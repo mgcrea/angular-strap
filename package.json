@@ -15,5 +15,8 @@
   },
   "devDependencies": {
     "testacular": "0.0.x"
+  },
+  "scripts": {
+  	"test": "testacular start & sleep 2 && open http://localhost:8080 && sleep 2 && testacular run"
   }
 }
