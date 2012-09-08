@@ -1,7 +1,7 @@
 [AngularStrap](https://github.com/mgcrea/angular-strap)
 =================
 
-AngularStrap is a set of directives that enables seamless integration of [Twitter Bootstrap](http://twitter.github.com/bootstrap) into your angular app.
+AngularStrap is a set of directives that enables seamless integration of [Twitter Bootstrap](https://twitter.github.com/bootstrap) into your [AngularJS](https://github.com/angular/angular.js) app.
 
 Available directives
 --------------------
@@ -18,11 +18,16 @@ Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, or [downl
 Testing
 -------
 
-AngularStrap is tested with `testacular` (`jasmine` unit tests).
+AngularStrap is tested with `testacular` (jasmine unit tests).
 
 	npm install testacular -g
-	cd test; testacular start
+	testacular start
+	testacular run
 
+Contributing
+------------
+
+Please submit all pull requests the against master branch. If your unit test contains javascript patches or features, you should include relevant unit tests. Thanks!
 
 Authors
 -------
