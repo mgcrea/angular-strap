@@ -3,7 +3,7 @@
 describe('popover', function () {
   var elm, scope, $httpBackend, $timeout;
 
-  beforeEach(module('$bs.directives'));
+  beforeEach(module('$strap.directives'));
 
   beforeEach(inject(function (_$httpBackend_, _$timeout_, $rootScope, $compile) {
     $httpBackend = _$httpBackend_,

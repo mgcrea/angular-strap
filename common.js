@@ -1,5 +1,5 @@
 
-angular.module('$bs.config', []).value('$bs.config', {});
-angular.module('$bs.filters', ['$bs.config']);
-angular.module('$bs.directives', ['$bs.config']);
-angular.module('$bs', ['$bs.filters', '$bs.directives', '$bs.config']);
+angular.module('$strap.config', []).value('$strap.config', {});
+angular.module('$strap.filters', ['$strap.config']);
+angular.module('$strap.directives', ['$strap.config']);
+angular.module('$strap', ['$strap.filters', '$strap.directives', '$strap.config']);

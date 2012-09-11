@@ -17,5 +17,8 @@
     "testacular": ">= 0.2.0"
   },
   "scripts": {
+    "test": [
+      "testacular start test/testacular.conf.js --single-run --browsers PhantomJS"
+    ]
   }
 }

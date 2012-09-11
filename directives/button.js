@@ -1,5 +1,5 @@
 
-angular.module('$bs.directives')
+angular.module('$strap.directives')
 
 .directive('bsButton', ['$parse', function($parse) {
 
