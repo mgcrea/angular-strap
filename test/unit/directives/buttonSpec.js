@@ -3,7 +3,7 @@
 describe('button', function () {
 	var elm, scope, $timeout;
 
-	beforeEach(module('$bs.directives'));
+	beforeEach(module('$strap.directives'));
 
 	beforeEach(inject(function ($injector, $rootScope, $compile) {
 		scope = $rootScope;

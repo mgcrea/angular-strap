@@ -1,5 +1,5 @@
 
-angular.module('$bs.directives')
+angular.module('$strap.directives')
 
 .directive('bsPopover', ['$compile', '$http', '$timeout', function($compile, $http, $timeout) {
 
