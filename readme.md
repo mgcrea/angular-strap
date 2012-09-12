@@ -10,6 +10,8 @@ Available directives
 
 + bs-popover (external partial fetch with correct scope compilation)
 
++ bs-datepicker (ngModel binding with validation support)
+
 Quick start
 -----------
 
