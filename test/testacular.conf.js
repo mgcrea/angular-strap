@@ -13,6 +13,7 @@ files = [
   'lib/jquery-1.7.2.js',
   'lib/angular-1.0.2.js',
   'lib/bootstrap-2.1.1.js',
+  'lib/bootstrap-datepicker.js',
   'test/lib/angular/angular-mocks.js',
   'common.js',
   'directives/*.js',
