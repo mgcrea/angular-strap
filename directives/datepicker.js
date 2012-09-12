@@ -56,8 +56,6 @@ angular.module('$strap.directives')
 				autoclose: true
 			});
 
-			window.element = element;
-
 		}
 	}
 

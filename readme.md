@@ -22,9 +22,8 @@ Testing
 
 AngularStrap is tested with `testacular` (jasmine unit tests).
 
-	npm install testacular -g
-	testacular start
-	testacular run
+	sudo npm install testacular -g
+	npm test
 
 Contributing
 ------------
