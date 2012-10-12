@@ -46,7 +46,7 @@ angular.module('$strap.directives')
             visibility = !tip.hasClass('in');
 
           // Hide any active popover except self
-          $("body > .popover").each(function() {
+          if(!attr.multiple) $("body > .popover").each(function() {
             var $this = $(this),
               popover = $this.data('popover');
             if(popover && !popover.$element.is(element)) $this.popover('hide');
