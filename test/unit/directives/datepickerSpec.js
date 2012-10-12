@@ -7,8 +7,9 @@ describe('datepicker', function () {
 
 	beforeEach(inject(function ($injector, $rootScope, $compile) {
 		scope = $rootScope;
+		scope.model = {};
 		elm = $compile(
-			'<input type="text" ng-model="user.date" data-date-format="dd/mm/yyyy" bs-datepicker>'
+			'<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" bs-datepicker>'
 		)($rootScope);
 	}));
 
@@ -33,6 +34,15 @@ describe('datepicker', function () {
 		expect(elm.data('datepicker').picker.is(':visible')).toBe(true);
 		elm.trigger('focusout');
 		//expect(elm.data('datepicker').picker.is(':visible')).toBe(false);
+	});
+
+	it('should correctly update both input value and bound model', function() {
+		var date = (new Date()).toISOString().substr(0, 10).replace(/-/g, '/');
+		elm.trigger('focusin');
+		$("body > .datepicker").find('td.active').trigger('click');
+		elm.trigger('focusout');
+		expect(elm.val()).toBe(date);
+		expect(scope.model.date).toBe(date);
 	});
 
 });
