@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsPopover', ['$compile', '$http', '$timeout', function($compile, $http, $timeout) {
+.directive('bsPopover', ['$compile', '$http', '$templateCache', '$timeout',  function($compile, $http, $templateCache, $timeout) {
 
   // Hide popovers when pressing esc
   $("body").on("keyup", function(ev) {
@@ -15,8 +15,9 @@ angular.module('$strap.directives')
     restrict: 'A',
     link: function postLink(scope, element, attr, ctrl) {
       //console.warn('postLink', this, arguments);
-
-      $http.get(attr.bsPopover).success(function(data) {
+      //$templateCache.removeAll();
+      var r = (Math.random() * 10e12).toFixed();
+      $http.get(attr.bsPopover, {cache: false}).success(function(data) {
 
         // Provide dismiss function
         scope.dismiss = function() {
@@ -31,6 +32,23 @@ angular.module('$strap.directives')
           //element.data('popover').tip().find("form").get(0).reset();
         };
 
+        // Visibility handling
+        element.on('click', function(ev) {
+          var popover = element.data('popover'),
+            visibility = !popover.tip().hasClass('in');
+
+          // Hide any active popover except self
+          if(!attr.multiple) $("body > .popover").each(function() {
+            var $this = $(this),
+              popover = $this.data('popover');
+            if(popover && !popover.$element.is(element)) $this.popover('hide');
+          });
+
+          // Toggle the popover
+          element.popover(visibility ? 'show' : 'hide');
+        });
+
+        // Create popover
         element.popover({
           content: function() {
             $timeout(function(){
@@ -40,32 +58,25 @@ angular.module('$strap.directives')
           },
           trigger: 'manual',
           html: true
-        }).on('click', function(ev) {
-          var popover = element.data('popover'),
-            tip = popover.tip(),
-            visibility = !tip.hasClass('in');
-
-          // Hide any active popover except self
-          if(!attr.multiple) $("body > .popover").each(function() {
-            var $this = $(this),
-              popover = $this.data('popover');
-            if(popover && !popover.$element.is(element)) $this.popover('hide');
-          });
-
-          // Rebind the popover
-          if(!tip.data('popover')) tip.data('popover', popover);
-
-          // Trigger events (should be in bootstrap core)
-          var e = $.Event(visibility ? 'show' : 'hide');
-          element.trigger(e);
-          if (e.isDefaultPrevented()) return;
-
-          // Toggle the popover
-          element.popover(visibility ? 'show' : 'hide');
-
-        }).on('show', function(ev) {
-          console.warn('show!');
         });
+
+        // Bootstrap override to provide events & tip() reference
+        var popover = element.data('popover');
+        popover.show = function() {
+          var e = $.Event('show');
+          this.$element.trigger(e);
+          if (e.isDefaultPrevented()) return;
+          var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
+          // Bind popover to the tip()
+          this.tip().data('popover', this);
+          return r;
+        }
+        popover.hide = function() {
+          var e = $.Event('hide');
+          this.$element.trigger(e);
+          if (e.isDefaultPrevented()) return;
+          return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
+        }
 
       });
     }

@@ -11,21 +11,21 @@ var DATE_REGEXP_MAP = {
 
 angular.module('$strap.directives')
 
-.directive('bsDatepicker', [function() {
+.directive('bsDatepicker', ['$timeout', function($timeout) {
 
   return {
     restrict: 'A',
     require: '?ngModel',
-    link: function postLink(scope, element, attrs, ctrl) {
+    link: function postLink(scope, element, attrs, controller) {
       //console.log('postLink', this, arguments);
 
       // If we have a controller (i.e. ngModelController) then wire it up
-      if(ctrl) {
-        var updateModel = function () {
+      if(controller) {
+        element.on('changeDate', function(ev) {
           scope.$apply(function () {
-            ctrl.$setViewValue(element.val());
+            controller.$setViewValue(element.val());
           });
-        };
+        });
       }
 
       var regexpForDateFormat = function(dateFormat, options) {
@@ -42,13 +42,13 @@ angular.module('$strap.directives')
       var dateFormatRegexp = regexpForDateFormat(attrs.dateFormat || 'mm/dd/yyyy'/*, {mask: !!attrs.uiMask}*/);
 
       // Handle date validity according to dateFormat
-      ctrl.$parsers.unshift(function(viewValue) {
+      controller.$parsers.unshift(function(viewValue) {
         //console.warn('viewValue', viewValue, dateFormatRegexp,  dateFormatRegexp.test(viewValue));
         if (!viewValue || dateFormatRegexp.test(viewValue)) {
-          ctrl.$setValidity('date', true);
+          controller.$setValidity('date', true);
           return viewValue;
         } else {
-          ctrl.$setValidity('date', false);
+          controller.$setValidity('date', false);
           return undefined;
         }
       });
@@ -73,13 +73,11 @@ angular.module('$strap.directives')
 
       // Create datepicker
       element.attr('data-toggle', 'datepicker');
-      element.datepicker({
-        autoclose: true
-      });
-
-      if(ctrl) {
-        element.on('changeDate', updateModel);
-      }
+      //$timeout(function () {
+        element.datepicker({
+          autoclose: true
+        });
+      //}, 0, false);
 
     }
   }
