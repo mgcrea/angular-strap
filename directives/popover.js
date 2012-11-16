@@ -52,9 +52,16 @@ angular.module('$strap.directives')
             if(popover && !popover.$element.is(element)) $this.popover('hide');
           });
 
+          // Rebind the popover
+          if(!tip.data('popover')) tip.data('popover', popover);
+
+          // Trigger events (should be in bootstrap core)
+          var e = $.Event(visibility ? 'show' : 'hide');
+          element.trigger(e);
+          if (e.isDefaultPrevented()) return;
+
           // Toggle the popover
           element.popover(visibility ? 'show' : 'hide');
-          tip.data('popover', popover);
 
         }).on('show', function(ev) {
           console.warn('show!');

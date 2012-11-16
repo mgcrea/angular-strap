@@ -59,12 +59,27 @@ angular.module('$strap.directives')
         component.on('click', function() { element.datepicker('show'); });
       }
 
+      // Popover GarbageCollection
+      var $popover = element.closest('.popover');
+      if($popover) {
+        $popover.on('hide', function(e) {
+          var datepicker = element.data('datepicker');
+          if(datepicker) {
+            datepicker.picker.remove();
+            element.data('datepicker', null);
+          }
+        });
+      }
+
       // Create datepicker
       element.attr('data-toggle', 'datepicker');
       element.datepicker({
         autoclose: true
-      }).on('changeDate', updateModel);
-      window.element = element;
+      });
+
+      if(ctrl) {
+        element.on('changeDate', updateModel);
+      }
 
     }
   }
