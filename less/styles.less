@@ -1,0 +1,111 @@
+@import "variables.less";
+@import "mixins.less";
+
+@img:"./../img";
+
+html, body {
+	-webkit-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+}
+
+button, select, textarea, input, pre {
+	-webkit-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+}
+
+header {
+	@media (max-width: 979px) {
+		margin-top: -20px;
+	}
+}
+
+.navbar {
+	.brand {
+		font-weight: 200;
+	}
+	.travis-btn {
+		position: absolute;
+		z-index: 2;
+		right: 20px;
+		top: 9px;
+		@media (max-width: 979px) {
+			right: 60px;
+			top: 13px;
+		}
+	}
+}
+
+.bs-docs-social {
+		background: rgba(245, 245, 245, .15);
+		border-top: 1px solid rgba(245, 245, 245, .25);
+		border-bottom: 1px solid rgba(221, 221, 221, .25);
+	ul.bs-docs-social-buttons {
+		li {
+			padding: 5px 0px;
+		}
+	}
+}
+
+.js .bs-docs-sidenav {
+	visibility: hidden;
+	&.animated {
+		-webkit-animation: fadeIn 1.3s ease-in 1s;
+		-moz-animation: fadeIn 1.3s ease-in 1s;
+		-ms-animation: fadeIn 1.3s ease-in 1s;
+		visibility: visible;
+	}
+}
+
+/* Popover
+-------------------------------------------------- */
+
+.popover .form-actions {
+  margin: 0 -14px -29px;
+  padding: 9px 10px 10px;
+  border-radius: 0 0 5px 5px;
+}
+
+
+/* Jumbotrons
+-------------------------------------------------- */
+
+/* Base class
+------------------------- */
+.jumbotron {
+	position: relative;
+	padding: 60px 0 40px;
+	color: #fff;
+	text-align: center;
+	text-shadow: 0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
+	backgound: #222;
+	background-size: cover;
+	background-position: 50% 20%;
+	background-image: url('@{img}/background.jpg');
+	@shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+	.box-shadow(@shadow);
+}
+.jumbotron h1 {
+	font-size: 80px;
+	font-weight: bold;
+	letter-spacing: -1px;
+	line-height: 1;
+}
+.jumbotron p {
+	font-size: 24px;
+	font-weight: 300;
+	line-height: 1.25;
+	margin-bottom: 30px;
+}
+
+/* Link styles (used on .masthead-links as well) */
+.jumbotron a {
+	color: #fff;
+	color: rgba(255,255,255,.5);
+	-webkit-transition: all .2s ease-in-out;
+		 -moz-transition: all .2s ease-in-out;
+					transition: all .2s ease-in-out;
+}
+.jumbotron a:hover {
+	color: #fff;
+	text-shadow: 0 0 10px rgba(255,255,255,.25);
+}

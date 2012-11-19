@@ -1,76 +1,276 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Angular-strap by mgcrea</title>
+<html lang="en" ng-app="strap" class="no-js">
+<head>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <meta charset="utf-8">
+  <title>AngularStrap</title>
+
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="//raw.github.com/mgcrea/angular-strap/master/lib/bootstrap-datepicker.css" rel="stylesheet">
+  <link href="css/prettify.css" rel="stylesheet">
+  <link href="css/animate.css" rel="stylesheet">
+  <link href="css/docs.css" rel="stylesheet">
+  <link href="less/styles.less" rel="stylesheet/less" type="text/css">
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js"></script>
     <![endif]-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.3.1/less.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+
+    <script src="//raw.github.com/mgcrea/angular-strap/master/lib/bootstrap-datepicker.js"></script>
+    <script src="//raw.github.com/mgcrea/angular-strap/master/common.js"></script>
+    <script src="//raw.github.com/mgcrea/angular-strap/master/directives/button.js"></script>
+    <script src="//raw.github.com/mgcrea/angular-strap/master/directives/datepicker.js"></script>
+    <script src="//raw.github.com/mgcrea/angular-strap/master/directives/popover.js"></script>
+
+    <script src="js/app.js"></script>
   </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Angular-strap</h1>
-        <p>Bootstrap directives for Angular</p>
 
-        <p class="view"><a href="https://github.com/mgcrea/angular-strap">View the Project on GitHub <small>mgcrea/angular-strap</small></a></p>
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
 
-
-        <ul>
-          <li><a href="https://github.com/mgcrea/angular-strap/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/mgcrea/angular-strap/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/mgcrea/angular-strap">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h3>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/mgcrea">mgcrea</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+  <!-- Navbar
+  ================================================== -->
+  <!--<div ng-include="'partials/nav.html'" onload="window.$.navLoaded()"></div>-->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="./index.html">AngularStrap</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="">
+              <a href="./index.html">Home</a>
+            </li>
+            <li class="active">
+              <a href="./directives.html">Directives</a>
+            </li>
+          </ul>
+        </div>
+        <a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank">
+          <img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master"/>
+        </a>
+      </div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-1813303-8");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
+  </nav>
+
+
+  <!-- Header
+  ================================================== -->
+  <!--<div ng-include="'partials/header.html'" onload="window.$.headerLoaded()"></div>-->
+  <header class="jumbotron subhead" id="overview">
+    <div class="container">
+      <h1>AngularStrap</h1>
+      <p class="lead">Bootstrap directives for <strong>AngularJS</strong>.</p>
+    </div>
+    <div class="bs-docs-social">
+      <div class="container">
+        <ul class="bs-docs-social-buttons">
+          <li>
+            <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;repo=angular-strap&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+          </li>
+          <li>
+            <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;repo=angular-strap&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="98px" height="20px"></iframe>
+          </li>
+          <!--<li class="follow-btn">
+            <iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/follow_button.1352365724.html#_=1353343600175&amp;id=twitter-widget-1&amp;lang=en&amp;screen_name=olouv&amp;show_count=true&amp;show_screen_name=true&amp;size=m" class="twitter-follow-button" style="width: 236px; height: 20px;" title="Twitter Follow Button" data-twttr-rendered="true"></iframe>
+          </li>-->
+          <li class="tweet-btn">
+            <iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.1352365724.html#_=1353343600171&amp;count=horizontal&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2Fmgcrea.github.com%2Fangular-strap%2Findex.html&amp;related=olouv%3ACreator%20of%20AngularStrap&amp;size=m&amp;text=AngularStrap&amp;url=http%3A%2F%2Fmgcrea.github.com%2Fangular-strap%2F&amp;via=olouv" class="twitter-share-button twitter-count-horizontal" style="width: 107px; height: 20px;" title="Twitter Tweet Button" data-twttr-rendered="true"></iframe>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="container" ng-controller="StrapCtrl">
+  <div class="row">
+
+    <div class="span3 bs-docs-sidebar">
+      <ul class="nav nav-list bs-docs-sidenav">
+        <li class="active"><a href="#popover"><i class="icon-chevron-right"></i> Popover</a></li>
+        <li><a href="#buttons"><i class="icon-chevron-right"></i> Buttons</a></li>
+        <li><a href="#checkboxes"><i class="icon-chevron-right"></i> Checkboxes</a></li>
+        <li><a href="#datepicker"><i class="icon-chevron-right"></i> Datepicker</a></li>
+      </ul>
+    </div>
+
+    <div class="span9">
+
+      <section id="popover">
+        <div class="page-header">
+          <h1>Popover <small>directives/popover.js</small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Add small overlays of content, like those on the iPad, to any element for housing secondary information.</p>
+        <p>Use any button to trigger a popover menu by placing it within a <code>bs-popover</code> tag.</p>
+        <div class="bs-docs-example">
+          <div class="well" style="margin: 0;">
+            <a class="btn btn-large btn-primary" data-title="Title One" data-placement="top" bs-popover="'partials/popover/popover.html'">Click to toggle popover</a>
+            <a class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover/popover.html'">Unique Popover <small>(will close existing popovers)</small></a>
+          </div>
+        </div>
+        <pre class="prettyprint linenums">
+&lt;a class=&quot;btn&quot; bs-popover=&quot;'partials/popover/popover.html'&quot;&gt;...&lt;/a&gt;
+&lt;!-- force close every other popover with data-unique --&gt;
+&lt;a class=&quot;btn&quot; data-unique=&quot;1&quot; bs-popover=&quot;'partials/popover/popover.html'&quot;&gt;...&lt;/a&gt;
+        </pre>
+      </section>
+
+      <section id="buttons">
+        <div class="page-header">
+          <h1>Button <small>directives/button.js</small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Use any button to trigger a dropdown menu by placing it within a <code>.btn-group</code> and providing the proper menu markup.</p>
+        <div class="bs-docs-example">
+          <pre>button: {{button | json}}</pre>
+          <div class="btn-toolbar well" style="margin: 0;">
+            <button type="button" class="btn" ng-model="button.active" bs-button>Left</button>
+          </div>
+        </div>
+        <pre class="prettyprint linenums">
+          &lt;div class="dropdown"&gt;
+          &lt;!-- Link or button to toggle dropdown --&gt;
+          &lt;ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Action&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Another action&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Something else here&lt;/a&gt;&lt;/li&gt;
+          &lt;li class="divider"&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Separated link&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+          &lt;/div&gt;
+        </pre>
+      </section>
+
+      <section id="checkboxes">
+        <div class="page-header">
+          <h1>Checkbox <small>directives/checkbox.js</small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Use any button to trigger a dropdown menu by placing it within a <code>.btn-group</code> and providing the proper menu markup.</p>
+        <div class="bs-docs-example">
+          <pre>checkbox: {{checkbox | json}}</pre>
+          <div class="btn-toolbar well" style="margin: 0;">
+            <div class="btn-group" data-toggle="buttons-checkbox">
+              <button type="button" class="btn" ng-model="checkbox.left" bs-button>Left</button>
+              <button type="button" class="btn" ng-model="checkbox.middle" bs-button>Middle</button>
+              <button type="button" class="btn" ng-model="checkbox.right" bs-button>Right</button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums">
+          &lt;div class="dropdown"&gt;
+          &lt;!-- Link or button to toggle dropdown --&gt;
+          &lt;ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Action&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Another action&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Something else here&lt;/a&gt;&lt;/li&gt;
+          &lt;li class="divider"&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Separated link&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+          &lt;/div&gt;
+        </pre>
+      </section>
+
+      <section id="datepicker">
+        <div class="page-header">
+          <h1>Datepicker <small>directives/datepicker.js</small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Use any button to trigger a dropdown menu by placing it within a <code>.btn-group</code> and providing the proper menu markup.</p>
+        <div class="bs-docs-example">
+          <pre>datepicker: {{datepicker | json}}</pre>
+          <form class="form-horizontal"  name="myForm">
+            <div class="control-group well">
+              <label class="control-label" for="inputDate">Date</label>
+              <div class="controls input-append">
+                <input class="input-small" type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
+                <button class="btn" data-toggle="datepicker" type="button"><i class="icon-calendar"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <pre class="prettyprint linenums">
+          &lt;div class="dropdown"&gt;
+          &lt;!-- Link or button to toggle dropdown --&gt;
+          &lt;ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Action&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Another action&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Something else here&lt;/a&gt;&lt;/li&gt;
+          &lt;li class="divider"&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Separated link&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+          &lt;/div&gt;
+        </pre>
+      </section>
+
+
+    </div>
+
+  </div>
+  </div>
+
+
+  <!--<div class="control-group well">
+      <div class="btn-group" data-toggle="buttons-checkbox">
+        <button type="button" class="btn" ng-model="button.left" bs-button>Left</button>
+        <button type="button" class="btn" ng-model="button.middle" bs-button>Middle</button>
+        <button type="button" class="btn" ng-model="button.right" bs-button>Right</button>
+      </div>
+    </div>-->
+
+
+
+    <!--<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+  </section>
+  <footer>
+    <p>This project is maintained by <a href="https://github.com/mgcrea">mgcrea</a></p>
+    <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+  </footer>
+</div>-->
+
+    <!-- Footer
+    ================================================== -->
+     <!--<footer class="footer">
+      <div class="container">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Designed and built with all the love in the world by <a href="http://twitter.com/mdo" target="_blank">@mdo</a> and <a href="http://twitter.com/fat" target="_blank">@fat</a>.</p>
+        <p>Code licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <ul class="footer-links">
+          <li><a href="http://blog.getbootstrap.com">Blog</a></li>
+          <li class="muted">·</li>
+          <li><a href="https://github.com/twitter/bootstrap/issues?state=open">Issues</a></li>
+          <li class="muted">·</li>
+          <li><a href="https://github.com/twitter/bootstrap/wiki">Roadmap and changelog</a></li>
+        </ul>
+      </div>
+    </footer>-->
+
+    <!-- Analytics
+    ================================================== -->
+
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-1813303-8");
+        pageTracker._trackPageview();
+      } catch(err) {}
+    </script>
 
   </body>
-</html>
+  </html>
