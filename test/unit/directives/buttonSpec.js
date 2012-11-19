@@ -8,12 +8,12 @@ describe('button', function () {
   beforeEach(inject(function ($injector, $rootScope, $compile) {
     scope = $rootScope;
     elm = $compile(
-      '<div class="btn" ng-model="buttonValue" bs-button>'
+      '<div class="btn" ng-model="buttonValue" data-toggle="button" bs-button>'
     )($rootScope);
   }));
 
-  it('should add "data-toggle" attr for you', function () {
-    expect(elm.attr('data-toggle') == 'button').toBe(true);
+  it('should remove "data-toggle" attr for you', function () {
+    expect(elm.attr('data-toggle')).toBeUndefined();
   });
 
   describe('model change to view', function () {

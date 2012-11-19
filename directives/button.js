@@ -3,26 +3,35 @@ angular.module('$strap.directives')
 
 .directive('bsButton', ['$parse', function($parse) {
 
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-    link: function postLink(scope, element, attr, ctrl) {
-      //console.warn('postLink', this, arguments);
+return {
+  restrict: 'A',
+  require: 'ngModel',
+  link: function postLink(scope, element, attr, ctrl) {
 
-      element.attr('data-toggle', 'button');
+    var getter = $parse(attr.ngModel),
+      setter = getter.assign;
 
-      scope.$watch(attr.ngModel, function(newValue, oldValue) {
-        if(!newValue) element.removeClass('active')
-        else element.addClass('active');
+    // Disable bootstrap embedded button toggling
+    element.removeAttr('data-toggle');
+    // Watch model for changes instead
+    scope.$watch(attr.ngModel, function(newValue, oldValue) {
+      if(!newValue) element.removeClass('active')
+      else element.addClass('active');
+    });
+
+    // Click handling
+    element.on('click', function(ev) {
+      scope.$apply(function() {
+        setter(scope, !getter(scope));
       });
+    });
 
-      element.on('click', function(ev) {
-        var getter = $parse(attr.ngModel),
-          setter = getter.assign;
-        setter(scope, attr.value || !getter(scope));
-      });
-
+    // Initial state
+    if(getter(scope)) {
+      element.addClass('active');
     }
+
   }
+}
 
 }])
