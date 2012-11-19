@@ -13,6 +13,7 @@ angular.module('$strap.directives')
 
 	return {
 		restrict: 'A',
+		scope: true,
 		link: function postLink(scope, element, attr, ctrl) {
 
 			var getter = $parse(attr.bsPopover),
