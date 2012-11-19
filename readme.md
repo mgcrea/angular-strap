@@ -6,11 +6,16 @@ AngularStrap is a set of directives that enables seamless integration of [Twitte
 Available directives
 --------------------
 
-+ bs-button (ngModel binding for data-toggle checkbox-like buttons), demo : http://embed.plnkr.co/P8O6A0
++ bs-button (ngModel binding for data-toggle checkbox-like buttons),
 
 + bs-popover (external partial fetch with correct scope compilation)
 
 + bs-datepicker (ngModel binding with validation support)
+
+Preview
+-------
+
+http://embed.plnkr.co/P8O6A0
 
 Quick start
 -----------
