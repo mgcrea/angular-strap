@@ -49,6 +49,7 @@ angular.module('$strap.directives')
 				});
 
 				// Create popover
+				//$timeout(function () {
 				element.popover({
 					content: function() {
 						$timeout(function(){
@@ -77,6 +78,7 @@ angular.module('$strap.directives')
 					if (e.isDefaultPrevented()) return;
 					return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
 				}
+				//}, 0, false);
 
 			});
 		}
