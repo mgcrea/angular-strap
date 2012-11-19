@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsPopover', ['$compile', '$http', '$templateCache', '$timeout',  function($compile, $http, $templateCache, $timeout) {
+.directive('bsPopover', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
 
 	// Hide popovers when pressing esc
 	$("body").on("keyup", function(ev) {
@@ -14,22 +14,19 @@ angular.module('$strap.directives')
 	return {
 		restrict: 'A',
 		link: function postLink(scope, element, attr, ctrl) {
-			//console.warn('postLink', this, arguments);
-			//$templateCache.removeAll();
-			var r = (Math.random() * 10e12).toFixed();
-			$http.get(attr.bsPopover, {cache: false}).success(function(data) {
 
-				// Provide dismiss function
+			var getter = $parse(attr.bsPopover),
+				setter = getter.assign;
+
+			$http.get(getter(scope)).success(function(data) {
+
+				// Provide scope display functions
 				scope.dismiss = function() {
 					element.popover('hide');
-					//console.warn(element.data('popover').tip().scope(), scope)
-					//element.data('popover').tip().find("form").get(0).reset();
 				};
 
 				scope.show = function() {
 					element.popover('show');
-					//console.warn(element.data('popover').tip().scope(), scope)
-					//element.data('popover').tip().find("form").get(0).reset();
 				};
 
 				// Visibility handling
@@ -49,7 +46,7 @@ angular.module('$strap.directives')
 				});
 
 				// Create popover
-				//$timeout(function () {
+				//$timeout(function () { // ui-lag?
 				element.popover({
 					content: function() {
 						$timeout(function(){

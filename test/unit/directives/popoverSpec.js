@@ -19,7 +19,7 @@ describe('popover', function () {
 			.respond('Hello {{name}}');
 
 		elm = $compile(
-			'<a class="btn" bs-popover="partials/popover.html" data-title="aTitle" data-placement="left"></a>'
+			'<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-placement="left"></a>'
 		)($rootScope);
 
 		$httpBackend.flush();
