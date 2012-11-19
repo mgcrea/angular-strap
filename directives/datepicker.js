@@ -73,7 +73,7 @@ angular.module('$strap.directives')
 
       // Create datepicker
       element.attr('data-toggle', 'datepicker');
-      //$timeout(function () {
+      //$timeout(function () { // makes the ui lag?
         element.datepicker({
           autoclose: true
         });

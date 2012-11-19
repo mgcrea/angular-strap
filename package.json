@@ -9,12 +9,12 @@
     "url": "git://github.com/angular-strap/angular-strap.git"
   },
   "engines": {
-    "node": ">= 0.6.11"
+    "node": ">= 0.8.4"
   },
   "dependencies": {
   },
   "devDependencies": {
-    "testacular": ">= 0.2.0"
+    "testacular": ">= 0.4.0"
   },
   "scripts": {
     "test": "testacular start test/testacular.conf.js --single-run --browsers PhantomJS",
