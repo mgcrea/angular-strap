@@ -23,8 +23,8 @@ $(function() {
 var app = angular.module('strap', ['$strap.directives']);
 
 app.controller('StrapCtrl', function($scope) {
+	$scope.popover = {content: 'Hello World'};
 	$scope.button = {active: true};
 	$scope.checkbox = {left: false, middle: true, right: false};
 	$scope.datepicker = {date: ''};
-	$scope.popover = $scope.button;
 });
