@@ -5,7 +5,7 @@ angular.module('$strap.directives')
 
 	// Hide popovers when pressing esc
 	$("body").on("keyup", function(ev) {
-		if(ev.keyCode == 27) $("body > .popover").each(function() {
+		if(ev.keyCode == 27) $(".popover.in").each(function() {
 			var $this = $(this);
 			$this.popover('hide');
 		});
@@ -24,7 +24,6 @@ angular.module('$strap.directives')
 				scope.dismiss = function() {
 					element.popover('hide');
 				};
-
 				scope.show = function() {
 					element.popover('show');
 				};
@@ -35,11 +34,13 @@ angular.module('$strap.directives')
 						visibility = !popover.tip().hasClass('in');
 
 					// Hide any active popover except self
-					if(!attr.multiple) $("body > .popover").each(function() {
-						var $this = $(this),
-							popover = $this.data('popover');
-						if(popover && !popover.$element.is(element)) $this.popover('hide');
-					});
+					if(!!attr.unique) {
+						$(".popover.in").each(function() {
+							var $this = $(this),
+								popover = $this.data('popover');
+							if(popover && !popover.$element.is(element)) $this.popover('hide');
+						});
+					}
 
 					// Toggle the popover
 					element.popover(visibility ? 'show' : 'hide');

@@ -3,7 +3,7 @@
 if(dump) console = {log: dump};
 
 describe('popover', function () {
-	var elm, scope, $httpBackend, $timeout;
+	var elm, elm2, scope, $httpBackend, $timeout;
 
 	beforeEach(module('$strap.directives'));
 
@@ -20,6 +20,16 @@ describe('popover', function () {
 
 		elm = $compile(
 			'<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-placement="left"></a>'
+		)($rootScope);
+
+		$httpBackend.flush();
+
+		$httpBackend
+			.expectGET('partials/popover.html')
+			.respond('Hello {{name}}');
+
+		elm2 = $compile(
+			'<a class="btn" bs-popover="\'partials/popover.html\'" data-unique="1" data-title="aTitleBis" data-placement="left"></a>'
 		)($rootScope);
 
 		$httpBackend.flush();
@@ -53,4 +63,16 @@ describe('popover', function () {
 		elm.trigger('click');
 		expect(elm.data('popover').tip().hasClass('in')).toBe(false);
 	});
+
+	it('should support data-unique attribute', function(done) {
+		elm.trigger('click');
+		expect(elm.data('popover').tip().hasClass('in')).toBe(true);
+		setTimeout(function() {
+			elm2.trigger('click');
+			expect(elm.data('popover').tip().hasClass('in')).toBe(false);
+			done();
+		}, 100)
+
+	});
+
 });
