@@ -179,10 +179,10 @@
         <p>Use any button to trigger a datepicker menu by appending a <code>bs-datepicker</code> tag.</p>
         <p>You can use a custom button as toggler with <code>data-toggle="datepicker"</code> on a sibling element. Supports AngularJS validation out of the box.</p>
         <div class="bs-docs-example">
-          <pre>datepicker: {{datepicker | json}}</pre>
-          <form class="form-horizontal well"  name="myForm">
+          <pre>datepicker: {{datepicker | json}}<!--<br />myForm: {{myForm | json}}--></pre>
+          <form class="form-horizontal well" name="myForm">
             <div class="control-group input-append">
-              <input class="input-small" type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
+              <input name="date" class="input-small" type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
               <button class="btn" data-toggle="datepicker" type="button"><i class="icon-calendar"></i></button>
             </div>
           </form>
