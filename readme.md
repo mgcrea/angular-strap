@@ -1,21 +1,7 @@
-[AngularStrap](https://github.com/mgcrea/angular-strap) [![Build Status](https://secure.travis-ci.org/mgcrea/angular-strap.png?branch=master)](http://travis-ci.org/#!/mgcrea/angular-strap)
+[AngularStrap](http://mgcrea.github.com/angular-strap) [![Build Status](https://secure.travis-ci.org/mgcrea/angular-strap.png?branch=master)](http://travis-ci.org/#!/mgcrea/angular-strap)
 =================
 
 AngularStrap is a set of directives that enables seamless integration of [Twitter Bootstrap](https://twitter.github.com/bootstrap) into your [AngularJS](https://github.com/angular/angular.js) app.
-
-Available directives
---------------------
-
-+ bs-button (ngModel binding for data-toggle checkbox-like buttons),
-
-+ bs-popover (external partial fetch with correct scope compilation)
-
-+ bs-datepicker (ngModel binding with validation support)
-
-Preview
--------
-
-http://embed.plnkr.co/P8O6A0
 
 Quick start
 -----------
