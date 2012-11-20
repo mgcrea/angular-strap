@@ -130,13 +130,16 @@
         <div class="bs-docs-example">
           <pre>modal: {{modal | json}}</pre>
           <div class="well" style="margin: 0;">
-            <a class="btn btn-large btn-primary" bs-modal="'partials/modal.html'">Click to open modal</a>
+            <button type="button" class="btn btn-large btn-primary" bs-modal="'partials/modal.html'">Click to open modal</button>
           </div>
         </div>
         <pre class="prettyprint linenums">
-&lt;a class=&quot;btn&quot; bs-modal=&quot;'partials/modal.html'&quot;&gt;...&lt;/a&gt;
+&lt;button type="button" class=&quot;btn&quot; bs-modal=&quot;'partials/modal.html'&quot;&gt;...&lt;/button&gt;
         </pre>
-        <p>You can use <code>ng-controller="MyModalCtrl"</code> along <code>bs-modal</code> if you want to use a custom scope for your modal.</p>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          You can use <code>ng-controller="MyModalCtrl"</code> along <code>bs-modal="..."</code> to create a custom scope for your modal.
+        </div>
       </section>
 
       <section id="popover">
@@ -151,16 +154,19 @@
         <div class="bs-docs-example">
           <pre>popover: {{popover | json}}</pre>
           <div class="well" style="margin: 0;">
-            <a class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover.html'">Click to toggle popover<br /><small>(won't close others)</small></a>
-            <a class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover.html'">Unique Popover<br /><small>(will close others)</small></a>
+            <button type="button" class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover.html'">Click to toggle popover<br /><small>(won't close others)</small></button>
+            <button type="button" class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover.html'">Unique Popover<br /><small>(will close others)</small></button>
           </div>
         </div>
         <pre class="prettyprint linenums">
-&lt;a class=&quot;btn&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/a&gt;
+&lt;button type="button" class=&quot;btn&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/button&gt;
 &lt;!-- force close every other popover with data-unique --&gt;
-&lt;a class=&quot;btn&quot; data-unique=&quot;1&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/a&gt;
+&lt;button type="button" class=&quot;btn&quot; data-unique=&quot;1&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/button&gt;
         </pre>
-        <p>You can use <code>ng-controller="MyPopoverCtrl"</code> along <code>bs-popover</code> if you want to use a custom scope for your modal.</p>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          You can use <code>ng-controller="MyPopoverCtrl"</code> along <code>bs-popover="..."</code> to create a custom scope for your popover.
+        </div>
       </section>
 
       <section id="buttons">
@@ -173,11 +179,11 @@
         <div class="bs-docs-example">
           <pre>button: {{button | json}}</pre>
           <div class="btn-toolbar well" style="margin: 0;">
-            <a data-toggle="button" class="btn" ng-model="button.active" bs-button>Toggle me!</a>
+            <button type="button" data-toggle="button" class="btn" ng-model="button.active" bs-button>Toggle me!</button>
           </div>
         </div>
         <pre class="prettyprint linenums">
-&lt;a data-toggle="button" class="btn" ng-model="button.active" bs-button&quot;&gt;...&lt;/a&gt;
+&lt;button type="button" data-toggle="button" class="btn" ng-model="button.active" bs-button&quot;&gt;...&lt;/button&gt;
         </pre>
         <h3 id="checkboxes">Checkboxes</h3>
         <div class="bs-docs-example">
@@ -212,14 +218,14 @@
           <form class="form-horizontal well" name="myForm">
             <div class="control-group input-append">
               <input name="date" class="input-small" type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
-              <button class="btn" data-toggle="datepicker" type="button"><i class="icon-calendar"></i></button>
+              <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
             </div>
           </form>
         </div>
         <pre class="prettyprint linenums">
 &lt;div class="control-group input-append"&gt;
   &lt;input type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker&gt;
-  &lt;button class="btn" data-toggle="datepicker" type="button"&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/button&gt;
+  &lt;button type="button" class="btn" data-toggle="datepicker"&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/button&gt;
 &lt;/div&gt;
         </pre>
       </section>
