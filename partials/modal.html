@@ -1,0 +1,13 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="myModalLabel">Modal header</h3>
+</div>
+<div class="modal-body">
+  <p>{{modal.content}}</p>
+  <br />
+  <pre>2 + 3 = {{ 2 + 3 }}</pre>
+</div>
+<div class="modal-footer">
+  <button class="btn" ng-click="dismiss()">Close</button>
+  <button class="btn btn-primary" ng-click="modal.saved=true;dismiss()">Save changes</button>
+</div>

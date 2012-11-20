@@ -25,9 +25,10 @@
 
   <script src="//raw.github.com/mgcrea/angular-strap/master/lib/bootstrap-datepicker.js"></script>
   <script src="//raw.github.com/mgcrea/angular-strap/master/common.js"></script>
+  <script src="//raw.github.com/mgcrea/angular-strap/master/directives/modal.js"></script>
+  <script src="//raw.github.com/mgcrea/angular-strap/master/directives/popover.js"></script>
   <script src="//raw.github.com/mgcrea/angular-strap/master/directives/button.js"></script>
   <script src="//raw.github.com/mgcrea/angular-strap/master/directives/datepicker.js"></script>
-  <script src="//raw.github.com/mgcrea/angular-strap/master/directives/popover.js"></script>
 
   <script src="js/app.js"></script>
 
@@ -102,7 +103,8 @@
 
     <div class="span3 bs-docs-sidebar">
       <ul class="nav nav-list bs-docs-sidenav">
-        <li class="active"><a href="#popover"><i class="icon-chevron-right"></i> Popover</a></li>
+        <li class="active"><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
+        <li><a href="#popover"><i class="icon-chevron-right"></i> Popover</a></li>
         <li><a href="#buttons"><i class="icon-chevron-right"></i> Buttons</a></li>
         <li><a href="#checkboxes"><i class="icon-chevron-right"></i> Checkboxes</a></li>
         <li><a href="#datepicker"><i class="icon-chevron-right"></i> Datepicker</a></li>
@@ -110,6 +112,26 @@
     </div>
 
     <div class="span9">
+
+      <section id="modal">
+        <div class="page-header">
+          <h1>Modal <small>directives/modal.js</small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Fetches an external html partial and populates the modal with its content.</p>
+        <p>Use any button to trigger a modal by appending a <code>bs-modal</code> tag.</p>
+        <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the modal to toggle its visibility.</p>
+        <div class="bs-docs-example">
+          <pre>modal: {{modal | json}}</pre>
+          <div class="well" style="margin: 0;">
+            <a class="btn btn-large btn-primary" bs-modal="'partials/modal.html'">Click to open modal</a>
+          </div>
+        </div>
+        <pre class="prettyprint linenums">
+&lt;a class=&quot;btn&quot; bs-modal=&quot;'partials/modal.html'&quot;&gt;...&lt;/a&gt;
+        </pre>
+      </section>
 
       <section id="popover">
         <div class="page-header">
@@ -119,18 +141,18 @@
         <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
         <p>Fetches an external html partial and populates the popover with its content.</p>
         <p>Use any button to trigger a popover menu by appending a <code>bs-popover</code> tag.</p>
-        <p>Both <code>$scope.show()</code> and <code>$scope.hide()</code> are available inside the popover to toggle its visibility.</p>
+        <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the popover to toggle its visibility.</p>
         <div class="bs-docs-example">
           <pre>popover: {{popover | json}}</pre>
           <div class="well" style="margin: 0;">
-            <a class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover/popover.html'">Click to toggle popover<br /><small>(won't close others)</small></a>
-            <a class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover/popover.html'">Unique Popover<br /><small>(will close others)</small></a>
+            <a class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover.html'">Click to toggle popover<br /><small>(won't close others)</small></a>
+            <a class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover.html'">Unique Popover<br /><small>(will close others)</small></a>
           </div>
         </div>
         <pre class="prettyprint linenums">
-&lt;a class=&quot;btn&quot; bs-popover=&quot;'partials/popover/popover.html'&quot;&gt;...&lt;/a&gt;
+&lt;a class=&quot;btn&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/a&gt;
 &lt;!-- force close every other popover with data-unique --&gt;
-&lt;a class=&quot;btn&quot; data-unique=&quot;1&quot; bs-popover=&quot;'partials/popover/popover.html'&quot;&gt;...&lt;/a&gt;
+&lt;a class=&quot;btn&quot; data-unique=&quot;1&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/a&gt;
         </pre>
       </section>
 
