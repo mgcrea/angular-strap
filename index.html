@@ -123,8 +123,8 @@
         <div class="bs-docs-example">
           <pre>popover: {{popover | json}}</pre>
           <div class="well" style="margin: 0;">
-            <a class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover/popover.html'">Click to toggle popover<br /><small>(won't close existing popovers)</small></a>
-            <a class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover/popover.html'">Unique Popover<br /><small>(will close existing popovers)</small></a>
+            <a class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover/popover.html'">Click to toggle popover<br /><small>(won't close others)</small></a>
+            <a class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover/popover.html'">Unique Popover<br /><small>(will close others)</small></a>
           </div>
         </div>
         <pre class="prettyprint linenums">
@@ -175,30 +175,23 @@
           <h1>Datepicker <small>directives/datepicker.js</small></h1>
         </div>
         <h2>Overview and examples</h2>
-        <p>Use any button to trigger a dropdown menu by placing it within a <code>.btn-group</code> and providing the proper menu markup.</p>
+        <p>Directive for bootstrap-datepicker (made by <a href="http://www.eyecon.ro/bootstrap-datepicker" target="_blank">Stefan Petre</a>).</p>
+        <p>Use any button to trigger a datepicker menu by appending a <code>bs-datepicker</code> tag.</p>
+        <p>You can use a custom button as toggler with <code>data-toggle="datepicker"</code> on a sibling element. Supports AngularJS validation out of the box.</p>
         <div class="bs-docs-example">
           <pre>datepicker: {{datepicker | json}}</pre>
-          <form class="form-horizontal"  name="myForm">
-            <div class="control-group well">
-              <label class="control-label" for="inputDate">Date</label>
-              <div class="controls input-append">
-                <input class="input-small" type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
-                <button class="btn" data-toggle="datepicker" type="button"><i class="icon-calendar"></i></button>
-              </div>
+          <form class="form-horizontal well"  name="myForm">
+            <div class="control-group input-append">
+              <input class="input-small" type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
+              <button class="btn" data-toggle="datepicker" type="button"><i class="icon-calendar"></i></button>
             </div>
           </form>
         </div>
         <pre class="prettyprint linenums">
-          &lt;div class="dropdown"&gt;
-          &lt;!-- Link or button to toggle dropdown --&gt;
-          &lt;ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"&gt;
-          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Action&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Another action&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Something else here&lt;/a&gt;&lt;/li&gt;
-          &lt;li class="divider"&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a tabindex="-1" href="#"&gt;Separated link&lt;/a&gt;&lt;/li&gt;
-          &lt;/ul&gt;
-          &lt;/div&gt;
+&lt;div class="control-group input-append"&gt;
+  &lt;input class="input-small" type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker&gt;
+  &lt;button class="btn" data-toggle="datepicker" type="button"&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/button&gt;
+&lt;/div&gt;
         </pre>
       </section>
 
