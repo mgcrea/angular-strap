@@ -7,7 +7,7 @@ $(function() {
 
 		var $sidenav = $(".bs-docs-sidenav");
 		var offset = $sidenav.offset();
-		$sidenav.affix({offset: offset.top - 20}).addClass("animated");
+		$sidenav.affix({offset: offset.top - ($(window).width() <= 979 ? 20 : 70) }).addClass("animated");
 
 		/*$("pre.prettyprint").each(function() {
 			var $this = $(this);
