@@ -1,7 +1,5 @@
 'use strict';
 
-if(dump) console = {log: dump};
-
 describe('popover', function () {
   var elm, elm2, scope, $httpBackend, $timeout;
 
