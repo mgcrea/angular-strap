@@ -19,28 +19,35 @@ header {
 	}
 }
 
-.navbar {
+body > .navbar {
+	/*&.navbar-fixed-top {
+		@media (max-width: 979px) {
+			position: fixed;
+		}
+	}*/
 	.brand {
 		font-weight: 200;
+		color: #f7f7f7;
 	}
 	.travis-btn {
 		/*position: absolute;
 		z-index: 2;
 		right: 20px;
 		top: 9px;
+		*/
 		@media (max-width: 979px) {
-			right: 60px;
-			top: 13px;
-		}*/
+			padding-right: 10px;
+		}
 		float: right;
 		padding-top: 10px;
+		padding-left: 20px;
 	}
 }
 
 .bs-docs-social {
-		background: rgba(245, 245, 245, .15);
-		border-top: 1px solid rgba(245, 245, 245, .25);
-		border-bottom: 1px solid rgba(221, 221, 221, .25);
+	background: rgba(245, 245, 245, .15);
+	border-top: 1px solid rgba(245, 245, 245, .25);
+	border-bottom: 1px solid rgba(221, 221, 221, .25);
 	ul.bs-docs-social-buttons {
 		li {
 			padding: 5px 0px;
@@ -73,7 +80,9 @@ header {
 .github-ribbon{background-color:#121621;top:3.2em;right:-3.7em;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg);-webkit-box-shadow:0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;-moz-box-shadow:0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;-ms-box-shadow:0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;-o-box-shadow:0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;box-shadow:0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;color:rgba(255,255,255,0.90);display:block;padding:.6em 3.5em;position:absolute;font:bold .82em sans-serif;text-align:center;text-decoration:none;text-shadow:1px -1px 8px rgba(0,0,0,0.60);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}
 .github-ribbon{
 	z-index:2;
-	//top: 80px;
+	@media (max-width: 979px) {
+		display: none;
+	}
 }
 
 /* Jumbotrons
@@ -82,6 +91,9 @@ header {
 /* Base class
 ------------------------- */
 .jumbotron {
+	/*@media (max-width: 980px) {
+		margin-top: 50px;
+	}*/
 	position: relative;
 	padding: 60px 0 40px;
 	color: #fff;
@@ -97,28 +109,4 @@ header {
 	@shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
 	.box-shadow(@shadow);
 }
-.jumbotron h1 {
-	font-size: 80px;
-	font-weight: bold;
-	letter-spacing: -1px;
-	line-height: 1;
-}
-.jumbotron p {
-	font-size: 24px;
-	font-weight: 300;
-	line-height: 1.25;
-	margin-bottom: 30px;
-}
 
-/* Link styles (used on .masthead-links as well) */
-.jumbotron a {
-	color: #fff;
-	color: rgba(255,255,255,.5);
-	-webkit-transition: all .2s ease-in-out;
-		 -moz-transition: all .2s ease-in-out;
-					transition: all .2s ease-in-out;
-}
-.jumbotron a:hover {
-	color: #fff;
-	text-shadow: 0 0 10px rgba(255,255,255,.25);
-}

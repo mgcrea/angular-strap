@@ -7,7 +7,7 @@
 
   <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/css/bootstrap.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
-  <link href="//raw.github.com/mgcrea/angular-strap/master/lib/bootstrap-datepicker.css" rel="stylesheet">
+  <link href="//raw.github.com/mgcrea/angular-strap/master/lib/bootstrap-datepicker.css" rel="stylesheet" type="text/css">
   <link href="css/prettify.css" rel="stylesheet">
   <link href="css/animate.css" rel="stylesheet">
   <link href="css/docs.css" rel="stylesheet">
@@ -48,6 +48,9 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
+        <a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank">
+          <img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master"/>
+        </a>
         <a class="brand" href="./index.html">AngularStrap</a>
         <div class="nav-collapse collapse">
           <ul class="nav">
@@ -59,9 +62,6 @@
             </li>
           </ul>
         </div>
-        <a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank">
-          <img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master"/>
-        </a>
       </div>
     </div>
   </nav>
@@ -123,7 +123,7 @@
         <div class="bs-docs-example">
           <pre>popover: {{popover | json}}</pre>
           <div class="well" style="margin: 0;">
-            <a class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover/popover.html'">Click to toggle popover<br /><small>(will not close existing popovers)</small></a>
+            <a class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover/popover.html'">Click to toggle popover<br /><small>(won't close existing popovers)</small></a>
             <a class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover/popover.html'">Unique Popover<br /><small>(will close existing popovers)</small></a>
           </div>
         </div>
