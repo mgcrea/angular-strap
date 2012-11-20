@@ -5,16 +5,15 @@ $(function() {
 
 	$(document).ready(function($) {
 
-		var offset = $("header").height() + $(".navbar-fixed-top").height();
-		$(".bs-docs-sidenav").affix({offset: offset}).addClass("animated");
-
+		var $sidenav = $(".bs-docs-sidenav");
+		var offset = $sidenav.offset();
+		$sidenav.affix({offset: offset.top - 20}).addClass("animated");
 
 		/*$("pre.prettyprint").each(function() {
 			var $this = $(this);
 			$this.text($this.html().replace('/\s+/ig', ''));
 		});*/
 		prettyPrint();
-
 
 	});
 
