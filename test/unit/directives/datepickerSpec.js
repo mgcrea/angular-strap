@@ -13,6 +13,10 @@ describe('datepicker', function () {
     )($rootScope);
   }));
 
+  it('should correctly be loaded', function() {
+    expect($.fn.datepicker).toBeDefined();
+  });
+
   it('should add "data-toggle" attr for you', function () {
     expect(elm.attr('data-toggle') == 'datepicker').toBe(true);
   });
