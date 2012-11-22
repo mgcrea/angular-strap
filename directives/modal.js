@@ -24,7 +24,7 @@ angular.module('$strap.directives')
         // Build modal object
         var id = getter(scope).replace(/\//g, '-').replace(/\./g, '-').replace('html', scope.$id);
         var $modal = $('<div></div>');
-        $modal = $modal.attr('id', id).attr('style', 'display:none;').addClass('modal hide fade').html(data);
+        $modal = $modal.attr('id', id).addClass('modal hide fade').html(data);
         $('body').append($modal);
 
         // Configure element
@@ -35,11 +35,8 @@ angular.module('$strap.directives')
           $compile($modal)(scope);
         });
 
-        $modal.on('hidden', function() {
-        });
-
-        window.element = element;
-        window.$modal = $modal;
+        // $modal.on('hidden', function() {
+        // });
 
       });
     }

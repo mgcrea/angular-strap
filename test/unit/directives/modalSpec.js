@@ -40,9 +40,11 @@ describe('modal', function () {
 
   it('should show the modal on click', function(done) {
     var $modal = $(elm.attr('href'));
+    expect($modal.hasClass('hide')).toBe(true);
     elm.trigger('click');
     $timeout(function() {
       expect($modal.hasClass('in')).toBe(true);
+      expect($modal.hasClass('hide')).toBe(false);
       done();
     });
   });
