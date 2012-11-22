@@ -133,12 +133,24 @@
         <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the modal to toggle its visibility.</p>
         <div class="bs-docs-example">
           <pre>modal: {{modal | json}}</pre>
-          <div class="well" style="margin: 0;">
+          <div class="well">
             <button type="button" class="btn btn-large btn-primary" bs-modal="'partials/modal.html'">Click to open modal</button>
           </div>
         </div>
-        <pre class="prettyprint linenums">
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Button to trigger modal --&gt;
 &lt;button type="button" class=&quot;btn&quot; bs-modal=&quot;'partials/modal.html'&quot;&gt;...&lt;/button&gt;
+
+&lt;!-- Modal (./partials/modal.html) -->
+&lt;div class="modal-header"&gt;
+  &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;×&lt;/button&gt;
+  &lt;h3&gt;Modal header&lt;/h3&gt;
+&lt;/div&gt;
+&lt;div class="modal-body"&gt;
+  &lt;p&gt;{{modal.content}}&lt;/p&gt;
+  &lt;br /&gt;
+  &lt;pre&gt;2 + 3 = {{ 2 + 3 }}&lt;/pre&gt;
+&lt;/div&gt;
         </pre>
         <div class="alert alert-info">
           <strong>Heads up!</strong>
@@ -157,12 +169,12 @@
         <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the popover to toggle its visibility.</p>
         <div class="bs-docs-example">
           <pre>popover: {{popover | json}}</pre>
-          <div class="well" style="margin: 0;">
+          <div class="well">
             <button type="button" class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover.html'">Click to toggle popover<br /><small>(won't close others)</small></button>
             <button type="button" class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover.html'">Unique Popover<br /><small>(will close others)</small></button>
           </div>
         </div>
-        <pre class="prettyprint linenums">
+        <pre class="prettyprint linenums" ng-non-bindable>
 &lt;button type="button" class=&quot;btn&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/button&gt;
 &lt;!-- force close every other popover with data-unique --&gt;
 &lt;button type="button" class=&quot;btn&quot; data-unique=&quot;1&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/button&gt;
@@ -186,13 +198,13 @@
             <button type="button" data-toggle="button" class="btn" ng-model="button.active" bs-button>Toggle me!</button>
           </div>
         </div>
-        <pre class="prettyprint linenums">
+        <pre class="prettyprint linenums" ng-non-bindable>
 &lt;button type="button" data-toggle="button" class="btn" ng-model="button.active" bs-button&quot;&gt;...&lt;/button&gt;
         </pre>
         <h3 id="checkboxes">Checkboxes</h3>
         <div class="bs-docs-example">
           <pre>checkbox: {{checkbox | json}}</pre>
-          <div class="btn-toolbar well" style="margin: 0;">
+          <div class="btn-toolbar well">
             <div class="btn-group" data-toggle="buttons-checkbox">
               <button type="button" class="btn" ng-model="checkbox.left" bs-button>Left</button>
               <button type="button" class="btn" ng-model="checkbox.middle" bs-button>Middle</button>
@@ -200,7 +212,7 @@
             </div>
           </div>
         </div>
-        <pre class="prettyprint linenums">
+        <pre class="prettyprint linenums" ng-non-bindable>
 &lt;div class="btn-group" data-toggle="buttons-checkbox"&gt;
   &lt;button type="button" class="btn" ng-model="checkbox.left" bs-button&quot;&gt;...&lt;/button&gt;
   &lt;button type="button" class="btn" ng-model="checkbox.middle" bs-button&quot;&gt;...&lt;/button&gt;
@@ -221,7 +233,7 @@
             <input type="text" class="span3" data-items="4" ng-model="typeaheadValue" bs-typeahead="typeahead">
           </div>
         </div>
-        <pre class="prettyprint linenums">
+        <pre class="prettyprint linenums" ng-non-bindable>
 &lt;input type="text" ng-model="typeaheadValue" bs-typeahead="typeahead"&gt;
         </pre>
      </section>
