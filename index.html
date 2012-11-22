@@ -10,12 +10,13 @@
 
   <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/css/bootstrap.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="css/bootstrap-datepicker.css" rel="stylesheet">
+  <link href="css/bootstrap-timepicker.css" rel="stylesheet">
   <link href="css/prettify.css" rel="stylesheet">
   <link href="css/animate.css" rel="stylesheet">
   <link href="css/docs.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
   <link href="less/styles.less" rel="stylesheet/less" type="text/css">
-  <link href="css/bootstrap-datepicker.css" rel="stylesheet">
 
   <!--[if lt IE 9]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js"></script>
@@ -28,12 +29,14 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
 
   <script src="//raw.github.com/mgcrea/angular-strap/master/lib/bootstrap-datepicker.js"></script>
+  <script src="//raw.github.com/mgcrea/angular-strap/master/lib/bootstrap-timepicker.js"></script>
   <script src="//raw.github.com/mgcrea/angular-strap/master/common.js"></script>
   <script src="//raw.github.com/mgcrea/angular-strap/master/directives/modal.js"></script>
   <script src="//raw.github.com/mgcrea/angular-strap/master/directives/popover.js"></script>
   <script src="//raw.github.com/mgcrea/angular-strap/master/directives/button.js"></script>
   <script src="//raw.github.com/mgcrea/angular-strap/master/directives/typeahead.js"></script>
   <script src="//raw.github.com/mgcrea/angular-strap/master/directives/datepicker.js"></script>
+  <script src="//raw.github.com/mgcrea/angular-strap/master/directives/timepicker.js"></script>
 
   <script src="js/app.js"></script>
 
@@ -117,6 +120,7 @@
         <li><a href="#checkboxes"><i class="icon-chevron-right"></i> Checkboxes</a></li>
         <li><a href="#typeahead"><i class="icon-chevron-right"></i> Typeahead</a></li>
         <li><a href="#datepicker"><i class="icon-chevron-right"></i> Datepicker</a></li>
+        <li><a href="#timepicker"><i class="icon-chevron-right"></i> Timepicker</a></li>
       </ul>
     </div>
 
@@ -250,6 +254,7 @@
           <pre>datepicker: {{datepicker | json}}<!--<br />myForm: {{myForm | json}}--></pre>
           <form class="form-horizontal well" name="myForm">
             <div class="control-group input-append">
+              <label class="label" style="margin-right:6px;">date</label>
               <input name="date" class="input-small" type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
               <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
             </div>
@@ -263,6 +268,32 @@
         </pre>
       </section>
 
+      <section id="timepicker">
+        <div class="page-header">
+          <h1>Timepicker <small><a href="//github.com/mgcrea/angular-strap/blob/master/directives/timepicker.js" target="_blank">directives/timepicker.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Directive for bootstrap-timepicker (made by <a href="https://github.com/jdewit" target="_blank">jdewit</a>), currently using the fork version from <a href="https://github.com/kla" target="_blank">kla</a>.</p>
+        <p>Use any button to trigger a timepicker menu by appending a <code>bs-timepicker</code> tag.</p>
+        <!--<p>You can use a custom button as toggler with <code>data-toggle="timepicker"</code> on a sibling element.</p>-->
+        <p>Supports AngularJS validation out of the box.</p>
+        <div class="bs-docs-example">
+          <pre>timepicker: {{timepicker | json}}<!--<br />myForm: {{myForm | json}}--></pre>
+          <form class="form-horizontal well" name="myForm">
+            <div class="control-group">
+              <label class="label">time</label>
+              <input name="time" class="input-small" type="text" ng-model="timepicker.time" bs-timepicker>
+              <i class="icon-time" style="margin: 2.5px 0 0 -24px; pointer-events: none; position: relative;"></i>
+            </div>
+          </form>
+        </div>
+        <pre class="prettyprint linenums">
+&lt;div class="control-group"&gt;
+  &lt;input type="text" ng-model="timepicker.time" bs-timepicker&gt;
+  &lt;i class="icon-time" style="margin: 2.5px 0 0 -24px; pointer-events: none; position: relative;"&gt;&lt;/i&gt;
+&lt;/div&gt;
+        </pre>
+      </section>
 
     </div>
 
