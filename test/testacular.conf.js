@@ -14,6 +14,7 @@ files = [
   'lib/angular.js',
   'lib/bootstrap.js',
   'lib/bootstrap-datepicker.js',
+  'lib/bootstrap-timepicker.js',
   'test/lib/angular/angular-mocks.js',
   'common.js',
   'directives/*.js',
