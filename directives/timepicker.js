@@ -36,10 +36,12 @@ angular.module('$strap.directives')
 			});
 
 			// Support add-on
-			var component = element.next('[data-toggle="timepicker"]');
-			if(component.length) {
-				component.on('click', function() { element.trigger('focus'); });
-			}
+			// var component = element.siblings('[data-toggle="timepicker"]');
+			// if(component.length) {
+			// 	component.on('click', function() {
+			// 		var $widget = element.data('timepicker').$widget;
+			// 	});
+			// }
 
 			// Popover GarbageCollection
 			var $popover = element.closest('.popover');
