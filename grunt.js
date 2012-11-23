@@ -67,7 +67,7 @@ module.exports = function(grunt) {
     var done = this.async();
     grunt.utils.spawn({
       cmd: process.platform === 'win32' ? 'testacular.cmd' : 'testacular',
-      args: process.env.TRAVIS ? ['start', 'test/testacular.conf.js', '--single-run', '--no-auto-watch', '--reporter=dots', '--browsers=PhantomJS'] : ['start', 'test/testacular.conf.js', '--single-run', '--no-auto-watch', '--browsers=PhantomJS']
+      args: process.env.TRAVIS ? ['start', 'test/testacular.conf.js', '--single-run', '--no-auto-watch', '--reporters=dots', '--browsers=PhantomJS'] : ['start', 'test/testacular.conf.js', '--single-run', '--no-auto-watch', '--browsers=PhantomJS']
     }, function (error, result, code) {
       if (error) {
         grunt.warn(error.stdout + error.stderr);
