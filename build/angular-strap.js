@@ -2,6 +2,7 @@
  * AngularStrap - Twitter Bootstrap directives for AngularJS
  * @version v0.5.1 - 2012-11-23
  * @link http://angular-strap.github.com
+ * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
