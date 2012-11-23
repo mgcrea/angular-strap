@@ -35,11 +35,13 @@ describe('timepicker', function () {
 		expect(elm.data('timepicker').$widget.hasClass('open')).toBe(true);
 	});
 
-	it('should show the datepicker on focus', function() {
+	it('should show the timepicker on focus', function() {
 		elm.trigger('focus');
 		expect(elm.data('timepicker').$widget.hasClass('open')).toBe(true);
 		$('body').trigger('click');
-		expect(elm.data('timepicker').$widget.hasClass('open')).toBe(false);
+		$timeout(function() {
+			expect(elm.data('timepicker').$widget.hasClass('open')).toBe(false);
+		});
 	});
 
 	it('should correctly update both input value and bound model', function() {
