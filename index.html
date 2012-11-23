@@ -149,6 +149,10 @@
   &lt;br /&gt;
   &lt;pre&gt;2 + 3 = {{ 2 + 3 }}&lt;/pre&gt;
 &lt;/div&gt;
+&lt;div class="modal-footer"&gt;
+  &lt;button type="button" class="btn" ng-click="dismiss()"&gt;Close&lt;/button&gt;
+  &lt;button class="btn btn-primary" ng-click="modal.saved=true;dismiss()"&gt;Save changes&lt;/button&gt;
+&lt;/div&gt;
         </pre>
         <div class="alert alert-info">
           <strong>Heads up!</strong>
@@ -173,9 +177,22 @@
           </div>
         </div>
         <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Button to trigger popover --&gt;
 &lt;button type="button" class=&quot;btn&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/button&gt;
-&lt;!-- force close every other popover with data-unique --&gt;
+
+&lt;!-- Force close others with data-unique attribute --&gt;
 &lt;button type="button" class=&quot;btn&quot; data-unique=&quot;1&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/button&gt;
+
+&lt;!-- Popover (./partials/popover.html) --&gt;
+&lt;form name="popoverForm"&gt;
+  &lt;p&gt;{{popover.content}}&lt;/p&gt;
+  &lt;br /&gt;
+  &lt;pre&gt;2 + 3 = {{ 2 + 3 }}&lt;/pre&gt;
+  &lt;div class="form-actions"&gt;
+    &lt;button type="button" class="btn" ng-click="dismiss()"&gt;Close&lt;/button&gt;
+    &lt;button class="btn btn-primary" ng-click="popover.saved=true;dismiss()"&gt;Save changes&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
         </pre>
         <div class="alert alert-info">
           <strong>Heads up!</strong>
@@ -193,11 +210,11 @@
         <div class="bs-docs-example">
           <pre>button: {{button | json}}</pre>
           <div class="btn-toolbar well" style="margin: 0;">
-            <button type="button" data-toggle="button" class="btn btn-primary" ng-model="button.active" bs-button>Toggle me!</button>
+            <button type="button" class="btn btn-primary" ng-model="button.active" bs-button>Toggle me!</button>
           </div>
         </div>
         <pre class="prettyprint linenums" ng-non-bindable>
-&lt;button type="button" data-toggle="button" class="btn" ng-model="button.active" bs-button&gt;...&lt;/button&gt;
+&lt;button type="button" class="btn" ng-model="button.active" bs-button&gt;...&lt;/button&gt;
         </pre>
         <h3 id="checkboxes">Checkboxes</h3>
         <div class="bs-docs-example">
