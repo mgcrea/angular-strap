@@ -9,4 +9,4 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 script:
-  - testacular start test/testacular.conf.js --single-run --no-auto-watch --browsers PhantomJS
+  - testacular start test/testacular.conf.js --single-run --no-auto-watch --reporter=dots --browsers PhantomJS
