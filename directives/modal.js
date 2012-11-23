@@ -2,6 +2,7 @@
 angular.module('$strap.directives')
 
 .directive('bsModal', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
+  'use strict';
 
   return {
     restrict: 'A',
