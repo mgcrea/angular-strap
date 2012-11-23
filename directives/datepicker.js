@@ -1,17 +1,17 @@
-
 // https://github.com/eternicode/bootstrap-datepicker
-
-var DATE_REGEXP_MAP = {
-	'/'    : '[\\/]',
-	'-'    : '[-]',
-	'dd'   : '(?:(?:[0-2]?\\d{1})|(?:[3][01]{1}))',
-	'mm'   : '(?:[0]?[1-9]|[1][012])',
-	'yyyy' : '(?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3}))(?![\\d])'
-};
 
 angular.module('$strap.directives')
 
 .directive('bsDatepicker', ['$timeout', function($timeout) {
+	'use strict';
+
+	var DATE_REGEXP_MAP = {
+		'/'    : '[\\/]',
+		'-'    : '[-]',
+		'dd'   : '(?:(?:[0-2]?\\d{1})|(?:[3][01]{1}))',
+		'mm'   : '(?:[0]?[1-9]|[1][012])',
+		'yyyy' : '(?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3}))(?![\\d])'
+	};
 
 	return {
 		restrict: 'A',
@@ -35,9 +35,9 @@ angular.module('$strap.directives')
 					regexpMap['/'] = '';
 					regexpMap['-'] = '';
 				}*/
-				angular.forEach(regexpMap, function(v, k) { re = re.split(k).join(v); })
+				angular.forEach(regexpMap, function(v, k) { re = re.split(k).join(v); });
 				return new RegExp('^' + re + '$', ['i']);
-			}
+			};
 
 			var dateFormatRegexp = regexpForDateFormat(attrs.dateFormat || 'mm/dd/yyyy'/*, {mask: !!attrs.uiMask}*/);
 
@@ -80,6 +80,7 @@ angular.module('$strap.directives')
 			//}, 0, false);
 
 		}
-	}
+
+	};
 
 }]);

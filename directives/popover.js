@@ -2,14 +2,17 @@
 angular.module('$strap.directives')
 
 .directive('bsPopover', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
+	'use strict';
 
 	// Hide popovers when pressing esc
 	$("body").on("keyup", function(ev) {
-		if(ev.keyCode == 27) $(".popover.in").each(function() {
-			var $this = $(this);
-			$this.popover('hide');
-		});
-	})
+		if(ev.keyCode === 27) {
+			$(".popover.in").each(function() {
+				var $this = $(this);
+				$this.popover('hide');
+			});
+		}
+	});
 
 	return {
 		restrict: 'A',
@@ -39,7 +42,9 @@ angular.module('$strap.directives')
 						$(".popover.in").each(function() {
 							var $this = $(this),
 								popover = $this.data('popover');
-							if(popover && !popover.$element.is(element)) $this.popover('hide');
+							if(popover && !popover.$element.is(element)) {
+								$this.popover('hide');
+							}
 						});
 					}
 
@@ -65,21 +70,26 @@ angular.module('$strap.directives')
 				popover.show = function() {
 					var e = $.Event('show');
 					this.$element.trigger(e);
-					if (e.isDefaultPrevented()) return;
+					if (e.isDefaultPrevented()) {
+						return;
+					}
 					var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
 					// Bind popover to the tip()
 					this.tip().data('popover', this);
 					return r;
-				}
+				};
 				popover.hide = function() {
 					var e = $.Event('hide');
 					this.$element.trigger(e);
-					if (e.isDefaultPrevented()) return;
+					if (e.isDefaultPrevented()) {
+						return;
+					}
 					return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
-				}
+				};
 				//}, 0, false);
 
 			});
 		}
 	};
+
 }]);

@@ -2,11 +2,12 @@
 // https://github.com/jdewit/bootstrap-timepicker
 // https://github.com/kla/bootstrap-timepicker
 
-var TIME_REGEXP = '((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)'
-
 angular.module('$strap.directives')
 
 .directive('bsTimepicker', ['$timeout', function($timeout) {
+	'use strict';
+
+	var TIME_REGEXP = '((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)';
 
 	return {
 		restrict: 'A',
@@ -38,9 +39,9 @@ angular.module('$strap.directives')
 			// Support add-on
 			// var component = element.siblings('[data-toggle="timepicker"]');
 			// if(component.length) {
-			// 	component.on('click', function() {
-			// 		var $widget = element.data('timepicker').$widget;
-			// 	});
+			//  component.on('click', function() {
+			//    var $widget = element.data('timepicker').$widget;
+			//   });
 			// }
 
 			// Popover GarbageCollection
@@ -62,6 +63,6 @@ angular.module('$strap.directives')
 			//});
 
 		}
-	}
+	};
 
 }]);
