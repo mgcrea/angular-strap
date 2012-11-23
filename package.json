@@ -14,7 +14,8 @@
   "dependencies": {
   },
   "devDependencies": {
-    "testacular": ">= 0.4.0"
+    "testacular": ">= 0.4.0",
+    "grunt": ">= 0.3.17"
   },
   "scripts": {
     "test": "testacular start test/testacular.conf.js --single-run --browsers PhantomJS",
