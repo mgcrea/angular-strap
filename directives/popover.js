@@ -26,6 +26,7 @@ angular.module('$strap.directives')
 
 				// Provide scope display functions
 				scope.dismiss = function() {
+					console.warn('dismiss!');
 					element.popover('hide');
 				};
 				scope.show = function() {
@@ -56,17 +57,58 @@ angular.module('$strap.directives')
 				//$timeout(function () { // ui-lag?
 				element.popover({
 					content: function() {
-						$timeout(function(){
-							$compile(element.data('popover').tip())(scope);
+						$timeout(function() {
+
+							var popover = element.data('popover'),
+								$tip = popover.tip();
+
+							$compile($tip)(scope);
+
+							setTimeout(function() {
+								popover.refresh();
+							});
+
 						});
+
 						return data;
 					},
 					trigger: 'manual',
 					html: true
 				});
 
-				// Bootstrap override to provide events & tip() reference
+				// Bootstrap override to provide events & tip() reference & refresh positions
 				var popover = element.data('popover');
+				popover.refresh = function() {
+					var $tip = this.tip(), inside, pos, actualWidth, actualHeight, placement, tp;
+
+					placement = typeof this.options.placement === 'function' ?
+						this.options.placement.call(this, $tip[0], this.$element[0]) :
+						this.options.placement;
+
+					inside = /in/.test(placement);
+
+					pos = this.getPosition(inside);
+
+					actualWidth = $tip[0].offsetWidth;
+					actualHeight = $tip[0].offsetHeight;
+
+					switch (inside ? placement.split(' ')[1] : placement) {
+						case 'bottom':
+						tp = {top: pos.top + pos.height + 10, left: pos.left + pos.width / 2 - actualWidth / 2};
+						break;
+						case 'top':
+						tp = {top: pos.top - actualHeight - 10, left: pos.left + pos.width / 2 - actualWidth / 2};
+						break;
+						case 'left':
+						tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth - 10};
+						break;
+						case 'right':
+						tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width + 10};
+						break;
+					}
+
+					$tip.offset(tp);
+				};
 				popover.show = function() {
 					var e = $.Event('show');
 					this.$element.trigger(e);
@@ -74,8 +116,10 @@ angular.module('$strap.directives')
 						return;
 					}
 					var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
+					// Save offset to refresh positions
+					this.$tip.data('offset', {width: this.$tip[0].offsetWidth, height: this.$tip[0].offsetHeight});
 					// Bind popover to the tip()
-					this.tip().data('popover', this);
+					this.$tip.data('popover', this);
 					return r;
 				};
 				popover.hide = function() {
@@ -86,7 +130,7 @@ angular.module('$strap.directives')
 					}
 					return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
 				};
-				//}, 0, false);
+				//});
 
 			});
 		}

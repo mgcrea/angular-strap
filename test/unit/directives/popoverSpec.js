@@ -1,7 +1,7 @@
 'use strict';
 
 describe('popover', function () {
-	var elm, elm2, scope, $httpBackend, $timeout;
+	var elm, elm2, popoverContent, scope, $httpBackend, $timeout;
 
 	beforeEach(module('$strap.directives'));
 
@@ -10,11 +10,12 @@ describe('popover', function () {
 		$timeout = _$timeout_,
 		scope = $rootScope;
 
-		scope.name = "World";
+		scope.content = "World<br />Multiline Content<br />";
+		popoverContent = 'Hello <span ng-bind-html-unsafe="content"></span>';
 
 		$httpBackend
 			.expectGET('partials/popover.html')
-			.respond('Hello {{name}}');
+			.respond(popoverContent);
 
 		elm = $compile(
 			'<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-placement="left"></a>'
@@ -24,7 +25,7 @@ describe('popover', function () {
 
 		$httpBackend
 			.expectGET('partials/popover.html')
-			.respond('Hello {{name}}');
+			.respond(popoverContent);
 
 		elm2 = $compile(
 			'<a class="btn" bs-popover="\'partials/popover.html\'" data-unique="1" data-title="aTitleBis" data-placement="left"></a>'
@@ -35,8 +36,8 @@ describe('popover', function () {
 
 	it('should fetch the partial and build the popover', function () {
 		expect(elm.data('popover')).toBeDefined();
-		expect(typeof elm.data('popover').options.content == 'function').toBe(true);
-		expect(elm.data('popover').options.content()).toBe('Hello {{name}}');
+		expect(typeof elm.data('popover').options.content === 'function').toBe(true);
+		expect(elm.data('popover').options.content()).toBe(popoverContent);
 	});
 
 	it('should define a correct title', function() {
@@ -46,7 +47,7 @@ describe('popover', function () {
 
 	it('should resolve scope variables in the external partial', function() {
 		elm.popover('show'); $timeout.flush();
-		expect(elm.data('popover').tip().find('.popover-content').text()).toBe('Hello World');
+		expect(elm.data('popover').tip().find('.popover-content').text()).toBe('Hello WorldMultiline Content');
 	});
 
 	it('should define the popover reference on the tip', function() {
@@ -69,8 +70,7 @@ describe('popover', function () {
 			elm2.trigger('click');
 			expect(elm.data('popover').tip().hasClass('in')).toBe(false);
 			done();
-		}, 100)
-
+		}, 100);
 	});
 
 });
