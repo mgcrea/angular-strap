@@ -26,7 +26,6 @@ angular.module('$strap.directives')
 
 				// Provide scope display functions
 				scope.dismiss = function() {
-					console.warn('dismiss!');
 					element.popover('hide');
 				};
 				scope.show = function() {
