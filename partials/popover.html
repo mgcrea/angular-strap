@@ -1,7 +1,7 @@
 <form name="popoverForm">
-	<p>{{popover.content}}</p>
+	<p ng-bind-html-unsafe="popover.content"></p>
 	<br />
-	<pre>2 + 3 = {{ 2 + 3 }}</pre>
+	<pre>2 + 3 = <span ng-cloak>{{ 2 + 3 }}</span></pre>
 	<div class="form-actions">
 		<button type="button" class="btn" ng-click="dismiss()">Close</button>
 		<button class="btn btn-primary" ng-click="popover.saved=true;dismiss()">Save changes</button>

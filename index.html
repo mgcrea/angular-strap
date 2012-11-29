@@ -173,7 +173,7 @@
           <pre>popover: {{popover | json}}</pre>
           <div class="well">
             <button type="button" class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover.html'">Click to toggle popover<br /><small>(won't close others)</small></button>
-            <button type="button" class="btn btn-large btn-danger" data-unique="1" data-placement="top" data-title="Title Two" bs-popover="'partials/popover.html'">Unique Popover<br /><small>(will close others)</small></button>
+            <button type="button" class="btn btn-large btn-danger" data-unique="1" data-placement="right" data-title="Title Two" bs-popover="'partials/popover.html'">Unique Popover<br /><small>(will close others)</small></button>
           </div>
         </div>
         <pre class="prettyprint linenums" ng-non-bindable>
@@ -185,7 +185,7 @@
 
 &lt;!-- Popover (./partials/popover.html) --&gt;
 &lt;form name="popoverForm"&gt;
-  &lt;p&gt;{{popover.content}}&lt;/p&gt;
+  &lt;p ng-bind-html-unsafe="popover.content"&gt;&lt;/p&gt;
   &lt;br /&gt;
   &lt;pre&gt;2 + 3 = {{ 2 + 3 }}&lt;/pre&gt;
   &lt;div class="form-actions"&gt;
