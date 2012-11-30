@@ -109,6 +109,7 @@
     <div class="span3 bs-docs-sidebar">
       <ul class="nav nav-list bs-docs-sidenav">
         <li class="active"><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
+        <li><a href="#tooltip"><i class="icon-chevron-right"></i> Tooltip</a></li>
         <li><a href="#popover"><i class="icon-chevron-right"></i> Popover</a></li>
         <li><a href="#buttons"><i class="icon-chevron-right"></i> Buttons</a></li>
         <li><a href="#checkboxes"><i class="icon-chevron-right"></i> Checkboxes</a></li>
@@ -160,6 +161,36 @@
         </div>
       </section>
 
+      <section id="tooltip">
+        <div class="page-header">
+          <h1>Tooltip <small><a href="//github.com/mgcrea/angular-strap/blob/master/directives/tooltip.js" target="_blank">directives/tooltip.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Parses the content passed to the directive & displays a tooltip with it.</p>
+        <p>Use any button to trigger a popover menu by appending a <code>bs-popover</code> tag.</p>
+        <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the tooltip to toggle its visibility.</p>
+        <div class="bs-docs-example">
+          <pre>tooltip: {{tooltip | json}}</pre>
+          <div class="well">
+            <a href="" bs-tooltip="tooltip.title">Hover me to toggle a tooltip</a>
+            <hr />
+            <div class="control-group input-prepend">
+              <button type="submit" class="btn" data-trigger="click" bs-tooltip="tooltip.title">Click me</button>
+              <input type="text" class="span2" data-placement="right" placeholder="Focus to toggle tooltip" data-trigger="focus" data-unique="1" bs-tooltip="tooltip.title"/>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Basic tooltip on hover --&gt;
+&lt;a href="#" bs-tooltip="tooltip.title"&gt;...&lt;/a&gt;
+&lt;!-- Button to trigger tooltip on click --&gt;
+&lt;button type="submit" class="btn" data-trigger="click" bs-tooltip="tooltip.title"&gt;Click me&lt;/button&gt;
+&lt;!-- Force close others with data-unique attribute --&gt;
+&lt;input type="text" data-trigger="focus" data-unique="1" bs-tooltip="tooltip.title"/&gt;
+        </pre>
+      </section>
+
       <section id="popover">
         <div class="page-header">
           <h1>Popover <small><a href="//github.com/mgcrea/angular-strap/blob/master/directives/popover.js" target="_blank">directives/popover.js</a></small></h1>
@@ -167,7 +198,7 @@
         <h2>Overview and examples</h2>
         <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
         <p>Fetches an external html partial and populates the popover with its content.</p>
-        <p>Use any button to trigger a popover menu by appending a <code>bs-popover</code> tag.</p>
+        <p>Use any button/anchor to trigger a popover menu by appending a <code>bs-popover</code> tag.</p>
         <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the popover to toggle its visibility.</p>
         <div class="bs-docs-example">
           <pre>popover: {{popover | json}}</pre>

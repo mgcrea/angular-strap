@@ -23,6 +23,7 @@ var app = angular.module('strap', ['$strap.directives']);
 
 app.controller('StrapCtrl', function($scope) {
 	$scope.modal = {content: 'Hello Modal', saved: false};
+	$scope.tooltip = {title: "Hello Tooltip<br />This is a multiline message!"};
 	$scope.popover = {content: "Hello Popover<br />This is a multiline message!", saved: false};
 	$scope.button = {active: true};
 	$scope.checkbox = {left: false, middle: true, right: false};
