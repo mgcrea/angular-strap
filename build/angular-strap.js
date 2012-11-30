@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.5.2 - 2012-11-29
+ * @version v0.5.3 - 2012-12-01
  * @link http://angular-strap.github.com
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -226,13 +226,9 @@ angular.module('$strap.directives')
           element.popover('show');
         };
 
-        // Visibility handling
-        element.on('click', function(ev) {
-          var popover = element.data('popover'),
-            visibility = !popover.tip().hasClass('in');
-
-          // Hide any active popover except self
-          if(!!attr.unique && visibility) {
+        if(!!attr.unique) {
+          element.on('show', function(ev) {
+            // Hide any active popover except self
             $(".popover.in").each(function() {
               var $this = $(this),
                 popover = $this.data('popover');
@@ -240,14 +236,10 @@ angular.module('$strap.directives')
                 $this.popover('hide');
               }
             });
-          }
+          });
+        }
 
-          // Toggle the popover
-          element.popover(visibility ? 'show' : 'hide');
-        });
-
-        // Create popover
-        //$timeout(function () { // ui-lag?
+        // Initialize popover
         element.popover({
           content: function() {
             $timeout(function() {
@@ -265,7 +257,6 @@ angular.module('$strap.directives')
 
             return data;
           },
-          trigger: 'manual',
           html: true
         });
 
@@ -308,9 +299,7 @@ angular.module('$strap.directives')
           if (e.isDefaultPrevented()) {
             return;
           }
-          var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
-          // Save offset to refresh positions
-          this.$tip.data('offset', {width: this.$tip[0].offsetWidth, height: this.$tip[0].offsetHeight});
+          var r = $.fn.popover.Constructor.prototype.show.apply(this, arguments);
           // Bind popover to the tip()
           this.$tip.data('popover', this);
           return r;
@@ -321,9 +310,8 @@ angular.module('$strap.directives')
           if (e.isDefaultPrevented()) {
             return;
           }
-          return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
+          return $.fn.popover.Constructor.prototype.hide.apply(this, arguments);
         };
-        //});
 
       });
     }
@@ -394,6 +382,66 @@ angular.module('$strap.directives')
       //$timeout(function () {
         element.timepicker();
       //});
+
+    }
+  };
+
+}]);
+
+
+angular.module('$strap.directives')
+
+.directive('bsTooltip', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
+  'use strict';
+
+  return {
+    restrict: 'A',
+    scope: true,
+    link: function postLink(scope, element, attr, ctrl) {
+
+      var getter = $parse(attr.bsTooltip),
+        setter = getter.assign;
+
+      if(!!attr.unique) {
+        element.on('show', function(ev) {
+          // Hide any active popover except self
+          $(".tooltip.in").each(function() {
+            var $this = $(this),
+              tooltip = $this.data('tooltip');
+            if(tooltip && !tooltip.$element.is(element)) {
+              $this.tooltip('hide');
+            }
+          });
+        });
+      }
+
+      // Initialize tooltip
+      element.tooltip({
+        title: getter(scope),
+        html: true
+      });
+
+      // Bootstrap override to provide events & tip() reference & refresh positions
+      var tooltip = element.data('tooltip');
+      tooltip.show = function() {
+        var e = $.Event('show');
+        this.$element.trigger(e);
+        if (e.isDefaultPrevented()) {
+          return;
+        }
+        var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
+        // Bind popover to the tip()
+        this.$tip.data('tooltip', this);
+        return r;
+      };
+      tooltip.hide = function() {
+        var e = $.Event('hide');
+        this.$element.trigger(e);
+        if (e.isDefaultPrevented()) {
+          return;
+        }
+        return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
+      };
 
     }
   };
