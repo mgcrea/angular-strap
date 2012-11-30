@@ -32,13 +32,9 @@ angular.module('$strap.directives')
 					element.popover('show');
 				};
 
-				// Visibility handling
-				element.on('click', function(ev) {
-					var popover = element.data('popover'),
-						visibility = !popover.tip().hasClass('in');
-
-					// Hide any active popover except self
-					if(!!attr.unique && visibility) {
+				if(!!attr.unique) {
+					element.on('show', function(ev) {
+						// Hide any active popover except self
 						$(".popover.in").each(function() {
 							var $this = $(this),
 								popover = $this.data('popover');
@@ -46,14 +42,10 @@ angular.module('$strap.directives')
 								$this.popover('hide');
 							}
 						});
-					}
+					});
+				}
 
-					// Toggle the popover
-					element.popover(visibility ? 'show' : 'hide');
-				});
-
-				// Create popover
-				//$timeout(function () { // ui-lag?
+				// Initialize popover
 				element.popover({
 					content: function() {
 						$timeout(function() {
@@ -71,7 +63,6 @@ angular.module('$strap.directives')
 
 						return data;
 					},
-					trigger: 'manual',
 					html: true
 				});
 
@@ -114,9 +105,7 @@ angular.module('$strap.directives')
 					if (e.isDefaultPrevented()) {
 						return;
 					}
-					var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
-					// Save offset to refresh positions
-					this.$tip.data('offset', {width: this.$tip[0].offsetWidth, height: this.$tip[0].offsetHeight});
+					var r = $.fn.popover.Constructor.prototype.show.apply(this, arguments);
 					// Bind popover to the tip()
 					this.$tip.data('popover', this);
 					return r;
@@ -127,9 +116,8 @@ angular.module('$strap.directives')
 					if (e.isDefaultPrevented()) {
 						return;
 					}
-					return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
+					return $.fn.popover.Constructor.prototype.hide.apply(this, arguments);
 				};
-				//});
 
 			});
 		}
