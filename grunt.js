@@ -14,12 +14,12 @@ module.exports = function(grunt) {
       ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' + ' */'
     },
     lint: {
-      files: ['grunt.js', 'directives/*.js', 'test/unit/*.js']
+      files: ['grunt.js', 'src/directives/*.js', 'test/unit/*.js']
     },
     builddir: 'build',
     concat: {
       build: {
-        src: ['<banner:meta.banner>', 'common.js', 'directives/*.js'],
+        src: ['<banner:meta.banner>', 'src/common.js', 'src/directives/*.js'],
         dest: '<%= builddir %>/<%= pkg.name %>.js'
       }
     },

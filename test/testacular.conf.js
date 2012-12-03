@@ -11,14 +11,14 @@ files = [
   JASMINE,
   'test/lib/async-callback.js',
   JASMINE_ADAPTER,
-  'lib/jquery.js',
-  'lib/angular.js',
-  'lib/bootstrap.js',
-  'lib/bootstrap-datepicker.js',
-  'lib/bootstrap-timepicker.js',
+  'test/lib/jquery.js',
+  'test/lib/angular/angular.js',
   'test/lib/angular/angular-mocks.js',
-  'common.js',
-  'directives/*.js',
+  'test/lib/bootstrap.js',
+  'vendor/bootstrap-datepicker.js',
+  'vendor/bootstrap-timepicker.js',
+  'src/common.js',
+  'src/directives/*.js',
   'test/unit/directives/*Spec.js'
 ];
 
