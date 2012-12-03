@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('button', function () {
+describe('button', function () {
   var scope, $sandbox, $compile, $timeout;
 
   beforeEach(module('$strap.directives'));
