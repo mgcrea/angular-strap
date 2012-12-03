@@ -108,7 +108,8 @@
 
     <div class="span3 bs-docs-sidebar">
       <ul class="nav nav-list bs-docs-sidenav">
-        <li class="active"><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
+        <li class="active"><a href="#dropdown"><i class="icon-chevron-right"></i> Dropdown</a></li>
+        <li><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
         <li><a href="#tooltip"><i class="icon-chevron-right"></i> Tooltip</a></li>
         <li><a href="#popover"><i class="icon-chevron-right"></i> Popover</a></li>
         <li><a href="#buttons"><i class="icon-chevron-right"></i> Buttons</a></li>
@@ -121,6 +122,42 @@
 
     <div class="span9">
 
+      <section id="dropdown">
+        <div class="page-header">
+          <h1>Dropdown <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/dropdown.js" target="_blank">directives/dropdown.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Toggleable, contextual menu for displaying lists of links.</p>
+        <p>Use any element to trigger a dropdown menu by appending a <code>bs-dropdown</code> tag.</p>
+        <div class="bs-docs-example">
+          <pre>dropdown: {{formattedDropdown}}</pre>
+          <div class="well">
+            <div class="btn-group">
+              <button type="button" class="btn" bs-dropdown="dropdown">Dropdown <b class="caret"></b></button>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary">Action</button>
+              <button class="btn btn-primary" bs-dropdown="dropdown">
+                <span class="caret"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Button to trigger dropdown --&gt;
+&lt;button type="button" class="btn" bs-dropdown="dropdown"&gt;...&lt;/button&gt;
+
+&lt;!-- Separated button -->
+&lt;div class="btn-group"&gt;
+  &lt;button type="button" class="btn btn-primary"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn btn-primary" bs-dropdown="dropdown"&gt;...&lt;/button&gt;
+    &lt;span class="caret"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+      </section>
+
       <section id="modal">
         <div class="page-header">
           <h1>Modal <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/modal.js" target="_blank">directives/modal.js</a></small></h1>
@@ -128,7 +165,7 @@
         <h2>Overview and examples</h2>
         <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
         <p>Fetches an external html partial and populates the modal with its content.</p>
-        <p>Use any button to trigger a modal by appending a <code>bs-modal</code> tag.</p>
+        <p>Use any button/link to trigger a modal by appending a <code>bs-modal</code> tag.</p>
         <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the modal to toggle its visibility.</p>
         <div class="bs-docs-example">
           <pre>modal: {{modal | json}}</pre>
@@ -138,7 +175,7 @@
         </div>
         <pre class="prettyprint linenums" ng-non-bindable>
 &lt;!-- Button to trigger modal --&gt;
-&lt;button type="button" class=&quot;btn&quot; bs-modal=&quot;'partials/modal.html'&quot;&gt;...&lt;/button&gt;
+&lt;button type="button" class="btn" bs-modal="'partials/modal.html'"&gt;...&lt;/button&gt;
 
 &lt;!-- Modal (./partials/modal.html) -->
 &lt;div class="modal-header"&gt;
@@ -168,7 +205,7 @@
         <h2>Overview and examples</h2>
         <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
         <p>Parses the content passed to the directive & displays a tooltip with it.</p>
-        <p>Use any button to trigger a popover menu by appending a <code>bs-popover</code> tag.</p>
+        <p>Use any button/link to trigger a popover menu by appending a <code>bs-popover</code> tag.</p>
         <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the tooltip to toggle its visibility.</p>
         <div class="bs-docs-example">
           <pre>tooltip: {{tooltip | json}}</pre>
@@ -198,7 +235,7 @@
         <h2>Overview and examples</h2>
         <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
         <p>Fetches an external html partial and populates the popover with its content.</p>
-        <p>Use any button/anchor to trigger a popover menu by appending a <code>bs-popover</code> tag.</p>
+        <p>Use any button/link to trigger a popover menu by appending a <code>bs-popover</code> tag.</p>
         <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the popover to toggle its visibility.</p>
         <div class="bs-docs-example">
           <pre>popover: {{popover | json}}</pre>
@@ -209,10 +246,10 @@
         </div>
         <pre class="prettyprint linenums" ng-non-bindable>
 &lt;!-- Button to trigger popover --&gt;
-&lt;button type="button" class=&quot;btn&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/button&gt;
+&lt;button type="button" class="btn" bs-popover="'partials/popover.html'"&gt;...&lt;/button&gt;
 
 &lt;!-- Force close others with data-unique attribute --&gt;
-&lt;button type="button" class=&quot;btn&quot; data-unique=&quot;1&quot; bs-popover=&quot;'partials/popover.html'&quot;&gt;...&lt;/button&gt;
+&lt;button type="button" class="btn" data-unique="1" bs-popover="'partials/popover.html'"&gt;...&lt;/button&gt;
 
 &lt;!-- Popover (./partials/popover.html) --&gt;
 &lt;form name="popoverForm"&gt;
@@ -237,7 +274,7 @@
         </div>
         <h2>Overview and examples</h2>
         <p>Enables databinding between a button and an scope object.</p>
-        <p>Use any button with <code>ng-model</code> and <code>bs-button</code> tags.</p>
+        <p>Use any button/link with <code>ng-model</code> and <code>bs-button</code> tags.</p>
         <div class="bs-docs-example">
           <pre>button: {{button | json}}</pre>
           <div class="btn-toolbar well" style="margin: 0;">
@@ -290,7 +327,7 @@
         </div>
         <h2>Overview and examples</h2>
         <p>Directive for bootstrap-datepicker (made by <a href="http://www.eyecon.ro/bootstrap-datepicker" target="_blank">Stefan Petre</a>).</p>
-        <p>Use any button to trigger a datepicker menu by appending a <code>bs-datepicker</code> tag.</p>
+        <p>Use any button/link to trigger a datepicker menu by appending a <code>bs-datepicker</code> tag.</p>
         <p>✓ Supports AngularJS validation out of the box.</p>
         <div class="bs-docs-example">
           <pre style="min-height: 60px;">datepicker: {{datepicker | json}}<!--<br />myForm: {{myForm | json}}--></pre>
@@ -320,7 +357,7 @@
         </div>
         <h2>Overview and examples</h2>
         <p>Directive for bootstrap-timepicker (made by <a href="https://github.com/jdewit" target="_blank">jdewit</a>), currently using our fork version from <a href="https://github.com/mgcrea" target="_blank">mgcrea</a>.</p>
-        <p>Use any button to trigger a timepicker menu by appending a <code>bs-timepicker</code> tag.</p>
+        <p>Use any button/link to trigger a timepicker menu by appending a <code>bs-timepicker</code> tag.</p>
         <!--<p>You can use a custom button as toggler with <code>data-toggle="timepicker"</code> on a sibling element.</p>-->
         <p>✓ Supports AngularJS validation out of the box.</p>
         <div class="bs-docs-example">
