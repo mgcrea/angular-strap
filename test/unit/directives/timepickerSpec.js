@@ -1,50 +1,62 @@
 'use strict';
 
 describe('timepicker', function () {
-  var elm, scope, $timeout;
+  var scope, $sandbox, $compile, $timeout;
 
   beforeEach(module('$strap.directives'));
 
-  beforeEach(inject(function (_$timeout_, $injector, $rootScope, $compile) {
-    $timeout = _$timeout_;
+  beforeEach(inject(function ($injector, $rootScope, _$compile_, _$timeout_) {
     scope = $rootScope;
+    $compile = _$compile_;
+    $timeout = _$timeout_;
+
+    $sandbox = $('<div id="sandbox"></div>').appendTo($('body'));
     scope.model = {};
-    elm = $compile(
-      '<input type="text" name="time" ng-model="model.time" data-default-time="false" data-show-meridian="false" bs-timepicker>'
-    )($rootScope);
-    //$timeout.flush();
   }));
 
-  it('should correctly be loaded', function() {
-    expect($.fn.timepicker).toBeDefined();
+  afterEach(function() {
+    $sandbox.remove();
+    scope.$destroy();
+    $('.bootstrap-timepicker').remove();
   });
 
+  var templates = {
+    'default': '<input type="text" name="time" ng-model="model.time" data-default-time="false" data-show-meridian="false" bs-timepicker>'
+  };
+
+  function compileDirective(template) {
+    template = template ? templates[template] : templates['default'];
+    template = $(template).appendTo($sandbox);
+    return $compile(template)(scope);
+  }
+
+  // Tests
+
   it('should add "data-toggle" attr for you', function () {
+    var elm = compileDirective();
     expect(elm.attr('data-toggle')).toBe('timepicker');
   });
 
-  // it('should show/hide the datepicker', function() {
-  //   elm.timepicker('show');
-  //   expect(elm.data('timepicker').$widget.hasClass('open')).toBe(true);
-  //   elm.timepicker('hide');
-  //   expect(elm.data('timepicker').$widget.hasClass('open')).toBe(false);
-  // });
+  it('should correctly call $.fn.timepicker', function () {
+    var spy = spyOn($.fn, 'timepicker');
+    var elm = compileDirective();
+    expect(spy).toHaveBeenCalled();
+  });
 
   it('should show the timepicker on click', function() {
+    var elm = compileDirective();
     elm.trigger('click');
     expect(elm.data('timepicker').$widget.hasClass('open')).toBe(true);
   });
 
   it('should show the timepicker on focus', function() {
+    var elm = compileDirective();
     elm.trigger('focus');
     expect(elm.data('timepicker').$widget.hasClass('open')).toBe(true);
-    $('body').trigger('click');
-    $timeout(function() {
-      expect(elm.data('timepicker').$widget.hasClass('open')).toBe(false);
-    });
   });
 
   it('should correctly update both input value and bound model', function() {
+    var elm = compileDirective();
     elm.trigger('focus');
     elm.data('timepicker').$widget.find('a[data-action="incrementHour"]').trigger('click');
     expect(elm.val()).toBe('01:00');

@@ -9,6 +9,7 @@ basePath = './..';
 // list of files / patterns to load in the browser
 files = [
   JASMINE,
+  'test/lib/async-callback.js',
   JASMINE_ADAPTER,
   'lib/jquery.js',
   'lib/angular.js',
