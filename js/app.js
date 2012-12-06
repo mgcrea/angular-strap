@@ -23,10 +23,10 @@ var app = angular.module('strap', ['$strap.directives']);
 
 app.controller('StrapCtrl', function($scope) {
 	$scope.dropdown = [
-		{text: 'Another action', href:'#anotherAction'},
-		{text: 'Something else here', href:'#'},
+		{text: 'Another action', href: '#anotherAction'},
+		{text: 'Something else here', href: '#', click: 'modal.saved=true'},
 		{divider: true},
-		{text: 'Separated link', href:'#',
+		{text: 'Separated link', href: '#',
 			submenu: [
 				{text: 'Second level link', href: '#'},
 				{text: 'Second level link 2', href: '#'}
