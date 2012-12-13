@@ -3,6 +3,11 @@
 
 AngularStrap is a set of directives that enables seamless integration of [Twitter Bootstrap](https://twitter.github.com/bootstrap) into your [AngularJS](https://github.com/angular/angular.js) app.
 
+Documentation and examples
+--------------------------
+
+Check the [documentation](http://mgcrea.github.com/angular-strap) for working examples.
+
 Quick start
 -----------
 
