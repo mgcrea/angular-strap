@@ -9,7 +9,7 @@ angular.module('$strap.directives')
   var template = '' +
   '<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">' +
     '<li ng-repeat="item in items" ng-class="{divider: !!item.divider, \'dropdown-submenu\': !!item.submenu && item.submenu.length}">' +
-      '<a ng-hide="!!item.divider" tabindex="-1" href="{{item.href}}">{{item.text}}</a>' +
+      '<a ng-hide="!!item.divider" tabindex="-1" ng-href="{{item.href}}" ng-click="{{item.click}}">{{item.text}}</a>' +
     '</li>' +
   '</ul>';
 
@@ -17,7 +17,7 @@ angular.module('$strap.directives')
     var subitems, submenu, subscope;
     for (var i = 0, l = items.length; i < l; i++) {
       if(subitems = items[i].submenu) {
-        subscope = scope.$new(true);
+        subscope = scope.$new();
         subscope.items = subitems;
         submenu = $compile(template)(subscope);
         submenu = submenu.appendTo(parent.children('li:nth-child(' + (i+1) + ')'));

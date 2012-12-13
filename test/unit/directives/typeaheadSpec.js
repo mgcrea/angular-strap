@@ -53,15 +53,15 @@ describe('typeahead', function () {
 
   it('should show correctly limit dropdown to 4 items', function() {
     var elm = compileDirective();
-    var $dropdown = $('body > .typeahead.dropdown-menu');
     elm.val('a').trigger('keyup');
+    var $dropdown = elm.next('.typeahead.dropdown-menu');
     expect($dropdown.children('li').length).toBe(4);
   });
 
   it('should show corretly set the value', function() {
     var elm = compileDirective();
-    var $dropdown = $('body > .typeahead.dropdown-menu');
     elm.val('a').trigger('keyup');
+    var $dropdown = elm.next('.typeahead.dropdown-menu');
     $dropdown.find('li:first > a').trigger('click');
     expect(elm.val()).toBe('Alabama');
   });
