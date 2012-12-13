@@ -112,8 +112,8 @@
 
     <div class="span3 bs-docs-sidebar">
       <ul class="nav nav-list bs-docs-sidenav">
-        <li class="active"><a href="#dropdown"><i class="icon-chevron-right"></i> Dropdown</a></li>
-        <li><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
+        <li class="active"><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
+        <li><a href="#dropdown"><i class="icon-chevron-right"></i> Dropdown</a></li>
         <li><a href="#tooltip"><i class="icon-chevron-right"></i> Tooltip</a></li>
         <li><a href="#popover"><i class="icon-chevron-right"></i> Popover</a></li>
         <li><a href="#buttons"><i class="icon-chevron-right"></i> Buttons</a></li>
@@ -125,42 +125,6 @@
     </div>
 
     <div class="span9">
-
-      <section id="dropdown">
-        <div class="page-header">
-          <h1>Dropdown <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/dropdown.js" target="_blank">directives/dropdown.js</a></small></h1>
-        </div>
-        <h2>Overview and examples</h2>
-        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
-        <p>Toggleable, contextual menu for displaying lists of links.</p>
-        <p>Use any element to trigger a dropdown menu by appending a <code>bs-dropdown</code> tag.</p>
-        <div class="bs-docs-example">
-          <pre>dropdown: {{formattedDropdown}}</pre>
-          <div class="well">
-            <div class="btn-group">
-              <button type="button" class="btn" bs-dropdown="dropdown">Dropdown <b class="caret"></b></button>
-            </div>
-            <div class="btn-group">
-              <button type="button" class="btn btn-primary">Action</button>
-              <button class="btn btn-primary" bs-dropdown="dropdown">
-                <span class="caret"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <pre class="prettyprint linenums" ng-non-bindable>
-&lt;!-- Button to trigger dropdown --&gt;
-&lt;button type="button" class="btn" bs-dropdown="dropdown"&gt;...&lt;/button&gt;
-
-&lt;!-- Separated button -->
-&lt;div class="btn-group"&gt;
-  &lt;button type="button" class="btn btn-primary"&gt;...&lt;/button&gt;
-  &lt;button type="button" class="btn btn-primary" bs-dropdown="dropdown"&gt;...&lt;/button&gt;
-    &lt;span class="caret"&gt;&lt;/span&gt;
-  &lt;/button&gt;
-&lt;/div&gt;
-        </pre>
-      </section>
 
       <section id="modal">
         <div class="page-header">
@@ -200,6 +164,42 @@
           <strong>Heads up!</strong>
           You can use <code>ng-controller="MyModalCtrl"</code> along <code>bs-modal="..."</code> to create a custom scope for your modal.
         </div>
+      </section>
+
+      <section id="dropdown">
+        <div class="page-header">
+          <h1>Dropdown <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/dropdown.js" target="_blank">directives/dropdown.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Toggleable, contextual menu for displaying lists of links.</p>
+        <p>Use any element to trigger a dropdown menu by appending a <code>bs-dropdown</code> tag.</p>
+        <div class="bs-docs-example">
+          <pre>dropdown: {{formattedDropdown}}</pre>
+          <div class="well">
+            <div class="btn-group">
+              <button type="button" class="btn" bs-dropdown="dropdown">Dropdown <b class="caret"></b></button>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary">Action</button>
+              <button class="btn btn-primary" bs-dropdown="dropdown">
+                <span class="caret"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Button to trigger dropdown --&gt;
+&lt;button type="button" class="btn" bs-dropdown="dropdown"&gt;...&lt;/button&gt;
+
+&lt;!-- Separated button -->
+&lt;div class="btn-group"&gt;
+  &lt;button type="button" class="btn btn-primary"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn btn-primary" bs-dropdown="dropdown"&gt;...&lt;/button&gt;
+    &lt;span class="caret"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+        </pre>
       </section>
 
       <section id="tooltip">
