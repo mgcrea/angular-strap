@@ -66,4 +66,12 @@ describe('typeahead', function () {
 		expect(elm.val()).toBe('Alabama');
 	});
 
+	it('should show correctly handle model binding', function() {
+		var elm = compileDirective();
+		scope.typeahead.push('Brazil');
+		elm.val('brazil').trigger('keyup');
+		var $dropdown = elm.next('.typeahead.dropdown-menu');
+		expect($dropdown.children('li').length).toBe(1);
+	});
+
 });
