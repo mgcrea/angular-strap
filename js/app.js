@@ -3,17 +3,26 @@ $(function() {
 
 	$("html").removeClass("no-js").addClass("js");
 
+	var $window = $(window);
+
 	$(document).ready(function($) {
 
-		var $sidenav = $(".bs-docs-sidenav");
-		var offset = $sidenav.offset();
-		$sidenav.affix({offset: offset.top - ($(window).width() <= 979 ? 20 : 70) }).addClass("animated");
+		// Disable certain links in docs
+		$('section [href^=#]').click(function (e) {
+			e.preventDefault();
+		});
+
+		// Sidebar
+		var $sidenav = $('.bs-docs-sidenav'), offset = $sidenav.offset();
+		$sidenav.affix({offset: {top: offset.top - ($window.width() <= 979 ? 20 : 70), bottom: 270}}).addClass('animated');
+
+		// Make code pretty
+		window.prettyPrint && window.prettyPrint();
 
 		/*$("pre.prettyprint").each(function() {
 			var $this = $(this);
 			$this.text($this.html().replace('/\s+/ig', ''));
 		});*/
-		prettyPrint();
 
 	});
 
