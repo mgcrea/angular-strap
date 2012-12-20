@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.5.4 - 2012-12-03
+ * @version v0.5.5 - 2012-12-20
  * @link http://angular-strap.github.com
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -70,9 +70,13 @@ angular.module('$strap.directives')
 	var DATE_REGEXP_MAP = {
 		'/'    : '[\\/]',
 		'-'    : '[-]',
-		'dd'   : '(?:(?:[0-2]?\\d{1})|(?:[3][01]{1}))',
+		'.'    : '[.]',
+		'dd'   : '(?:(?:[0-2]?[0-9]{1})|(?:[3][01]{1}))',
+		'd'   : '(?:(?:[0-2]?[0-9]{1})|(?:[3][01]{1}))',
 		'mm'   : '(?:[0]?[1-9]|[1][012])',
-		'yyyy' : '(?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3}))(?![\\d])'
+		'm'   : '(?:[0]?[1-9]|[1][012])',
+		'yyyy' : '(?:(?:[1]{1}[0-9]{1}[0-9]{1}[0-9]{1})|(?:[2]{1}[0-9]{3}))(?![[0-9]])',
+		'yy'   : '(?:(?:[0-9]{1}[0-9]{1}))(?![[0-9]])'
 	};
 
 	return {
@@ -158,7 +162,7 @@ angular.module('$strap.directives')
   var template = '' +
   '<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">' +
     '<li ng-repeat="item in items" ng-class="{divider: !!item.divider, \'dropdown-submenu\': !!item.submenu && item.submenu.length}">' +
-      '<a ng-hide="!!item.divider" tabindex="-1" href="{{item.href}}">{{item.text}}</a>' +
+      '<a ng-hide="!!item.divider" tabindex="-1" ng-href="{{item.href}}" ng-click="{{item.click}}">{{item.text}}</a>' +
     '</li>' +
   '</ul>';
 
@@ -166,7 +170,7 @@ angular.module('$strap.directives')
     var subitems, submenu, subscope;
     for (var i = 0, l = items.length; i < l; i++) {
       if(subitems = items[i].submenu) {
-        subscope = scope.$new(true);
+        subscope = scope.$new();
         subscope.items = subitems;
         submenu = $compile(template)(subscope);
         submenu = submenu.appendTo(parent.children('li:nth-child(' + (i+1) + ')'));
