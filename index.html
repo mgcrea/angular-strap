@@ -3,7 +3,7 @@
 <head>
 
   <meta charset="utf-8">
-  <title>AngularStrap - Bootstrap directives for AngularJS</title>
+  <title>AngularStrap - Bootstrap directives for Angular</title>
   <meta itemprop="name" content="AngularStrap">
   <meta name="description" content="AngularStrap is a set of directives that enables seamless integration of Twitter Bootstrap into your AngularJS app.">
   <meta name="google-site-verification" content="oy4NUcp65W_x0wLJ52bE5MBmFvpJTqrsidjMaReF2Ww" />
@@ -288,6 +288,25 @@
         <pre class="prettyprint linenums" ng-non-bindable>
 &lt;button type="button" class="btn" ng-model="button.active" bs-button&gt;...&lt;/button&gt;
         </pre>
+
+        <h3 id="buttons-select">Button Select</h3>
+        <div class="bs-docs-example">
+          <pre>buttonSelect: {{buttonSelect | json}}</pre>
+          <div class="well">
+            <label>Product price:</label>
+            <div class="input-append">
+              <input class="span2" type="text" ng-model="buttonSelect.price">
+              <button type="button" class="btn" ng-model="buttonSelect.currency" bs-button-select="['$', '€', '¥']"></button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div class="input-append"&gt;
+  &lt;input type="text" ng-model="buttonSelect.price"&gt;
+  &lt;button type="button"class="btn" ng-model="buttonSelect.currency" bs-button-select="['$', '€', '¥']"&gt;&lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+
         <h3 id="checkboxes">Checkboxes</h3>
         <div class="bs-docs-example">
           <pre>checkbox: {{checkbox | json}}</pre>
