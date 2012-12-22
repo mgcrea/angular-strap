@@ -1,0 +1,16 @@
+{
+  "author": "Olivier Louvignes",
+  "name": "angular-strap",
+  "description": "AngularStrap - Twitter Bootstrap directives for AngularJS",
+  "version": "0.5.6",
+  "homepage": "http://angular-strap.github.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/angular-strap/angular-strap.git"
+  },
+  "main": "./build/angular-strap.min.js",
+  "dependencies": {
+    "jquery": "~1.8.3",
+    "bootstrap": "~2.2.2"
+  }
+}
