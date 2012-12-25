@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('modal', function () {
+describe('modal', function () {
   var scope, $sandbox, $compile, $timeout, $httpBackend;
 
   beforeEach(module('$strap.directives'));
