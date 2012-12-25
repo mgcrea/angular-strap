@@ -1,6 +1,6 @@
 'use strict';
 
-describe('modal', function () {
+ddescribe('modal', function () {
 	var scope, $sandbox, $compile, $timeout, $httpBackend;
 
 	beforeEach(module('$strap.directives'));
@@ -27,12 +27,13 @@ describe('modal', function () {
 		'default': '<a class="btn" bs-modal="\'partials/modal.html\'"></a>'
 	};
 
-	function compileDirective(template) {
+	function compileDirective(template, expectCache) {
 		template = template ? templates[template] : templates['default'];
 		template = $(template).appendTo($sandbox);
-		$httpBackend.expectGET('partials/modal.html').respond(scope.modal);
+		if(!expectCache) { $httpBackend.expectGET('partials/modal.html').respond(scope.modal); }
 		var elm = $compile(template)(scope);
-		$httpBackend.flush();
+		if(!expectCache) { $httpBackend.flush(); }
+		else { scope.$digest(); } // evaluate $evalAsync queue used by $q
 		return elm;
 	}
 

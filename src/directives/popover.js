@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsPopover', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
+.directive('bsPopover', ['$parse', '$compile', '$http', '$timeout', '$q', '$templateCache', function($parse, $compile, $http, $timeout, $q, $templateCache) {
 	'use strict';
 
 	// Hide popovers when pressing esc
@@ -20,9 +20,15 @@ angular.module('$strap.directives')
 		link: function postLink(scope, element, attr, ctrl) {
 
 			var getter = $parse(attr.bsPopover),
-				setter = getter.assign;
+				setter = getter.assign,
+				value = getter(scope);
 
-			$http.get(getter(scope)).success(function(data) {
+			$q.when($templateCache.get(value) || $http.get(value, {cache: true})).then(function onSuccess(template) {
+
+				// Handle response from $http promise
+				if(angular.isObject(template)) {
+					template = template.data;
+				}
 
 				// Provide scope display functions
 				scope.dismiss = function() {
@@ -32,6 +38,7 @@ angular.module('$strap.directives')
 					element.popover('show');
 				};
 
+				// Handle `data-unique` attribute
 				if(!!attr.unique) {
 					element.on('show', function(ev) {
 						// Hide any active popover except self
@@ -44,24 +51,23 @@ angular.module('$strap.directives')
 						});
 					});
 				}
-
 				// Initialize popover
 				element.popover({
 					content: function() {
-						$timeout(function() {
+						$timeout(function() { // use async $apply
 
 							var popover = element.data('popover'),
 								$tip = popover.tip();
 
 							$compile($tip)(scope);
 
-							setTimeout(function() {
+							setTimeout(function() { // refresh position on nextTick
 								popover.refresh();
 							});
 
 						});
 
-						return data;
+						return template;
 					},
 					html: true
 				});
@@ -119,7 +125,9 @@ angular.module('$strap.directives')
 					return $.fn.popover.Constructor.prototype.hide.apply(this, arguments);
 				};
 
+			}, function onError(err) {
 			});
+
 		}
 	};
 

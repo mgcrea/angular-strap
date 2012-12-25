@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsModal', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
+.directive('bsModal', ['$parse', '$compile', '$http', '$timeout', '$q', '$templateCache', function($parse, $compile, $http, $timeout, $q, $templateCache) {
 	'use strict';
 
 	return {
@@ -10,9 +10,15 @@ angular.module('$strap.directives')
 		link: function postLink(scope, element, attr, ctrl) {
 
 			var getter = $parse(attr.bsModal),
-				setter = getter.assign;
+				setter = getter.assign,
+				value = getter(scope);
 
-			$http.get(getter(scope)).success(function(data) {
+			$q.when($templateCache.get(value) || $http.get(value, {cache: true})).then(function onSuccess(template) {
+
+				// Handle response from $http promise
+				if(angular.isObject(template)) {
+					template = template.data;
+				}
 
 				// Provide scope display functions
 				scope.dismiss = function() {
@@ -24,7 +30,7 @@ angular.module('$strap.directives')
 
 				// Build modal object
 				var id = getter(scope).replace(/\//g, '-').replace(/\./g, '-').replace('html', scope.$id);
-				var $modal = $('<div></div>').attr('id', id).addClass('modal hide fade').html(data);
+				var $modal = $('<div></div>').attr('id', id).addClass('modal hide fade').html(template);
 				$('body').append($modal);
 
 				// Configure element
