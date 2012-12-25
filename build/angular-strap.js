@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.5.6 - 2012-12-22
+ * @version v0.5.7 - 2012-12-25
  * @link http://angular-strap.github.com
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -253,7 +253,7 @@ angular.module('$strap.directives')
 
 angular.module('$strap.directives')
 
-.directive('bsModal', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
+.directive('bsModal', ['$parse', '$compile', '$http', '$timeout', '$q', '$templateCache', function($parse, $compile, $http, $timeout, $q, $templateCache) {
   'use strict';
 
   return {
@@ -262,9 +262,15 @@ angular.module('$strap.directives')
     link: function postLink(scope, element, attr, ctrl) {
 
       var getter = $parse(attr.bsModal),
-        setter = getter.assign;
+        setter = getter.assign,
+        value = getter(scope);
 
-      $http.get(getter(scope)).success(function(data) {
+      $q.when($templateCache.get(value) || $http.get(value, {cache: true})).then(function onSuccess(template) {
+
+        // Handle response from $http promise
+        if(angular.isObject(template)) {
+          template = template.data;
+        }
 
         // Provide scope display functions
         scope.dismiss = function() {
@@ -276,7 +282,7 @@ angular.module('$strap.directives')
 
         // Build modal object
         var id = getter(scope).replace(/\//g, '-').replace(/\./g, '-').replace('html', scope.$id);
-        var $modal = $('<div></div>').attr('id', id).addClass('modal hide fade').html(data);
+        var $modal = $('<div></div>').attr('id', id).addClass('modal hide fade').html(template);
         $('body').append($modal);
 
         // Configure element
@@ -298,7 +304,7 @@ angular.module('$strap.directives')
 
 angular.module('$strap.directives')
 
-.directive('bsPopover', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
+.directive('bsPopover', ['$parse', '$compile', '$http', '$timeout', '$q', '$templateCache', function($parse, $compile, $http, $timeout, $q, $templateCache) {
   'use strict';
 
   // Hide popovers when pressing esc
@@ -317,9 +323,15 @@ angular.module('$strap.directives')
     link: function postLink(scope, element, attr, ctrl) {
 
       var getter = $parse(attr.bsPopover),
-        setter = getter.assign;
+        setter = getter.assign,
+        value = getter(scope);
 
-      $http.get(getter(scope)).success(function(data) {
+      $q.when($templateCache.get(value) || $http.get(value, {cache: true})).then(function onSuccess(template) {
+
+        // Handle response from $http promise
+        if(angular.isObject(template)) {
+          template = template.data;
+        }
 
         // Provide scope display functions
         scope.dismiss = function() {
@@ -329,6 +341,7 @@ angular.module('$strap.directives')
           element.popover('show');
         };
 
+        // Handle `data-unique` attribute
         if(!!attr.unique) {
           element.on('show', function(ev) {
             // Hide any active popover except self
@@ -341,24 +354,23 @@ angular.module('$strap.directives')
             });
           });
         }
-
         // Initialize popover
         element.popover({
           content: function() {
-            $timeout(function() {
+            $timeout(function() { // use async $apply
 
               var popover = element.data('popover'),
                 $tip = popover.tip();
 
               $compile($tip)(scope);
 
-              setTimeout(function() {
+              setTimeout(function() { // refresh position on nextTick
                 popover.refresh();
               });
 
             });
 
-            return data;
+            return template;
           },
           html: true
         });
@@ -416,7 +428,9 @@ angular.module('$strap.directives')
           return $.fn.popover.Constructor.prototype.hide.apply(this, arguments);
         };
 
+      }, function onError(err) {
       });
+
     }
   };
 
