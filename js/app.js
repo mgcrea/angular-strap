@@ -1,9 +1,11 @@
-
+ 
 $(function() {
 
 	$("html").removeClass("no-js").addClass("js");
 
 	var $window = $(window);
+
+    new FastClick(document.body);
 
 	$(document).ready(function($) {
 
