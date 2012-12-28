@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     lint: {
       files: ['grunt.js', 'src/directives/*.js', 'test/unit/*.js']
     },
-    builddir: 'build',
+    builddir: 'dist',
     concat: {
       build: {
         src: ['<banner:meta.banner>', 'src/common.js', 'src/directives/*.js'],
@@ -36,6 +36,7 @@ module.exports = function(grunt) {
     jshint: {
       options: {
         curly: true,
+        browser: true,
         eqeqeq: true,
         immed: true,
         latedef: true,

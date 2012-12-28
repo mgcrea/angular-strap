@@ -23,7 +23,7 @@ angular.module('$strap.directives')
 		restrict: 'A',
 		require: '?ngModel',
 		link: function postLink(scope, element, attrs, controller) {
-			console.log('postLink', this, arguments); window.element = element;
+			//console.log('postLink', this, arguments); window.element = element;
 
 			var regexpForDateFormat = function(dateFormat, options) {
 				options || (options = {});
@@ -41,7 +41,7 @@ angular.module('$strap.directives')
 			// Handle date validity according to dateFormat
 			if(controller) {
 				controller.$parsers.unshift(function(viewValue) {
-					console.warn('viewValue', viewValue, dateFormatRegexp,  dateFormatRegexp.test(viewValue));
+					//console.warn('viewValue', viewValue, dateFormatRegexp,  dateFormatRegexp.test(viewValue));
 					if (!viewValue || dateFormatRegexp.test(viewValue)) {
 						controller.$setValidity('date', true);
 						return viewValue;
