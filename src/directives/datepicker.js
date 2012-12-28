@@ -46,16 +46,18 @@ angular.module('$strap.directives')
       var dateFormatRegexp = regexpForDateFormat(attrs.dateFormat || 'mm/dd/yyyy'/*, {mask: !!attrs.uiMask}*/);
 
       // Handle date validity according to dateFormat
-      controller.$parsers.unshift(function(viewValue) {
-        //console.warn('viewValue', viewValue, dateFormatRegexp,  dateFormatRegexp.test(viewValue));
-        if (!viewValue || dateFormatRegexp.test(viewValue)) {
-          controller.$setValidity('date', true);
-          return viewValue;
-        } else {
-          controller.$setValidity('date', false);
-          return undefined;
-        }
-      });
+      if(controller) {
+        controller.$parsers.unshift(function(viewValue) {
+          //console.warn('viewValue', viewValue, dateFormatRegexp,  dateFormatRegexp.test(viewValue));
+          if (!viewValue || dateFormatRegexp.test(viewValue)) {
+            controller.$setValidity('date', true);
+            return viewValue;
+          } else {
+            controller.$setValidity('date', false);
+            return undefined;
+          }
+        });
+      }
 
       // Support add-on
       var component = element.next('[data-toggle="datepicker"]');
