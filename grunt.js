@@ -80,4 +80,24 @@ module.exports = function(grunt) {
     });
   });
 
+  grunt.registerTask('bump', 'Increment version number', function(versionType) {
+    function bumpVersion(version, versionType) {
+      var type = {patch: 2, minor: 1, major: 0},
+          parts = version.split('.'),
+          idx = type[versionType || 'patch'];
+      parts[idx] = parseInt(parts[idx], 10) + 1;
+      while(++idx < parts.length) { parts[idx] = 0; }
+      return parts.join('.');
+    }
+    var version;
+    function updateFile(file) {
+      var json = grunt.file.readJSON(file);
+      version = json.version = bumpVersion(json.version, versionType || 'patch');
+      grunt.file.write(file, JSON.stringify(json, null, '  '));
+    }
+    updateFile('package.json');
+    updateFile('component.json');
+    grunt.log.ok('Version bumped to ' + version);
+  });
+
 };
