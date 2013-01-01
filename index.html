@@ -23,7 +23,7 @@
   <link href="css/animate.css" rel="stylesheet">
   <link href="css/docs.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
-  <link href="less/styles.less" rel="stylesheet/less" type="text/css">
+  <!--<link href="less/styles.less" rel="stylesheet/less" type="text/css">-->
 
   <!--[if lt IE 8]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.4/json3.min.js"></script>
@@ -36,7 +36,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.3.1/less.min.js"></script>
+  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.3.1/less.min.js"></script>-->
   <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
 
   <script src="js/fastclick.min.js"></script>
@@ -63,10 +63,15 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
+        <div class="btn-toolbar btn-group pull-right">
+          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.js"><i class="icon-download-alt icon-white"></i>&nbsp;dev <small>(v0.5.9)</small></a>
+          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.min.js"><i class="icon-download-alt icon-white"></i>&nbsp;prod <small>(v0.5.9)</small></a>
+        </div>
         <a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank">
           <img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master"/>
         </a>
         <a class="brand" href="./">AngularStrap</a>
+
         <div class="nav-collapse collapse">
           <ul class="nav">
             <li class="">
@@ -111,7 +116,9 @@
         </ul>
       </div>
     </div>
-    <a href="https://github.com/mgcrea/angular-strap" target="_blank" class="github-ribbon">Fork me on GitHub</a>
+    <div class="github-ribbon">
+      <a href="https://github.com/mgcrea/angular-strap" target="_blank">Fork me on GitHub</a>
+    </div>
   </header>
 
 
@@ -122,6 +129,7 @@
       <ul class="nav nav-list bs-docs-sidenav">
         <li class="active"><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
         <li><a href="#dropdown"><i class="icon-chevron-right"></i> Dropdown</a></li>
+        <li><a href="#navbar"><i class="icon-chevron-right"></i> Navbar</a></li>
         <li><a href="#tooltip"><i class="icon-chevron-right"></i> Tooltip</a></li>
         <li><a href="#popover"><i class="icon-chevron-right"></i> Popover</a></li>
         <li><a href="#buttons"><i class="icon-chevron-right"></i> Buttons</a></li>
@@ -206,6 +214,41 @@
   &lt;button type="button" class="btn btn-primary" bs-dropdown="dropdown"&gt;...&lt;/button&gt;
     &lt;span class="caret"&gt;&lt;/span&gt;
   &lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+      </section>
+
+      <section id="navbar">
+        <div class="page-header">
+          <h1>Navbar <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/navbar.js" target="_blank">directives/navbar.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Performs regular expression tests with the <code>data-match-route</code> attribute when <code>$location.path()</code> gets updated.</p>
+        <p>Toggles the <code>active</code> class for you. Trigger the behavior with a <code>bs-navbar</code> tag.</p>
+        <div class="bs-docs-example">
+          <div class="navbar" bs-navbar>
+            <div class="navbar-inner">
+              <a class="brand" href="#">Title</a>
+              <ul class="nav">
+                <li data-match-route="/(:?navbar)"><a href="#/navbar">Home</a></li>
+                <li data-match-route="/page-one"><a href="#/page-one">Page One</a></li>
+                <li data-match-route="/page-t.*"><a href="#/page-two">Page Two</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div class="navbar" bs-navbar&gt;
+  &lt;div class="navbar-inner"&gt;
+    &lt;a class="brand" href="#"&gt;Title&lt;/a&gt;
+    &lt;ul class="nav"&gt;
+      &lt;!-- You can use regular expressions --&gt;
+      &lt;li data-match-route="/(:?navbar)"&gt;&lt;a href="#/navbar"&gt;Home&lt;/a&gt;&lt;/li&gt;
+      &lt;li data-match-route="/page-one"&gt;&lt;a href="#/page-one"&gt;Page One&lt;/a&gt;&lt;/li&gt;
+      &lt;li data-match-route="/page-t.*"&gt;&lt;a href="#/page-two"&gt;Page Two&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
 &lt;/div&gt;
         </pre>
       </section>

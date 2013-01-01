@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.5.8 - 2012-12-28
+ * @version v0.5.9 - 2013-01-01
  * @link http://angular-strap.github.com
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -312,6 +312,37 @@ angular.module('$strap.directives')
 				// $modal.on('hidden', function() {
 				// });
 
+			});
+		}
+	};
+}]);
+
+
+angular.module('$strap.directives')
+
+.directive('bsNavbar', ['$location', function($location) {
+	'use strict';
+
+	return {
+		restrict: 'A',
+		link: function postLink($scope, element, attrs, controller) {
+			// Watch for the $location
+			$scope.$watch(function() {
+				return $location.path();
+			}, function(newValue, oldValue) {
+
+				element.find('li[data-match-route]').each(function(k, li) {
+					var $li = angular.element(li),
+						pattern = $li.data('match-route'),
+						regexp = new RegExp('^' + pattern + '$', ["i"]);
+
+					if(regexp.test(newValue)) {
+						$li.addClass('active');
+					} else {
+						$li.removeClass('active');
+					}
+
+				});
 			});
 		}
 	};
