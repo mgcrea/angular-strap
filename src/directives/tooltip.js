@@ -53,6 +53,14 @@ angular.module('$strap.directives')
 				return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
 			};
 
+			// Provide scope display functions
+			scope.dismiss = function() {
+				element.tooltip('hide');
+			};
+			scope.show = function() {
+				element.tooltip('show');
+			};
+
 		}
 	};
 
