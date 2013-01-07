@@ -27,7 +27,9 @@ describe('typeahead', function () {
   function compileDirective(template) {
     template = template ? templates[template] : templates['default'];
     template = $(template).appendTo($sandbox);
-    return $compile(template)(scope);
+    var result = $compile(template)(scope);
+    scope.$digest();
+    return result;
   }
 
   // Tests
@@ -66,12 +68,28 @@ describe('typeahead', function () {
     expect(elm.val()).toBe('Alabama');
   });
 
-  it('should show correctly handle model binding', function() {
+  it('should show correctly handle source update', function() {
     var elm = compileDirective();
     scope.typeahead.push('Brazil');
     elm.val('brazil').trigger('keyup');
     var $dropdown = elm.next('.typeahead.dropdown-menu');
     expect($dropdown.children('li').length).toBe(1);
+  });
+
+  it('should show correctly handle source replace', function() {
+    var elm = compileDirective();
+    elm.val('a').trigger('keyup');
+    var $dropdown = elm.next('.typeahead.dropdown-menu');
+    expect($dropdown.children('li').length).toBe(4);
+    scope.typeahead = ['Brazil'];
+    scope.$digest();
+    elm.val('brazil').trigger('keyup');
+    $dropdown = elm.next('.typeahead.dropdown-menu');
+    expect($dropdown.children('li').length).toBe(1);
+    elm.val('a').trigger('keyup');
+    $dropdown = elm.next('.typeahead.dropdown-menu');
+    expect($dropdown.children('li').length).toBe(1);
+
   });
 
 });
