@@ -10,11 +10,19 @@ angular.module('$strap.directives')
 		link: function postLink(scope, element, attr, controller) {
 
 			var getter = $parse(attr.bsTypeahead),
-			setter = getter.assign;
+					setter = getter.assign,
+					value = getter(scope);
+
+			// Watch bsTypeahead for changes
+			scope.$watch(attr.bsTypeahead, function(newValue, oldValue) {
+				if(newValue !== oldValue) {
+					value = newValue;
+				}
+			});
 
 			element.attr('data-provide', 'typeahead');
 			element.typeahead({
-				source: getter(scope),
+				source: function(query) { return value; },
 				items: attr.items,
 				updater: function(value) {
 					// If we have a controller (i.e. ngModelController) then wire it up
