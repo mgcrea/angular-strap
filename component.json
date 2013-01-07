@@ -3,7 +3,7 @@
   "name": "angular-strap",
   "description": "AngularStrap - Twitter Bootstrap directives for AngularJS",
   "version": "0.5.10",
-  "homepage": "http://angular-strap.github.com",
+  "homepage": "http://mgcrea.github.com/angular-strap",
   "repository": {
     "type": "git",
     "url": "git://github.com/angular-strap/angular-strap.git"
