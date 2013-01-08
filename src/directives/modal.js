@@ -14,7 +14,7 @@ angular.module('$strap.directives')
         value = getter(scope);
 
       $q.when($templateCache.get(value) || $http.get(value, {cache: true})).then(function onSuccess(template) {
-
+        console.warn('template', template);
         // Handle response from $http promise
         if(angular.isObject(template)) {
           template = template.data;
@@ -29,7 +29,7 @@ angular.module('$strap.directives')
         };
 
         // Build modal object
-        var id = getter(scope).replace(/\//g, '-').replace(/\./g, '-').replace('html', scope.$id);
+        var id = getter(scope).replace('.html', '').replace(/\//g, '-').replace(/\./g, '-') + '-' + scope.$id;
         var $modal = $('<div></div>').attr('id', id).attr('tabindex', -1).addClass('modal hide fade').html(template);
         $('body').append($modal);
 
