@@ -59,7 +59,9 @@ angular.module('$strap.directives')
 							var popover = element.data('popover'),
 								$tip = popover.tip();
 
-							$compile($tip)(scope);
+							if (!$tip.hasClass("ng-scope")) {
+								$compile($tip)(scope);
+							}
 
 							setTimeout(function() { // refresh position on nextTick
 								popover.refresh();
