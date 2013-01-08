@@ -14,7 +14,7 @@ angular.module('$strap.directives')
         value = getter(scope);
 
       $q.when($templateCache.get(value) || $http.get(value, {cache: true})).then(function onSuccess(template) {
-        console.warn('template', template);
+
         // Handle response from $http promise
         if(angular.isObject(template)) {
           template = template.data;
