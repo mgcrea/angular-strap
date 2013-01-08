@@ -154,7 +154,7 @@
         </div>
         <h2>Overview and examples</h2>
         <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
-        <p>Fetches an external html partial and populates the modal with its content.</p>
+        <p>Fetches an external html partial (or an inline <code>ng-template</code>) and populates the modal with its content.</p>
         <p>Use any button/link to trigger a modal by appending a <code>bs-modal</code> attribute.</p>
         <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the modal to toggle its visibility.</p>
         <div class="bs-docs-example">
@@ -167,7 +167,7 @@
 &lt;!-- Button to trigger modal --&gt;
 &lt;button type="button" class="btn" bs-modal="'partials/modal.html'"&gt;...&lt;/button&gt;
 
-&lt;!-- Modal (./partials/modal.html) -->
+&lt;!-- Modal (external ./partials/modal.html or inline ng-template) -->
 &lt;div class="modal-header"&gt;
   &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;×&lt;/button&gt;
   &lt;h3&gt;Modal header&lt;/h3&gt;
@@ -181,6 +181,7 @@
   &lt;button type="button" class="btn" ng-click="dismiss()"&gt;Close&lt;/button&gt;
   &lt;button class="btn btn-primary" ng-click="modal.saved=true;dismiss()"&gt;Save changes&lt;/button&gt;
 &lt;/div&gt;
+
         </pre>
         <div class="alert alert-info">
           <strong>Heads up!</strong>
@@ -295,7 +296,7 @@
         </div>
         <h2>Overview and examples</h2>
         <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
-        <p>Fetches an external html partial and populates the popover with its content.</p>
+        <p>Fetches an external html partial (or an inline <code>ng-template</code>) and populates the popover with its content.</p>
         <p>Use any button/link to trigger a popover menu by appending a <code>bs-popover</code> attribute.</p>
         <p>Both <code>$scope.show()</code> and <code>$scope.dismiss()</code> are available inside the popover to toggle its visibility.</p>
         <div class="bs-docs-example">
@@ -312,7 +313,7 @@
 &lt;!-- Force close others with data-unique attribute --&gt;
 &lt;button type="button" class="btn" data-unique="1" bs-popover="'partials/popover.html'"&gt;...&lt;/button&gt;
 
-&lt;!-- Popover (./partials/popover.html) --&gt;
+&lt;!-- Popover (external ./partials/popover.html or inline ng-template)  --&gt;
 &lt;form name="popoverForm"&gt;
   &lt;p ng-bind-html-unsafe="popover.content"&gt;&lt;/p&gt;
   &lt;br /&gt;
