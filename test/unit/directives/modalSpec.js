@@ -24,7 +24,8 @@ describe('modal', function () {
 	});
 
 	var templates = {
-		'default': '<a class="btn" bs-modal="\'partials/modal.html\'"></a>'
+		'default': '<a class="btn" bs-modal="\'partials/modal.html\'"></a>',
+		'cached': '<script type="text/ng-template" id="cached-modal">' + 'Hello <span ng-bind-html-unsafe="content"></span>' + '</script><a class="btn" bs-modal="\'cached-modal\'" data-unique="1" data-title="aTitleBis" data-placement="left"></a>'
 	};
 
 	function compileDirective(template, expectCache) {
@@ -33,7 +34,7 @@ describe('modal', function () {
 		if(!expectCache) { $httpBackend.expectGET('partials/modal.html').respond(scope.modal); }
 		var elm = $compile(template)(scope);
 		if(!expectCache) { $httpBackend.flush(); }
-		else { scope.$digest(); } // evaluate $evalAsync queue used by $q
+		scope.$digest(); // evaluate $evalAsync queue used by $q
 		return elm;
 	}
 
@@ -42,6 +43,16 @@ describe('modal', function () {
 	it('should fetch the partial and build the modal', function () {
 		var elm = compileDirective();
 		expect(elm.attr('data-toggle')).toBe('modal');
+		expect(elm.attr('href')).toBeDefined();
+		var $modal = $(elm.attr('href'));
+		expect($modal.hasClass('modal')).toBe(true);
+		expect($modal.html()).toBe(scope.modal);
+	});
+
+	it('should fetch the partial from cache and build the modal', function () {
+		compileDirective('cached', true);
+		expect(scope.$$asyncQueue.length).toBe(0);
+		var elm = $('a[bs-modal]');
 		expect(elm.attr('href')).toBeDefined();
 		var $modal = $(elm.attr('href'));
 		expect($modal.hasClass('modal')).toBe(true);

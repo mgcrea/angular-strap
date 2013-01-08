@@ -26,7 +26,7 @@ describe('popover', function () {
 	var templates = {
 		'default': '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-placement="left"></a>',
 		'unique': '<a class="btn" bs-popover="\'partials/popover.html\'" data-unique="1" data-title="aTitleBis" data-placement="left"></a>',
-		'cache': '<script type="text/ng-template" id="cachedPopover.html">' + 'Hello <span ng-bind-html-unsafe="content"></span>' + '</script><a class="btn" bs-popover="\'cachedPopover.html\'" data-unique="1" data-title="aTitleBis" data-placement="left"></a>'
+		'cached': '<script type="text/ng-template" id="cached-popover">' + 'Hello <span ng-bind-html-unsafe="content"></span>' + '</script><a class="btn" bs-popover="\'cached-popover\'" data-unique="1" data-title="aTitleBis" data-placement="left"></a>'
 	};
 
 	function compileDirective(template, expectCache) {
@@ -35,7 +35,7 @@ describe('popover', function () {
 		if(!expectCache) { $httpBackend.expectGET('partials/popover.html').respond(scope.popover); }
 		var elm = $compile(template)(scope);
 		if(!expectCache) { $httpBackend.flush(); }
-		else { scope.$digest(); } // evaluate $evalAsync queue used by $q
+		scope.$digest(); // evaluate $evalAsync queue used by $q
 		return elm;
 	}
 
@@ -49,12 +49,12 @@ describe('popover', function () {
 	});
 
 	it('should fetch the partial from cache and build the popover', function () {
-		var elm = compileDirective('cache', true);
+		compileDirective('cached', true);
 		expect(scope.$$asyncQueue.length).toBe(0);
-		// @fixme
-		// expect(elm.data('popover')).toBeDefined();
-		// expect(typeof elm.data('popover').options.content === 'function').toBe(true);
-		// expect(elm.data('popover').options.content()).toBe(scope.popover);
+		var elm = $('a[bs-popover]');
+		expect(elm.data('popover')).toBeDefined();
+		expect(typeof elm.data('popover').options.content === 'function').toBe(true);
+		expect(elm.data('popover').options.content()).toBe(scope.popover);
 	});
 
 	it('should correctly call $.fn.popover', function () {
