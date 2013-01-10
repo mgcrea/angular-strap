@@ -30,14 +30,6 @@ angular.module('$strap.directives')
 					template = template.data;
 				}
 
-				// Provide scope display functions
-				scope.dismiss = function() {
-					element.popover('hide');
-				};
-				scope.show = function() {
-					element.popover('show');
-				};
-
 				// Handle `data-unique` attribute
 				if(!!attr.unique) {
 					element.on('show', function(ev) {
@@ -128,7 +120,18 @@ angular.module('$strap.directives')
 					return $.fn.popover.Constructor.prototype.hide.apply(this, arguments);
 				};
 
-			}, function onError(err) {
+				// Provide scope display functions
+				scope._popover = function(name) {
+					element.popover(name);
+				};
+				scope.hide = function() {
+					element.popover('hide');
+				};
+				scope.show = function() {
+					element.popover('show');
+				};
+				scope.dismiss = scope.hide;
+
 			});
 
 		}
