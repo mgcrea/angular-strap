@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('popover', function () {
+describe('popover', function () {
 	var scope, $sandbox, $compile, $timeout, $httpBackend, $templateCache;
 
 	beforeEach(module('$strap.directives'));
@@ -33,7 +33,6 @@ ddescribe('popover', function () {
 		},
 		'cached': {
 			scope: {content: "World<br />Multiline Content<br />"},
-			popover: '<div>Hello <span ng-bind-html-unsafe="content"></span>',
 			element: '<script type="text/ng-template" id="cached-popover">' + 'Hello <span ng-bind-html-unsafe="content"></span>' + '</script>' + '<a class="btn" bs-popover="\'cached-popover\'" data-title="aTitle"></a>'
 		},
 		'ngRepeatWithoutTitle': {
