@@ -72,8 +72,11 @@ angular.module('$strap.directives')
 					html: true
 				});
 
-				// Bootstrap override to provide events & tip() reference & refresh positions
+				// Bootstrap override to provide events, tip() reference, refreshable positions
 				var popover = element.data('popover');
+				popover.hasContent = function() {
+					return this.getTitle() || template; // fix multiple $compile()
+				};
 				popover.refresh = function() {
 					var $tip = this.tip(), inside, pos, actualWidth, actualHeight, placement, tp;
 
