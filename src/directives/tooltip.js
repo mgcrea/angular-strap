@@ -1,16 +1,16 @@
 
 angular.module('$strap.directives')
 
-.directive('bsTooltip', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
+.directive('bsTooltip', ['$parse', '$compile',  function($parse, $compile) {
 	'use strict';
 
 	return {
 		restrict: 'A',
-		scope: true,
+		scope: {
+			title: '=bsTooltip',
+			model: '='
+		},
 		link: function postLink(scope, element, attr, ctrl) {
-
-			var getter = $parse(attr.bsTooltip),
-				setter = getter.assign;
 
 			if(!!attr.unique) {
 				element.on('show', function(ev) {
@@ -27,11 +27,11 @@ angular.module('$strap.directives')
 
 			// Initialize tooltip
 			element.tooltip({
-				title: getter(scope),
+				title: scope.title,
 				html: true
 			});
 
-			// Bootstrap override to provide events & tip() reference & refresh positions
+			// Bootstrap override to provide events & tip() reference
 			var tooltip = element.data('tooltip');
 			tooltip.show = function() {
 				var e = $.Event('show');
@@ -41,7 +41,7 @@ angular.module('$strap.directives')
 				}
 				var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
 				// Bind popover to the tip()
-				this.$tip.data('tooltip', this);
+				this.tip().data('tooltip', this);
 				return r;
 			};
 			tooltip.hide = function() {
