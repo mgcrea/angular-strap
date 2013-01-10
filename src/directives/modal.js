@@ -20,14 +20,6 @@ angular.module('$strap.directives')
           template = template.data;
         }
 
-        // Provide scope display functions
-        scope.dismiss = function() {
-          $modal.modal('hide');
-        };
-        scope.show = function() {
-          $modal.modal('show');
-        };
-
         // Build modal object
         var id = getter(scope).replace('.html', '').replace(/\//g, '-').replace(/\./g, '-') + '-' + scope.$id;
         var $modal = $('<div></div>').attr('id', id).attr('tabindex', -1).addClass('modal hide fade').html(template);
@@ -41,8 +33,17 @@ angular.module('$strap.directives')
           $compile($modal)(scope);
         });
 
-        // $modal.on('hidden', function() {
-        // });
+        // Provide scope display functions
+        scope._modal = function(name) {
+          $modal.modal(name);
+        };
+        scope.hide = function() {
+          $modal.modal('hide');
+        };
+        scope.show = function() {
+          $modal.modal('show');
+        };
+        scope.dismiss = scope.hide;
 
       });
     }

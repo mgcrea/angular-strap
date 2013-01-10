@@ -54,12 +54,16 @@ angular.module('$strap.directives')
       };
 
       // Provide scope display functions
-      scope.dismiss = function() {
+      scope._tooltip = function(event) {
+        element.tooltip(event);
+      };
+      scope.hide = function() {
         element.tooltip('hide');
       };
       scope.show = function() {
         element.tooltip('show');
       };
+      scope.dismiss = scope.hide;
 
     }
   };
