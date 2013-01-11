@@ -24,7 +24,8 @@ angular.module('$strap.directives')
 
         // Watch model for changes
         scope.$watch(attrs.ngModel, function(newValue, oldValue) {
-          if(!!newValue === !oldValue) {
+          var bNew = !!newValue, bOld = !!oldValue;
+          if(bNew !== bOld) {
             $.fn.button.Constructor.prototype.toggle.call(button);
           }
         });
@@ -61,24 +62,24 @@ angular.module('$strap.directives')
 
       };
 
-      // Provide scope display functions
-      // scope._button = function(event) {
-      //   element.button(event);
-      // };
-      // scope.loading = function() {
-      //   element.tooltip('loading');
-      // };
-      // scope.reset = function() {
-      //   element.tooltip('reset');
-      // };
+      /*Provide scope display functions
+      scope._button = function(event) {
+        element.button(event);
+      };
+      scope.loading = function() {
+        element.tooltip('loading');
+      };
+      scope.reset = function() {
+        element.tooltip('reset');
+      };
 
-      // if(attrs.loadingText) element.click(function () {
-      //   //var btn = $(this)
-      //   element.button('loading')
-      //   setTimeout(function () {
-      //   element.button('reset')
-      //   }, 1000)
-      // });
+      if(attrs.loadingText) element.click(function () {
+        //var btn = $(this)
+        element.button('loading')
+        setTimeout(function () {
+        element.button('reset')
+        }, 1000)
+      });*/
 
     }
   };

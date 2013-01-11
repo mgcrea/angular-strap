@@ -6,10 +6,10 @@ angular.module('$strap.directives')
 
   return {
     restrict: 'A',
-    // scope: {
-    //   title: '=bsTooltip',
-    //   model: '='
-    // },
+    /*scope: {
+      title: '=bsTooltip',
+      model: '='
+    },*/
     link: function postLink(scope, element, attrs, ctrl) {
 
       if(!!attrs.unique) {
@@ -53,17 +53,17 @@ angular.module('$strap.directives')
         return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
       };
 
-      // Provide scope display functions -> requires isolated scope which is too much trouble for a tooltip
-      // scope._tooltip = function(event) {
-      //   element.tooltip(event);
-      // };
-      // scope.hide = function() {
-      //   element.tooltip('hide');
-      // };
-      // scope.show = function() {
-      //   element.tooltip('show');
-      // };
-      // scope.dismiss = scope.hide;
+      /*Provide scope display functions -> requires isolated scope which is too much trouble for a tooltip
+      scope._tooltip = function(event) {
+        element.tooltip(event);
+      };
+      scope.hide = function() {
+        element.tooltip('hide');
+      };
+      scope.show = function() {
+        element.tooltip('show');
+      };
+      scope.dismiss = scope.hide;*/
 
     }
   };

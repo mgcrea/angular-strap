@@ -80,7 +80,8 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('bump', 'Increment version number', function(versionType) {
+  grunt.registerTask('bump', 'Increment version number', function() {
+    var versionType = grunt.option('type');
     function bumpVersion(version, versionType) {
       var type = {patch: 2, minor: 1, major: 0},
           parts = version.split('.'),
