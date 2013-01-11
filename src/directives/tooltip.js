@@ -6,13 +6,13 @@ angular.module('$strap.directives')
 
 	return {
 		restrict: 'A',
-		scope: {
-			title: '=bsTooltip',
-			model: '='
-		},
-		link: function postLink(scope, element, attr, ctrl) {
+		// scope: {
+		// 	title: '=bsTooltip',
+		// 	model: '='
+		// },
+		link: function postLink(scope, element, attrs, ctrl) {
 
-			if(!!attr.unique) {
+			if(!!attrs.unique) {
 				element.on('show', function(ev) {
 					// Hide any active popover except self
 					$(".tooltip.in").each(function() {
@@ -27,7 +27,7 @@ angular.module('$strap.directives')
 
 			// Initialize tooltip
 			element.tooltip({
-				title: scope.title,
+				title: scope.$eval(attrs.bsTooltip),
 				html: true
 			});
 
@@ -53,17 +53,17 @@ angular.module('$strap.directives')
 				return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
 			};
 
-			// Provide scope display functions
-			scope._tooltip = function(event) {
-				element.tooltip(event);
-			};
-			scope.hide = function() {
-				element.tooltip('hide');
-			};
-			scope.show = function() {
-				element.tooltip('show');
-			};
-			scope.dismiss = scope.hide;
+			// Provide scope display functions -> requires isolated scope which is too much trouble for a tooltip
+			// scope._tooltip = function(event) {
+			// 	element.tooltip(event);
+			// };
+			// scope.hide = function() {
+			// 	element.tooltip('hide');
+			// };
+			// scope.show = function() {
+			// 	element.tooltip('show');
+			// };
+			// scope.dismiss = scope.hide;
 
 		}
 	};
