@@ -1,7 +1,7 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.5.10 - 2013-01-07
- * @link http://angular-strap.github.com
+ * @version v0.6.0 - 2013-01-11
+ * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -15,46 +15,148 @@ angular.module('$strap', ['$strap.filters', '$strap.directives', '$strap.config'
 
 angular.module('$strap.directives')
 
-.directive('bsButton', ['$parse', function($parse) {
+.directive('bsButton', ['$parse', '$timeout', function($parse, $timeout) {
 	'use strict';
 
 	return {
 		restrict: 'A',
-		require: 'ngModel',
-		link: function postLink(scope, element, attr, ctrl) {
+		require: '?ngModel',
+		link: function postLink(scope, element, attrs, controller) {
 
-			var getter = $parse(attr.ngModel),
-				setter = getter.assign;
+			// If we have a controller (i.e. ngModelController) then wire it up
+			if(controller) {
 
-			// Disable bootstrap embedded button toggling
-			if(element.attr('data-toggle') === 'button') {
-				element.removeAttr('data-toggle');
-			}
-			if(element.parent().attr('data-toggle') === 'buttons-checkbox') {
-				element.parent().removeAttr('data-toggle');
-			}
+				// Set as single toggler if not part of a btn-group
+				if(!element.parent('[data-toggle="buttons-checkbox"], [data-toggle="buttons-radio"]').length) {
+					element.attr('data-toggle', 'button');
+				}
 
-			// Watch model for changes instead
-			scope.$watch(attr.ngModel, function(newValue, oldValue) {
-				if(!newValue) {
-					element.removeClass('active');
-				} else {
+				// Handle default state
+				if(!!scope.$eval(attrs.ngModel)) {
 					element.addClass('active');
 				}
-			});
 
-			// Click handling
-			element.on('click', function(ev) {
-				scope.$apply(function() {
-					setter(scope, !getter(scope));
+				// Watch model for changes
+				scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+					var bNew = !!newValue, bOld = !!oldValue;
+					if(bNew !== bOld) {
+						$.fn.button.Constructor.prototype.toggle.call(button);
+					}
 				});
-			});
 
-			// Initial state
-			if(getter(scope)) {
-				element.addClass('active');
 			}
 
+			// Initialize button
+			element.button();
+
+			// Bootstrap override to handle toggling
+			var button = element.data('button');
+			button.toggle = function() {
+
+				if(!controller) {
+					return $.fn.button.Constructor.prototype.toggle.call(this);
+				}
+
+				var $parent = element.parent('[data-toggle="buttons-radio"]');
+
+				if($parent.length) {
+					element.siblings('[ng-model]').each(function(k, v) {
+						$parse($(v).attr('ng-model')).assign(scope, false);
+					});
+					scope.$digest();
+					if(!controller.$modelValue) {
+						controller.$setViewValue(!controller.$modelValue);
+						scope.$digest();
+					}
+				} else {
+					scope.$apply(function () {
+						controller.$setViewValue(!controller.$modelValue);
+					});
+				}
+
+			};
+
+			/*Provide scope display functions
+			scope._button = function(event) {
+				element.button(event);
+			};
+			scope.loading = function() {
+				element.tooltip('loading');
+			};
+			scope.reset = function() {
+				element.tooltip('reset');
+			};
+
+			if(attrs.loadingText) element.click(function () {
+				//var btn = $(this)
+				element.button('loading')
+				setTimeout(function () {
+				element.button('reset')
+				}, 1000)
+			});*/
+
+		}
+	};
+
+}])
+
+.directive('bsButtonsCheckbox', ['$parse', function($parse) {
+	'use strict';
+	return {
+		restrict: 'A',
+		require: '?ngModel',
+		compile: function compile(tElement, tAttrs, transclude) {
+			tElement.attr('data-toggle', 'buttons-checkbox').find('a, button').each(function(k, v) {
+				$(v).attr('bs-button', '');
+			});
+		}
+	};
+
+}])
+
+.directive('bsButtonsRadio', ['$parse', function($parse) {
+	'use strict';
+	return {
+		restrict: 'A',
+		require: '?ngModel',
+		compile: function compile(tElement, tAttrs, transclude) {
+
+			tElement.attr('data-toggle', 'buttons-radio');
+
+			// Delegate to children ngModel
+			if(!tAttrs.ngModel) {
+				tElement.find('a, button').each(function(k, v) {
+					$(v).attr('bs-button', '');
+				});
+			}
+
+			return function postLink(scope, iElement, iAttrs, controller) {
+
+				// If we have a controller (i.e. ngModelController) then wire it up
+				if(controller) {
+
+					iElement
+						.find('[value]').button()
+						.filter('[value="' + scope.$eval(iAttrs.ngModel) + '"]')
+						.addClass('active');
+
+					iElement.on('click.button.data-api', function (ev) {
+						scope.$apply(function () {
+							controller.$setViewValue($(ev.target).attr('value'));
+						});
+					});
+
+					// Watch model for changes
+					scope.$watch(iAttrs.ngModel, function(newValue, oldValue) {
+						if(newValue !== oldValue) {
+							var $btn = iElement.find('[value="' + scope.$eval(iAttrs.ngModel) + '"]');
+							$.fn.button.Constructor.prototype.toggle.call($btn.data('button'));
+						}
+					});
+
+				}
+
+			};
 		}
 	};
 
@@ -221,7 +323,7 @@ angular.module('$strap.directives')
   var template = '' +
   '<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">' +
     '<li ng-repeat="item in items" ng-class="{divider: !!item.divider, \'dropdown-submenu\': !!item.submenu && item.submenu.length}">' +
-      '<a ng-hide="!!item.divider" tabindex="-1" ng-href="{{item.href}}" ng-click="{{item.click}}">{{item.text}}</a>' +
+      '<a ng-hide="!!item.divider" tabindex="-1" ng-href="{{item.href}}" ng-click="{{item.click}}" target="{{item.target}}" ng-bind-html-unsafe="item.text"></a>' +
     '</li>' +
   '</ul>';
 
@@ -288,17 +390,9 @@ angular.module('$strap.directives')
 					template = template.data;
 				}
 
-				// Provide scope display functions
-				scope.dismiss = function() {
-					$modal.modal('hide');
-				};
-				scope.show = function() {
-					$modal.modal('show');
-				};
-
 				// Build modal object
-				var id = getter(scope).replace(/\//g, '-').replace(/\./g, '-').replace('html', scope.$id);
-				var $modal = $('<div></div>').attr('id', id).addClass('modal hide fade').html(template);
+				var id = getter(scope).replace('.html', '').replace(/\//g, '-').replace(/\./g, '-') + '-' + scope.$id;
+				var $modal = $('<div></div>').attr('id', id).attr('tabindex', -1).addClass('modal hide fade').html(template);
 				$('body').append($modal);
 
 				// Configure element
@@ -309,8 +403,17 @@ angular.module('$strap.directives')
 					$compile($modal)(scope);
 				});
 
-				// $modal.on('hidden', function() {
-				// });
+				// Provide scope display functions
+				scope._modal = function(name) {
+					$modal.modal(name);
+				};
+				scope.hide = function() {
+					$modal.modal('hide');
+				};
+				scope.show = function() {
+					$modal.modal('show');
+				};
+				scope.dismiss = scope.hide;
 
 			});
 		}
@@ -380,14 +483,6 @@ angular.module('$strap.directives')
 					template = template.data;
 				}
 
-				// Provide scope display functions
-				scope.dismiss = function() {
-					element.popover('hide');
-				};
-				scope.show = function() {
-					element.popover('show');
-				};
-
 				// Handle `data-unique` attribute
 				if(!!attr.unique) {
 					element.on('show', function(ev) {
@@ -422,8 +517,11 @@ angular.module('$strap.directives')
 					html: true
 				});
 
-				// Bootstrap override to provide events & tip() reference & refresh positions
+				// Bootstrap override to provide events, tip() reference, refreshable positions
 				var popover = element.data('popover');
+				popover.hasContent = function() {
+					return this.getTitle() || template; // fix multiple $compile()
+				};
 				popover.refresh = function() {
 					var $tip = this.tip(), inside, pos, actualWidth, actualHeight, placement, tp;
 
@@ -475,7 +573,18 @@ angular.module('$strap.directives')
 					return $.fn.popover.Constructor.prototype.hide.apply(this, arguments);
 				};
 
-			}, function onError(err) {
+				// Provide scope display functions
+				scope._popover = function(name) {
+					element.popover(name);
+				};
+				scope.hide = function() {
+					element.popover('hide');
+				};
+				scope.show = function() {
+					element.popover('show');
+				};
+				scope.dismiss = scope.hide;
+
 			});
 
 		}
@@ -555,18 +664,18 @@ angular.module('$strap.directives')
 
 angular.module('$strap.directives')
 
-.directive('bsTooltip', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
+.directive('bsTooltip', ['$parse', '$compile',  function($parse, $compile) {
 	'use strict';
 
 	return {
 		restrict: 'A',
-		scope: true,
-		link: function postLink(scope, element, attr, ctrl) {
+		/*scope: {
+			title: '=bsTooltip',
+			model: '='
+		},*/
+		link: function postLink(scope, element, attrs, ctrl) {
 
-			var getter = $parse(attr.bsTooltip),
-				setter = getter.assign;
-
-			if(!!attr.unique) {
+			if(!!attrs.unique) {
 				element.on('show', function(ev) {
 					// Hide any active popover except self
 					$(".tooltip.in").each(function() {
@@ -581,11 +690,11 @@ angular.module('$strap.directives')
 
 			// Initialize tooltip
 			element.tooltip({
-				title: getter(scope),
+				title: scope.$eval(attrs.bsTooltip),
 				html: true
 			});
 
-			// Bootstrap override to provide events & tip() reference & refresh positions
+			// Bootstrap override to provide events & tip() reference
 			var tooltip = element.data('tooltip');
 			tooltip.show = function() {
 				var e = $.Event('show');
@@ -595,7 +704,7 @@ angular.module('$strap.directives')
 				}
 				var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
 				// Bind popover to the tip()
-				this.$tip.data('tooltip', this);
+				this.tip().data('tooltip', this);
 				return r;
 			};
 			tooltip.hide = function() {
@@ -607,13 +716,17 @@ angular.module('$strap.directives')
 				return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
 			};
 
-			// Provide scope display functions
-			scope.dismiss = function() {
+			/*Provide scope display functions -> requires isolated scope which is too much trouble for a tooltip
+			scope._tooltip = function(event) {
+				element.tooltip(event);
+			};
+			scope.hide = function() {
 				element.tooltip('hide');
 			};
 			scope.show = function() {
 				element.tooltip('show');
 			};
+			scope.dismiss = scope.hide;*/
 
 		}
 	};

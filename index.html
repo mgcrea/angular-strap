@@ -70,8 +70,8 @@
           <span class="icon-bar"></span>
         </button>
         <div class="btn-toolbar btn-group pull-right">
-          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.js"><i class="icon-download-alt icon-white"></i>&nbsp;dev <small>(v0.5.10)</small></a>
-          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.min.js"><i class="icon-download-alt icon-white"></i>&nbsp;prod <small>(v0.5.10)</small></a>
+          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.js"><i class="icon-download-alt icon-white"></i>&nbsp;dev <small>(v0.6.0)</small></a>
+          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.min.js"><i class="icon-download-alt icon-white"></i>&nbsp;prod <small>(v0.6.0)</small></a>
         </div>
         <a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank">
           <img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master"/>
@@ -140,6 +140,7 @@
         <li><a href="#popover"><i class="icon-chevron-right"></i> Popover</a></li>
         <li><a href="#buttons"><i class="icon-chevron-right"></i> Buttons</a></li>
         <li><a href="#checkboxes"><i class="icon-chevron-right"></i> Checkboxes</a></li>
+        <li><a href="#radios"><i class="icon-chevron-right"></i> Radios</a></li>
         <li><a href="#typeahead"><i class="icon-chevron-right"></i> Typeahead</a></li>
         <li><a href="#datepicker"><i class="icon-chevron-right"></i> Datepicker</a></li>
         <li><a href="#timepicker"><i class="icon-chevron-right"></i> Timepicker</a></li>
@@ -365,24 +366,66 @@
 &lt;/div&gt;
         </pre>
 
-        <h3 id="checkboxes">Checkboxes</h3>
+        <h2 id="checkboxes">Checkboxes</h3>
+        <p>Add <code>bs-buttons-checkbox</code> for checkbox style toggling on btn-group.</p>
         <div class="bs-docs-example">
           <pre>checkbox: {{checkbox | json}}</pre>
           <div class="btn-toolbar well">
-            <div class="btn-group" data-toggle="buttons-checkbox">
-              <button type="button" class="btn" ng-model="checkbox.left" bs-button>Left</button>
-              <button type="button" class="btn" ng-model="checkbox.middle" bs-button>Middle</button>
-              <button type="button" class="btn" ng-model="checkbox.right" bs-button>Right</button>
+            <div class="btn-group" bs-buttons-checkbox>
+              <button type="button" class="btn" ng-model="checkbox.left">Left</button>
+              <button type="button" class="btn" ng-model="checkbox.middle">Middle</button>
+              <button type="button" class="btn" ng-model="checkbox.right">Right</button>
             </div>
           </div>
         </div>
         <pre class="prettyprint linenums" ng-non-bindable>
-&lt;div class="btn-group" data-toggle="buttons-checkbox"&gt;
-  &lt;button type="button" class="btn" ng-model="checkbox.left" bs-button&gt;...&lt;/button&gt;
-  &lt;button type="button" class="btn" ng-model="checkbox.middle" bs-button&gt;...&lt;/button&gt;
-  &lt;button type="button" class="btn" ng-model="checkbox.right" bs-button&gt;...&lt;/button&gt;
+&lt;div class="btn-group" bs-buttons-checkbox&gt;
+  &lt;button type="button" class="btn" ng-model="checkbox.left"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" ng-model="checkbox.middle"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" ng-model="checkbox.right"&gt;...&lt;/button&gt;
 &lt;/div&gt;
         </pre>
+
+        <h2 id="radios">Radios</h3>
+        <p>Add <code>bs-buttons-radio</code> for radio style toggling on btn-group.</p>
+        <div class="bs-docs-example">
+          <pre>radio: {{radio | json}}</pre>
+          <div class="btn-toolbar well">
+            <div class="btn-group" bs-buttons-radio>
+              <button type="button" class="btn" ng-model="radio.left">Left</button>
+              <button type="button" class="btn" ng-model="radio.middle">Middle</button>
+              <button type="button" class="btn" ng-model="radio.right">Right</button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div class="btn-group" bs-buttons-radio&gt;
+  &lt;button type="button" class="btn" ng-model="radio.left"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" ng-model="radio.middle"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" ng-model="radio.right"&gt;...&lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+
+        <h3 id="radios-single">Radios with a single model</h3>
+        <p>Add <code>bs-buttons-checkbox</code> with an <code>ng-model</code> attribute to bind your buttons to a single model.</p>
+        <div class="bs-docs-example">
+          <pre>radioValue: {{radioValue | json}}</pre>
+          <div class="btn-toolbar well">
+            <div class="btn-group" ng-model="radioValue" bs-buttons-radio>
+              <button type="button" class="btn" value="left">Left</button>
+              <button type="button" class="btn" value="middle">Middle</button>
+              <button type="button" class="btn" value="right">Right</button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div class="btn-group" ng-model="radioValue" bs-buttons-radio&gt;
+  &lt;button type="button" class="btn" value="left"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" value="middle"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" value="right"&gt;...&lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+
       </section>
 
        <section id="typeahead">
