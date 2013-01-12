@@ -35,6 +35,16 @@ angular.module('$strap.directives')
 				}
 			});
 
+			// add entered element into typeahead array for other fields
+			element.bind('blur', function() {
+				var new_value = element.val();
+				if ( new_value.length > 1 && $.inArray( new_value, value ) === -1 ) { // IE doesn't have .indexOf
+					scope.$apply( function() {
+						value.unshift( element.val() );
+					});
+				}
+			});
+
 		}
 	};
 
