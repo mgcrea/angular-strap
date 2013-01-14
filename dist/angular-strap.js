@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.6.0 - 2013-01-14
+ * @version v0.6.1 - 2013-01-14
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -44,6 +44,13 @@ angular.module('$strap.directives')
 					}
 				});
 
+			}
+
+			// Support buttons without .btn class
+			if(!element.hasClass('btn')) {
+				element.on('click.button.data-api', function (e) {
+					element.button('toggle');
+				});
 			}
 
 			// Initialize button
@@ -474,9 +481,14 @@ angular.module('$strap.directives')
 
 			var getter = $parse(attr.bsPopover),
 				setter = getter.assign,
-				value = getter(scope);
+				value = getter(scope),
+				options = {};
 
-			$q.when($templateCache.get(value) || $http.get(value, {cache: true})).then(function onSuccess(template) {
+			if(angular.isObject(value)) {
+				options = value;
+			}
+
+			$q.when(options.content || $templateCache.get(value) || $http.get(value, {cache: true})).then(function onSuccess(template) {
 
 				// Handle response from $http promise
 				if(angular.isObject(template)) {
@@ -496,8 +508,9 @@ angular.module('$strap.directives')
 						});
 					});
 				}
+
 				// Initialize popover
-				element.popover({
+				element.popover(angular.extend({}, options, {
 					content: function() {
 						$timeout(function() { // use async $apply
 
@@ -515,7 +528,7 @@ angular.module('$strap.directives')
 						return template;
 					},
 					html: true
-				});
+				}));
 
 				// Bootstrap override to provide events, tip() reference, refreshable positions
 				var popover = element.data('popover');
