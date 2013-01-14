@@ -277,7 +277,8 @@
             <hr />
             <div class="control-group input-prepend">
               <button type="submit" class="btn" data-trigger="click" bs-tooltip="tooltip.title">Click me</button>
-              <input type="text" class="span3" data-placement="right" placeholder="Focus to toggle tooltip" data-trigger="focus" data-unique="1" bs-tooltip="tooltip.title"/>
+              <input type="text" class="span3" data-placement="bottom" placeholder="Focus to toggle tooltip" data-trigger="focus" data-unique="1" bs-tooltip="tooltip.title"/>
+              <input style="margin: 10px 0 0 10px;" type="checkbox" ng-model="tooltip.checked" data-placement="right" bs-tooltip="tooltip.title">
             </div>
           </div>
         </div>
@@ -288,7 +289,13 @@
 &lt;button type="submit" class="btn" data-trigger="click" bs-tooltip="tooltip.title"&gt;...&lt;/button&gt;
 &lt;!-- Force close others with data-unique attribute --&gt;
 &lt;input type="text" data-trigger="focus" data-unique="1" bs-tooltip="tooltip.title"/&gt;
+&lt;!-- Two-way databinding --&gt;
+&lt;input type="checkbox" ng-model="tooltip.checked" bs-tooltip="tooltip.title"/&gt;
         </pre>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          <em>"The rule of thumb is, if you﻿ use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery</em>
+        </div>
       </section>
 
       <section id="popover">

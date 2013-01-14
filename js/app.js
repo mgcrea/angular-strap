@@ -46,7 +46,7 @@ app.controller('StrapCtrl', function($scope) {
 	];
 	$scope.formattedDropdown = "[\n  {text: 'Another action', href:'#anotherAction'},\n  {text: 'Another action', href:'#anotherAction'},\n  {divider: true},\n  {text: 'Separated link', href:'#', submenu: [\n    {text: 'Second level link', href: '#'},\n    {text: 'Second level link 2', href: '#'}\n  ]}\n]";
 	$scope.modal = {content: 'Hello Modal', saved: false};
-	$scope.tooltip = {title: "Hello Tooltip<br />This is a multiline message!"};
+	$scope.tooltip = {title: "Hello Tooltip<br />This is a multiline message!", checked: false};
 	$scope.popover = {content: "Hello Popover<br />This is a multiline message!", saved: false};
 	$scope.button = {active: true};
 	$scope.buttonSelect = {price: '89,99', currency: '€'};
