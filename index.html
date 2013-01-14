@@ -48,9 +48,9 @@
   <script src="js/fastclick.min.js"></script>
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/bootstrap-timepicker.js"></script>
-  <script src="js/angular-strap.min.js?v=0.6.0"></script>
+  <script src="js/angular-strap.min.js?v=0.6.1"></script>
 
-  <script src="js/app.js?v=0.6.0"></script>
+  <script src="js/app.js?v=0.6.1"></script>
 
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -70,8 +70,8 @@
           <span class="icon-bar"></span>
         </button>
         <div class="btn-toolbar btn-group pull-right">
-          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.js"><i class="icon-download-alt icon-white"></i>&nbsp;dev <small>(v0.6.0)</small></a>
-          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.min.js"><i class="icon-download-alt icon-white"></i>&nbsp;prod <small>(v0.6.0)</small></a>
+          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.js"><i class="icon-download-alt icon-white"></i>&nbsp;dev <small>(v0.6.1)</small></a>
+          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/master/dist/angular-strap.min.js"><i class="icon-download-alt icon-white"></i>&nbsp;prod <small>(v0.6.1)</small></a>
         </div>
         <a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank">
           <img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master"/>
@@ -315,8 +315,11 @@
           </div>
         </div>
         <pre class="prettyprint linenums" ng-non-bindable>
-&lt;!-- Button to trigger popover --&gt;
+&lt;!-- Button to trigger popover with an external partial --&gt;
 &lt;button type="button" class="btn" bs-popover="'partials/popover.html'"&gt;...&lt;/button&gt;
+
+&lt;!-- You can also use a simple object {title:'', content:'', etc.} instead of a partial/template --&gt;
+&lt;button type="button" class="btn" bs-popover="popover"&gt;...&lt;/button&gt;
 
 &lt;!-- Force close others with data-unique attribute --&gt;
 &lt;button type="button" class="btn" data-unique="1" bs-popover="'partials/popover.html'"&gt;...&lt;/button&gt;
