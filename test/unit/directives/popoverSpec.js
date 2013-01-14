@@ -31,6 +31,10 @@ describe('popover', function () {
 			popover: 'Hello <span ng-bind-html-unsafe="content"></span>',
 			element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-unique="1"></a>'
 		},
+		'object': {
+			scope: {popover: {title: "aTitle", content: "World<br />Multiline Content<br />"}},
+			element: '<a class="btn" bs-popover="popover"></a>'
+		},
 		'cached': {
 			scope: {content: "World<br />Multiline Content<br />"},
 			element: '<script type="text/ng-template" id="cached-popover">' + 'Hello <span ng-bind-html-unsafe="content"></span>' + '</script>' + '<a class="btn" bs-popover="\'cached-popover\'" data-title="aTitle"></a>'
@@ -69,6 +73,14 @@ describe('popover', function () {
 		expect(elm.data('popover')).toBeDefined();
 		expect(typeof elm.data('popover').options.content === 'function').toBe(true);
 		expect(elm.data('popover').options.content()).toBe(templates['default'].popover);
+	});
+
+	it('should support a plain object and build the popover', function () {
+		compileDirective('object', true);
+		var elm = $('a[bs-popover]');
+		expect(elm.data('popover')).toBeDefined();
+		expect(typeof elm.data('popover').options.content === 'function').toBe(true);
+		expect(elm.data('popover').options.content()).toBe(templates['object'].scope.popover.content);
 	});
 
 	it('should correctly call $.fn.popover', function () {
