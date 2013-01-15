@@ -19,6 +19,7 @@ In order to use AngularStrap, you have to:
 
 1. Include the required libraries (cdn/local)
 
+>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
@@ -26,6 +27,7 @@ In order to use AngularStrap, you have to:
 
 2. Inject the `$strap.directives` into your app module
 
+>
     var app = angular.module('angularjs-starter', ['$strap.directives']);
 
 Testing
@@ -33,6 +35,7 @@ Testing
 
 AngularStrap is tested with `testacular` against the latest available release of jQuery & Bootstrap.
 
+>
 	sudo npm install testacular -g
 	npm test
 
