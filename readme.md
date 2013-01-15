@@ -6,17 +6,32 @@ AngularStrap is a set of directives that enables seamless integration of [Twitte
 Documentation and examples
 --------------------------
 
-Check the [documentation](http://mgcrea.github.com/angular-strap) for working examples.
++ Check the [documentation](http://mgcrea.github.com/angular-strap) and [changelog](https://github.com/mgcrea/angular-strap/wiki/Changelog).
+
++ Use & fork the available [plunkers](https://github.com/mgcrea/angular-strap/wiki/Plunkers) to test a directive or report an issue.
 
 Quick start
 -----------
 
 Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, or [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master).
 
+In order to use AngularStrap, you have to:
+
+1. Include the required libraries (cdn/local)
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+    <script src="//mgcrea.github.com/angular-strap/js/angular-strap.js"></script>
+
+2. Inject the `$strap.directives` into your app module
+
+    var app = angular.module('angularjs-starter', ['$strap.directives']);
+
 Testing
 -------
 
-AngularStrap is tested with `testacular` (jasmine unit tests).
+AngularStrap is tested with `testacular` against the latest available release of jQuery & Bootstrap.
 
 	sudo npm install testacular -g
 	npm test
