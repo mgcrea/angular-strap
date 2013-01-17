@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.6.1 - 2013-01-14
+ * @version v0.6.2 - 2013-01-17
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -11,6 +11,40 @@ angular.module('$strap.config', []).value('$strap.config', {});
 angular.module('$strap.filters', ['$strap.config']);
 angular.module('$strap.directives', ['$strap.config']);
 angular.module('$strap', ['$strap.filters', '$strap.directives', '$strap.config']);
+
+
+angular.module('$strap.directives')
+
+.directive('bsAlert', ['$parse', '$timeout', '$compile', function($parse, $timeout, $compile) {
+  'use strict';
+
+  return {
+    restrict: 'A',
+    link: function postLink(scope, element, attrs) {
+
+      scope.$watch(attrs.bsAlert, function(newValue, oldValue) {
+        element.html((newValue.title ? '<strong>' + newValue.title + '</strong>&nbsp;' : '') + newValue.content || '');
+        // Compile alert content
+        $timeout(function(){
+          $compile(element.contents())(scope);
+        });
+        if(newValue.type || oldValue.type) {
+          oldValue.type && element.removeClass('alert-' + oldValue.type);
+          newValue.type && element.addClass('alert-' + newValue.type);
+        }
+        if(newValue.close !== false) {
+          element.prepend('<button type="button" class="close" data-dismiss="alert">&times;</button>');
+        }
+      }, true);
+
+      element.alert();
+
+      // element.on('close', function() {
+      // });
+
+    }
+  };
+}]);
 
 
 angular.module('$strap.directives')
@@ -752,14 +786,14 @@ angular.module('$strap.directives')
   return {
     restrict: 'A',
     require: '?ngModel',
-    link: function postLink(scope, element, attr, controller) {
+    link: function postLink(scope, element, attrs, controller) {
 
-      var getter = $parse(attr.bsTypeahead),
+      var getter = $parse(attrs.bsTypeahead),
           setter = getter.assign,
           value = getter(scope);
 
       // Watch bsTypeahead for changes
-      scope.$watch(attr.bsTypeahead, function(newValue, oldValue) {
+      scope.$watch(attrs.bsTypeahead, function(newValue, oldValue) {
         if(newValue !== oldValue) {
           value = newValue;
         }
@@ -768,7 +802,8 @@ angular.module('$strap.directives')
       element.attr('data-provide', 'typeahead');
       element.typeahead({
         source: function(query) { return value; },
-        items: attr.items,
+        minLength: attrs.minLength || 1,
+        items: attrs.items,
         updater: function(value) {
           // If we have a controller (i.e. ngModelController) then wire it up
           if(controller) {
@@ -779,6 +814,26 @@ angular.module('$strap.directives')
           return value;
         }
       });
+
+      // Bootstrap override
+      var typeahead = element.data('typeahead');
+      // Fixes #2043: allows minLength of zero to enable show all for typeahead
+      typeahead.lookup = function (event) {
+        var items;
+        this.query = this.$element.val() || '';
+        if (this.query.length < this.options.minLength) {
+          return this.shown ? this.hide() : this;
+        }
+        items = $.isFunction(this.source) ? this.source(this.query, $.proxy(this.process, this)) : this.source;
+        return items ? this.process(items) : this;
+      };
+
+      // Support 0-minLength
+      if(attrs.minLength === "0") {
+        setTimeout(function() { // Push to the event loop to make sure element.typeahead is defined
+          element.on('focus', element.typeahead.bind(element, 'lookup'));
+        });
+      }
 
     }
   };
