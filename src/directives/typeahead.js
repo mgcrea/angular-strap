@@ -51,8 +51,10 @@ angular.module('$strap.directives')
 
 			// Support 0-minLength
 			if(attrs.minLength === "0") {
-				element.on('focus', function() {
-					setTimeout(element.typeahead.bind(element, 'lookup'), 200);
+				setTimeout(function() { // Push to the event loop to make sure element.typeahead is defined (breaks tests otherwise)
+					element.on('focus', function() {
+						setTimeout(element.typeahead.bind(element, 'lookup'), 200);
+					});
 				});
 			}
 
