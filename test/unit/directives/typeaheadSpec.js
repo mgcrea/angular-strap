@@ -11,7 +11,6 @@ describe('typeahead', function () {
     $timeout = _$timeout_;
 
     $sandbox = $('<div id="sandbox"></div>').appendTo($('body'));
-    scope.typeahead = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
   }));
 
   afterEach(function() {
@@ -21,15 +20,25 @@ describe('typeahead', function () {
   });
 
   var templates = {
-    'default': '<input type="text" class="span3" data-items="4" ng-model="typeaheadValue" bs-typeahead="typeahead">'
+    'default': {
+      scope: {typeahead: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]},
+      element: '<input type="text" class="span3" data-items="4" ng-model="typeaheadValue" bs-typeahead="typeahead">'
+    },
+    'minLength': {
+      element: '<input type="text" class="span3" data-items="4" data-min-length="4" ng-model="typeaheadValue" bs-typeahead="typeahead">'
+    },
+    'minLength-0': {
+      element: '<input type="text" class="span3" data-items="4" data-min-length="0" ng-model="typeaheadValue" bs-typeahead="typeahead">'
+    }
   };
 
   function compileDirective(template) {
     template = template ? templates[template] : templates['default'];
-    template = $(template).appendTo($sandbox);
-    var result = $compile(template)(scope);
+    angular.extend(scope, template.scope || templates['default'].scope);
+    var $element = $(template.element).appendTo($sandbox);
+    $element = $compile($element)(scope);
     scope.$digest();
-    return result;
+    return $element;
   }
 
   // Tests
@@ -89,7 +98,23 @@ describe('typeahead', function () {
     elm.val('a').trigger('keyup');
     $dropdown = elm.next('.typeahead.dropdown-menu');
     expect($dropdown.children('li').length).toBe(1);
+  });
 
+  it('should show correctly handle minLength attribute', function() {
+    var elm = compileDirective('minLength');
+    elm.val('a').trigger('keyup');
+    var $dropdown = elm.next('.typeahead.dropdown-menu');
+    expect($dropdown.children('li').length).toBe(0);
+    elm.val('alab').trigger('keyup');
+    $dropdown = elm.next('.typeahead.dropdown-menu');
+    expect($dropdown.children('li').length).toBe(1);
+  });
+
+  it('should show correctly handle minLength=0 attribute', function() {
+    var elm = compileDirective('minLength-0');
+    elm.trigger('focus');
+    var $dropdown = elm.next('.typeahead.dropdown-menu');
+    expect($dropdown.children('li').length).toBe(0);
   });
 
 });
