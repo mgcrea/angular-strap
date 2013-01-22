@@ -38,14 +38,16 @@ angular.module('$strap.directives')
 				// Handle `data-unique` attribute
 				if(!!attr.unique) {
 					element.on('show', function(ev) {
-						// Hide any active popover except self
-						$(".popover.in").each(function() {
-							var $this = $(this),
-								popover = $this.data('popover');
-							if(popover && !popover.$element.is(element)) {
-								$this.popover('hide');
-							}
-						});
+						_hideAllPopversExcept(element);
+					});
+				}
+
+				// Handle `data-hide` attribute
+				if(attr.hide) {
+					scope.$watch(attr.hide, function(val) {
+						if (val) {
+							_hidePopover(element);
+						}
 					});
 				}
 
@@ -140,6 +142,31 @@ angular.module('$strap.directives')
 
 			});
 
+			function _eachPopover(callback) {
+				$(".popover.in").each(function() {
+					var $this = $(this),
+						popover = $this.data('popover');
+					if (popover) {
+						callback($this, popover);
+					}
+				});
+			}
+
+			function _hideAllPopversExcept(element) {
+				_eachPopover(function($elem, popover) {
+					if (!popover.$element.is(element)) {
+						$elem.popover('hide');
+					}
+				});
+			}
+
+			function _hidePopover(element) {
+				_eachPopover(function($elem, popover ){
+					if (popover.$element.is(element)) {
+						$elem.popover('hide');
+					}
+				});
+			}
 		}
 	};
 
