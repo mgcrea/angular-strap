@@ -1,4 +1,3 @@
-
 angular.module('$strap.directives')
 
 .directive('bsModal', ['$parse', '$compile', '$http', '$timeout', '$q', '$templateCache', function($parse, $compile, $http, $timeout, $q, $templateCache) {
@@ -22,7 +21,7 @@ angular.module('$strap.directives')
 
         // Build modal object
         var id = getter(scope).replace('.html', '').replace(/\//g, '-').replace(/\./g, '-') + '-' + scope.$id;
-        var $modal = $('<div></div>').attr('id', id).attr('tabindex', -1).addClass('modal hide fade').html(template);
+        var $modal = $('<div></div>').attr('id', id).attr('tabindex', -1).attr('data-backdrop', element.attr('data-backdrop') || true).attr('data-keyboard', element.attr('data-keyboard') || true).addClass('modal hide fade').html(template);
         $('body').append($modal);
 
         // Configure element
