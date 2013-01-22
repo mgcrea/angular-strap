@@ -1,4 +1,3 @@
-
 angular.module('$strap.directives')
 
 .directive('bsTypeahead', ['$parse', function($parse) {
@@ -22,7 +21,7 @@ angular.module('$strap.directives')
 
       element.attr('data-provide', 'typeahead');
       element.typeahead({
-        source: function(query) { return value; },
+        source: value,
         minLength: attrs.minLength || 1,
         items: attrs.items,
         updater: function(value) {
