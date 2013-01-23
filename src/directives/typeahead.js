@@ -37,6 +37,13 @@ angular.module('$strap.directives')
 
 			// Bootstrap override
 			var typeahead = element.data('typeahead');
+
+            typeahead.focus = function (e) {
+                this.lookup();
+            }
+
+            element.on('focus', $.proxy(typeahead.focus, typeahead))
+
 			// Fixes #2043: allows minLength of zero to enable show all for typeahead
 			typeahead.lookup = function (event) {
 				var items;
