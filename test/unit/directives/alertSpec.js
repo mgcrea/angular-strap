@@ -21,7 +21,7 @@ describe('alert', function () {
   var templates = {
     'default': {
       scope: {alert: {type:'error', title: 'Holy guacamole!', content: 'Hello Alert, <pre>2 + 3 = {{ 2 + 3 }}</pre>'}},
-      element: ' <div class="alert fade in" bs-alert="alert"></div>'
+      element: '<div class="alert fade in" bs-alert="alert"></div>'
     }
   };
 
