@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.6.2 - 2013-01-17
+ * @version v0.6.3 - 2013-01-25
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -203,7 +203,7 @@ angular.module('$strap.directives')
 
 					iElement.on('click.button.data-api', function (ev) {
 						scope.$apply(function () {
-							controller.$setViewValue($(ev.target).attr('value'));
+							controller.$setViewValue($(ev.target).closest('button').attr('value'));
 						});
 					});
 
@@ -429,7 +429,6 @@ angular.module('$strap.directives')
 
 }]);
 
-
 angular.module('$strap.directives')
 
 .directive('bsModal', ['$parse', '$compile', '$http', '$timeout', '$q', '$templateCache', function($parse, $compile, $http, $timeout, $q, $templateCache) {
@@ -453,7 +452,7 @@ angular.module('$strap.directives')
 
 				// Build modal object
 				var id = getter(scope).replace('.html', '').replace(/\//g, '-').replace(/\./g, '-') + '-' + scope.$id;
-				var $modal = $('<div></div>').attr('id', id).attr('tabindex', -1).addClass('modal hide fade').html(template);
+				var $modal = $('<div></div>').attr('id', id).attr('tabindex', -1).attr('data-backdrop', element.attr('data-backdrop') || true).attr('data-keyboard', element.attr('data-keyboard') || true).addClass('modal hide fade').html(template);
 				$('body').append($modal);
 
 				// Configure element
@@ -797,7 +796,6 @@ angular.module('$strap.directives')
 
 }]);
 
-
 angular.module('$strap.directives')
 
 .directive('bsTypeahead', ['$parse', function($parse) {
@@ -821,7 +819,7 @@ angular.module('$strap.directives')
 
 			element.attr('data-provide', 'typeahead');
 			element.typeahead({
-				source: function(query) { return value; },
+				source: function(query) { return angular.isFunction(value) ? value.apply(null, arguments) : value; },
 				minLength: attrs.minLength || 1,
 				items: attrs.items,
 				updater: function(value) {
@@ -850,8 +848,10 @@ angular.module('$strap.directives')
 
 			// Support 0-minLength
 			if(attrs.minLength === "0") {
-				setTimeout(function() { // Push to the event loop to make sure element.typeahead is defined
-					element.on('focus', element.typeahead.bind(element, 'lookup'));
+				setTimeout(function() { // Push to the event loop to make sure element.typeahead is defined (breaks tests otherwise)
+					element.on('focus', function() {
+						setTimeout(element.typeahead.bind(element, 'lookup'), 200);
+					});
 				});
 			}
 
