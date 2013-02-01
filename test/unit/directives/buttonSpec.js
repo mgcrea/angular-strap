@@ -1,7 +1,7 @@
 'use strict';
 
 describe('button', function () {
-  var scope, $sandbox, $compile, $timeout;
+  var scope, $sandbox, $compile, $timeout, $q;
 
   beforeEach(module('$strap.directives'));
 
@@ -13,10 +13,11 @@ describe('button', function () {
     });
   });
 
-  beforeEach(inject(function ($injector, $rootScope, _$compile_, _$timeout_) {
+  beforeEach(inject(function ($injector, $rootScope, _$compile_, _$timeout_, _$q_) {
     scope = $rootScope;
     $compile = _$compile_;
     $timeout = _$timeout_;
+    $q = _$q_;
 
     $sandbox = $('<div id="sandbox"></div>').appendTo($('body'));
 
@@ -39,6 +40,10 @@ describe('button', function () {
   var templates = {
     'default': {
       scope: {buttonValue: undefined},
+      element: '<div class="btn" ng-model="buttonValue" data-toggle="button" bs-button>'
+    },
+    'promise': {
+      scope: {},
       element: '<div class="btn" ng-model="buttonValue" data-toggle="button" bs-button>'
     },
     'checkbox': {
@@ -99,6 +104,14 @@ describe('button', function () {
         scope.buttonValue = false;
       });
       expect(elm.hasClass('active')).toBe(false);
+    });
+
+    it('should handle $q model', function () {
+      var deferred = $q.defer();
+      scope.buttonValue = deferred.promise;
+      deferred.resolve(true);
+      var elm = compileDirective('promise');
+      expect(elm.hasClass('active')).toBe(true);
     });
   });
 
