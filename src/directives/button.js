@@ -17,8 +17,9 @@ angular.module('$strap.directives')
 					element.attr('data-toggle', 'button');
 				}
 
-				// Handle default state
-				if(!!scope.$eval(attrs.ngModel)) {
+				// Handle start state
+				var startValue = !!scope.$eval(attrs.ngModel);
+				if(startValue) {
 					element.addClass('active');
 				}
 
@@ -27,6 +28,9 @@ angular.module('$strap.directives')
 					var bNew = !!newValue, bOld = !!oldValue;
 					if(bNew !== bOld) {
 						$.fn.button.Constructor.prototype.toggle.call(button);
+					// Handle $q promises
+					} else if(bNew && !startValue) {
+						element.addClass('active');
 					}
 				});
 
