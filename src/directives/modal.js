@@ -25,7 +25,7 @@ angular.module('$strap.directives')
           .attr('id', id)
           .attr('data-backdrop', attr.backdrop || true)
           .attr('data-keyboard', attr.keyboard || true)
-          .addClass(attr['class'] ? 'fade ' + attr['class'] : 'fade')
+          .addClass(attr.modalClass ? 'fade ' + attr.modalClass : 'fade')
           .html(template);
 
         $('body').append($modal);
