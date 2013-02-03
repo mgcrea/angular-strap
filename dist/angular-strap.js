@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.6.3 - 2013-01-25
+ * @version v0.6.4 - 2013-02-03
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -85,8 +85,9 @@ angular.module('$strap.directives')
           element.attr('data-toggle', 'button');
         }
 
-        // Handle default state
-        if(!!scope.$eval(attrs.ngModel)) {
+        // Handle start state
+        var startValue = !!scope.$eval(attrs.ngModel);
+        if(startValue) {
           element.addClass('active');
         }
 
@@ -95,6 +96,9 @@ angular.module('$strap.directives')
           var bNew = !!newValue, bOld = !!oldValue;
           if(bNew !== bOld) {
             $.fn.button.Constructor.prototype.toggle.call(button);
+          // Handle $q promises
+          } else if(bNew && !startValue) {
+            element.addClass('active');
           }
         });
 
@@ -362,7 +366,8 @@ angular.module('$strap.directives')
         // Create datepicker
         element.attr('data-toggle', 'datepicker');
         element.datepicker({
-          autoclose: true
+          autoclose: true,
+          language: attrs.language || 'en'
         });
 
       }
@@ -452,7 +457,13 @@ angular.module('$strap.directives')
 
         // Build modal object
         var id = getter(scope).replace('.html', '').replace(/\//g, '-').replace(/\./g, '-') + '-' + scope.$id;
-        var $modal = $('<div></div>').attr('id', id).attr('tabindex', -1).attr('data-backdrop', element.attr('data-backdrop') || true).attr('data-keyboard', element.attr('data-keyboard') || true).addClass('modal hide fade').html(template);
+        var $modal = $('<div class="modal hide" tabindex="-1"></div>')
+          .attr('id', id)
+          .attr('data-backdrop', attr.backdrop || true)
+          .attr('data-keyboard', attr.keyboard || true)
+          .addClass(attr['class'] ? 'fade ' + attr['class'] : 'fade')
+          .html(template);
+
         $('body').append($modal);
 
         // Configure element
@@ -548,7 +559,7 @@ angular.module('$strap.directives')
           template = template.data;
         }
 
-        // Handle `data-unique` attribute
+        // Handle data-unique attribute
         if(!!attr.unique) {
           element.on('show', function(ev) {
             // Hide any active popover except self
@@ -559,6 +570,15 @@ angular.module('$strap.directives')
                 $this.popover('hide');
               }
             });
+          });
+        }
+
+        // Handle data-hide attribute (requires dot-notation model)
+        if(!!attr.hide) {
+          scope.$watch(attr.hide, function(newValue, oldValue) {
+            if(!!newValue) {
+              popover.hide();
+            }
           });
         }
 
@@ -836,7 +856,7 @@ angular.module('$strap.directives')
       // Bootstrap override
       var typeahead = element.data('typeahead');
       // Fixes #2043: allows minLength of zero to enable show all for typeahead
-      typeahead.lookup = function (event) {
+      typeahead.lookup = function (ev) {
         var items;
         this.query = this.$element.val() || '';
         if (this.query.length < this.options.minLength) {
