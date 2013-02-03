@@ -25,7 +25,7 @@ describe('modal', function () {
 
 	var templates = {
 		'default': '<a class="btn" bs-modal="\'partials/modal.html\'"></a>',
-		'extra': '<a class="btn" bs-modal="\'partials/modal.html\'" data-backdrop="0" data-keyboard="0" data-class="modal-wide"></a>',
+		'extra': '<a class="btn" bs-modal="\'partials/modal.html\'" data-backdrop="0" data-keyboard="0" data-modal-class="modal-wide"></a>',
 		'cached': '<script type="text/ng-template" id="cached-modal">' + 'Hello <span ng-bind-html-unsafe="content"></span>' + '</script><a class="btn" bs-modal="\'cached-modal\'" data-unique="1" data-title="aTitleBis" data-placement="left"></a>'
 	};
 
