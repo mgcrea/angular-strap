@@ -25,6 +25,7 @@ describe('modal', function () {
 
   var templates = {
     'default': '<a class="btn" bs-modal="\'partials/modal.html\'"></a>',
+    'extra': '<a class="btn" bs-modal="\'partials/modal.html\'" data-backdrop="0" data-keyboard="0" data-class="modal-wide"></a>',
     'cached': '<script type="text/ng-template" id="cached-modal">' + 'Hello <span ng-bind-html-unsafe="content"></span>' + '</script><a class="btn" bs-modal="\'cached-modal\'" data-unique="1" data-title="aTitleBis" data-placement="left"></a>'
   };
 
@@ -47,6 +48,14 @@ describe('modal', function () {
     var $modal = $(elm.attr('href'));
     expect($modal.hasClass('modal')).toBe(true);
     expect($modal.html()).toBe(scope.modal);
+  });
+
+  it('should handle extra attributes', function () {
+    var elm = compileDirective('extra');
+    var $modal = $(elm.attr('href'));
+    expect($modal.attr('data-backdrop')).toBe('0');
+    expect($modal.attr('data-keyboard')).toBe('0');
+    expect($modal.hasClass('modal-wide')).toBe(true);
   });
 
   it('should fetch the partial from cache and build the modal', function () {
