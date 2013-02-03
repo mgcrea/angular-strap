@@ -31,6 +31,11 @@ describe('popover', function () {
       popover: 'Hello <span ng-bind-html-unsafe="content"></span>',
       element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-unique="1"></a>'
     },
+    'hide': {
+      scope: {content: "World<br />Multiline Content<br />", foo: {hide: false}},
+      popover: 'Hello <span ng-bind-html-unsafe="content"></span>',
+      element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-hide="foo.hide"></a>'
+    },
     'object': {
       scope: {popover: {title: "aTitle", content: "World<br />Multiline Content<br />"}},
       element: '<a class="btn" bs-popover="popover"></a>'
@@ -121,6 +126,15 @@ describe('popover', function () {
     elm.trigger('click');
     expect(elm.data('popover').tip().hasClass('in')).toBe(true);
     elm2.trigger('click');
+    expect(elm.data('popover').tip().hasClass('in')).toBe(false);
+  });
+
+  it('should support data-hide attribute', function() {
+    var elm = compileDirective('hide');
+    elm.trigger('click');
+    expect(elm.data('popover').tip().hasClass('in')).toBe(true);
+    scope.foo.hide = true;
+    scope.$digest();
     expect(elm.data('popover').tip().hasClass('in')).toBe(false);
   });
 
