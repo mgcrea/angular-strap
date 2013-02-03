@@ -21,7 +21,13 @@ angular.module('$strap.directives')
 
 				// Build modal object
 				var id = getter(scope).replace('.html', '').replace(/\//g, '-').replace(/\./g, '-') + '-' + scope.$id;
-				var $modal = $('<div></div>').attr('id', id).attr('tabindex', -1).attr('data-backdrop', element.attr('data-backdrop') || true).attr('data-keyboard', element.attr('data-keyboard') || true).addClass('modal hide fade').html(template);
+				var $modal = $('<div class="modal hide" tabindex="-1"></div>')
+					.attr('id', id)
+					.attr('data-backdrop', attr.backdrop || true)
+					.attr('data-keyboard', attr.keyboard || true)
+					.addClass(attr.class ? 'fade ' + attr.class : 'fade')
+					.html(template);
+
 				$('body').append($modal);
 
 				// Configure element
