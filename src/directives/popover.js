@@ -35,7 +35,7 @@ angular.module('$strap.directives')
 					template = template.data;
 				}
 
-				// Handle `data-unique` attribute
+				// Handle data-unique attribute
 				if(!!attr.unique) {
 					element.on('show', function(ev) {
 						// Hide any active popover except self
@@ -46,6 +46,15 @@ angular.module('$strap.directives')
 								$this.popover('hide');
 							}
 						});
+					});
+				}
+
+				// Handle data-hide attribute (requires dot-notation model)
+				if(!!attr.hide) {
+					scope.$watch(attr.hide, function(newValue, oldValue) {
+						if(!!newValue) {
+							popover.hide();
+						}
 					});
 				}
 
