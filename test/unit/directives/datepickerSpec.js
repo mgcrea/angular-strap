@@ -21,7 +21,8 @@ describe('datepicker', function () {
   });
 
   var templates = {
-    'default': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" bs-datepicker>'
+    'default': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" bs-datepicker>',
+    'language': '<input type="text" ng-model="model.date" data-language="fr" bs-datepicker>'
   };
 
   function compileDirective(template) {
@@ -41,6 +42,11 @@ describe('datepicker', function () {
     var spy = spyOn($.fn, 'datepicker');
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should handle "data-language" attr', function () {
+    var elm = compileDirective('language');
+    expect(elm.data('datepicker').language).toBe('fr');
   });
 
   it('should show/hide the datepicker', function() {
