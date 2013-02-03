@@ -94,7 +94,8 @@ angular.module('$strap.directives')
 				// Create datepicker
 				element.attr('data-toggle', 'datepicker');
 				element.datepicker({
-					autoclose: true
+					autoclose: true,
+					language: attrs.language || 'en'
 				});
 
 			}
