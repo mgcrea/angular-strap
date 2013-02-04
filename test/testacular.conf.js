@@ -29,7 +29,8 @@ exclude = [];
 // use dots reporter, as travis terminal does not support escaping sequences
 // possible values: 'dots', 'progress', 'junit'
 // CLI --reporters progress
-reporters = ['coverage', 'progress'];
+// 'coverage',
+reporters = ['progress'];
 
 
 // web server port

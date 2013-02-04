@@ -14,7 +14,8 @@ angular.module('$strap.directives')
 
 				element.find('li[data-match-route]').each(function(k, li) {
 					var $li = angular.element(li),
-						pattern = $li.data('match-route'),
+						// data('match-rout') does not work with dynamic attributes
+						pattern = $li.attr('data-match-route'),
 						regexp = new RegExp('^' + pattern + '$', ["i"]);
 
 					if(regexp.test(newValue)) {
