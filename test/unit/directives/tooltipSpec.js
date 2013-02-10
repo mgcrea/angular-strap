@@ -36,7 +36,7 @@ describe('tooltip', function () {
 	it('should initialize the tooltip', function () {
 		var elm = compileDirective();
 		expect(elm.data('tooltip')).toBeDefined();
-		expect(elm.data('tooltip').options.title).toBe(scope.content);
+		expect(typeof elm.data('tooltip').options.title).toBe('function');
 	});
 
 	it('should correctly call $.fn.tooltip', function () {

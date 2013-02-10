@@ -9,6 +9,17 @@ angular.module('$strap.directives')
 		scope: true,
 		link: function postLink(scope, element, attrs, ctrl) {
 
+			var getter = $parse(attrs.bsTooltip),
+				setter = getter.assign,
+				value = getter(scope);
+
+			// Watch bsTooltip for changes
+			scope.$watch(attrs.bsTooltip, function(newValue, oldValue) {
+				if(newValue !== oldValue) {
+					value = newValue;
+				}
+			});
+
 			if(!!attrs.unique) {
 				element.on('show', function(ev) {
 					// Hide any active popover except self
@@ -24,7 +35,7 @@ angular.module('$strap.directives')
 
 			// Initialize tooltip
 			element.tooltip({
-				title: scope.$eval(attrs.bsTooltip),
+				title: function() { return angular.isFunction(value) ? value.apply(null, arguments) : value; },
 				html: true
 			});
 
