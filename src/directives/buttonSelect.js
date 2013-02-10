@@ -4,6 +4,8 @@ angular.module('$strap.directives')
 .directive('bsButtonSelect', ['$parse', '$timeout', function($parse, $timeout) {
   'use strict';
 
+  var isTouch = 'ontouchstart' in window;
+
   return {
     restrict: 'A',
     require: '?ngModel',
@@ -24,7 +26,7 @@ angular.module('$strap.directives')
 
       // Click handling
       var values, value, index, newValue;
-      element.on('click', function onClick() {
+      element.on(isTouch ? 'touchstart.bsButtonSelect.data-api' : 'click.bsButtonSelect.data-api', function(ev) {
         values = getter(scope);
         value = ctrl ? scope.$eval(attr.ngModel) : element.text();
         index = values.indexOf(value);
