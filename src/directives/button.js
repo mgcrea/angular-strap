@@ -147,7 +147,9 @@ angular.module('$strap.directives')
           scope.$watch(iAttrs.ngModel, function(newValue, oldValue) {
             if(newValue !== oldValue) {
               var $btn = iElement.find('[value="' + scope.$eval(iAttrs.ngModel) + '"]');
-              $.fn.button.Constructor.prototype.toggle.call($btn.data('button'));
+              if($btn.length) {
+                $.fn.button.Constructor.prototype.toggle.call($btn.data('button'));
+              }
             }
           });
 

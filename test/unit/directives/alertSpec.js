@@ -46,14 +46,17 @@ describe('alert', function () {
     var elm = compileDirective();
     expect(elm.data('alert')).toBeDefined();
     var expected = '<button type="button" class="close" data-dismiss="alert">×</button>' +
-    '<strong>Holy guacamole!</strong>' +
-    '&nbsp;Hello Alert, <pre>2 + 3 = {{ 2 + 3 }}</pre>';
-    expect(elm.html()).toBe(expected);
-    $timeout.flush();
-    expected = '<button type="button" class="close ng-scope" data-dismiss="alert">×</button>' +
     '<strong class="ng-scope">Holy guacamole!</strong>' +
     '<span class="ng-scope">&nbsp;Hello Alert, </span><pre class="ng-scope ng-binding">2 + 3 = 5</pre>';
     expect(elm.html()).toBe(expected);
+  });
+
+  it('should correctly update the alert class', function () {
+    var elm = compileDirective();
+    scope.alert.type = 'info';
+    scope.$digest();
+    expect(elm.hasClass('error')).toBe(false);
+    expect(elm.hasClass('info')).toBe(false);
   });
 
 });
