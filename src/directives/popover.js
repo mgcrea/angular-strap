@@ -61,6 +61,7 @@ angular.module('$strap.directives')
         // Initialize popover
         element.popover(angular.extend({}, options, {
           content: function() {
+
             $timeout(function() { // use async $apply
 
               var popover = element.data('popover'),
@@ -70,6 +71,7 @@ angular.module('$strap.directives')
 
               setTimeout(function() { // refresh position on nextTick
                 popover.refresh();
+                popover.tip().css('visibility', 'visible');
               });
 
             });
@@ -116,10 +118,10 @@ angular.module('$strap.directives')
           $tip.offset(tp);
         };
         popover.show = function() {
-          var e = $.Event('show');
-          this.$element.trigger(e);
-          if (e.isDefaultPrevented()) {
-            return;
+          if(!$.fn.tooltip.Constructor.prototype.applyPlacement) { // Implemented in bootstrap 2.3.0
+            var e = $.Event('show');
+            this.$element.trigger(e);
+            if (e.isDefaultPrevented()) return;
           }
           var r = $.fn.popover.Constructor.prototype.show.apply(this, arguments);
           // Bind popover to the tip()
@@ -127,13 +129,18 @@ angular.module('$strap.directives')
           return r;
         };
         popover.hide = function() {
-          var e = $.Event('hide');
-          this.$element.trigger(e);
-          if (e.isDefaultPrevented()) {
-            return;
+          if(!$.fn.tooltip.Constructor.prototype.applyPlacement) { // Implemented in bootstrap 2.3.0
+            var e = $.Event('hide');
+            this.$element.trigger(e);
+            if (e.isDefaultPrevented()) return;
           }
           return $.fn.popover.Constructor.prototype.hide.apply(this, arguments);
         };
+
+        // Fix flickering due to compilation
+        element.on('show', function(ev) { console.warn('show');
+          popover.tip().css('visibility', 'hidden');
+        });
 
         // Provide scope display functions
         scope._popover = function(name) {
