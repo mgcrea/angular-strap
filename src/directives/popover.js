@@ -121,7 +121,7 @@ angular.module('$strap.directives')
 					if(!$.fn.tooltip.Constructor.prototype.applyPlacement) { // Implemented in bootstrap 2.3.0
 						var e = $.Event('show');
 						this.$element.trigger(e);
-						if (e.isDefaultPrevented()) return;
+						if (e.isDefaultPrevented()) { return; }
 					}
 					var r = $.fn.popover.Constructor.prototype.show.apply(this, arguments);
 					// Bind popover to the tip()
@@ -132,7 +132,7 @@ angular.module('$strap.directives')
 					if(!$.fn.tooltip.Constructor.prototype.applyPlacement) { // Implemented in bootstrap 2.3.0
 						var e = $.Event('hide');
 						this.$element.trigger(e);
-						if (e.isDefaultPrevented()) return;
+						if (e.isDefaultPrevented()) { return; }
 					}
 					return $.fn.popover.Constructor.prototype.hide.apply(this, arguments);
 				};
