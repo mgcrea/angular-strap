@@ -31,7 +31,9 @@ In order to use AngularStrap, you have to:
 2. Inject the `$strap.directives` into your app module
 
 >
+``` javascript
     var app = angular.module('angularjs-starter', ['$strap.directives']);
+```
 
 ## Developers
 
