@@ -12,7 +12,6 @@ describe('tooltip', function () {
 		$httpBackend = _$httpBackend_;
 
 		$sandbox = $('<div id="sandbox"></div>').appendTo($('body'));
-		scope.content = "World<br>Multiline Content<br>";
 	}));
 
 	afterEach(function() {
@@ -21,14 +20,22 @@ describe('tooltip', function () {
 	});
 
 	var templates = {
-		'default': '<a class="btn" bs-tooltip="content" data-unique="true" data-placement="left"></a>',
-		'click': '<a class="btn" bs-tooltip="content" data-trigger="click" data-placement="left"></a>'
+		'default': {
+			scope: {content: 'Hello World<br>Multiline Content<br>'},
+			element: '<a class="btn" bs-tooltip="content" data-unique="true" data-placement="left"></a>'
+		},
+		'click': {
+			element: '<a class="btn" bs-tooltip="content" data-trigger="click" data-placement="left"></a>'
+		}
 	};
 
 	function compileDirective(template) {
 		template = template ? templates[template] : templates['default'];
-		template = $(template).appendTo($sandbox);
-		return $compile(template)(scope);
+		angular.extend(scope, template.scope || templates['default'].scope);
+		var $element = $(template.element).appendTo($sandbox);
+		$element = $compile($element)(scope);
+		scope.$digest();
+		return $element;
 	}
 
 	// Tests
@@ -47,6 +54,19 @@ describe('tooltip', function () {
 
 	it('should define a correct title', function() {
 		var elm = compileDirective();
+		elm.tooltip('show');
+		expect(elm.data('tooltip').tip().find('.tooltip-inner').html()).toBe(scope.content);
+	});
+
+	it('should show correctly handle title update/replace', function() {
+		var elm = compileDirective();
+		scope.content += 'Update';
+		scope.$digest();
+		elm.tooltip('show');
+		expect(elm.data('tooltip').tip().find('.tooltip-inner').html()).toBe(scope.content);
+		elm.tooltip('hide');
+		scope.content = 'Replace';
+		scope.$digest();
 		elm.tooltip('show');
 		expect(elm.data('tooltip').tip().find('.tooltip-inner').html()).toBe(scope.content);
 	});
