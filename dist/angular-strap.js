@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.6.4 - 2013-02-03
+ * @version v0.6.5 - 2013-02-10
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -22,45 +22,71 @@ angular.module('$strap.directives')
 		restrict: 'A',
 		link: function postLink(scope, element, attrs) {
 
-			scope.$watch(attrs.bsAlert, function(newValue, oldValue) {
+			var getter = $parse(attrs.bsAlert),
+				setter = getter.assign,
+				value = getter(scope);
 
-				if(typeof newValue === 'undefined') {
-					if(typeof oldValue !== 'undefined') {
-						element.remove();
-					}
-					return;
-				}
-
-				// Set alert content
-				element.html((newValue.title ? '<strong>' + newValue.title + '</strong>&nbsp;' : '') + newValue.content || '');
-
-				// Compile alert content
-				$timeout(function(){
-					$compile(element.contents())(scope);
-				});
-
-				// Add proper class
-				if(newValue.type || oldValue.type) {
-					oldValue.type && element.removeClass('alert-' + oldValue.type);
-					newValue.type && element.addClass('alert-' + newValue.type);
-				}
+			// For static alerts
+			if(!attrs.bsAlert) {
 
 				// Setup close button
-				if(newValue.close !== false) {
+				if(angular.isUndefined(attrs.closeButton) || (attrs.closeButton !== '0' && attrs.closeButton !== 'false')) {
 					element.prepend('<button type="button" class="close" data-dismiss="alert">&times;</button>');
 				}
 
-			}, true);
+			} else {
 
-			// For basic alerts
-			if(!attrs.bsAlert && attrs.close !== '0') {
-				element.prepend('<button type="button" class="close" data-dismiss="alert">&times;</button>');
+				scope.$watch(attrs.bsAlert, function(newValue, oldValue) {
+					value = newValue;
+
+					// Set alert content
+					element.html((newValue.title ? '<strong>' + newValue.title + '</strong>&nbsp;' : '') + newValue.content || '');
+
+					if(!!newValue.closed) {
+						element.hide();
+					}
+
+					// Compile alert content
+					//$timeout(function(){
+					$compile(element.contents())(scope);
+					//});
+
+					// Add proper class
+					if(newValue.type || oldValue.type) {
+						oldValue.type && element.removeClass('alert-' + oldValue.type);
+						newValue.type && element.addClass('alert-' + newValue.type);
+					}
+
+					// Setup close button
+					if(angular.isUndefined(attrs.closeButton) || (attrs.closeButton !== '0' && attrs.closeButton !== 'false')) {
+						element.prepend('<button type="button" class="close" data-dismiss="alert">&times;</button>');
+					}
+
+				}, true);
+
 			}
 
 			element.addClass('alert').alert();
 
-			// element.on('close', function() {
-			// });
+			var parentArray = attrs.ngRepeat && attrs.ngRepeat.split(' in ').pop();
+
+			element.on('close', function(ev) {
+
+				if(parentArray) { // ngRepeat, remove from parent array
+					element.hide();
+					ev.preventDefault();
+					scope.$parent.$apply(function() {
+						scope.$parent[parentArray].splice(scope.$index, 1);
+					});
+				} else if(value) { // object, set closed property to 'true'
+					ev.preventDefault();
+					scope.$apply(function() {
+						value.closed = true;
+					});
+				} else { // static, regular behavior
+				}
+
+			});
 
 		}
 	};
@@ -215,7 +241,9 @@ angular.module('$strap.directives')
 					scope.$watch(iAttrs.ngModel, function(newValue, oldValue) {
 						if(newValue !== oldValue) {
 							var $btn = iElement.find('[value="' + scope.$eval(iAttrs.ngModel) + '"]');
-							$.fn.button.Constructor.prototype.toggle.call($btn.data('button'));
+							if($btn.length) {
+								$.fn.button.Constructor.prototype.toggle.call($btn.data('button'));
+							}
 						}
 					});
 
@@ -507,7 +535,8 @@ angular.module('$strap.directives')
 
 				element.find('li[data-match-route]').each(function(k, li) {
 					var $li = angular.element(li),
-						pattern = $li.data('match-route'),
+						// data('match-rout') does not work with dynamic attributes
+						pattern = $li.attr('data-match-route'),
 						regexp = new RegExp('^' + pattern + '$', ["i"]);
 
 					if(regexp.test(newValue)) {
@@ -758,6 +787,17 @@ angular.module('$strap.directives')
 		scope: true,
 		link: function postLink(scope, element, attrs, ctrl) {
 
+			var getter = $parse(attrs.bsTooltip),
+				setter = getter.assign,
+				value = getter(scope);
+
+			// Watch bsTooltip for changes
+			scope.$watch(attrs.bsTooltip, function(newValue, oldValue) {
+				if(newValue !== oldValue) {
+					value = newValue;
+				}
+			});
+
 			if(!!attrs.unique) {
 				element.on('show', function(ev) {
 					// Hide any active popover except self
@@ -773,7 +813,7 @@ angular.module('$strap.directives')
 
 			// Initialize tooltip
 			element.tooltip({
-				title: scope.$eval(attrs.bsTooltip),
+				title: function() { return angular.isFunction(value) ? value.apply(null, arguments) : value; },
 				html: true
 			});
 
