@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.6.5 - 2013-02-10
+ * @version v0.6.5 - 2013-02-11
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -261,6 +261,8 @@ angular.module('$strap.directives')
 .directive('bsButtonSelect', ['$parse', '$timeout', function($parse, $timeout) {
 	'use strict';
 
+	var isTouch = 'ontouchstart' in window;
+
 	return {
 		restrict: 'A',
 		require: '?ngModel',
@@ -281,7 +283,7 @@ angular.module('$strap.directives')
 
 			// Click handling
 			var values, value, index, newValue;
-			element.on('click', function onClick() {
+			element.on(isTouch ? 'touchstart.bsButtonSelect.data-api' : 'click.bsButtonSelect.data-api', function(ev) {
 				values = getter(scope);
 				value = ctrl ? scope.$eval(attr.ngModel) : element.text();
 				index = values.indexOf(value);
