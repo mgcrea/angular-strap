@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git://github.com/angular-strap/angular-strap.git"
   },
-  "main": "./build/angular-strap.min.js",
+  "main": "./dist/angular-strap.min.js",
   "dependencies": {
     "jquery": "~1.9.1",
     "bootstrap": "~2.3.0"
