@@ -54,21 +54,54 @@ angular.module('$strap.directives')
 
       element.addClass('alert').alert();
 
+      // Support fade-in effect
+      if(element.hasClass('fade')) {
+        element.removeClass('in');
+        setTimeout(function() {
+          element.addClass('in');
+        });
+      }
+
       var parentArray = attrs.ngRepeat && attrs.ngRepeat.split(' in ').pop();
 
-      element.on('close', function(ev) {
+      element.on('close', function(ev) { console.warn('close!');
+        var removeElement;
 
         if(parentArray) { // ngRepeat, remove from parent array
-          element.hide();
           ev.preventDefault();
-          scope.$parent.$apply(function() {
-            scope.$parent[parentArray].splice(scope.$index, 1);
-          });
+
+          element.removeClass('in');
+            console.warn(scope.$parent);
+
+          removeElement = function() {
+            element.trigger('closed');
+            if(scope.$parent) {
+              scope.$parent.$apply(function() {
+                scope.$parent[parentArray].splice(scope.$index, 1);
+              });
+            }
+          };
+
+          $.support.transition && element.hasClass('fade') ?
+            element.on($.support.transition.end, removeElement) :
+            removeElement();
+
         } else if(value) { // object, set closed property to 'true'
           ev.preventDefault();
-          scope.$apply(function() {
-            value.closed = true;
-          });
+
+          element.removeClass('in');
+
+          removeElement = function() {
+            element.trigger('closed');
+            scope.$apply(function() {
+              value.closed = true;
+            });
+          };
+
+          $.support.transition && element.hasClass('fade') ?
+            element.on($.support.transition.end, removeElement) :
+            removeElement();
+
         } else { // static, regular behavior
         }
 
