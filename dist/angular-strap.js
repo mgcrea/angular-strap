@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.6.5 - 2013-02-11
+ * @version v0.6.5 - 2013-02-13
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -68,21 +68,54 @@ angular.module('$strap.directives')
 
 			element.addClass('alert').alert();
 
+			// Support fade-in effect
+			if(element.hasClass('fade')) {
+				element.removeClass('in');
+				setTimeout(function() {
+					element.addClass('in');
+				});
+			}
+
 			var parentArray = attrs.ngRepeat && attrs.ngRepeat.split(' in ').pop();
 
-			element.on('close', function(ev) {
+			element.on('close', function(ev) { console.warn('close!');
+				var removeElement;
 
 				if(parentArray) { // ngRepeat, remove from parent array
-					element.hide();
 					ev.preventDefault();
-					scope.$parent.$apply(function() {
-						scope.$parent[parentArray].splice(scope.$index, 1);
-					});
+
+					element.removeClass('in');
+						console.warn(scope.$parent);
+
+					removeElement = function() {
+						element.trigger('closed');
+						if(scope.$parent) {
+							scope.$parent.$apply(function() {
+								scope.$parent[parentArray].splice(scope.$index, 1);
+							});
+						}
+					};
+
+					$.support.transition && element.hasClass('fade') ?
+						element.on($.support.transition.end, removeElement) :
+						removeElement();
+
 				} else if(value) { // object, set closed property to 'true'
 					ev.preventDefault();
-					scope.$apply(function() {
-						value.closed = true;
-					});
+
+					element.removeClass('in');
+
+					removeElement = function() {
+						element.trigger('closed');
+						scope.$apply(function() {
+							value.closed = true;
+						});
+					};
+
+					$.support.transition && element.hasClass('fade') ?
+						element.on($.support.transition.end, removeElement) :
+						removeElement();
+
 				} else { // static, regular behavior
 				}
 
@@ -563,8 +596,7 @@ angular.module('$strap.directives')
 	$("body").on("keyup", function(ev) {
 		if(ev.keyCode === 27) {
 			$(".popover.in").each(function() {
-				var $this = $(this);
-				$this.popover('hide');
+				$(this).popover('hide');
 			});
 		}
 	});
@@ -592,7 +624,7 @@ angular.module('$strap.directives')
 
 				// Handle data-unique attribute
 				if(!!attr.unique) {
-					element.on('show', function(ev) {
+					element.on('show', function(ev) { // requires bootstrap 2.3.0+
 						// Hide any active popover except self
 						$(".popover.in").each(function() {
 							var $this = $(this),
@@ -604,98 +636,40 @@ angular.module('$strap.directives')
 					});
 				}
 
-				// Handle data-hide attribute (requires dot-notation model)
+				// Handle data-hide attribute to toggle visibility
 				if(!!attr.hide) {
 					scope.$watch(attr.hide, function(newValue, oldValue) {
 						if(!!newValue) {
 							popover.hide();
+						} else if(newValue !== oldValue) {
+							popover.show();
 						}
 					});
 				}
 
 				// Initialize popover
 				element.popover(angular.extend({}, options, {
-					content: function() {
-
-						$timeout(function() { // use async $apply
-
-							var popover = element.data('popover'),
-								$tip = popover.tip();
-
-							$compile($tip)(scope);
-
-							setTimeout(function() { // refresh position on nextTick
-								popover.refresh();
-								popover.tip().css('visibility', 'visible');
-							});
-
-						});
-
-						return template;
-					},
+					content: template,
 					html: true
 				}));
 
-				// Bootstrap override to provide events, tip() reference, refreshable positions
+				// Bootstrap override to provide tip() reference & compilation
 				var popover = element.data('popover');
 				popover.hasContent = function() {
 					return this.getTitle() || template; // fix multiple $compile()
 				};
-				popover.refresh = function() {
-					var $tip = this.tip(), inside, pos, actualWidth, actualHeight, placement, tp;
+				popover.getPosition = function() {
+					var r = $.fn.popover.Constructor.prototype.getPosition.apply(this, arguments);
 
-					placement = typeof this.options.placement === 'function' ?
-						this.options.placement.call(this, $tip[0], this.$element[0]) :
-						this.options.placement;
+					// Compile content
+					$compile(this.$tip)(scope);
+					scope.$digest();
 
-					inside = /in/.test(placement);
-
-					pos = this.getPosition(inside);
-
-					actualWidth = $tip[0].offsetWidth;
-					actualHeight = $tip[0].offsetHeight;
-
-					switch (inside ? placement.split(' ')[1] : placement) {
-						case 'bottom':
-						tp = {top: pos.top + pos.height + 10, left: pos.left + pos.width / 2 - actualWidth / 2};
-						break;
-						case 'top':
-						tp = {top: pos.top - actualHeight - 10, left: pos.left + pos.width / 2 - actualWidth / 2};
-						break;
-						case 'left':
-						tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth - 10};
-						break;
-						case 'right':
-						tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width + 10};
-						break;
-					}
-
-					$tip.offset(tp);
-				};
-				popover.show = function() {
-					if(!$.fn.tooltip.Constructor.prototype.applyPlacement) { // Implemented in bootstrap 2.3.0
-						var e = $.Event('show');
-						this.$element.trigger(e);
-						if (e.isDefaultPrevented()) { return; }
-					}
-					var r = $.fn.popover.Constructor.prototype.show.apply(this, arguments);
 					// Bind popover to the tip()
 					this.$tip.data('popover', this);
+
 					return r;
 				};
-				popover.hide = function() {
-					if(!$.fn.tooltip.Constructor.prototype.applyPlacement) { // Implemented in bootstrap 2.3.0
-						var e = $.Event('hide');
-						this.$element.trigger(e);
-						if (e.isDefaultPrevented()) { return; }
-					}
-					return $.fn.popover.Constructor.prototype.hide.apply(this, arguments);
-				};
-
-				// Fix flickering due to compilation
-				element.on('show', function(ev) { console.warn('show');
-					popover.tip().css('visibility', 'hidden');
-				});
 
 				// Provide scope display functions
 				scope._popover = function(name) {
@@ -715,7 +689,6 @@ angular.module('$strap.directives')
 	};
 
 }]);
-
 
 // https://github.com/jdewit/bootstrap-timepicker
 // https://github.com/kla/bootstrap-timepicker
