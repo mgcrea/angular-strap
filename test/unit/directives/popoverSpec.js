@@ -31,10 +31,10 @@ describe('popover', function () {
       popover: 'Hello <span ng-bind-html-unsafe="content"></span>',
       element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-unique="1"></a>'
     },
-    'hidden': {
-      scope: {content: "World<br />Multiline Content<br />", foo: {hidden: false}},
+    'hide': {
+      scope: {content: "World<br />Multiline Content<br />", foo: {hide: false}},
       popover: 'Hello <span ng-bind-html-unsafe="content"></span>',
-      element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-hidden="foo.hidden"></a>'
+      element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-hide="foo.hide"></a>'
     },
     'object': {
       scope: {popover: {title: "aTitle", content: "World<br />Multiline Content<br />"}},
@@ -127,12 +127,12 @@ describe('popover', function () {
     //expect(elm.data('popover').tip().hasClass('in')).toBe(false);
   });
 
-  it('should support data-hidden attribute', function() {
-    var elm = compileDirective('hidden');
+  it('should support data-hide attribute', function() {
+    var elm = compileDirective('hide');
     elm.trigger('click');
     expect(elm.data('popover').tip().hasClass('in')).toBe(true);
-    scope.foo.hidden = true;
-    scope.$digest();
+    scope.foo.hide = true;
+    scope.$digest(); // $digest already in progress
     expect(elm.data('popover').tip().hasClass('in')).toBe(false);
   });
 

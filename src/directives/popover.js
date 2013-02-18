@@ -48,9 +48,9 @@ angular.module('$strap.directives')
           });
         }
 
-        // Handle data-hidden attribute to toggle visibility
-        if(!!attr.hidden) {
-          scope.$watch(attr.hidden, function(newValue, oldValue) {
+        // Handle data-hide attribute to toggle visibility
+        if(!!attr.hide) {
+          scope.$watch(attr.hide, function(newValue, oldValue) {
             if(!!newValue) {
               popover.hide();
             } else if(newValue !== oldValue) {
