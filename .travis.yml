@@ -3,10 +3,11 @@ node_js:
   - 0.8
 
 before_script:
-  - "export DISPLAY=:99.0"
-  - "export PHANTOMJS_BIN=/usr/local/phantomjs/bin/phantomjs"
-  - "sh -e /etc/init.d/xvfb start"
+  - export DISPLAY=:99.0
+  - export PHANTOMJS_BIN=/usr/local/phantomjs/bin/phantomjs
+  - sh -e /etc/init.d/xvfb start
   - sleep 3 # give xvfb some time to start
+  - npm install -g grunt-cli
 
 script:
   - grunt lint test
