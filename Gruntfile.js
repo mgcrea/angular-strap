@@ -14,27 +14,25 @@ module.exports = function(grunt) {
       ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' +
       ' */\n'
     },
-    build: {
+    dirs: {
       dest: 'dist'
     },
     concat: {
       options: {
         banner: '<%= meta.banner %>'
       },
-      build: {
-        files: {
-          '<%= build.dest %>/<%= pkg.name %>.js': ['src/common.js', 'src/directives/*.js']
-        }
+      dist: {
+        src: ['src/common.js', 'src/directives/*.js'],
+        dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
       }
     },
     uglify: {
       options: {
         banner: '<%= meta.banner %>'
       },
-      build: {
-        files: {
-          '<%= build.dest %>/<%= pkg.name %>.min.js': ['<%= build.dest %>/<%= pkg.name %>.js']
-        }
+      dist: {
+        src: ['<%= concat.dist.dest %>'],
+        dest: '<%= dirs.dest %>/<%= pkg.name %>.min.js'
       }
     },
     jshint: {
