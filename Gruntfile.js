@@ -63,11 +63,20 @@ module.exports = function(grunt) {
     //   tasks: 'default'
     // },
     testacular: {
+      test: {
+        options: {
+          reporters: ['dots'],
+          singleRun: true
+        }
+      },
+      server: {
+        options: {
+          singleRun: false
+        }
+      },
       options: {
         configFile: 'test/testacular.conf.js',
-        browsers: ['PhantomJS'],
-        reporters: ['dots'],
-        singleRun: true
+        browsers: ['PhantomJS']
       }
     }
   });
@@ -86,14 +95,18 @@ module.exports = function(grunt) {
 
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'testacular']);
+  grunt.registerTask('default', ['test']);
+
+  // Test tasks.
+  grunt.registerTask('test', ['jshint', 'testacular:test']);
+  grunt.registerTask('test-server', ['testacular:server']);
 
   // Build task.
-  grunt.registerTask('build', ['jshint', 'testacular', 'concat', 'uglify']);
+  grunt.registerTask('build', ['test', 'concat', 'uglify']);
 
 
   // Provides the "testacular" task.
-  grunt.registerTask('testacular', 'Starts up a testacular server.', function() {
+  grunt.registerMultiTask('testacular', 'Starts up a testacular server.', function() {
     var done = this.async();
     require('testacular').server.start(this.options(), function(code) {
       done(code === 0);
