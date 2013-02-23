@@ -14,17 +14,17 @@ AngularStrap is a set of directives that enables seamless integration of [Twitte
 
 ## Quick start
 
-1. Include the required libraries (cdn/local)
++ Include the required libraries (cdn/local)
 
 >
 ``` html
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5gs/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.0/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.6.6/angular-strap.min.js"></script>
 ```
 
-2. Inject the `$strap.directives` into your app module
++ Inject the `$strap.directives` into your app module
 
 >
 ``` javascript
@@ -32,10 +32,9 @@ var app = angular.module('angularjs-starter', ['$strap.directives']);
 ```
 
 
-
 ## Developers
 
-Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, or [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master).
+Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master) or install with bower `bower install angular-strap`.
 
 AngularStrap is tested with `testacular` against the latest available release of jQuery & Bootstrap.
 
