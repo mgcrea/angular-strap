@@ -1,9 +1,9 @@
 {
-  "author": "Olivier Louvignes",
   "name": "angular-strap",
   "description": "AngularStrap - Twitter Bootstrap directives for AngularJS",
   "version": "0.6.6",
   "homepage": "http://mgcrea.github.com/angular-strap",
+  "author": "Olivier Louvignes <olivier@mg-crea.com>",
   "repository": {
     "type": "git",
     "url": "git://github.com/angular-strap/angular-strap.git"
@@ -13,8 +13,12 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "testacular": ">= 0.4.0",
-    "grunt": ">= 0.3.17"
+    "testacular": ">= 0.6.0",
+    "grunt": ">= 0.4.0",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-testacular": "~0.3.0"
   },
   "scripts": {
     "test": "testacular start test/testacular.conf.js --single-run --browsers PhantomJS",
