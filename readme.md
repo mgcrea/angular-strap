@@ -39,8 +39,9 @@ Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, [download
 AngularStrap is tested with `testacular` against the latest available release of jQuery & Bootstrap.
 
 >
+	$ sudo npm install grunt-cli --global
 	$ npm install --dev
-	$ npm test
+	$ grunt test
 
 You can build the latest version using `grunt`.
 
