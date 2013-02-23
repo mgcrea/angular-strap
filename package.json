@@ -17,8 +17,7 @@
     "grunt": ">= 0.4.0",
     "grunt-contrib-concat": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-testacular": "~0.3.0"
+    "grunt-contrib-uglify": "*"
   },
   "scripts": {
     "test": "testacular start test/testacular.conf.js --single-run --browsers PhantomJS",
