@@ -14,10 +14,6 @@ AngularStrap is a set of directives that enables seamless integration of [Twitte
 
 ## Quick start
 
-Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, or [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master).
-
-In order to use AngularStrap, you have to:
-
 1. Include the required libraries (cdn/local)
 
 >
@@ -35,7 +31,11 @@ In order to use AngularStrap, you have to:
 var app = angular.module('angularjs-starter', ['$strap.directives']);
 ```
 
+
+
 ## Developers
+
+Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, or [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master).
 
 AngularStrap is tested with `testacular` against the latest available release of jQuery & Bootstrap.
 
