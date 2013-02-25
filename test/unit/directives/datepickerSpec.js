@@ -39,7 +39,13 @@ describe('datepicker', function () {
   });
 
   it('should correctly call $.fn.datepicker', function () {
+    var old = $.fn.datepicker;
     var spy = spyOn($.fn, 'datepicker');
+    for (var key in old) {
+      if (old.hasOwnProperty(key)) {
+        spy[key] = old[key];
+      }
+    }
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
   });

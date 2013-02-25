@@ -38,7 +38,13 @@ describe('timepicker', function () {
   });
 
   it('should correctly call $.fn.timepicker', function () {
+    var old = $.fn.timepicker;
     var spy = spyOn($.fn, 'timepicker');
+    for (var key in old) {
+      if (old.hasOwnProperty(key)) {
+        spy[key] = old[key];
+      }
+    }
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
   });

@@ -69,7 +69,13 @@ describe('modal', function () {
   });
 
   it('should correctly call $.fn.modal', function () {
+    var old = $.fn.modal;
     var spy = spyOn($.fn, 'modal').andCallThrough();
+    for (var key in old) {
+      if (old.hasOwnProperty(key)) {
+        spy[key] = old[key];
+      }
+    }
     var elm = compileDirective();
     elm.modal('show');
     expect(spy).toHaveBeenCalled();

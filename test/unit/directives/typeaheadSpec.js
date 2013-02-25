@@ -49,7 +49,13 @@ describe('typeahead', function () {
   });
 
   it('should correctly call $.fn.typeahead', function () {
+    var old = $.fn.typeahead;
     var spy = spyOn($.fn, 'typeahead').andCallThrough();
+    for (var key in old) {
+      if (old.hasOwnProperty(key)) {
+        spy[key] = old[key];
+      }
+    }
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
   });
