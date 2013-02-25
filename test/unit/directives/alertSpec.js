@@ -37,7 +37,13 @@ describe('alert', function () {
   // Tests
 
   it('should correctly call $.fn.alert', function () {
+    var old = $.fn.alert;
     var spy = spyOn($.fn, 'alert').andCallThrough();
+    for (var key in old) {
+      if (old.hasOwnProperty(key)) {
+        spy[key] = old[key];
+      }
+    }
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
   });
