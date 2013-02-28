@@ -86,7 +86,8 @@ describe('popover', function () {
   });
 
   it('should correctly call $.fn.popover', function () {
-    var spy = spyOn($.fn, 'popover').andCallThrough();
+    var old = $.fn.popover;
+    var spy = angular.extend(spyOn($.fn, 'popover'), old).andCallThrough();
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
   });
