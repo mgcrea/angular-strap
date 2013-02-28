@@ -37,7 +37,8 @@ describe('alert', function () {
   // Tests
 
   it('should correctly call $.fn.alert', function () {
-    var spy = spyOn($.fn, 'alert').andCallThrough();
+    var spy = angular.extend(spyOn($.fn, 'alert'), $.fn.popover).andCallThrough();
+    //var spy = spyOn($.fn, 'alert').andCallThrough();
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
   });
