@@ -20,7 +20,7 @@ angular.module('$strap.directives')
 				}
 
 				// Build modal object
-				var id = getter(scope).replace('.html', '').replace(/\//g, '-').replace(/\./g, '-') + '-' + scope.$id;
+				var id = getter(scope).replace('.html', '').replace(/[\/|\.|:]/g, "-") + '-' + scope.$id;
 				var $modal = $('<div class="modal hide" tabindex="-1"></div>')
 					.attr('id', id)
 					.attr('data-backdrop', attr.backdrop || true)
