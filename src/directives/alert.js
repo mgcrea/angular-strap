@@ -64,7 +64,7 @@ angular.module('$strap.directives')
 
       var parentArray = attrs.ngRepeat && attrs.ngRepeat.split(' in ').pop();
 
-      element.on('close', function(ev) { console.warn('close!');
+      element.on('close', function(ev) {
         var removeElement;
 
         if(parentArray) { // ngRepeat, remove from parent array

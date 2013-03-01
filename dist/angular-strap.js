@@ -1,11 +1,10 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.6.6 - 2013-02-13
+ * @version v0.6.6 - 2013-02-23
  * @link http://mgcrea.github.com/angular-strap
- * @author Olivier Louvignes
+ * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-
 
 angular.module('$strap.config', []).value('$strap.config', {});
 angular.module('$strap.filters', ['$strap.config']);
