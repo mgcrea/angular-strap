@@ -14,34 +14,34 @@ AngularStrap is a set of directives that enables seamless integration of [Twitte
 
 ## Quick start
 
-Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, or [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master).
-
-In order to use AngularStrap, you have to:
-
-1. Include the required libraries (cdn/local)
++ Include the required libraries (cdn/local)
 
 >
 ``` html
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.0/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
-    <script src="//mgcrea.github.com/angular-strap/js/angular-strap.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.0/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.6.6/angular-strap.min.js"></script>
 ```
 
-2. Inject the `$strap.directives` into your app module
++ Inject the `$strap.directives` into your app module
 
 >
 ``` javascript
-    var app = angular.module('angularjs-starter', ['$strap.directives']);
+var app = angular.module('angularjs-starter', ['$strap.directives']);
 ```
 
+
 ## Developers
+
+Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master) or install with bower `bower install angular-strap`.
 
 AngularStrap is tested with `testacular` against the latest available release of jQuery & Bootstrap.
 
 >
+	$ sudo npm install grunt-cli --global
 	$ npm install --dev
-	$ npm test
+	$ grunt test
 
 You can build the latest version using `grunt`.
 
