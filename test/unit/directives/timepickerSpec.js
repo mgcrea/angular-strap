@@ -38,7 +38,8 @@ describe('timepicker', function () {
   });
 
   it('should correctly call $.fn.timepicker', function () {
-    var spy = spyOn($.fn, 'timepicker');
+    var old = $.fn.timepicker;
+    var spy = angular.extend(spyOn($.fn, 'timepicker'), old).andCallThrough();
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
   });

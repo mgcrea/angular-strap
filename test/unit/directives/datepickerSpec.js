@@ -39,7 +39,8 @@ describe('datepicker', function () {
   });
 
   it('should correctly call $.fn.datepicker', function () {
-    var spy = spyOn($.fn, 'datepicker');
+    var old = $.fn.datepicker;
+    var spy = angular.extend(spyOn($.fn, 'datepicker'), old).andCallThrough();
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
   });
