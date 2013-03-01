@@ -38,12 +38,7 @@ describe('alert', function () {
 
   it('should correctly call $.fn.alert', function () {
     var old = $.fn.alert;
-    var spy = spyOn($.fn, 'alert').andCallThrough();
-    for (var key in old) {
-      if (old.hasOwnProperty(key)) {
-        spy[key] = old[key];
-      }
-    }
+    var spy = angular.extend(spyOn($.fn, 'alert'), old).andCallThrough();
     var elm = compileDirective();
     expect(spy).toHaveBeenCalled();
   });
