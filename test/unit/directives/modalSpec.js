@@ -69,7 +69,8 @@ describe('modal', function () {
 	});
 
 	it('should correctly call $.fn.modal', function () {
-		var spy = spyOn($.fn, 'modal').andCallThrough();
+		var old = $.fn.modal;
+		var spy = angular.extend(spyOn($.fn, 'modal'), old).andCallThrough();
 		var elm = compileDirective();
 		elm.modal('show');
 		expect(spy).toHaveBeenCalled();

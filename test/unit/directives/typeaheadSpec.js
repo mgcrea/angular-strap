@@ -49,7 +49,8 @@ describe('typeahead', function () {
 	});
 
 	it('should correctly call $.fn.typeahead', function () {
-		var spy = angular.extend(spyOn($.fn, 'typeahead'), $.fn.typeahead).andCallThrough();
+		var old = $.fn.typeahead;
+		var spy = angular.extend(spyOn($.fn, 'typeahead'), old).andCallThrough();
 		var elm = compileDirective();
 		expect(spy).toHaveBeenCalled();
 	});
