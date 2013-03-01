@@ -48,12 +48,7 @@ describe('tooltip', function () {
 
 	it('should correctly call $.fn.tooltip', function () {
 		var old = $.fn.tooltip;
-		var spy = spyOn($.fn, 'tooltip').andCallThrough();
-		for (var key in old) {
-			if (old.hasOwnProperty(key)) {
-				spy[key] = old[key];
-			}
-		}
+		var spy = angular.extend(spyOn($.fn, 'tooltip'), old).andCallThrough();
 		var elm = compileDirective();
 		expect(spy).toHaveBeenCalled();
 	});

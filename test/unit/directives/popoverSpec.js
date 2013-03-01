@@ -87,12 +87,7 @@ describe('popover', function () {
 
 	it('should correctly call $.fn.popover', function () {
 		var old = $.fn.popover;
-		var spy = spyOn($.fn, 'popover').andCallThrough();
-		for (var key in old) {
-			if (old.hasOwnProperty(key)) {
-				spy[key] = old[key];
-			}
-		}
+		var spy = angular.extend(spyOn($.fn, 'popover'), old).andCallThrough();
 		var elm = compileDirective();
 		expect(spy).toHaveBeenCalled();
 	});
