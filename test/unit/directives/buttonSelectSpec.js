@@ -50,14 +50,12 @@ describe('buttonSelect', function () {
 
   describe('view change to model', function () {
 
-    var isTouch = 'ontouchstart' in window;
-
     it('should update model to next candidate on click', function () {
       var elm = compileDirective();
       expect(scope.buttonSelect).toBe('b');
-      elm.trigger(isTouch ? 'touchstart' : 'click');
+      elm.trigger('click');
       expect(scope.buttonSelect).toBe('c');
-      elm.trigger(isTouch ? 'touchstart' : 'click');
+      elm.trigger('click');
       expect(scope.buttonSelect).toBe('a');
     });
 
