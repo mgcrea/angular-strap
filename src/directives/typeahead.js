@@ -52,7 +52,8 @@ angular.module('$strap.directives')
 			if(attrs.minLength === "0") {
 				setTimeout(function() { // Push to the event loop to make sure element.typeahead is defined (breaks tests otherwise)
 					element.on('focus', function() {
-						setTimeout(element.typeahead.bind(element, 'lookup'), 200);
+						// run typeahead.lookup only of element value is empty
+						element.val().length == 0 && setTimeout(element.typeahead.bind(element, 'lookup'), 200);
 					});
 				});
 			}
