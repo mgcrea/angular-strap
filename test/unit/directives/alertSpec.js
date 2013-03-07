@@ -20,8 +20,16 @@ describe('alert', function () {
 
   var templates = {
     'default': {
-      scope: {alert: {type:'error', title: 'Holy guacamole!', content: 'Hello Alert, <pre>2 + 3 = {{ 2 + 3 }}</pre>'}},
+      scope: {alert:{type:'error', title: 'Holy guacamole!', content: 'Hello Alert, <pre>2 + 3 = {{ 2 + 3 }}</pre>'}},
       element: '<div class="alert fade in" bs-alert="alert"></div>'
+    },
+    'alertStack': {
+      scope: {alerts:[{type:'error', title: 'Holy guacamole!', content: 'Hello Alert, <pre>2 + 3 = {{ 2 + 3 }}</pre>'}]},
+      element: '<div class="alerts"><div class="alert" ng-repeat="alert in alerts" bs-alert="alert"></div></div>'
+    },
+    'deepAlertStack': {
+      scope: {deep:{alerts:[{type:'error', title: 'Holy guacamole!', content: 'Hello Alert, <pre>2 + 3 = {{ 2 + 3 }}</pre>'}]}},
+      element: '<div class="alert"><div class="alert" ng-repeat="alert in deep.alerts" bs-alert="alert"></div></div>'
     }
   };
 
@@ -60,4 +68,15 @@ describe('alert', function () {
     expect(elm.hasClass('info')).toBe(false);
   });
 
+  it('should correctly remove alert from stack', function() {
+    var elm = compileDirective('alertStack').parent();
+    $('button', elm).click();
+    expect(scope.alerts.length).toBe(0);
+  });
+
+  it('should correctly remove alert from deep stack', function() {
+    var elm = compileDirective('deepAlertStack');
+    $("button", elm).click();
+    expect(scope.deep.alerts.length).toBe(0);
+  });
 });
