@@ -71,13 +71,23 @@ angular.module('$strap.directives')
           ev.preventDefault();
 
           element.removeClass('in');
-            console.warn(scope.$parent);
 
           removeElement = function() {
             element.trigger('closed');
             if(scope.$parent) {
               scope.$parent.$apply(function() {
-                scope.$parent[parentArray].splice(scope.$index, 1);
+                var path = parentArray.split('.');
+                var curr = scope.$parent;
+
+                for (var i = 0; i < path.length; ++i) {
+                  if (curr) {
+                    curr = curr[path[i]];
+                  }
+                }
+
+                if (curr) {
+                  curr.splice(scope.$index, 1);
+                }
               });
             }
           };
