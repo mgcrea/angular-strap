@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsTabs', ['$location', function($location) {
+.directive('bsTabs', ['$parse', '$compile', function($parse, $compile) {
   'use strict';
 
   return {
@@ -23,6 +23,8 @@ angular.module('$strap.directives')
 
       iElement.html(tabs.join('') + panes.join(''));
 
+      // Compile tab-content
+      $compile(iElement.children('div.tab-content'))(scope);
     }
 
   };

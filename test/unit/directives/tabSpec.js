@@ -19,6 +19,7 @@ describe('tab', function () {
       $(this).tab('show');
     });
 
+    scope.tab = {title:'About', content: 'Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney\'s organic lomo retro fanny pack lo-fi farm-to-table readymade.'};
   }));
 
   afterEach(function() {
@@ -27,8 +28,8 @@ describe('tab', function () {
   });
 
   var templates = {
-    'default': '<div bs-tabs><div class="active" data-tab="\'Home\'"><p>A</p></div><div data-tab="\'Profile\'"><p>B</p></div><div data-tab="\'About\'"><p>C</p></div></div>',
-    'fade': '<div bs-tabs><div class="active fade" data-tab="\'Home\'"><p>A</p></div><div class="fade" data-tab="\'Profile\'"><p>B</p></div><div class="fade" data-tab="\'About\'"><p>C</p></div></div>'
+    'default': '<div bs-tabs><div class="active" data-tab="\'Home\'"><p>A</p></div><div data-tab="\'Profile\'"><p>B</p></div><div data-tab="tab.title"><p>{{tab.content}}</p></div></div>',
+    'fade': '<div bs-tabs><div class="active fade" data-tab="\'Home\'"><p>A</p></div><div class="fade" data-tab="\'Profile\'"><p>B</p></div><div class="fade" data-tab="tab.title"><p>{{tab.content}}</p></div></div>'
   };
 
   function compileDirective(template) {
@@ -56,6 +57,12 @@ describe('tab', function () {
     expect(elm.children('div.tab-content').children('div').length).toBe(count);
   });
 
+  it('should correctly compile tab-content', function() {
+    var elm = compileDirective();
+    expect(elm.find('ul.nav-tabs li:nth-child(3)').text()).toBe(scope.tab.title);
+    expect(elm.find('div.tab-content div:nth-child(3)').text()).toBe(scope.tab.content);
+  });
+
   it('should correctly switch tabs', function() {
     var elm = compileDirective();
     expect(elm.find('ul.nav-tabs li:first').hasClass('active')).toBe(true);
@@ -65,7 +72,7 @@ describe('tab', function () {
     expect(elm.find('div.tab-content div.active').text()).toBe('B');
   });
 
-  it('should correctly work with fade class', function() {
+  it('should correctly switch tabs with fade class', function() {
     var elm = compileDirective('fade');
     expect(elm.find('ul.nav-tabs li:first').hasClass('active')).toBe(true);
     expect(elm.find('div.tab-content div.fade.active.in').text()).toBe('A');
