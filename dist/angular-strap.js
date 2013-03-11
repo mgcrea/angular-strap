@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.6.6 - 2013-02-23
+ * @version v0.7.0 - 2013-03-11
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -77,20 +77,30 @@ angular.module('$strap.directives')
 
       var parentArray = attrs.ngRepeat && attrs.ngRepeat.split(' in ').pop();
 
-      element.on('close', function(ev) { console.warn('close!');
+      element.on('close', function(ev) {
         var removeElement;
 
         if(parentArray) { // ngRepeat, remove from parent array
           ev.preventDefault();
 
           element.removeClass('in');
-            console.warn(scope.$parent);
 
           removeElement = function() {
             element.trigger('closed');
             if(scope.$parent) {
               scope.$parent.$apply(function() {
-                scope.$parent[parentArray].splice(scope.$index, 1);
+                var path = parentArray.split('.');
+                var curr = scope.$parent;
+
+                for (var i = 0; i < path.length; ++i) {
+                  if (curr) {
+                    curr = curr[path[i]];
+                  }
+                }
+
+                if (curr) {
+                  curr.splice(scope.$index, 1);
+                }
               });
             }
           };
@@ -293,33 +303,31 @@ angular.module('$strap.directives')
 .directive('bsButtonSelect', ['$parse', '$timeout', function($parse, $timeout) {
   'use strict';
 
-  var isTouch = 'ontouchstart' in window;
-
   return {
     restrict: 'A',
     require: '?ngModel',
-    link: function postLink(scope, element, attr, ctrl) {
+    link: function postLink(scope, element, attrs, ctrl) {
 
-      var getter = $parse(attr.bsButtonSelect),
+      var getter = $parse(attrs.bsButtonSelect),
         setter = getter.assign;
 
       // Bind ngModelController
       if(ctrl) {
-        element.text(scope.$eval(attr.ngModel));
+        element.text(scope.$eval(attrs.ngModel));
         // Watch model for changes
-        scope.$watch(attr.ngModel, function(newValue, oldValue) {
+        scope.$watch(attrs.ngModel, function(newValue, oldValue) {
           element.text(newValue);
         });
       }
 
-
       // Click handling
       var values, value, index, newValue;
-      element.on(isTouch ? 'touchstart.bsButtonSelect.data-api' : 'click.bsButtonSelect.data-api', function(ev) {
+      element.bind('click', function(ev) {
         values = getter(scope);
-        value = ctrl ? scope.$eval(attr.ngModel) : element.text();
+        value = ctrl ? scope.$eval(attrs.ngModel) : element.text();
         index = values.indexOf(value);
         newValue = index > values.length - 2 ? values[0] : values[index + 1];
+        console.warn(values, newValue);
 
         scope.$apply(function() {
           element.text(newValue);
@@ -330,6 +338,7 @@ angular.module('$strap.directives')
       });
     }
   };
+
 }]);
 
 // https://github.com/eternicode/bootstrap-datepicker
@@ -429,6 +438,7 @@ angular.module('$strap.directives')
         element.attr('data-toggle', 'datepicker');
         element.datepicker({
           autoclose: true,
+          forceParse: attrs.forceParse || false,
           language: attrs.language || 'en'
         });
 
@@ -518,7 +528,7 @@ angular.module('$strap.directives')
         }
 
         // Build modal object
-        var id = getter(scope).replace('.html', '').replace(/\//g, '-').replace(/\./g, '-') + '-' + scope.$id;
+        var id = getter(scope).replace('.html', '').replace(/[\/|\.|:]/g, "-") + '-' + scope.$id;
         var $modal = $('<div class="modal hide" tabindex="-1"></div>')
           .attr('id', id)
           .attr('data-backdrop', attr.backdrop || true)
@@ -688,6 +698,39 @@ angular.module('$strap.directives')
   };
 
 }]);
+
+angular.module('$strap.directives')
+
+.directive('bsTabs', ['$parse', '$compile', function($parse, $compile) {
+  'use strict';
+
+  return {
+    restrict: 'A',
+    link: function postLink(scope, iElement, iAttrs, controller) {
+
+      var tabs = ['<ul class="nav nav-tabs">', '</ul>'];
+      var panes = ['<div class="tab-content">', '</div>'];
+
+      iElement.find('[data-tab]').each(function(index) {
+        var $this = angular.element(this),
+            id = 'tab-' + scope.$id + '-' + index,
+            active = $this.hasClass('active'),
+            fade = $this.hasClass('fade'),
+            title = scope.$eval($this.data('tab'));
+        tabs.splice(index + 1, 0, '<li' + (active ? ' class="active"' : '') + '><a href="#' + id + '" data-toggle="tab">' + title + '</a></li>');
+        panes.splice(index + 1, 0, '<div class="tab-pane ' + $this.attr('class') + (fade && active ? ' in' : '') + '" id="' + id + '">' + this.innerHTML + '</div>');
+      });
+
+      iElement.html(tabs.join('') + panes.join(''));
+
+      // Compile tab-content
+      $compile(iElement.children('div.tab-content'))(scope);
+    }
+
+  };
+
+}]);
+
 
 // https://github.com/jdewit/bootstrap-timepicker
 // https://github.com/kla/bootstrap-timepicker
@@ -891,7 +934,7 @@ angular.module('$strap.directives')
       if(attrs.minLength === "0") {
         setTimeout(function() { // Push to the event loop to make sure element.typeahead is defined (breaks tests otherwise)
           element.on('focus', function() {
-            setTimeout(element.typeahead.bind(element, 'lookup'), 200);
+            element.val().length === 0 && setTimeout(element.typeahead.bind(element, 'lookup'), 200);
           });
         });
       }
