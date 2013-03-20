@@ -96,4 +96,46 @@ describe('modal', function () {
     }, 100);*/
   });
 
+  describe("events", function() {
+
+    beforeEach(function() {
+      this.elm = compileDirective();
+      this.$modal = $(this.elm.attr('href'));
+      this.event = null;
+    });
+
+    it('should emit an event on show', function () {
+      scope.$on("modal-show", function (e) {
+        event = e;
+      });
+      this.$modal.modal({show: true});
+      expect(event).not.toBeNull();
+    });
+
+    it('should emit an event on shown', function () {
+      scope.$on("modal-shown", function (e) {
+        event = e;
+      });
+      this.$modal.modal({show: true});
+      expect(event).not.toBeNull();
+    });
+
+    it('should emit an event on hide', function () {
+      scope.$on("modal-hide", function (e) {
+        event = e;
+      });
+      this.$modal.modal({hide: true});
+      expect(event).not.toBeNull();
+    });
+
+    it('should emit an event on hidden', function () {
+      scope.$on("modal-hidden", function (e) {
+        event = e;
+      });
+      this.$modal.modal({hide: true});
+      expect(event).not.toBeNull();
+    });
+
+  });
+
 });

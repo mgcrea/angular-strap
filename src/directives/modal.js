@@ -50,6 +50,22 @@ angular.module('$strap.directives')
         };
         scope.dismiss = scope.hide;
 
+        $modal.on("show", function(event) {
+          scope.$emit("modal-show", event);
+        });
+
+        $modal.on("shown", function(event) {
+          scope.$emit("modal-shown", event);
+        });
+
+        $modal.on("hide", function(event) {
+          scope.$emit("modal-hide", event);
+        });
+
+        $modal.on("hidden", function(event) {
+          scope.$emit("modal-hidden", event);
+        });
+
       });
     }
   };
