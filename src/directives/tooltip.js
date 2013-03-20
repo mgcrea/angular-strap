@@ -42,23 +42,10 @@ angular.module('$strap.directives')
       // Bootstrap override to provide events & tip() reference
       var tooltip = element.data('tooltip');
       tooltip.show = function() {
-        var e = $.Event('show');
-        this.$element.trigger(e);
-        if (e.isDefaultPrevented()) {
-          return;
-        }
         var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
-        // Bind popover to the tip()
+        // Bind tooltip to the tip()
         this.tip().data('tooltip', this);
         return r;
-      };
-      tooltip.hide = function() {
-        var e = $.Event('hide');
-        this.$element.trigger(e);
-        if (e.isDefaultPrevented()) {
-          return;
-        }
-        return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
       };
 
       //Provide scope display functions
