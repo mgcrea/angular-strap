@@ -65,12 +65,6 @@ angular.module('$strap.directives')
         });
       }
 
-      // Support add-on
-      var component = element.next('[data-toggle="datepicker"]');
-      if(component.length) {
-        component.on('click', function() { isTouch ? element.trigger('focus') : element.datepicker('show'); });
-      }
-
       // Use native interface for touch devices
       if(isTouch && element.prop('type') === 'text') {
 
@@ -113,6 +107,12 @@ angular.module('$strap.directives')
           forceParse: attrs.forceParse || false
         });
 
+      }
+
+      // Support add-on
+      var component = element.next('[data-toggle="datepicker"]');
+      if(component.length) {
+        component.on('click', function() { element.trigger('focus'); });
       }
 
     }
