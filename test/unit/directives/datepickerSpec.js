@@ -22,6 +22,7 @@ describe('datepicker', function () {
 
   var templates = {
     'default': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" bs-datepicker>',
+    'addon': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" bs-datepicker><span class="add-on" data-toggle="datepicker"><i class="icon-calendar"></i></span>',
     'language': '<input type="text" ng-model="model.date" data-language="fr" bs-datepicker>'
   };
 
@@ -59,29 +60,22 @@ describe('datepicker', function () {
     expect(elm.data('datepicker').picker.is(':visible')).toBe(false);
   });
 
-  it('should show the datepicker on click', function() {
+  it('should show the datepicker on focus', function() {
     var elm = compileDirective();
-    elm.trigger('click');
+    elm.trigger('focus');
     expect(elm.data('datepicker').picker.is(':visible')).toBe(true);
   });
 
-  it('should show the datepicker on focus', function(/*done*/) {
-    var elm = compileDirective();
-    elm.trigger('focusin');
+  it('should show the datepicker on [data-toggle="datepicker"] click', function() {
+    var elm = compileDirective('addon');
+    elm.next('[data-toggle="datepicker"]').trigger('click');
     expect(elm.data('datepicker').picker.is(':visible')).toBe(true);
-    elm.trigger('focusout');
-    /*setTimeout(function() {
-      expect(elm.data('datepicker').picker.is(':visible')).toBe(false);
-      dump(elm.data('datepicker').picker.get(0).outerHTML);
-      done();
-    }, 200);*/
   });
 
   it('should correctly update both input value and bound model', function() {
     var elm = compileDirective();
-    elm.trigger('focusin');
-    $("body > .datepicker").find('td.active').trigger('click');
-    elm.trigger('focusout');
+    elm.trigger('focus');
+    elm.data('datepicker').picker.find('td.active').trigger('click');
     expect(elm.val() !== '').toBe(true);
     expect(scope.model.date).toBe(elm.val());
   });
