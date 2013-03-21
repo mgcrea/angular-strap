@@ -60,6 +60,7 @@ describe('timepicker', function () {
     var elm = compileDirective();
     elm.trigger('focus');
     elm.data('timepicker').$widget.find('a[data-action="incrementHour"]').trigger('click');
+    $timeout.flush();
     expect(elm.val()).toBe('01:00');
     expect(scope.model.time).toBe('01:00');
   });
