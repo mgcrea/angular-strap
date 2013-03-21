@@ -32,7 +32,7 @@ describe('tab', function () {
       scope: {tab: {title: 'About', content: 'Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney\'s organic lomo retro fanny pack lo-fi farm-to-table readymade.'}}
     },
     'fade': {
-      element: '<div bs-tabs><div class="active fade" data-tab="\'Home\'"><p>A</p></div><div class="fade" data-tab="\'Profile\'"><p>B</p></div><div class="fade" data-tab="tab.title"><p>{{tab.content}}</p></div></div>',
+      element: '<div data-fade="1" bs-tabs><div data-tab="\'Home\'"><p>A</p></div><div data-tab="\'Profile\'"><p>B</p></div><div data-tab="tab.title"><p>{{tab.content}}</p></div></div>',
       scope: {tab: {title: 'About', content: 'Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney\'s organic lomo retro fanny pack lo-fi farm-to-table readymade.'}}
     },
     'repeat': {
@@ -42,6 +42,18 @@ describe('tab', function () {
         {title:'Profile', content: 'Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.'},
         {title:'About', content: 'Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney\'s organic lomo retro fanny pack lo-fi farm-to-table readymade.'}
       ]}
+    },
+    'object': {
+      element: '<div bs-tabs="tabs">',
+      scope: {tabs: [
+        {title:'Home', content: 'Raw denim you probably haven\'t heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica.'},
+        {title:'Profile', content: 'Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.'},
+        {title:'About', content: 'Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney\'s organic lomo retro fanny pack lo-fi farm-to-table readymade.'}
+      ]}
+    },
+    'ngModel': {
+      element: '<div ng-model="tab.active" bs-tabs><div class="active" data-tab="\'Home\'"><p>A</p></div><div data-tab="\'Profile\'"><p>B</p></div><div data-tab="\'About\'"><p>C</p></div></div>',
+      scope: {tab: {active: 1}}
     }
   };
 
@@ -105,6 +117,43 @@ describe('tab', function () {
     elm.find('ul.nav-tabs li:nth-child(2) a').trigger('click');
     expect(elm.find('ul.nav-tabs li:nth-child(2)').hasClass('active')).toBe(true);
     expect(elm.find('div.tab-content div.active').text()).toBe(scope.tabs[1].content);
+  });
+
+  it('should correctly render tabs from pure objects', function() {
+    var elm = compileDirective('object');
+    expect(elm.find('ul.nav-tabs li:first').hasClass('active')).toBe(true);
+    expect(elm.find('div.tab-content div.active').text()).toBe(scope.tabs[0].content);
+    elm.find('ul.nav-tabs li:nth-child(2) a').trigger('click');
+    expect(elm.find('ul.nav-tabs li:nth-child(2)').hasClass('active')).toBe(true);
+    expect(elm.find('div.tab-content div.active').text()).toBe(scope.tabs[1].content);
+  });
+
+  describe("data-binding", function() {
+
+    it('should correctly apply model changes to the view', function(done) {
+      var elm = compileDirective('ngModel');
+      setTimeout(function() {
+        var activeIndex = elm.find('ul.nav-tabs li').index(elm.find('ul.nav-tabs li.active'));
+        expect(activeIndex).toBe(1);
+        scope.tab.active = 2;
+        scope.$digest();
+        setTimeout(function() {
+          var activeIndex = elm.find('ul.nav-tabs li').index(elm.find('ul.nav-tabs li.active'));
+          expect(activeIndex).toBe(2);
+          done();
+        });
+      });
+    });
+
+    it('should correctly apply view changes to the model', function(done) {
+      var elm = compileDirective('ngModel');
+      elm.find('ul.nav-tabs li:nth-child(3) a').trigger('click');
+      setTimeout(function() {
+        expect(scope.tab.active).toBe(2);
+        done();
+      });
+    });
+
   });
 
 });
