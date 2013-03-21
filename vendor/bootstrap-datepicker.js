@@ -46,8 +46,6 @@
     if(this.component && this.component.length === 0)
       this.component = false;
 
-    this._attachEvents();
-
     this.forceParse = true;
     if ('forceParse' in options) {
       this.forceParse = options.forceParse;
@@ -55,16 +53,12 @@
       this.forceParse = this.element.data('date-force-parse');
     }
 
-
-    this.picker = $(DPGlobal.template)
-              .appendTo(this.isInline ? this.element : 'body')
-              .on({
-                click: $.proxy(this.click, this),
-                mousedown: $.proxy(this.mousedown, this)
-              });
+    this.picker = $(DPGlobal.template);
+    this._buildEvents();
+    this._attachEvents();
 
     if(this.isInline) {
-      this.picker.addClass('datepicker-inline');
+      this.picker.addClass('datepicker-inline').appendTo(this.element);
     } else {
       this.picker.addClass('datepicker-dropdown dropdown-menu');
     }
@@ -73,12 +67,6 @@
       this.picker.find('.prev i, .next i')
             .toggleClass('icon-arrow-left icon-arrow-right');
     }
-    $(document).on('mousedown', function (e) {
-      // Clicked outside the datepicker, hide it
-      if ($(e.target).closest('.datepicker.datepicker-inline, .datepicker.datepicker-dropdown').length === 0) {
-        that.hide();
-      }
-    });
 
     this.autoclose = false;
     if ('autoclose' in options) {
@@ -165,8 +153,22 @@
     constructor: Datepicker,
 
     _events: [],
-    _attachEvents: function(){
-      this._detachEvents();
+    _secondaryEvents: [],
+    _applyEvents: function(evs){
+      for (var i=0, el, ev; i<evs.length; i++){
+        el = evs[i][0];
+        ev = evs[i][1];
+        el.on(ev);
+      }
+    },
+    _unapplyEvents: function(evs){
+      for (var i=0, el, ev; i<evs.length; i++){
+        el = evs[i][0];
+        ev = evs[i][1];
+        el.off(ev);
+      }
+    },
+    _buildEvents: function(){
       if (this.isInput) { // single input
         this._events = [
           [this.element, {
@@ -189,9 +191,9 @@
           }]
         ];
       }
-            else if (this.element.is('div')) {  // inline datepicker
-              this.isInline = true;
-            }
+      else if (this.element.is('div')) {  // inline datepicker
+        this.isInline = true;
+      }
       else {
         this._events = [
           [this.element, {
@@ -199,26 +201,46 @@
           }]
         ];
       }
-      for (var i=0, el, ev; i<this._events.length; i++){
-        el = this._events[i][0];
-        ev = this._events[i][1];
-        el.on(ev);
-      }
+
+      this._secondaryEvents = [
+        [this.picker, {
+          click: $.proxy(this.click, this)
+        }],
+        [$(window), {
+          resize: $.proxy(this.place, this)
+        }],
+        [$(document), {
+          mousedown: $.proxy(function (e) {
+            // Clicked outside the datepicker, hide it
+            if ($(e.target).closest('.datepicker.datepicker-inline, .datepicker.datepicker-dropdown').length === 0) {
+              this.hide();
+            }
+          }, this)
+        }]
+      ];
+    },
+    _attachEvents: function(){
+      this._detachEvents();
+      this._applyEvents(this._events);
     },
     _detachEvents: function(){
-      for (var i=0, el, ev; i<this._events.length; i++){
-        el = this._events[i][0];
-        ev = this._events[i][1];
-        el.off(ev);
-      }
-      this._events = [];
+      this._unapplyEvents(this._events);
+    },
+    _attachSecondaryEvents: function(){
+      this._detachSecondaryEvents();
+      this._applyEvents(this._secondaryEvents);
+    },
+    _detachSecondaryEvents: function(){
+      this._unapplyEvents(this._secondaryEvents);
     },
 
     show: function(e) {
+      if (!this.isInline)
+        this.picker.appendTo('body');
       this.picker.show();
       this.height = this.component ? this.component.outerHeight() : this.element.outerHeight();
       this.place();
-      $(window).on('resize', $.proxy(this.place, this));
+      this._attachSecondaryEvents();
       if (e) {
         e.preventDefault();
       }
@@ -231,13 +253,10 @@
     hide: function(e){
       if(this.isInline) return;
       if (!this.picker.is(':visible')) return;
-      this.picker.hide();
-      $(window).off('resize', this.place);
+      this.picker.hide().detach();
+      this._detachSecondaryEvents();
       this.viewMode = this.startViewMode;
       this.showMode();
-      if (!this.isInput) {
-        $(document).off('mousedown', this.hide);
-      }
 
       if (
         this.forceParse &&
@@ -254,7 +273,9 @@
     },
 
     remove: function() {
+      this.hide();
       this._detachEvents();
+      this._detachSecondaryEvents();
       this.picker.remove();
       delete this.element.data().datepicker;
       if (!this.isInput) {
