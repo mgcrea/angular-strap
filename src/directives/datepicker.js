@@ -110,7 +110,7 @@ angular.module('$strap.directives')
       }
 
       // Support add-on
-      var component = element.next('[data-toggle="datepicker"]');
+      var component = element.siblings('[data-toggle="datepicker"]');
       if(component.length) {
         component.on('click', function() { element.trigger('focus'); });
       }
