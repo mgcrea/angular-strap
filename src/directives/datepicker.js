@@ -46,8 +46,8 @@ angular.module('$strap.directives')
     link: function postLink(scope, element, attrs, controller) {
 
       var options = config.datepicker || {},
-          format = attrs.dateFormat || options.format || 'mm/dd/yyyy',
-          language = attrs.language || options.language || 'en';
+          language = attrs.language || options.language || 'en',
+          format = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy';
 
       var dateFormatRegexp = isTouch ? 'yyyy/mm/dd' : regexpForDateFormat(format, language);
 
