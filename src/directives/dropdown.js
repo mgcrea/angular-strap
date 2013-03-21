@@ -1,51 +1,47 @@
 
 angular.module('$strap.directives')
 
-.directive('bsDropdown', ['$parse', '$compile', function($parse, $compile) {
+.directive('bsDropdown', ['$parse', '$compile', '$timeout', function($parse, $compile, $timeout) {
   'use strict';
 
-  var slice = Array.prototype.slice;
-
-  var template = '' +
-  '<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">' +
-    '<li ng-repeat="item in items" ng-class="{divider: !!item.divider, \'dropdown-submenu\': !!item.submenu && item.submenu.length}">' +
-      '<a ng-hide="!!item.divider" tabindex="-1" ng-href="{{item.href}}" ng-click="{{item.click}}" target="{{item.target}}" ng-bind-html-unsafe="item.text"></a>' +
-    '</li>' +
-  '</ul>';
-
-  var linkSubmenu = function(items, parent, scope) {
-    var subitems, submenu, subscope;
-    for (var i = 0, l = items.length; i < l; i++) {
-      if(subitems = items[i].submenu) {
-        subscope = scope.$new();
-        subscope.items = subitems;
-        submenu = $compile(template)(subscope);
-        submenu = submenu.appendTo(parent.children('li:nth-child(' + (i+1) + ')'));
-        asyncLinkSubmenu(subitems, submenu, subscope);
-      }
-    }
-  };
-
-  var asyncLinkSubmenu = function() {
-    var args = slice.call(arguments);
-    setTimeout(function() {
-      linkSubmenu.apply(null, args);
+  var buildTemplate = function(items, ul) {
+    if(!ul) ul = ['<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">', '</ul>'];
+    angular.forEach(items, function(item, index) {
+      if(item.divider) return ul.splice(index + 1, 0, '<li class="divider"></li>');
+      var li = '<li' + (item.submenu && item.submenu.length ? ' class="dropdown-submenu"' : '') + '>' +
+        '<a tabindex="-1" ng-href="' + (item.href || '') + '"' + (item.click ? '" ng-click="' + item.click + '"' : '') + (item.target ? '" target="' + item.target + '"' : '') + '>' +
+        (item.text || '') + '</a>';
+      if(item.submenu && item.submenu.length) li += buildTemplate(item.submenu).join("\n");
+      li += '</li>';
+      ul.splice(index + 1, 0, li);
     });
+    return ul;
   };
 
   return {
     restrict: 'EA',
     scope: true,
-    link: function postLink(scope, element, attr) {
+    link: function postLink(scope, iElement, iAttrs) {
 
-      var getter = $parse(attr.bsDropdown);
+      var getter = $parse(iAttrs.bsDropdown),
+          items = getter(scope);
 
-      scope.items = getter(scope);
-      var dropdown = $compile(template)(scope);
-      asyncLinkSubmenu(scope.items, dropdown, scope);
-      dropdown.insertAfter(element);
+      // Defer after any ngRepeat rendering
+      $timeout(function() {
 
-      element
+        if(!angular.isArray(items)) {
+          // @todo?
+        }
+
+        var dropdown = angular.element(buildTemplate(items).join(''));
+        dropdown.insertAfter(iElement);
+
+        // Compile dropdown-menu
+        $compile(iElement.next('ul.dropdown-menu'))(scope);
+
+      });
+
+      iElement
         .addClass('dropdown-toggle')
         .attr('data-toggle', "dropdown");
 
