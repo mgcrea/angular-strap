@@ -36,7 +36,7 @@ angular.module('$strap.directives')
         return new RegExp('^' + re + '$', ['i']);
       };
 
-      var dateFormatRegexp = isTouch ? 'yyyy/mm/dd' : regexpForDateFormat(attrs.dateFormat || 'mm/dd/yyyy'/*, {mask: !!attrs.uiMask}*/);
+      var dateFormatRegexp = isTouch ? 'yyyy/mm/dd' : regexpForDateFormat(attrs.dateFormat || ($.fn.datepicker.dates[attrs.language] && $.fn.datepicker.dates[attrs.language].format) || 'mm/dd/yyyy'/*, {mask: !!attrs.uiMask}*/);
 
       // Handle date validity according to dateFormat
       if(controller) {
