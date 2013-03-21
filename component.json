@@ -12,6 +12,7 @@
   "dependencies": {
     "jquery": ">= 1.8.0",
     "bootstrap": ">= 2.2.0",
-    "bootstrap-datepicker": ">= 1.0.0"
+    "bootstrap-datepicker": ">= 1.0.0",
+    "bootstrap-timepicker": ">= 0.2.2"
   }
 }
