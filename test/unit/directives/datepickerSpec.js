@@ -22,6 +22,7 @@ describe('datepicker', function () {
 
   var templates = {
     'default': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" bs-datepicker>',
+    'string': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" data-date-string="1" bs-datepicker>',
     'addon': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" bs-datepicker><span class="add-on" data-toggle="datepicker"><i class="icon-calendar"></i></span>',
     'language': '<input type="text" ng-model="model.date" data-language="fr" bs-datepicker>'
   };
@@ -74,6 +75,14 @@ describe('datepicker', function () {
 
   it('should correctly update both input value and bound model', function() {
     var elm = compileDirective();
+    elm.trigger('focus');
+    elm.data('datepicker').picker.find('td.active').trigger('click');
+    expect(elm.val() !== '').toBe(true);
+    expect(scope.model.date).toBe(elm.data('datepicker').date);
+  });
+
+  it('should correctly update both input value and bound model', function() {
+    var elm = compileDirective('string');
     elm.trigger('focus');
     elm.data('datepicker').picker.find('td.active').trigger('click');
     expect(elm.val() !== '').toBe(true);

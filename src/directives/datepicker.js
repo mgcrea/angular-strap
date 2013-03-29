@@ -47,22 +47,35 @@ angular.module('$strap.directives')
 
       var options = config.datepicker || {},
           language = attrs.language || options.language || 'en',
+          string = attrs.dateString || options.string || false,
           format = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy';
 
       var dateFormatRegexp = isTouch ? 'yyyy/mm/dd' : regexpForDateFormat(format, language);
 
       // Handle date validity according to dateFormat
       if(controller) {
+
+        // ngModel validity
         controller.$parsers.unshift(function(viewValue) {
-          //console.warn('viewValue', viewValue, dateFormatRegexp,  dateFormatRegexp.test(viewValue));
-          if (!viewValue || dateFormatRegexp.test(viewValue)) {
+          if(!viewValue) {
+            controller.$setValidity('date', true);
+            return null;
+          } else if(!string && angular.isDate(viewValue)) {
             controller.$setValidity('date', true);
             return viewValue;
+          } else if(angular.isString(viewValue) && dateFormatRegexp.test(viewValue)) {
+            controller.$setValidity('date', true);
+            return string ? viewValue : $.fn.datepicker.DPGlobal.parseDate(viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
           } else {
             controller.$setValidity('date', false);
             return undefined;
           }
         });
+
+        // ngModel rendering
+        controller.$render = function ngModelRender() {
+          return controller.$modelValue && element.datepicker('setValue', controller.$modelValue);
+        };
       }
 
       // Use native interface for touch devices
@@ -81,7 +94,7 @@ angular.module('$strap.directives')
         if(controller) {
           element.on('changeDate', function(ev) {
             scope.$apply(function () {
-              controller.$setViewValue(element.val());
+              controller.$setViewValue(string ? element.val() : ev.date);
             });
           });
         }
@@ -89,7 +102,7 @@ angular.module('$strap.directives')
         // Popover GarbageCollection
         var $popover = element.closest('.popover');
         if($popover) {
-          $popover.on('hide', function(e) {
+          $popover.on('hidden', function(e) {
             var datepicker = element.data('datepicker');
             if(datepicker) {
               datepicker.picker.remove();
