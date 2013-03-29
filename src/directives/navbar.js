@@ -12,7 +12,7 @@ angular.module('$strap.directives')
         return $location.path();
       }, function(newValue, oldValue) {
 
-        element.find('li[data-match-route]').each(function(k, li) {
+        $('li[data-match-route]', element).each(function(k, li) {
           var $li = angular.element(li),
             // data('match-rout') does not work with dynamic attributes
             pattern = $li.attr('data-match-route'),
