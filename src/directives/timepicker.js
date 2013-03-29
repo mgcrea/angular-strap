@@ -36,9 +36,14 @@ angular.module('$strap.directives')
       // Create datepicker
       element.attr('data-toggle', 'timepicker');
       element.parent().addClass('bootstrap-timepicker');
-      //$timeout(function () {
-        element.timepicker();
-      //});
+      element.timepicker();
+      var timepicker = element.data('timepicker');
+
+      // Support add-on
+      var component = element.siblings('[data-toggle="timepicker"]');
+      if(component.length) {
+        component.on('click', $.proxy(timepicker.showWidget, timepicker));
+      }
 
     }
   };
