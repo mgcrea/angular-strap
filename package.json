@@ -9,7 +9,7 @@
     "url": "git://github.com/angular-strap/angular-strap.git"
   },
   "engines": {
-    "node": "0.8.x"
+    "node": ">= 0.8"
   },
   "dependencies": {},
   "devDependencies": {
