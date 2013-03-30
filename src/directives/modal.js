@@ -39,7 +39,7 @@ angular.module('$strap.directives')
         });
 
         // Provide scope display functions
-        scope._modal = function(name) {
+        scope.$modal = function(name) {
           $modal.modal(name);
         };
         scope.hide = function() {
@@ -50,20 +50,18 @@ angular.module('$strap.directives')
         };
         scope.dismiss = scope.hide;
 
-        $modal.on("show", function(event) {
-          scope.$emit("modal-show", event);
+        $modal.on('show', function(event) {
+          scope.$emit('modal-show', event);
         });
-
-        $modal.on("shown", function(event) {
-          scope.$emit("modal-shown", event);
+        $modal.on('shown', function(event) {
+          scope.$emit('modal-shown', event);
+          $('input[autofocus]').first().trigger('focus');
         });
-
-        $modal.on("hide", function(event) {
-          scope.$emit("modal-hide", event);
+        $modal.on('hide', function(event) {
+          scope.$emit('modal-hide', event);
         });
-
-        $modal.on("hidden", function(event) {
-          scope.$emit("modal-hidden", event);
+        $modal.on('hidden', function(event) {
+          scope.$emit('modal-hidden', event);
         });
 
       });
