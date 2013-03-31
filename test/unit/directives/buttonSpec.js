@@ -69,6 +69,12 @@ describe('button', function () {
       +   '<button type="button" class="btn" value="middle">Middle</button>'
       +   '<button type="button" class="btn" value="right">Right</button>'
       + '</div>'
+    },
+    'radio-single-model-ng-repeat': {
+      scope: {radio: 'middle', values:['left', 'middle', 'right']},
+      element: '<div class="btn-group" ng-model="radio" bs-buttons-radio>'
+      +   '<button ng-repeat="value in values" type="button" class="btn" value="{{value}}">{{value}}</button>'
+      + '</div>'
     }
   };
 
@@ -160,8 +166,8 @@ describe('button', function () {
       var elm = compileDirective('radio');
       elm.find('[ng-model="radio.left"]').trigger('click');
       expect(scope.radio).toEquals({left: true, middle: false, right: false});
-      elm.find('[ng-model="radio.left"]').trigger('click');
-      expect(scope.radio).toEquals({left: true, middle: false, right: false});
+      elm.find('[ng-model="radio.middle"]').trigger('click');
+      expect(scope.radio).toEquals({left: false, middle: true, right: false});
     });
 
     it('should handle model to view changes', function () {
@@ -181,8 +187,8 @@ describe('button', function () {
       var elm = compileDirective('radio-single-model');
       elm.find('[value="left"]').trigger('click');
       expect(scope.radio).toEquals('left');
-      elm.find('[value="left"]').trigger('click');
-      expect(scope.radio).toEquals('left');
+      elm.find('[value="middle"]').trigger('click');
+      expect(scope.radio).toEquals('middle');
     });
 
     it('should handle model to view changes', function () {
@@ -195,5 +201,25 @@ describe('button', function () {
       expect(elm.find('[value="right"]').hasClass('active')).toBe(true);
     });
   });
+
+    describe('buttons radio single model ng-repeat', function () {
+      it('should handle view to model changes', function () {
+        var elm = compileDirective('radio-single-model-ng-repeat');
+        elm.find('[value="left"]').trigger('click');
+        expect(scope.radio).toEquals('left');
+        elm.find('[value="middle"]').trigger('click');
+        expect(scope.radio).toEquals('middle');
+      });
+
+      it('should handle model to view changes', function () {
+        var elm = compileDirective('radio-single-model');
+        scope.$apply(function () {
+            scope.radio = 'right';
+        });
+        expect(elm.find('[value="left"]').hasClass('active')).toBe(false);
+        expect(elm.find('[value="middle"]').hasClass('active')).toBe(false);
+        expect(elm.find('[value="right"]').hasClass('active')).toBe(true);
+      });
+    });
 
 });

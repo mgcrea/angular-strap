@@ -132,6 +132,11 @@ angular.module('$strap.directives')
         // If we have a controller (i.e. ngModelController) then wire it up
         if(controller) {
 
+          // if use ng-repeat have to digest first
+          if (iElement.html().match(/<!-- ngRepeat:.*?-->/g)) {
+            scope.$apply();
+          }
+
           iElement
             .find('[value]').button()
             .filter('[value="' + scope.$eval(iAttrs.ngModel) + '"]')
