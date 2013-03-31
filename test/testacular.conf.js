@@ -18,6 +18,7 @@ files = [
   'vendor/bootstrap-datepicker.js',
   //'vendor/bootstrap-datepicker.fr.js',
   'vendor/bootstrap-timepicker.js',
+  'vendor/bootstrap-select.js',
   'src/common.js',
   'src/directives/*.js',
   'test/unit/directives/*Spec.js'
