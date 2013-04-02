@@ -1,41 +1,71 @@
-[AngularStrap](http://mgcrea.github.com/angular-strap) [![Build Status](https://secure.travis-ci.org/mgcrea/angular-strap.png?branch=master)](http://travis-ci.org/#!/mgcrea/angular-strap)
-=================
+# [AngularStrap](http://mgcrea.github.com/angular-strap) [![Build Status](https://secure.travis-ci.org/mgcrea/angular-strap.png?branch=master)](http://travis-ci.org/#!/mgcrea/angular-strap)
 
 AngularStrap is a set of directives that enables seamless integration of [Twitter Bootstrap](https://twitter.github.com/bootstrap) into your [AngularJS](https://github.com/angular/angular.js) app.
 
-Documentation and examples
---------------------------
 
-Check the [documentation](http://mgcrea.github.com/angular-strap) for working examples.
 
-Quick start
------------
+## Documentation and examples
 
-Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, or [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master).
++ Check the [documentation](http://mgcrea.github.com/angular-strap) and [changelog](https://github.com/mgcrea/angular-strap/wiki/Changelog).
 
-Testing
--------
++ Use & fork the available [plunkers](https://github.com/mgcrea/angular-strap/wiki/Plunkers) to test a directive or report an issue.
 
-AngularStrap is tested with `testacular` (jasmine unit tests).
 
-	sudo npm install testacular -g
-	npm test
 
-Contributing
-------------
+## Quick start
 
-Please submit all pull requests the against master branch. If your unit test contains javascript patches or features, you should include relevant unit tests. Thanks!
++ Include the required libraries (cdn/local)
 
-Authors
--------
+>
+``` html
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.0/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.1/angular-strap.min.js"></script>
+```
+
++ Inject the `$strap.directives` into your app module
+
+>
+``` javascript
+var app = angular.module('angularjs-starter', ['$strap.directives']);
+```
+
+
+## Developers
+
+Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master) or install with bower `bower install angular-strap`.
+
+AngularStrap is tested with `testacular` against the latest available release of jQuery & Bootstrap.
+
+>
+	$ sudo npm install grunt-cli --global
+	$ npm install --dev
+	$ grunt test
+
+You can build the latest version using `grunt`.
+
+>
+	$ grunt build
+
+
+
+## Contributing
+
+Please submit all pull requests the against master branch. If your unit test contains JavaScript patches or features, you should include relevant unit tests. Thanks!
+
+
+
+## Authors
 
 **Olivier Louvignes**
 
 + http://olouv.com
 + http://github.com/mgcrea
 
-Copyright and license
----------------------
+
+
+## Copyright and license
 
 	The MIT License
 

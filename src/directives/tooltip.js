@@ -1,67 +1,66 @@
 
 angular.module('$strap.directives')
 
-.directive('bsTooltip', ['$parse', '$compile', '$http', '$timeout',  function($parse, $compile, $http, $timeout) {
-	'use strict';
+.directive('bsTooltip', ['$parse', '$compile',  function($parse, $compile) {
+  'use strict';
 
-	return {
-		restrict: 'A',
-		scope: true,
-		link: function postLink(scope, element, attr, ctrl) {
+  return {
+    restrict: 'A',
+    scope: true,
+    link: function postLink(scope, element, attrs, ctrl) {
 
-			var getter = $parse(attr.bsTooltip),
-				setter = getter.assign;
+      var getter = $parse(attrs.bsTooltip),
+        setter = getter.assign,
+        value = getter(scope);
 
-			if(!!attr.unique) {
-				element.on('show', function(ev) {
-					// Hide any active popover except self
-					$(".tooltip.in").each(function() {
-						var $this = $(this),
-							tooltip = $this.data('tooltip');
-						if(tooltip && !tooltip.$element.is(element)) {
-							$this.tooltip('hide');
-						}
-					});
-				});
-			}
+      // Watch bsTooltip for changes
+      scope.$watch(attrs.bsTooltip, function(newValue, oldValue) {
+        if(newValue !== oldValue) {
+          value = newValue;
+        }
+      });
 
-			// Initialize tooltip
-			element.tooltip({
-				title: getter(scope),
-				html: true
-			});
+      if(!!attrs.unique) {
+        element.on('show', function(ev) {
+          // Hide any active popover except self
+          $(".tooltip.in").each(function() {
+            var $this = $(this),
+              tooltip = $this.data('tooltip');
+            if(tooltip && !tooltip.$element.is(element)) {
+              $this.tooltip('hide');
+            }
+          });
+        });
+      }
 
-			// Bootstrap override to provide events & tip() reference & refresh positions
-			var tooltip = element.data('tooltip');
-			tooltip.show = function() {
-				var e = $.Event('show');
-				this.$element.trigger(e);
-				if (e.isDefaultPrevented()) {
-					return;
-				}
-				var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
-				// Bind popover to the tip()
-				this.$tip.data('tooltip', this);
-				return r;
-			};
-			tooltip.hide = function() {
-				var e = $.Event('hide');
-				this.$element.trigger(e);
-				if (e.isDefaultPrevented()) {
-					return;
-				}
-				return $.fn.tooltip.Constructor.prototype.hide.apply(this, arguments);
-			};
+      // Initialize tooltip
+      element.tooltip({
+        title: function() { return angular.isFunction(value) ? value.apply(null, arguments) : value; },
+        html: true
+      });
 
-			// Provide scope display functions
-			scope.dismiss = function() {
-				element.tooltip('hide');
-			};
-			scope.show = function() {
-				element.tooltip('show');
-			};
+      // Bootstrap override to provide events & tip() reference
+      var tooltip = element.data('tooltip');
+      tooltip.show = function() {
+        var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
+        // Bind tooltip to the tip()
+        this.tip().data('tooltip', this);
+        return r;
+      };
 
-		}
-	};
+      //Provide scope display functions
+      scope._tooltip = function(event) {
+        element.tooltip(event);
+      };
+      scope.hide = function() {
+        element.tooltip('hide');
+      };
+      scope.show = function() {
+        element.tooltip('show');
+      };
+      scope.dismiss = scope.hide;
+
+    }
+  };
 
 }]);

@@ -1,3 +1,6 @@
 .DS_Store
 npm-debug.log
+test/coverage
+components/
+node_modules/
 !.gitignore
