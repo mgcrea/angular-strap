@@ -1090,6 +1090,13 @@ angular.module('$strap.directives')
         items = $.isFunction(this.source) ? this.source(this.query, $.proxy(this.process, this)) : this.source;
         return items ? this.process(items) : this;
       };
+      
+      if(attrs.matchall === "true") {
+        //hack to return true on every server side sugg
+        typeahead.matcher = function (item) {
+          return true;
+        }
+      }
 
       // Support 0-minLength
       if(attrs.minLength === "0") {
