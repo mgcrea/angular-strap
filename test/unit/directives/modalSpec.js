@@ -45,15 +45,15 @@ describe('modal', function () {
   it('should fetch the partial and build the modal', function () {
     var elm = compileDirective();
     expect(elm.attr('data-toggle')).toBe('modal');
-    expect(elm.attr('href')).toBeDefined();
-    var $modal = $(elm.attr('href'));
+    expect(elm.attr('data-target')).toBeDefined();
+    var $modal = $(elm.attr('data-target'));
     expect($modal.hasClass('modal')).toBe(true);
     expect($modal.html()).toBe(scope.modal);
   });
 
   it('should handle extra attributes', function () {
     var elm = compileDirective('extra');
-    var $modal = $(elm.attr('href'));
+    var $modal = $(elm.attr('data-target'));
     // expect($modal.attr('data-backdrop')).toBe('0');
     // expect($modal.attr('data-keyboard')).toBe('0');
     expect($modal.hasClass('modal-wide')).toBe(true);
@@ -63,8 +63,8 @@ describe('modal', function () {
     compileDirective('cached', true);
     expect(scope.$$asyncQueue.length).toBe(0);
     var elm = $('a[bs-modal]');
-    expect(elm.attr('href')).toBeDefined();
-    var $modal = $(elm.attr('href'));
+    expect(elm.attr('data-target')).toBeDefined();
+    var $modal = $(elm.attr('data-target'));
     expect($modal.hasClass('modal')).toBe(true);
     expect($modal.html()).toBe(scope.modal);
   });
@@ -79,14 +79,14 @@ describe('modal', function () {
 
   it('should resolve scope variables in the external partial', function() {
     var elm = compileDirective();
-    var $modal = $(elm.attr('href'));
+    var $modal = $(elm.attr('data-target'));
     $modal.modal('show'); $timeout.flush();
     expect($modal.text()).toBe('Hello ' + scope.content.replace(/<br \/>/g, ''));
   });
 
   it('should show the modal on click', function(/*done*/) {
     var elm = compileDirective();
-    var $modal = $(elm.attr('href'));
+    var $modal = $(elm.attr('data-target'));
     expect($modal.hasClass('hide')).toBe(true);
     elm.trigger('click');
     /*setTimeout(function() {
@@ -102,7 +102,7 @@ describe('modal', function () {
 
     beforeEach(function() {
       elm = compileDirective();
-      $modal = $(elm.attr('href'));
+      $modal = $(elm.attr('data-target'));
       spy = jasmine.createSpy('event');
     });
 
