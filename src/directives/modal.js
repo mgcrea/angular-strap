@@ -90,7 +90,7 @@ angular.module('$strap.directives')
       };
 
       $q.when($modal(options)).then(function onSuccess(modal) {
-        iElement.attr('href', '#' + modal.attr('id')).attr('data-toggle', 'modal');
+        iElement.attr('data-target', '#' + modal.attr('id')).attr('data-toggle', 'modal');
       });
 
     }
