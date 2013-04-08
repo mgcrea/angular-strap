@@ -5,7 +5,7 @@ angular.module('$strap.directives')
 .directive('bsDatepicker', ['$timeout', '$strap.config', function($timeout, config) {
   'use strict';
 
-  var isTouch = 'ontouchstart' in window && !window.navigator.userAgent.match(/PhantomJS/i);
+  var isAppleTouch = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
 
   var regexpMap = function regexpMap(language) {
     language = language || 'en';
@@ -47,25 +47,30 @@ angular.module('$strap.directives')
 
       var options = config.datepicker || {},
           language = attrs.language || options.language || 'en',
-          string = attrs.dateString || options.string || false,
-          format = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy';
+          type = attrs.dateType || options.type || 'date',
+          format = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'yyyy-mm-dd';
 
-      var dateFormatRegexp = isTouch ? 'yyyy/mm/dd' : regexpForDateFormat(format, language);
+      var dateFormatRegexp = isAppleTouch ? regexpForDateFormat('yyyy-mm-dd', language) : regexpForDateFormat(format, language);
 
       // Handle date validity according to dateFormat
       if(controller) {
+
+        // controller.$formatters.unshift(function(viewValue) {
+        //   console.warn('$formatters', arguments);
+        // });
 
         // ngModel validity
         controller.$parsers.unshift(function(viewValue) {
           if(!viewValue) {
             controller.$setValidity('date', true);
             return null;
-          } else if(!string && angular.isDate(viewValue)) {
+          } else if(type === 'date' && angular.isDate(viewValue)) {
             controller.$setValidity('date', true);
             return viewValue;
           } else if(angular.isString(viewValue) && dateFormatRegexp.test(viewValue)) {
             controller.$setValidity('date', true);
-            return string ? viewValue : $.fn.datepicker.DPGlobal.parseDate(viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
+            if(isAppleTouch) return new Date(viewValue);
+            return type === 'string' ? viewValue : $.fn.datepicker.DPGlobal.parseDate(viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
           } else {
             controller.$setValidity('date', false);
             return undefined;
@@ -76,38 +81,22 @@ angular.module('$strap.directives')
         controller.$render = function ngModelRender() {
           return controller.$modelValue && element.datepicker('setValue', controller.$modelValue);
         };
+
       }
 
       // Use native interface for touch devices
-      if(isTouch && element.prop('type') === 'text') {
+      if(isAppleTouch) {
 
-        element.prop('type', 'date');
-        element.on('change', function(ev) {
-          scope.$apply(function () {
-            controller.$setViewValue(element.val());
-          });
-        });
+        element.prop('type', 'date').css('-webkit-appearance', 'textfield');
 
       } else {
 
-        // If we have a controller (i.e. ngModelController) then wire it up
+        // If we have a ngModelController then wire it up
         if(controller) {
           element.on('changeDate', function(ev) {
             scope.$apply(function () {
-              controller.$setViewValue(string ? element.val() : ev.date);
+              controller.$setViewValue(type === 'string' ? element.val() : ev.date);
             });
-          });
-        }
-
-        // Popover GarbageCollection
-        var $popover = element.closest('.popover');
-        if($popover) {
-          $popover.on('hidden', function(e) {
-            var datepicker = element.data('datepicker');
-            if(datepicker) {
-              datepicker.picker.remove();
-              element.data('datepicker', null);
-            }
           });
         }
 
@@ -120,12 +109,24 @@ angular.module('$strap.directives')
           forceParse: attrs.forceParse || false
         });
 
+        // Garbage collection
+        scope.$on('$destroy', function() {
+          console.warn('$destroy');
+          var datepicker = element.data('datepicker');
+          if(datepicker) {
+            datepicker.picker.remove();
+            element.data('datepicker', null);
+          }
+        });
+
       }
 
       // Support add-on
       var component = element.siblings('[data-toggle="datepicker"]');
       if(component.length) {
-        component.on('click', function() { element.trigger('focus'); });
+        component.on('click', function() {
+          element.trigger('focus');
+        });
       }
 
     }
