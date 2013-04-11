@@ -6,6 +6,9 @@
 // base path, that will be used to resolve files and exclude
 basePath = './..';
 
+// frameworks to use
+// frameworks = ['jasmine'];
+
 // list of files / patterns to load in the browser
 files = [
   JASMINE,
@@ -16,7 +19,6 @@ files = [
   'test/lib/angular/angular-mocks.js',
   'test/lib/bootstrap.js',
   'vendor/bootstrap-datepicker.js',
-  //'vendor/bootstrap-datepicker.fr.js',
   'vendor/bootstrap-timepicker.js',
   'src/common.js',
   'src/directives/*.js',
@@ -31,7 +33,6 @@ exclude = [];
 // CLI --reporters progress
 // 'coverage',
 reporters = ['progress'];
-
 
 // web server port
 // CLI --port 9876
@@ -76,15 +77,3 @@ singleRun = false;
 // report which specs are slower than 500ms
 // CLI --report-slower-than 500
 reportSlowerThan = 500;
-
-// compile coffee scripts
-preprocessors = {
-  'src/common.js': 'coverage',
-  'src/directives/*.js': 'coverage'
-  //'**/*.coffee': 'coffee'
-};
-
-coverageReporter = {
-  type : 'html',
-  dir : 'test/coverage/'
-};

@@ -62,7 +62,7 @@ module.exports = function(grunt) {
     //   files: '<config:jshint.files>',
     //   tasks: 'default'
     // },
-    testacular: {
+    karma: {
       test: {
         options: {
           reporters: ['dots'],
@@ -75,7 +75,7 @@ module.exports = function(grunt) {
         }
       },
       options: {
-        configFile: 'test/testacular.conf.js',
+        configFile: 'test/karma.conf.js',
         browsers: ['PhantomJS']
       }
     }
@@ -98,17 +98,17 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['test']);
 
   // Test tasks.
-  grunt.registerTask('test', ['jshint', 'testacular:test']);
-  grunt.registerTask('test-server', ['testacular:server']);
+  grunt.registerTask('test', ['jshint', 'karma:test']);
+  grunt.registerTask('test-server', ['karma:server']);
 
   // Build task.
   grunt.registerTask('build', ['test', 'concat', 'uglify']);
 
 
-  // Provides the "testacular" task.
-  grunt.registerMultiTask('testacular', 'Starts up a testacular server.', function() {
+  // Provides the "karma" task.
+  grunt.registerMultiTask('karma', 'Starts up a karma server.', function() {
     var done = this.async();
-    require('testacular').server.start(this.options(), function(code) {
+    require('karma').server.start(this.options(), function(code) {
       done(code === 0);
     });
   });
