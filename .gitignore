@@ -4,3 +4,4 @@ test/coverage
 components/
 node_modules/
 !.gitignore
+.idea
