@@ -54,19 +54,16 @@ angular.module('$strap.directives')
         };
         scope.dismiss = scope.hide;
 
-        $modal.on('show', function(event) {
-          scope.$emit('modal-show', event);
+        // Emit modal events
+        angular.forEach(['show', 'shown', 'hide', 'hidden'], function(name) {
+          $modal.on(name, function(ev) {
+            scope.$emit('modal-' + name, ev);
+          });
         });
+
+        // Support autofocus attribute
         $modal.on('shown', function(event) {
-          scope.$emit('modal-shown', event);
-          // Support autofocus attribute
           $('input[autofocus]', $modal).first().trigger('focus');
-        });
-        $modal.on('hide', function(event) {
-          scope.$emit('modal-hide', event);
-        });
-        $modal.on('hidden', function(event) {
-          scope.$emit('modal-hidden', event);
         });
 
         if(options.show) {

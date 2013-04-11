@@ -78,6 +78,9 @@ describe('button', function () {
     var $element = $(template.element).appendTo($sandbox);
     $element = $compile($element)(scope);
     scope.$digest();
+    if(template === 'radio' || template === 'radio-single-model') {
+      $timeout.flush();
+    }
     return $element;
   }
 

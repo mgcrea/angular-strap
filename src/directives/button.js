@@ -125,7 +125,7 @@ angular.module('$strap.directives')
 
 }])
 
-.directive('bsButtonsRadio', ['$parse', function($parse) {
+.directive('bsButtonsRadio', ['$timeout', function($timeout) {
   'use strict';
   return {
     restrict: 'A',
@@ -146,10 +146,12 @@ angular.module('$strap.directives')
         // If we have a controller (i.e. ngModelController) then wire it up
         if(controller) {
 
-          iElement
-            .find('[value]').button()
-            .filter('[value="' + scope.$eval(iAttrs.ngModel) + '"]')
-            .addClass('active');
+          $timeout(function() {
+            iElement
+              .find('[value]').button()
+              .filter('[value="' + controller.$viewValue + '"]')
+              .addClass('active');
+          });
 
           iElement.on('click.button.data-api', function (ev) {
             scope.$apply(function () {
@@ -162,7 +164,8 @@ angular.module('$strap.directives')
             if(newValue !== oldValue) {
               var $btn = iElement.find('[value="' + scope.$eval(iAttrs.ngModel) + '"]');
               if($btn.length) {
-                $.fn.button.Constructor.prototype.toggle.call($btn.data('button'));
+                $btn.button('toggle');
+                // $.fn.button.Constructor.prototype.toggle.call($btn.data('button'));
               }
             }
           });

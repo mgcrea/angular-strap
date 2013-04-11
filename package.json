@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - Twitter Bootstrap directives for AngularJS",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "homepage": "http://mgcrea.github.com/angular-strap",
   "author": "Olivier Louvignes <olivier@mg-crea.com>",
   "repository": {
@@ -13,7 +13,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "testacular": "0.6.1",
+    "karma": "~ 0.8.0",
     "grunt": ">= 0.4.0",
     "grunt-contrib-concat": "*",
     "grunt-contrib-jshint": "*",

@@ -46,6 +46,7 @@ angular.module('$strap.directives')
               controller.$setViewValue(value);
             });
           }
+          scope.$emit('typeahead-updated', value);
           return value;
         }
       });
