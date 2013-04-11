@@ -23,9 +23,6 @@ angular.module('$strap.directives')
     require: '?ngModel',
     link: function postLink(scope, element, attrs, ctrl) {
 
-      var getter = $parse(attrs.bsButtonSelect),
-        setter = getter.assign;
-
       // Bind ngModelController
       if(ctrl) {
         element.text(scope.$eval(attrs.ngModel));
