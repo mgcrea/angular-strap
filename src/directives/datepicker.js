@@ -1,17 +1,17 @@
-/* global define:false */
+/* global define:false, angular:false */
 
 /* Adapted from patterns at https://github.com/umdjs/umd. */
-(function(angular, factory) {
+(function(factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['../common', '../../vendor/bootstrap-timepicker'], function () {
+    define(['../common', '../../vendor/bootstrap-datepicker'], function () {
       factory(angular)
     })
   } else {
     factory(angular)
   }
 
-}(angular, function(angular) {
+}(function(angular) {
 
 // https://github.com/eternicode/bootstrap-datepicker
 

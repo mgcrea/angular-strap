@@ -1,7 +1,7 @@
-/* global define:false */
+/* global define:false, angular:false */
 
 /* Adapted from patterns at https://github.com/umdjs/umd. */
-(function(angular, factory) {
+(function(factory) {
 
   if (typeof define === 'function' && define.amd) {
     define(['../common'], function () {
@@ -11,7 +11,7 @@
     factory(angular)
   }
 
-}(angular, function(angular) {
+}(function(angular) {
 
 angular.module('$strap.directives')
 
