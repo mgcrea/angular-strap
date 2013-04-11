@@ -49,6 +49,13 @@ angular.module('$strap.directives')
         return items ? this.process(items) : this;
       };
 
+      if(attrs.matchall === "true") {
+        // return true on every server side sugg
+        typeahead.matcher = function (item) {
+          return true;
+        }
+      }
+
       // Support 0-minLength
       if(attrs.minLength === "0") {
         setTimeout(function() { // Push to the event loop to make sure element.typeahead is defined (breaks tests otherwise)
