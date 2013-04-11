@@ -88,11 +88,12 @@ You'll also have to provide various dependencies to AngularStrap's common module
 
 Once you've added AngularStrap to your RequireJS configuration as described previously, referencing its modules as dependencies is trivial.
 
+The following requires only the `alert` and `typeahead` directives.
+
 ```javascript
 require([
-  // ...
-  /* Provides the alert and typeahead directives. */
-  , 'angular-strap/directives/alert'
+  'angular-strap/directives/alert',
+  'angular-strap/directives/typeahead'
 ]), function() {
   // ...
 })
@@ -102,8 +103,7 @@ You can also include all directives at once.
 
 ```javascript
 require([
-  // ...
-  , 'angular-strap/directives'
+  'angular-strap/directives'
 ]), function() {
   // ...
 })
