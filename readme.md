@@ -84,6 +84,41 @@ You'll also have to provide various dependencies to AngularStrap's common module
 }
 ```
 
+### Inclusion
+
+Once you've added AngularStrap to your RequireJS configuration as described previously, referencing its modules as dependencies is trivial.
+
+```javascript
+require([
+  // ...
+  /* Provides the alert and typeahead directives. */
+  , 'angular-strap/directives/alert'
+]), function() {
+  // ...
+})
+```
+
+You can also include all directives at once.
+
+```javascript
+require([
+  // ...
+  , 'angular-strap/directives'
+]), function() {
+  // ...
+})
+```
+
+Or make them module dependencies.
+
+```javascript
+define([
+  'angular-strap/directives'
+]), function() {
+  // ...
+})
+```
+
 ## Contributing
 
 Please submit all pull requests the against master branch. If your unit test contains JavaScript patches or features, you should include relevant unit tests. Thanks!
