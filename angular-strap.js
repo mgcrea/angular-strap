@@ -1,7 +1,5 @@
 /**
  * RequireJS module definition.
- *
- * TODO: Create a module for each directive.
  */
 
 /*global define:false */
