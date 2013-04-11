@@ -5,10 +5,10 @@
 
   if (typeof define === 'function' && define.amd) {
     define(['../common', '../../vendor/bootstrap-datepicker'], function () {
-      factory(angular)
-    })
+      factory(angular);
+    });
   } else {
-    factory(angular)
+    factory(angular);
   }
 
 }(function(angular) {
@@ -150,4 +150,4 @@ angular.module('$strap.directives')
 
 }]);
 
-}))
+}));

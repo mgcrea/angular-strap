@@ -20,5 +20,4 @@ define([
     , './directives/tooltip'
     , './directives/typeahead'
 ], function () {
-    return {}
-})
+});

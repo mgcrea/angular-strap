@@ -5,10 +5,10 @@
 
   if (typeof define === 'function' && define.amd) {
     define(['../common'], function () {
-      factory(angular)
-    })
+      factory(angular);
+    });
   } else {
-    factory(angular)
+    factory(angular);
   }
 
 }(function(angular) {
@@ -78,4 +78,4 @@ angular.module('$strap.directives')
 
 }]);
 
-}))
+}));
