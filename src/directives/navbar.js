@@ -6,9 +6,9 @@ angular.module('$strap.directives')
 
   return {
     restrict: 'A',
-    link: function postLink($scope, element, attrs, controller) {
+    link: function postLink(scope, element, attrs, controller) {
       // Watch for the $location
-      $scope.$watch(function() {
+      scope.$watch(function() {
         return $location.path();
       }, function(newValue, oldValue) {
 
