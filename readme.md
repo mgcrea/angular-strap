@@ -66,6 +66,8 @@ Include in your RequireJS configuration a mapping that looks similar to the foll
 }
 ```
 
+Note that [`map`](http://requirejs.org/docs/api.html#config-map) is used instead of `path`, allowing AngularStrap modules to resolve dependencies internally within the package.
+
 You'll also have to provide various dependencies to AngularStrap's common module using a shim similar to the following. (It's an exercise to the reader to locate and include the dependencies you'll need.)
 
 ```javascript
