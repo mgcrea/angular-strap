@@ -1,11 +1,13 @@
 /**
- * RequireJS module definition.
+ * Single module for including all directives.
+ *
+ * TODO: Consider moving the Angular module definition here.
  */
 
 /*global define:false */
 
 define([
-    './src/directives/alert'
+    './directives/alert'
     , './src/directives/button'
     , './src/directives/buttonSelect'
     , './src/directives/datepicker'
