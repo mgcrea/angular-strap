@@ -1,120 +1,102 @@
 'use strict';
+// global describe, it
 
-describe('select directive', function () {
-
-  var fixture;
-  var element;
-  var currentScope;
-  var bootstrapSelect;
-  var menu;
+describe('select', function () {
+  var scope, $sandbox, $compile, $timeout, $httpBackend, $templateCache;
 
   beforeEach(module('$strap.directives'));
 
-  beforeEach(function () {
-    var body = angular.element('body');
-    fixture = angular.element('<div></div>');
-    fixture.appendTo(body);
-  });
+  beforeEach(inject(function ($injector, $rootScope, _$compile_, _$timeout_, _$httpBackend_, _$templateCache_) {
+    scope = $rootScope;
+    $compile = _$compile_;
+    $timeout = _$timeout_;
+    $httpBackend = _$httpBackend_;
+    $templateCache = _$templateCache_;
 
-  afterEach(function () {
-    fixture.remove();
-  });
-
-  beforeEach(inject(function ($compile, $rootScope) {
-
-    element = angular.element('<select bs-select ng-model="model.item" ng-options="i.id as i.name for i in items"></select>');
-    element.appendTo(fixture);
-
-    currentScope = $rootScope;
-
-    $rootScope.model = {
-      item: 2
-    };
-
-    $rootScope.items = [
-      {
-        id: 1,
-        name: 'item 1'
-      },
-      {
-        id: 2,
-        name: 'item 2'
-      }
-    ];
-
-    $compile(element)($rootScope, false);
-    $rootScope.$digest();
-
-    bootstrapSelect = element.siblings('.bootstrap-select');
-    menu = bootstrapSelect.find('ul[role=menu]');
-
+    $sandbox = $('<div id="sandbox"></div>').appendTo('body');
   }));
 
-  it('initialises bootstrap select on the element', function () {
-    expect(bootstrapSelect.length).toBe(1);
+  afterEach(function() {
+    $sandbox.remove();
+    scope.$destroy();
   });
 
-  it('adds every item to the bootstrap select menu', function () {
-    expect(menu.children().length).toBe(2);
-  });
+  var templates = {
+    'default': {
+      scope: {items: [{id: '1', name: 'foo'}, {id: '2', name: 'bar'}, {id: '3', name: 'baz'}], selectedItem: '2'},
+      element: '<select ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in items" bs-select></select>'
+    }
+  };
 
-  it('updates the bootstrap select menu when items are changed', function () {
+  function compileDirective(template) {
+    template = template ? templates[template] : templates['default'];
+    angular.extend(scope, template.scope);
+    var $element = $(template.element).appendTo($sandbox);
+    $element = $compile($element)(scope);
+    scope.$digest(); // evaluate $evalAsync queue used by $q
+    $timeout.flush();
+    return $element;
+  }
 
-    currentScope.items.push({
-      id: 3,
-      name: 'item 3'
+  describe('default template', function() {
+
+    var elm, select, menu;
+    beforeEach(function() {
+      elm = compileDirective();
+      select = elm.next('.bootstrap-select');
+      menu = select.find('ul[role=menu]');
     });
-    currentScope.$apply();
 
-    expect(menu.children().length).toBe(3);
-  });
+    it('initialises bootstrap select on the element', function () {
+      expect(select.length).toBe(1);
+    });
 
-  it('selects the correct item by default', function () {
-    expect(menu.find('.selected').text()).toBe('item 2');
-  });
+    it('adds every item to the bootstrap select menu', function () {
+      expect(menu.children().length).toBe(scope.items.length);
+    });
 
-  it('updates the scope when a new item is selected', function () {
+    it('updates the bootstrap select menu when items are changed', function () {
+      scope.items.push({id: '4', name: 'qux'});
+      scope.$digest();
+      expect(menu.children().length).toBe(scope.items.length);
+    });
 
-    menu.find('li a').first().click();
+    it('selects the correct item by default', function () {
+      expect(menu.find('.selected').text()).toBe('bar');
+    });
 
-    expect(currentScope.model.item).toBe(1);
-  });
+    it('updates the scope when a new item is selected', function () {
+      menu.find('li a').first().click();
+      expect(scope.selectedItem).toBe('1');
+    });
 
-  it('updates bootstrap select when the model changes', function () {
+    it('updates bootstrap select when the model changes', function () {
+      scope.selectedItem = '3';
+      scope.$digest();
+      expect(menu.find('.selected').text()).toBe('baz');
+    });
 
-    currentScope.model.item = 1;
-    currentScope.$apply();
+    it('does not add ng-scope class to bootstrap select element', function () {
+      expect(select.hasClass('ng-scope')).toBe(false);
+    });
 
-    expect(menu.find('.selected').text()).toBe('item 1');
-  });
+    // it('adds new classes from original element when the model changes', function () {
+    //   elm.addClass('dummy');
+    //   scope.model.item = 1;
+    //   scope.$digest();
+    //   expect(select.hasClass('dummy')).toBe(true);
+    // });
 
-  it('does not add ng-scope class to bootstrap select element', function () {
-    expect(bootstrapSelect.hasClass('ng-scope')).toBe(false);
-  });
+    // it('syncs classes removed from original element when the model changes', function () {
+    //   element.addClass('dummy');
+    //   scope.model.item = 1;
+    //   scope.$digest();
+    //   element.removeClass('dummy');
+    //   scope.model.item = 2;
+    //   scope.$digest();
+    //   expect(select.hasClass('dummy')).toBe(false);
+    // });
 
-  it('adds new classes from original element when the model changes', function () {
-
-    element.addClass('dummy');
-
-    currentScope.model.item = 1;
-    currentScope.$apply();
-
-    expect(bootstrapSelect.hasClass('dummy')).toBe(true);
-  });
-
-  it('syncs classes removed from original element when the model changes', function () {
-
-    element.addClass('dummy');
-
-    currentScope.model.item = 1;
-    currentScope.$apply();
-
-    element.removeClass('dummy');
-
-    currentScope.model.item = 2;
-    currentScope.$apply();
-
-    expect(bootstrapSelect.hasClass('dummy')).toBe(false);
   });
 
 });

@@ -1,38 +1,38 @@
 
 angular.module('$strap.directives')
 
-.directive('bsSelect', function() {
+.directive('bsSelect', ['$timeout', function($timeout) {
   'use strict';
 
+  var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/;
+
   return {
+    restrict: 'A',
+    require: '?ngModel',
+    link: function postLink(scope, element, attrs, controller) {
 
-    scope: true,
+      var options = scope.$eval(attrs.bsSelect) || {};
+      // console.warn('postLink', options, arguments);
 
-    link: function (scope, element, attrs) {
-
-      var previousClasses = element.attr('class');
-
-      var syncClasses = function () {
-        var currentClasses = element.attr('class');
-        element.next().removeClass(previousClasses).addClass(currentClasses).removeClass('ng-scope');
-        previousClasses = element.attr('class');
-      };
-
-      // Watch for changes to the length of our select element
-      scope.$watch(function () {
-        return element[0].length;
-      }, function () {
-        element.selectpicker('render');
+      $timeout(function() {
+        element.selectpicker(options);
+        element.next().removeClass('ng-scope');
       });
 
-      // Watch for changes to the model value
-      scope.$watch(attrs.ngModel, function () {
-        element.selectpicker('render');
-        syncClasses();
-      });
+      // If we have a controller (i.e. ngModelController) then wire it up
+      if(controller) {
+
+        // Watch for changes to the model value
+        scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+          if (newValue !== oldValue) {
+            element.selectpicker('refresh');
+          }
+        });
+
+      }
 
     }
 
   };
 
-});
+}]);
