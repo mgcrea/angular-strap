@@ -5,10 +5,10 @@
 
   if (typeof define === 'function' && define.amd) {
     define(['../common'], function () {
-      factory(angular);
-    });
+      factory(angular)
+    })
   } else {
-    factory(angular);
+    factory(angular)
   }
 
 }(function(angular) {
@@ -22,6 +22,9 @@ angular.module('$strap.directives')
     restrict: 'A',
     require: '?ngModel',
     link: function postLink(scope, element, attrs, ctrl) {
+
+      var getter = $parse(attrs.bsButtonSelect),
+        setter = getter.assign;
 
       // Bind ngModelController
       if(ctrl) {
@@ -53,4 +56,4 @@ angular.module('$strap.directives')
 
 }]);
 
-}));
+}))
