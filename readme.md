@@ -48,7 +48,39 @@ You can build the latest version using `grunt`.
 >
 	$ grunt build
 
+## RequireJS
 
+[RequireJS](http://requirejs.org/) users can include AngularStrap modules as they would any other dependency, optionally including only the functionality they need.
+
+### Configuration
+
+Include in your RequireJS configuration a mapping that looks similar to the following. (Assumes you've unpacked AngularStrap into `vendor/angular-strap` inside your project.)
+
+```javascript
+{
+  map : {
+    '*' : {
+      'angular-strap' : 'vendor/angular-strap/src'
+    }
+  }
+}
+```
+
+You'll also have to provide various dependencies to AngularStrap's common module using a shim similar to the following. (It's an exercise to the reader to locate and include the dependencies you'll need.)
+
+```javascript
+{
+  shim : {
+    'angular-strap' : {
+      deps : [
+        'vendor/angular',
+        'vendor/jquery',
+        'vendor/bootstrap/js/bootstrap-button'
+      ]
+    }
+  }
+}
+```
 
 ## Contributing
 
