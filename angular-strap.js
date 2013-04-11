@@ -1,8 +1,13 @@
-/*global define */
+/**
+ * RequireJS module definition.
+ *
+ * TODO: Create a module for each directive.
+ */
+
+/*global define:false */
 
 define([
-    './src/common'
-    , './src/directives/alert'
+    './src/directives/alert'
     , './src/directives/button'
     , './src/directives/buttonSelect'
     , './src/directives/datepicker'
@@ -14,9 +19,6 @@ define([
     , './src/directives/timepicker'
     , './src/directives/tooltip'
     , './src/directives/typeahead'
-
-    , './vendor/bootstrap-datepicker'
-    , './vendor/bootstrap-timepicker'
 ], function () {
     return {}
 })
