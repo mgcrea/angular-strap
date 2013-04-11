@@ -132,6 +132,33 @@ angular.module('$strap.directives')
         // If we have a controller (i.e. ngModelController) then wire it up
         if(controller) {
 
+          // if use ng-repeat have to digest first
+          if (iElement.html().match(/<!-- ngRepeat:.*?-->/g)) {
+            scope.$apply();
+
+            // watch for changes in the ng-repeat model and set the active class accordingly
+            scope.$watch(function() {
+              var btns = iElement.find('button'),
+                values = [];
+
+              values.length = btns.length;
+
+              angular.forEach(btns, function(b, i) {
+                values[i] = angular.element(b).attr('value');
+              });
+
+              return angular.toJson(values);
+
+            }, function(newVal, oldVal) {
+              if (newVal !== oldVal) {
+                iElement
+                  .find('[value]').button()
+                  .filter('[value="' + scope.$eval(iAttrs.ngModel) + '"]')
+                  .addClass('active');
+              }
+            });
+          }
+
           iElement
             .find('[value]').button()
             .filter('[value="' + scope.$eval(iAttrs.ngModel) + '"]')
