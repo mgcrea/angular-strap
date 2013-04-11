@@ -54,7 +54,7 @@ You can build the latest version using `grunt`.
 
 ### Configuration
 
-Include in your RequireJS configuration a mapping that looks similar to the following. (Assumes you've unpacked AngularStrap into `vendor/angular-strap` inside your project.)
+Include in your RequireJS configuration a mapping that looks similar to the following. (Assumes you've unpacked AngularStrap into `vendor/angular-strap` inside your project. You can, of course, put this anywhere; modify the following to suit your needs.)
 
 ```javascript
 {
@@ -68,16 +68,16 @@ Include in your RequireJS configuration a mapping that looks similar to the foll
 
 Note that [`map`](http://requirejs.org/docs/api.html#config-map) is used instead of `path`, allowing AngularStrap modules to resolve dependencies internally within the package.
 
-You'll also have to provide various dependencies to AngularStrap's common module using a shim similar to the following. (It's an exercise to the reader to locate and include the dependencies you'll need.)
+You'll also have to provide various dependencies to AngularStrap's common module using a shim similar to the following. (The location and versions of these dependencies may differ in your project. Modify the following example to suit your needs.)
 
 ```javascript
 {
   shim : {
     'angular-strap' : {
       deps : [
-        'vendor/angular',
-        'vendor/jquery',
-        'vendor/bootstrap/js/bootstrap-button'
+        'vendor/angular-1.1.3/angular',
+        'vendor/jquery-1.9.1',
+        'vendor/bootstrap-2.3.1/js/bootstrap'
       ]
     }
   }
