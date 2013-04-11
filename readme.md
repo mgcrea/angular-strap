@@ -84,7 +84,7 @@ You'll also have to provide various dependencies to AngularStrap's common module
 }
 ```
 
-### Inclusion
+### Usage
 
 Once you've added AngularStrap to your RequireJS configuration as described previously, referencing its modules as dependencies is trivial.
 
