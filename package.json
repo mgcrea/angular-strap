@@ -20,7 +20,7 @@
     "grunt-contrib-uglify": "*"
   },
   "scripts": {
-    "test": "testacular start test/testacular.conf.js --single-run --browsers PhantomJS",
-    "test-server": "testacular start test/testacular.conf.js --browsers PhantomJS"
+    "test": "karma start test/karma.conf.js --single-run --browsers PhantomJS",
+    "test-server": "karma start test/karma.conf.js --browsers PhantomJS"
   }
 }
