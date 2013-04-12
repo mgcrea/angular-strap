@@ -1,3 +1,18 @@
+/* global define:false, angular:false */
+
+/* Adapted from patterns at https://github.com/umdjs/umd. */
+(function(factory) {
+
+  if (typeof define === 'function' && define.amd) {
+    define(['../common'], function () {
+      factory(angular);
+    });
+  } else {
+    factory(angular);
+  }
+
+}(function(angular) {
+
 angular.module('$strap.directives')
 
 .factory('$modal', ['$rootScope', '$compile', '$http', '$timeout', '$q', '$templateCache', function($rootScope, $compile, $http, $timeout, $q, $templateCache) {
@@ -93,3 +108,5 @@ angular.module('$strap.directives')
     }
   };
 }]);
+
+}));

@@ -1,3 +1,18 @@
+/* global define:false, angular:false */
+
+/* Adapted from patterns at https://github.com/umdjs/umd. */
+(function(factory) {
+
+  if (typeof define === 'function' && define.amd) {
+    define(['../common', '../../vendor/bootstrap-datepicker'], function () {
+      factory(angular);
+    });
+  } else {
+    factory(angular);
+  }
+
+}(function(angular) {
+
 // https://github.com/eternicode/bootstrap-datepicker
 
 angular.module('$strap.directives')
@@ -134,3 +149,5 @@ angular.module('$strap.directives')
   };
 
 }]);
+
+}));

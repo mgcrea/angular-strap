@@ -1,3 +1,17 @@
+/* global define:false, angular:false */
+
+/* Adapted from patterns at https://github.com/umdjs/umd. */
+(function(factory) {
+
+  if (typeof define === 'function' && define.amd) {
+    define(['../common', '../../vendor/bootstrap-timepicker'], function () {
+      factory(angular);
+    });
+  } else {
+    factory(angular);
+  }
+
+}(function(angular) {
 
 angular.module('$strap.directives')
 
@@ -49,3 +63,5 @@ angular.module('$strap.directives')
   };
 
 }]);
+
+}));

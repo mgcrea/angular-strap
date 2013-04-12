@@ -48,7 +48,76 @@ You can build the latest version using `grunt`.
 >
 	$ grunt build
 
+## RequireJS
 
+[RequireJS](http://requirejs.org/) users can include AngularStrap modules as they would any other dependency, optionally including only the functionality they need.
+
+### Configuration
+
+Include in your RequireJS configuration a mapping that looks similar to the following. (Assumes you've unpacked AngularStrap into `vendor/angular-strap` inside your project. You can, of course, put this anywhere; modify the following to suit your needs.)
+
+```javascript
+{
+  map : {
+    '*' : {
+      'angular-strap' : 'vendor/angular-strap/src'
+    }
+  }
+}
+```
+
+Note that [`map`](http://requirejs.org/docs/api.html#config-map) is used instead of `path`, allowing AngularStrap modules to resolve dependencies internally within the package.
+
+You'll also have to provide various dependencies to AngularStrap's common module using a shim similar to the following. (The location and versions of these dependencies may differ in your project. Modify the following example to suit your needs.)
+
+```javascript
+{
+  shim : {
+    'angular-strap' : {
+      deps : [
+        'vendor/angular-1.1.3/angular',
+        'vendor/jquery-1.9.1',
+        'vendor/bootstrap-2.3.1/js/bootstrap'
+      ]
+    }
+  }
+}
+```
+
+### Usage
+
+Once you've added AngularStrap to your RequireJS configuration as described previously, referencing its modules as dependencies is trivial.
+
+The following requires only the `alert` and `typeahead` directives.
+
+```javascript
+require([
+  'angular-strap/directives/alert',
+  'angular-strap/directives/typeahead'
+]), function() {
+  // ...
+})
+```
+
+You can also include all directives at once.
+
+```javascript
+require([
+  'angular-strap/directives'
+]), function() {
+  // ...
+})
+```
+
+Or make them module dependencies.
+
+```javascript
+define([
+  'angular-strap/directives'
+]), function() {
+  // ...
+})
+```
 
 ## Contributing
 
