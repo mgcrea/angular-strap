@@ -6,7 +6,7 @@
   "author": "Olivier Louvignes <olivier@mg-crea.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/angular-strap/angular-strap.git"
+    "url": "git://github.com/mgcrea/angular-strap.git"
   },
   "engines": {
     "node": ">= 0.8"
