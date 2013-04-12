@@ -49,7 +49,7 @@ angular.module('$strap.directives')
           language = attrs.language || options.language || 'en',
           type = attrs.dateType || options.type || 'date',
           format = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'yyyy-mm-dd';
-
+          
       var dateFormatRegexp = isAppleTouch ? regexpForDateFormat('yyyy-mm-dd', language) : regexpForDateFormat(format, language);
 
       // Handle date validity according to dateFormat
@@ -106,7 +106,11 @@ angular.module('$strap.directives')
           autoclose: true,
           format: format,
           language: language,
-          forceParse: attrs.forceParse || false
+          forceParse: attrs.forceParse || false,
+          weekStart: attrs.weekStart || options.weekStart || null,
+          startDate: attrs.startDate || options.startDate || null,
+          endDate: attrs.endDate || options.endDate || null,
+          daysOfWeekDisabled: attrs.daysOfWeekDisabled || options.daysOfWeekDisabled || null
         });
 
         // Garbage collection
