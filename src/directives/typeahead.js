@@ -53,7 +53,7 @@ angular.module('$strap.directives')
         // return true on every server side sugg
         typeahead.matcher = function (item) {
           return true;
-        }
+        };
       }
 
       // Support 0-minLength
