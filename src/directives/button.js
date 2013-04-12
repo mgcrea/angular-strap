@@ -38,7 +38,7 @@ angular.module('$strap.directives')
 
       // Support buttons without .btn class
       if(!element.hasClass('btn')) {
-        element.on('click.button.data-api', function (e) {
+        element.on('click.button.data-api', function (ev) {
           element.button('toggle');
         });
       }
