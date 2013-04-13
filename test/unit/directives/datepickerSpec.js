@@ -73,20 +73,19 @@ describe('datepicker', function () {
     expect(elm.data('datepicker').picker.is(':visible')).toBe(true);
   });
 
-  it('should correctly update both input value and bound model', function() {
+  it('should correctly update the model from the view', function() {
     var elm = compileDirective();
     elm.trigger('focus');
-    elm.data('datepicker').picker.find('td.active').trigger('click');
+    elm.data('datepicker').picker.find('td').trigger('click');
     expect(elm.val() !== '').toBe(true);
     expect(scope.model.date).toBe(elm.data('datepicker').date);
   });
 
-  it('should correctly update both input value and bound mode', function() {
-    var elm = compileDirective('string');
-    elm.trigger('focus');
-    elm.data('datepicker').picker.find('td.active').trigger('click');
-    expect(elm.val() !== '').toBe(true);
-    expect(scope.model.date).toBe(elm.val());
+  it('should correctly update the view from the model', function() {
+    var elm = compileDirective('default');
+    scope.model.date = new Date(2000, 0, 1);
+    scope.$digest();
+    expect(elm.data('datepicker').date).toBe(scope.model.date);
   });
 
 });
