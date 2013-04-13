@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.7.2 - 2013-04-11
+ * @version v0.7.2 - 2013-04-13
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -174,7 +174,7 @@ angular.module('$strap.directives')
 
       // Support buttons without .btn class
       if(!element.hasClass('btn')) {
-        element.on('click.button.data-api', function (e) {
+        element.on('click.button.data-api', function (ev) {
           element.button('toggle');
         });
       }
@@ -425,7 +425,7 @@ angular.module('$strap.directives')
 
         // ngModel rendering
         controller.$render = function ngModelRender() {
-          return controller.$modelValue && element.datepicker('setValue', controller.$modelValue);
+          return controller.$modelValue && element.datepicker('update', controller.$modelValue);
         };
 
       }
