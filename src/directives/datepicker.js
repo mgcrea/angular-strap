@@ -79,7 +79,7 @@ angular.module('$strap.directives')
 
         // ngModel rendering
         controller.$render = function ngModelRender() {
-          return controller.$modelValue && element.datepicker('update', controller.$modelValue);
+          return controller.$viewValue && element.datepicker('update', controller.$viewValue);
         };
 
       }
