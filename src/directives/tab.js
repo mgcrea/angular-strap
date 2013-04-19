@@ -58,7 +58,7 @@ angular.module('$strap.directives')
           });
 
           if(scope.panes.length && !active) {
-            $panes.find('.tab-pane:first').addClass('active' + (iAttrs.fade ? ' in' : ''));
+            $panes.find('.tab-pane:first-child').addClass('active' + (iAttrs.fade ? ' in' : ''));
             scope.panes[0].active = true;
           }
 
@@ -79,7 +79,8 @@ angular.module('$strap.directives')
             if(angular.isUndefined(newValue)) return;
             activeTab = newValue; // update starting activeTab before first build
             setTimeout(function() {
-              var $next = $tabs.find('li:eq(' + newValue*1 + ')');
+              var $next = $($tabs[0].querySelectorAll('li')[newValue*1]);
+              console.warn($next);
               if(!$next.hasClass('active')) {
                 $next.children('a').tab('show');
               }
