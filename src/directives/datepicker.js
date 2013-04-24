@@ -55,11 +55,12 @@ angular.module('$strap.directives')
       // Handle date validity according to dateFormat
       if(controller) {
 
-        // controller.$formatters.unshift(function(viewValue) {
-        //   console.warn('$formatters', arguments);
-        // });
+        // modelValue -> $formatters -> viewValue
+        controller.$formatters.unshift(function(viewValue) {
+          return type === 'date' && angular.isString(viewValue) ? new Date(viewValue) : viewValue;
+        });
 
-        // ngModel validity
+        // viewValue -> $parsers -> modelValue
         controller.$parsers.unshift(function(viewValue) {
           if(!viewValue) {
             controller.$setValidity('date', true);

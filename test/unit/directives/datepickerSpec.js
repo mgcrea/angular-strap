@@ -1,17 +1,16 @@
 'use strict';
 
 describe('datepicker', function () {
-    var scope, $sandbox, $compile, $timeout;
+  var scope, $sandbox, $compile, $timeout;
 
   beforeEach(module('$strap.directives'));
 
   beforeEach(inject(function ($injector, $rootScope, _$compile_, _$timeout_) {
-    scope = $rootScope;
+    scope = $rootScope.$new(true);
     $compile = _$compile_;
     $timeout = _$timeout_;
 
     $sandbox = $('<div id="sandbox"></div>').appendTo($('body'));
-    scope.model = {};
   }));
 
   afterEach(function() {
@@ -20,17 +19,31 @@ describe('datepicker', function () {
     $('.datepicker').remove();
   });
 
-  var templates = {
-    'default': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" bs-datepicker>',
-    'string': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" data-date-type="string" bs-datepicker>',
-    'addon': '<input type="text" ng-model="model.date" data-date-format="yyyy/mm/dd" bs-datepicker><span class="add-on" data-toggle="datepicker"><i class="icon-calendar"></i></span>',
-    'language': '<input type="text" ng-model="model.date" data-language="fr" bs-datepicker>'
+  var fixtures = {
+    'default': {
+      element: '<input type="text" ng-model="foo.date" bs-datepicker>',
+      scope: {foo: {date: new Date('2012-09-01T00:00:00.000Z')}}
+    },
+    'string': {
+      element: '<input type="text" ng-model="foo.date" data-date-format="yyyy/mm/dd" data-date-type="string" bs-datepicker>',
+      scope: {foo: {date: '2012/09/01'}}
+    },
+    'addon': {
+      element: '<input type="text" ng-model="foo.date" bs-datepicker><span class="add-on" data-toggle="datepicker"><i class="icon-calendar"></i></span>'
+    },
+    'language': {
+      element: '<input type="text" ng-model="foo.date" data-language="fr" bs-datepicker>'
+    }
   };
 
   function compileDirective(template) {
-    template = template ? templates[template] : templates['default'];
-    template = $(template).appendTo($sandbox);
-    return $compile(template)(scope);
+    template = template ? fixtures[template] : fixtures['default'];
+    angular.extend(scope, template.scope || fixtures['default'].scope);
+    $(template.element).appendTo($sandbox);
+    var $element = $(template.element).appendTo($sandbox);
+    $element = $compile($element)(scope);
+    scope.$digest();
+    return $element;
   }
 
   // Tests
@@ -73,19 +86,40 @@ describe('datepicker', function () {
     expect(elm.data('datepicker').picker.is(':visible')).toBe(true);
   });
 
-  it('should correctly update the model from the view', function() {
-    var elm = compileDirective();
-    elm.trigger('focus');
-    elm.data('datepicker').picker.find('td').trigger('click');
-    expect(elm.val() !== '').toBe(true);
-    expect(scope.model.date).toBe(elm.data('datepicker').date);
+  describe("data-binding", function() {
+
+    it('should support date as a string', function() {
+      var elm = compileDirective('string');
+      expect(+elm.data('datepicker').date).toBe(+new Date('2012-09-01T00:00:00.000Z'));
+      expect(elm.prop('value')).toBe('2012/09/01');
+    });
+
   });
 
-  it('should correctly update the view from the model', function() {
-    var elm = compileDirective('default');
-    scope.model.date = new Date(2000, 0, 1);
-    scope.$digest();
-    expect(elm.data('datepicker').date).toBe(scope.model.date);
+  describe("data-binding", function() {
+
+    it('should correctly apply model defaults to the view', function() {
+      var elm = compileDirective();
+      expect(elm.data('datepicker').date).toBe(scope.foo.date);
+      expect(elm.val()).toBe('2012-09-01');
+    });
+
+    it('should correctly apply model changes to the view', function() {
+      var elm = compileDirective();
+      scope.foo.date = new Date('2000-01-01T00:00:00.000Z');
+      scope.$digest();
+      expect(elm.data('datepicker').date).toBe(scope.foo.date);
+      expect(elm.val()).toBe('2000-01-01');
+    });
+
+    it('should correctly apply view changes to the model', function() {
+      var elm = compileDirective();
+      elm.trigger('focus');
+      elm.data('datepicker').picker.find('td').trigger('click');
+      expect(elm.val() !== '').toBe(true);
+      expect(scope.foo.date).toBe(elm.data('datepicker').date);
+    });
+
   });
 
 });
