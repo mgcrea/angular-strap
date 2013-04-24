@@ -45,12 +45,17 @@ angular.module('$strap.directives')
     require: '?ngModel',
     link: function postLink(scope, element, attrs, controller) {
 
-      var options = config.datepicker || {},
-          language = attrs.language || options.language || 'en',
-          type = attrs.dateType || options.type || 'date',
-          format = isAppleTouch ? 'yyyy-mm-dd' : attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'yyyy-mm-dd';
+      var options = angular.extend({autoclose: true}, config.datepicker || {}),
+          type = attrs.dateType || options.type || 'date';
 
-      var dateFormatRegexp = regexpForDateFormat(format, language);
+      // $.fn.datepicker options
+      angular.forEach(['format', 'weekStart', 'calendarWeeks', 'startDate', 'endDate', 'daysOfWeekDisabled', 'autoclose', 'startView', 'minViewMode', 'todayBtn', 'todayHighlight', 'keyboardNavigation', 'language', 'forceParse'], function(key) {
+        if(angular.isDefined(attrs[key])) options[key] = attrs[key];
+      });
+
+      var language = options.language || 'en',
+          format = isAppleTouch ? 'yyyy-mm-dd' : attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'yyyy-mm-dd',
+          dateFormatRegexp = regexpForDateFormat(format, language);
 
       // Handle date validity according to dateFormat
       if(controller) {
@@ -108,12 +113,10 @@ angular.module('$strap.directives')
 
         // Create datepicker
         element.attr('data-toggle', 'datepicker');
-        element.datepicker({
-          autoclose: true,
+        element.datepicker(angular.extend(options, {
           format: format,
-          language: language,
-          forceParse: attrs.forceParse || false
-        });
+          language: language
+        }));
 
         // Garbage collection
         scope.$on('$destroy', function() {
