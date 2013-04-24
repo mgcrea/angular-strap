@@ -56,8 +56,8 @@ angular.module('$strap.directives')
       if(controller) {
 
         // modelValue -> $formatters -> viewValue
-        controller.$formatters.unshift(function(viewValue) {
-          return type === 'date' && angular.isString(viewValue) ? new Date(viewValue) : viewValue;
+        controller.$formatters.unshift(function(modelValue) {
+          return type === 'date' && angular.isString(modelValue) ? new Date(modelValue) : modelValue;
         });
 
         // viewValue -> $parsers -> modelValue
@@ -112,7 +112,6 @@ angular.module('$strap.directives')
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          console.warn('$destroy');
           var datepicker = element.data('datepicker');
           if(datepicker) {
             datepicker.picker.remove();

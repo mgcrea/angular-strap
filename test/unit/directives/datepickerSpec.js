@@ -6,7 +6,7 @@ describe('datepicker', function () {
   beforeEach(module('$strap.directives'));
 
   beforeEach(inject(function ($injector, $rootScope, _$compile_, _$timeout_) {
-    scope = $rootScope.$new(true);
+    scope = $rootScope.$new();
     $compile = _$compile_;
     $timeout = _$timeout_;
 
