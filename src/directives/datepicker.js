@@ -5,7 +5,7 @@ angular.module('$strap.directives')
 .directive('bsDatepicker', ['$timeout', '$strap.config', function($timeout, config) {
   'use strict';
 
-  var isAppleTouch = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
+  var isAppleTouch = /(iPad|iPho(ne|d))/g.test(navigator.userAgent);
 
   var regexpMap = function regexpMap(language) {
     language = language || 'en';
@@ -48,9 +48,9 @@ angular.module('$strap.directives')
       var options = config.datepicker || {},
           language = attrs.language || options.language || 'en',
           type = attrs.dateType || options.type || 'date',
-          format = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'yyyy-mm-dd';
+          format = isAppleTouch ? 'yyyy-mm-dd' : attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'yyyy-mm-dd';
 
-      var dateFormatRegexp = isAppleTouch ? regexpForDateFormat('yyyy-mm-dd', language) : regexpForDateFormat(format, language);
+      var dateFormatRegexp = regexpForDateFormat(format, language);
 
       // Handle date validity according to dateFormat
       if(controller) {
@@ -80,6 +80,11 @@ angular.module('$strap.directives')
 
         // ngModel rendering
         controller.$render = function ngModelRender() {
+          if(isAppleTouch) {
+            var date = $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
+            element.val(date);
+            return date;
+          }
           return controller.$viewValue && element.datepicker('update', controller.$viewValue);
         };
 
