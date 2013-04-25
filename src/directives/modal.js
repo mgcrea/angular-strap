@@ -31,13 +31,17 @@ angular.module('$strap.directives')
         scope.$modal = function(name) {
           $modal.modal(name);
         };
-        scope.hide = function() {
-          $modal.modal('hide');
+        angular.forEach(['show', 'hide'], function(name) {
+          scope[name] = function() {
+            $modal.modal(name);
+          };
+        });
+
+        // @deprecated
+        scope.dismiss = function() {
+          console.warn('[DEPRECATED] $strap: scope.dissmiss is deprecated, please use scope.hide() or scope.$modal("hide")');
+          return scope.hide();
         };
-        scope.show = function() {
-          $modal.modal('show');
-        };
-        scope.dismiss = scope.hide;
 
         // Emit modal events
         angular.forEach(['show', 'shown', 'hide', 'hidden'], function(name) {
