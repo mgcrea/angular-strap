@@ -22,8 +22,9 @@ angular.module('$strap.directives')
 
       // Handle input time validity
       var timeRegExp = new RegExp('^' + TIME_REGEXP + '$', ['i']);
+
+      // viewValue -> $parsers -> modelValue
       controller.$parsers.unshift(function(viewValue) {
-        // console.warn('viewValue', viewValue, timeRegExp,  timeRegExp.test(viewValue));
         if (!viewValue || timeRegExp.test(viewValue)) {
           controller.$setValidity('time', true);
           return viewValue;
