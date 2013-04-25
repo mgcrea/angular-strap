@@ -36,10 +36,9 @@ angular.module('$strap.directives')
             $modal.modal(name);
           };
         });
-
         // @deprecated
         scope.dismiss = function() {
-          console.warn('[DEPRECATED] $strap: scope.dissmiss is deprecated, please use scope.hide() or scope.$modal("hide")');
+          console.warn('[DEPRECATED] $strap.modal - `scope.dismiss()` is deprecated, please use `scope.hide()` or `scope.$modal("hide")`');
           return scope.hide();
         };
 
