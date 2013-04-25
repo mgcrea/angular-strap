@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsAlert', ['$parse', '$timeout', '$compile', function($parse, $timeout, $compile) {
+.directive('bsAlert', function($parse, $timeout, $compile) {
   'use strict';
 
   return {
@@ -119,4 +119,4 @@ angular.module('$strap.directives')
 
     }
   };
-}]);
+});

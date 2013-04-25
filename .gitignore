@@ -1,5 +1,7 @@
 .DS_Store
 npm-debug.log
+*.sublime-project
+*.sublime-workspace
 test/coverage
 components/
 node_modules/

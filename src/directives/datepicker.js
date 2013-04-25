@@ -2,7 +2,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsDatepicker', ['$timeout', '$strap.config', function($timeout, config) {
+.directive('bsDatepicker', function($timeout, $strapConfig) {
   'use strict';
 
   var isAppleTouch = /(iPad|iPho(ne|d))/g.test(navigator.userAgent);
@@ -30,12 +30,16 @@ angular.module('$strap.directives')
   var regexpForDateFormat = function regexpForDateFormat(format, language) {
     var re = format, map = regexpMap(language), i;
     // Abstract replaces to avoid collisions
-    i = 0; angular.forEach(map, function(v, k) {
-      re = re.split(k).join('${' + i + '}'); i++;
+    i = 0;
+    angular.forEach(map, function(v, k) {
+      re = re.split(k).join('${' + i + '}');
+      i++;
     });
     // Replace abstracted values
-    i = 0; angular.forEach(map, function(v, k) {
-      re = re.split('${' + i + '}').join(v); i++;
+    i = 0;
+    angular.forEach(map, function(v, k) {
+      re = re.split('${' + i + '}').join(v);
+      i++;
     });
     return new RegExp('^' + re + '$', ['i']);
   };
@@ -45,7 +49,7 @@ angular.module('$strap.directives')
     require: '?ngModel',
     link: function postLink(scope, element, attrs, controller) {
 
-      var options = angular.extend({autoclose: true}, config.datepicker || {}),
+      var options = angular.extend({autoclose: true}, $strapConfig.datepicker || {}),
           type = attrs.dateType || options.type || 'date';
 
       // $.fn.datepicker options
@@ -141,4 +145,4 @@ angular.module('$strap.directives')
 
   };
 
-}]);
+});

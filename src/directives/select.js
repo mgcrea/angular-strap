@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsSelect', ['$timeout', function($timeout) {
+.directive('bsSelect', function($timeout) {
   'use strict';
 
   var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/;
@@ -35,4 +35,4 @@ angular.module('$strap.directives')
 
   };
 
-}]);
+});

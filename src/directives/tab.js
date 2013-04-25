@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsTabs', ['$parse', '$compile', '$timeout', function($parse, $compile, $timeout) {
+.directive('bsTabs', function($parse, $compile, $timeout) {
   'use strict';
 
   var template = '<div class="tabs">' +
@@ -89,10 +89,10 @@ angular.module('$strap.directives')
 
         }
 
-    };
+      };
 
-  }
+    }
 
-};
+  };
 
-}]);
+});

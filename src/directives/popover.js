@@ -1,13 +1,13 @@
 
 angular.module('$strap.directives')
 
-.directive('bsPopover', ['$parse', '$compile', '$http', '$timeout', '$q', '$templateCache', function($parse, $compile, $http, $timeout, $q, $templateCache) {
+.directive('bsPopover', function($parse, $compile, $http, $timeout, $q, $templateCache) {
   'use strict';
 
   // Hide popovers when pressing esc
-  $("body").on("keyup", function(ev) {
+  $('body').on('keyup', function(ev) {
     if(ev.keyCode === 27) {
-      $(".popover.in").each(function() {
+      $('.popover.in').each(function() {
         $(this).popover('hide');
       });
     }
@@ -38,7 +38,7 @@ angular.module('$strap.directives')
         if(!!attr.unique) {
           element.on('show', function(ev) { // requires bootstrap 2.3.0+
             // Hide any active popover except self
-            $(".popover.in").each(function() {
+            $('.popover.in').each(function() {
               var $this = $(this),
                 popover = $this.data('popover');
               if(popover && !popover.$element.is(element)) {
@@ -110,4 +110,4 @@ angular.module('$strap.directives')
     }
   };
 
-}]);
+});

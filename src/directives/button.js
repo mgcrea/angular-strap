@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsButton', ['$parse', '$timeout', function($parse, $timeout) {
+.directive('bsButton', function($parse, $timeout) {
   'use strict';
 
   return {
@@ -95,9 +95,9 @@ angular.module('$strap.directives')
     }
   };
 
-}])
+})
 
-.directive('bsButtonsCheckbox', ['$parse', function($parse) {
+.directive('bsButtonsCheckbox', function($parse) {
   'use strict';
   return {
     restrict: 'A',
@@ -109,9 +109,9 @@ angular.module('$strap.directives')
     }
   };
 
-}])
+})
 
-.directive('bsButtonsRadio', ['$timeout', function($timeout) {
+.directive('bsButtonsRadio', function($timeout) {
   'use strict';
   return {
     restrict: 'A',
@@ -162,4 +162,4 @@ angular.module('$strap.directives')
     }
   };
 
-}]);
+});

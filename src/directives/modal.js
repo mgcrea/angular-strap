@@ -1,6 +1,7 @@
 angular.module('$strap.directives')
 
-.factory('$modal', ['$rootScope', '$compile', '$http', '$timeout', '$q', '$templateCache', function($rootScope, $compile, $http, $timeout, $q, $templateCache) {
+.factory('$modal', function($rootScope, $compile, $http, $timeout, $q, $templateCache) {
+  'use strict';
 
   var ModalFactory = function ModalFactory(options) {
 
@@ -16,7 +17,7 @@ angular.module('$strap.directives')
       .then(function onSuccess(template) {
 
         // Build modal object
-        var id = templateUrl.replace('.html', '').replace(/[\/|\.|:]/g, "-") + '-' + scope.$id;
+        var id = templateUrl.replace('.html', '').replace(/[\/|\.|:]/g, '-') + '-' + scope.$id;
         var $modal = $('<div class="modal hide" tabindex="-1"></div>').attr('id', id).addClass('fade').html(template);
         if(options.modalClass) $modal.addClass(options.modalClass);
 
@@ -70,9 +71,9 @@ angular.module('$strap.directives')
 
   return ModalFactory;
 
-}])
+})
 
-.directive('bsModal', ['$q', '$modal', function($q, $modal) {
+.directive('bsModal', function($q, $modal) {
   'use strict';
 
   return {
@@ -95,4 +96,4 @@ angular.module('$strap.directives')
 
     }
   };
-}]);
+});

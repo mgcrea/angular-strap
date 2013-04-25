@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsNavbar', ['$location', function($location) {
+.directive('bsNavbar', function($location) {
   'use strict';
 
   return {
@@ -16,7 +16,7 @@ angular.module('$strap.directives')
           var $li = angular.element(li),
             // data('match-rout') does not work with dynamic attributes
             pattern = $li.attr('data-match-route'),
-            regexp = new RegExp('^' + pattern + '$', ["i"]);
+            regexp = new RegExp('^' + pattern + '$', ['i']);
 
           if(regexp.test(newValue)) {
             $li.addClass('active');
@@ -28,4 +28,4 @@ angular.module('$strap.directives')
       });
     }
   };
-}]);
+});

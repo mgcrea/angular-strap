@@ -8,19 +8,24 @@
     "type": "git",
     "url": "git://github.com/mgcrea/angular-strap.git"
   },
-  "engines": {
-    "node": ">= 0.8"
-  },
   "dependencies": {},
   "devDependencies": {
-    "karma": "~ 0.8.0",
-    "grunt": ">= 0.4.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "*",
     "grunt-contrib-concat": "*",
+    "grunt-contrib-connect": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-uglify": "*"
+    "grunt-contrib-livereload": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-karma": "~0.4.4",
+    "grunt-ngmin": "~0.0.2",
+    "grunt-regarde": "~0.1.1",
+    "matchdep": "~0.1.1"
+  },
+  "engines": {
+    "node": ">=0.8.0"
   },
   "scripts": {
-    "test": "karma start test/karma.conf.js --single-run --browsers PhantomJS",
-    "test-server": "karma start test/karma.conf.js --browsers PhantomJS"
+    "test": "grunt test"
   }
 }
