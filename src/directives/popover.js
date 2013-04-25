@@ -92,11 +92,7 @@ angular.module('$strap.directives')
             popover(name);
           };
         });
-        // @deprecated
-        scope.dismiss = function() {
-          console.warn('[DEPRECATED] $strap.popover - `scope.dismiss()` is deprecated, please use `scope.hide()` or `scope.$popover("hide")`');
-          return scope.hide();
-        };
+        scope.dismiss = scope.hide;
 
         // Emit popover events
         angular.forEach(['show', 'shown', 'hide', 'hidden'], function(name) {

@@ -8,7 +8,7 @@ angular.module('$strap.directives')
     function Modal(options) {
       if(!options) options = {};
 
-      var scope = options.scope || $rootScope.$new(),
+      var scope = options.scope ? options.scope.$new() : $rootScope.$new(),
           templateUrl = options.template;
 
       //@todo support {title, content} object
@@ -37,11 +37,7 @@ angular.module('$strap.directives')
             $modal.modal(name);
           };
         });
-        // @deprecated
-        scope.dismiss = function() {
-          console.warn('[DEPRECATED] $strap.modal - `scope.dismiss()` is deprecated, please use `scope.hide()` or `scope.$modal("hide")`');
-          return scope.hide();
-        };
+        scope.dismiss = scope.hide;
 
         // Emit modal events
         angular.forEach(['show', 'shown', 'hide', 'hidden'], function(name) {
@@ -51,8 +47,17 @@ angular.module('$strap.directives')
         });
 
         // Support autofocus attribute
-        $modal.on('shown', function(event) {
+        $modal.on('shown', function(ev) {
           $('input[autofocus]', $modal).first().trigger('focus');
+        });
+        // Auto-remove $modal created via service
+        $modal.on('hidden', function(ev) {
+          if(!options.persist) scope.$destroy();
+        });
+
+        // Garbage collection
+        scope.$on('$destroy', function() {
+          $modal.remove();
         });
 
         if(options.show) {
@@ -83,11 +88,11 @@ angular.module('$strap.directives')
 
       var options = {
         template: scope.$eval(iAttrs.bsModal),
+        persist: true,
         scope: scope,
         modalClass: iAttrs.modalClass || '',
         backdrop: iAttrs.backdrop*1 || true,
         keyboard: iAttrs.keyboard*1 || true,
-        show: iAttrs.show*1 || false
       };
 
       $q.when($modal(options)).then(function onSuccess(modal) {
