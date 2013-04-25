@@ -28,7 +28,6 @@ angular.module('$strap.directives')
         value = ctrl ? scope.$eval(attrs.ngModel) : element.text();
         index = values.indexOf(value);
         newValue = index > values.length - 2 ? values[0] : values[index + 1];
-        console.warn(values, newValue);
 
         scope.$apply(function() {
           element.text(newValue);

@@ -80,7 +80,6 @@ angular.module('$strap.directives')
             activeTab = newValue; // update starting activeTab before first build
             setTimeout(function() {
               var $next = $($tabs[0].querySelectorAll('li')[newValue*1]);
-              console.warn($next);
               if(!$next.hasClass('active')) {
                 $next.children('a').tab('show');
               }

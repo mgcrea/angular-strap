@@ -89,7 +89,7 @@ angular.module('$strap.directives')
         };
         angular.forEach(['show', 'hide'], function(name) {
           scope[name] = function() {
-            popover(name);
+            popover[name]();
           };
         });
         scope.dismiss = scope.hide;

@@ -111,14 +111,25 @@ module.exports = function(grunt) {
             '<%= yeoman.src %>/{,*/}*.js'
           ]
         }
+      },
+      banner: {
+        files: {
+          '<%= yeoman.dist %>/<%= pkg.name %>.js': [
+            '<%= yeoman.dist %>/<%= pkg.name %>.js'
+          ]
+        }
       }
     },
     ngmin: {
+      // options: {
+      //   stripBanners: true,
+      //   banner: '<%= meta.banner %>'
+      // },
       dist: {
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: '*.js',
+          src: '<%= pkg.name %>.js',
           dest: '<%= yeoman.dist %>'
         }]
       }
@@ -164,6 +175,7 @@ module.exports = function(grunt) {
     'test',
     'concat',
     'ngmin',
+    'concat:banner',
     'uglify'
   ]);
 

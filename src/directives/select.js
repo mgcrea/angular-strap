@@ -12,7 +12,6 @@ angular.module('$strap.directives')
     link: function postLink(scope, element, attrs, controller) {
 
       var options = scope.$eval(attrs.bsSelect) || {};
-      // console.warn('postLink', options, arguments);
 
       $timeout(function() {
         element.selectpicker(options);
