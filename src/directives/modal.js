@@ -8,7 +8,7 @@ angular.module('$strap.directives')
     function Modal(options) {
       if(!options) options = {};
 
-      var scope = options.scope ? options.scope.$new() : $rootScope.$new(),
+      var scope = options.scope ? options.scope : $rootScope.$new(),
           templateUrl = options.template;
 
       //@todo support {title, content} object
