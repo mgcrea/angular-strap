@@ -22,7 +22,7 @@ angular.module('$strap.directives')
 
         // Support close-after attribute
         if(angular.isDefined(attrs.closeAfter)) {
-          var closeAfter = parseInt(attrs.closeAfter) || 0;
+          var closeAfter = parseInt(attrs.closeAfter, 10) || 0;
           $timeout(function(){
             element.alert('close');
           }, closeAfter);
@@ -58,8 +58,8 @@ angular.module('$strap.directives')
           } else if (angular.isDefined(attrs.closeAfter)) {
             closeAfter = attrs.closeAfter;
           }
-          closeAfter = parseInt(closeAfter) || 0;
-          
+          closeAfter = parseInt(closeAfter, 10) || 0;
+
           if(closeAfter > 0) {
             $timeout(function(){
               element.alert('close');
