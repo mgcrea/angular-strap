@@ -20,6 +20,15 @@ angular.module('$strap.directives')
           element.prepend('<button type="button" class="close" data-dismiss="alert">&times;</button>');
         }
 
+        // Support close-after attribute
+        if(angular.isDefined(attrs.closeAfter)) {
+          var closeAfter = parseInt(attrs.closeAfter) || 0;
+          $timeout(function(){
+            element.alert('close');
+          }, closeAfter);
+        }
+
+
       } else {
 
         scope.$watch(attrs.bsAlert, function(newValue, oldValue) {
@@ -41,6 +50,20 @@ angular.module('$strap.directives')
           if(newValue.type || oldValue.type) {
             oldValue.type && element.removeClass('alert-' + oldValue.type);
             newValue.type && element.addClass('alert-' + newValue.type);
+          }
+
+          var closeAfter = 0;
+          if (angular.isDefined(newValue.closeAfter)) {
+            closeAfter = newValue.closeAfter;
+          } else if (angular.isDefined(attrs.closeAfter)) {
+            closeAfter = attrs.closeAfter;
+          }
+          closeAfter = parseInt(closeAfter) || 0;
+          
+          if(closeAfter > 0) {
+            $timeout(function(){
+              element.alert('close');
+            }, closeAfter);
           }
 
           // Setup close button
