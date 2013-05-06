@@ -1,93 +1,97 @@
 
 angular.module('$strap.directives')
 
-.directive('bsTabs', ['$parse', '$compile', '$timeout', function($parse, $compile, $timeout) {
+.directive('bsTabs', function($parse, $compile, $timeout) {
   'use strict';
+
+  var template = '<div class="tabs">' +
+  '<ul class="nav nav-tabs">' +
+    '<li ng-repeat="pane in panes" ng-class="{active:pane.active}">' +
+      '<a data-target="#{{pane.id}}" data-index="{{$index}}" data-toggle="tab">{{pane.title}}</a>' +
+    '</li>' +
+  '</ul>' +
+  '<div class="tab-content" ng-transclude>' +
+    // '<div ng-repeat="pane in panes" ng-class="{active:pane.selected}">{{pane.content}}</div>' +
+  '</div>';
 
   return {
     restrict: 'A',
     require: '?ngModel',
+    priority: 0,
     scope: true,
-    link: function postLink(scope, iElement, iAttrs, controller) {
+    template: template,//'<div class="tabs"><ul class="nav nav-tabs"></ul><div class="tab-content"></div></div>',
+    replace: true,
+    transclude: true,
+    compile: function compile(tElement, tAttrs, transclude) {
 
-      var getter = $parse(iAttrs.bsTabs),
-        setter = getter.assign,
-        value = getter(scope);
+      return function postLink(scope, iElement, iAttrs, controller) {
 
-      var tabs = ['<ul class="nav nav-tabs">', '</ul>'];
-      var panes = ['<div class="tab-content">', '</div>'];
+        var getter = $parse(iAttrs.bsTabs),
+            setter = getter.assign,
+            value = getter(scope);
 
-      iElement.hide();
-      var activeTab = 0;
+        scope.panes = [];
+        var $tabs = iElement.find('ul.nav-tabs');
+        var $panes = iElement.find('div.tab-content');
 
-      // Defer after any ngRepeat rendering
-      $timeout(function() {
 
-        if(!angular.isArray(value)) {
+        var activeTab = 0, id, title, active;
+        $timeout(function() {
 
-          value = [];
-          // Convert existing dom elements
-          iElement.children('[data-title], [data-tab]').each(function(index) {
+          $panes.find('[data-title], [data-tab]').each(function(index) {
             var $this = angular.element(this);
-            value.push({
-              title: scope.$eval($this.data('title') || $this.data('tab')),
+
+            id = 'tab-' + scope.$id + '-' + index;
+            title = $this.data('title') || $this.data('tab');
+            active = !active && $this.hasClass('active');
+
+            $this.attr('id', id).addClass('tab-pane');
+            if(iAttrs.fade) $this.addClass('fade');
+
+            scope.panes.push({
+              id: id,
+              title: title,
               content: this.innerHTML,
-              active: $this.hasClass('active'),
-              fade: $this.hasClass('fade')
+              active: active
+            });
+
+          });
+
+          if(scope.panes.length && !active) {
+            $panes.find('.tab-pane:first-child').addClass('active' + (iAttrs.fade ? ' in' : ''));
+            scope.panes[0].active = true;
+          }
+
+        });
+
+        // If we have a controller (i.e. ngModelController) then wire it up
+        if(controller) {
+
+          iElement.on('show', function(ev) {
+            var $target = $(ev.target);
+            scope.$apply(function() {
+              controller.$setViewValue($target.data('index'));
+            });
+          });
+
+          // Watch ngModel for changes
+          scope.$watch(iAttrs.ngModel, function(newValue, oldValue) {
+            if(angular.isUndefined(newValue)) return;
+            activeTab = newValue; // update starting activeTab before first build
+            setTimeout(function() {
+              var $next = $($tabs[0].querySelectorAll('li')[newValue*1]);
+              if(!$next.hasClass('active')) {
+                $next.children('a').tab('show');
+              }
             });
           });
 
         }
 
-        // Select correct starting activeTab
-        angular.forEach(value, function(tab, index) {
-          if(tab.active) {
-            activeTab = index;
-          }
-        });
-
-        // Build from object
-        angular.forEach(value, function(tab, index) {
-          var id = 'tab-' + scope.$id + '-' + index,
-              active = activeTab === index,
-              fade = iAttrs.fade || tab.fade;
-          tabs.splice(index + 1, 0, '<li' + (active ? ' class="active"' : '') + '><a href="#' + id + '" data-index="' + index + '" data-toggle="tab">' + tab.title + '</a></li>');
-          panes.splice(index + 1, 0, '<div class="tab-pane' + (active ? ' active' : '') + (fade ? ' fade' : '') + (fade && active ? ' in' : '') + '" id="' + id + '">' + tab.content + '</div>');
-        });
-
-        iElement.html(tabs.join('') + panes.join('')).show();
-
-        // Compile tab-content
-        $compile(iElement.children('div.tab-content'))(scope);
-
-      });
-
-      // If we have a controller (i.e. ngModelController) then wire it up
-      if(controller) {
-
-        iElement.on('show', function(ev) {
-          var $target = $(ev.target);
-          scope.$apply(function() {
-            controller.$setViewValue($target.data('index'));
-          });
-        });
-
-        // Watch ngModel for changes
-        scope.$watch(iAttrs.ngModel, function(newValue, oldValue) {
-          if(angular.isUndefined(newValue)) { return; }
-          activeTab = newValue; // update starting activeTab before first build
-          setTimeout(function() {
-            var $next = iElement.children('ul.nav-tabs').find('li:eq(' + newValue*1 + ')');
-            if(!$next.hasClass('active')) {
-              $next.children('a').tab('show');
-            }
-          });
-        });
-
-      }
+      };
 
     }
 
   };
 
-}]);
+});

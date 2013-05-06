@@ -1,6 +1,6 @@
 angular.module('$strap.directives')
 
-.directive('bsTypeahead', ['$parse', function($parse) {
+.directive('bsTypeahead', function($parse) {
   'use strict';
 
   return {
@@ -31,6 +31,7 @@ angular.module('$strap.directives')
               controller.$setViewValue(value);
             });
           }
+          scope.$emit('typeahead-updated', value);
           return value;
         }
       });
@@ -49,7 +50,7 @@ angular.module('$strap.directives')
       };
 
       // Support 0-minLength
-      if(attrs.minLength === "0") {
+      if(attrs.minLength === '0') {
         setTimeout(function() { // Push to the event loop to make sure element.typeahead is defined (breaks tests otherwise)
           element.on('focus', function() {
             element.val().length === 0 && setTimeout(element.typeahead.bind(element, 'lookup'), 200);
@@ -60,4 +61,4 @@ angular.module('$strap.directives')
     }
   };
 
-}]);
+});

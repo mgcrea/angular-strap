@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsTooltip', ['$parse', '$compile',  function($parse, $compile) {
+.directive('bsTooltip', function($parse, $compile) {
   'use strict';
 
   return {
@@ -23,7 +23,7 @@ angular.module('$strap.directives')
       if(!!attrs.unique) {
         element.on('show', function(ev) {
           // Hide any active popover except self
-          $(".tooltip.in").each(function() {
+          $('.tooltip.in').each(function() {
             var $this = $(this),
               tooltip = $this.data('tooltip');
             if(tooltip && !tooltip.$element.is(element)) {
@@ -63,4 +63,4 @@ angular.module('$strap.directives')
     }
   };
 
-}]);
+});

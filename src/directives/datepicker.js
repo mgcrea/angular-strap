@@ -2,10 +2,10 @@
 
 angular.module('$strap.directives')
 
-.directive('bsDatepicker', ['$timeout', '$strap.config', function($timeout, config) {
+.directive('bsDatepicker', function($timeout, $strapConfig) {
   'use strict';
 
-  var isTouch = 'ontouchstart' in window && !window.navigator.userAgent.match(/PhantomJS/i);
+  var isAppleTouch = /(iPad|iPho(ne|d))/g.test(navigator.userAgent);
 
   var regexpMap = function regexpMap(language) {
     language = language || 'en';
@@ -30,12 +30,16 @@ angular.module('$strap.directives')
   var regexpForDateFormat = function regexpForDateFormat(format, language) {
     var re = format, map = regexpMap(language), i;
     // Abstract replaces to avoid collisions
-    i = 0; angular.forEach(map, function(v, k) {
-      re = re.split(k).join('${' + i + '}'); i++;
+    i = 0;
+    angular.forEach(map, function(v, k) {
+      re = re.split(k).join('${' + i + '}');
+      i++;
     });
     // Replace abstracted values
-    i = 0; angular.forEach(map, function(v, k) {
-      re = re.split('${' + i + '}').join(v); i++;
+    i = 0;
+    angular.forEach(map, function(v, k) {
+      re = re.split('${' + i + '}').join(v);
+      i++;
     });
     return new RegExp('^' + re + '$', ['i']);
   };
@@ -45,66 +49,86 @@ angular.module('$strap.directives')
     require: '?ngModel',
     link: function postLink(scope, element, attrs, controller) {
 
-      var options = config.datepicker || {},
-          language = attrs.language || options.language || 'en',
-          format = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy';
+      var options = angular.extend({autoclose: true}, $strapConfig.datepicker || {}),
+          type = attrs.dateType || options.type || 'date';
 
-      var dateFormatRegexp = isTouch ? 'yyyy/mm/dd' : regexpForDateFormat(format, language);
+      // $.fn.datepicker options
+      angular.forEach(['format', 'weekStart', 'calendarWeeks', 'startDate', 'endDate', 'daysOfWeekDisabled', 'autoclose', 'startView', 'minViewMode', 'todayBtn', 'todayHighlight', 'keyboardNavigation', 'language', 'forceParse'], function(key) {
+        if(angular.isDefined(attrs[key])) options[key] = attrs[key];
+      });
+
+      var language = options.language || 'en',
+          format = isAppleTouch ? 'yyyy-mm-dd' : attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'yyyy-mm-dd',
+          dateFormatRegexp = regexpForDateFormat(format, language);
 
       // Handle date validity according to dateFormat
       if(controller) {
+
+        // modelValue -> $formatters -> viewValue
+        controller.$formatters.unshift(function(modelValue) {
+          return type === 'date' && angular.isString(modelValue) ? new Date(modelValue) : modelValue;
+        });
+
+        // viewValue -> $parsers -> modelValue
         controller.$parsers.unshift(function(viewValue) {
-          //console.warn('viewValue', viewValue, dateFormatRegexp,  dateFormatRegexp.test(viewValue));
-          if (!viewValue || dateFormatRegexp.test(viewValue)) {
+          if(!viewValue) {
+            controller.$setValidity('date', true);
+            return null;
+          } else if(type === 'date' && angular.isDate(viewValue)) {
             controller.$setValidity('date', true);
             return viewValue;
+          } else if(angular.isString(viewValue) && dateFormatRegexp.test(viewValue)) {
+            controller.$setValidity('date', true);
+            if(isAppleTouch) return new Date(viewValue);
+            return type === 'string' ? viewValue : $.fn.datepicker.DPGlobal.parseDate(viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
           } else {
             controller.$setValidity('date', false);
             return undefined;
           }
         });
+
+        // ngModel rendering
+        controller.$render = function ngModelRender() {
+          if(isAppleTouch) {
+            var date = $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
+            element.val(date);
+            return date;
+          }
+          return controller.$viewValue && element.datepicker('update', controller.$viewValue);
+        };
+
       }
 
       // Use native interface for touch devices
-      if(isTouch && element.prop('type') === 'text') {
+      if(isAppleTouch) {
 
-        element.prop('type', 'date');
-        element.on('change', function(ev) {
-          scope.$apply(function () {
-            controller.$setViewValue(element.val());
-          });
-        });
+        element.prop('type', 'date').css('-webkit-appearance', 'textfield');
 
       } else {
 
-        // If we have a controller (i.e. ngModelController) then wire it up
+        // If we have a ngModelController then wire it up
         if(controller) {
           element.on('changeDate', function(ev) {
             scope.$apply(function () {
-              controller.$setViewValue(element.val());
+              controller.$setViewValue(type === 'string' ? element.val() : ev.date);
             });
-          });
-        }
-
-        // Popover GarbageCollection
-        var $popover = element.closest('.popover');
-        if($popover) {
-          $popover.on('hide', function(e) {
-            var datepicker = element.data('datepicker');
-            if(datepicker) {
-              datepicker.picker.remove();
-              element.data('datepicker', null);
-            }
           });
         }
 
         // Create datepicker
         element.attr('data-toggle', 'datepicker');
-        element.datepicker({
-          autoclose: true,
+        element.datepicker(angular.extend(options, {
           format: format,
-          language: language,
-          forceParse: attrs.forceParse || false
+          language: language
+        }));
+
+        // Garbage collection
+        scope.$on('$destroy', function() {
+          var datepicker = element.data('datepicker');
+          if(datepicker) {
+            datepicker.picker.remove();
+            element.data('datepicker', null);
+          }
         });
 
       }
@@ -112,11 +136,13 @@ angular.module('$strap.directives')
       // Support add-on
       var component = element.siblings('[data-toggle="datepicker"]');
       if(component.length) {
-        component.on('click', function() { element.trigger('focus'); });
+        component.on('click', function() {
+          element.trigger('focus');
+        });
       }
 
     }
 
   };
 
-}]);
+});

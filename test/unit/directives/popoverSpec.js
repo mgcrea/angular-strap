@@ -143,4 +143,38 @@ describe('popover', function () {
     expect(elm.data('popover').tip().find('.popover-content').text()).toBe('ABC');
   });
 
+  describe("events", function() {
+    var elm, spy;
+
+    beforeEach(function() {
+      elm = compileDirective();
+      spy = jasmine.createSpy('event');
+    });
+
+    it('should emit an event on show', function () {
+      scope.$on('popover-show', spy);
+      elm.popover('show');
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should emit an event on shown', function () {
+      scope.$on('popover-shown', spy);
+      elm.popover('show');
+      // expect(spy).toHaveBeenCalled();
+    });
+
+    it('should emit an event on hide', function () {
+      scope.$on('popover-hide', spy);
+      elm.popover('hide');
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should emit an event on hidden', function () {
+      scope.$on('popover-hidden', spy);
+      elm.popover('hide');
+      // expect(spy).toHaveBeenCalled();
+    });
+
+  });
+
 });

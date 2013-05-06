@@ -2,8 +2,24 @@
 
 module.exports = function(grunt) {
 
+  // load all grunt tasks
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
+  // livereload
+  var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
+  var mountFolder = function (connect, dir) {
+    return connect.static(require('path').resolve(dir));
+  };
+
+  // configurable paths
+  var yeomanConfig = {
+    src: 'src',
+    dist: 'dist'
+  };
+
   // Project configuration.
   grunt.initConfig({
+    yeoman: yeomanConfig,
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       banner: '/**\n' +
@@ -14,16 +30,108 @@ module.exports = function(grunt) {
       ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' +
       ' */\n'
     },
-    dirs: {
-      dest: 'dist'
+    watch: {
+      livereload: {
+        files: [
+          '{.tmp,<%= yeoman.src %>}/{,*/}*.js'
+        ],
+        tasks: ['livereload']
+      }
+    },
+    connect: {
+      options: {
+        port: 9000,
+        hostname: 'localhost'
+      },
+      livereload: {
+        options: {
+          middleware: function (connect) {
+            return [
+              lrSnippet,
+              mountFolder(connect, '.tmp'),
+              mountFolder(connect, yeomanConfig.src)
+            ];
+          }
+        }
+      },
+      test: {
+        options: {
+          port: 9090,
+          middleware: function (connect) {
+            return [
+              mountFolder(connect, '.tmp'),
+              mountFolder(connect, 'test')
+            ];
+          }
+        }
+      }
+    },
+    clean: {
+      dist: {
+        files: [{
+          dot: true,
+          src: [
+            '.tmp',
+            '<%= yeoman.dist %>/*',
+            '!<%= yeoman.dist %>/.git*'
+          ]
+        }]
+      },
+      server: '.tmp'
+    },
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc'
+      },
+      all: [
+        'Gruntfile.js',
+        '<%= yeoman.src %>/{,*/}*.js'
+      ]
+    },
+    karma: {
+      options: {
+        configFile: 'test/karma.conf.js',
+        browsers: ['PhantomJS']
+      },
+      unit: {
+        singleRun: true
+      },
+      server: {
+        autoWatch: true
+      }
     },
     concat: {
       options: {
         banner: '<%= meta.banner %>'
       },
       dist: {
-        src: ['src/common.js', 'src/directives/*.js'],
-        dest: '<%= dirs.dest %>/<%= pkg.name %>.js'
+        files: {
+          '<%= yeoman.dist %>/<%= pkg.name %>.js': [
+            '<%= yeoman.src %>/common.js',
+            '<%= yeoman.src %>/{,*/}*.js'
+          ]
+        }
+      },
+      banner: {
+        files: {
+          '<%= yeoman.dist %>/<%= pkg.name %>.js': [
+            '<%= yeoman.dist %>/<%= pkg.name %>.js'
+          ]
+        }
+      }
+    },
+    ngmin: {
+      // options: {
+      //   stripBanners: true,
+      //   banner: '<%= meta.banner %>'
+      // },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.dist %>',
+          src: '<%= pkg.name %>.js',
+          dest: '<%= yeoman.dist %>'
+        }]
       }
     },
     uglify: {
@@ -31,87 +139,47 @@ module.exports = function(grunt) {
         banner: '<%= meta.banner %>'
       },
       dist: {
-        src: ['<%= concat.dist.dest %>'],
-        dest: '<%= dirs.dest %>/<%= pkg.name %>.min.js'
-      }
-    },
-    jshint: {
-      files: ['Gruntfile.js', 'src/directives/*.js', 'test/unit/*.js'],
-      options: {
-        curly: true,
-        browser: true,
-        eqeqeq: true,
-        immed: true,
-        latedef: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        undef: true,
-        boss: true,
-        eqnull: true,
-        expr: true,
-        node: true,
-        globals: {
-          exports: true,
-          angular: false,
-          $: false
+        files: {
+          '<%= yeoman.dist %>/<%= pkg.name %>.min.js': [
+            '<%= yeoman.dist %>/<%= pkg.name %>.js'
+          ]
         }
-      }
-    },
-    // watch: {
-    //   files: '<config:jshint.files>',
-    //   tasks: 'default'
-    // },
-    testacular: {
-      test: {
-        options: {
-          reporters: ['dots'],
-          singleRun: true
-        }
-      },
-      server: {
-        options: {
-          singleRun: false
-        }
-      },
-      options: {
-        configFile: 'test/testacular.conf.js',
-        browsers: ['PhantomJS']
       }
     }
   });
 
-  // Load the plugin that provides the "jshint" task.
-  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.renameTask('regarde', 'watch');
 
-  // Load the plugin that provides the "concat" task.
-  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.registerTask('server', [
+    'clean:server',
+    'livereload-start',
+    'connect:livereload',
+    'watch'
+  ]);
 
-  // Load the plugin that provides the "uglify" task.
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.registerTask('test', [
+    'clean:server',
+    'jshint',
+    'connect:test',
+    'karma:unit'
+  ]);
 
-  // Load the plugin that provides the "watch" task.
-  //grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.registerTask('test-server', [
+    'clean:server',
+    'connect:test',
+    'karma:server'
+  ]);
 
+  grunt.registerTask('build', [
+    'clean:dist',
+    'test',
+    'concat',
+    'ngmin',
+    'concat:banner',
+    'uglify'
+  ]);
 
-  // Default task.
   grunt.registerTask('default', ['test']);
-
-  // Test tasks.
-  grunt.registerTask('test', ['jshint', 'testacular:test']);
-  grunt.registerTask('test-server', ['testacular:server']);
-
-  // Build task.
-  grunt.registerTask('build', ['test', 'concat', 'uglify']);
-
-
-  // Provides the "testacular" task.
-  grunt.registerMultiTask('testacular', 'Starts up a testacular server.', function() {
-    var done = this.async();
-    require('testacular').server.start(this.options(), function(code) {
-      done(code === 0);
-    });
-  });
 
   // Provides the "bump" task.
   grunt.registerTask('bump', 'Increment version number', function() {

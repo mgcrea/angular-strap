@@ -21,7 +21,8 @@ describe('timepicker', function () {
   });
 
   var templates = {
-    'default': '<input type="text" name="time" ng-model="model.time" data-default-time="false" data-show-meridian="false" bs-timepicker>'
+    'default': '<input type="text" name="time" ng-model="model.time" data-default-time="false" data-show-meridian="false" bs-timepicker>',
+    'addon': '<input type="text" name="time" ng-model="model.time" data-default-time="false" data-show-meridian="false" bs-timepicker><span class="add-on" data-toggle="timepicker"><i class="icon-time"></i></span>'
   };
 
   function compileDirective(template) {
@@ -53,6 +54,12 @@ describe('timepicker', function () {
   it('should show the timepicker on focus', function() {
     var elm = compileDirective();
     elm.trigger('focus');
+    expect(elm.data('timepicker').$widget.hasClass('open')).toBe(true);
+  });
+
+  it('should show the timepicker on [data-toggle="timepicker"] click', function() {
+    var elm = compileDirective('addon');
+    elm.next('[data-toggle="timepicker"]').trigger('click');
     expect(elm.data('timepicker').$widget.hasClass('open')).toBe(true);
   });
 

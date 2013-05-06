@@ -1,7 +1,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsDropdown', ['$parse', '$compile', '$timeout', function($parse, $compile, $timeout) {
+.directive('bsDropdown', function($parse, $compile, $timeout) {
   'use strict';
 
   var buildTemplate = function(items, ul) {
@@ -11,7 +11,7 @@ angular.module('$strap.directives')
       var li = '<li' + (item.submenu && item.submenu.length ? ' class="dropdown-submenu"' : '') + '>' +
         '<a tabindex="-1" ng-href="' + (item.href || '') + '"' + (item.click ? '" ng-click="' + item.click + '"' : '') + (item.target ? '" target="' + item.target + '"' : '') + '>' +
         (item.text || '') + '</a>';
-      if(item.submenu && item.submenu.length) li += buildTemplate(item.submenu).join("\n");
+      if(item.submenu && item.submenu.length) li += buildTemplate(item.submenu).join('\n');
       li += '</li>';
       ul.splice(index + 1, 0, li);
     });
@@ -43,9 +43,9 @@ angular.module('$strap.directives')
 
       iElement
         .addClass('dropdown-toggle')
-        .attr('data-toggle', "dropdown");
+        .attr('data-toggle', 'dropdown');
 
     }
   };
 
-}]);
+});
