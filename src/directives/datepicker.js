@@ -66,7 +66,7 @@ angular.module('$strap.directives')
 
         // modelValue -> $formatters -> viewValue
         controller.$formatters.unshift(function(modelValue) {
-          return type === 'date' && angular.isString(modelValue) ? new Date(modelValue) : modelValue;
+          return type === 'date' && angular.isString(modelValue) ? $.fn.datepicker.DPGlobal.parseDate(modelValue, $.fn.datepicker.DPGlobal.parseFormat(format), language) : modelValue;
         });
 
         // viewValue -> $parsers -> modelValue
