@@ -1,8 +1,8 @@
+'use strict';
 
 angular.module('$strap.directives')
 
 .directive('bsButton', function($parse, $timeout) {
-  'use strict';
 
   return {
     restrict: 'A',
@@ -98,7 +98,7 @@ angular.module('$strap.directives')
 })
 
 .directive('bsButtonsCheckbox', function($parse) {
-  'use strict';
+
   return {
     restrict: 'A',
     require: '?ngModel',
@@ -112,7 +112,7 @@ angular.module('$strap.directives')
 })
 
 .directive('bsButtonsRadio', function($timeout) {
-  'use strict';
+
   return {
     restrict: 'A',
     require: '?ngModel',

@@ -1,8 +1,8 @@
+'use strict';
 
 angular.module('$strap.directives')
 
 .directive('bsTabs', function($parse, $compile, $timeout) {
-  'use strict';
 
   var template = '<div class="tabs">' +
   '<ul class="nav nav-tabs">' +

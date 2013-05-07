@@ -1,8 +1,8 @@
+'use strict';
 
 angular.module('$strap.directives')
 
 .directive('bsButtonSelect', ['$parse', '$timeout', function($parse, $timeout) {
-  'use strict';
 
   return {
     restrict: 'A',

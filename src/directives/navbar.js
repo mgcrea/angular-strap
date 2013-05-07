@@ -1,8 +1,8 @@
+'use strict';
 
 angular.module('$strap.directives')
 
 .directive('bsNavbar', function($location) {
-  'use strict';
 
   return {
     restrict: 'A',

@@ -1,7 +1,8 @@
+'use strict';
+
 angular.module('$strap.directives')
 
 .factory('$modal', function($rootScope, $compile, $http, $timeout, $q, $templateCache) {
-  'use strict';
 
   var ModalFactory = function ModalFactory(options) {
 
@@ -79,7 +80,6 @@ angular.module('$strap.directives')
 })
 
 .directive('bsModal', function($q, $modal) {
-  'use strict';
 
   return {
     restrict: 'A',

@@ -1,7 +1,8 @@
+'use strict';
+
 angular.module('$strap.directives')
 
 .directive('bsTypeahead', function($parse) {
-  'use strict';
 
   return {
     restrict: 'A',

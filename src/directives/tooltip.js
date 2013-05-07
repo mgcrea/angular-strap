@@ -1,8 +1,8 @@
+'use strict';
 
 angular.module('$strap.directives')
 
 .directive('bsTooltip', function($parse, $compile) {
-  'use strict';
 
   return {
     restrict: 'A',
