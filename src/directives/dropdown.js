@@ -1,8 +1,8 @@
+'use strict';
 
 angular.module('$strap.directives')
 
 .directive('bsDropdown', function($parse, $compile, $timeout) {
-  'use strict';
 
   var buildTemplate = function(items, ul) {
     if(!ul) ul = ['<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">', '</ul>'];

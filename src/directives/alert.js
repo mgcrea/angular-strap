@@ -1,8 +1,8 @@
+'use strict';
 
 angular.module('$strap.directives')
 
 .directive('bsAlert', function($parse, $timeout, $compile) {
-  'use strict';
 
   return {
     restrict: 'A',

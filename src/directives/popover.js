@@ -1,8 +1,8 @@
+'use strict';
 
 angular.module('$strap.directives')
 
 .directive('bsPopover', function($parse, $compile, $http, $timeout, $q, $templateCache) {
-  'use strict';
 
   // Hide popovers when pressing esc
   $('body').on('keyup', function(ev) {

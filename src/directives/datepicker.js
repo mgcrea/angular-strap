@@ -1,9 +1,9 @@
+'use strict';
 // https://github.com/eternicode/bootstrap-datepicker
 
 angular.module('$strap.directives')
 
 .directive('bsDatepicker', function($timeout, $strapConfig) {
-  'use strict';
 
   var isAppleTouch = /(iPad|iPho(ne|d))/g.test(navigator.userAgent);
 
