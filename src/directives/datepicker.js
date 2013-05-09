@@ -56,9 +56,9 @@ angular.module('$strap.directives')
       angular.forEach(['format', 'weekStart', 'calendarWeeks', 'startDate', 'endDate', 'daysOfWeekDisabled', 'autoclose', 'startView', 'minViewMode', 'todayBtn', 'todayHighlight', 'keyboardNavigation', 'language', 'forceParse'], function(key) {
         if(angular.isDefined(attrs[key])) options[key] = attrs[key];
       });
-	  
-	  var language = options.language || 'en',
-		  readFormat = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy',
+
+      var language = options.language || 'en',
+		      readFormat = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy',
           format = isAppleTouch ? 'yyyy-mm-dd' : readFormat,
           dateFormatRegexp = regexpForDateFormat(format, language);
 
@@ -91,7 +91,7 @@ angular.module('$strap.directives')
         // ngModel rendering
         controller.$render = function ngModelRender() {
           if(isAppleTouch) {
-            var date = controller.$viewValue ? $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language) : "";
+            var date = controller.$viewValue ? $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language) : '';
             element.val(date);
             return date;
           }
