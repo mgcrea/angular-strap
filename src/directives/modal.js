@@ -2,17 +2,15 @@
 
 angular.module('$strap.directives')
 
-.factory('$modal', function($rootScope, $compile, $http, $timeout, $q, $templateCache) {
+.factory('$modal', function($rootScope, $compile, $http, $timeout, $q, $templateCache, $strapConfig) {
 
-  var ModalFactory = function ModalFactory(options) {
+  var ModalFactory = function ModalFactory(config) {
 
-    function Modal(options) {
-      if(!options) options = {};
+    function Modal(config) {
 
-      var scope = options.scope ? options.scope : $rootScope.$new(),
+      var options = angular.extend(config || {}, $strapConfig.modal || {}),
+          scope = options.scope ? options.scope : $rootScope.$new(),
           templateUrl = options.template;
-
-      //@todo support {title, content} object
 
       return $q.when($templateCache.get(templateUrl) || $http.get(templateUrl, {cache: true}).then(function(res) { return res.data; }))
       .then(function onSuccess(template) {
@@ -62,7 +60,7 @@ angular.module('$strap.directives')
         });
 
         if(options.show) {
-          $modal.modal('show');
+          $modal.modal(options);
         }
 
         return $modal;
@@ -71,7 +69,7 @@ angular.module('$strap.directives')
 
     }
 
-    return new Modal(options);
+    return new Modal(config);
 
   };
 
@@ -89,11 +87,13 @@ angular.module('$strap.directives')
       var options = {
         template: scope.$eval(iAttrs.bsModal),
         persist: true,
-        scope: scope,
-        modalClass: iAttrs.modalClass || '',
-        backdrop: iAttrs.backdrop*1 || true,
-        keyboard: iAttrs.keyboard*1 || true,
+        scope: scope
       };
+
+      // $.fn.datepicker options
+      angular.forEach(['modalClass', 'backdrop', 'keyboard'], function(key) {
+        if(angular.isDefined(iAttrs[key])) options[key] = iAttrs[key];
+      });
 
       $q.when($modal(options)).then(function onSuccess(modal) {
         iElement.attr('data-target', '#' + modal.attr('id')).attr('data-toggle', 'modal');
