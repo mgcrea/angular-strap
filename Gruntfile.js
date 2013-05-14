@@ -107,8 +107,10 @@ module.exports = function(grunt) {
       dist: {
         files: {
           '<%= yeoman.dist %>/<%= pkg.name %>.js': [
+            '<%= yeoman.src %>/angular-strap.prefix',
             '<%= yeoman.src %>/common.js',
-            '<%= yeoman.src %>/{,*/}*.js'
+            '<%= yeoman.src %>/{,*/}*.js',
+            '<%= yeoman.src %>/angular-strap.suffix'
           ]
         }
       },
