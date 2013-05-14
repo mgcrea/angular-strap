@@ -12,8 +12,11 @@ angular.module('$strap.directives')
         return $location.path();
       }, function(newValue, oldValue) {
 
-        $('li[data-match-route]', element).each(function(k, li) {
-          var $li = angular.element(li),
+        var li = element[0].querySelectorAll('[data-match-route]'),
+          i = li.length;
+        
+        while (i--) {
+          var $li = angular.element(li[i]),
             // data('match-rout') does not work with dynamic attributes
             pattern = $li.attr('data-match-route'),
             regexp = new RegExp('^' + pattern + '$', ['i']);
@@ -24,7 +27,7 @@ angular.module('$strap.directives')
             $li.removeClass('active');
           }
 
-        });
+        }
       });
     }
   };
