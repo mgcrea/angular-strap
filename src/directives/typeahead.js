@@ -39,7 +39,7 @@ angular.module('$strap.directives')
       // Bootstrap override
       var typeahead = element.data('typeahead');
       // Fixes #2043: allows minLength of zero to enable show all for typeahead
-      typeahead.lookup = function (ev) {
+      typeahead.lookup = function(ev) {
         var items;
         this.query = this.$element.val() || '';
         if (this.query.length < this.options.minLength) {
@@ -49,9 +49,10 @@ angular.module('$strap.directives')
         return items ? this.process(items) : this;
       };
 
-      if(attrs.matchall === "true") {
-        // return true on every server side sugg
-        typeahead.matcher = function (item) {
+      var matchAll = element.data('data-match-all');
+      if(typeof(matchAll) != 'undefined' && matchAll === "true") {
+        // Return true on every item, for example if the dropdown is populated with server-side sugggestions
+        typeahead.matcher = function(item) {
           return true;
         };
       }
