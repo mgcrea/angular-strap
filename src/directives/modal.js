@@ -8,7 +8,7 @@ angular.module('$strap.directives')
 
     function Modal(config) {
 
-      var options = angular.extend(config || {}, $strapConfig.modal || {}),
+      var options = angular.extend({show: true}, $strapConfig.modal, config),
           scope = options.scope ? options.scope : $rootScope.$new(),
           templateUrl = options.template;
 
@@ -59,9 +59,7 @@ angular.module('$strap.directives')
           $modal.remove();
         });
 
-        if(options.show) {
-          $modal.modal(options);
-        }
+        $modal.modal(options);
 
         return $modal;
 
@@ -87,6 +85,7 @@ angular.module('$strap.directives')
       var options = {
         template: scope.$eval(iAttrs.bsModal),
         persist: true,
+        show: false,
         scope: scope
       };
 
