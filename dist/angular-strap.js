@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.7.3 - 2013-05-07
+ * @version v0.7.3 - 2013-05-09
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -294,10 +294,10 @@ angular.module('$strap.directives').directive('bsDatepicker', [
           if (angular.isDefined(attrs[key]))
             options[key] = attrs[key];
         });
-        var language = options.language || 'en', format = isAppleTouch ? 'yyyy-mm-dd' : attrs.dateFormat || options.format || $.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format || 'yyyy-mm-dd', dateFormatRegexp = regexpForDateFormat(format, language);
+        var language = options.language || 'en', readFormat = attrs.dateFormat || options.format || $.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format || 'mm/dd/yyyy', format = isAppleTouch ? 'yyyy-mm-dd' : readFormat, dateFormatRegexp = regexpForDateFormat(format, language);
         if (controller) {
           controller.$formatters.unshift(function (modelValue) {
-            return type === 'date' && angular.isString(modelValue) ? new Date(modelValue) : modelValue;
+            return type === 'date' && angular.isString(modelValue) && modelValue ? $.fn.datepicker.DPGlobal.parseDate(modelValue, $.fn.datepicker.DPGlobal.parseFormat(readFormat), language) : modelValue;
           });
           controller.$parsers.unshift(function (viewValue) {
             if (!viewValue) {
@@ -318,7 +318,7 @@ angular.module('$strap.directives').directive('bsDatepicker', [
           });
           controller.$render = function ngModelRender() {
             if (isAppleTouch) {
-              var date = $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
+              var date = controller.$viewValue ? $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language) : '';
               element.val(date);
               return date;
             }
