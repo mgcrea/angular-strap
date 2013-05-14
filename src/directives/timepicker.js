@@ -18,22 +18,22 @@ angular.module('$strap.directives')
             controller.$setViewValue(element.val());
           });
         });
+
+        // Handle input time validity
+        var timeRegExp = new RegExp('^' + TIME_REGEXP + '$', ['i']);
+  
+        // viewValue -> $parsers -> modelValue
+        controller.$parsers.unshift(function(viewValue) {
+          if (!viewValue || timeRegExp.test(viewValue)) {
+            controller.$setValidity('time', true);
+            return viewValue;
+          } else {
+            controller.$setValidity('time', false);
+            return;
+          }
+        });
       }
-
-      // Handle input time validity
-      var timeRegExp = new RegExp('^' + TIME_REGEXP + '$', ['i']);
-
-      // viewValue -> $parsers -> modelValue
-      controller.$parsers.unshift(function(viewValue) {
-        if (!viewValue || timeRegExp.test(viewValue)) {
-          controller.$setValidity('time', true);
-          return viewValue;
-        } else {
-          controller.$setValidity('time', false);
-          return;
-        }
-      });
-
+      
       // Create datepicker
       element.attr('data-toggle', 'timepicker');
       element.parent().addClass('bootstrap-timepicker');
