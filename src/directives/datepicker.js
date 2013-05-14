@@ -66,7 +66,7 @@ angular.module('$strap.directives')
 
         // modelValue -> $formatters -> viewValue
         controller.$formatters.unshift(function(modelValue) {
-          return type === 'date' && angular.isString(modelValue) ? new Date(modelValue) : modelValue;
+          return type === 'date' && angular.isString(modelValue) && modelValue ? $.fn.datepicker.DPGlobal.parseDate(modelValue, $.fn.datepicker.DPGlobal.parseFormat(format), language) : modelValue;
         });
 
         // viewValue -> $parsers -> modelValue
@@ -90,7 +90,7 @@ angular.module('$strap.directives')
         // ngModel rendering
         controller.$render = function ngModelRender() {
           if(isAppleTouch) {
-            var date = $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
+            var date = controller.$viewValue ? $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language) : '';
             element.val(date);
             return date;
           }
