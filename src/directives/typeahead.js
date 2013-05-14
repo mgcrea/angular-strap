@@ -49,9 +49,8 @@ angular.module('$strap.directives')
         return items ? this.process(items) : this;
       };
 
-      var matchAll = element.data('data-match-all');
-      if(typeof(matchAll) != 'undefined' && matchAll === "true") {
-        // Return true on every item, for example if the dropdown is populated with server-side sugggestions
+      // Return true on every item, for example if the dropdown is populated with server-side sugggestions
+      if(attrs.matchAll === "true") {
         typeahead.matcher = function(item) {
           return true;
         };
