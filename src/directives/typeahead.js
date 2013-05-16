@@ -51,7 +51,7 @@ angular.module('$strap.directives')
       };
 
       // Return true on every item, for example if the dropdown is populated with server-side sugggestions
-      if(attrs.matchAll === "true") {
+      if(!!attrs.matchAll) {
         typeahead.matcher = function(item) {
           return true;
         };
