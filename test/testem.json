@@ -1,0 +1,21 @@
+{
+  "framework": "jasmine",
+  "launchers": {
+    "iOS": {
+      "command": "ios-browser http://localhost:7357"
+    }
+  },
+  "src_files": [
+    "test/lib/async-callback.js",
+    "test/lib/jquery.js",
+    "test/lib/angular/angular.js",
+    "test/lib/angular/angular-mocks.js",
+    "test/lib/bootstrap.js",
+    "vendor/bootstrap-datepicker.js",
+    "vendor/bootstrap-timepicker.js",
+    "vendor/bootstrap-select.js",
+    "src/common.js",
+    "src/directives/*.js",
+    "test/unit/directives/*Spec.js"
+  ]
+}
