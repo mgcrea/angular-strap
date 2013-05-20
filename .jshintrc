@@ -4,7 +4,6 @@
   "browser": true,
   "jquery": true,
   "devel": false,
-  "es5": true,
   "esnext": true,
   "bitwise": true,
 

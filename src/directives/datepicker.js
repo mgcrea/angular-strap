@@ -58,7 +58,8 @@ angular.module('$strap.directives')
       });
 
       var language = options.language || 'en',
-          format = isAppleTouch ? 'yyyy-mm-dd' : attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'yyyy-mm-dd',
+		      readFormat = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy',
+          format = isAppleTouch ? 'yyyy-mm-dd' : readFormat,
           dateFormatRegexp = regexpForDateFormat(format, language);
 
       // Handle date validity according to dateFormat
@@ -66,7 +67,7 @@ angular.module('$strap.directives')
 
         // modelValue -> $formatters -> viewValue
         controller.$formatters.unshift(function(modelValue) {
-          return type === 'date' && angular.isString(modelValue) && modelValue ? $.fn.datepicker.DPGlobal.parseDate(modelValue, $.fn.datepicker.DPGlobal.parseFormat(format), language) : modelValue;
+          return type === 'date' && angular.isString(modelValue) && modelValue ? $.fn.datepicker.DPGlobal.parseDate(modelValue, $.fn.datepicker.DPGlobal.parseFormat(readFormat), language) : modelValue;
         });
 
         // viewValue -> $parsers -> modelValue
