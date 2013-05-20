@@ -14,28 +14,28 @@ angular.module('$strap.directives')
                 if(item.submenu && item.submenu.length) li += buildTemplate(item.submenu).join('\n');
                 li += '</li>';
                 ul.splice(index + 1, 0, li);
-            });
+			  });
             return ul;
-        };
+          };
 
         return {
             restrict: 'EA',
             scope: true,
             link: function postLink(scope, iElement, iAttrs) {
-               scope.$watch(iAttrs.bsDropdown,function(newdd,olddd) {
-                   var dropdown = angular.element(buildTemplate(newdd).join(''));
-                   iElement.nextAll().remove();
-                   dropdown.insertAfter(iElement);
+                scope.$watch(iAttrs.bsDropdown,function(newdd,olddd) {
+                    var dropdown = angular.element(buildTemplate(newdd).join(''));
+                    iElement.nextAll().remove();
+                    dropdown.insertAfter(iElement);
 
-                   // Compile dropdown-menu
-                   $compile(iElement.next('ul.dropdown-menu'))(scope);
+                    // Compile dropdown-menu
+                    $compile(iElement.next('ul.dropdown-menu'))(scope);
 
-                   iElement
+                    iElement
                        .addClass('dropdown-toggle')
                        .attr('data-toggle', 'dropdown');
 
-               });
-            }
-        };
+                  });
+              }
+          };
 
-    });
+      });
