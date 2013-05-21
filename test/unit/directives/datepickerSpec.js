@@ -106,7 +106,7 @@ describe('datepicker', function () {
       it('should correctly apply model defaults to the view', function() {
         var elm = compileDirective();
         expect(elm.data('datepicker').date).toBe(scope.foo.date);
-        expect(elm.val()).toBe('2012-09-01');
+        expect(elm.val()).toBe('09/01/2012');
       });
 
       it('should correctly apply model changes to the view', function() {
@@ -114,7 +114,7 @@ describe('datepicker', function () {
         scope.foo.date = new Date('2000-01-01T00:00:00.000Z');
         scope.$digest();
         expect(elm.data('datepicker').date).toBe(scope.foo.date);
-        expect(elm.val()).toBe('2000-01-01');
+        expect(elm.val()).toBe('01/01/2000');
       });
 
       it('should correctly apply view changes to the model', function() {
