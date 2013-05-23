@@ -16,8 +16,8 @@ angular.module('$strap.directives')
       if(ctrl) {
         element.text(scope.$eval(attrs.ngModel));
         // Watch model for changes
-        scope.$watch(attrs.ngModel, function(newValue, oldValue) {
-          element.text(newValue);
+        attrs.$observe('ngModel', function(value) {
+          element.text(scope.$eval(value));
         });
       }
 
