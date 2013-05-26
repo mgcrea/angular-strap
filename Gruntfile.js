@@ -199,7 +199,7 @@ module.exports = function(grunt) {
       grunt.file.write(file, JSON.stringify(json, null, '  '));
     }
     updateFile('package.json');
-    updateFile('component.json');
+    updateFile('bower.json');
     grunt.log.ok('Version bumped to ' + version);
   });
 
