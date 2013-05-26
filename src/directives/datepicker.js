@@ -95,7 +95,8 @@ angular.module('$strap.directives')
             element.val(date);
             return date;
           }
-          return controller.$viewValue && element.datepicker('update', controller.$viewValue);
+          if(!controller.$viewValue) element.val('');
+          return element.datepicker('update', controller.$viewValue);
         };
 
       }
