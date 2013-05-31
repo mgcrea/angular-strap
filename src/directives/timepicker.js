@@ -35,7 +35,7 @@ angular.module('$strap.directives')
 
       }
 
-      // Create datepicker
+      // Create timepicker
       element.attr('data-toggle', 'timepicker');
       element.parent().addClass('bootstrap-timepicker');
       element.timepicker($strapConfig.timepicker || {});
