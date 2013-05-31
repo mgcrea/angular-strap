@@ -2,7 +2,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsTimepicker', function($timeout) {
+.directive('bsTimepicker', function($timeout, $strapConfig) {
 
   var TIME_REGEXP = '((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)';
 
@@ -38,7 +38,7 @@ angular.module('$strap.directives')
       // Create datepicker
       element.attr('data-toggle', 'timepicker');
       element.parent().addClass('bootstrap-timepicker');
-      element.timepicker();
+      element.timepicker($strapConfig.timepicker || {});
       var timepicker = element.data('timepicker');
 
       // Support add-on
