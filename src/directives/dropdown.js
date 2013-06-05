@@ -14,8 +14,8 @@ angular.module('$strap.directives')
                 if(item.submenu && item.submenu.length) li += buildTemplate(item.submenu).join('\n');
                 li += '</li>';
                 ul.splice(index + 1, 0, li);
-			  });
-            return ul;
+              });
+              return ul;
           };
 
         return {
