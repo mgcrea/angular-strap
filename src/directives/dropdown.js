@@ -15,7 +15,7 @@ angular.module('$strap.directives')
                 li += '</li>';
                 ul.splice(index + 1, 0, li);
               });
-              return ul;
+            return ul;
           };
 
         return {
