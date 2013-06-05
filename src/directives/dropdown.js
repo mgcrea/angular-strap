@@ -39,3 +39,4 @@ angular.module('$strap.directives')
           };
 
       });
+	  
