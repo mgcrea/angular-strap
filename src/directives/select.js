@@ -13,9 +13,13 @@ angular.module('$strap.directives')
 
       var options = scope.$eval(attrs.bsSelect) || {};
 
-      $timeout(function() {
-        element.selectpicker(options);
-        element.next().removeClass('ng-scope');
+      element.selectpicker(options);
+      element.next().removeClass('ng-scope');
+
+      scope.$watch(function () {
+        return element[0].length;
+      }, function () {
+        element.selectpicker('refresh');
       });
 
       // If we have a controller (i.e. ngModelController) then wire it up
