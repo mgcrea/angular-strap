@@ -53,9 +53,24 @@ angular.module('$strap.directives')
           type = attrs.dateType || options.type || 'date';
 
       // $.fn.datepicker options
-      angular.forEach(['format', 'weekStart', 'calendarWeeks', 'startDate', 'endDate', 'daysOfWeekDisabled', 'autoclose', 'startView', 'minViewMode', 'todayBtn', 'todayHighlight', 'keyboardNavigation', 'language', 'forceParse'], function(key) {
-        if(angular.isDefined(attrs[key])) options[key] = attrs[key];
-      });
+      angular.forEach([
+          ['format', 'dateFormat'],
+          ['weekStart', 'dateWeekStart'],
+          ['calendarWeeks', 'dateCalendarWeeks'],
+          ['startDate', 'dateStartDate'],
+          ['endDate', 'dateEndDate'],
+          ['daysOfWeekDisabled', 'dateDaysOfWeekDisabled'],
+          ['autoclose', 'dateAutoclose'],
+          ['startView', 'dateStartView'],
+          ['minViewMode', 'dateMinViewMode'],
+          ['todayBtn', 'dateTodayBtn'],
+          ['todayHighlight', 'dateTodayHighlight'],
+          ['keyboardNavigation', 'dateKeyboardNavigation'],
+          ['language', 'dateLanguage'],
+          ['forceParse', 'dateForceParse']
+        ], function (key) {
+          if (angular.isDefined(attrs[key[1]])) options[key[0]] = attrs[key[1]];
+        });
 
       var language = options.language || 'en',
           readFormat = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy',
