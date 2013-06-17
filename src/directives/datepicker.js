@@ -133,6 +133,16 @@ angular.module('$strap.directives')
           }
         });
 
+        // Update start-date when changed
+        attrs.$observe('startDate', function(value) {
+          element.datepicker('setStartDate',value);
+        });
+
+        // Update end-date when changed
+        attrs.$observe('endDate', function(value) {
+          element.datepicker('setEndDate',value);
+        });
+
       }
 
       // Support add-on
