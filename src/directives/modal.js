@@ -47,7 +47,9 @@ angular.module('$strap.directives')
 
         // Support autofocus attribute
         $modal.on('shown', function(ev) {
-          $('input[autofocus]', $modal).first().trigger('focus');
+          if (!$('input[autofocus]', $modal).first().trigger('focus').length) {
+		    $('textarea[autofocus]', $modal).first().trigger('focus');
+		  }
         });
         // Auto-remove $modal created via service
         $modal.on('hidden', function(ev) {
