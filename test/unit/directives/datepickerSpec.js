@@ -122,7 +122,7 @@ describe('datepicker', function () {
         elm.trigger('focus');
         elm.data('datepicker').picker.find('td').trigger('click');
         expect(elm.val() !== '').toBe(true);
-        expect(scope.foo.date).toBe(elm.data('datepicker').date);
+        expect(angular.equals(scope.foo.date, elm.data('datepicker').date)).toBe(true);
       });
 
     });
