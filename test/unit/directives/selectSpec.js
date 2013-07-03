@@ -2,15 +2,13 @@
 // global describe, it
 
 describe('select', function () {
-  var scope, $sandbox, $compile, $timeout, $httpBackend, $templateCache;
+  var scope, $sandbox, $compile, $templateCache;
 
   beforeEach(module('$strap.directives'));
 
-  beforeEach(inject(function ($injector, $rootScope, _$compile_, _$timeout_, _$httpBackend_, _$templateCache_) {
+  beforeEach(inject(function ($injector, $rootScope, _$compile_, _$templateCache_) {
     scope = $rootScope;
     $compile = _$compile_;
-    $timeout = _$timeout_;
-    $httpBackend = _$httpBackend_;
     $templateCache = _$templateCache_;
 
     $sandbox = $('<div id="sandbox"></div>').appendTo('body');
@@ -34,7 +32,6 @@ describe('select', function () {
     var $element = $(template.element).appendTo($sandbox);
     $element = $compile($element)(scope);
     scope.$digest(); // evaluate $evalAsync queue used by $q
-    $timeout.flush();
     return $element;
   }
 
