@@ -23,7 +23,7 @@ angular.module('$strap.directives')
 
         // Watch for changes to the model value
         scope.$watch(attrs.ngModel, function(newValue, oldValue) {
-          if (newValue !== oldValue) {
+          if (!angular.equals(newValue, oldValue)) {
             element.selectpicker('refresh');
           }
         });
