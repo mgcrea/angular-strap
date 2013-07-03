@@ -54,7 +54,6 @@ describe('dropdown', function () {
     var $element = $(template.element).appendTo($sandbox);
     $element = $compile($element)(scope);
     scope.$digest();
-    $timeout.flush(); // relies on $timeout
     return $element;
   }
   // Tests
