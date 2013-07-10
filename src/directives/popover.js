@@ -59,6 +59,18 @@ angular.module('$strap.directives')
           });
         }
 
+        if(!!attr.show) {
+          scope.$watch(attr.show, function(newValue, oldValue) {
+            if(!!newValue) {
+              $timeout(function() {
+                popover.show();
+              });
+            } else if(newValue !== oldValue) {
+              popover.hide();
+            }
+          });
+        }
+
         // Initialize popover
         element.popover(angular.extend({}, options, {
           content: template,
