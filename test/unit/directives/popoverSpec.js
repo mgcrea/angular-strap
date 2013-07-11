@@ -36,6 +36,11 @@ describe('popover', function () {
       popover: 'Hello <span ng-bind-html-unsafe="content"></span>',
       element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-hide="foo.hide"></a>'
     },
+    'show': {
+      scope: {content: "World<br />Multiline Content<br />", foo: {show: false}},
+      popover: 'Hello <span ng-bind-html-unsafe="content"></span>',
+      element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-show="foo.show"></a>'
+    },
     'object': {
       scope: {popover: {title: "aTitle", content: "World<br />Multiline Content<br />"}},
       element: '<a class="btn" bs-popover="popover"></a>'
@@ -135,6 +140,15 @@ describe('popover', function () {
     scope.foo.hide = true;
     scope.$digest(); // $digest already in progress
     expect(elm.data('popover').tip().hasClass('in')).toBe(false);
+  });
+
+  it('should support data-show attribute', function() {
+    var elm = compileDirective('show');
+    expect(elm.data('popover').tip().hasClass('in')).toBe(false);
+    scope.foo.show = true;
+    $timeout(function() {
+        expect(elm.data('popover').tip().hasClass('in')).toBe(true);
+    });
   });
 
   it('should correctly compile ng-repeat without a title', function() {
