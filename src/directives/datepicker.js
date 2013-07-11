@@ -149,7 +149,9 @@ angular.module('$strap.directives')
       var component = element.siblings('[data-toggle="datepicker"]');
       if(component.length) {
         component.on('click', function() {
-          element.trigger('focus');
+          if (!element.prop('disabled')) { // Hack check for IE 8
+            element.trigger('focus');
+          }
         });
       }
 
