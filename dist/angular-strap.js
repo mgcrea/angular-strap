@@ -369,7 +369,9 @@ angular.module('$strap.directives').directive('bsDatepicker', [
         var component = element.siblings('[data-toggle="datepicker"]');
         if (component.length) {
           component.on('click', function () {
-            element.trigger('focus');
+            if (!element.prop('disabled')) {
+              element.trigger('focus');
+            }
           });
         }
       }
@@ -522,7 +524,7 @@ angular.module('$strap.directives').directive('bsNavbar', [
           $('li[data-match-route]', element).each(function (k, li) {
             var $li = angular.element(li), pattern = $li.attr('data-match-route'), regexp = new RegExp('^' + pattern + '$', ['i']);
             if (regexp.test(newValue)) {
-              $li.addClass('active');
+              $li.addClass('active').find('.collapse.in').collapse('hide');
             } else {
               $li.removeClass('active');
             }
@@ -576,6 +578,17 @@ angular.module('$strap.directives').directive('bsPopover', [
                 popover.hide();
               } else if (newValue !== oldValue) {
                 popover.show();
+              }
+            });
+          }
+          if (!!attr.show) {
+            scope.$watch(attr.show, function (newValue, oldValue) {
+              if (!!newValue) {
+                $timeout(function () {
+                  popover.show();
+                });
+              } else if (newValue !== oldValue) {
+                popover.hide();
               }
             });
           }
