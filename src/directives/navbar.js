@@ -19,7 +19,7 @@ angular.module('$strap.directives')
             regexp = new RegExp('^' + pattern + '$', ['i']);
 
           if(regexp.test(newValue)) {
-            $li.addClass('active');
+            $li.addClass('active').find('.collapse.in').collapse('hide');
           } else {
             $li.removeClass('active');
           }
