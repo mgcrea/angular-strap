@@ -3,6 +3,6 @@ npm-debug.log
 *.sublime-project
 *.sublime-workspace
 test/coverage
-components/
+bower_components/
 node_modules/
 !.gitignore
