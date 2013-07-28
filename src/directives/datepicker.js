@@ -136,13 +136,13 @@ angular.module('$strap.directives')
         // Update start-date when changed
         attrs.$observe('startDate', function(value) {
           value = value.replace(/(^")|("$)/g, '');
-          element.datepicker('setStartDate',value);
+          element.datepicker('setStartDate',new Date(value));
         });
 
         // Update end-date when changed
         attrs.$observe('endDate', function(value) {
           value = value.replace(/(^")|("$)/g, '');
-          element.datepicker('setEndDate',value);
+          element.datepicker('setEndDate',new Date(value));
         });
 
       }
