@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.7.5 - 2013-07-21
+ * @version v0.7.5 - 2013-07-30
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -428,7 +428,7 @@ angular.module('$strap.directives').factory('$modal', [
   '$templateCache',
   '$strapConfig',
   function ($rootScope, $compile, $http, $timeout, $q, $templateCache, $strapConfig) {
-    var ModalFactory = function ModalFactory(config) {
+    var ModFactory = function ModalFactory(config) {
       function Modal(config) {
         var options = angular.extend({ show: true }, $strapConfig.modal, config), scope = options.scope ? options.scope : $rootScope.$new(), templateUrl = options.template;
         return $q.when($templateCache.get(templateUrl) || $http.get(templateUrl, { cache: true }).then(function (res) {
@@ -480,7 +480,7 @@ angular.module('$strap.directives').factory('$modal', [
       }
       return new Modal(config);
     };
-    return ModalFactory;
+    return ModFactory;
   }
 ]).directive('bsModal', [
   '$q',
