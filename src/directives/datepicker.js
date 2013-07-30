@@ -60,14 +60,21 @@ angular.module('$strap.directives')
       var language = options.language || 'en',
           readFormat = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy',
           format = isAppleTouch ? 'yyyy-mm-dd' : readFormat,
-          dateFormatRegexp = regexpForDateFormat(format, language);
+          dateFormatRegexp = regexpForDateFormat(format, language),
+          ISODateRegexp = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/;
 
       // Handle date validity according to dateFormat
       if(controller) {
 
         // modelValue -> $formatters -> viewValue
         controller.$formatters.unshift(function(modelValue) {
-          return type === 'date' && angular.isString(modelValue) && modelValue ? $.fn.datepicker.DPGlobal.parseDate(modelValue, $.fn.datepicker.DPGlobal.parseFormat(readFormat), language) : modelValue;
+          if (modelValue && type === 'iso' && ISODateRegexp.test(modelValue)) {
+            return $.fn.datepicker.DPGlobal.parseDate(new Date(modelValue), $.fn.datepicker.DPGlobal.parseFormat(readFormat), language);
+          } else if(modelValue && type === 'date' && angular.isString(modelValue)) {
+            return $.fn.datepicker.DPGlobal.parseDate(modelValue, $.fn.datepicker.DPGlobal.parseFormat(readFormat), language);
+          } else {
+            return modelValue;
+          }
         });
 
         // viewValue -> $parsers -> modelValue
@@ -75,7 +82,7 @@ angular.module('$strap.directives')
           if(!viewValue) {
             controller.$setValidity('date', true);
             return null;
-          } else if(type === 'date' && angular.isDate(viewValue)) {
+          } else if ((type === 'date' || type === 'iso') && angular.isDate(viewValue)) {
             controller.$setValidity('date', true);
             return viewValue;
           } else if(angular.isString(viewValue) && dateFormatRegexp.test(viewValue)) {
