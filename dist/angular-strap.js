@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.7.5 - 2013-07-21
+ * @version v0.7.5 - 2013-07-31
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -248,7 +248,7 @@ angular.module('$strap.directives').directive('bsDatepicker', [
   '$strapConfig',
   function ($timeout, $strapConfig) {
     var isAppleTouch = /(iP(a|o)d|iPhone)/g.test(navigator.userAgent);
-    var regexpMap = function regexpMap(language) {
+    var regexpMap = function regexpMapFn(language) {
       language = language || 'en';
       return {
         '/': '[\\/]',
@@ -267,7 +267,7 @@ angular.module('$strap.directives').directive('bsDatepicker', [
         'yy': '(?:(?:[0-9]{1}[0-9]{1}))(?![[0-9]])'
       };
     };
-    var regexpForDateFormat = function regexpForDateFormat(format, language) {
+    var regexpForDateFormat = function regexpForDateFormatFn(format, language) {
       var re = format, map = regexpMap(language), i;
       i = 0;
       angular.forEach(map, function (v, k) {
@@ -428,7 +428,7 @@ angular.module('$strap.directives').factory('$modal', [
   '$templateCache',
   '$strapConfig',
   function ($rootScope, $compile, $http, $timeout, $q, $templateCache, $strapConfig) {
-    var ModalFactory = function ModalFactory(config) {
+    var ModalFactory = function ModalFactoryFn(config) {
       function Modal(config) {
         var options = angular.extend({ show: true }, $strapConfig.modal, config), scope = options.scope ? options.scope : $rootScope.$new(), templateUrl = options.template;
         return $q.when($templateCache.get(templateUrl) || $http.get(templateUrl, { cache: true }).then(function (res) {
