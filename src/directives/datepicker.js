@@ -7,7 +7,7 @@ angular.module('$strap.directives')
 
   var isAppleTouch = /(iP(a|o)d|iPhone)/g.test(navigator.userAgent);
 
-  var regexpMap = function regexpMap(language) {
+  var regexpMap = function regexpMapFn(language) {
     language = language || 'en';
     return {
       '/'    : '[\\/]',
@@ -27,7 +27,7 @@ angular.module('$strap.directives')
     };
   };
 
-  var regexpForDateFormat = function regexpForDateFormat(format, language) {
+  var regexpForDateFormat = function regexpForDateFormatFn(format, language) {
     var re = format, map = regexpMap(language), i;
     // Abstract replaces to avoid collisions
     i = 0;

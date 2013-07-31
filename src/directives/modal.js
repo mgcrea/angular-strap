@@ -4,7 +4,7 @@ angular.module('$strap.directives')
 
 .factory('$modal', function($rootScope, $compile, $http, $timeout, $q, $templateCache, $strapConfig) {
 
-  var ModalFactory = function ModalFactory(config) {
+  var ModalFactory = function ModalFactoryFn(config) {
 
     function Modal(config) {
 
