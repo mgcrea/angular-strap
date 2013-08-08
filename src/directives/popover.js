@@ -21,10 +21,20 @@ angular.module('$strap.directives')
       var getter = $parse(attr.bsPopover),
         setter = getter.assign,
         value = getter(scope),
-        options = {};
+        options = {},
+        validPlacements = {
+          top: 0,
+          bottom: 1,
+          left: 2,
+          right: 3
+        };
 
       if(angular.isObject(value)) {
         options = value;
+      }
+
+      if(angular.isString(attr.placement) && angular.isDefined(validPlacements[attr.placement])) {
+        options.placement = attr.placement;
       }
 
       $q.when(options.content || $templateCache.get(value) || $http.get(value, {cache: true})).then(function onSuccess(template) {

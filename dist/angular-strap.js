@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.7.5 - 2013-07-31
+ * @version v0.7.5 - 2013-08-08
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -393,7 +393,7 @@ angular.module('$strap.directives').directive('bsDropdown', [
       angular.forEach(items, function (item, index) {
         if (item.divider)
           return ul.splice(index + 1, 0, '<li class="divider"></li>');
-        var li = '<li' + (item.submenu && item.submenu.length ? ' class="dropdown-submenu"' : '') + '>' + '<a tabindex="-1" ng-href="' + (item.href || '') + '"' + (item.click ? '" ng-click="' + item.click + '"' : '') + (item.target ? '" target="' + item.target + '"' : '') + (item.method ? '" data-method="' + item.method + '"' : '') + '>' + (item.text || '') + '</a>';
+        var li = '<li' + (item.submenu && item.submenu.length ? ' class="dropdown-submenu"' : '') + '>' + '<a tabindex="-1" ng-href="' + (item.href || '') + '"' + (item.click ? '" ng-click="' + item.click + '"' : '') + (item.target ? '" target="' + item.target + '"' : '') + (item.method ? '" data-method="' + item.method + '"' : '') + '>' + (item.icon && '<i class="' + item.icon + '"></i>&nbsp;' || '') + (item.text || '') + '</a>';
         if (item.submenu && item.submenu.length)
           li += buildTemplate(item.submenu).join('\n');
         li += '</li>';
@@ -554,9 +554,17 @@ angular.module('$strap.directives').directive('bsPopover', [
       restrict: 'A',
       scope: true,
       link: function postLink(scope, element, attr, ctrl) {
-        var getter = $parse(attr.bsPopover), setter = getter.assign, value = getter(scope), options = {};
+        var getter = $parse(attr.bsPopover), setter = getter.assign, value = getter(scope), options = {}, validPlacements = {
+            top: 0,
+            bottom: 1,
+            left: 2,
+            right: 3
+          };
         if (angular.isObject(value)) {
           options = value;
+        }
+        if (angular.isString(attr.placement) && angular.isDefined(validPlacements[attr.placement])) {
+          options.placement = attr.placement;
         }
         $q.when(options.content || $templateCache.get(value) || $http.get(value, { cache: true })).then(function onSuccess(template) {
           if (angular.isObject(template)) {
