@@ -33,6 +33,14 @@ describe('datepicker', function () {
     },
     'language': {
       element: '<input type="text" ng-model="foo.date" data-language="fr" bs-datepicker>'
+    },
+    'stringISO': {
+      element: '<input type="text" ng-model="foo.date" data-date-format="yyyy/mm/dd" data-date-type="iso" bs-datepicker>',
+      scope: {foo: {date: '2012-11-11T10:00:00.000Z'}}
+    },
+    'date': {
+      element: '<input type="text" ng-model="foo.date" data-date-format="yyyy/mm/dd" data-date-type="date" bs-datepicker>',
+      scope: {foo: {date: new Date('2012-11-11T10:00:00.000Z')}}
     }
   };
 
@@ -97,6 +105,18 @@ describe('datepicker', function () {
         var elm = compileDirective('string');
         expect(+elm.data('datepicker').date).toBe(+new Date('2012-09-01T00:00:00.000Z'));
         expect(elm.prop('value')).toBe('2012/09/01');
+      });
+
+      it('should support date as a date', function() {
+        var elm = compileDirective('date');
+        expect(+elm.data('datepicker').date).toBe(+new Date('2012-11-11T10:00:00.000Z'));
+        expect(elm.prop('value')).toBe('2012/11/11');
+      });
+
+      it('should support date as an ISO string', function() {
+        var elm = compileDirective('stringISO');
+        expect(+elm.data('datepicker').date).toBe(+new Date('2012-11-11T10:00:00.000Z'));
+        expect(elm.prop('value')).toBe('2012/11/11');
       });
 
     });
