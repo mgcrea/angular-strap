@@ -15,9 +15,7 @@ angular.module('$strap.directives')
 
       // Watch bsTooltip for changes
       scope.$watch(attrs.bsTooltip, function(newValue, oldValue) {
-        if(newValue !== oldValue) {
-          value = newValue;
-        }
+        value = newValue;
       });
 
       if(!!attrs.unique) {
