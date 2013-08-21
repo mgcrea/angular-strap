@@ -3,7 +3,19 @@
 describe('tooltip', function () {
   var scope, $sandbox, $compile, $timeout, $httpBackend;
 
-  beforeEach(module('$strap.directives'));
+  angular.module('$strap.directives.test', ['$strap.directives'])
+  .directive('bsWrappedTooltip', function() {
+    return {
+      replace: true,
+      template: '<div><a class="btn" bs-tooltip="content"></a></div>',
+      link: function(scope, element, attrs) {
+        scope.content = 'some tooltip content';
+      }
+    };
+  });
+
+
+  beforeEach(module('$strap.directives', '$strap.directives.test'));
 
   beforeEach(inject(function ($rootScope, _$compile_, _$timeout_, _$httpBackend_) {
     scope = $rootScope;
@@ -26,6 +38,10 @@ describe('tooltip', function () {
     },
     'click': {
       element: '<a class="btn" bs-tooltip="content" data-trigger="click" data-placement="left"></a>'
+    },
+    'wrapped': {
+      scope: {},
+      element: '<div bs-wrapped-tooltip/></a>'
     }
   };
 
@@ -95,4 +111,10 @@ describe('tooltip', function () {
     expect(elm2.data('tooltip').tip().hasClass('in')).toBe(false);
   });
 
+  it('should update the tooltip text even if it is set inside the link function of a parent directive', function() {
+    var elm = compileDirective('wrapped').find('a[bs-tooltip]');
+    expect(elm.data('tooltip').options.title()).toBe(scope.content);
+    elm.trigger('mouseenter');
+    expect(elm.next().text()).toBe(scope.content);
+  });
 });
