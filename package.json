@@ -11,16 +11,20 @@
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-contrib-clean": "*",
-    "grunt-contrib-concat": "*",
-    "grunt-contrib-connect": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-livereload": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-karma": "~0.4.4",
-    "grunt-ngmin": "~0.0.2",
-    "grunt-regarde": "~0.1.1",
-    "matchdep": "~0.1.1"
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-connect": "~0.3.0",
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-livereload": "~0.1.2",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-ngmin-concat": "~0.1.0",
+    "grunt-karma": "~0.7.0",
+    "matchdep": "~0.1.2",
+    "karma-phantomjs-launcher": "~0.1.0",
+    "karma-chrome-launcher": "~0.1.0",
+    "karma-firefox-launcher": "~0.1.0",
+    "karma-jasmine": "~0.1.0",
+    "karma-junit-reporter": "~0.1.0"
   },
   "engines": {
     "node": ">=0.8.0"

@@ -1,8 +1,7 @@
 .DS_Store
-npm-debug.log
 *.sublime-project
 *.sublime-workspace
-test/coverage
 bower_components/
 node_modules/
+docs/
 !.gitignore
