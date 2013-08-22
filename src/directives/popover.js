@@ -40,7 +40,7 @@ angular.module('$strap.directives')
             // Hide any active popover except self
             $('.popover.in').each(function() {
               var $this = $(this),
-                popover = $this.data('popover');
+                popover = $this.data('bs.popover');
               if(popover && !popover.$element.is(element)) {
                 $this.popover('hide');
               }
@@ -78,7 +78,7 @@ angular.module('$strap.directives')
         }));
 
         // Bootstrap override to provide tip() reference & compilation
-        var popover = element.data('popover');
+        var popover = element.data('bs.popover');
         popover.hasContent = function() {
           return this.getTitle() || template; // fix multiple $compile()
         };
@@ -90,7 +90,7 @@ angular.module('$strap.directives')
           scope.$digest();
 
           // Bind popover to the tip()
-          this.$tip.data('popover', this);
+          this.$tip.data('bs.popover', this);
 
           return r;
         };
