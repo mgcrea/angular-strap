@@ -34,6 +34,13 @@ angular.module('$strap.directives')
           template = template.data;
         }
 
+        // Handle data-placement and data-trigger attributes
+        angular.forEach(['placement', 'trigger'], function(name) {
+          if(!!attr[name]) {
+            options[name] = attr[name];
+          }
+        });
+
         // Handle data-unique attribute
         if(!!attr.unique) {
           element.on('show', function(ev) { // requires bootstrap 2.3.0+
