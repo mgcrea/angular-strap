@@ -24,6 +24,11 @@ angular.module('$strap.directives')
         // Watch for changes to the model value
         scope.$watch(attrs.ngModel, function(newValue, oldValue) {
           if (!angular.equals(newValue, oldValue)) {
+            // Avoid closing the dropdown while selecting multiple options
+            if (element.attr('multiple') &&
+                element.data().selectpicker.button.parent().hasClass('open'))
+              return true;
+            
             element.selectpicker('refresh');
           }
         });
