@@ -54,7 +54,9 @@ angular.module('$strap.directives')
             if(!!newValue) {
               popover.hide();
             } else if(newValue !== oldValue) {
-              popover.show();
+              $timeout(function() {
+                popover.show();
+              });
             }
           });
         }
