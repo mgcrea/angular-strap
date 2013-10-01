@@ -17,15 +17,24 @@ angular.module('$strap.directives')
         element.selectpicker(options);
         element.next().removeClass('ng-scope');
       });
-
+      
       // If we have a controller (i.e. ngModelController) then wire it up
       if(controller) {
 
-        // Watch for changes to the model value
-        scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+        var refresh = function(newValue, oldValue) {
           if (!angular.equals(newValue, oldValue)) {
             element.selectpicker('refresh');
           }
+        };
+
+        // Watch for changes to the model value
+        scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+          refresh(newValue, oldValue);
+        });
+
+        // Watch for changes to the options
+        scope.$watch(attrs.bsSelect, function(newValue, oldValue) {
+          refresh(newValue, oldValue);
         });
 
       }
