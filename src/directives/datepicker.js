@@ -142,12 +142,18 @@ angular.module('$strap.directives')
 
         // Update start-date when changed
         attrs.$observe('startDate', function(value) {
-          element.datepicker('setStartDate',value);
+          if (!angular.isUndefined(value)) {
+            value = value.replace(/(^")|("$)/g, '');
+            element.datepicker('setStartDate',new Date(value));
+          }
         });
 
         // Update end-date when changed
         attrs.$observe('endDate', function(value) {
-          element.datepicker('setEndDate',value);
+          if (!angular.isUndefined(value)) {
+            value = value.replace(/(^")|("$)/g, '');
+            element.datepicker('setEndDate',new Date(value));
+          }
         });
 
       }
