@@ -53,6 +53,16 @@ describe('popover', function () {
       scope: {things: [{name: "A"}, {name: "B"}, {name: "C"}]},
       popover: '<ul><li ng-repeat="thing in things">{{thing.name}}</li></ul>',
       element: '<a class="btn" bs-popover="\'partials/popover.html\'"></a>'
+    },
+    'placement': {
+      scope: {content: "World<br />Multiline Content<br />"},
+      popover: 'Hello <span ng-bind-html-unsafe="content"></span>',
+      element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-placement="right"></a>'
+    },
+    'trigger': {
+      scope: {content: "World<br />Multiline Content<br />"},
+      popover: 'Hello <span ng-bind-html-unsafe="content"></span>',
+      element: '<a class="btn" bs-popover="\'partials/popover.html\'" data-title="aTitle" data-trigger="hover"></a>'
     }
   };
 
@@ -101,6 +111,20 @@ describe('popover', function () {
     var elm = compileDirective();
     elm.popover('show');
     expect(elm.data('popover').tip().find('.popover-title').text()).toBe('aTitle');
+  });
+
+  it('should define a correct trigger', function() {
+    var elm = compileDirective('trigger');
+    elm.trigger('mouseover');
+    expect(elm.data('popover').tip().hasClass('in')).toBe(true);
+    elm.trigger('mouseleave');
+    expect(elm.data('popover').tip().hasClass('in')).toBe(false);
+  });
+
+  it('should define a correct placement', function() {
+    var elm = compileDirective('placement');
+    elm.popover('show');
+    expect(elm.data('popover').tip().hasClass('right')).toBe(true);
   });
 
   it('should resolve scope variables in the external partial', function() {
