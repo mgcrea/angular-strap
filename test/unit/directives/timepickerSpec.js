@@ -82,7 +82,7 @@ describe('timepicker', function () {
     elm.data('timepicker').$widget.find('a[data-action="incrementHour"]').trigger('click');
     $timeout.flush();
     expect(elm.val()).toBe('01:00');
-    expect(scope.model.time).toMatch(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{1,2} \d{4} 01:00:\d{2} GMT[-+]\d{4} \([A-Z]{3,4}\)/);
+    expect(scope.model.time).toMatch(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{1,2} \d{4} 01:00:\d{2} GMT[-+]\d{4} \(.*\)/);
   });
 
   it('should not accept bad input', function() {

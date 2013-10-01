@@ -24,7 +24,8 @@
     "karma-chrome-launcher": "~0.1.0",
     "karma-firefox-launcher": "~0.1.0",
     "karma-jasmine": "~0.1.0",
-    "karma-junit-reporter": "~0.1.0"
+    "karma-junit-reporter": "~0.1.0",
+    "source-map": "~0.1.30"
   },
   "engines": {
     "node": ">=0.8.0"
