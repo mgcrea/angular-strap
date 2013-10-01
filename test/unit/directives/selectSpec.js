@@ -24,7 +24,7 @@ describe('select', function () {
   var templates = {
     'default': {
       scope: {items: [{id: '1', name: 'foo'}, {id: '2', name: 'bar'}, {id: '3', name: 'baz'}], selectedItem: '2'},
-      element: '<select ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in items" bs-select></select>'
+      element: '<select ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in items" bs-select="items"></select>'
     }
   };
 
@@ -78,6 +78,13 @@ describe('select', function () {
 
     it('does not add ng-scope class to bootstrap select element', function () {
       expect(select.hasClass('ng-scope')).toBe(false);
+    });
+
+    it('updates bootstrap select when the option items change', function () {
+      scope.items.push({id: '4', name: 'shock'});
+      scope.selectedItem = '4';
+      scope.$digest();
+      expect(menu.find('.selected').text()).toBe('shock');
     });
 
     // it('adds new classes from original element when the model changes', function () {
