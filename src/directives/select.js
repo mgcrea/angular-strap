@@ -23,6 +23,11 @@ angular.module('$strap.directives')
 
         var refresh = function(newValue, oldValue) {
           if (!angular.equals(newValue, oldValue)) {
+            // Avoid closing the dropdown while selecting multiple options
+            if (element.attr('multiple') &&
+                element.data().selectpicker.button.parent().hasClass('open'))
+              return true;
+            
             element.selectpicker('refresh');
           }
         };
