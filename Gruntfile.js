@@ -28,7 +28,7 @@ module.exports = function(grunt) {
         ' * @link <%= pkg.homepage %>\n' +
         ' * @author <%= pkg.author %>\n' +
         ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' +
-        ' */\n'
+        ' */\n\n'
     },
     watch: {
       livereload: {
@@ -122,11 +122,9 @@ module.exports = function(grunt) {
         }
       },
       banner: {
-        files: {
-          '<%= yeoman.dist %>/<%= pkg.name %>.js': [
-            '<%= yeoman.dist %>/<%= pkg.name %>.js'
-          ]
-        }
+        banner: '<%= meta.banner %>',
+        src: ['<%= yeoman.dist %>/<%= pkg.name %>.js'],
+        dest: '<%= yeoman.dist %>/<%= pkg.name %>.js'
       }
     },
     ngmin: {
@@ -144,9 +142,6 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
-      options: {
-        banner: '<%= meta.banner %>'
-      },
       dist: {
         files: {
           '<%= yeoman.dist %>/<%= pkg.name %>.min.js': [
