@@ -33,9 +33,18 @@ angular.module('$strap.directives')
         });
 
         // Watch for changes to the options
-        scope.$watch(attrs.bsSelect, function(newValue, oldValue) {
-          refresh(newValue, oldValue);
-        });
+        if (attrs.ngOptions) {
+            var match = attrs.ngOptions.match(NG_OPTIONS_REGEXP);
+            if (match && scope[match[7]]) {
+                scope.$watch(function () {
+                    return scope[match[7]];
+                }, function (newValue, oldValue) {
+                    if (!angular.equals(newValue, oldValue)) {
+                        refresh(newValue, oldValue);
+                    }
+                }, true);
+            }
+        }
 
       }
 
