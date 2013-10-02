@@ -34,6 +34,10 @@ describe('datepicker', function () {
     'language': {
       element: '<input type="text" ng-model="foo.date" data-language="fr" bs-datepicker>'
     },
+    'variableLanguage': {
+      element: '<input type="text" ng-model="foo.date" data-language="{{language}}" bs-datepicker>',
+      scope: {language: 'en', foo: {date: new Date('2012-09-22T00:00:00.000Z')}}
+    },
     'stringISO': {
       element: '<input type="text" ng-model="foo.date" data-date-format="yyyy/mm/dd" data-date-type="iso" bs-datepicker>',
       scope: {foo: {date: '2012-11-11T10:00:00.000Z'}}
@@ -75,6 +79,21 @@ describe('datepicker', function () {
       (function($){$.fn.datepicker.dates["fr"]={days:["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"],daysShort:["Dim","Lun","Mar","Mer","Jeu","Ven","Sam","Dim"],daysMin:["D","L","Ma","Me","J","V","S","D"],months:["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],monthsShort:["Jan","Fev","Mar","Avr","Mai","Jui","Jul","Aou","Sep","Oct","Nov","Dec"],today:"Aujourd'hui",weekStart:1,format:"dd/mm/yyyy"}})(jQuery);
       var elm = compileDirective('language');
       expect(elm.data('datepicker').language).toBe('fr');
+    });
+
+    it('should handle "data-language" attribute changes', function () {
+      (function($){$.fn.datepicker.dates["fr"]={days:["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"],daysShort:["Dim","Lun","Mar","Mer","Jeu","Ven","Sam","Dim"],daysMin:["D","L","Ma","Me","J","V","S","D"],months:["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],monthsShort:["Jan","Fev","Mar","Avr","Mai","Jui","Jul","Aou","Sep","Oct","Nov","Dec"],today:"Aujourd'hui",weekStart:1,format:"dd/mm/yyyy"}})(jQuery);
+      var elm = compileDirective('variableLanguage');
+      scope.foo.date = new Date('2012-09-22T00:00:00.000Z');
+      expect(elm.val()).toBe('09/22/2012');
+      scope.language = 'fr';
+      scope.$digest();
+      expect(elm.data('datepicker').language).toBe('fr');
+      expect(elm.val()).toBe('22/09/2012');
+      scope.language = '';
+      scope.$digest();
+      expect(elm.val()).toBe('09/22/2012');
+      expect(scope.foo.date).toEqual(new Date('2012-09-22T00:00:00.000Z'))
     });
 
     it('should show/hide the datepicker', function() {
