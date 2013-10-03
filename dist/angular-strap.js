@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.7.6 - 2013-10-02
+ * @version v0.7.7 - 2013-10-04
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -579,9 +579,7 @@
     function ($parse, $compile, $http, $timeout, $q, $templateCache) {
       $('body').on('keyup', function (ev) {
         if (ev.keyCode === 27) {
-          $('.popover.in').each(function () {
-            $(this).popover('hide');
-          });
+          $('.popover.in').popover('hide');
         }
       });
       return {
@@ -606,12 +604,7 @@
             });
             if (!!attr.unique) {
               element.on('show', function (ev) {
-                $('.popover.in').each(function () {
-                  var $this = $(this), popover = $this.data('popover');
-                  if (popover && !popover.$element.is(element)) {
-                    $this.popover('hide');
-                  }
-                });
+                $('.popover.in').not(element).popover('hide');
               });
             }
             if (!!attr.hide) {
@@ -700,9 +693,18 @@
             scope.$watch(attrs.ngModel, function (newValue, oldValue) {
               refresh(newValue, oldValue);
             });
-            scope.$watch(attrs.bsSelect, function (newValue, oldValue) {
-              refresh(newValue, oldValue);
-            });
+            if (attrs.ngOptions) {
+              var match = attrs.ngOptions.match(NG_OPTIONS_REGEXP);
+              if (match && scope[match[7]]) {
+                scope.$watch(function () {
+                  return scope[match[7]];
+                }, function (newValue, oldValue) {
+                  if (!angular.equals(newValue, oldValue)) {
+                    refresh(newValue, oldValue);
+                  }
+                }, true);
+              }
+            }
           }
         }
       };
