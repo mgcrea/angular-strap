@@ -24,7 +24,7 @@ describe('select', function () {
   var templates = {
     'default': {
       scope: {items: [{id: '1', name: 'foo'}, {id: '2', name: 'bar'}, {id: '3', name: 'baz'}], selectedItem: '2'},
-      element: '<select ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in items" bs-select="items"></select>'
+      element: '<select ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in items" bs-select ></select>'
     }
   };
 
