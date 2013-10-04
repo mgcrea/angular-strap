@@ -13,7 +13,7 @@ describe('select', function () {
     $httpBackend = _$httpBackend_;
     $templateCache = _$templateCache_;
 
-    $sandbox = $('<div id="sandbox"></div>').appendTo('body');
+    $sandbox = angular.element('<div id="sandbox"></div>').appendTo('body');
   }));
 
   afterEach(function() {
@@ -25,14 +25,18 @@ describe('select', function () {
     'default': {
       scope: {items: [{id: '1', name: 'foo'}, {id: '2', name: 'bar'}, {id: '3', name: 'baz'}], selectedItem: '2'},
       element: '<select ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in items" bs-select ></select>'
+    },
+    'validate': {
+      scope: {items: [{id: '1', name: 'foo'}, {id: '2', name: 'bar'}, {id: '3', name: 'baz'}], selectedItem: '2', isRequired: false},
+      element: '<form name="testForm"><select name="mySelect" ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in items" ng-required="isRequired" bs-select></select></form>'
     }
   };
 
   function compileDirective(template) {
     template = template ? templates[template] : templates['default'];
     angular.extend(scope, template.scope);
-    var $element = $(template.element).appendTo($sandbox);
-    $element = $compile($element)(scope);
+    var $element = angular.element(template.element).appendTo($sandbox);
+    $element = $compile(angular.element($element))(scope);
     scope.$digest(); // evaluate $evalAsync queue used by $q
     $timeout.flush();
     return $element;
@@ -105,5 +109,77 @@ describe('select', function () {
     // });
 
   });
+
+  describe('validate template', function() {
+
+    var elm, selectPicker, select, menu;
+    beforeEach(function() {
+      elm = compileDirective('validate');
+      elm = elm.find('select');
+      selectPicker = elm.next('.bootstrap-select');
+      menu = selectPicker.find('ul[role=menu]');
+      scope.$digest();
+      select = scope.testForm.mySelect;
+    });
+    
+    var expectValid = function(valid) {
+      if (valid === undefined) {
+        valid = true;
+      }
+      // Test the original select
+      expect(elm.hasClass('ng-valid')).toBe(valid);
+      expect(elm.hasClass('ng-valid-required')).toBe(valid);
+      expect(elm.hasClass('ng-invalid')).toBe(!valid);
+      expect(elm.hasClass('ng-invalid-required')).toBe(!valid);
+      // Test the selectpicker
+      expect(selectPicker.hasClass('ng-valid')).toBe(valid);
+      expect(selectPicker.hasClass('ng-valid-required')).toBe(valid);
+      expect(selectPicker.hasClass('ng-invalid')).toBe(!valid);
+      expect(selectPicker.hasClass('ng-invalid-required')).toBe(!valid);
+      // Test the NgModelController
+      expect(select.$valid).toBe(valid);
+      expect(select.$invalid).toBe(!valid);
+    };
+
+    it('should be a valid element in the form', function () {
+      expect(select).toBeDefined();
+      expect(select.$pristine).toBe(true);
+      expect(select.$dirty).toBe(false);
+      expectValid();
+    });
+
+    it('should set the selectPicker as required', function () {
+      scope.isRequired = true;
+      scope.$digest();
+      expect(elm.attr('required')).toBe('required');
+    });
+
+    it('should be a valid element after a selection', function () {
+      scope.isRequired = true;
+      scope.selectedItem = '2';
+      scope.$digest();
+      expect(elm.attr('required')).toBe('required');
+      expectValid();
+    });
+
+    it('should be an invalid element', function () {
+      scope.isRequired = true;
+      scope.selectedItem = undefined;
+      scope.$digest();
+      expect(elm.attr('required')).toBe('required');
+      expectValid(false);
+    });
+
+    it('should become invalid when a selection is performed through click', function () {
+      scope.isRequired = true;
+      scope.selectedItem = undefined;
+      scope.$digest();
+      menu.find('li:nth-child(2) a').click();
+      expect(scope.selectedItem).toBe('1');
+      expectValid();
+    });
+    
+  });
+
 
 });
