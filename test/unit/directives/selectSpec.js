@@ -25,6 +25,10 @@ describe('select', function () {
     'default': {
       scope: {items: [{id: '1', name: 'foo'}, {id: '2', name: 'bar'}, {id: '3', name: 'baz'}], selectedItem: '2'},
       element: '<select ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in items" bs-select ></select>'
+    },
+    'validate': {
+      scope: {items: [{id: '1', name: 'foo'}, {id: '2', name: 'bar'}, {id: '3', name: 'baz'}], selectedItem: '', isRequired: false},
+      element: '<select ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in items" bs-select ng-required="isRequired"></select>'
     }
   };
 
@@ -105,5 +109,59 @@ describe('select', function () {
     // });
 
   });
+
+  describe('validate template', function() {
+
+    var elm, select, menu;
+    beforeEach(function() {
+      elm = compileDirective('validate');
+      select = elm.next('.bootstrap-select');
+      menu = select.find('ul[role=menu]');
+      scope.$digest();
+    });
+
+    it('should be a valid element', function () {
+      expect(select.hasClass('ng-valid')).toBe(true);
+      expect(select.hasClass('ng-valid-required')).toBe(true);
+      expect(select.hasClass('ng-invalid')).toBe(false);
+      expect(select.hasClass('ng-invalid-required')).toBe(false);
+    });
+
+    it('should set the select as required', function () {
+      scope.isRequired = true;
+      scope.$digest();
+      expect(elm.attr('required')).toBe('required');
+    });
+
+    it('should be a valid element after a selection', function () {
+      scope.isRequired = true;
+      scope.selectedItem = '2';
+      scope.$digest();
+      expect(elm.attr('required')).toBe('required');
+      expect(select.hasClass('ng-valid')).toBe(true);
+      expect(select.hasClass('ng-valid-required')).toBe(true);
+      expect(select.hasClass('ng-invalid')).toBe(false);
+      expect(select.hasClass('ng-invalid-required')).toBe(false);
+    });
+
+    it('should be an invalid element', function () {
+      scope.isRequired = true;
+      scope.selectedItem = undefined;
+      scope.$digest();
+      expect(elm.attr('required')).toBe('required');
+      expect(elm.hasClass('ng-valid')).toBe(false);
+      expect(elm.hasClass('ng-valid-required')).toBe(false);
+      expect(elm.hasClass('ng-invalid')).toBe(true);
+      expect(elm.hasClass('ng-invalid-required')).toBe(true);
+      /*
+      expect(select.hasClass('ng-valid')).toBe(false);
+      expect(select.hasClass('ng-valid-required')).toBe(false);
+      expect(select.hasClass('ng-invalid')).toBe(true);
+      expect(select.hasClass('ng-invalid-required')).toBe(true);
+      */
+    });
+    
+  });
+
 
 });
