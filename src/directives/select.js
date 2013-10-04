@@ -16,7 +16,7 @@ angular.module('$strap.directives')
 
       $timeout(function() {
         element.selectpicker(options);
-        selectpicker = element.next();
+        selectpicker = element.next('.bootstrap-select');
         selectpicker.removeClass('ng-scope');
       });
       
@@ -43,9 +43,13 @@ angular.module('$strap.directives')
         };
 
         // Handle AngularJS validation when the DOM changes
-        controller.$parsers.unshift(checkValidity);
+        controller.$parsers.push(checkValidity);
         // Handle AngularJS validation when the model changes
-        controller.$formatters.unshift(checkValidity);
+        controller.$formatters.push(checkValidity);
+        // Handle AngularJS validation when the required attribute changes
+        attrs.$observe('required', function() {
+          checkValidity(controller.$viewValue);
+        });
 
         // Watch for changes to the model value
         scope.$watch(attrs.ngModel, function(newValue, oldValue) {
