@@ -19,7 +19,8 @@ angular.module('$strap.directives')
       var getter = $parse(attr.bsPopover),
         setter = getter.assign,
         value = getter(scope),
-        options = {};
+        options = {},
+        popoverScope;
 
       if(angular.isObject(value)) {
         options = value;
@@ -85,9 +86,10 @@ angular.module('$strap.directives')
         };
         popover.getPosition = function() {
           var r = $.fn.popover.Constructor.prototype.getPosition.apply(this, arguments);
-
+          // create new scope to compile against
+          popoverScope = scope.$new();
           // Compile content
-          $compile(this.$tip)(scope);
+          $compile(this.$tip)(popoverScope);
           scope.$digest();
 
           // Bind popover to the tip()
@@ -112,6 +114,12 @@ angular.module('$strap.directives')
           element.on(name, function(ev) {
             scope.$emit('popover-' + name, ev);
           });
+        });
+        //destroy the popover scope when hidden
+        scope.$on('popover-hidden',function(){
+          $timeout(function(){
+            popoverScope.$destroy();
+          },0);
         });
 
       });
