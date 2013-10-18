@@ -116,8 +116,10 @@ angular.module('$strap.directives')
           });
         });
         //destroy the popover scope when hidden
-        scope.$on('popover-hidden', function(){
-          popoverScope.$destroy();
+        scope.$on('popover-hidden',function(){
+          $timeout(function(){
+            popoverScope.$destroy();
+          },0);
         });
 
       });
