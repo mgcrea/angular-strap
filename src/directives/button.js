@@ -137,7 +137,7 @@ angular.module('$strap.directives')
               .find('[value]').button()
               .filter('[value="' + controller.$viewValue + '"]')
               .addClass('active');
-          });
+          }, 0, false);
 
           iElement.on('click.button.data-api', function (ev) {
             scope.$apply(function () {
