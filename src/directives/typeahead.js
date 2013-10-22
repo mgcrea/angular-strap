@@ -21,6 +21,7 @@ angular.module('$strap.directives')
       });
 
       element.attr('data-provide', 'typeahead');
+      element.attr('autocomplete', 'off');
       element.typeahead({
         source: function(query) { return angular.isFunction(value) ? value.apply(null, arguments) : value; },
         minLength: attrs.minLength || 1,
