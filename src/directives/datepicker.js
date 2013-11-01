@@ -71,14 +71,15 @@ angular.module('$strap.directives')
         type = attrs.dateType || options.type || 'date';
 
         // $.fn.datepicker options
-        angular.forEach(['format', 'weekStart', 'calendarWeeks', 'startDate', 'endDate', 'daysOfWeekDisabled', 'autoclose', 'startView', 'minViewMode', 'todayBtn', 'todayHighlight', 'keyboardNavigation', 'language', 'forceParse'], function(key) {
+        angular.forEach(['format', 'weekStart', 'calendarWeeks', 'startDate', 'endDate', 'daysOfWeekDisabled', 'autoclose', 'startView', 'minViewMode', 'todayBtn', 'todayHighlight', 'keyboardNavigation', 'language', 'forceParse', 'beforeShowDay'], function(key) {
           if(angular.isDefined(attrs[key])) options[key] = attrs[key];
         });
 
         var language = options.language || 'en',
           readFormat = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy',
           format = isAppleTouch ? 'yyyy-mm-dd' : readFormat,
-          dateFormatRegexp = regexpForDateFormat(format, language);
+          dateFormatRegexp = regexpForDateFormat(format, language),
+          beforeShowDay = scope.$eval(attrs.beforeShowDay);
 
         // Handle date validity according to dateFormat
         if(controller) {
@@ -136,7 +137,8 @@ angular.module('$strap.directives')
           // element.attr('data-toggle', 'datepicker');
           element.datepicker(angular.extend(options, {
             format: format,
-            language: language
+            language: language,
+            beforeShowDay: beforeShowDay
           }));
 
           // Garbage collection
