@@ -2,7 +2,7 @@
 
 angular.module('$strap.directives')
 
-.directive('bsSelect', function($timeout) {
+.directive('bsSelect', function($timeout, $parse) {
 
   var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/;
 
@@ -52,21 +52,17 @@ angular.module('$strap.directives')
         });
 
         // Watch for changes to the model value
-        scope.$watch(attrs.ngModel, function(newValue, oldValue) {
-          refresh(newValue, oldValue);
-        });
+        scope.$watch(attrs.ngModel, refresh);
 
         // Watch for changes to the options
         if (attrs.ngOptions) {
-          var match = attrs.ngOptions.match(NG_OPTIONS_REGEXP);
-          if (match && scope[match[7]]) {
+          var match = attrs.ngOptions.match(NG_OPTIONS_REGEXP),
+		  valuesFn = $parse(match[7]);
+
+          if (match && match[7]) {
             scope.$watch(function () {
-              return scope[match[7]];
-            }, function (newValue, oldValue) {
-                    if (!angular.equals(newValue, oldValue)) {
-                      refresh(newValue, oldValue);
-                    }
-                  }, true);
+              return valuesFn(scope);
+            }, refresh, true);
           }
         }
 
