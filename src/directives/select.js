@@ -16,6 +16,7 @@ angular.module('$strap.directives')
 
       $timeout(function() {
         element.selectpicker(options);
+        element.unbind('DOMNodeInserted DOMNodeRemoved'); // disable listening for DOM updates
         selectpicker = element.next('.bootstrap-select');
         selectpicker.removeClass('ng-scope');
       });
