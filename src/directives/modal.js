@@ -17,7 +17,14 @@ angular.module('$strap.directives')
 
         // Build modal object
         var id = templateUrl.replace('.html', '').replace(/[\/|\.|:]/g, '-') + '-' + scope.$id;
-        var $modal = $('<div class="modal hide" tabindex="-1"></div>').attr('id', id).addClass('fade').html(template);
+        var ctrlHtml;
+        if (options.controller) {
+          scope.controller = options.controller;
+          ctrlHtml = ' ng-controller="controller"';
+        } else {
+          ctrlHtml = '';
+        }
+        var $modal = $('<div class="modal hide" tabindex="-1"' + ctrlHtml + '></div>').attr('id', id).addClass('fade').html(template);
         if(options.modalClass) $modal.addClass(options.modalClass);
 
         $('body').append($modal);
