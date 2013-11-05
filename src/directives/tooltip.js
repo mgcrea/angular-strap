@@ -23,7 +23,7 @@ angular.module('$strap.directives')
           // Hide any active popover except self
           $('.tooltip.in').each(function() {
             var $this = $(this),
-              tooltip = $this.data('tooltip');
+              tooltip = $this.data('bs.tooltip');
             if(tooltip && !tooltip.$element.is(element)) {
               $this.tooltip('hide');
             }
@@ -38,11 +38,11 @@ angular.module('$strap.directives')
       });
 
       // Bootstrap override to provide events & tip() reference
-      var tooltip = element.data('tooltip');
+      var tooltip = element.data('bs.tooltip');
       tooltip.show = function() {
         var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
         // Bind tooltip to the tip()
-        this.tip().data('tooltip', this);
+        this.tip().data('bs.tooltip', this);
         return r;
       };
 
