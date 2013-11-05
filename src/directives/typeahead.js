@@ -46,7 +46,7 @@ angular.module('$strap.directives')
         if (this.query.length < this.options.minLength) {
           return this.shown ? this.hide() : this;
         }
-        items = $.isFunction(this.source) ? this.source(this.query, $.proxy(this.process, this)) : this.source;
+        items = $.isFunction(this.source) ? this.source(this.query, this.$element, $.proxy(this.process, this)) : this.source;
         return items ? this.process(items) : this;
       };
 
