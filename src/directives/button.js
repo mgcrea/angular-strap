@@ -143,7 +143,7 @@ angular.module('$strap.directives')
               .find('[value]').button()
               .filter('[value="' + controller.$viewValue + '"]')
               .addClass('active');
-          });
+          }, 0, false);
 
           iElement.on(evName, function (ev) {
             scope.$apply(function () {
