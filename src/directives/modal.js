@@ -5,7 +5,9 @@ angular.module('$strap.directives')
 
 .factory('$modal', function($rootScope, $compile, $http, $timeout, $q, $templateCache, $strapConfig) {
 
-  var evSuffix = !!$.fn.emulateTransitionEnd ? '.bs.modal' : '';
+  var type = 'modal',
+      dataPrefix = !!$.fn.emulateTransitionEnd ? 'bs.' : '',
+      evSuffix = dataPrefix ? '.' + dataPrefix + type : '';
 
   var ModalFactory = function ModalFactoryFn(config) {
 
@@ -44,7 +46,7 @@ angular.module('$strap.directives')
 
         // Emit modal events
         angular.forEach(['show', 'shown', 'hide', 'hidden'], function(name) {
-          $modal.on(name, function(ev) {
+          $modal.on(name + evSuffix, function(ev) {
             scope.$emit('modal-' + name, ev);
           });
         });

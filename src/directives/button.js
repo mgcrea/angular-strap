@@ -4,8 +4,11 @@ angular.module('$strap.directives')
 
 .directive('bsButton', function($parse, $timeout, $strapConfig) {
 
-  var name = !!$.fn.emulateTransitionEnd ? 'bs.button' : 'button';
-  var evName = 'click.' + name + '.data-api';
+  var type = 'button',
+      dataPrefix = !!$.fn.emulateTransitionEnd ? 'bs.' : '',
+      evSuffix = dataPrefix ? '.' + dataPrefix + type : '';
+
+  var evName = 'click' + evSuffix + '.data-api';
 
   return {
     restrict: 'A',
@@ -50,7 +53,7 @@ angular.module('$strap.directives')
       element.button();
 
       // Bootstrap override to handle toggling
-      var button = element.data('button');
+      var button = element.data(dataPrefix + type);
       button.toggle = function() {
 
         if(!controller) {
@@ -116,8 +119,11 @@ angular.module('$strap.directives')
 
 .directive('bsButtonsRadio', function($timeout) {
 
-  var name = !!$.fn.emulateTransitionEnd ? 'bs.button' : 'button';
-  var evName = 'click.' + name + '.data-api';
+  var type = 'button',
+      dataPrefix = !!$.fn.emulateTransitionEnd ? 'bs.' : '',
+      evSuffix = dataPrefix ? '.' + dataPrefix + type : '';
+
+  var evName = 'click' + evSuffix + '.data-api';
 
   return {
     restrict: 'A',

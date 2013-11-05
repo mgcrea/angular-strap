@@ -4,6 +4,10 @@ angular.module('$strap.directives')
 
 .directive('bsPopover', function($parse, $compile, $http, $timeout, $q, $templateCache) {
 
+  var type = 'popover',
+      dataPrefix = !!$.fn.emulateTransitionEnd ? 'bs.' : '',
+      evSuffix = dataPrefix ? '.' + dataPrefix + type : '';
+
   // Hide popovers when pressing esc
   $('body').on('keyup', function(ev) {
     if(ev.keyCode === 27) {
@@ -41,7 +45,7 @@ angular.module('$strap.directives')
 
         // Handle data-unique attribute
         if(!!attr.unique) {
-          element.on('show', function(ev) { // requires bootstrap 2.3.0+
+          element.on('show' + evSuffix, function(ev) { // requires bootstrap 2.3.0+
             // Hide any active popover except self
             $('.popover.in').not(element).popover('hide');
           });
@@ -79,7 +83,7 @@ angular.module('$strap.directives')
         }));
 
         // Bootstrap override to provide tip() reference & compilation
-        var popover = element.data('popover');
+        var popover = element.data(dataPrefix + type);
         popover.hasContent = function() {
           return this.getTitle() || template; // fix multiple $compile()
         };
@@ -91,7 +95,7 @@ angular.module('$strap.directives')
           scope.$digest();
 
           // Bind popover to the tip()
-          this.$tip.data('popover', this);
+          this.$tip.data(dataPrefix + type, this);
 
           return r;
         };
@@ -109,7 +113,7 @@ angular.module('$strap.directives')
 
         // Emit popover events
         angular.forEach(['show', 'shown', 'hide', 'hidden'], function(name) {
-          element.on(name, function(ev) {
+          element.on(name + evSuffix, function(ev) {
             scope.$emit('popover-' + name, ev);
           });
         });
