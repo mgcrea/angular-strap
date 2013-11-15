@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.7.7 - 2013-10-04
+ * @version v0.7.8 - 2013-11-15
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -108,7 +108,10 @@
   angular.module('$strap.directives').directive('bsButton', [
     '$parse',
     '$timeout',
-    function ($parse, $timeout) {
+    '$strapConfig',
+    function ($parse, $timeout, $strapConfig) {
+      var type = 'button', dataPrefix = !!$.fn.emulateTransitionEnd ? 'bs.' : '', evSuffix = dataPrefix ? '.' + dataPrefix + type : '';
+      var evName = 'click' + evSuffix + '.data-api';
       return {
         restrict: 'A',
         require: '?ngModel',
@@ -131,12 +134,12 @@
             });
           }
           if (!element.hasClass('btn')) {
-            element.on('click.button.data-api', function (ev) {
+            element.on(evName, function (ev) {
               element.button('toggle');
             });
           }
           element.button();
-          var button = element.data('button');
+          var button = element.data(dataPrefix + type);
           button.toggle = function () {
             if (!controller) {
               return $.fn.button.Constructor.prototype.toggle.call(this);
@@ -176,6 +179,8 @@
   ]).directive('bsButtonsRadio', [
     '$timeout',
     function ($timeout) {
+      var type = 'button', dataPrefix = !!$.fn.emulateTransitionEnd ? 'bs.' : '', evSuffix = dataPrefix ? '.' + dataPrefix + type : '';
+      var evName = 'click' + evSuffix + '.data-api';
       return {
         restrict: 'A',
         require: '?ngModel',
@@ -190,8 +195,8 @@
             if (controller) {
               $timeout(function () {
                 iElement.find('[value]').button().filter('[value="' + controller.$viewValue + '"]').addClass('active');
-              });
-              iElement.on('click.button.data-api', function (ev) {
+              }, 0, false);
+              iElement.on(evName, function (ev) {
                 scope.$apply(function () {
                   controller.$setViewValue($(ev.target).closest('button').attr('value'));
                 });
@@ -461,6 +466,7 @@
     '$templateCache',
     '$strapConfig',
     function ($rootScope, $compile, $http, $timeout, $q, $templateCache, $strapConfig) {
+      var type = 'modal', dataPrefix = !!$.fn.emulateTransitionEnd ? 'bs.' : '', evSuffix = dataPrefix ? '.' + dataPrefix + type : '';
       var ModalFactory = function ModalFactoryFn(config) {
         function Modal(config) {
           var options = angular.extend({ show: true }, $strapConfig.modal, config), scope = options.scope ? options.scope : $rootScope.$new(), templateUrl = options.template;
@@ -468,7 +474,9 @@
             return res.data;
           })).then(function onSuccess(template) {
             var id = templateUrl.replace('.html', '').replace(/[\/|\.|:]/g, '-') + '-' + scope.$id;
-            var $modal = $('<div class="modal hide" tabindex="-1"></div>').attr('id', id).addClass('fade').html(template);
+            var $modal = $('<div class="modal" tabindex="-1"></div>').attr('id', id).addClass('fade').html(template);
+            if (!$.fn.emulateTransitionEnd)
+              $modal.addClass('hide');
             if (options.modalClass)
               $modal.addClass(options.modalClass);
             $('body').append($modal);
@@ -493,14 +501,14 @@
               'hide',
               'hidden'
             ], function (name) {
-              $modal.on(name, function (ev) {
+              $modal.on(name + evSuffix, function (ev) {
                 scope.$emit('modal-' + name, ev);
               });
             });
-            $modal.on('shown', function (ev) {
+            $modal.on('shown' + evSuffix, function (ev) {
               $('input[autofocus], textarea[autofocus]', $modal).first().trigger('focus');
             });
-            $modal.on('hidden', function (ev) {
+            $modal.on('hidden' + evSuffix, function (ev) {
               if (!options.persist)
                 scope.$destroy();
             });
@@ -577,6 +585,7 @@
     '$q',
     '$templateCache',
     function ($parse, $compile, $http, $timeout, $q, $templateCache) {
+      var type = 'popover', dataPrefix = !!$.fn.emulateTransitionEnd ? 'bs.' : '', evSuffix = dataPrefix ? '.' + dataPrefix + type : '';
       $('body').on('keyup', function (ev) {
         if (ev.keyCode === 27) {
           $('.popover.in').popover('hide');
@@ -603,7 +612,7 @@
               }
             });
             if (!!attr.unique) {
-              element.on('show', function (ev) {
+              element.on('show' + evSuffix, function (ev) {
                 $('.popover.in').not(element).popover('hide');
               });
             }
@@ -633,7 +642,7 @@
               content: template,
               html: true
             }));
-            var popover = element.data('popover');
+            var popover = element.data(dataPrefix + type);
             popover.hasContent = function () {
               return this.getTitle() || template;
             };
@@ -641,7 +650,7 @@
               var r = $.fn.popover.Constructor.prototype.getPosition.apply(this, arguments);
               $compile(this.$tip)(scope);
               scope.$digest();
-              this.$tip.data('popover', this);
+              this.$tip.data(dataPrefix + type, this);
               return r;
             };
             scope.$popover = function (name) {
@@ -662,7 +671,7 @@
               'hide',
               'hidden'
             ], function (name) {
-              element.on(name, function (ev) {
+              element.on(name + evSuffix, function (ev) {
                 scope.$emit('popover-' + name, ev);
               });
             });
@@ -673,16 +682,19 @@
   ]);
   angular.module('$strap.directives').directive('bsSelect', [
     '$timeout',
-    function ($timeout) {
+    '$parse',
+    function ($timeout, $parse) {
       var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/;
       return {
         restrict: 'A',
         require: '?ngModel',
         link: function postLink(scope, element, attrs, controller) {
-          var options = scope.$eval(attrs.bsSelect) || {};
+          var options = scope.$eval(attrs.bsSelect) || {}, selectpicker;
           $timeout(function () {
             element.selectpicker(options);
-            element.next().removeClass('ng-scope');
+            element.unbind('DOMNodeInserted DOMNodeRemoved');
+            selectpicker = element.next('.bootstrap-select');
+            selectpicker.removeClass('ng-scope');
           });
           if (controller) {
             var refresh = function (newValue, oldValue) {
@@ -690,19 +702,24 @@
                 element.selectpicker('refresh');
               }
             };
-            scope.$watch(attrs.ngModel, function (newValue, oldValue) {
-              refresh(newValue, oldValue);
+            var checkValidity = function (value) {
+              if (selectpicker) {
+                selectpicker.toggleClass('ng-invalid', !controller.$valid).toggleClass('ng-valid', controller.$valid).toggleClass('ng-invalid-required', !controller.$valid).toggleClass('ng-valid-required', controller.$valid).toggleClass('ng-dirty', controller.$dirty).toggleClass('ng-pristine', controller.$pristine);
+              }
+              return value;
+            };
+            controller.$parsers.push(checkValidity);
+            controller.$formatters.push(checkValidity);
+            attrs.$observe('required', function () {
+              checkValidity(controller.$viewValue);
             });
+            scope.$watch(attrs.ngModel, refresh);
             if (attrs.ngOptions) {
-              var match = attrs.ngOptions.match(NG_OPTIONS_REGEXP);
-              if (match && scope[match[7]]) {
+              var match = attrs.ngOptions.match(NG_OPTIONS_REGEXP), valuesFn = $parse(match[7]);
+              if (match && match[7]) {
                 scope.$watch(function () {
-                  return scope[match[7]];
-                }, function (newValue, oldValue) {
-                  if (!angular.equals(newValue, oldValue)) {
-                    refresh(newValue, oldValue);
-                  }
-                }, true);
+                  return valuesFn(scope);
+                }, refresh, true);
               }
             }
           }
@@ -924,6 +941,7 @@
     '$parse',
     '$compile',
     function ($parse, $compile) {
+      var type = 'tooltip', dataPrefix = !!$.fn.emulateTransitionEnd ? 'bs.' : '', evSuffix = dataPrefix ? '.' + dataPrefix + type : '';
       return {
         restrict: 'A',
         scope: true,
@@ -935,7 +953,7 @@
           if (!!attrs.unique) {
             element.on('show', function (ev) {
               $('.tooltip.in').each(function () {
-                var $this = $(this), tooltip = $this.data('tooltip');
+                var $this = $(this), tooltip = $this.data(dataPrefix + type);
                 if (tooltip && !tooltip.$element.is(element)) {
                   $this.tooltip('hide');
                 }
@@ -948,10 +966,10 @@
             },
             html: true
           });
-          var tooltip = element.data('tooltip');
+          var tooltip = element.data(dataPrefix + type);
           tooltip.show = function () {
             var r = $.fn.tooltip.Constructor.prototype.show.apply(this, arguments);
-            this.tip().data('tooltip', this);
+            this.tip().data(dataPrefix + type, this);
             return r;
           };
           scope._tooltip = function (event) {
