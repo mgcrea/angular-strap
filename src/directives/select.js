@@ -52,8 +52,10 @@ angular.module('$strap.directives')
           checkValidity(controller.$viewValue);
         });
         // Watch ng-disabled
-        attrs.$observe('disabled', function() {
-          element.selectpicker('refresh');
+        attrs.$observe('disabled', function (value) {
+          if(typeof value !== 'undefined') {
+            element.selectpicker('refresh');
+          }
         });
 
         // Watch for changes to the model value
