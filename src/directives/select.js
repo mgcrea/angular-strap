@@ -51,6 +51,12 @@ angular.module('$strap.directives')
         attrs.$observe('required', function() {
           checkValidity(controller.$viewValue);
         });
+        // Watch ng-disabled
+        attrs.$observe('disabled', function (value) {
+          if(typeof value !== 'undefined') {
+            element.selectpicker('refresh');
+          }
+        });
 
         // Watch for changes to the model value
         scope.$watch(attrs.ngModel, refresh);
