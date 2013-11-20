@@ -86,8 +86,7 @@ angular.module('$strap.directives')
         };
         popover.getPosition = function() {
           var r = $.fn.popover.Constructor.prototype.getPosition.apply(this, arguments);
-          // create new scope to compile against
-          popoverScope = scope.$new();
+
           // Compile content
           $compile(this.$tip)(popoverScope);
           scope.$digest();
@@ -119,7 +118,10 @@ angular.module('$strap.directives')
         scope.$on('popover-hidden',function(){
           $timeout(function(){
             popoverScope.$destroy();
-          },0);
+          });
+        });
+        scope.$on('popover-show',function(){
+            popoverScope = scope.$new();
         });
 
       });
