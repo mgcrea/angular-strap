@@ -79,9 +79,11 @@ angular.module('$strap.directives')
             if(angular.isUndefined(newValue)) return;
             activeTab = newValue; // update starting activeTab before first build
             setTimeout(function() {
-              var $next = $($tabs[0].querySelectorAll('li')[newValue*1]);
-              if(!$next.hasClass('active')) {
-                $next.children('a').tab('show');
+              if(activeTab === newValue) {
+                var $next = $($tabs[0].querySelectorAll('li')[newValue*1]);
+                if(!$next.hasClass('active')) {
+                  $next.children('a').tab('show');
+                }
               }
             });
           });
