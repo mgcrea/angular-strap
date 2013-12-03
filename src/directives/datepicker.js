@@ -77,7 +77,7 @@ angular.module('$strap.directives')
 
         var language = options.language || 'en',
           readFormat = attrs.dateFormat || options.format || ($.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format) || 'mm/dd/yyyy',
-          format = isAppleTouch ? 'yyyy-mm-dd' : readFormat,
+          format = isAppleTouch && !options.disableNative ? 'yyyy-mm-dd' : readFormat,
           dateFormatRegexp = regexpForDateFormat(format, language);
 
         // Handle date validity according to dateFormat
@@ -98,7 +98,7 @@ angular.module('$strap.directives')
               return viewValue;
             } else if(angular.isString(viewValue) && dateFormatRegexp.test(viewValue)) {
               controller.$setValidity('date', true);
-              if(isAppleTouch) return new Date(viewValue);
+              if(isAppleTouch && !options.disableNative) return new Date(viewValue);
               return type === 'string' ? viewValue : $.fn.datepicker.DPGlobal.parseDate(viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
             } else {
               controller.$setValidity('date', false);
@@ -108,7 +108,7 @@ angular.module('$strap.directives')
 
           // ngModel rendering
           controller.$render = function ngModelRender() {
-            if(isAppleTouch) {
+            if(isAppleTouch && !options.disableNative) {
               var date = controller.$viewValue ? $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language) : '';
               element.val(date);
               return date;
@@ -120,7 +120,7 @@ angular.module('$strap.directives')
         }
 
         // Use native interface for touch devices
-        if (isAppleTouch) {
+        if (isAppleTouch && !options.disableNative) {
           element.prop('type', 'date').css('-webkit-appearance', 'textfield');
         } else {
           // If we have a ngModelController then wire it up
