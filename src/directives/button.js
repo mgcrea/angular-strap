@@ -164,9 +164,9 @@ angular.module('$strap.directives')
             scope.$apply(function () {
               var $btn = $(ev.target), newValue;
 
-              if($btn.find('input').length) {
+              if($btn.closest('.btn').find('input').length) {
                 // bs3
-                newValue = $btn.find('input').val();
+                newValue = $btn.closest('.btn').find('input').val();
               } else {
                 // bs2
                 newValue = $btn.closest('button, .btn').attr('value');
