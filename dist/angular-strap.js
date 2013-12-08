@@ -1,6 +1,6 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.7.8 - 2013-11-15
+ * @version v0.7.8 - 2013-12-03
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -325,7 +325,7 @@
               if (angular.isDefined(attrs[key]))
                 options[key] = attrs[key];
             });
-            var language = options.language || 'en', readFormat = attrs.dateFormat || options.format || $.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format || 'mm/dd/yyyy', format = isAppleTouch ? 'yyyy-mm-dd' : readFormat, dateFormatRegexp = regexpForDateFormat(format, language);
+            var language = options.language || 'en', readFormat = attrs.dateFormat || options.format || $.fn.datepicker.dates[language] && $.fn.datepicker.dates[language].format || 'mm/dd/yyyy', format = isAppleTouch && !options.disableNative ? 'yyyy-mm-dd' : readFormat, dateFormatRegexp = regexpForDateFormat(format, language);
             if (controller) {
               controller.$formatters.unshift(function (modelValue) {
                 return getFormattedModelValue(modelValue, readFormat, language);
@@ -339,7 +339,7 @@
                   return viewValue;
                 } else if (angular.isString(viewValue) && dateFormatRegexp.test(viewValue)) {
                   controller.$setValidity('date', true);
-                  if (isAppleTouch)
+                  if (isAppleTouch && !options.disableNative)
                     return new Date(viewValue);
                   return type === 'string' ? viewValue : $.fn.datepicker.DPGlobal.parseDate(viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language);
                 } else {
@@ -348,7 +348,7 @@
                 }
               });
               controller.$render = function ngModelRender() {
-                if (isAppleTouch) {
+                if (isAppleTouch && !options.disableNative) {
                   var date = controller.$viewValue ? $.fn.datepicker.DPGlobal.formatDate(controller.$viewValue, $.fn.datepicker.DPGlobal.parseFormat(format), language) : '';
                   element.val(date);
                   return date;
@@ -358,7 +358,7 @@
                 return element.datepicker('update', controller.$viewValue);
               };
             }
-            if (isAppleTouch) {
+            if (isAppleTouch && !options.disableNative) {
               element.prop('type', 'date').css('-webkit-appearance', 'textfield');
             } else {
               if (controller) {
