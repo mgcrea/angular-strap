@@ -67,7 +67,7 @@ angular.module('$strap.directives')
         // If we have a controller (i.e. ngModelController) then wire it up
         if(controller) {
 
-          iElement.on('show.bs.tab', function(ev) {
+          iElement.on('show show.bs.tab', function(ev) {
             var $target = $(ev.target);
             scope.$apply(function() {
               controller.$setViewValue($target.data('index'));
