@@ -38,9 +38,17 @@ describe('datepicker', function () {
       element: '<input type="text" ng-model="foo.date" data-language="{{language}}" bs-datepicker>',
       scope: {language: 'en', foo: {date: new Date('2012-09-22T00:00:00.000Z')}}
     },
-    'stringISO': {
+    'stringISO_completePrecision': {
       element: '<input type="text" ng-model="foo.date" data-date-format="yyyy/mm/dd" data-date-type="iso" bs-datepicker>',
       scope: {foo: {date: '2012-11-11T10:00:00.000Z'}}
+    },
+    'stringISO_noMillis': {
+      element: '<input type="text" ng-model="foo.date" data-date-format="yyyy/mm/dd" data-date-type="iso" bs-datepicker>',
+      scope: {foo: {date: '2012-11-12T10:00:00Z'}}
+    },
+    'stringISO_noSeconds': {
+      element: '<input type="text" ng-model="foo.date" data-date-format="yyyy/mm/dd" data-date-type="iso" bs-datepicker>',
+      scope: {foo: {date: '2012-11-13T10:00Z'}}
     },
     'date': {
       element: '<input type="text" ng-model="foo.date" data-date-format="yyyy/mm/dd" data-date-type="date" bs-datepicker>',
@@ -132,10 +140,26 @@ describe('datepicker', function () {
         expect(elm.prop('value')).toBe('2012/11/11');
       });
 
-      it('should support date as an ISO string', function() {
-        var elm = compileDirective('stringISO');
-        expect(+elm.data('datepicker').date).toBe(+new Date('2012-11-11T10:00:00.000Z'));
-        expect(elm.prop('value')).toBe('2012/11/11');
+      describe("dates as ISO string", function() {
+
+        it('should support time with complete precision', function() {
+          var elm = compileDirective('stringISO_completePrecision');
+          expect(+elm.data('datepicker').date).toBe(+new Date('2012-11-11T10:00:00.000Z'));
+          expect(elm.prop('value')).toBe('2012/11/11');
+        });
+
+        it('should support time without milliseconds', function() {
+          var elm = compileDirective('stringISO_noMillis');
+          expect(+elm.data('datepicker').date).toBe(+new Date('2012-11-12T10:00:00Z'));
+          expect(elm.prop('value')).toBe('2012/11/12');
+        });
+
+        it('should support time without seconds', function() {
+          var elm = compileDirective('stringISO_noSeconds');
+          expect(+elm.data('datepicker').date).toBe(+new Date('2012-11-13T10:00Z'));
+          expect(elm.prop('value')).toBe('2012/11/13');
+        });
+
       });
 
     });
