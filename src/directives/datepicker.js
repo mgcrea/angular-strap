@@ -160,7 +160,7 @@ angular.module('$strap.directives')
         }
 
         // Support add-on
-        var component = element.siblings('[data-toggle="datepicker"]');
+        var component = element.parent().find('[data-toggle="datepicker"]');
         if(component.length) {
           component.on('click', function() {
             if (!element.prop('disabled')) { // Hack check for IE 8
