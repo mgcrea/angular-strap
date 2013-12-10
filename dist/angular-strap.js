@@ -1,12 +1,12 @@
 /**
  * AngularStrap - Twitter Bootstrap directives for AngularJS
- * @version v0.7.8 - 2013-11-15
+ * @version v0.7.8 - 2013-12-10
  * @link http://mgcrea.github.com/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-(function (window, document, undefined) {
+(function (window, document, $, undefined) {
   'use strict';
   angular.module('$strap.config', []).value('$strapConfig', {});
   angular.module('$strap.filters', ['$strap.config']);
@@ -287,7 +287,7 @@
         });
         return new RegExp('^' + re + '$', ['i']);
       };
-      var ISODateRegexp = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/;
+      var ISODateRegexp = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/;
       return {
         restrict: 'A',
         require: '?ngModel',
@@ -1042,4 +1042,4 @@
       };
     }
   ]);
-}(window, document));
+}(window, document, window.jQuery));
