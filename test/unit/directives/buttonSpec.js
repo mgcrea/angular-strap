@@ -69,6 +69,20 @@ describe('button', function () {
       +   '<button type="button" class="btn" value="middle">Middle</button>'
       +   '<button type="button" class="btn" value="right">Right</button>'
       + '</div>'
+    },
+    'radio-single-model-bs3': {
+      scope: {radio: 'middle'},
+      element: '<div class="btn-group" ng-model="radio" bs-buttons-radio>'
+      +    '<label class="btn btn-default">'
+      +        '<input type="radio" name="type_options" value="left" id="option1"/>left'
+      +    '</label>'
+      +    '<label class="btn btn-default">'
+      +        '<input type="radio" name="type_options" value="middle" id="option2"/>middle'
+      +    '</label>'
+      +    '<label class="btn btn-default">'
+      +        '<input type="radio" name="type_options" value="right" id="option3"/>right'
+      +    '</label>'
+      + '</div>'
     }
   };
 
@@ -199,4 +213,44 @@ describe('button', function () {
     });
   });
 
+  describe('buttons radio single model in bootstrap3 style', function () {
+
+    it('should handle view to model changes', function () {
+      var elm = compileDirective('radio-single-model-bs3');
+      
+      // click left
+      elm.find('[value="left"]').closest('.btn').trigger('click');
+      expect(scope.radio).toEquals('left');
+      expect(elm.find('[value="left"]').closest('.btn').hasClass('active')).toBe(true);
+      expect(elm.find('[value="middle"]').closest('.btn').hasClass('active')).toBe(false);
+      expect(elm.find('[value="right"]').closest('.btn').hasClass('active')).toBe(false);
+      
+      // click right
+      elm.find('[value="right"]').closest('.btn').trigger('click');
+      expect(scope.radio).toEquals('right');
+      expect(elm.find('[value="left"]').closest('.btn').hasClass('active')).toBe(false);
+      expect(elm.find('[value="middle"]').closest('.btn').hasClass('active')).toBe(false);
+      expect(elm.find('[value="right"]').closest('.btn').hasClass('active')).toBe(true);
+    });
+
+    it('should handle model to view changes', function () {
+      var elm = compileDirective('radio-single-model-bs3');
+      
+      // right
+      scope.$apply(function () {
+        scope.radio = 'right';
+      });
+      expect(elm.find('[value="left"]').closest('.btn').hasClass('active')).toBe(false);
+      expect(elm.find('[value="middle"]').closest('.btn').hasClass('active')).toBe(false);
+      expect(elm.find('[value="right"]').closest('.btn').hasClass('active')).toBe(true);
+
+      // left
+      scope.$apply(function () {
+        scope.radio = 'left';
+      });
+      expect(elm.find('[value="left"]').closest('.btn').hasClass('active')).toBe(true);
+      expect(elm.find('[value="middle"]').closest('.btn').hasClass('active')).toBe(false);
+      expect(elm.find('[value="right"]').closest('.btn').hasClass('active')).toBe(false);
+    });
+  });
 });

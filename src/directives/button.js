@@ -130,7 +130,13 @@ angular.module('$strap.directives')
     require: '?ngModel',
     compile: function compile(tElement, tAttrs, transclude) {
 
-      tElement.attr('data-toggle', 'buttons-radio');
+      if(dataPrefix === '') {
+        // bs2
+        tElement.attr('data-toggle', 'buttons-radio');
+      } else {
+        // bs3
+        tElement.attr('data-toggle', 'buttons');
+      }
 
       // Delegate to children ngModel
       if(!tAttrs.ngModel) {
@@ -143,17 +149,29 @@ angular.module('$strap.directives')
 
         // If we have a controller (i.e. ngModelController) then wire it up
         if(controller) {
-
           $timeout(function() {
-            iElement
-              .find('[value]').button()
-              .filter('[value="' + controller.$viewValue + '"]')
-              .addClass('active');
+            var $input = iElement.find('[value]').filter('[value="' + controller.$viewValue + '"]');
+
+            if ($input.prop('type') === 'radio') {
+              $input.prop('checked', true);
+              $input.closest('.btn').addClass('active');
+            } else {
+              $input.addClass('active');
+            }
           }, 0, false);
 
           iElement.on(evName, function (ev) {
             scope.$apply(function () {
-              controller.$setViewValue($(ev.target).closest('button').attr('value'));
+              var $btn = $(ev.target), newValue;
+
+              if($btn.closest('.btn').find('input').length) {
+                // bs3
+                newValue = $btn.closest('.btn').find('input').val();
+              } else {
+                // bs2
+                newValue = $btn.closest('button, .btn').attr('value');
+              }
+              controller.$setViewValue(newValue);
             });
           });
 
@@ -161,14 +179,17 @@ angular.module('$strap.directives')
           scope.$watch(iAttrs.ngModel, function(newValue, oldValue) {
             if(newValue !== oldValue) {
               var $btn = iElement.find('[value="' + scope.$eval(iAttrs.ngModel) + '"]');
+
+              if($btn.is('input')) {
+                // bs3
+                $btn = $btn.closest('button, .btn');
+              }
               if($btn.length) {
                 $btn.button('toggle');
               }
             }
           });
-
         }
-
       };
     }
   };
