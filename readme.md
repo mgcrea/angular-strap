@@ -1,4 +1,4 @@
-# [AngularStrap](http://mgcrea.github.com/angular-strap) [![Build Status](https://secure.travis-ci.org/mgcrea/angular-strap.png?branch=master)](http://travis-ci.org/#!/mgcrea/angular-strap)
+# [AngularStrap](http://mgcrea.github.com/angular-strap) [![Build Status](https://secure.travis-ci.org/mgcrea/angular-strap.png?branch=master)](http://travis-ci.org/#!/mgcrea/angular-strap) [![Tip for next commit](http://tip4commit.com/projects/143.svg)](http://tip4commit.com/projects/143)
 
 AngularStrap is a set of directives that enables seamless integration of [Twitter Bootstrap](https://twitter.github.com/bootstrap) into your [AngularJS](https://github.com/angular/angular.js) app.
 
