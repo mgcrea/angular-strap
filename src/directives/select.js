@@ -26,7 +26,9 @@ angular.module('$strap.directives')
 
         var refresh = function(newValue, oldValue) {
           if (!angular.equals(newValue, oldValue)) {
-            element.selectpicker('refresh');
+            $timeout(function () {
+              element.selectpicker('refresh');
+            });
           }
         };
         
@@ -53,7 +55,11 @@ angular.module('$strap.directives')
         });
 
         // Watch for changes to the model value
-        scope.$watch(attrs.ngModel, refresh);
+        scope.$watch(attrs.ngModel, function (newValue, oldValue) {
+          if (!selectpicker.find(document.activeElement)[0]) {
+            refresh(newValue, oldValue);
+          }
+        });
 
         // Watch for changes to the options
         if (attrs.ngOptions) {
