@@ -50,7 +50,6 @@ angular.module('$strap.directives')
 
   return {
     restrict: 'A',
-    require: '?ngModel',
     link: function postLink(scope, element, attrs, controller) {
 
       var options = angular.extend({autoclose: true}, $strapConfig.datepicker || {});
