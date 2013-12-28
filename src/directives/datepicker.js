@@ -126,9 +126,10 @@ angular.module('$strap.directives')
           // If we have a ngModelController then wire it up
           if (controller) {
             element.on('changeDate', function(ev) {
-              scope.$apply(function () {
-                controller.$setViewValue(type === 'string' ? element.val() : ev.date);
-              });
+              var fn = function () {
+                  controller.$setViewValue(type === 'string' ? element.val() : ev.date);
+              };
+              (scope.$$phase || scope.$root.$$phase) ? fn() : scope.$apply();
             });
           }
 
