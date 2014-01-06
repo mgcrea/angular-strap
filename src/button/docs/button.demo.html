@@ -1,0 +1,56 @@
+<div class="bs-docs-section" ng-controller="ButtonDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="buttons">Buttons <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/button/button.js" target="_blank">button.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.button</code>
+  </div>
+
+
+    <h2 id="buttons-examples">Examples</h2>
+    <p>Do more with buttons. Control button states or create groups of buttons for more components like toolbars.</p>
+    <p>This modules exposes two directives: <code>bs-checkbox</code> and <code>bs-radio</code> that can be used as attributes to trigger toggle, checkbox or radio behavior.</p>
+    <div class="callout callout-info">
+      <h4>Group directives are also available as shortcuts</h4>
+      <p>Use <code>bs-checkbox-group</code> and <code>bs-radio-group</code> to easily setup the proper markup at compile time.</p>
+    </div>
+
+    <h3 id="buttons-usage">Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip></i></a></h3>
+
+    <pre class="bs-example-scope">$scope.button = {{button | json}};</pre>
+    <div class="bs-example" style="padding-bottom: 24px;" append-source>
+
+      <label>Toggle:</label>
+      <button type="button" class="btn btn-default" ng-model="button.toggle" bs-checkbox>Toggle</button>
+      <!-- You can also use custom values with the `data-true-value` & `data-false-value` attributes -->
+
+      <hr><label>Checkboxes:</label>
+      <div class="btn-group" ng-model="button.checkbox" bs-checkbox-group>
+        <label class="btn btn-default"><input type="checkbox" value="left"> Left</label>
+        <label class="btn btn-default"><input type="checkbox" value="middle"> Middle</label>
+        <label class="btn btn-default"><input type="checkbox" value="right"> Right</label>
+        <!-- Children get compiled by `bs-checkbox-group` to :
+        <label class="btn btn-default"><input type="checkbox" value="left" ng-model="button.checkbox.left" bs-checkbox> Left</label>
+        ...
+        -->
+      </div>
+
+      <hr><label>Radios:</label>
+      <div class="btn-group" ng-model="button.radio" bs-radio-group>
+        <label class="btn btn-default"><input type="radio" class="btn btn-default" value="0"> First</label>
+        <label class="btn btn-default"><input type="radio" class="btn btn-default" value="1"> Second</label>
+        <label class="btn btn-default"><input type="radio" class="btn btn-default" value="2"> Third</label>
+        <!-- Children get compiled by `bs-radio-group` to :
+        <label class="btn btn-default"><input type="radio" class="btn btn-default" value="left" ng-model="button.radio" bs-radio> Left</label>
+        ...
+        -->
+      </div>
+
+    </div>
+
+    <div class="callout callout-info">
+      <h4>Type support</h4>
+      <p>Theses directives can handle both <code>strings</code>, <code>numbers</code> and <code>booleans</code> values.</p>
+    </div>
+
+</div>
