@@ -1,0 +1,163 @@
+<div class="bs-docs-section" ng-controller="TooltipDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="tooltips">Tooltips <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/tooltip.js" target="_blank">tooltip.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.tooltip</code>
+  </div>
+
+
+  <h2 id="tooltips-examples">Examples</h2>
+  <p>Add small overlays of content on hover, to any element for housing secondary information.</p>
+
+  <h3>Live demo</h3>
+  <div class="form-group hide">
+    <label>Title</label>
+    <input type="text" class="form-control" ng-model="tooltip.title" placeholder="Title">
+  </div>
+  <pre class="bs-example-scope">$scope.tooltip = {{tooltip | json}};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+
+    <!-- Markup for a default tooltip with a scope passed as an object {title:''} -->
+    <p>Tight pants next level keffiyeh <a href="" data-animation="animation-flipX" bs-tooltip="tooltip">you probably</a> haven't heard of them. Photo booth beard raw denim letterpress vegan messenger bag stumptown.</p>
+
+    <div class="input-group col-xs-5">
+      <span class="input-group-btn">
+        <!-- You can also use data-attrs to assign scope variables -->
+        <button class="btn btn-primary" type="button" data-trigger="click" data-type="success" title="{{tooltip.title}}" bs-tooltip="tooltip">Click me</button>
+      </span>
+      <input type="text" class="form-control" data-placement="right" data-type="info" data-container="body" placeholder="Focus to toggle tooltip" data-trigger="focus" bs-tooltip="tooltip">
+    </div>
+    <div class="checkbox">
+      <label data-placement="bottom" data-animation="animation-fadeAndScale" data-type="info" data-animation="animation-fadeAndScale" bs-tooltip="tooltip">
+        <input type="checkbox" ng-model="tooltip.checked"> Remember me
+      </label>
+    </div>
+
+  </div>
+
+  <div class="callout callout-info">
+    <h4>Two-way data-binding</h4>
+    <p>To prevent databinding issues, "the rule of thumb is, if you﻿ use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery.</p>
+  </div>
+
+  <h2 id="tooltips-usage">Usage</h2>
+  <p>Append a <code>bs-tooltip</code> attribute to any element to enable the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module exposes a <code>$tooltip</code>service</h4>
+    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block>
+          var myTooltip = $tooltip(element, {title: 'My Title'});
+        </code>
+      </pre>
+    </div>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-tooltip</code> attribute</p>
+  <div class="callout callout-info">
+    <h4>This module supports exotic placement options!</h4>
+    <p>You can position your popover in corners (such as <code>bottom-left</code>) or any other combination two. Requires some CSS to render properly.</p>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by <code>ngAnimate</code></td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'right'</td>
+          <td>how to position the tooltip - top | bottom | left | right, or any combination like bottom-left.</td>
+        </tr>
+        <tr>
+          <td>trigger</td>
+          <td>string</td>
+          <td>'click'</td>
+          <td>how tooltip is triggered - click | hover | focus | manual</td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default title value if
+            <code>title</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>delay</td>
+          <td>number | object</td>
+          <td>0</td>
+          <td>
+            <p>delay showing and hiding the tooltip (ms) - does not apply to manual trigger type</p>
+            <p>If a number is supplied, delay is applied to both hide/show</p>
+            <p>Object structure is:
+              <code>delay: { show: 500, hide: 100 }</code>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the tooltip to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the tooltip in the flow of the document near the triggering element -&nbsp;which will prevent the tooltip from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$tooltipProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block>
+          angular.module('myApp')
+          .config(function($tooltipProvider) {
+            angular.extend($tooltipProvider.defaults, {
+              animation: 'animation-flipX',
+              trigger: 'hover'
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+  <h3>Scope methods</h3>
+  <p>Methods available inside the directive scope to toggle visibility.</p>
+
+  <h4>$show()</h4>
+  <p>Reveals the tooltip.</p>
+
+  <h4>$hide()</h4>
+  <p>Hides the tooltip.</p>
+
+  <h4>$toggle()</h4>
+  <p>Toggles the tooltip.</p>
+
+</div>
