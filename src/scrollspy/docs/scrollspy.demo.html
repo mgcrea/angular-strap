@@ -1,0 +1,105 @@
+<div class="bs-docs-section">
+
+  <div class="page-header">
+    <h1 id="scrollspy">scrollspy <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/scrollspy/scrollspy.js" target="_blank">scrollspy.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.scrollspy</code>
+  </div>
+
+  <h2 id="scrollspy-examples">Examples</h2>
+  <p>The subnavigation on the left is a live demo of the scrollspy plugin.</p>
+
+  <div class="callout callout-warning">
+    <h4>Plugin dependency</h4>
+    <p>scrollspy require the <a href="#">jqlite.dimensions</a> plugin to be included.</p>
+  </div>
+
+  <div class="highlight">
+    <pre>
+      <code class="html" highlight-block>
+        &lt;ul class="nav bs-sidenav"&gt;
+          &lt;li data-target="#modals" bs-scrollspy&gt;
+            &lt;a href="#modals"&gt;Modal&lt;/a&gt;
+            &lt;ul class="nav"&gt;
+              &lt;li data-target="#modals-examples" bs-scrollspy&gt;&lt;a href="#modals-examples"&gt;Examples&lt;/a&gt;&lt;/li&gt;
+              &lt;li data-target="#modals-usage" bs-scrollspy&gt;&lt;a href="#modals-usage"&gt;Usage&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+
+        <!-- Alternatively, you can use the short following equivalent short markup -->
+        &lt;ul class="nav bs-sidenav" bs-scrollspy-list&gt;
+          &lt;li&gt;
+            &lt;a href="#modals"&gt;Modal&lt;/a&gt;
+            &lt;ul class="nav"&gt;
+              &lt;li&gt;&lt;a href="#modals-examples"&gt;Examples&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href="#modals-usage"&gt;Usage&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      </code>
+    </pre>
+  </div>
+
+  <h2 id="scrollspy-usage">Usage</h2>
+  <p>Append a <code>bs-scrollspy</code>attribute to any element to enable the plugin.</p>
+  <div class="callout callout-info">
+    <h4>The module also exposes an <code>$scrollspy</code>service</h4>
+    <p>Available for programmatic use (mainly inside a directive as it requires an element).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block>
+          var scrollspy = $scrollspy(element, options);
+        </code>
+      </pre>
+    </div>
+  </div>
+
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 50px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>target</td>
+          <td>string</td>
+          <td>''</td>
+          <td>Required target selector.</td>
+        </tr>
+        <tr>
+          <td>offset</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from top of screen when calculating position of scroll.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$scrollspyProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block>
+          angular.module('myApp')
+          .config(function($scrollspyProvider) {
+            angular.extend($scrollspyProvider.defaults, {
+              animation: 'animation-fadeAndSlideTop',
+              placement: 'top'
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+</div>
