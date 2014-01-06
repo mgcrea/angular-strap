@@ -4,6 +4,7 @@ AngularStrap is a set of native directives that enables seamless integration of 
 
 >
 AngularStrap was initially written to provide AngularJS wrapping directives for Twitter Bootstrap. It used to leverage the javascript code written by Bootstrap's contributors to minimize work, retro-compatibility issues & time to market.
+>
 While it worked pretty well, it required a big javascript payload: both jQuery & Twitter Bootstrap libraries. When the 1.2 release of AngularJS showed up with the ngAnimate module, greatly simplifying DOM manipulation, we knew it was time for a rewrite!
 
 ## Documentation and examples
