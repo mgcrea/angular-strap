@@ -122,7 +122,6 @@ describe('tooltip', function () {
       expect(scope.foo.bar).toBe(2);
     });
 
-
     it('should default to `animation-fade` animation', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('mouseenter');

@@ -7,7 +7,8 @@ before_script:
   - export PHANTOMJS_BIN=/usr/local/phantomjs/bin/phantomjs
   - sh -e /etc/init.d/xvfb start
   - sleep 3 # give xvfb some time to start
-  - npm install -g grunt-cli
+  - npm install -g grunt-cli bower
+  - bower install --dev
 
 script:
   - grunt
