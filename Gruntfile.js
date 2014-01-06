@@ -483,7 +483,7 @@ module.exports = function (grunt) {
     'cssmin:generated',
     'uglify:generated',
     'concat:docs',
-    'rev',
+    // 'rev',
     'usemin'
   ]);
 

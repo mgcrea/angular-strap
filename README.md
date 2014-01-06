@@ -6,9 +6,7 @@ AngularStrap is a set of native directives that enables seamless integration of 
 
 ## Documentation and examples
 
-+ Check the [documentation](http://mgcrea.github.io/angular-strap) and [changelog](https://github.com/mgcrea/angular-strap/wiki/Changelog).
-
-+ Use & fork the available [plunkers](https://github.com/mgcrea/angular-strap/wiki/Plunkers) to test a directive or report an issue.
++ Check the [documentation](http://mgcrea.github.io/angular-strap) and [changelog](https://github.com/mgcrea/angular-strap/releases).
 
 
 
