@@ -1,0 +1,19 @@
+{
+  "name": "angular-strap",
+  "description": "AngularStrap - AngularJS directives for Twitter Bootstrap",
+  "version": "2.0.0-b.1",
+  "dependencies": {
+    "angular": "~1.2.5",
+    "angular-animate": "~1.2.5",
+    "angular-route": "~1.2.5",
+    "angular-sanitize": "~1.2.5",
+    "bootstrap": "~3.0.3"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.5",
+    "angular-scenario": "~1.2.5",
+    "font-awesome": "~4.0.3",
+    "highlightjs": "~7.5.0",
+    "jquery": "~2.0.3"
+  }
+}
