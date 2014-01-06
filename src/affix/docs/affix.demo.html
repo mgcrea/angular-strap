@@ -1,0 +1,98 @@
+<div class="bs-docs-section">
+
+  <div class="page-header">
+    <h1 id="affix">Affix <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/affix/affix.js" target="_blank">affix.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.affix</code>
+  </div>
+
+  <h2 id="affix-examples">Examples</h2>
+  <p>The subnavigation on the left is a live demo of the affix plugin.</p>
+
+  <div class="callout callout-warning">
+    <h4>Plugin dependency</h4>
+    <p>Affix require the <a href="#">jqlite.dimensions</a> plugin to be included.</p>
+  </div>
+
+  <div class="highlight">
+    <pre>
+      <code class="html" highlight-block>
+        &lt;div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-80" bs-affixt&gt;&lt;/div&gt;
+      </code>
+    </pre>
+  </div>
+
+  <h2 id="affix-usage">Usage</h2>
+  <p>Append a <code>bs-affix</code>attribute to any element to enable the plugin.</p>
+  <div class="callout callout-info">
+    <h4>The module also exposes an <code>$affix</code>service</h4>
+    <p>Available for programmatic use (mainly inside a directive as it requires an element).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block>
+          var affix = $affix(element, options);
+        </code>
+      </pre>
+    </div>
+  </div>
+
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 50px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>offsetTop</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from top of screen when calculating position of scroll.</td>
+        </tr>
+        <tr>
+          <td>offsetBottom</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from bottom of screen when calculating position of scroll.</td>
+        </tr>
+        <tr>
+          <td>offsetParent</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from parent when calculating position of scroll.</td>
+        </tr>
+        <tr>
+          <td>offsetUnpin</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from unpin position when calculating position of scroll.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$affixProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block>
+          angular.module('myApp')
+          .config(function($affixProvider) {
+            angular.extend($affixProvider.defaults, {
+              animation: 'animation-fadeAndSlideTop',
+              placement: 'top'
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+</div>
