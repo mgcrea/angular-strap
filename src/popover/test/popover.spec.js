@@ -49,8 +49,8 @@ describe('popover', function () {
       element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-trigger="hover" bs-popover>hover me</a>'
     },
     'options-template': {
-      scope: {items: ['foo', 'bar', 'baz'], foo: {bar: 0}},
-      element: '<a data-content="bar" data-template="custom" bs-popover>click me</a>'
+      scope: {popover: {title: 'Title', content: 'Hello Popover<br>This is a multiline message!', counter: 0}, items: ['foo', 'bar', 'baz']},
+      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-template="custom" bs-popover>click me</a>'
     }
   };
 
@@ -165,7 +165,7 @@ describe('popover', function () {
         $templateCache.put('custom', '<div class="popover"><div class="popover-content">foo: {{content}}</div></div>');
         var elm = compileDirective('options-template');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.find('.popover-content').text()).toBe('foo: bar');
+        expect(sandboxEl.find('.popover-content').text()).toBe('foo: ' + scope.popover.content);
       });
 
       it('should support template with ngRepeat', function() {
@@ -180,16 +180,16 @@ describe('popover', function () {
       });
 
       it('should support template with ngClick', function() {
-        $templateCache.put('custom', '<div class="popover"><div class="popover-content"><a class="btn" ng-click="foo.bar=foo.bar+1">click me</a></div></div>');
+        $templateCache.put('custom', '<div class="popover"><div class="popover-content"><a class="btn" ng-click="popover.counter=popover.counter+1">click me</a></div></div>');
         var elm = compileDirective('options-template');
         angular.element(elm[0]).triggerHandler('click');
         expect(angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click'));
-        expect(scope.foo.bar).toBe(1);
+        expect(scope.popover.counter).toBe(1);
         // Consecutive toggles
         angular.element(elm[0]).triggerHandler('click');
         angular.element(elm[0]).triggerHandler('click');
         expect(angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click'));
-        expect(scope.foo.bar).toBe(2);
+        expect(scope.popover.counter).toBe(2);
       });
 
     });
