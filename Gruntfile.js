@@ -335,7 +335,7 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yo.dist %>/<%= pkg.name %>.js': [
-            '<%= yo.src %>/common.js',
+            '<%= yo.src %>/module.js',
             '<%= yo.src %>/{,*/}*.js'
           ]
         }
