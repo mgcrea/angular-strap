@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en" ng-app="strap" class="no-js" itemscope itemtype="http://schema.org/Product">
+<head>
+
+  <meta charset="utf-8">
+  <title>AngularStrap - Bootstrap directives for Angular</title>
+  <meta itemprop="name" content="AngularStrap">
+  <meta name="description" content="AngularStrap is a set of directives that enables seamless integration of Twitter Bootstrap into your AngularJS app.">
+  <meta name="google-site-verification" content="oy4NUcp65W_x0wLJ52bE5MBmFvpJTqrsidjMaReF2Ww" />
+  <meta itemprop="name" content="AngularStrap - Bootstrap directives for Angular">
+  <meta itemprop="description" content="AngularStrap is a set of directives that enables seamless integration of Twitter Bootstrap into your AngularJS app.">
+  <meta itemprop="image" content="http://mgcrea.github.com/angular-strap/img/snippet.jpg">
+  <link rel="author" href="https://plus.google.com/103156582871250188205">
+
+  <!-- Sets initial viewport load and disables zooming  -->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap-datepicker.css?r=0.7.5" rel="stylesheet">
+  <link href="vendor/bootstrap-timepicker.css?r=0.7.5" rel="stylesheet">
+  <link href="vendor/bootstrap-select.css?r=0.7.5" rel="stylesheet">
+  <link href="css/prettify.css" rel="stylesheet">
+  <link href="css/animate.css" rel="stylesheet">
+  <link href="css/docs.css" rel="stylesheet">
+  <link href="css/styles.css?v=0.7.5" rel="stylesheet">
+  <!--<link href="less/styles.less" rel="stylesheet/less" type="text/css">-->
+
+  <!--[if lt IE 8]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.4/json3.min.js"></script>
+  <![endif]-->
+  <!--[if lt IE 9]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js"></script>
+  <![endif]-->
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.3.1/less.min.js"></script>-->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"></script>
+
+  <script src="vendor/bootstrap-datepicker.js?r=0.7.5"></script>
+  <script src="vendor/bootstrap-timepicker.js?r=0.7.5"></script>
+  <script src="vendor/bootstrap-select.js?r=0.7.5"></script>
+  <script src="js/fastclick.min.js?v=0.6.3"></script>
+  <script src="js/angular-strap.js?v=0.7.5"></script>
+
+  <script src="js/app.js?v=0.7.5r2"></script>
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+<script type="text/ng-template" id="get-started">
+  <p>AngularStrap requires <code>jQuery</code> & <code>Bootstrap</code>.</p>
+  <p>Just inject <code>$strap.directives</code> module.</p>
+  <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- 1. Include the required libraries (from cdn or local) --&gt;
+&lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">&lt;/script&gt;
+&lt;script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.0/bootstrap.min.js">&lt;/script&gt;
+&lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js">&lt;/script&gt;
+&lt;script src="//mgcrea.github.com/angular-strap/js/angular-strap.js">&lt;/script&gt;
+
+&lt;!-- 2. Inject the $strap.directives into your app module --&gt;
+var app = angular.module('angularjs-starter', ['$strap.directives']);
+
+  </pre>
+</script>
+
+  <!-- Navbar
+  ================================================== -->
+  <!--<div ng-include="'partials/nav.html'" onload="window.$.navLoaded()"></div>-->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <!-- <a id="get-started-btn" class="btn btn-small" bs-popover="'get-started'" data-title="Get Started" data-class="modal-wide" data-placement="bottom"><i class="icon-download-alt icon-white"></i>&nbsp;get started</small></a> -->
+        <div class="btn-toolbar btn-group pull-right">
+          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/v0.7.5/dist/angular-strap.js"><i class="icon-download-alt icon-white"></i>&nbsp;dev <small>(v0.7.5)</small></a>
+          <a class="btn btn-small btn-inverse" href="//raw.github.com/mgcrea/angular-strap/v0.7.5/dist/angular-strap.min.js"><i class="icon-download-alt icon-white"></i>&nbsp;prod <small>(4.1K)</small></a>
+        </div>
+        <a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank">
+          <img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master"/>
+        </a>
+        <a class="brand" href="./">AngularStrap</a>
+
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="">
+              <a href="./">Home</a>
+            </li>
+            <li class="active">
+              <a href="./">Directives</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- Header
+  ================================================== -->
+  <!--<div ng-include="'partials/header.html'" onload="window.$.headerLoaded()"></div>-->
+  <header class="jumbotron subhead" id="overview">
+    <div class="container">
+      <h1>AngularStrap</h1>
+      <p class="lead">Bootstrap directives for <strong>AngularJS</strong>.</p>
+    </div>
+    <div class="bs-docs-social">
+      <div class="container">
+        <ul class="bs-docs-social-buttons">
+          <li>
+            <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;repo=angular-strap&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+          </li>
+          <li>
+            <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;repo=angular-strap&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="98px" height="20px"></iframe>
+          </li>
+          <!--<li class="follow-btn">
+            <iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/follow_button.1352365724.html#_=1353343600175&amp;id=twitter-widget-1&amp;lang=en&amp;screen_name=olouv&amp;show_count=true&amp;show_screen_name=true&amp;size=m" class="twitter-follow-button" style="width: 236px; height: 20px;" title="Twitter Follow Button" data-twttr-rendered="true"></iframe>
+          </li>-->
+          <li class="tweet-btn">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://mgcrea.github.com/angular-strap/" data-text="AngularStrap - Bootstrap directives for AngularJS" data-related="olouv">Tweet</a>
+          </li>
+          <li>
+            <div class="g-plusone" data-size="medium" data-href="http://mgcrea.github.com/angular-strap/"></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="github-ribbon">
+      <a href="https://github.com/mgcrea/angular-strap" target="_blank">Fork me on GitHub</a>
+    </div>
+  </header>
+
+
+  <div class="container" ng-controller="StrapCtrl">
+  <div style="margin-top: 40px;">
+    <div class="alert alert-danger bs-alert-old-docs">
+      <strong>Heads up!</strong> These docs are for AngularStrap v1, which is no longer officially supported. <a href="//mgcrea.github.io/angular-strap/">Check out the latest version of AngularStrap!</a>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="span3 bs-docs-sidebar">
+      <ul class="nav nav-list bs-docs-sidenav">
+        <li><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
+        <li><a href="#dropdown"><i class="icon-chevron-right"></i> Dropdown</a></li>
+        <li><a href="#navbar"><i class="icon-chevron-right"></i> Navbar</a></li>
+        <li><a href="#tab"><i class="icon-chevron-right"></i> Tab</a></li>
+        <li><a href="#tooltip"><i class="icon-chevron-right"></i> Tooltip</a></li>
+        <li><a href="#popover"><i class="icon-chevron-right"></i> Popover</a></li>
+        <li><a href="#alerts"><i class="icon-chevron-right"></i> Alert</a></li>
+        <li><a href="#buttons"><i class="icon-chevron-right"></i> Buttons</a></li>
+        <li><a href="#checkboxes"><i class="icon-chevron-right"></i> Checkboxes</a></li>
+        <li><a href="#radios"><i class="icon-chevron-right"></i> Radios</a></li>
+        <li><a href="#typeahead"><i class="icon-chevron-right"></i> Typeahead</a></li>
+        <li><a href="#select"><i class="icon-chevron-right"></i> Select</a></li>
+        <li><a href="#datepicker"><i class="icon-chevron-right"></i> Datepicker</a></li>
+        <li><a href="#timepicker"><i class="icon-chevron-right"></i> Timepicker</a></li>
+      </ul>
+
+    </div>
+
+    <div class="span9">
+
+<!--       <section id="quickstart">
+        <div class="page-header">
+          <h1>Quick Start</h1>
+        </div>
+        <p>Include the required libraries (cdn/local)</p>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Include the required libraries (cdn/local) --&gt;
+&lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"&gt;&lt;/script&gt;
+&lt;script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.0/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.6.6/angular-strap.min.js"&gt;&lt;/script&gt;
+        </pre>
+        <p>Inject the `$strap.directives` into your app module</p>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Inject the `$strap.directives` into your app module --&gt;
+var app = angular.module('angularjs-starter', ['$strap.directives']);
+        </pre>
+      </section> -->
+
+      <section id="modal">
+        <div class="page-header">
+          <h1>Modal <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/modal.js" target="_blank">directives/modal.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Fetches an external html partial (or an inline <code>ng-template</code>) and populates the modal with its content.</p>
+        <p>Use any button/link to trigger a modal by appending a <code>bs-modal</code> attribute.</p>
+        <p>Both <code>$scope.show()</code>, <code>$scope.hide()</code> & <code>$scope.$modal()</code> are available inside the modal to toggle its visibility.</p>
+        <div class="bs-docs-example">
+          <a href="//plnkr.co/edit/xKP5PW3Dco1CczmCuuVN?p=preview" target="_blank" class="btn btn-small btn-plnkr"><i class="icon-pencil"></i> Edit in plunker</a>
+          <pre>$scope.modal: {{modal | json}}</pre>
+          <div class="well">
+            <button type="button" class="btn btn-large btn-primary" bs-modal="'partials/modal.html'">Click to open modal</button>
+            &nbsp;<button type="button" class="btn btn-large" ng-click="showModalViaService()">With $modal service</button>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Button to trigger modal --&gt;
+&lt;button type="button" class="btn" bs-modal="'partials/modal.html'"&gt;...&lt;/button&gt;
+
+&lt;!-- Modal (external ./partials/modal.html or inline ng-template) -->
+&lt;div class="modal-header"&gt;
+  &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;×&lt;/button&gt;
+  &lt;h3&gt;Modal header&lt;/h3&gt;
+&lt;/div&gt;
+&lt;div class="modal-body"&gt;
+  &lt;p&gt;{{modal.content}}&lt;/p&gt;
+  &lt;br /&gt;
+  &lt;pre&gt;2 + 3 = {{ 2 + 3 }}&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class="modal-footer"&gt;
+  &lt;button type="button" class="btn" ng-click="hide()"&gt;Close&lt;/button&gt;
+  &lt;button class="btn btn-primary" ng-click="modal.saved=true;hide()"&gt;Save changes&lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          You can use $modal functions <code>(show, hide, $modal)</code> out of its scope by passing them: <code>ng-click="someScopeFunction($modal)"</code>.
+        </div>
+        <h3>$modal Service</h3>
+        <p>AngularStrap ships with a <code>$modal</code> service that you can inject in your controllers to trigger modals in a more efficient way (ie. inside <code>ng-repeat</code>, etc.).</p>
+        <pre class="prettyprint linenums" ng-non-bindable>
+// Create modal (returns a promise since it may have to perform an http request)
+var modalPromise = $modal({template: '/js/app/views/elements/modal-welcome.html', persist: true, show: false, backdrop: 'static', scope: $scope});
+
+// Toggle modal
+$scope.showModalViaService = function() {
+  $q.when(modalPromise).then(function(modalEl) {
+    modalEl.modal('show');
+  });
+};
+        </pre>
+      </section>
+
+      <section id="dropdown">
+        <div class="page-header">
+          <h1>Dropdown <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/dropdown.js" target="_blank">directives/dropdown.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Toggleable, contextual menu for displaying lists of links.</p>
+        <p>Use any element to trigger a dropdown menu by appending a <code>bs-dropdown</code> attribute.</p>
+        <div class="bs-docs-example">
+          <a href="//plnkr.co/edit/ywCmR5wcMpZElwE5Qk9S?p=preview" target="_blank" class="btn btn-small btn-plnkr"><i class="icon-pencil"></i> Edit in plunker</a>
+          <pre>$scope.dropdown: {{dropdown | json}}</pre>
+          <div class="well">
+            <div class="btn-group">
+              <button type="button" class="btn" bs-dropdown="dropdown">Dropdown <b class="caret"></b></button>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary">Action</button>
+              <button class="btn btn-primary" bs-dropdown="dropdown">
+                <span class="caret"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Button to trigger dropdown --&gt;
+&lt;button type="button" class="btn" bs-dropdown="dropdown"&gt;...&lt;/button&gt;
+
+&lt;!-- Separated button -->
+&lt;div class="btn-group"&gt;
+  &lt;button type="button" class="btn btn-primary"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn btn-primary" bs-dropdown="dropdown"&gt;...&lt;/button&gt;
+    &lt;span class="caret"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+      </section>
+
+      <section id="navbar">
+        <div class="page-header">
+          <h1>Navbar <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/navbar.js" target="_blank">directives/navbar.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Performs regular expression tests with the <code>data-match-route</code> attribute when <code>$location.path()</code> gets updated.</p>
+        <p>Toggles the <code>active</code> class for you. Trigger the behavior with a <code>bs-navbar</code> attribute.</p>
+        <div class="bs-docs-example">
+          <a href="//plnkr.co/edit/G67eybC4zwlF1sqLH93t?p=preview" target="_blank" class="btn btn-small btn-plnkr"><i class="icon-pencil"></i> Edit in plunker</a>
+          <pre>$location.path(): {{$location.path()}}</pre>
+          <div class="navbar" bs-navbar>
+            <div class="navbar-inner">
+              <a class="brand" href="#">Title</a>
+              <ul class="nav">
+                <li data-match-route="/(:?navbar)"><a href="#/navbar">Home</a></li>
+                <li data-match-route="/page-one"><a href="#/page-one">Page One</a></li>
+                <li data-match-route="/page-two.*"><a href="#/page-two/sub-a">Page Two</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div class="navbar" bs-navbar&gt;
+  &lt;div class="navbar-inner"&gt;
+    &lt;a class="brand" href="#"&gt;Title&lt;/a&gt;
+    &lt;ul class="nav"&gt;
+      &lt;!-- You can use regular expressions --&gt;
+      &lt;li data-match-route="/(:?navbar)"&gt;&lt;a href="#/navbar"&gt;Home&lt;/a&gt;&lt;/li&gt;
+      &lt;li data-match-route="/page-one"&gt;&lt;a href="#/page-one"&gt;Page One&lt;/a&gt;&lt;/li&gt;
+      &lt;li data-match-route="/page-two.*"&gt;&lt;a href="#/page-two/sub-a"&gt;Page Two&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </pre>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          The directives also supports <code>HTML5 mode</code>, you just have to drop the dashes.
+        </div>
+      </section>
+
+      <section id="tab">
+        <div class="page-header">
+          <h1>Tab <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/tab.js" target="_blank">directives/tab.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Create tabs interfaces by appending a <code>bs-tabs</code> attribute to a div container.</p>
+        <div class="bs-docs-example">
+          <a href="//plnkr.co/edit/3C9vTbdhLRGo3X2Nu0yw?p=preview" target="_blank" class="btn btn-small btn-plnkr"><i class="icon-pencil"></i> Edit in plunker</a>
+          <pre>$scope.tabs: {{tabs | json}}</pre>
+          <div data-fade="1" ng-model="tabs.activeTab" bs-tabs>
+            <div ng-repeat="tab in tabs" data-title="{{tab.title}}"><p>{{tab.content}}</p></div>
+          </div>
+          <hr>
+          <div class="well">
+            <code>tabs.activeTab=<span>{{tabs.activeTab}}</span></code>
+            <div class="btn-group" ng-model="tabs.activeTab" bs-buttons-radio>
+              <button type="button" class="btn btn-primary" value="0">First</button>
+              <button type="button" class="btn btn-primary" value="1">Second</button>
+              <button type="button" class="btn btn-primary" value="2">Third</button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div data-fade="1" ngModel="activeTab" bs-tabs&gt;
+  &lt;div ng-repeat="tab in tabs" data-title="{{tab.title}}"&gt;&lt;p&gt;{{tab.content}}&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+        </pre>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          You can programmaticaly switch tab with an optional <code>ngModel</code> attribute.<br>You must use dot-notation (ie. <code>myObj.myProp</code>) to make the two-way databinding work.
+        </div>
+      </section>
+
+      <section id="tooltip">
+        <div class="page-header">
+          <h1>Tooltip <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/tooltip.js" target="_blank">directives/tooltip.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Parses the content passed to the directive & displays a tooltip with it.</p>
+        <p>Use any button/link to trigger a tooltip menu by appending a <code>bs-tooltip</code> attribute.</p>
+        <p>Both <code>$scope.show()</code> and <code>$scope.hide()</code> are available inside the tooltip to toggle its visibility.</p>
+        <div class="bs-docs-example">
+          <a href="//plnkr.co/edit/DoLKYXF54BzjL44Zm8Cs?p=preview" target="_blank" class="btn btn-small btn-plnkr"><i class="icon-pencil"></i> Edit in plunker</a>
+          <pre>tooltip: {{tooltip | json}}</pre>
+          <div class="well">
+            <p>Tight pants next level keffiyeh <a href="" bs-tooltip="tooltip.title">you probably</a> haven't heard of them. Photo booth beard raw denim letterpress vegan messenger bag stumptown.</p>
+            <hr />
+            <div class="control-group input-prepend">
+              <button type="submit" class="btn" data-trigger="click" bs-tooltip="tooltip.title">Click me</button>
+              <input type="text" class="span3" data-placement="bottom" placeholder="Focus to toggle tooltip" data-trigger="focus" data-unique="1" bs-tooltip="tooltip.title"/>
+              <input style="margin: 10px 0 0 10px;" type="checkbox" ng-model="tooltip.checked" data-placement="right" bs-tooltip="tooltip.title">
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Basic tooltip on hover --&gt;
+&lt;a href="#" bs-tooltip="tooltip.title"&gt;...&lt;/a&gt;
+&lt;!-- Button to trigger tooltip on click --&gt;
+&lt;button type="submit" class="btn" data-trigger="click" bs-tooltip="tooltip.title"&gt;...&lt;/button&gt;
+&lt;!-- Force close others with data-unique attribute --&gt;
+&lt;input type="text" data-trigger="focus" data-unique="1" bs-tooltip="tooltip.title"/&gt;
+&lt;!-- Two-way databinding --&gt;
+&lt;input type="checkbox" ng-model="tooltip.checked" bs-tooltip="tooltip.title"/&gt;
+        </pre>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          <em>To prevent databinding issues, "the rule of thumb is, if you﻿ use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery</em>
+        </div>
+      </section>
+
+      <section id="popover">
+        <div class="page-header">
+          <h1>Popover <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/popover.js" target="_blank">directives/popover.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <!--<p><a target="_blank" href="http://twitter.github.com/bootstrap/javascript.html#popovers"><small>boostrap</small></a></p>-->
+        <p>Fetches an external html partial (or an inline <code>ng-template</code>) and populates the popover with its content.</p>
+        <p>Use any button/link to trigger a popover menu by appending a <code>bs-popover</code> attribute.</p>
+        <p>Both <code>$scope.show()</code> and <code>$scope.hide()</code> and <code>$scope.$popover()</code> are available inside the popover to toggle its visibility.</p>
+        <div class="bs-docs-example">
+          <a href="//plnkr.co/edit/lThOkfVJCVf6RDiqvQZG?p=preview" target="_blank" class="btn btn-small btn-plnkr"><i class="icon-pencil"></i> Edit in plunker</a>
+          <pre>popover: {{popover | json}}</pre>
+          <div class="well">
+            <button type="button" class="btn btn-large btn-primary" data-placement="top" data-title="Title One" bs-popover="'partials/popover.html'">Click to toggle popover<br /><small>(won't close others)</small></button>
+            <button type="button" class="btn btn-large btn-danger" data-unique="1" data-placement="right" data-title="Title Two" bs-popover="'partials/popover.html'">Unique Popover<br /><small>(will close others)</small></button>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Button to trigger popover with an external partial --&gt;
+&lt;button type="button" class="btn" bs-popover="'partials/popover.html'"&gt;...&lt;/button&gt;
+
+&lt;!-- You can also use a simple object {title:'', content:'', etc.} instead of a partial/template --&gt;
+&lt;button type="button" class="btn" bs-popover="popover"&gt;...&lt;/button&gt;
+
+&lt;!-- Force close others with data-unique attribute --&gt;
+&lt;button type="button" class="btn" data-unique="1" bs-popover="'partials/popover.html'"&gt;...&lt;/button&gt;
+
+&lt;!-- Popover (external ./partials/popover.html or inline ng-template)  --&gt;
+&lt;form name="popoverForm"&gt;
+  &lt;p ng-bind-html-unsafe="popover.content"&gt;&lt;/p&gt;
+  &lt;br /&gt;
+  &lt;pre&gt;2 + 3 = {{ 2 + 3 }}&lt;/pre&gt;
+  &lt;div class="form-actions"&gt;
+    &lt;button type="button" class="btn" ng-click="submitForm($popover)"&gt;Close&lt;/button&gt;
+    &lt;button class="btn btn-primary" ng-click="popover.saved=true;hide()"&gt;Save changes&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+        </pre>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          You can use <code>ng-controller="MyPopoverCtrl"</code> alongside <code>bs-popover="..."</code> to spawn a controller with a custom scope for your popover.
+        </div>
+      </section>
+
+      <section id="alerts">
+        <div class="page-header">
+          <h1>Alert <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/alert.js" target="_blank">directives/alert.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Build a custom alert with the <code>bs-alert</code> attribute.</p>
+        <div class="bs-docs-example">
+          <pre>alerts: {{alerts | json}}</pre>
+          <div class="well">
+            <div class="btn-toolbar">
+              <label class="label" style="margin-right:1em">alerts[0].type</label>
+              <div class="btn-group" ng-model="alerts[0].type" bs-buttons-radio>
+                <button type="button" class="btn" value="">basic</button>
+                <button type="button" class="btn" value="error">error</button>
+                <button type="button" class="btn" value="success">success</button>
+                <button type="button" class="btn" value="info">info</button>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary" ng-click="addAlert()"><i class="icon-plus icon-white"></i>&nbsp;Add alert</button>
+          </div>
+          <hr />
+          <div class="alerts">
+            <div class="alert fade" ng-repeat="alert in alerts" bs-alert="alert"></div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;!-- Basic static alert (default bootstrap behavior) --&gt;
+&lt;div class="alert fade" bs-alert&gt;&lt;strong&gt;Hey!&lt;/strong&gt;&nbsp;This is a static alert.&lt;/div&gt;
+
+&lt;!-- Alert bound to an object (alert.closed is set to true on close) --&gt;
+&lt;div class="alert fade" bs-alert="alert"&gt;&lt;/div&gt;
+
+&lt;!-- Use an array stack (alert is removed from the stack on close) --&gt;
+&lt;div class="alerts"&gt;
+  &lt;div class="alert fade" ng-repeat="alert in alerts" bs-alert="alert"&gt;&lt;/div&gt;
+&lt;/div&gt;
+        </pre>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          You can use a button with <code>data-dismiss="alert"</code> to dismiss your alerts.
+        </div>
+     </section>
+
+      <section id="buttons">
+        <div class="page-header">
+          <h1>Button <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/button.js" target="_blank">directives/button.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Enables databinding between a button and a scope object.</p>
+        <p>Use any button/link with <code>ng-model</code> and <code>bs-button</code> attributes.</p>
+        <div class="bs-docs-example">
+          <pre>button: {{button | json}}</pre>
+          <div class="btn-toolbar well" style="margin: 0;">
+            <button type="button" class="btn btn-primary" ng-model="button.active" bs-button>Toggle me!</button>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;button type="button" class="btn" ng-model="button.active" bs-button&gt;...&lt;/button&gt;
+        </pre>
+
+        <h3 id="buttons-select">Button Select</h3>
+        <div class="bs-docs-example">
+          <pre>buttonSelect: {{buttonSelect | json}}</pre>
+          <div class="well">
+            <label>Product price:</label>
+            <div class="input-append">
+              <input class="span2" type="text" ng-model="buttonSelect.price">
+              <button type="button" class="btn" ng-model="buttonSelect.currency" bs-button-select="['$', '€', '¥']"></button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div class="input-append"&gt;
+  &lt;input type="text" ng-model="buttonSelect.price"&gt;
+  &lt;button type="button"class="btn" ng-model="buttonSelect.currency" bs-button-select="['$', '€', '¥']"&gt;&lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+
+        <h2 id="checkboxes">Checkboxes</h3>
+        <p>Add <code>bs-buttons-checkbox</code> for checkbox-style toggling on btn-group.</p>
+        <div class="bs-docs-example">
+          <pre>checkbox: {{checkbox | json}}</pre>
+          <div class="btn-toolbar well">
+            <div class="btn-group" bs-buttons-checkbox>
+              <button type="button" class="btn" ng-model="checkbox.left">Left</button>
+              <button type="button" class="btn" ng-model="checkbox.middle">Middle</button>
+              <button type="button" class="btn" ng-model="checkbox.right">Right</button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div class="btn-group" bs-buttons-checkbox&gt;
+  &lt;button type="button" class="btn" ng-model="checkbox.left"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" ng-model="checkbox.middle"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" ng-model="checkbox.right"&gt;...&lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+
+        <h2 id="radios">Radios</h3>
+        <p>Add <code>bs-buttons-radio</code> for radio-style toggling on btn-group.</p>
+        <div class="bs-docs-example">
+          <pre>radio: {{radio | json}}</pre>
+          <div class="btn-toolbar well">
+            <div class="btn-group" bs-buttons-radio>
+              <button type="button" class="btn" ng-model="radio.left">Left</button>
+              <button type="button" class="btn" ng-model="radio.middle">Middle</button>
+              <button type="button" class="btn" ng-model="radio.right">Right</button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div class="btn-group" bs-buttons-radio&gt;
+  &lt;button type="button" class="btn" ng-model="radio.left"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" ng-model="radio.middle"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" ng-model="radio.right"&gt;...&lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+
+        <h3 id="radios-single">Radios with a single model</h3>
+        <p>Add <code>bs-buttons-radio</code> with an <code>ng-model</code> attribute to bind your buttons to a single model.</p>
+        <div class="bs-docs-example">
+          <pre>radioValue: {{radioValue | json}}</pre>
+          <div class="btn-toolbar well">
+            <div class="btn-group" ng-model="radioValue" bs-buttons-radio>
+              <button type="button" class="btn" value="left">Left</button>
+              <button type="button" class="btn" value="middle">Middle</button>
+              <button type="button" class="btn" value="right">Right</button>
+            </div>
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;div class="btn-group" ng-model="radioValue" bs-buttons-radio&gt;
+  &lt;button type="button" class="btn" value="left"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" value="middle"&gt;...&lt;/button&gt;
+  &lt;button type="button" class="btn" value="right"&gt;...&lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+      </section>
+
+      <section id="typeahead">
+        <div class="page-header">
+          <h1>Typeahead <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/typeahead.js" target="_blank">directives/typeahead.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Use any input with typeahead functionality by appending a <code>bs-typeahead</code> attribute.</p>
+        <div class="bs-docs-example">
+          <pre>value: {{typeaheadValue}}<br /><br />typeahead: {{typeahead}}</pre>
+          <div class="well">
+            <input type="text" class="span3" data-items="4" ng-model="typeaheadValue" bs-typeahead="typeahead" placeholder="Typeahead">
+            <br>
+            <input type="text" class="span3" data-items="4" data-min-length="0" ng-model="typeaheadValueBis" bs-typeahead="typeahead" placeholder="Typeahead with minLength=0">
+          </div>
+        </div>
+        <pre class="prettyprint linenums" ng-non-bindable>
+&lt;input type="text" ng-model="typeaheadValue" bs-typeahead="typeahead"&gt;
+
+&lt;!-- You can also use a function --&gt;
+&lt;input type="text" ng-model="typeaheadValue" bs-typeahead="typeaheadFn"&gt;
+
+&lt;!-- Function defined in your controller --&gt;
+$scope.typeaheadFn = function(query) {
+  return $.map($scope.typeahead, function(country) {
+    return country + '_1';
+  });
+}
+
+&lt;!-- Async function defined in your controller  --&gt;
+$scope.typeaheadFn = function(query, callback) {
+  $http.get('/stations/autocomplete?term='+query).success(function(stations) {
+    callback(stations); // This will automatically open the popup with retrieved results
+  });
+}
+        </pre>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          You can use a the <code>data-min-length</code> attribute to either show the popup right away (minLength=0) or only after a specific number of chars have been typed in.
+        </div>
+     </section>
+
+      <section id="select">
+        <div class="page-header">
+          <h1>Select <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/select.js" target="_blank">directives/select.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Directive for <a href="https://github.com/silviomoreto/bootstrap-select" target="_blank">bootstrap-select</a> (made by <a href="https://github.com/silviomoreto" target="_blank">Silvio Moreto</a>).</p>
+        <p>Append a <code>bs-select</code> attribute to enable bootstrap-select on a regular Angular select.</p>
+        <p><i class="icon-flag"></i>&nbsp;Requires <code><a href="vendor/bootstrap-select.js">bootstrap-select.js</a></code> & <code><a href="vendor/bootstrap-select.css">bootstrap-select.css</a></code>.</p>
+        <h3>Simple selects</h3>
+        <div class="bs-docs-example">
+          <a href="//plnkr.co/edit/T1D3wF88RYqk5x77MJDT?p=preview" target="_blank" class="btn btn-small btn-plnkr"><i class="icon-pencil"></i> Edit in plunker</a>
+          <pre>$scope.selects: {{selects | json}}</pre>
+          <pre>$scope.selectedItem: {{selectedItem | json}}</pre>
+          <div class="well">
+            <select class="span2" ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in selects" data-style="btn-primary" bs-select></select>
+            <hr>
+            <div class="btn-group" ng-model="selectedItem" bs-buttons-radio>
+              <button ng-repeat="(key, value) in selects" type="button" class="btn" value="{{value.id}}" ng-bind-html-unsafe="value.name"></button>
+            </div>
+            <button type="button" class="btn" ng-click="pushSelect()"><i class="icon-plus"></i>&nbsp;add item</button>
+          </div>
+        </div>
+        <pre class="prettyprint linenums">
+&lt;select class="span2" ng-model="selectedItem" ng-options="value.id as value.name for (key, value) in selects" data-style="btn-primary" bs-select&gt;&lt;/select&gt;
+        </pre>
+        <h3>Multiple selects</h3>
+        <div class="bs-docs-example">
+          <a href="//plnkr.co/edit/T1D3wF88RYqk5x77MJDT?p=preview" target="_blank" class="btn btn-small btn-plnkr"><i class="icon-pencil"></i> Edit in plunker</a>
+          <pre>$scope.selects: {{selects | json}}</pre>
+          <pre>$scope.selectedItems: {{selectedItems | json}}</pre>
+          <div class="well">
+            <select class="span4" ng-model="selectedItems" multiple title="Choose one of the following..." ng-options="value.id as value.name for value in selects" data-style="btn-primary" bs-select></select>
+            <hr>
+            <button type="button" class="btn" ng-click="pushSelect()"><i class="icon-plus"></i>&nbsp;add item</button>
+          </div>
+        </div>
+        <pre class="prettyprint linenums">
+&lt;select class="span4" ng-model="selectedItem" multiple title="Choose one of the following..." ng-options="value.id as value.name for (key, value) in selects" data-style="btn-primary" bs-select&gt;&lt;/select&gt;
+        </pre>
+      </section>
+
+      <section id="datepicker">
+        <div class="page-header">
+          <h1>Datepicker <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/datepicker.js" target="_blank">directives/datepicker.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Directive for <a href="https://github.com/eternicode/bootstrap-datepicker" target="_blank">bootstrap-datepicker</a> (made by <a href="https://github.com/eternicode" target="_blank">Stefan Petre</a>).</p>
+        <p><i class="icon-flag"></i>&nbsp;Requires <code><a href="vendor/bootstrap-datepicker.js">bootstrap-datepicker.js</a></code> & <code><a href="vendor/bootstrap-datepicker.css">bootstrap-datepicker.css</a></code>.</p>
+        <p>Add a datepicker to an input by appending a <code>bs-datepicker</code> attribute.</p>
+        <p><i class="icon-ok"></i>&nbsp;Supports AngularJS validation out of the box.</p>
+        <div class="bs-docs-example">
+          <a href="//plnkr.co/edit/QAxwgLSWQaYbGzkzeu4g?p=preview" target="_blank" class="btn btn-small btn-plnkr"><i class="icon-pencil"></i> Edit in plunker</a>
+          <pre style="min-height: 60px;">datepicker: {{datepicker | json}}<!--<br />myForm: {{myForm | json}}--></pre>
+          <form class="form-horizontal well">
+            <div class="control-group input-append">
+              <label for="inputDatepicker" class="label" style="margin-right:6px;">date</label>
+              <input id="inputDatepicker" class="input-small" type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
+              <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+            </div>
+          </form>
+        </div>
+        <pre class="prettyprint linenums">
+&lt;div class="control-group input-append"&gt;
+  &lt;input type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker&gt;
+  &lt;button type="button" class="btn" data-toggle="datepicker"&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- You can use the global $strapConfig to set defaults --&gt;
+app.value('$strapConfig', {
+  datepicker: {
+    language: 'fr',
+    format: 'M d, yyyy'
+  }
+});
+        </pre>
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          You can use a custom button or add-on as a toggle with <code>data-toggle="datepicker"</code> on a sibling element.
+        </div>
+      </section>
+
+      <section id="timepicker">
+        <div class="page-header">
+          <h1>Timepicker <small><a href="//github.com/mgcrea/angular-strap/blob/master/src/directives/timepicker.js" target="_blank">directives/timepicker.js</a></small></h1>
+        </div>
+        <h2>Overview and examples</h2>
+        <p>Directive for <a href="https://github.com/jdewit/bootstrap-timepicker" target="_blank">bootstrap-timepicker</a> (made by <a href="https://github.com/jdewit" target="_blank">jdewit</a>).</p>
+        <p><i class="icon-flag"></i>&nbsp;Requires <code><a href="vendor/bootstrap-timepicker.js">bootstrap-timepicker.js</a></code> & <code><a href="vendor/bootstrap-timepicker.css">bootstrap-timepicker.css</a></code>.</p>
+        <p>Add a timepicker to an input by appending a <code>bs-timepicker</code> attribute.</p>
+        <p><i class="icon-ok"></i>&nbsp;Supports AngularJS validation out of the box.</p>
+        <div class="bs-docs-example">
+          <pre style="min-height: 60px;">timepicker: {{timepicker | json}}<!--<br />myForm: {{myForm | json}}--></pre>
+          <form class="form-horizontal well">
+            <div class="control-group">
+              <label for="inputTimepicker" class="label" style="margin-right:6px;">time</label>
+              <div class="input-append">
+                <input id="inputTimepicker" type="text" class="input-small" ng-model="timepicker.time" bs-timepicker>
+                <!-- <i class="icon-time" style="position: relative; margin: 2.5px 0 0 -24px;"></i> -->
+                <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <pre class="prettyprint linenums">
+&lt;div class="control-group input-append"&gt;
+  &lt;input type="text" ng-model="timepicker.time" bs-timepicker&gt;
+  &lt;button type="button" class="btn" data-toggle="timepicker"&gt;&lt;i class="icon-time"&gt;&lt;/i&gt;&lt;/button&gt;
+&lt;/div&gt;
+        </pre>
+<!-- &lt;i class="icon-time" style="position: relative;margin: 2.5px 0 0 -24px;"&gt;&lt;/i&gt; -->
+        <div class="alert alert-info">
+          <strong>Heads up!</strong>
+          You can use a custom button or add-on as a toggle with <code>data-toggle="timepicker"</code> on a sibling element.
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+  </div>
+
+    <!-- Footer
+    ================================================== -->
+    <footer class="footer">
+      <div class="container">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Designed and built by <a href="https://plus.google.com/103156582871250188205?rel=author" target="_blank">Olivier Louvignes</a> -
+        <span class="authors-social-buttons">
+          <a href="https://twitter.com/olouv" class="twitter-follow-button" data-show-count="false">Follow @olouv</a>
+          <iframe src="http://ghbtns.com/github-btn.html?user=mgcrea&type=follow&count=false" allowtransparency="true" frameborder="0" scrolling="0" width="165" height="20"></iframe>
+        </span>
+      </p>
+      <hr />
+      <p>Using <a href="http://twitter.github.com/bootstrap" target="_blank">Twitter Bootstrap</a> and the <a href="css/docs.css" target="_blank">Bootstrap's docs styles</a> designed and built by <a href="http://twitter.com/mdo" target="_blank">@mdo</a> and <a href="http://twitter.com/fat" target="_blank">@fat</a>.</p>
+      <p>Code licensed under <a href="http://github.com/mgcrea/angular-strap/blob/master/license.md" target="_blank">The MIT License</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/mgcrea/angular-strap/issues?state=open">Issues</a></li>
+        <li class="muted">·</li>
+        <li><a href="https://github.com/mgcrea/angular-strap/wiki">Roadmap and changelog</a></li>
+      </ul>
+    </div>
+  </footer>
+
+    <!-- Analytics
+    ================================================== -->
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-1813303-8']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+
+    <!-- Socials
+    ================================================== -->
+
+    <script type="text/javascript">
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+    <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+    </script>
+
+  </body>
+  </html>

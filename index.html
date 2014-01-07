@@ -1,0 +1,119 @@
+<!doctype html>
+<html class="no-js" lang="en" ng-app="mgcrea.ngStrapDocs">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>AngularStrap v2</title>
+  <meta name="description" content="">
+
+  <!-- Sets initial viewport load and disables zooming  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <!-- Set a shorter title for iOS6 devices when saved to home screen -->
+  <meta name="apple-mobile-web-app-title" content="BootstrapSandbox">
+
+  <meta property="og:image" content="https://github.global.ssl.fastly.net/images/modules/logos_page/Octocat.png">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Prevent flickering of AngularJS compiled elements -->
+  <style type="text/css">[ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }</style>
+
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"> -->
+  <!-- <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"> -->
+  <link rel="stylesheet" href="styles/libraries.min.css"/>
+
+  <link rel="stylesheet" href="styles/main.min.css"/>
+
+</head>
+
+<body ontouchstart="" ng-controller="MainCtrl">
+
+  <div ng-include="'views/navbar.html'"></div>
+  <div ng-include="'views/header.html'"></div>
+  <div class="bs-old-docs">
+    <div class="container">
+      <strong>
+        <a href="./1.0/">Looking for AngularStrap v1 docs?</a>
+      </strong>
+      We've moved it to a new home while we push forward with AngularStrap 2.
+    </div>
+  </div>
+
+  <div class="container bs-docs-container">
+    <div class="row">
+      <div class="col-md-3">
+        <div ng-include="'views/sidebar.html'"></div>
+      </div>
+      <div class="col-md-9">
+        <div ng-include="'views/sections/getting-started.html'"></div>
+        <div ng-include="'modal/docs/modal.demo.html'"></div>
+        <div ng-include="'aside/docs/aside.demo.html'"></div>
+        <div ng-include="'alert/docs/alert.demo.html'"></div>
+        <div ng-include="'button/docs/button.demo.html'"></div>
+        <div ng-include="'tooltip/docs/tooltip.demo.html'"></div>
+        <div ng-include="'popover/docs/popover.demo.html'"></div>
+        <div ng-include="'dropdown/docs/dropdown.demo.html'"></div>
+        <div ng-include="'scrollspy/docs/scrollspy.demo.html'"></div>
+        <div ng-include="'affix/docs/affix.demo.html'"></div>
+        <div ng-include="'tab/docs/tab.demo.html'"></div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-include="'views/footer.html'"></div>
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-sanitize.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-animate.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
+  <!-- <script src="bower_components/angular/angular.js"></script> -->
+  <!-- <script src="bower_components/angular-sanitize/angular-sanitize.js"></script> -->
+  <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
+  <!-- <script src="bower_components/angular-route/angular-route.js"></script> -->
+  <script src="scripts/libraries.min.js"></script>
+
+  <script src="scripts/angular-strap.min.js"></script>
+
+  <script src="scripts/docs.min.js"></script>
+
+  <!-- Analytics
+  ================================================== -->
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1813303-8']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+  <!-- Socials
+  ================================================== -->
+
+  <script type="text/javascript">
+    (function() {
+      var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+      po.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+    })();
+  </script>
+
+  <script>
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+  </script>
+
+</body>
+
+</html>
