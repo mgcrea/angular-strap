@@ -5,7 +5,7 @@ describe('aside', function () {
   var $compile, $templateCache, scope, sandboxEl;
 
   beforeEach(module('ngSanitize'));
-  beforeEach(module('mgcrea.ngStrap.modal', 'mgcrea.ngStrap.aside'));
+  beforeEach(module('mgcrea.ngStrap.aside'));
 
   beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_) {
     scope = _$rootScope_.$new();

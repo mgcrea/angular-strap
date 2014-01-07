@@ -91,7 +91,7 @@ describe('tooltip', function () {
       expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.tooltip.title);
     });
 
-    it('should support ngRepeat markup inside', function() {
+    it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-tooltip]')).triggerHandler('mouseenter');
       expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.items[0].tooltip);

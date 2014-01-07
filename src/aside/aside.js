@@ -4,7 +4,7 @@ var forEach = angular.forEach;
 var isObject = angular.isObject;
 var isDefined = angular.isDefined;
 
-angular.module('mgcrea.ngStrap.aside', [])
+angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
 
   .run(function($templateCache) {
     var template = '' +
