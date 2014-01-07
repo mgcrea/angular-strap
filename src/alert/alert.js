@@ -1,25 +1,18 @@
 'use strict';
 
-var slice = Array.prototype.slice;
-var trim = String.prototype.trim;
-var forEach = angular.forEach;
-var isDefined = angular.isDefined;
-var isUndefined = angular.isUndefined;
-var isObject = angular.isObject;
-var isNumber = angular.isNumber;
-var isString = angular.isString;
-var jqLite = angular.element;
+// @BUG: following snippet won't compile correctly
+// @TODO: submit issue to core
+// '<span ng-if="title"><strong ng-bind="title"></strong>&nbsp;</span><span ng-bind-html="content"></span>' +
 
 angular.module('mgcrea.ngStrap.alert', [])
 
-  // @bug: '<span ng-if="title"><strong ng-bind="title"></strong>&nbsp;</span><span ng-bind-html="content"></span>' +
-
   .run(function($templateCache) {
 
-    var template =  '<div class="alert" tabindex="-1" ng-class="[type ? \'alert-\' + type : null]">' +
-                      '<button type="button" class="close" ng-click="$hide()">&times;</button>' +
-                      '<strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span>' +
-                    '</div>';
+    var template =  '' +
+      '<div class="alert" tabindex="-1" ng-class="[type ? \'alert-\' + type : null]">' +
+        '<button type="button" class="close" ng-click="$hide()">&times;</button>' +
+        '<strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span>' +
+      '</div>';
 
     $templateCache.put('$alert', template);
 
@@ -54,7 +47,7 @@ angular.module('mgcrea.ngStrap.alert', [])
 
         // Support scope as string options
         if(!options.scope) {
-          forEach([/*'title', 'content', */'type'], function(key) {
+          angular.forEach([/*'title', 'content', */'type'], function(key) {
             if(options[key]) $alert.scope[key] = options[key];
           });
         }
@@ -91,12 +84,12 @@ angular.module('mgcrea.ngStrap.alert', [])
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        forEach(['template', 'placement', 'keyboard', 'container', 'animation', 'duration'], function(key) {
-          if(isDefined(attr[key])) options[key] = attr[key];
+        angular.forEach(['template', 'placement', 'keyboard', 'container', 'animation', 'duration'], function(key) {
+          if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // Support scope as data-attrs
-        forEach(['title', 'content', 'type'], function(key) {
+        angular.forEach(['title', 'content', 'type'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
             scope[key] = newValue;
           });
@@ -128,50 +121,3 @@ angular.module('mgcrea.ngStrap.alert', [])
     };
 
   });
-
-
-  // .directive('bsAlert', function($window, $animate, $alert) {
-
-  //   var defaults = $alert.defaults;
-
-  //   return {
-  //     restrict: 'EAC',
-  //     scope: true,
-  //     require: '?ngModel',
-  //     templateUrl: defaults.template,
-  //     compile: function(element, attr) {
-  //       return function postLink($scope, $element, $attr, ctrl, $transclude) {
-
-  //         // Require scope as an object
-  //         attr.bsTabs && $scope.$watch(attr.bsTabs, function(newValue, oldValue) {
-  //           $scope.panes = newValue;
-  //         }, true);
-
-  //         // Add base class
-  //         $element.addClass('tabs');
-
-  //         // Support animations
-  //         if($attr.animation) {
-  //           $element.addClass($attr.animation || defaults.animation);
-  //         }
-
-  //         $scope.active = $scope.activePane = 0;
-  //         $scope.setActive = function(index, ev) {
-  //           $scope.active = index;
-  //           if(ctrl) {
-  //             ctrl.$setViewValue(index);
-  //           }
-  //         };
-
-  //         // model -> view
-  //         if(ctrl) {
-  //           ctrl.$render = function() {
-  //             $scope.active = ctrl.$modelValue;
-  //           };
-  //         }
-
-  //       };
-  //     }
-  //   };
-
-  // });

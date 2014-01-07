@@ -1,6 +1,5 @@
 'use strict';
 
-
 angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.jqlite.debounce', 'mgcrea.ngStrap.jqlite.dimensions'])
 
   .provider('$scrollspy', function() {
@@ -16,12 +15,11 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.jqlite.debounce', 'm
 
     this.$get = function($window, $document, $rootScope, dimensions, debounce, throttle) {
 
-      var jqLite = angular.element;
-      var forEach = angular.forEach;
+      var windowEl = angular.element($window);
+      var docEl = angular.element($document.prop('documentElement'));
+      var bodyEl = angular.element($window.document.body);
 
-      var windowEl = jqLite($window);
-      var docEl = jqLite($document.prop('documentElement'));
-      var bodyEl = jqLite($window.document.body);
+      // Helper functions
 
       function nodeName(element, name) {
         return element[0].nodeName && element[0].nodeName.toLowerCase() === name.toLowerCase();
@@ -96,7 +94,6 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.jqlite.debounce', 'm
         };
 
         $scrollspy.checkPosition = function() {
-          // console.warn('checkPosition');
 
           // Calculate the scroll position
           scrollTop = (isWindowSpy ? $window.pageYOffset : scrollEl.prop('scrollTop')) || 0;
@@ -153,7 +150,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.jqlite.debounce', 'm
 
         $scrollspy.checkOffsets = function() {
 
-          forEach(trackedElements, function(trackedElement) {
+          angular.forEach(trackedElements, function(trackedElement) {
             var targetElement = document.querySelector(trackedElement.target);
             trackedElement.offsetTop = targetElement ? dimensions.offset(targetElement).top : null;
             if(options.offset && trackedElement.offsetTop !== null) trackedElement.offsetTop -= options.offset * 1;
@@ -205,16 +202,13 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.jqlite.debounce', 'm
 
   .directive('bsScrollspy', function($rootScope, debounce, dimensions, $scrollspy) {
 
-    var forEach = angular.forEach,
-        isDefined = angular.isDefined;
-
     return {
       restrict: 'EAC',
       link: function postLink(scope, element, attr) {
 
         var options = {scope: scope};
-        forEach(['offset', 'target'], function(key) {
-          if(isDefined(attr[key])) options[key] = attr[key];
+        angular.forEach(['offset', 'target'], function(key) {
+          if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         var scrollspy = $scrollspy(options);
@@ -235,13 +229,11 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.jqlite.debounce', 'm
 
   .directive('bsScrollspyList', function($rootScope, debounce, dimensions, $scrollspy) {
 
-    var forEach = angular.forEach;
-
     return {
       restrict: 'A',
       compile: function postLink(element, attr) {
         var children = element[0].querySelectorAll('li > a[href]');
-        forEach(children, function(child) {
+        angular.forEach(children, function(child) {
           var childEl = angular.element(child);
           childEl.parent().attr('bs-scrollspy', '').attr('data-target', childEl.attr('href'));
         });

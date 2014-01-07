@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('dropdown', function () {
+describe('dropdown', function () {
 
   var $compile, $templateCache, scope, sandboxEl;
 

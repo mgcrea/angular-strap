@@ -1,10 +1,5 @@
 'use strict';
 
-var forEach = angular.forEach;
-var isObject = angular.isObject;
-var isDefined = angular.isDefined;
-var jqLite = angular.element;
-
 angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.jqlite.dimensions'])
 
   .provider('$affix', function() {
@@ -15,8 +10,8 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.jqlite.dimensions'])
 
     this.$get = function($window, dimensions) {
 
-      var windowEl = jqLite($window);
-      var bodyEl = jqLite($window.document.body);
+      var windowEl = angular.element($window);
+      var bodyEl = angular.element($window.document.body);
 
       function AffixFactory(element, config) {
 
@@ -41,7 +36,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.jqlite.dimensions'])
             }
           }
           else {
-            parent = jqLite(options.offsetParent);
+            parent = angular.element(options.offsetParent);
           }
         }
 
@@ -176,17 +171,13 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.jqlite.dimensions'])
 
   .directive('bsAffix', function($affix, dimensions) {
 
-    var forEach = angular.forEach;
-    var isDefined = angular.isDefined;
-    var jqLite = angular.element;
-
     return {
       restrict: 'EAC',
       link: function postLink(scope, element, attr) {
 
         var options = {scope: scope, offsetTop: 'auto'};
-        forEach(['offsetTop', 'offsetBottom', 'offsetParent', 'offsetUnpin'], function(key) {
-          if(isDefined(attr[key])) options[key] = attr[key];
+        angular.forEach(['offsetTop', 'offsetBottom', 'offsetParent', 'offsetUnpin'], function(key) {
+          if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         var affix = $affix(element, options);

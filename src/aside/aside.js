@@ -1,28 +1,27 @@
 'use strict';
 
-var forEach = angular.forEach;
-var isObject = angular.isObject;
-var isDefined = angular.isDefined;
-
 angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
 
   .run(function($templateCache) {
+
     var template = '' +
-    '<div class="aside" tabindex="-1" role="dialog">' +
-      '<div class="aside-dialog">' +
-        '<div class="aside-content">' +
-          '<div class="aside-header" ng-show="title">' +
-            '<button type="button" class="close" ng-click="$hide()">&times;</button>' +
-            '<h4 class="aside-title" ng-bind-html="title"></h4>' +
-          '</div>' +
-          '<div class="aside-body" ng-show="content" ng-bind-html="content"></div>' +
-          '<div class="aside-footer">' +
-            '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' +
+      '<div class="aside" tabindex="-1" role="dialog">' +
+        '<div class="aside-dialog">' +
+          '<div class="aside-content">' +
+            '<div class="aside-header" ng-show="title">' +
+              '<button type="button" class="close" ng-click="$hide()">&times;</button>' +
+              '<h4 class="aside-title" ng-bind-html="title"></h4>' +
+            '</div>' +
+            '<div class="aside-body" ng-show="content" ng-bind-html="content"></div>' +
+            '<div class="aside-footer">' +
+              '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' +
+            '</div>' +
           '</div>' +
         '</div>' +
-      '</div>' +
-    '</div>';
+      '</div>';
+
     $templateCache.put('$aside', template);
+
   })
 
   .provider('$aside', function() {
@@ -70,12 +69,12 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
       link: function postLink(scope, element, attr, transclusion) {
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        forEach(['template', 'placement', 'backdrop', 'keyboard', 'show', 'container', 'animation'], function(key) {
-          if(isDefined(attr[key])) options[key] = attr[key];
+        angular.forEach(['template', 'placement', 'backdrop', 'keyboard', 'show', 'container', 'animation'], function(key) {
+          if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // Support scope as data-attrs
-        forEach(['title', 'content'], function(key) {
+        angular.forEach(['title', 'content'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
             scope[key] = newValue;
           });

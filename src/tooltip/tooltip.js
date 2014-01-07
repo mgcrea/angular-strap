@@ -3,7 +3,15 @@
 angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
 
   .run(function($templateCache) {
-    $templateCache.put('$tooltip', '<div class="tooltip" ng-show="title"><div class="tooltip-arrow"></div><div class="tooltip-inner" ng-bind-html="title"></div></div>');
+
+    var template = '' +
+      '<div class="tooltip" ng-show="title">' +
+        '<div class="tooltip-arrow"></div>' +
+        '<div class="tooltip-inner" ng-bind-html="title"></div>' +
+      '</div>';
+
+    $templateCache.put('$tooltip', template);
+
   })
 
   .provider('$tooltip', function() {
@@ -25,9 +33,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
     this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions) {
 
       var trim = String.prototype.trim;
-      var forEach = angular.forEach;
-      var isDefined = angular.isDefined;
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+
+      // Helper functions
+
       var findElement = function(query, element) {
         return angular.element((element || document).querySelectorAll(query));
       };
@@ -308,8 +317,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
 
   .directive('bsTooltip', function($window, $location, $sce, $tooltip) {
 
-    var forEach = angular.forEach;
-    var isDefined = angular.isDefined;
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
     return {
@@ -319,15 +326,15 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
 
         // Directive options
         var options = {scope: scope};
-        forEach(['placement', 'container', 'delay', 'trigger', 'animation', 'type', 'template'], function(key) {
-          if(isDefined(attr[key])) options[key] = attr[key];
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'animation', 'type', 'template'], function(key) {
+          if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // Support scope as data-attrs
-        forEach(['title'], function(key) {
+        angular.forEach(['title'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
             scope[key] = newValue;
-            isDefined(oldValue) && requestAnimationFrame(function() {
+            angular.isDefined(oldValue) && requestAnimationFrame(function() {
               tooltip && tooltip.$applyPlacement();
             });
           });
@@ -340,7 +347,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
           } else {
             scope.content = newValue;
           }
-          isDefined(oldValue) && requestAnimationFrame(function() {
+          angular.isDefined(oldValue) && requestAnimationFrame(function() {
             tooltip && tooltip.$applyPlacement();
           });
         }, true);

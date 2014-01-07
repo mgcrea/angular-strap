@@ -3,7 +3,16 @@
 angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
   .run(function($templateCache) {
-    $templateCache.put('$popover', '<div class="popover" tabindex="-1" ng-show="content" ng-class="{\'in\': $visible}"><div class="arrow"></div><h3 class="popover-title" ng-bind-html="title" ng-show="title"></h3><div class="popover-content" ng-bind-html="content"></div></div>');
+
+    var template = '' +
+      '<div class="popover" tabindex="-1" ng-show="content" ng-class="{\'in\': $visible}">' +
+        '<div class="arrow"></div>' +
+        '<h3 class="popover-title" ng-bind-html="title" ng-show="title"></h3>' +
+        '<div class="popover-content" ng-bind-html="content"></div>' +
+      '</div>';
+
+    $templateCache.put('$popover', template);
+
   })
 
   .provider('$popover', function() {
@@ -40,8 +49,6 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
   .directive('bsPopover', function($window, $location, $sce, $popover) {
 
-    var forEach = angular.forEach;
-    var isDefined = angular.isDefined;
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
     return {
@@ -51,15 +58,15 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
         // Directive options
         var options = {scope: scope};
-        forEach(['placement', 'keyboard', 'container', 'delay', 'trigger', 'animation', 'template'], function(key) {
-          if(isDefined(attr[key])) options[key] = attr[key];
+        angular.forEach(['placement', 'keyboard', 'container', 'delay', 'trigger', 'animation', 'template'], function(key) {
+          if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // Support scope as data-attrs
-        forEach(['title', 'content'], function(key) {
+        angular.forEach(['title', 'content'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
             scope[key] = newValue;
-            isDefined(oldValue) && requestAnimationFrame(function() {
+            angular.isDefined(oldValue) && requestAnimationFrame(function() {
               popover && popover.$applyPlacement();
             });
           });
@@ -72,7 +79,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
           } else {
             scope.content = newValue;
           }
-          isDefined(oldValue) && requestAnimationFrame(function() {
+          angular.isDefined(oldValue) && requestAnimationFrame(function() {
             popover && popover.$applyPlacement();
           });
         }, true);

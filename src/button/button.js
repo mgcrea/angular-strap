@@ -1,8 +1,5 @@
 'use strict';
 
-var forEach = angular.forEach;
-var jqLite = angular.element;
-
 angular.module('mgcrea.ngStrap.button', [])
 
   .provider('$button', function() {
@@ -27,8 +24,8 @@ angular.module('mgcrea.ngStrap.button', [])
         element.attr('data-toggle', 'buttons');
         element.removeAttr('ng-model');
         var children = element[0].querySelectorAll('input[type="checkbox"]');
-        forEach(children, function(child) {
-          var childEl = jqLite(child);
+        angular.forEach(children, function(child) {
+          var childEl = angular.element(child);
           childEl.attr('bs-checkbox', '');
           childEl.attr('ng-model', attr.ngModel + '.' + childEl.attr('value'));
         });
@@ -114,9 +111,9 @@ angular.module('mgcrea.ngStrap.button', [])
         element.attr('data-toggle', 'buttons');
         element.removeAttr('ng-model');
         var children = element[0].querySelectorAll('input[type="radio"]');
-        forEach(children, function(child) {
-          jqLite(child).attr('bs-radio', '');
-          jqLite(child).attr('ng-model', attr.ngModel);
+        angular.forEach(children, function(child) {
+          angular.element(child).attr('bs-radio', '');
+          angular.element(child).attr('ng-model', attr.ngModel);
         });
       }
 

@@ -3,8 +3,18 @@
 angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
   .run(function($templateCache) {
-    $templateCache.put('$dropdown', '<ul tabindex="-1" class="dropdown-menu" role="menu"><li role="presentation" ng-class="{divider: item.divider}" ng-repeat="item in content" ><a role="menuitem" tabindex="-1" href="{{item.href}}" ng-if="!item.divider" ng-click="$eval(item.click);$hide()" ng-bind-html="item.text"></a></li></ul>');
+
+    var template = '' +
+      '<ul tabindex="-1" class="dropdown-menu" role="menu">' +
+        '<li role="presentation" ng-class="{divider: item.divider}" ng-repeat="item in content" >' +
+          '<a role="menuitem" tabindex="-1" href="{{item.href}}" ng-if="!item.divider" ng-click="$eval(item.click);$hide()" ng-bind-html="item.text"></a>' +
+        '</li>' +
+      '</ul>';
+
+    $templateCache.put('$dropdown', template);
+
   })
+
 
   .provider('$dropdown', function() {
 

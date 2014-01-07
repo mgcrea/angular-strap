@@ -3,8 +3,25 @@
 angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions'])
 
   .run(function($templateCache) {
-    var template = '<div class="modal" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header" ng-show="title"><button type="button" class="close" ng-click="$hide()">&times;</button><h4 class="modal-title" ng-bind-html="title"></h4></div><div class="modal-body" ng-show="content" ng-bind-html="content"></div><div class="modal-footer"><button type="button" class="btn btn-default" ng-click="$hide()">Close</button></div></div></div></div>';
+
+    var template = '' +
+      '<div class="modal" tabindex="-1" role="dialog">' +
+        '<div class="modal-dialog">' +
+          '<div class="modal-content">' +
+            '<div class="modal-header" ng-show="title">' +
+              '<button type="button" class="close" ng-click="$hide()">&times;</button>' +
+              '<h4 class="modal-title" ng-bind-html="title"></h4>' +
+            '</div>'+
+            '<div class="modal-body" ng-show="content" ng-bind-html="content"></div>'+
+            '<div class="modal-footer">' +
+              '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
     $templateCache.put('$modal', template);
+
   })
 
   .provider('$modal', function() {
