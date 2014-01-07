@@ -15,6 +15,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
       placement: 'top',
       template: '$tooltip',
       trigger: 'hover focus',
+      keyboard: false,
       type: '',
       // html: false,
       title: '',
@@ -158,6 +159,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
           scope.$digest();
           requestAnimationFrame($tooltip.$applyPlacement);
 
+          // Bind events
+          if(options.keyboard) {
+            $tooltip.focus();
+            tipElement.on('keyup', $tooltip.$onKeyUp);
+          }
+
         };
 
         $tooltip.leave = function() {
@@ -181,12 +188,19 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
           scope.$digest();
           isShown = false;
 
+          // Unbind events
+          if(options.keyboard) {
+            tipElement.off('keyup', $tooltip.$onKeyUp);
+          }
+
         };
 
         $tooltip.toggle = function() {
-
           isShown ? $tooltip.leave() : $tooltip.enter();
+        };
 
+        $tooltip.focus = function() {
+          tipElement[0].focus();
         };
 
         // Protected methods
@@ -209,6 +223,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
           tipPosition.left += 'px';
           tipElement.css(tipPosition);
 
+        };
+
+        $tooltip.$onKeyUp = function(evt) {
+          evt.which === 27 && $tooltip.hide();
         };
 
         // Private methods
