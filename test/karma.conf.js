@@ -25,9 +25,9 @@ module.exports = function(config) {
       'test/effroi.js',
       'test/helpers.js',
       'test/async.js',
-      'test/mock/**/*.js',
-      'src/{,*/}/test/*.spec.js',
-      'test/spec/**/*.js'
+      // 'test/mock/**/*.js',
+      // 'test/spec/**/*.js',
+      'src/{,*/}/test/*.spec.js'
     ],
 
     // list of files / patterns to exclude
