@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Twitter Bootstrap",
-  "version": "2.0.0-b.1",
+  "version": "2.0.0-beta.1",
   "dependencies": {
     "angular": "~1.2.5",
     "angular-animate": "~1.2.5",

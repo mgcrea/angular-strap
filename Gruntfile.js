@@ -347,7 +347,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yo.dist %>',
-          src: '*',
+          src: '{,*/}*.js',
           dest: '<%= yo.dist %>'
         }]
       },
@@ -415,11 +415,15 @@ module.exports = function (grunt) {
       dist: {
         options: {
           report: 'gzip',
-          sourceMap: '<%= yo.dist %>/<%= pkg.name %>.min.map'
+          sourceMap: '<%= yo.dist %>/<%= pkg.name %>.min.map',
+          sourceMappingURL: '<%= pkg.name %>.min.map'
         },
         files: [{
-          dest: '<%= yo.dist %>/<%= pkg.name %>.min.js',
-          src: '<%= yo.dist %>/<%= pkg.name %>.js'
+          expand: true,
+          cwd: '<%= yo.dist %>',
+          src: '{,*/}*.js',
+          dest: '<%= yo.dist %>',
+          ext: '.min.js'
         }]
       }
     },
@@ -468,6 +472,7 @@ module.exports = function (grunt) {
     'ngmin:dist',
     'ngmin:modules',
     'uglify:dist',
+    'concat:banner'
   ]);
 
   grunt.registerTask('docs', [
