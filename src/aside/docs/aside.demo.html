@@ -49,9 +49,9 @@
 
             // Pre-fetch an external template populated with a custom scope
             var myOtherAside = $aside({scope: $scope, template: 'aside/docs/aside.tpl.demo.html'});
-            // Show when some event occurs (uses promises to ensure the template has been loaded)
-            myOtherModal.deferred.then(function() {
-              myOtherModal.show();
+            // Show when some event occurs (use $promise property to ensure the template has been loaded)
+            myOtherAside.$promise.then(function() {
+              myOtherAside.show();
             })
           })
         </code>

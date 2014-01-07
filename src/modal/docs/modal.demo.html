@@ -43,8 +43,8 @@
 
             // Pre-fetch an external template populated with a custom scope
             var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.tpl.demo.html'});
-            // Show when some event occurs (uses promises to ensure the template has been loaded)
-            myOtherModal.deferred.then(function() {
+            // Show when some event occurs (use $promise property to ensure the template has been loaded)
+            myOtherModal.$promise.then(function() {
               myOtherModal.show();
             })
           })

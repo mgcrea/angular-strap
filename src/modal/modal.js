@@ -38,8 +38,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions'])
 
         // Common vars
         var options = angular.extend({}, defaults, config);
-        $modal.promise = $q.when($templateCache.get(options.template) || $http.get(options.template/*, {cache: true}*/));
-        var scope = $modal.scope = options.scope && options.scope.$new() || $rootScope.$new();
+        $modal.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template/*, {cache: true}*/));
+        var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(!options.element && !options.container) {
           options.container = 'body';
         }
@@ -71,7 +71,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions'])
         // Fetch, compile then initialize modal
         var modalLinker, modalElement;
         var backdropElement = jqLite('<div class="' + options.prefixClass + '-backdrop"/>');
-        $modal.promise.then(function(template) {
+        $modal.$promise.then(function(template) {
           if(angular.isObject(template)) template = template.data;
           template = trim.apply(template);
           modalLinker = $compile(template);
@@ -103,7 +103,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions'])
           var after = options.container ? null : options.element;
 
           // Fetch a cloned element linked from template
-          modalElement = modalLinker(scope, function(clonedElement, scope) {});
+          modalElement = $modal.$element = modalLinker(scope, function(clonedElement, scope) {});
 
           // Set the initial positioning.
           modalElement.css({display: 'block'}).addClass(options.placement);

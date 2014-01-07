@@ -37,7 +37,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
 
         // Common vars
         var options = angular.extend({}, defaults, config);
-        $tooltip.promise = $q.when($templateCache.get(options.template) || $http.get(options.template/*, {cache: true}*/));
+        $tooltip.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template/*, {cache: true}*/));
         var scope = options.scope.$new() || $rootScope.$new();
         if(options.delay && angular.isString(options.delay)) {
           options.delay = parseFloat(options.delay);
@@ -65,7 +65,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
 
         // Fetch, compile then initialize tooltip
         var tipLinker, tipElement, tipTemplate;
-        $tooltip.promise.then(function(template) {
+        $tooltip.$promise.then(function(template) {
           if(angular.isObject(template)) template = template.data;
           template = trim.apply(template);
           tipTemplate = template;
@@ -143,7 +143,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
           var after = options.container ? null : element;
 
           // Fetch a cloned element linked from template
-          tipElement = tipLinker(scope, function(clonedElement, scope) {});
+          tipElement = $tooltip.$element = tipLinker(scope, function(clonedElement, scope) {});
 
           // Set the initial positioning.
           tipElement.css({top: '0px', left: '0px', display: 'block'}).addClass(options.placement);
