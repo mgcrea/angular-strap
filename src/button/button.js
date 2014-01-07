@@ -41,7 +41,6 @@ angular.module('mgcrea.ngStrap.button', [])
   .directive('bsCheckbox', function($button) {
 
     var defaults = $button.defaults;
-    var isDefined = angular.isDefined;
     var constantValueRegExp = /^(true|false|\d+)$/;
 
     return {
@@ -55,11 +54,11 @@ angular.module('mgcrea.ngStrap.button', [])
         var isInput = element[0].nodeName === 'INPUT';
         var activeElement = isInput ? element.parent() : element;
 
-        var trueValue = isDefined(attr.trueValue) ? attr.trueValue : true;
+        var trueValue = angular.isDefined(attr.trueValue) ? attr.trueValue : true;
         if(constantValueRegExp.test(attr.trueValue)) {
           trueValue = scope.$eval(attr.trueValue);
         }
-        var falseValue = isDefined(attr.falseValue) ? attr.falseValue : false;
+        var falseValue = angular.isDefined(attr.falseValue) ? attr.falseValue : false;
         if(constantValueRegExp.test(attr.falseValue)) {
           falseValue = scope.$eval(attr.falseValue);
         }
@@ -128,7 +127,6 @@ angular.module('mgcrea.ngStrap.button', [])
   .directive('bsRadio', function($button) {
 
     var defaults = $button.defaults;
-    var isDefined = angular.isDefined;
     var constantValueRegExp = /^(true|false|\d+)$/;
 
     return {
