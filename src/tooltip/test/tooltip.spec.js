@@ -33,15 +33,21 @@ describe('tooltip', function () {
       scope: {items: [{name: 'foo', tooltip: 'Hello Tooltip<br>This is a multiline message!'}]},
       element: '<ul><li ng-repeat="item in items"><a title="{{item.tooltip}}" bs-tooltip>{{item.name}}</a></li></ul>'
     },
-    'custom-template': {
-      scope: {items: ['foo', 'bar', 'baz'], foo: {bar: 0}},
-      element: '<a title="bar" data-template="custom" bs-tooltip>hover me</a>'
+    'options-animation': {
+      element: '<a title="{{tooltip.title}}" data-animation="animation-flipX" bs-tooltip>hover me</a>'
     },
     'options-placement': {
       element: '<a title="{{tooltip.title}}" data-placement="bottom" bs-tooltip>hover me</a>'
     },
     'options-placement-exotic': {
       element: '<a title="{{tooltip.title}}" data-placement="bottom-right" bs-tooltip>hover me</a>'
+    },
+    'options-trigger': {
+      element: '<a title="{{tooltip.title}}" data-trigger="click" bs-tooltip>click me</a>'
+    },
+    'options-template': {
+      scope: {items: ['foo', 'bar', 'baz'], foo: {bar: 0}},
+      element: '<a title="bar" data-template="custom" bs-tooltip>hover me</a>'
     }
   };
 
@@ -91,54 +97,23 @@ describe('tooltip', function () {
       expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.items[0].tooltip);
     });
 
-    it('should support custom template', function() {
-      $templateCache.put('custom', '<div class="tooltip"><div class="tooltip-inner">foo: {{title}}</div></div>');
-      var elm = compileDirective('custom-template');
-      angular.element(elm[0]).triggerHandler('mouseenter');
-      expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: bar');
-    });
-
-    it('should support template with ngRepeat', function() {
-      $templateCache.put('custom', '<div class="tooltip"><div class="tooltip-inner"><ul><li ng-repeat="item in items">{{item}}</li></ul></div></div>');
-      var elm = compileDirective('custom-template');
-      angular.element(elm[0]).triggerHandler('mouseenter');
-      expect(sandboxEl.find('.tooltip-inner').text()).toBe('foobarbaz');
-      // Consecutive toggles
-      angular.element(elm[0]).triggerHandler('mouseleave');
-      angular.element(elm[0]).triggerHandler('mouseenter');
-      expect(sandboxEl.find('.tooltip-inner').text()).toBe('foobarbaz');
-    });
-
-    it('should support template with ngClick', function() {
-      $templateCache.put('custom', '<div class="tooltip"><div class="tooltip-inner"><a class="btn" ng-click="foo.bar=foo.bar+1">click me</a></div></div>');
-      var elm = compileDirective('custom-template');
-      angular.element(elm[0]).triggerHandler('mouseenter');
-      expect(angular.element(sandboxEl.find('.tooltip-inner > .btn')[0]).triggerHandler('click'));
-      expect(scope.foo.bar).toBe(1);
-      // Consecutive toggles
-      angular.element(elm[0]).triggerHandler('mouseleave');
-      angular.element(elm[0]).triggerHandler('mouseenter');
-      expect(angular.element(sandboxEl.find('.tooltip-inner > .btn')[0]).triggerHandler('click'));
-      expect(scope.foo.bar).toBe(2);
-    });
-
-    it('should default to `animation-fade` animation', function() {
-      var elm = compileDirective('default');
-      angular.element(elm[0]).triggerHandler('mouseenter');
-      expect(sandboxEl.children('.tooltip').hasClass('animation-fade')).toBeTruthy();
-    });
-
   });
 
 
   describe('options', function () {
 
-    describe('placement', function () {
+    describe('animation', function () {
 
       it('should default to `animation-fade` animation', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('mouseenter');
         expect(sandboxEl.children('.tooltip').hasClass('animation-fade')).toBeTruthy();
+      });
+
+      it('should support custom animation', function() {
+        var elm = compileDirective('options-animation');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(sandboxEl.children('.tooltip').hasClass('animation-flipX')).toBeTruthy();
       });
 
     });
@@ -161,6 +136,54 @@ describe('tooltip', function () {
         var elm = compileDirective('options-placement-exotic');
         angular.element(elm[0]).triggerHandler('mouseenter');
         expect(sandboxEl.children('.tooltip').hasClass('bottom-right')).toBeTruthy();
+      });
+
+    });
+
+    describe('trigger', function () {
+
+      it('should support an alternative trigger', function() {
+        var elm = compileDirective('options-trigger');
+        expect(sandboxEl.children('.tooltip').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.children('.tooltip').length).toBe(1);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.children('.tooltip').length).toBe(0);
+      });
+
+    });
+
+    describe('template', function () {
+
+      it('should support custom template', function() {
+        $templateCache.put('custom', '<div class="tooltip"><div class="tooltip-inner">foo: {{title}}</div></div>');
+        var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: bar');
+      });
+
+      it('should support template with ngRepeat', function() {
+        $templateCache.put('custom', '<div class="tooltip"><div class="tooltip-inner"><ul><li ng-repeat="item in items">{{item}}</li></ul></div></div>');
+        var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(sandboxEl.find('.tooltip-inner').text()).toBe('foobarbaz');
+        // Consecutive toggles
+        angular.element(elm[0]).triggerHandler('mouseleave');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(sandboxEl.find('.tooltip-inner').text()).toBe('foobarbaz');
+      });
+
+      it('should support template with ngClick', function() {
+        $templateCache.put('custom', '<div class="tooltip"><div class="tooltip-inner"><a class="btn" ng-click="foo.bar=foo.bar+1">click me</a></div></div>');
+        var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(angular.element(sandboxEl.find('.tooltip-inner > .btn')[0]).triggerHandler('click'));
+        expect(scope.foo.bar).toBe(1);
+        // Consecutive toggles
+        angular.element(elm[0]).triggerHandler('mouseleave');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(angular.element(sandboxEl.find('.tooltip-inner > .btn')[0]).triggerHandler('click'));
+        expect(scope.foo.bar).toBe(2);
       });
 
     });

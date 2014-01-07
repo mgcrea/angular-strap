@@ -36,15 +36,21 @@ describe('popover', function () {
       scope: {items: [{name: 'foo', popover: {title: 'Title', content: 'Hello Popover<br>This is a multiline message!'}}]},
       element: '<ul><li ng-repeat="item in items"><a class="btn" bs-popover="item.popover">{{item.name}}</a></li></ul>'
     },
-    'custom-template': {
-      scope: {items: ['foo', 'bar', 'baz'], foo: {bar: 0}},
-      element: '<a data-content="bar" data-template="custom" bs-popover>click me</a>'
+    'options-animation': {
+      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-animation="animation-flipX" bs-popover>hover me</a>'
     },
     'options-placement': {
-      element: '<a title="{{popover.title}}" data-placement="bottom" bs-popover>hover me</a>'
+      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-placement="bottom" bs-popover>hover me</a>'
     },
     'options-placement-exotic': {
-      element: '<a title="{{popover.title}}" data-placement="bottom-right" bs-popover>hover me</a>'
+      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-placement="bottom-right" bs-popover>hover me</a>'
+    },
+    'options-trigger': {
+      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-trigger="hover" bs-popover>hover me</a>'
+    },
+    'options-template': {
+      scope: {items: ['foo', 'bar', 'baz'], foo: {bar: 0}},
+      element: '<a data-content="bar" data-template="custom" bs-popover>click me</a>'
     }
   };
 
@@ -90,51 +96,12 @@ describe('popover', function () {
       expect(sandboxEl.find('.popover-content').html()).toBe(scope.popover.content);
     });
 
-    it('should support ngRepeat markup inside', function() {
+    it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-popover]')).triggerHandler('click');
       expect(sandboxEl.find('.popover-title').html()).toBe(scope.items[0].popover.title);
       expect(sandboxEl.find('.popover-content').html()).toBe(scope.items[0].popover.content);
     });
-
-    it('should support custom template', function() {
-      $templateCache.put('custom', '<div class="popover"><div class="popover-content">foo: {{content}}</div></div>');
-      var elm = compileDirective('custom-template');
-      angular.element(elm[0]).triggerHandler('click');
-      expect(sandboxEl.find('.popover-content').text()).toBe('foo: bar');
-    });
-
-    it('should support template with ngRepeat', function() {
-      $templateCache.put('custom', '<div class="popover"><div class="popover-content"><ul><li ng-repeat="item in items">{{item}}</li></ul></div></div>');
-      var elm = compileDirective('custom-template');
-      angular.element(elm[0]).triggerHandler('click');
-      expect(sandboxEl.find('.popover-content').text()).toBe('foobarbaz');
-      // Consecutive toggles
-      angular.element(elm[0]).triggerHandler('click');
-      angular.element(elm[0]).triggerHandler('click');
-      expect(sandboxEl.find('.popover-content').text()).toBe('foobarbaz');
-    });
-
-    it('should support template with ngClick', function() {
-      $templateCache.put('custom', '<div class="popover"><div class="popover-content"><a class="btn" ng-click="foo.bar=foo.bar+1">click me</a></div></div>');
-      var elm = compileDirective('custom-template');
-      angular.element(elm[0]).triggerHandler('click');
-      expect(angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click'));
-      expect(scope.foo.bar).toBe(1);
-      // Consecutive toggles
-      angular.element(elm[0]).triggerHandler('click');
-      angular.element(elm[0]).triggerHandler('click');
-      expect(angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click'));
-      expect(scope.foo.bar).toBe(2);
-    });
-
-
-    // it('test-cache', function() {
-    //   var elm = compileDirective('default');
-    //   angular.forEach(angular.element.cache, function(item) {
-    //     dump(item.data);
-    //   });
-    // })
 
   });
 
@@ -147,6 +114,12 @@ describe('popover', function () {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.children('.popover').hasClass('animation-fade')).toBeTruthy();
+      });
+
+      it('should support custom animation', function() {
+        var elm = compileDirective('options-animation');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.children('.popover').hasClass('animation-flipX')).toBeTruthy();
       });
 
     });
@@ -173,8 +146,54 @@ describe('popover', function () {
 
     });
 
+    describe('trigger', function () {
+
+      it('should support an alternative trigger', function() {
+        var elm = compileDirective('options-trigger');
+        expect(sandboxEl.children('.popover').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(sandboxEl.children('.popover').length).toBe(1);
+        angular.element(elm[0]).triggerHandler('mouseleave');
+        expect(sandboxEl.children('.popover').length).toBe(0);
+      });
+
+    });
+
+    describe('template', function () {
+
+      it('should support custom template', function() {
+        $templateCache.put('custom', '<div class="popover"><div class="popover-content">foo: {{content}}</div></div>');
+        var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.popover-content').text()).toBe('foo: bar');
+      });
+
+      it('should support template with ngRepeat', function() {
+        $templateCache.put('custom', '<div class="popover"><div class="popover-content"><ul><li ng-repeat="item in items">{{item}}</li></ul></div></div>');
+        var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.popover-content').text()).toBe('foobarbaz');
+        // Consecutive toggles
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.popover-content').text()).toBe('foobarbaz');
+      });
+
+      it('should support template with ngClick', function() {
+        $templateCache.put('custom', '<div class="popover"><div class="popover-content"><a class="btn" ng-click="foo.bar=foo.bar+1">click me</a></div></div>');
+        var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click'));
+        expect(scope.foo.bar).toBe(1);
+        // Consecutive toggles
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click'));
+        expect(scope.foo.bar).toBe(2);
+      });
+
+    });
+
   });
+
 });
-
-// https://github.com/angular-ui/bootstrap/blob/master/src/popover/test/popover.spec.js
-
