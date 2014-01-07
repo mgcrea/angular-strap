@@ -203,9 +203,9 @@ module.exports = function (grunt) {
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
       html: '<%= yo.pages %>/index.html',
-      // css: ['<%= yo.pages %>/styles/{,*/}*.css'],
+      css: ['<%= yo.pages %>/styles/{,*/}*.css'],
       options: {
-        assetsDirs: ['<%= yo.pages %>']
+        assetsDirs: ['<%= yo.pages %>', '<%= yo.pages %>/images']
       }
     },
 
@@ -490,7 +490,7 @@ module.exports = function (grunt) {
     'cssmin:generated',
     'uglify:generated',
     'concat:docs',
-    // 'rev',
+    'rev',
     'usemin'
   ]);
 
