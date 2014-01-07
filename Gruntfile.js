@@ -241,7 +241,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yo.docs %>',
-          src: ['*.html', 'views/{,*/}*.html'],
+          src: ['*.html'],//, 'views/{,*/}*.html'],
           dest: '<%= yo.pages %>'
         }]
       }
@@ -273,7 +273,6 @@ module.exports = function (grunt) {
       fonts: {
         files: [{
           expand: true,
-          dot: true,
           cwd: 'bower_components/font-awesome',
           dest: '<%= yo.pages %>',
           src: [
@@ -284,11 +283,11 @@ module.exports = function (grunt) {
       docs: {
         files: [{
           expand: true,
-          dot: true,
+          cwd: '<%= yo.docs %>/',
           dest: '<%= yo.pages %>',
           src: [
-            // 'bower_components/**/*',
-            'fonts/*'
+            'images/*',
+            '1.0/**/*'
           ]
         }]
       }
@@ -399,13 +398,16 @@ module.exports = function (grunt) {
           module: 'mgcrea.ngStrapDocs',
           usemin: 'scripts/docs.min.js'
         },
-        cwd: '<%= yo.src %>',
-        src: [
-          '{,*/}docs/*.html',
-          // '<%= yo.src %>/{,*/}docs/*.html',
-          // '<%= yo.docs %>/views/{,*/}*.html'
-        ],
-        dest: '.tmp/ngtemplates/scripts/docs.js'
+        files: [{
+          cwd: '<%= yo.src %>',
+          src: '{,*/}docs/*.html',
+          dest: '.tmp/ngtemplates/scripts/src-docs.js'
+        },
+        {
+          cwd: '<%= yo.docs %>',
+          src: 'views/{,*/}*.html',
+          dest: '.tmp/ngtemplates/scripts/docs-views.js'
+        }]
       }
     },
 

@@ -14,6 +14,7 @@
     "angular-scenario": "~1.2.5",
     "font-awesome": "~4.0.3",
     "highlightjs": "~7.5.0",
+    "fastclick": "~0.6.10",
     "jquery": "~2.0.3"
   }
 }

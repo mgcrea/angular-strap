@@ -1,0 +1,167 @@
+<div class="bs-docs-section" ng-controller="ModalDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="modals">Modals <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/modal/modal.js" target="_blank">modal.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.modal</code>
+  </div>
+
+
+  <h2 id="modals-examples">Examples</h2>
+  <p>Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.</p>
+
+  <h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip></i></a></h3>
+  <pre class="bs-example-scope">$scope.modal = {{modal | json}};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+
+    <!-- Button to trigger a default modal with a scope as an object {title:'', content:'', etc.} -->
+    <button type="button" class="btn btn-lg btn-primary" data-placement="center" data-animation="animation-fadeAndScale" bs-modal="modal">Click to toggle modal
+      <br />
+      <small>(using an object)</small>
+    </button>
+
+    <!-- You can use a custom html template with the `data-template` attr -->
+    <button type="button" class="btn btn-lg btn-danger" data-animation="animation-flipX"  data-template="modal/docs/modal.tpl.demo.html" bs-modal="modal">Custom Modal
+      <br />
+      <small>(using data-template)</small>
+    </button>
+
+  </div>
+
+  <h2 id="modals-usage">Usage</h2>
+  <p>Append a <code>bs-modal</code>attribute to any element to activate the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module also exposes a <code>$modal</code>service</h4>
+    <p>Available for programmatic use (inside a directive/controller).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block>
+          angular.module('myApp')
+          .controller('DemoCtrl', function($scope, $modal) {
+            // Show a basic modal from a controller
+            var myModal = $modal({title: 'My Title', content: 'My Content', show: true});
+
+            // Pre-fetch an external template populated with a custom scope
+            var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.tpl.demo.html'});
+            // Show when some event occurs (uses promises to ensure the template has been loaded)
+            myOtherModal.deferred.then(function() {
+              myOtherModal.show();
+            })
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-modal</code> attribute</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 50px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by ngAnimate</td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'top'</td>
+          <td>how to position the modal - top | bottom | center <small>(requires custom CSS)</small>.</td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default title value if
+            <code>title</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>content</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default content value if
+            <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>backdrop</td>
+          <td>boolean or the string
+            <code>'static'</code>
+          </td>
+          <td>true</td>
+          <td>Includes a modal-backdrop element. Alternatively, specify
+            <code>static</code>for a backdrop which doesn't close the modal on click.</td>
+        </tr>
+        <tr>
+          <td>keyboard</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Closes the modal when escape key is pressed</td>
+        </tr>
+        <tr>
+          <td>show</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Shows the modal when initialized.</td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the popover to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$modalProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block>
+          angular.module('myApp')
+          .config(function($modalProvider) {
+            angular.extend($modalProvider.defaults, {
+              animation: 'animation-flipX'
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+  <h3>Scope methods</h3>
+  <p>Methods available inside the directive scope to toggle visibility.</p>
+
+  <h4>$show()</h4>
+  <p>Reveals the modal.</p>
+
+  <h4>$hide()</h4>
+  <p>Hides the modal.</p>
+
+  <h4>$toggle()</h4>
+  <p>Toggles the modal.</p>
+
+</div>
