@@ -1,0 +1,50 @@
+<div class="bs-docs-section" ng-controller="DropdownDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="dropdowns">Dropdowns <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/dropdown.js" target="_blank">dropdown.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.dropdown</code>
+  </div>
+
+
+  <h2 id="dropdowns-examples">Examples</h2>
+  <p>Add dropdown menus to nearly anything with this simple plugin, including the navbar, tabs, and pills.</p>
+  <p>Append a <code>bs-dropdown</code> attribute to any element to enable the plugin.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Dropdowns require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
+  </div>
+
+  <h3>Live demo</h3>
+  <pre class="bs-example-scope">$scope.dropdown = {{dropdown | json}};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+
+    <!-- Button to trigger a default dropdown with a scope as an object [{title:'', content:'', etc.}] -->
+    <button type="button" class="btn btn-lg btn-primary" data-animation="animation-flipX" bs-dropdown="dropdown">Click to toggle dropdown
+      <br />
+      <small>(using an object)</small>
+    </button>
+
+  </div>
+
+
+  <h2 id="dropdowns-usage">Usage</h2>
+  <div class="callout callout-info">
+    <h4>Two-way data-binding</h4>
+    <p>To prevent databinding issues, "the rule of thumb is, if you﻿ use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery.</p>
+  </div>
+
+  <h3>Scope methods</h3>
+  <p>Methods available inside the directive scope to toggle visibility.</p>
+
+  <h4>$show()</h4>
+  <p>Reveals the dropdown.</p>
+
+  <h4>$hide()</h4>
+  <p>Hides the dropdown.</p>
+
+  <h4>$toggle()</h4>
+  <p>Toggles the dropdown.</p>
+
+</div>
