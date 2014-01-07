@@ -101,7 +101,7 @@ describe('aside', function () {
       it('should default to `animation-fadeAndSlideRight` animation', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.aside').hasClass('animation-fadeAndSlideRight')).toBeTruthy();
+        expect(sandboxEl.children('.aside')).toHaveClass('animation-fadeAndSlideRight');
       });
 
     });
@@ -111,13 +111,13 @@ describe('aside', function () {
       it('should default to `top` placement', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.aside').hasClass('right')).toBeTruthy();
+        expect(sandboxEl.children('.aside')).toHaveClass('right');
       });
 
       it('should support placement', function() {
         var elm = compileDirective('options-placement');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.aside').hasClass('left')).toBeTruthy();
+        expect(sandboxEl.children('.aside')).toHaveClass('left');
       });
 
     });

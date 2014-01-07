@@ -104,7 +104,7 @@ describe('modal', function () {
       it('should default to `animation-fade` animation', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.modal').hasClass('animation-fade')).toBeTruthy();
+        expect(sandboxEl.children('.modal')).toHaveClass('animation-fade');
       });
 
     });
@@ -114,19 +114,19 @@ describe('modal', function () {
       it('should default to `top` placement', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.modal').hasClass('top')).toBeTruthy();
+        expect(sandboxEl.children('.modal')).toHaveClass('top');
       });
 
       it('should support placement', function() {
         var elm = compileDirective('options-placement');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.modal').hasClass('bottom')).toBeTruthy();
+        expect(sandboxEl.children('.modal')).toHaveClass('bottom');
       });
 
       it('should support exotic-placement', function() {
         var elm = compileDirective('options-placement-exotic');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.modal').hasClass('center')).toBeTruthy();
+        expect(sandboxEl.children('.modal')).toHaveClass('center');
       });
 
     });
