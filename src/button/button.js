@@ -5,12 +5,20 @@ var jqLite = angular.element;
 
 angular.module('mgcrea.ngStrap.button', [])
 
-  .constant('buttonsConfig', {
-    activeClass:'active',
-    toggleEvent:'click'
+  .provider('$button', function() {
+
+    var defaults = this.defaults = {
+      activeClass:'active',
+      toggleEvent:'click'
+    };
+
+    this.$get = function() {
+      return {defaults: defaults};
+    };
+
   })
 
-  .directive('bsCheckboxGroup', function(buttonsConfig) {
+  .directive('bsCheckboxGroup', function() {
 
     return {
       restrict: 'A',
@@ -30,17 +38,18 @@ angular.module('mgcrea.ngStrap.button', [])
 
   })
 
-  .directive('bsCheckbox', function(buttonsConfig) {
+  .directive('bsCheckbox', function($button) {
 
+    var defaults = $button.defaults;
     var isDefined = angular.isDefined;
-    var activeClass = buttonsConfig.activeClass || 'active';
-    var toggleEvent = buttonsConfig.toggleEvent || 'click';
     var constantValueRegExp = /^(true|false|\d+)$/;
 
     return {
       restrict: 'A',
       require: 'ngModel',
       link: function postLink(scope, element, attr, controller) {
+
+        var options = defaults;
 
         // Support label > input[type="checkbox"]
         var isInput = element[0].nodeName === 'INPUT';
@@ -75,11 +84,11 @@ angular.module('mgcrea.ngStrap.button', [])
           if(isInput) {
             element[0].checked = isActive;
           }
-          activeElement.toggleClass(activeClass, isActive);
+          activeElement.toggleClass(options.activeClass, isActive);
         };
 
         // view -> model
-        element.bind(toggleEvent, function() {
+        element.bind(options.toggleEvent, function() {
           scope.$apply(function () {
             // console.warn('!click', element.attr('ng-model'), 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue, 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue);
             if(!isInput) {
@@ -97,7 +106,7 @@ angular.module('mgcrea.ngStrap.button', [])
 
   })
 
-  .directive('bsRadioGroup', function(buttonsConfig) {
+  .directive('bsRadioGroup', function() {
 
     return {
       restrict: 'A',
@@ -116,17 +125,18 @@ angular.module('mgcrea.ngStrap.button', [])
 
   })
 
-  .directive('bsRadio', function(buttonsConfig) {
+  .directive('bsRadio', function($button) {
 
+    var defaults = $button.defaults;
     var isDefined = angular.isDefined;
-    var activeClass = buttonsConfig.activeClass || 'active';
-    var toggleEvent = buttonsConfig.toggleEvent || 'click';
     var constantValueRegExp = /^(true|false|\d+)$/;
 
     return {
       restrict: 'A',
       require: 'ngModel',
       link: function postLink(scope, element, attr, controller) {
+
+        var options = defaults;
 
         // Support `label > input[type="radio"]` markup
         var isInput = element[0].nodeName === 'INPUT';
@@ -141,11 +151,11 @@ angular.module('mgcrea.ngStrap.button', [])
           if(isInput) {
             element[0].checked = isActive;
           }
-          activeElement.toggleClass(activeClass, isActive);
+          activeElement.toggleClass(options.activeClass, isActive);
         };
 
         // view -> model
-        element.bind(toggleEvent, function() {
+        element.bind(options.toggleEvent, function() {
           scope.$apply(function () {
             // console.warn('!click', element.attr('value'), 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue, 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue);
             controller.$setViewValue(value);
