@@ -10,6 +10,7 @@ module.exports = function (grunt) {
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
+  grunt.loadNpmTasks('grunt-nginclude');
 
   // Time how long tasks take. Can help when optimizing build times
   // require('time-grunt')(grunt);
@@ -159,8 +160,11 @@ module.exports = function (grunt) {
           dumpLineNumbers: 'comments',
         },
         files: [{
-          src: '<%= yo.docs %>/styles/main.less',
-          dest: '.tmp/styles/main.css'
+          expand: true,
+          cwd: '<%= yo.docs %>/styles/',
+          src: '*.less',
+          dest: '.tmp/styles/',
+          ext: '.css'
         }]
       },
       docs: {
@@ -169,8 +173,11 @@ module.exports = function (grunt) {
           report: 'gzip'
         },
         files: [{
-          src: '<%= yo.docs %>/styles/main.less',
-          dest: '.tmp/styles/main.css'
+          expand: true,
+          cwd: '<%= yo.docs %>/styles/',
+          src: '*.less',
+          dest: '.tmp/styles/',
+          ext: '.css'
         }]
       }
     },
@@ -209,6 +216,19 @@ module.exports = function (grunt) {
       }
     },
 
+    // Embed static ngincludes
+    nginclude: {
+      docs: {
+        files: [{
+          src: '<%= yo.docs %>/index.html',
+          dest: '<%= yo.pages %>/index.html'
+        }],
+        options: {
+          assetsDirs: ['<%= yo.src %>', '<%= yo.docs %>']
+        }
+      }
+    },
+
     // The following *-min tasks produce minified files in the dist folder
     imagemin: {
       dist: {
@@ -234,13 +254,13 @@ module.exports = function (grunt) {
     // Minify html files
     htmlmin: {
       options: {
-        collapseWhitespace: false,
+        collapseWhitespace: true,
         removeComments: false
       },
       docs: {
         files: [{
           expand: true,
-          cwd: '<%= yo.docs %>',
+          cwd: '<%= yo.pages %>',
           src: ['*.html'],//, 'views/{,*/}*.html'],
           dest: '<%= yo.pages %>'
         }]
@@ -297,10 +317,8 @@ module.exports = function (grunt) {
     concurrent: {
       docs: [
         'less:docs',
-        'concat:generated',
         'uglify:generated',
-        'cssmin:generated',
-        'htmlmin'
+        'cssmin:generated'
       ],
       server: [
         'less:dev'
@@ -403,11 +421,12 @@ module.exports = function (grunt) {
           src: '{,*/}docs/*.html',
           dest: '.tmp/ngtemplates/scripts/src-docs.js'
         },
-        {
-          cwd: '<%= yo.docs %>',
-          src: 'views/{,*/}*.html',
-          dest: '.tmp/ngtemplates/scripts/docs-views.js'
-        }]
+        // {
+        //   cwd: '<%= yo.docs %>',
+        //   src: 'views/{,*/}*.html',
+        //   dest: '.tmp/ngtemplates/scripts/docs-views.js'
+        // }
+        ]
       }
     },
 
@@ -481,7 +500,7 @@ module.exports = function (grunt) {
     // 'concurrent:docs',
     'less:docs',
     'autoprefixer',
-    'htmlmin:docs',
+    'nginclude:docs',
     'ngtemplates:docs',
     'concat:generated',
     'ngmin:docs',
@@ -491,7 +510,8 @@ module.exports = function (grunt) {
     'uglify:generated',
     'concat:docs',
     'rev',
-    'usemin'
+    'usemin',
+    // 'htmlmin:docs' // breaks code preview
   ]);
 
   grunt.registerTask('default', [
