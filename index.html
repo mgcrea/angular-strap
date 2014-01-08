@@ -1,10 +1,144 @@
-<!doctype html><html class="no-js" lang="en" ng-app="mgcrea.ngStrapDocs"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>AngularStrap</title><meta name="description" content="AngularJS 1.2+ native directives for Twitter Bootstrap 3."><!-- Sets initial viewport load and disables zooming  --><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"><!-- Makes your prototype chrome-less once bookmarked to your phone's home screen --><meta name="apple-mobile-web-app-capable" content="yes"><!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> --><meta name="apple-mobile-web-app-status-bar-style" content="black"><!-- Set a shorter title for iOS6 devices when saved to home screen --><meta name="apple-mobile-web-app-title" content="BootstrapSandbox"><!-- Properties for Google+ snippets --><meta property="og:title" content="AngularStrap"><!-- <meta property="og:image" content="https://github.global.ssl.fastly.net/images/modules/logos_page/Octocat.png"> --><meta property="og:image" content="http://mgcrea.github.io/angular-strap/images/aaffb27b.snippet.png"><meta property="og:description" content="AngularJS 1.2+ native directives for Twitter Bootstrap 3."><link rel="author" href="https://plus.google.com/103156582871250188205"><link rel="icon" href="http://angularjs.org/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="http://angularjs.org/favicon.ico" type="image/x-icon"><!-- Prevent flickering of AngularJS compiled elements --><style type="text/css">[ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }</style><link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"><link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"><!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"> --><!-- <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"> --><link rel="stylesheet" href="styles/bf4e4fe4.libraries.min.css"><link rel="stylesheet" href="styles/cd9e88d2.main.min.css"><link rel="stylesheet" href="styles/2fb8031d.angular-motion.min.css"></head><body ontouchstart="" ng-controller="MainCtrl"><!-- ngInclude: 'docs/views/navbar.html' --><header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner"><div class="container"><div class="navbar-header"><button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button> <a href="./" class="navbar-brand">AngularStrap</a></div><nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation"><ul class="nav navbar-nav"><!--         <li>
+<!doctype html>
+<html class="no-js" lang="en" ng-app="mgcrea.ngStrapDocs">
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>AngularStrap</title>
+  <meta name="description" content="AngularJS 1.2+ native directives for Twitter Bootstrap 3.">
+
+  <!-- Sets initial viewport load and disables zooming  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <!-- Set a shorter title for iOS6 devices when saved to home screen -->
+  <meta name="apple-mobile-web-app-title" content="BootstrapSandbox">
+
+  <!-- Properties for Google+ snippets -->
+  <meta property="og:title" content="AngularStrap">
+  <!-- <meta property="og:image" content="https://github.global.ssl.fastly.net/images/modules/logos_page/Octocat.png"> -->
+  <meta property="og:image" content="http://mgcrea.github.io/angular-strap/images/aaffb27b.snippet.png">
+  <meta property="og:description" content="AngularJS 1.2+ native directives for Twitter Bootstrap 3.">
+
+  <link rel="author" href="https://plus.google.com/103156582871250188205">
+  <link rel="icon" href="http://angularjs.org/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="http://angularjs.org/favicon.ico" type="image/x-icon">
+
+  <!-- Prevent flickering of AngularJS compiled elements -->
+  <style type="text/css">[ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }</style>
+
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"> -->
+  <!-- <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"> -->
+  <link rel="stylesheet" href="styles/bf4e4fe4.libraries.min.css"/>
+
+  <link rel="stylesheet" href="styles/cd9e88d2.main.min.css"/>
+
+  <link rel="stylesheet" href="styles/2fb8031d.angular-motion.min.css"/>
+
+</head>
+
+<body ontouchstart="" ng-controller="MainCtrl">
+
+  <!-- ngInclude: 'docs/views/navbar.html' -->
+<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="./" class="navbar-brand">AngularStrap</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+<!--         <li>
           <a href="./getting-started">Getting started</a>
-        </li> --><li><a href="#/directives">Directives</a></li><!--         <li>
+        </li> -->
+        <li>
+          <a href="#/directives">Directives</a>
+        </li>
+<!--         <li>
           <a href="./customize">Customize</a>
-        </li> --></ul><ul class="nav navbar-nav navbar-right"><!--         <li>
+        </li> -->
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+<!--         <li>
           <a href="./about">About</a>
-        </li> --><li><a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank"><img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master"></a></li><li><a href="//github.com/mgcrea/angular-strap" target="_blank"><i class="fa fa-github"></i>&nbsp;GitHub <!-- <img src="//badge.fury.io/bo/angular-strap.png"/> --></a></li><li class="muted">·</li><li><a href="//github.com/mgcrea/angular-strap/releases" target="_blank"><i class="fa fa-download"></i>&nbsp;v2.0.0-beta.1 <!-- <img src="//badge.fury.io/bo/angular-strap.png"/> --></a></li></ul></nav></div></header><!-- ngInclude: 'docs/views/header.html' --><div class="bs-header" id="content"><div class="container"><div class="col-md-9"><h1>AngularStrap</h1><p>AngularJS 1.2+ native directives for Twitter Bootstrap 3.</p></div><div class="bs-docs-social col-md-3"><ul><li class="github-btn"><iframe src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;repo=angular-strap&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe></li><li class="github-btn"><iframe src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;repo=angular-strap&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe></li><li class="github-btn"><iframe src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;type=follow&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="160" height="20"></iframe></li><li class="twitter-btn"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://mgcrea.github.io/angular-strap" data-text="AngularStrap - AngularJS 1.2+ directives for Twitter Bootstrap 3." data-related="olouv"></a></li><li><div class="g-plusone" data-size="medium" data-href="http://mgcrea.github.io/angular-strap"></div></li></ul></div></div></div><div class="bs-old-docs"><div class="container"><strong><a href="http://mgcrea.github.io/angular-strap/1.0/">Looking for AngularStrap v1 docs?</a></strong> We've moved it to a new home while we push forward with AngularStrap 2.</div></div><div class="container bs-docs-container"><div class="row"><div class="col-md-3"><!-- ngInclude: 'docs/views/sidebar.html' --><div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-80" bs-affix="" bs-scrollspy-list=""><ul class="nav bs-sidenav"><!--     <li>
+        </li> -->
+        <li>
+          <a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank">
+            <img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master">
+          </a>
+        </li>
+        <li>
+          <a href="//github.com/mgcrea/angular-strap" target="_blank">
+            <i class="fa fa-github"></i>&nbsp;GitHub
+            <!-- <img src="//badge.fury.io/bo/angular-strap.png"/> -->
+          </a>
+        </li>
+        <li class="muted">·</li>
+        <li>
+          <a href="//github.com/mgcrea/angular-strap/releases" target="_blank">
+            <i class="fa fa-download"></i>&nbsp;v2.0.0-beta.1
+            <!-- <img src="//badge.fury.io/bo/angular-strap.png"/> -->
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+  <!-- ngInclude: 'docs/views/header.html' -->
+<div class="bs-header" id="content">
+  <div class="container">
+    <div class="col-md-9">
+      <h1>AngularStrap</h1>
+      <p>AngularJS 1.2+ native directives for Twitter Bootstrap 3.</p>
+    </div>
+    <div class="bs-docs-social col-md-3">
+      <ul>
+        <li class="github-btn">
+          <iframe src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;repo=angular-strap&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+        </li>
+        <li class="github-btn">
+          <iframe src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;repo=angular-strap&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+        </li>
+        <li class="github-btn">
+          <iframe src="http://ghbtns.com/github-btn.html?user=mgcrea&amp;type=follow&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="160" height="20"></iframe>
+        </li>
+        <li class="twitter-btn">
+          <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://mgcrea.github.io/angular-strap" data-text="AngularStrap - AngularJS 1.2+ directives for Twitter Bootstrap 3." data-related="olouv"></a>
+        </li>
+        <li>
+          <div class="g-plusone" data-size="medium" data-href="http://mgcrea.github.io/angular-strap"></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+  <div class="bs-old-docs">
+    <div class="container">
+      <strong>
+        <a href="http://mgcrea.github.io/angular-strap/1.0/">Looking for AngularStrap v1 docs?</a>
+      </strong>
+      We've moved it to a new home while we push forward with AngularStrap 2.
+    </div>
+  </div>
+
+  <div class="container bs-docs-container">
+    <div class="row">
+      <div class="col-md-3">
+        <!-- ngInclude: 'docs/views/sidebar.html' -->
+<div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-80" bs-affix="" bs-scrollspy-list="">
+  <ul class="nav bs-sidenav">
+<!--     <li>
       <a href="#js-overview">Overview</a>
       <ul class="nav">
         <li><a href="#js-individual-compiled">Individual or compiled</a>
@@ -20,10 +154,100 @@
       </ul>
     </li>
     <li><a href="#transitions">Transitions</a>
-    </li> --><li><a href="#getting-started">Getting started</a> <!--       <ul class="nav">
+    </li> -->
+    <li>
+      <a href="#getting-started">Getting started</a>
+<!--       <ul class="nav">
         <li><a href="#modals-examples">Examples</a></li>
         <li><a href="#modals-usage">Usage</a></li>
-      </ul> --></li><hr style="margin: 2px 0"><li><a href="#modals">Modal</a><ul class="nav"><li><a href="#modals-examples">Examples</a></li><li><a href="#modals-usage">Usage</a></li></ul></li><li><a href="#asides">Aside</a><ul class="nav"><li><a href="#asides-examples">Examples</a></li><li><a href="#asides-usage">Usage</a></li></ul></li><li><a href="#alerts">Alert</a><ul class="nav"><li><a href="#alerts-examples">Examples</a></li><li><a href="#alerts-usage">Usage</a></li></ul></li><li><a href="#buttons">Button</a><ul class="nav"><li><a href="#buttons-examples">Examples</a></li><li><a href="#buttons-usage">Usage</a></li></ul></li><li><a href="#tooltips">Tooltip</a><ul class="nav"><li><a href="#tooltips-examples">Examples</a></li><li><a href="#tooltips-usage">Usage</a></li></ul></li><li><a href="#popovers">Popover</a><ul class="nav"><li><a href="#popovers-examples">Examples</a></li><li><a href="#popovers-usage">Usage</a></li></ul></li><li><a href="#dropdowns">Dropdown</a><ul class="nav"><li><a href="#dropdowns-examples">Examples</a></li><li><a href="#dropdowns-usage">Usage</a></li></ul></li><li><a href="#scrollspy">Scrollspy</a><ul class="nav"><li><a href="#scrollspy-examples">Examples</a></li><li><a href="#scrollspy-usage">Usage</a></li></ul></li><li><a href="#affix">Affix</a><ul class="nav"><li><a href="#affix-examples">Examples</a></li><li><a href="#affix-usage">Usage</a></li></ul></li><li><a href="#tabs">Tab</a><ul class="nav"><li><a href="#tabs-examples">Examples</a></li><li><a href="#tabs-usage">Usage</a></li></ul></li><!--
+      </ul> -->
+    </li>
+    <hr style="margin: 2px 0;">
+    <li>
+      <a href="#modals">Modal</a>
+      <ul class="nav">
+        <li><a href="#modals-examples">Examples</a></li>
+        <li><a href="#modals-usage">Usage</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#asides">Aside</a>
+      <ul class="nav">
+        <li><a href="#asides-examples">Examples</a></li>
+        <li><a href="#asides-usage">Usage</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#alerts">Alert</a>
+      <ul class="nav">
+        <li><a href="#alerts-examples">Examples</a>
+        </li>
+        <li><a href="#alerts-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#buttons">Button</a>
+      <ul class="nav">
+        <li><a href="#buttons-examples">Examples</a>
+        </li>
+        <li><a href="#buttons-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#tooltips">Tooltip</a>
+      <ul class="nav">
+        <li><a href="#tooltips-examples">Examples</a></li>
+        <li><a href="#tooltips-usage">Usage</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#popovers">Popover</a>
+      <ul class="nav">
+        <li><a href="#popovers-examples">Examples</a>
+        </li>
+        <li><a href="#popovers-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#dropdowns">Dropdown</a>
+      <ul class="nav">
+        <li><a href="#dropdowns-examples">Examples</a>
+        </li>
+        <li><a href="#dropdowns-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#scrollspy">Scrollspy</a>
+      <ul class="nav">
+        <li><a href="#scrollspy-examples">Examples</a>
+        </li>
+        <li><a href="#scrollspy-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#affix">Affix</a>
+      <ul class="nav">
+        <li><a href="#affix-examples">Examples</a>
+        </li>
+        <li><a href="#affix-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#tabs">Tab</a>
+      <ul class="nav">
+        <li><a href="#tabs-examples">Examples</a>
+        </li>
+        <li><a href="#tabs-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+<!--
     <li>
       <a href="#collapse">Collapse</a>
       <ul class="nav">
@@ -41,15 +265,50 @@
         <li><a href="#carousel-usage">Usage</a>
         </li>
       </ul>
-    </li> --></ul></div></div><div class="col-md-9"><!-- ngInclude: 'docs/views/sections/getting-started.html' --><div class="bs-docs-section"><div class="page-header"><h1 id="getting-started">Getting started <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/README.md" target="_blank">readme.md</a></h1><code>mgcrea.ngStrap</code></div><div class="callout callout-info"><h4 id="project-history">Project history</h4><p>AngularStrap was initially written to provide AngularJS wrapping directives for Twitter Bootstrap. It used to leverage the javascript code written by Bootstrap's contributors to minimize work, retro-compatibility issues & time to market.</p><p>While it worked pretty well, it required a big javascript payload: both jQuery & Twitter Bootstrap libraries. When the 1.2 release of AngularJS showed up with the ngAnimate module, greatly simplifying DOM manipulation, we knew it was time for a rewrite!</p></div><h2 id="project-quickstart">Quick Start</h2><p>Install and manage AngularStrap with <a href="http://bower.io">Bower</a>.</p><div class="highlight"><pre>
+    </li> -->
+
+  </ul>
+</div>
+
+      </div>
+      <div class="col-md-9">
+        <!-- ngInclude: 'docs/views/sections/getting-started.html' -->
+<div class="bs-docs-section">
+
+  <div class="page-header">
+    <h1 id="getting-started">Getting started <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/README.md" target="_blank">readme.md</a>
+    </h1>
+    <code>mgcrea.ngStrap</code>
+  </div>
+
+  <div class="callout callout-info">
+    <h4 id="project-history">Project history</h4>
+    <p>AngularStrap was initially written to provide AngularJS wrapping directives for Twitter Bootstrap. It used to leverage the javascript code written by Bootstrap's contributors to minimize work, retro-compatibility issues & time to market.</p>
+    <p>While it worked pretty well, it required a big javascript payload: both jQuery & Twitter Bootstrap libraries. When the 1.2 release of AngularJS showed up with the ngAnimate module, greatly simplifying DOM manipulation, we knew it was time for a rewrite!</p>
+  </div>
+
+  <h2 id="project-quickstart">Quick Start</h2>
+  <p>Install and manage AngularStrap with <a href="http://bower.io">Bower</a>.</p>
+  <div class="highlight">
+    <pre>
       <code class="bash" highlight-block="">
         $ bower install angular-strap#2.0.0-beta.1 --save
       </code>
-    </pre></div><p>Inject the <code>mgcrea.ngStrap</code> module into your application.</p><div class="highlight"><pre>
+    </pre>
+  </div>
+  <p>Inject the <code>mgcrea.ngStrap</code> module into your application.</p>
+  <div class="highlight">
+    <pre>
       <code class="javascript" highlight-block="">
         angular.module('myApp', ['mgcrea.ngStrap']);
       </code>
-    </pre></div><div class="callout callout-info"><h4>Custom builds</h4><p>AngularStrap provides independently built modules that can be loaded separately</p><div class="highlight"><pre>
+    </pre>
+  </div>
+  <div class="callout callout-info">
+    <h4>Custom builds</h4>
+    <p>AngularStrap provides independently built modules that can be loaded separately</p>
+    <div class="highlight">
+      <pre>
         <code class="javascript" highlight-block="">
           angular.module('myApp', [
             'mgcrea.ngStrap.modal',
@@ -57,7 +316,14 @@
             'mgcrea.ngStrap.tooltip'
           ]);
         </code>
-      </pre></div></div><h2 id="project-contribute">Contribute</h2><p>Build and work on AngularStrap with <a href="http://grunt.io">Grunt</a>.</p><div class="highlight"><pre>
+      </pre>
+    </div>
+  </div>
+
+  <h2 id="project-contribute">Contribute</h2>
+  <p>Build and work on AngularStrap with <a href="http://grunt.io">Grunt</a>.</p>
+  <div class="highlight">
+    <pre>
       <code class="bash" highlight-block="">
         // Serve and watch docs, ideal to hack!
         $ grunt serve
@@ -66,7 +332,55 @@
         // Build AngularStrap
         $ grunt build
       </code>
-    </pre></div><div class="callout callout-info"><h4>Animations</h4><p>AngularStrap leverages AngularJS <code>ngAnimate</code> module to provide animations to the directives. Therefore, it requires to load custom CSS code as <code>ngAnimate</code> comes with a very specific markup.</p><p>The docs currently use the (unreleased) <code>AngularMotion</code> project that provides ready to go animations for AngularJS.</p></div></div><!-- ngInclude: 'src/modal/docs/modal.demo.html' --><div class="bs-docs-section" ng-controller="ModalDemoCtrl"><div class="page-header"><h1 id="modals">Modals <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/modal/modal.js" target="_blank">modal.js</a></h1><code>mgcrea.ngStrap.modal</code></div><h2 id="modals-examples">Examples</h2><p>Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.</p><h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3><pre class="bs-example-scope">$scope.modal = {{modal | json}};</pre><div class="bs-example" style="padding-bottom: 24px" append-source=""><!-- Button to trigger a default modal with a scope as an object {title:'', content:'', etc.} --><button type="button" class="btn btn-lg btn-primary" data-placement="center" data-animation="animation-fadeAndScale" bs-modal="modal">Click to toggle modal<br><small>(using an object)</small></button> <!-- You can use a custom html template with the `data-template` attr --> <button type="button" class="btn btn-lg btn-danger" data-animation="animation-flipX" data-template="modal/docs/modal.tpl.demo.html" bs-modal="modal">Custom Modal<br><small>(using data-template)</small></button></div><h2 id="modals-usage">Usage</h2><p>Append a <code>bs-modal</code>attribute to any element to activate the directive.</p><div class="callout callout-info"><h4>The module also exposes a <code>$modal</code>service</h4><p>Available for programmatic use (inside a directive/controller).</p><div class="highlight"><pre>
+    </pre>
+  </div>
+
+  <div class="callout callout-info">
+    <h4>Animations</h4>
+    <p>AngularStrap leverages AngularJS <code>ngAnimate</code> module to provide animations to the directives. Therefore, it requires to load custom CSS code as <code>ngAnimate</code> comes with a very specific markup.</p>
+    <p>The docs currently use the (unreleased) <code>AngularMotion</code> project that provides ready to go animations for AngularJS.</p>
+  </div>
+
+</div>
+
+        <!-- ngInclude: 'src/modal/docs/modal.demo.html' -->
+<div class="bs-docs-section" ng-controller="ModalDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="modals">Modals <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/modal/modal.js" target="_blank">modal.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.modal</code>
+  </div>
+
+
+  <h2 id="modals-examples">Examples</h2>
+  <p>Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.</p>
+
+  <h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3>
+  <pre class="bs-example-scope">$scope.modal = {{modal | json}};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+
+    <!-- Button to trigger a default modal with a scope as an object {title:'', content:'', etc.} -->
+    <button type="button" class="btn btn-lg btn-primary" data-placement="center" data-animation="animation-fadeAndScale" bs-modal="modal">Click to toggle modal
+      <br>
+      <small>(using an object)</small>
+    </button>
+
+    <!-- You can use a custom html template with the `data-template` attr -->
+    <button type="button" class="btn btn-lg btn-danger" data-animation="animation-flipX" data-template="modal/docs/modal.tpl.demo.html" bs-modal="modal">Custom Modal
+      <br>
+      <small>(using data-template)</small>
+    </button>
+
+  </div>
+
+  <h2 id="modals-usage">Usage</h2>
+  <p>Append a <code>bs-modal</code>attribute to any element to activate the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module also exposes a <code>$modal</code>service</h4>
+    <p>Available for programmatic use (inside a directive/controller).</p>
+    <div class="highlight">
+      <pre>
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .controller('DemoCtrl', function($scope, $modal) {
@@ -81,7 +395,97 @@
             })
           })
         </code>
-      </pre></div></div><h3>Options</h3><p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p><p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-modal</code> attribute</p><div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr><th style="width: 100px">Name</th><th style="width: 50px">type</th><th style="width: 50px">default</th><th>description</th></tr></thead><tbody><tr><td>animation</td><td>string</td><td>animation-fade</td><td>apply a CSS animation powered by ngAnimate</td></tr><tr><td>placement</td><td>string</td><td>'top'</td><td>how to position the modal - top | bottom | center <small>(requires custom CSS)</small>.</td></tr><tr><td>title</td><td>string</td><td>''</td><td>default title value if <code>title</code>attribute isn't present</td></tr><tr><td>content</td><td>string</td><td>''</td><td>default content value if <code>data-content</code>attribute isn't present</td></tr><tr><td>backdrop</td><td>boolean or the string <code>'static'</code></td><td>true</td><td>Includes a modal-backdrop element. Alternatively, specify <code>static</code>for a backdrop which doesn't close the modal on click.</td></tr><tr><td>keyboard</td><td>boolean</td><td>true</td><td>Closes the modal when escape key is pressed</td></tr><tr><td>show</td><td>boolean</td><td>true</td><td>Shows the modal when initialized.</td></tr><tr><td>container</td><td>string | false</td><td>false</td><td><p>Appends the popover to a specific element. Example: <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p></td></tr><tr><td>template</td><td>path</td><td>false</td><td><p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p></td></tr></tbody></table></div><div class="callout callout-info"><h4>Default options</h4><p>You can override global defaults for the plugin with <code>$modalProvider.defaults</code></p><div class="highlight"><pre class="bs-exemple-code">
+      </pre>
+    </div>
+  </div>
+
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-modal</code> attribute</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 50px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by ngAnimate</td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'top'</td>
+          <td>how to position the modal - top | bottom | center <small>(requires custom CSS)</small>.</td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default title value if
+            <code>title</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>content</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default content value if
+            <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>backdrop</td>
+          <td>boolean or the string
+            <code>'static'</code>
+          </td>
+          <td>true</td>
+          <td>Includes a modal-backdrop element. Alternatively, specify
+            <code>static</code>for a backdrop which doesn't close the modal on click.</td>
+        </tr>
+        <tr>
+          <td>keyboard</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Closes the modal when escape key is pressed</td>
+        </tr>
+        <tr>
+          <td>show</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Shows the modal when initialized.</td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the popover to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$modalProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .config(function($modalProvider) {
@@ -90,7 +494,68 @@
             });
           })
         </code>
-      </pre></div></div><h3>Scope methods</h3><p>Methods available inside the directive scope to toggle visibility.</p><h4>$show()</h4><p>Reveals the modal.</p><h4>$hide()</h4><p>Hides the modal.</p><h4>$toggle()</h4><p>Toggles the modal.</p></div><!-- ngInclude: 'src/aside/docs/aside.demo.html' --><div class="bs-docs-section" ng-controller="AsideDemoCtrl"><div class="page-header"><h1 id="asides">Asides <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/aside/aside.js" target="_blank">aside.js</a></h1><code>mgcrea.ngStrap.aside</code></div><h2 id="asides-examples">Examples</h2><p>Asides are custom panels, drawers that inherit the behavior of modals.</p><div class="callout callout-danger"><h4>Plugin dependency</h4><p>Asides require the <a href="#modals">modal plugin</a> to be included.</p></div><h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3><pre class="bs-example-scope">$scope.aside = {{aside | json}};</pre><div class="bs-example" style="padding-bottom: 24px" append-source=""><!-- Button to trigger a default aside with a scope as an object {title:'', content:'', etc.} --><button type="button" class="btn btn-lg btn-primary" bs-aside="aside">Click to toggle aside<br><small>(using an object)</small></button> <!-- You can use a custom html template with the `data-template` attr --> <button type="button" class="btn btn-lg btn-danger" data-template="aside/docs/aside.tpl.demo.html" data-placement="left" data-animation="animation-fadeAndSlideLeft" bs-aside="aside">Custom aside<br><small>(using data-template)</small></button></div><h2 id="asides-usage">Usage</h2><p>Append a <code>bs-aside</code>attribute to any element to enable the plugin.</p><div class="callout callout-info"><h4>The module also exposes an <code>$aside</code>service</h4><p>Available for programmatic use.</p><div class="highlight"><pre>
+      </pre>
+    </div>
+  </div>
+
+  <h3>Scope methods</h3>
+  <p>Methods available inside the directive scope to toggle visibility.</p>
+
+  <h4>$show()</h4>
+  <p>Reveals the modal.</p>
+
+  <h4>$hide()</h4>
+  <p>Hides the modal.</p>
+
+  <h4>$toggle()</h4>
+  <p>Toggles the modal.</p>
+
+</div>
+
+        <!-- ngInclude: 'src/aside/docs/aside.demo.html' -->
+<div class="bs-docs-section" ng-controller="AsideDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="asides">Asides <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/aside/aside.js" target="_blank">aside.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.aside</code>
+  </div>
+
+
+  <h2 id="asides-examples">Examples</h2>
+  <p>Asides are custom panels, drawers that inherit the behavior of modals.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Asides require the <a href="#modals">modal plugin</a> to be included.</p>
+  </div>
+
+  <h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3>
+  <pre class="bs-example-scope">$scope.aside = {{aside | json}};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+
+    <!-- Button to trigger a default aside with a scope as an object {title:'', content:'', etc.} -->
+    <button type="button" class="btn btn-lg btn-primary" bs-aside="aside">Click to toggle aside
+      <br>
+      <small>(using an object)</small>
+    </button>
+
+    <!-- You can use a custom html template with the `data-template` attr -->
+    <button type="button" class="btn btn-lg btn-danger" data-template="aside/docs/aside.tpl.demo.html" data-placement="left" data-animation="animation-fadeAndSlideLeft" bs-aside="aside">Custom aside
+      <br>
+      <small>(using data-template)</small>
+    </button>
+
+  </div>
+
+
+  <h2 id="asides-usage">Usage</h2>
+  <p>Append a <code>bs-aside</code>attribute to any element to enable the plugin.</p>
+  <div class="callout callout-info">
+    <h4>The module also exposes an <code>$aside</code>service</h4>
+    <p>Available for programmatic use.</p>
+    <div class="highlight">
+      <pre>
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .controller('DemoCtrl', function($scope, $aside) {
@@ -105,7 +570,96 @@
             })
           })
         </code>
-      </pre></div></div><h3>Options</h3><p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p><p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-aside</code> attribute</p><div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr><th style="width: 100px">Name</th><th style="width: 50px">type</th><th style="width: 50px">default</th><th>description</th></tr></thead><tbody><tr><td>animation</td><td>string</td><td>animation-fadeAndSlideRight</td><td>apply a CSS animation powered by ngAnimate</td></tr><tr><td>placement</td><td>string</td><td>'top'</td><td>how to position the modal - top | bottom | center <small>(requires custom CSS)</small>.</td></tr><tr><td>title</td><td>string</td><td>''</td><td>default title value if <code>title</code>attribute isn't present</td></tr><tr><td>content</td><td>string</td><td>''</td><td>default content value if <code>data-content</code>attribute isn't present</td></tr><tr><td>backdrop</td><td>boolean or the string <code>'static'</code></td><td>true</td><td>Includes a modal-backdrop element. Alternatively, specify <code>static</code>for a backdrop which doesn't close the modal on click.</td></tr><tr><td>keyboard</td><td>boolean</td><td>true</td><td>Closes the modal when escape key is pressed</td></tr><tr><td>show</td><td>boolean</td><td>true</td><td>Shows the modal when initialized.</td></tr><tr><td>container</td><td>string | false</td><td>false</td><td><p>Appends the popover to a specific element. Example: <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p></td></tr><tr><td>template</td><td>path</td><td>false</td><td><p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p></td></tr></tbody></table></div><div class="callout callout-info"><h4>Default options</h4><p>You can override global defaults for the plugin with <code>$asideProvider.defaults</code></p><div class="highlight"><pre class="bs-exemple-code">
+      </pre>
+    </div>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-aside</code> attribute</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 50px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fadeAndSlideRight</td>
+          <td>apply a CSS animation powered by ngAnimate</td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'top'</td>
+          <td>how to position the modal - top | bottom | center <small>(requires custom CSS)</small>.</td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default title value if
+            <code>title</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>content</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default content value if
+            <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>backdrop</td>
+          <td>boolean or the string
+            <code>'static'</code>
+          </td>
+          <td>true</td>
+          <td>Includes a modal-backdrop element. Alternatively, specify
+            <code>static</code>for a backdrop which doesn't close the modal on click.</td>
+        </tr>
+        <tr>
+          <td>keyboard</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Closes the modal when escape key is pressed</td>
+        </tr>
+        <tr>
+          <td>show</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Shows the modal when initialized.</td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the popover to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$asideProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .config(function($asideProvider) {
@@ -115,14 +669,169 @@
             });
           })
         </code>
-      </pre></div></div><h3>Scope methods</h3><p>Methods available inside the directive scope to toggle visibility.</p><h4>$show()</h4><p>Reveals the aside.</p><h4>$hide()</h4><p>Hides the aside.</p><h4>$toggle()</h4><p>Toggles the aside.</p></div><!-- ngInclude: 'src/alert/docs/alert.demo.html' --><div class="bs-docs-section" ng-controller="AlertDemoCtrl"><div class="page-header"><h1 id="alerts">Alerts <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/alert/alert.js" target="_blank">alert.js</a></h1><code>mgcrea.ngStrap.alert</code></div><h2 id="alerts-examples">Examples</h2><p>Alerts are styled tiny dialogs that inherit the behavior of modals.</p><div class="callout callout-danger"><h4>Plugin dependency</h4><p>Alerts require the <a href="#modals">modal plugin</a> to be included.</p></div><h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3><pre class="bs-example-scope">$scope.alert = {{alert | json}};</pre><div class="bs-example" style="padding-bottom: 24px" append-source=""><!-- Button to trigger a default alert with a scope as an object {title:'', content:'', etc.} --><button type="button" class="btn btn-lg btn-primary" data-placement="top-right" data-duration="3" bs-alert="alert">Click to toggle alert<br><small>(using an object)</small></button> <!-- You can also use data-attrs to assign scope variables --> <button type="button" class="btn btn-lg btn-primary" title="{{alert.title}}" data-content="{{alert.content}}" data-type="success" data-container="#alerts-container" bs-alert="">Click to toggle alert<br><small>(using data-attrs)</small></button> <!-- You can use a custom html template with the `data-template` attr --> <button type="button" class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="animation-fadeAndSlideTop" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert<br><small>(using data-template)</small></button> <!-- Element container to append the first alert --><hr><div id="alerts-container"></div></div><h2 id="alerts-usage">Usage</h2><p>Append a <code>bs-alert</code>attribute to any element to enable the plugin.</p><div class="callout callout-info"><h4>The module also exposes an <code>$alert</code>service</h4><p>Available for programmatic use (inside a controller/directive).</p><div class="highlight"><pre>
+      </pre>
+    </div>
+  </div>
+
+
+  <h3>Scope methods</h3>
+  <p>Methods available inside the directive scope to toggle visibility.</p>
+
+  <h4>$show()</h4>
+  <p>Reveals the aside.</p>
+
+  <h4>$hide()</h4>
+  <p>Hides the aside.</p>
+
+  <h4>$toggle()</h4>
+  <p>Toggles the aside.</p>
+
+</div>
+
+        <!-- ngInclude: 'src/alert/docs/alert.demo.html' -->
+<div class="bs-docs-section" ng-controller="AlertDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="alerts">Alerts <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/alert/alert.js" target="_blank">alert.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.alert</code>
+  </div>
+
+
+  <h2 id="alerts-examples">Examples</h2>
+  <p>Alerts are styled tiny dialogs that inherit the behavior of modals.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Alerts require the <a href="#modals">modal plugin</a> to be included.</p>
+  </div>
+
+  <h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3>
+  <pre class="bs-example-scope">$scope.alert = {{alert | json}};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+
+    <!-- Button to trigger a default alert with a scope as an object {title:'', content:'', etc.} -->
+    <button type="button" class="btn btn-lg btn-primary" data-placement="top-right" data-duration="3" bs-alert="alert">Click to toggle alert
+      <br>
+      <small>(using an object)</small>
+    </button>
+
+    <!-- You can also use data-attrs to assign scope variables -->
+    <button type="button" class="btn btn-lg btn-primary" title="{{alert.title}}" data-content="{{alert.content}}" data-type="success" data-container="#alerts-container" bs-alert="">Click to toggle alert
+      <br>
+      <small>(using data-attrs)</small>
+    </button>
+
+    <!-- You can use a custom html template with the `data-template` attr -->
+    <button type="button" class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="animation-fadeAndSlideTop" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
+      <br>
+      <small>(using data-template)</small>
+    </button>
+
+    <!-- Element container to append the first alert -->
+    <hr>
+    <div id="alerts-container"></div>
+
+  </div>
+
+
+  <h2 id="alerts-usage">Usage</h2>
+  <p>Append a <code>bs-alert</code>attribute to any element to enable the plugin.</p>
+  <div class="callout callout-info">
+    <h4>The module also exposes an <code>$alert</code>service</h4>
+    <p>Available for programmatic use (inside a controller/directive).</p>
+    <div class="highlight">
+      <pre>
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .controller('DemoCtrl', function($scope, $alert) {
             var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'info', show: true});
           })
         </code>
-      </pre></div></div><h3>Options</h3><p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p><p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-aside</code> attribute</p><div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr><th style="width: 100px">Name</th><th style="width: 50px">type</th><th style="width: 50px">default</th><th>description</th></tr></thead><tbody><tr><td>animation</td><td>string</td><td>animation-fade</td><td>apply a CSS animation powered by ngAnimate</td></tr><tr><td>placement</td><td>string</td><td>''</td><td>how to position the alert - top | top-left | top-right <small>(requires custom CSS)</small>.</td></tr><tr><td>title</td><td>string</td><td>''</td><td>default title value if <code>title</code>attribute isn't present</td></tr><tr><td>content</td><td>string</td><td>''</td><td>default content value if <code>data-content</code>attribute isn't present</td></tr><tr><td>type</td><td>string</td><td>'info'</td><td>default content value if <code>data-type</code>attribute isn't present</td></tr><tr><td>keyboard</td><td>boolean</td><td>true</td><td>Closes the modal when escape key is pressed</td></tr><tr><td>show</td><td>boolean</td><td>true</td><td>Shows the modal when initialized.</td></tr><tr><td>container</td><td>string | false</td><td>false</td><td><p>Appends the popover to a specific element. Example: <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p></td></tr><tr><td>template</td><td>path</td><td>false</td><td><p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p></td></tr></tbody></table></div><div class="callout callout-info"><h4>Default options</h4><p>You can override global defaults for the plugin with <code>$alertProvider.defaults</code></p><div class="highlight"><pre class="bs-exemple-code">
+      </pre>
+    </div>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-aside</code> attribute</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 50px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by ngAnimate</td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>''</td>
+          <td>how to position the alert - top | top-left | top-right <small>(requires custom CSS)</small>.</td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default title value if <code>title</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>content</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default content value if <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>type</td>
+          <td>string</td>
+          <td>'info'</td>
+          <td>default content value if <code>data-type</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>keyboard</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Closes the modal when escape key is pressed</td>
+        </tr>
+        <tr>
+          <td>show</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Shows the modal when initialized.</td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the popover to a specific element. Example: <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$alertProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .config(function($alertProvider) {
@@ -132,17 +841,221 @@
             });
           })
         </code>
-      </pre></div></div><h3>Scope methods</h3><p>Methods available inside the directive scope to toggle visibility.</p><h4>$show()</h4><p>Reveals the alert.</p><h4>$hide()</h4><p>Hides the alert.</p><h4>$toggle()</h4><p>Toggles the alert.</p></div><!-- ngInclude: 'src/button/docs/button.demo.html' --><div class="bs-docs-section" ng-controller="ButtonDemoCtrl"><div class="page-header"><h1 id="buttons">Buttons <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/button/button.js" target="_blank">button.js</a></h1><code>mgcrea.ngStrap.button</code></div><h2 id="buttons-examples">Examples</h2><p>Do more with buttons. Control button states or create groups of buttons for more components like toolbars.</p><p>This modules exposes two directives: <code>bs-checkbox</code> and <code>bs-radio</code> that can be used as attributes to trigger toggle, checkbox or radio behavior.</p><div class="callout callout-info"><h4>Group directives are also available as shortcuts</h4><p>Use <code>bs-checkbox-group</code> and <code>bs-radio-group</code> to easily setup the proper markup at compile time.</p></div><h3 id="buttons-usage">Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3><pre class="bs-example-scope">$scope.button = {{button | json}};</pre><div class="bs-example" style="padding-bottom: 24px" append-source=""><label>Toggle:</label><button type="button" class="btn btn-default" ng-model="button.toggle" bs-checkbox="">Toggle</button> <!-- You can also use custom values with the `data-true-value` & `data-false-value` attributes --><hr><label>Checkboxes:</label><div class="btn-group" ng-model="button.checkbox" bs-checkbox-group=""><label class="btn btn-default"><input type="checkbox" value="left">Left</label><label class="btn btn-default"><input type="checkbox" value="middle">Middle</label><label class="btn btn-default"><input type="checkbox" value="right">Right</label><!-- Children get compiled by `bs-checkbox-group` to :
+      </pre>
+    </div>
+  </div>
+
+
+  <h3>Scope methods</h3>
+  <p>Methods available inside the directive scope to toggle visibility.</p>
+
+  <h4>$show()</h4>
+  <p>Reveals the alert.</p>
+
+  <h4>$hide()</h4>
+  <p>Hides the alert.</p>
+
+  <h4>$toggle()</h4>
+  <p>Toggles the alert.</p>
+
+</div>
+
+        <!-- ngInclude: 'src/button/docs/button.demo.html' -->
+<div class="bs-docs-section" ng-controller="ButtonDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="buttons">Buttons <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/button/button.js" target="_blank">button.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.button</code>
+  </div>
+
+
+    <h2 id="buttons-examples">Examples</h2>
+    <p>Do more with buttons. Control button states or create groups of buttons for more components like toolbars.</p>
+    <p>This modules exposes two directives: <code>bs-checkbox</code> and <code>bs-radio</code> that can be used as attributes to trigger toggle, checkbox or radio behavior.</p>
+    <div class="callout callout-info">
+      <h4>Group directives are also available as shortcuts</h4>
+      <p>Use <code>bs-checkbox-group</code> and <code>bs-radio-group</code> to easily setup the proper markup at compile time.</p>
+    </div>
+
+    <h3 id="buttons-usage">Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3>
+
+    <pre class="bs-example-scope">$scope.button = {{button | json}};</pre>
+    <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+
+      <label>Toggle:</label>
+      <button type="button" class="btn btn-default" ng-model="button.toggle" bs-checkbox="">Toggle</button>
+      <!-- You can also use custom values with the `data-true-value` & `data-false-value` attributes -->
+
+      <hr><label>Checkboxes:</label>
+      <div class="btn-group" ng-model="button.checkbox" bs-checkbox-group="">
+        <label class="btn btn-default"><input type="checkbox" value="left"> Left</label>
+        <label class="btn btn-default"><input type="checkbox" value="middle"> Middle</label>
+        <label class="btn btn-default"><input type="checkbox" value="right"> Right</label>
+        <!-- Children get compiled by `bs-checkbox-group` to :
         <label class="btn btn-default"><input type="checkbox" value="left" ng-model="button.checkbox.left" bs-checkbox> Left</label>
         ...
-        --></div><hr><label>Radios:</label><div class="btn-group" ng-model="button.radio" bs-radio-group=""><label class="btn btn-default"><input type="radio" class="btn btn-default" value="0">First</label><label class="btn btn-default"><input type="radio" class="btn btn-default" value="1">Second</label><label class="btn btn-default"><input type="radio" class="btn btn-default" value="2">Third</label><!-- Children get compiled by `bs-radio-group` to :
+        -->
+      </div>
+
+      <hr><label>Radios:</label>
+      <div class="btn-group" ng-model="button.radio" bs-radio-group="">
+        <label class="btn btn-default"><input type="radio" class="btn btn-default" value="0"> First</label>
+        <label class="btn btn-default"><input type="radio" class="btn btn-default" value="1"> Second</label>
+        <label class="btn btn-default"><input type="radio" class="btn btn-default" value="2"> Third</label>
+        <!-- Children get compiled by `bs-radio-group` to :
         <label class="btn btn-default"><input type="radio" class="btn btn-default" value="left" ng-model="button.radio" bs-radio> Left</label>
         ...
-        --></div></div><div class="callout callout-info"><h4>Type support</h4><p>Theses directives can handle both <code>strings</code>, <code>numbers</code> and <code>booleans</code> values.</p></div></div><!-- ngInclude: 'src/tooltip/docs/tooltip.demo.html' --><div class="bs-docs-section" ng-controller="TooltipDemoCtrl"><div class="page-header"><h1 id="tooltips">Tooltips <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/tooltip.js" target="_blank">tooltip.js</a></h1><code>mgcrea.ngStrap.tooltip</code></div><h2 id="tooltips-examples">Examples</h2><p>Add small overlays of content on hover, to any element for housing secondary information.</p><h3>Live demo</h3><div class="form-group hide"><label>Title</label><input type="text" class="form-control" ng-model="tooltip.title" placeholder="Title"></div><pre class="bs-example-scope">$scope.tooltip = {{tooltip | json}};</pre><div class="bs-example" style="padding-bottom: 24px" append-source=""><!-- Markup for a default tooltip with a scope passed as an object {title:''} --><p>Tight pants next level keffiyeh <a href="" data-animation="animation-flipX" bs-tooltip="tooltip">you probably</a> haven't heard of them. Photo booth beard raw denim letterpress vegan messenger bag stumptown.</p><div class="input-group col-xs-5"><span class="input-group-btn"><!-- You can also use data-attrs to assign scope variables --><button class="btn btn-primary" type="button" data-trigger="click" data-type="success" title="{{tooltip.title}}" bs-tooltip="tooltip">Click me</button></span><input type="text" class="form-control" data-placement="right" data-type="info" data-container="body" placeholder="Focus to toggle tooltip" data-trigger="focus" bs-tooltip="tooltip"></div><div class="checkbox"><label data-placement="bottom" data-animation="animation-fadeAndScale" data-type="info" bs-tooltip="tooltip"><input type="checkbox" ng-model="tooltip.checked">Remember me</label></div></div><div class="callout callout-info"><h4>Two-way data-binding</h4><p>To prevent databinding issues, "the rule of thumb is, if you use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery.</p></div><h2 id="tooltips-usage">Usage</h2><p>Append a <code>bs-tooltip</code> attribute to any element to enable the directive.</p><div class="callout callout-info"><h4>The module exposes a <code>$tooltip</code>service</h4><p>Available for programmatic use (mainly in directives as it requires a DOM element).</p><div class="highlight"><pre>
+        -->
+      </div>
+
+    </div>
+
+    <div class="callout callout-info">
+      <h4>Type support</h4>
+      <p>Theses directives can handle both <code>strings</code>, <code>numbers</code> and <code>booleans</code> values.</p>
+    </div>
+
+</div>
+
+        <!-- ngInclude: 'src/tooltip/docs/tooltip.demo.html' -->
+<div class="bs-docs-section" ng-controller="TooltipDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="tooltips">Tooltips <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/tooltip.js" target="_blank">tooltip.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.tooltip</code>
+  </div>
+
+
+  <h2 id="tooltips-examples">Examples</h2>
+  <p>Add small overlays of content on hover, to any element for housing secondary information.</p>
+
+  <h3>Live demo</h3>
+  <div class="form-group hide">
+    <label>Title</label>
+    <input type="text" class="form-control" ng-model="tooltip.title" placeholder="Title">
+  </div>
+  <pre class="bs-example-scope">$scope.tooltip = {{tooltip | json}};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+
+    <!-- Markup for a default tooltip with a scope passed as an object {title:''} -->
+    <p>Tight pants next level keffiyeh <a href="" data-animation="animation-flipX" bs-tooltip="tooltip">you probably</a> haven't heard of them. Photo booth beard raw denim letterpress vegan messenger bag stumptown.</p>
+
+    <div class="input-group col-xs-5">
+      <span class="input-group-btn">
+        <!-- You can also use data-attrs to assign scope variables -->
+        <button class="btn btn-primary" type="button" data-trigger="click" data-type="success" title="{{tooltip.title}}" bs-tooltip="tooltip">Click me</button>
+      </span>
+      <input type="text" class="form-control" data-placement="right" data-type="info" data-container="body" placeholder="Focus to toggle tooltip" data-trigger="focus" bs-tooltip="tooltip">
+    </div>
+    <div class="checkbox">
+      <label data-placement="bottom" data-animation="animation-fadeAndScale" data-type="info" bs-tooltip="tooltip">
+        <input type="checkbox" ng-model="tooltip.checked"> Remember me
+      </label>
+    </div>
+
+  </div>
+
+  <div class="callout callout-info">
+    <h4>Two-way data-binding</h4>
+    <p>To prevent databinding issues, "the rule of thumb is, if you﻿ use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery.</p>
+  </div>
+
+  <h2 id="tooltips-usage">Usage</h2>
+  <p>Append a <code>bs-tooltip</code> attribute to any element to enable the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module exposes a <code>$tooltip</code>service</h4>
+    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
+    <div class="highlight">
+      <pre>
         <code class="javascript" highlight-block="">
           var myTooltip = $tooltip(element, {title: 'My Title'});
         </code>
-      </pre></div></div><h3>Options</h3><p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p><p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-tooltip</code> attribute</p><div class="callout callout-info"><h4>This module supports exotic placement options!</h4><p>You can position your popover in corners (such as <code>bottom-left</code>) or any other combination two. Requires some CSS to render properly.</p></div><div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr><th style="width: 100px">Name</th><th style="width: 100px">type</th><th style="width: 50px">default</th><th>description</th></tr></thead><tbody><tr><td>animation</td><td>string</td><td>animation-fade</td><td>apply a CSS animation powered by <code>ngAnimate</code></td></tr><tr><td>placement</td><td>string</td><td>'right'</td><td>how to position the tooltip - top | bottom | left | right, or any combination like bottom-left.</td></tr><tr><td>trigger</td><td>string</td><td>'click'</td><td>how tooltip is triggered - click | hover | focus | manual</td></tr><tr><td>title</td><td>string</td><td>''</td><td>default title value if <code>title</code>attribute isn't present</td></tr><tr><td>delay</td><td>number | object</td><td>0</td><td><p>delay showing and hiding the tooltip (ms) - does not apply to manual trigger type</p><p>If a number is supplied, delay is applied to both hide/show</p><p>Object structure is: <code>delay: { show: 500, hide: 100 }</code></p></td></tr><tr><td>container</td><td>string | false</td><td>false</td><td><p>Appends the tooltip to a specific element. Example: <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the tooltip in the flow of the document near the triggering element -&nbsp;which will prevent the tooltip from floating away from the triggering element during a window resize.</p></td></tr><tr><td>template</td><td>path</td><td>false</td><td><p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p></td></tr></tbody></table></div><div class="callout callout-info"><h4>Default options</h4><p>You can override global defaults for the plugin with <code>$tooltipProvider.defaults</code></p><div class="highlight"><pre class="bs-exemple-code">
+      </pre>
+    </div>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-tooltip</code> attribute</p>
+  <div class="callout callout-info">
+    <h4>This module supports exotic placement options!</h4>
+    <p>You can position your popover in corners (such as <code>bottom-left</code>) or any other combination two. Requires some CSS to render properly.</p>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by <code>ngAnimate</code></td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'right'</td>
+          <td>how to position the tooltip - top | bottom | left | right, or any combination like bottom-left.</td>
+        </tr>
+        <tr>
+          <td>trigger</td>
+          <td>string</td>
+          <td>'click'</td>
+          <td>how tooltip is triggered - click | hover | focus | manual</td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default title value if
+            <code>title</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>delay</td>
+          <td>number | object</td>
+          <td>0</td>
+          <td>
+            <p>delay showing and hiding the tooltip (ms) - does not apply to manual trigger type</p>
+            <p>If a number is supplied, delay is applied to both hide/show</p>
+            <p>Object structure is:
+              <code>delay: { show: 500, hide: 100 }</code>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the tooltip to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the tooltip in the flow of the document near the triggering element -&nbsp;which will prevent the tooltip from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$tooltipProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .config(function($tooltipProvider) {
@@ -152,11 +1065,171 @@
             });
           })
         </code>
-      </pre></div></div><h3>Scope methods</h3><p>Methods available inside the directive scope to toggle visibility.</p><h4>$show()</h4><p>Reveals the tooltip.</p><h4>$hide()</h4><p>Hides the tooltip.</p><h4>$toggle()</h4><p>Toggles the tooltip.</p></div><!-- ngInclude: 'src/popover/docs/popover.demo.html' --><div class="bs-docs-section" ng-controller="PopoverDemoCtrl"><div class="page-header"><h1 id="popovers">Popovers <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/popover.js" target="_blank">popover.js</a></h1><code>mgcrea.ngStrap.popover</code></div><h2 id="popovers-examples">Examples</h2><p>Add small overlays of content on tap, like those on the iPad, to any element for housing secondary information.</p><div class="callout callout-danger"><h4>Plugin dependency</h4><p>Popovers require the <a href="#tooltips">tooltip plugin</a> to be included.</p></div><h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3><div class="form-group hide"><label>Title</label><input type="text" class="form-control" ng-model="popover.title" placeholder="Title"><label>Content</label><textarea class="form-control" ng-model="popover.content" rows="3"></textarea></div><pre class="bs-example-scope">$scope.popover = {{popover | json}};</pre><div class="bs-example" style="padding-bottom: 24px" append-source=""><!-- Button to trigger a default popover with a scope as an object {title:'', content:'', etc.} --><button type="button" class="btn btn-lg btn-primary" data-placement="bottom" data-animation="animation-flipX" bs-popover="popover">Click to toggle popover<br><small>(using an object)</small></button> <!-- You can also use data-attrs to assign scope variables --> <button type="button" class="btn btn-lg btn-primary" data-placement="top-right" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover="">Click to toggle popover<br><small>(using data-attrs)</small></button> <!-- You can use a custom html template with the `data-template` attr --> <button type="button" class="btn btn-lg btn-danger" title="{{popover.title}}" data-content="{{popover.content}}" data-template="popover/docs/popover.tpl.demo.html" data-animation="animation-flipX" bs-popover="">Custom Popover<br><small>(using data-template)</small></button></div><h2 id="popovers-usage">Usage</h2><p>Append a <code>bs-popover</code>attribute to any element to enable the directive.</p><div class="callout callout-info"><h4>The module exposes a <code>$popover</code>service</h4><p>Available for programmatic use (mainly in directives as it requires a DOM element).</p><div class="highlight"><pre>
+      </pre>
+    </div>
+  </div>
+
+  <h3>Scope methods</h3>
+  <p>Methods available inside the directive scope to toggle visibility.</p>
+
+  <h4>$show()</h4>
+  <p>Reveals the tooltip.</p>
+
+  <h4>$hide()</h4>
+  <p>Hides the tooltip.</p>
+
+  <h4>$toggle()</h4>
+  <p>Toggles the tooltip.</p>
+
+</div>
+
+        <!-- ngInclude: 'src/popover/docs/popover.demo.html' -->
+<div class="bs-docs-section" ng-controller="PopoverDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="popovers">Popovers <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/popover.js" target="_blank">popover.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.popover</code>
+  </div>
+
+
+  <h2 id="popovers-examples">Examples</h2>
+  <p>Add small overlays of content on tap, like those on the iPad, to any element for housing secondary information.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Popovers require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
+  </div>
+
+  <h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3>
+  <div class="form-group hide">
+    <label>Title</label>
+    <input type="text" class="form-control" ng-model="popover.title" placeholder="Title">
+    <label>Content</label>
+    <textarea class="form-control" ng-model="popover.content" rows="3"></textarea>
+  </div>
+  <pre class="bs-example-scope">$scope.popover = {{popover | json}};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+    <!-- Button to trigger a default popover with a scope as an object {title:'', content:'', etc.} -->
+    <button type="button" class="btn btn-lg btn-primary" data-placement="bottom" data-animation="animation-flipX" bs-popover="popover">Click to toggle popover
+      <br>
+      <small>(using an object)</small>
+    </button>
+
+    <!-- You can also use data-attrs to assign scope variables -->
+    <button type="button" class="btn btn-lg btn-primary" data-placement="top-right" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover="">Click to toggle popover
+      <br>
+      <small>(using data-attrs)</small>
+    </button>
+
+    <!-- You can use a custom html template with the `data-template` attr -->
+    <button type="button" class="btn btn-lg btn-danger" title="{{popover.title}}" data-content="{{popover.content}}" data-template="popover/docs/popover.tpl.demo.html" data-animation="animation-flipX" bs-popover="">Custom Popover
+      <br>
+      <small>(using data-template)</small>
+    </button>
+  </div>
+
+  <h2 id="popovers-usage">Usage</h2>
+  <p>Append a <code>bs-popover</code>attribute to any element to enable the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module exposes a <code>$popover</code>service</h4>
+    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
+    <div class="highlight">
+      <pre>
         <code class="javascript" highlight-block="">
           var myPopover = $popover(element, {title: 'My Title', content: 'My Content'});
         </code>
-      </pre></div></div><h3>Options</h3><p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p><p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-popover</code> attribute</p><div class="callout callout-info"><h4>This module supports exotic placement options!</h4><p>You can position your popover in corners (such as <code>bottom-left</code>) or any other combination two. Requires some CSS to render properly.</p></div><div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr><th style="width: 100px">Name</th><th style="width: 100px">type</th><th style="width: 50px">default</th><th>description</th></tr></thead><tbody><tr><td>animation</td><td>string</td><td>animation-fade</td><td>apply a CSS animation powered by <code>ngAnimate</code></td></tr><tr><td>placement</td><td>string</td><td>'right'</td><td>how to position the popover - top | bottom | left | right, or any combination like bottom-left.</td></tr><tr><td>trigger</td><td>string</td><td>'click'</td><td>how popover is triggered - click | hover | focus | manual</td></tr><tr><td>title</td><td>string</td><td>''</td><td>default title value if <code>title</code>attribute isn't present</td></tr><tr><td>content</td><td>string</td><td>''</td><td>default content value if <code>data-content</code>attribute isn't present</td></tr><tr><td>delay</td><td>number | object</td><td>0</td><td><p>delay showing and hiding the popover (ms) - does not apply to manual trigger type</p><p>If a number is supplied, delay is applied to both hide/show</p><p>Object structure is: <code>delay: { show: 500, hide: 100 }</code></p></td></tr><tr><td>container</td><td>string | false</td><td>false</td><td><p>Appends the popover to a specific element. Example: <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p></td></tr><tr><td>template</td><td>path</td><td>false</td><td><p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p></td></tr></tbody></table></div><div class="callout callout-info"><h4>Default options</h4><p>You can override global defaults for the plugin with <code>$popoverProvider.defaults</code></p><div class="highlight"><pre class="bs-exemple-code">
+      </pre>
+    </div>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-popover</code> attribute</p>
+  <div class="callout callout-info">
+    <h4>This module supports exotic placement options!</h4>
+    <p>You can position your popover in corners (such as <code>bottom-left</code>) or any other combination two. Requires some CSS to render properly.</p>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by <code>ngAnimate</code></td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'right'</td>
+          <td>how to position the popover - top | bottom | left | right, or any combination like bottom-left.</td>
+        </tr>
+        <tr>
+          <td>trigger</td>
+          <td>string</td>
+          <td>'click'</td>
+          <td>how popover is triggered - click | hover | focus | manual</td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default title value if
+            <code>title</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>content</td>
+          <td>string</td>
+          <td>''</td>
+          <td>default content value if
+            <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>delay</td>
+          <td>number | object</td>
+          <td>0</td>
+          <td>
+            <p>delay showing and hiding the popover (ms) - does not apply to manual trigger type</p>
+            <p>If a number is supplied, delay is applied to both hide/show</p>
+            <p>Object structure is:
+              <code>delay: { show: 500, hide: 100 }</code>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the popover to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$popoverProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .config(function($popoverProvider) {
@@ -166,7 +1239,95 @@
             });
           })
         </code>
-      </pre></div></div><h3>Scope methods</h3><p>Methods available inside the directive scope to toggle visibility.</p><h4>$show()</h4><p>Reveals the popover.</p><h4>$hide()</h4><p>Hides the popover.</p><h4>$toggle()</h4><p>Toggles the popover.</p></div><!-- ngInclude: 'src/dropdown/docs/dropdown.demo.html' --><div class="bs-docs-section" ng-controller="DropdownDemoCtrl"><div class="page-header"><h1 id="dropdowns">Dropdowns <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/dropdown.js" target="_blank">dropdown.js</a></h1><code>mgcrea.ngStrap.dropdown</code></div><h2 id="dropdowns-examples">Examples</h2><p>Add dropdown menus to nearly anything with this simple plugin, including the navbar, tabs, and pills.</p><p>Append a <code>bs-dropdown</code> attribute to any element to enable the plugin.</p><div class="callout callout-danger"><h4>Plugin dependency</h4><p>Dropdowns require the <a href="#tooltips">tooltip plugin</a> to be included.</p></div><h3>Live demo</h3><pre class="bs-example-scope">$scope.dropdown = {{dropdown | json}};</pre><div class="bs-example" style="padding-bottom: 24px" append-source=""><!-- Button to trigger a default dropdown with a scope as an object [{title:'', content:'', etc.}] --><button type="button" class="btn btn-lg btn-primary" data-animation="animation-flipX" bs-dropdown="dropdown">Click to toggle dropdown<br><small>(using an object)</small></button></div><h2 id="dropdowns-usage">Usage</h2><div class="callout callout-info"><h4>Two-way data-binding</h4><p>To prevent databinding issues, "the rule of thumb is, if you use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery.</p></div><h3>Scope methods</h3><p>Methods available inside the directive scope to toggle visibility.</p><h4>$show()</h4><p>Reveals the dropdown.</p><h4>$hide()</h4><p>Hides the dropdown.</p><h4>$toggle()</h4><p>Toggles the dropdown.</p></div><!-- ngInclude: 'src/scrollspy/docs/scrollspy.demo.html' --><div class="bs-docs-section"><div class="page-header"><h1 id="scrollspy">scrollspy <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/scrollspy/scrollspy.js" target="_blank">scrollspy.js</a></h1><code>mgcrea.ngStrap.scrollspy</code></div><h2 id="scrollspy-examples">Examples</h2><p>The subnavigation on the left is a live demo of the scrollspy plugin.</p><div class="callout callout-warning"><h4>Plugin dependency</h4><p>scrollspy require the <a href="#">jqlite.dimensions</a> plugin to be included.</p></div><div class="highlight"><pre>
+      </pre>
+    </div>
+  </div>
+
+  <h3>Scope methods</h3>
+  <p>Methods available inside the directive scope to toggle visibility.</p>
+
+  <h4>$show()</h4>
+  <p>Reveals the popover.</p>
+
+  <h4>$hide()</h4>
+  <p>Hides the popover.</p>
+
+  <h4>$toggle()</h4>
+  <p>Toggles the popover.</p>
+
+</div>
+
+        <!-- ngInclude: 'src/dropdown/docs/dropdown.demo.html' -->
+<div class="bs-docs-section" ng-controller="DropdownDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="dropdowns">Dropdowns <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/dropdown.js" target="_blank">dropdown.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.dropdown</code>
+  </div>
+
+
+  <h2 id="dropdowns-examples">Examples</h2>
+  <p>Add dropdown menus to nearly anything with this simple plugin, including the navbar, tabs, and pills.</p>
+  <p>Append a <code>bs-dropdown</code> attribute to any element to enable the plugin.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Dropdowns require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
+  </div>
+
+  <h3>Live demo</h3>
+  <pre class="bs-example-scope">$scope.dropdown = {{dropdown | json}};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+
+    <!-- Button to trigger a default dropdown with a scope as an object [{title:'', content:'', etc.}] -->
+    <button type="button" class="btn btn-lg btn-primary" data-animation="animation-flipX" bs-dropdown="dropdown">Click to toggle dropdown
+      <br>
+      <small>(using an object)</small>
+    </button>
+
+  </div>
+
+
+  <h2 id="dropdowns-usage">Usage</h2>
+  <div class="callout callout-info">
+    <h4>Two-way data-binding</h4>
+    <p>To prevent databinding issues, "the rule of thumb is, if you﻿ use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery.</p>
+  </div>
+
+  <h3>Scope methods</h3>
+  <p>Methods available inside the directive scope to toggle visibility.</p>
+
+  <h4>$show()</h4>
+  <p>Reveals the dropdown.</p>
+
+  <h4>$hide()</h4>
+  <p>Hides the dropdown.</p>
+
+  <h4>$toggle()</h4>
+  <p>Toggles the dropdown.</p>
+
+</div>
+
+        <!-- ngInclude: 'src/scrollspy/docs/scrollspy.demo.html' -->
+<div class="bs-docs-section">
+
+  <div class="page-header">
+    <h1 id="scrollspy">scrollspy <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/scrollspy/scrollspy.js" target="_blank">scrollspy.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.scrollspy</code>
+  </div>
+
+  <h2 id="scrollspy-examples">Examples</h2>
+  <p>The subnavigation on the left is a live demo of the scrollspy plugin.</p>
+
+  <div class="callout callout-warning">
+    <h4>Plugin dependency</h4>
+    <p>scrollspy require the <a href="#">jqlite.dimensions</a> plugin to be included.</p>
+  </div>
+
+  <div class="highlight">
+    <pre>
       <code class="html" highlight-block="">
         &lt;ul class="nav bs-sidenav"&gt;
           &lt;li data-target="#modals" bs-scrollspy&gt;
@@ -189,11 +1350,57 @@
           &lt;/li&gt;
         &lt;/ul&gt;
       </code>
-    </pre></div><h2 id="scrollspy-usage">Usage</h2><p>Append a <code>bs-scrollspy</code>attribute to any element to enable the plugin.</p><div class="callout callout-info"><h4>The module also exposes an <code>$scrollspy</code>service</h4><p>Available for programmatic use (mainly inside a directive as it requires an element).</p><div class="highlight"><pre>
+    </pre>
+  </div>
+
+  <h2 id="scrollspy-usage">Usage</h2>
+  <p>Append a <code>bs-scrollspy</code>attribute to any element to enable the plugin.</p>
+  <div class="callout callout-info">
+    <h4>The module also exposes an <code>$scrollspy</code>service</h4>
+    <p>Available for programmatic use (mainly inside a directive as it requires an element).</p>
+    <div class="highlight">
+      <pre>
         <code class="javascript" highlight-block="">
           var scrollspy = $scrollspy(element, options);
         </code>
-      </pre></div></div><h3>Options</h3><p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p><div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr><th style="width: 100px">Name</th><th style="width: 50px">type</th><th style="width: 50px">default</th><th>description</th></tr></thead><tbody><tr><td>target</td><td>string</td><td>''</td><td>Required target selector.</td></tr><tr><td>offset</td><td>number</td><td>0</td><td>Pixels to offset from top of screen when calculating position of scroll.</td></tr></tbody></table></div><div class="callout callout-info"><h4>Default options</h4><p>You can override global defaults for the plugin with <code>$scrollspyProvider.defaults</code></p><div class="highlight"><pre class="bs-exemple-code">
+      </pre>
+    </div>
+  </div>
+
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 50px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>target</td>
+          <td>string</td>
+          <td>''</td>
+          <td>Required target selector.</td>
+        </tr>
+        <tr>
+          <td>offset</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from top of screen when calculating position of scroll.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$scrollspyProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .config(function($scrollspyProvider) {
@@ -203,15 +1410,97 @@
             });
           })
         </code>
-      </pre></div></div></div><!-- ngInclude: 'src/affix/docs/affix.demo.html' --><div class="bs-docs-section"><div class="page-header"><h1 id="affix">Affix <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/affix/affix.js" target="_blank">affix.js</a></h1><code>mgcrea.ngStrap.affix</code></div><h2 id="affix-examples">Examples</h2><p>The subnavigation on the left is a live demo of the affix plugin.</p><div class="callout callout-warning"><h4>Plugin dependency</h4><p>Affix require the <a href="#">jqlite.dimensions</a> plugin to be included.</p></div><div class="highlight"><pre>
+      </pre>
+    </div>
+  </div>
+
+</div>
+
+        <!-- ngInclude: 'src/affix/docs/affix.demo.html' -->
+<div class="bs-docs-section">
+
+  <div class="page-header">
+    <h1 id="affix">Affix <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/affix/affix.js" target="_blank">affix.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.affix</code>
+  </div>
+
+  <h2 id="affix-examples">Examples</h2>
+  <p>The subnavigation on the left is a live demo of the affix plugin.</p>
+
+  <div class="callout callout-warning">
+    <h4>Plugin dependency</h4>
+    <p>Affix require the <a href="#">jqlite.dimensions</a> plugin to be included.</p>
+  </div>
+
+  <div class="highlight">
+    <pre>
       <code class="html" highlight-block="">
         &lt;div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-80" bs-affixt&gt;&lt;/div&gt;
       </code>
-    </pre></div><h2 id="affix-usage">Usage</h2><p>Append a <code>bs-affix</code>attribute to any element to enable the plugin.</p><div class="callout callout-info"><h4>The module also exposes an <code>$affix</code>service</h4><p>Available for programmatic use (mainly inside a directive as it requires an element).</p><div class="highlight"><pre>
+    </pre>
+  </div>
+
+  <h2 id="affix-usage">Usage</h2>
+  <p>Append a <code>bs-affix</code>attribute to any element to enable the plugin.</p>
+  <div class="callout callout-info">
+    <h4>The module also exposes an <code>$affix</code>service</h4>
+    <p>Available for programmatic use (mainly inside a directive as it requires an element).</p>
+    <div class="highlight">
+      <pre>
         <code class="javascript" highlight-block="">
           var affix = $affix(element, options);
         </code>
-      </pre></div></div><h3>Options</h3><p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p><div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr><th style="width: 100px">Name</th><th style="width: 50px">type</th><th style="width: 50px">default</th><th>description</th></tr></thead><tbody><tr><td>offsetTop</td><td>number</td><td>0</td><td>Pixels to offset from top of screen when calculating position of scroll.</td></tr><tr><td>offsetBottom</td><td>number</td><td>0</td><td>Pixels to offset from bottom of screen when calculating position of scroll.</td></tr><tr><td>offsetParent</td><td>number</td><td>0</td><td>Pixels to offset from parent when calculating position of scroll.</td></tr><tr><td>offsetUnpin</td><td>number</td><td>0</td><td>Pixels to offset from unpin position when calculating position of scroll.</td></tr></tbody></table></div><div class="callout callout-info"><h4>Default options</h4><p>You can override global defaults for the plugin with <code>$affixProvider.defaults</code></p><div class="highlight"><pre class="bs-exemple-code">
+      </pre>
+    </div>
+  </div>
+
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 50px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>offsetTop</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from top of screen when calculating position of scroll.</td>
+        </tr>
+        <tr>
+          <td>offsetBottom</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from bottom of screen when calculating position of scroll.</td>
+        </tr>
+        <tr>
+          <td>offsetParent</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from parent when calculating position of scroll.</td>
+        </tr>
+        <tr>
+          <td>offsetUnpin</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Pixels to offset from unpin position when calculating position of scroll.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$affixProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .config(function($affixProvider) {
@@ -221,7 +1510,54 @@
             });
           })
         </code>
-      </pre></div></div></div><!-- ngInclude: 'src/tab/docs/tab.demo.html' --><div class="bs-docs-section" ng-controller="TabDemoCtrl"><div class="page-header"><h1 id="tabs">Tabs <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/tab/tab.js" target="_blank">tab.js</a></h1><code>mgcrea.ngStrap.tab</code></div><h2 id="tabs-examples">Examples</h2><p>Add quick, dynamic tab functionality to transition through panes of local content.</p><h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a><pre class="bs-example-scope">$scope.tabs = {{tabs | json}};</pre><div class="bs-example" append-source=""><!-- ngModel is optional --><div ng-model="tabs.activeTab" bs-tabs="tabs"></div></div><div class="bs-example" style="padding-bottom: 24px"><label>activeTab:</label><strong class="text-danger">{{tabs.activeTab}}</strong>&nbsp;<div class="btn-group" ng-model="tabs.activeTab" bs-radio-group=""><label class="btn btn-default"><input type="radio" class="btn btn-default" value="0">First</label><label class="btn btn-default"><input type="radio" class="btn btn-default" value="1">Second</label><label class="btn btn-default"><input type="radio" class="btn btn-default" value="2">Third</label></div></div></h3><h2 id="tabs-usage">Usage</h2><p>Append a <code>bs-tabs</code>attribute to any element to enable the directive.</p><div class="bs-callout bs-callout-info"><h4>Custom animations</h4><p>Pane animation is done with <code>ngClass('active')</code> callbacks and require custom CSS.</p><pre class="bs-exemple-code">
+      </pre>
+    </div>
+  </div>
+
+</div>
+
+        <!-- ngInclude: 'src/tab/docs/tab.demo.html' -->
+<div class="bs-docs-section" ng-controller="TabDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="tabs">Tabs <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/tab/tab.js" target="_blank">tab.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.tab</code>
+  </div>
+
+
+  <h2 id="tabs-examples">Examples</h2>
+  <p>Add quick, dynamic tab functionality to transition through panes of local content.</p>
+
+  <h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a>
+    
+    <pre class="bs-example-scope">$scope.tabs = {{tabs | json}};</pre>
+    <div class="bs-example" append-source="">
+      <!-- ngModel is optional -->
+      <div ng-model="tabs.activeTab" bs-tabs="tabs">
+      </div>
+    </div>
+    <div class="bs-example" style="padding-bottom: 24px;">
+      <label>activeTab:</label>
+      <strong class="text-danger">{{tabs.activeTab}}</strong>&nbsp;
+      <div class="btn-group" ng-model="tabs.activeTab" bs-radio-group="">
+        <label class="btn btn-default">
+          <input type="radio" class="btn btn-default" value="0">First</label>
+        <label class="btn btn-default">
+          <input type="radio" class="btn btn-default" value="1">Second</label>
+        <label class="btn btn-default">
+          <input type="radio" class="btn btn-default" value="2">Third</label>
+      </div>
+    </div>
+  </h3>
+
+  <h2 id="tabs-usage">Usage</h2>
+  <p>Append a <code>bs-tabs</code>attribute to any element to enable the directive.</p>
+
+  <div class="bs-callout bs-callout-info">
+    <h4>Custom animations</h4>
+    <p>Pane animation is done with <code>ngClass('active')</code> callbacks and require custom CSS.</p>
+    <pre class="bs-exemple-code">
       <code class="css" highlight-block="">
         .tabs.animation-fade .tab-pane {
           opacity: 1;
@@ -239,7 +1575,45 @@
           }
         }
       </code>
-    </pre></div><h3>Options</h3><p>Options can be passed via data attributes or as an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object on <code>bs-tabs</code>. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p><div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr><th style="width: 100px">Name</th><th style="width: 100px">type</th><th style="width: 50px">default</th><th>description</th></tr></thead><tbody><tr><td>animation</td><td>string</td><td>animation-fade</td><td>apply a CSS animation to the popover with <code>ngAnimate</code></td></tr><tr><td>template</td><td>path</td><td>false</td><td><p>If a remote URL is provided, overrides the default template</p></td></tr></tbody></table></div><div class="callout callout-info"><h4>Default options</h4><p>You can override global defaults for the plugin with <code>$tabProvider.defaults</code></p><div class="highlight"><pre class="bs-exemple-code">
+    </pre>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data attributes or as an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object on
+    <code>bs-tabs</code>. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation to the popover with <code>ngAnimate</code></td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If a remote URL is provided, overrides the default template</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$tabProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
         <code class="javascript" highlight-block="">
           angular.module('myApp')
           .config(function($tabProvider) {
@@ -248,8 +1622,62 @@
             });
           })
         </code>
-      </pre></div></div></div></div></div></div><!-- ngInclude: 'docs/views/footer.html' --><footer class="bs-footer"><div class="container"><p class="pull-right"><a href="#">Back to top</a></p><p>Designed and built by <a href="//plus.google.com/+OlivierLouvignes/posts?rel=author" target="_blank">Olivier Louvignes</a>. <a href="https://twitter.com/olouv" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @olouv</a></p><hr><p>Using <a href="http://twitter.github.com/bootstrap" target="_blank">Twitter Bootstrap</a> and the <a href="css/docs.css" target="_blank">Bootstrap's docs styles</a> designed and built by <a href="http://twitter.com/mdo" target="_blank">@mdo</a> and <a href="http://twitter.com/fat" target="_blank">@fat</a>.</p><p>Code licensed under <a href="//github.com/mgcrea/angular-strap/blob/master/LICENSE.md" target="_blank">The MIT License</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p><ul class="footer-links"><li><a href="https://github.com/mgcrea/angular-strap/issues?state=open">Issues</a></li><li class="muted">·</li><li><a href="https://github.com/mgcrea/angular-strap/wiki">Roadmap and changelog</a></li><li class="muted">·</li><li><a href="https://github.com/mgcrea/angular-strap/releases">Releases</a></li></ul></div></footer><script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script><script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-sanitize.min.js"></script><script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-animate.min.js"></script><script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script><!-- <script src="bower_components/angular/angular.js"></script> --><!-- <script src="bower_components/angular-sanitize/angular-sanitize.js"></script> --><!-- <script src="bower_components/angular-animate/angular-animate.js"></script> --><script src="scripts/fefd8626.libraries.min.js"></script><script src="scripts/7dbef518.angular-strap.min.js"></script><script src="scripts/dbc37aa9.docs.min.js"></script><script src="scripts/9c95f451.demo.min.js"></script><!-- Analytics
-  ================================================== --><script type="text/javascript">var _gaq = _gaq || [];
+      </pre>
+    </div>
+  </div>
+
+</div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ngInclude: 'docs/views/footer.html' -->
+<footer class="bs-footer">
+  <div class="container">
+    <p class="pull-right"><a href="#">Back to top</a>
+    </p>
+    <p>Designed and built by <a href="//plus.google.com/+OlivierLouvignes/posts?rel=author" target="_blank">Olivier Louvignes</a>.
+      <a href="https://twitter.com/olouv" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @olouv</a>
+    </p>
+    <hr>
+    <p>Using <a href="http://twitter.github.com/bootstrap" target="_blank">Twitter Bootstrap</a> and the <a href="css/docs.css" target="_blank">Bootstrap's docs styles</a> designed and built by <a href="http://twitter.com/mdo" target="_blank">@mdo</a> and <a href="http://twitter.com/fat" target="_blank">@fat</a>.</p>
+    <p>Code licensed under <a href="//github.com/mgcrea/angular-strap/blob/master/LICENSE.md" target="_blank">The MIT License</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+    <ul class="footer-links">
+      <li><a href="https://github.com/mgcrea/angular-strap/issues?state=open">Issues</a>
+      </li>
+      <li class="muted">·</li>
+      <li><a href="https://github.com/mgcrea/angular-strap/wiki">Roadmap and changelog</a>
+      </li>
+      <li class="muted">·</li>
+      <li><a href="https://github.com/mgcrea/angular-strap/releases">Releases</a>
+      </li>
+    </ul>
+  </div>
+</footer>
+
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-sanitize.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-animate.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
+  <!-- <script src="bower_components/angular/angular.js"></script> -->
+  <!-- <script src="bower_components/angular-sanitize/angular-sanitize.js"></script> -->
+  <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
+  <script src="scripts/fefd8626.libraries.min.js"></script>
+
+  <script src="scripts/7dbef518.angular-strap.min.js"></script>
+
+  <script src="scripts/dbc37aa9.docs.min.js"></script>
+
+  <script src="scripts/9c95f451.demo.min.js"></script>
+
+  <!-- Analytics
+  ================================================== -->
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-1813303-8']);
     _gaq.push(['_trackPageview']);
 
@@ -257,9 +1685,25 @@
       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();</script><!-- Socials
-  ================================================== --><script type="text/javascript">(function() {
+    })();
+
+  </script>
+
+  <!-- Socials
+  ================================================== -->
+
+  <script type="text/javascript">
+    (function() {
       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
       po.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'apis.google.com/js/plusone.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-    })();</script><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></body></html>
+    })();
+  </script>
+
+  <script>
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+  </script>
+
+</body>
+
+</html>
