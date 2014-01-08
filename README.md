@@ -27,7 +27,7 @@ While it worked pretty well, it required a big javascript payload: both jQuery &
 
 >
 ``` javascript
-angular.module('myApp', ['ngStrap']);
+angular.module('myApp', ['mgcrea.ngStrap']);
 ```
 
 
