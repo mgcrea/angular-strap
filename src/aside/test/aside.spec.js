@@ -23,22 +23,26 @@ describe('aside', function () {
 
   var templates = {
     'default': {
-      scope: {aside: {title: 'Title', content: 'Hello aside<br>This is a multiline message!'}},
+      scope: {aside: {title: 'Title', content: 'Hello aside!'}},
       element: '<a title="{{aside.title}}" data-content="{{aside.content}}" bs-aside>click me</a>'
     },
     'markup-scope': {
       element: '<a bs-aside="aside">click me</a>'
     },
     'markup-ngRepeat': {
-      scope: {items: [{name: 'foo', aside: {title: 'Title', content: 'Hello aside<br>This is a multiline message!'}}]},
+      scope: {items: [{name: 'foo', aside: {title: 'Title', content: 'Hello aside!'}}]},
       element: '<ul><li ng-repeat="item in items"><a title="{{item.aside.title}}" data-content="{{item.aside.content}}" bs-aside>{{item.name}}</a></li></ul>'
     },
     'options-placement': {
       element: '<a data-placement="left" bs-aside="aside">click me</a>'
     },
+    'options-html': {
+      scope: {aside: {title: 'Title', content: 'Hello aside<br>This is a multiline message!'}},
+      element: '<a data-html="1" bs-aside="aside">click me</a>'
+    },
     'options-template': {
-      scope: {aside: {title: 'Title', content: 'Hello aside<br>This is a multiline message!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a title="{{aside.title}}" data-content="{{aside.content}}" data-template="custom" bs-aside>click me</a>'
+      scope: {aside: {title: 'Title', content: 'Hello aside!', counter: 0}, items: ['foo', 'bar', 'baz']},
+      element: '<a data-template="custom" bs-aside="aside">click me</a>'
     }
   };
 
@@ -118,6 +122,17 @@ describe('aside', function () {
         var elm = compileDirective('options-placement');
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.children('.aside')).toHaveClass('left');
+      });
+
+    });
+
+    describe('html', function () {
+
+      it('should correctly compile inner content', function() {
+        var elm = compileDirective('options-html');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.aside-title').html()).toBe(scope.aside.title);
+        expect(sandboxEl.find('.aside-body').html()).toBe(scope.aside.content);
       });
 
     });
