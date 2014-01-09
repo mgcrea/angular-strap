@@ -7,7 +7,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
     var template = '' +
       '<div class="tooltip" ng-show="title">' +
         '<div class="tooltip-arrow"></div>' +
-        '<div class="tooltip-inner" ng-bind-html="title"></div>' +
+        '<div class="tooltip-inner" ng-bind="title"></div>' +
       '</div>';
 
     $templateCache.put('$tooltip', template);
@@ -24,9 +24,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
       template: '$tooltip',
       trigger: 'hover focus',
       keyboard: false,
-      type: '',
-      // html: false,
+      html: false,
       title: '',
+      type: '',
       delay: 0
     };
 
@@ -34,6 +34,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
 
       var trim = String.prototype.trim;
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+      var htmlReplaceRegExp = /ng-bind="/ig;
 
       // Helper functions
 
@@ -77,6 +78,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
         var tipLinker, tipElement, tipTemplate;
         $tooltip.$promise.then(function(template) {
           if(angular.isObject(template)) template = template.data;
+          if(options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
           template = trim.apply(template);
           tipTemplate = template;
           tipLinker = $compile(template);
@@ -326,11 +328,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'animation', 'type', 'template'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'type', 'template'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
-        // Support scope as data-attrs
+        // Observe scope attributes for change
         angular.forEach(['title'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
             scope[key] = newValue;

@@ -10,7 +10,7 @@
   <h2 id="tooltips-examples">Examples</h2>
   <p>Add small overlays of content on hover, to any element for housing secondary information.</p>
 
-  <h3>Live demo</h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="tooltip/docs/tooltip.demo.html" data-content-js-url="tooltip/docs/tooltip.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip><i class="fa fa-edit"></i></a></h3>
   <div class="form-group hide">
     <label>Title</label>
     <input type="text" class="form-control" ng-model="tooltip.title" placeholder="Title">
@@ -36,11 +36,6 @@
 
   </div>
 
-  <div class="callout callout-info">
-    <h4>Two-way data-binding</h4>
-    <p>To prevent databinding issues, "the rule of thumb is, if you﻿ use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery.</p>
-  </div>
-
   <h2 id="tooltips-usage">Usage</h2>
   <p>Append a <code>bs-tooltip</code> attribute to any element to enable the directive.</p>
   <div class="callout callout-info">
@@ -60,7 +55,8 @@
   <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-tooltip</code> attribute</p>
   <div class="callout callout-info">
     <h4>This module supports exotic placement options!</h4>
-    <p>You can position your popover in corners (such as <code>bottom-left</code>) or any other combination two. Requires some CSS to render properly.</p>
+    <p>You can position your popover in corners (such as <code>bottom-left</code>) or any other combination two.</p>
+    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
   </div>
   <div class="table-responsive">
     <table class="table table-bordered table-striped">
@@ -95,8 +91,13 @@
           <td>title</td>
           <td>string</td>
           <td>''</td>
-          <td>default title value if
-            <code>title</code>attribute isn't present</td>
+          <td>default title value if <code>title</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
         </tr>
         <tr>
           <td>delay</td>

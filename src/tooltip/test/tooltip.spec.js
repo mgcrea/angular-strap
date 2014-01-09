@@ -23,14 +23,14 @@ describe('tooltip', function () {
 
   var templates = {
     'default': {
-      scope: {tooltip: {title: 'Hello Tooltip<br>This is a multiline message!'}},
+      scope: {tooltip: {title: 'Hello Tooltip!'}},
       element: '<a title="{{tooltip.title}}" bs-tooltip>hover me</a>'
     },
     'markup-scope': {
       element: '<a bs-tooltip="tooltip">hover me</a>'
     },
     'markup-ngRepeat': {
-      scope: {items: [{name: 'foo', tooltip: 'Hello Tooltip<br>This is a multiline message!'}]},
+      scope: {items: [{name: 'foo', tooltip: 'Hello Tooltip!'}]},
       element: '<ul><li ng-repeat="item in items"><a title="{{item.tooltip}}" bs-tooltip>{{item.name}}</a></li></ul>'
     },
     'options-animation': {
@@ -45,8 +45,12 @@ describe('tooltip', function () {
     'options-trigger': {
       element: '<a data-trigger="click" bs-tooltip="tooltip">click me</a>'
     },
+    'options-html': {
+      scope: {tooltip: {title: 'Hello Tooltip<br>This is a multiline message!'}},
+      element: '<a data-html="1" bs-tooltip="tooltip">hover me</a>'
+    },
     'options-template': {
-      scope: {tooltip: {title: 'Hello Tooltip<br>This is a multiline message!', counter: 0}, items: ['foo', 'bar', 'baz']},
+      scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{tooltip.title}}" data-template="custom" bs-tooltip>hover me</a>'
     }
   };
@@ -149,6 +153,16 @@ describe('tooltip', function () {
         expect(sandboxEl.children('.tooltip').length).toBe(1);
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.children('.tooltip').length).toBe(0);
+      });
+
+    });
+
+    describe('html', function () {
+
+      it('should correctly compile inner content', function() {
+        var elm = compileDirective('options-html');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.tooltip.title);
       });
 
     });
