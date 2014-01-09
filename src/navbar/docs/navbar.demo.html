@@ -18,7 +18,7 @@
         <a class="navbar-brand" href="#">Brand</a>
       </div>
       <ul class="nav navbar-nav">
-        <li data-match-route="/(:?navbar)"><a href="#/navbar">Home</a></li>
+        <li data-match-route="/?(navbar)?"><a href="#/">Home</a></li>
         <li data-match-route="/page-one"><a href="#/page-one">Page One</a></li>
         <li data-match-route="/page-two.*"><a href="#/page-two/sub-a">Page Two</a></li>
       </ul>
@@ -30,7 +30,7 @@
   <p>Use <code>data-match-route</code> attributes to any children navigation item that should be toggled active.</p>
   <div class="callout callout-info">
     <h4>Heads up!</h4>
-    <p>The directives also supports <code>HTML5 mode</code>, you just have to drop the dashes.</p>
+    <p>The directives also supports <code>HTML5 mode</code>, you just have to drop the <code>href</code> dashes.</p>
   </div>
 
 

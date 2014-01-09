@@ -42,7 +42,7 @@ angular.module('mgcrea.ngStrap.navbar', [])
 
             var liElement = angular.element(li);
             var pattern = liElement.attr(options.routeAttr);
-            var regexp = new RegExp('^' + pattern + '$', ['i']);
+            var regexp = new RegExp('^' + pattern.replace('/', '\\/') + '$', ['i']);
 
             if(regexp.test(newValue)) {
               liElement.addClass(options.activeClass);
