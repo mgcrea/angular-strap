@@ -35,11 +35,11 @@
   <!-- <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"> -->
   <link rel="stylesheet" href="styles/bf4e4fe4.libraries.min.css"/>
 
-  <link rel="stylesheet" href="styles/4ba8cf52.bootstrap-additions.min.css"/>
+  <link rel="stylesheet" href="styles/bfde0436.bootstrap-additions.min.css"/>
 
-  <link rel="stylesheet" href="styles/2fb8031d.angular-motion.min.css"/>
+  <link rel="stylesheet" href="styles/dbbb1be3.angular-motion.min.css"/>
 
-  <link rel="stylesheet" href="styles/e38a4db1.main.min.css"/>
+  <link rel="stylesheet" href="styles/06646150.main.min.css"/>
 
 </head>
 
@@ -379,6 +379,36 @@
       <small>(using data-template)</small>
     </button>
 
+  </div>
+
+  <div class="callout callout-info">
+    <h4>Custom styles optional</h4>
+    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
+  </div>
+
+  <div class="callout callout-info">
+    <h4>Backdrop animation</h4>
+    <p>Backdrop animation being powered by <code>ngAnimate</code>, it requires custom CSS.</p>
+    <pre class="bs-exemple-code">
+      <code class="css" highlight-block="">
+        .modal-backdrop.animation-fade {
+          opacity: .5;
+          transition: opacity .15s linear;
+          &.ng-enter {
+            opacity: 0;
+            &.ng-enter-active {
+              opacity: .5;
+            }
+          }
+          &.ng-leave {
+            opacity: .5;
+            &.ng-leave-active {
+              opacity: 0;
+            }
+          }
+        }
+      </code>
+    </pre>
   </div>
 
   <h2 id="modals-usage">Usage</h2>
@@ -1756,7 +1786,7 @@
 
   <script src="scripts/aca4e248.docs.min.js"></script>
 
-  <script src="scripts/c30dbe2a.docs.tpl.min.js"></script>
+  <script src="scripts/bd757583.docs.tpl.min.js"></script>
 
   <script src="scripts/124e4550.demo.min.js"></script>
 
