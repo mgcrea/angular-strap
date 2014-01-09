@@ -84,7 +84,7 @@ angular.module('mgcrea.ngStrap.alert', [])
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'placement', 'keyboard', 'container', 'animation', 'duration'], function(key) {
+        angular.forEach(['template', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

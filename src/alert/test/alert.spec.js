@@ -23,22 +23,26 @@ describe('alert', function () {
 
   var templates = {
     'default': {
-      scope: {alert: {title: 'Title', content: 'Hello alert<br>This is a multiline message!'}},
+      scope: {alert: {title: 'Title', content: 'Hello alert!'}},
       element: '<a title="{{alert.title}}" data-content="{{alert.content}}" bs-alert>click me</a>'
     },
     'markup-scope': {
       element: '<a bs-alert="alert">click me</a>'
     },
     'markup-ngRepeat': {
-      scope: {items: [{name: 'foo', alert: {title: 'Title', content: 'Hello alert<br>This is a multiline message!'}}]},
+      scope: {items: [{name: 'foo', alert: {title: 'Title', content: 'Hello alert!'}}]},
       element: '<ul><li ng-repeat="item in items"><a title="{{item.alert.title}}" data-content="{{item.alert.content}}" bs-alert>{{item.name}}</a></li></ul>'
     },
     'options-placement': {
       element: '<a data-placement="left" bs-alert="alert">click me</a>'
     },
+    'options-html': {
+      scope: {alert: {title: 'Title', content: 'Hello alert<br>This is a multiline message!'}},
+      element: '<a bs-alert="alert">click me</a>'
+    },
     'options-template': {
-      scope: {alert: {title: 'Title', content: 'Hello alert<br>This is a multiline message!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a title="{{alert.title}}" data-content="{{alert.content}}" data-template="custom" bs-alert>click me</a>'
+      scope: {alert: {title: 'Title', content: 'Hello alert!', counter: 0}, items: ['foo', 'bar', 'baz']},
+      element: '<a data-template="custom" bs-alert="alert">click me</a>'
     }
   };
 
@@ -118,6 +122,17 @@ describe('alert', function () {
         var elm = compileDirective('options-placement');
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.children('.alert')).toHaveClass('left');
+      });
+
+    });
+
+    describe('html', function () {
+
+      it('should correctly compile inner content', function() {
+        var elm = compileDirective('options-html');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.alert > strong').html()).toBe(scope.alert.title);
+        expect(sandboxEl.find('.alert > span').html()).toBe(scope.alert.content);
       });
 
     });
