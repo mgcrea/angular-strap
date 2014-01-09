@@ -7,8 +7,8 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
     var template = '' +
       '<div class="popover" tabindex="-1" ng-show="content" ng-class="{\'in\': $visible}">' +
         '<div class="arrow"></div>' +
-        '<h3 class="popover-title" ng-bind-html="title" ng-show="title"></h3>' +
-        '<div class="popover-content" ng-bind-html="content"></div>' +
+        '<h3 class="popover-title" ng-bind="title" ng-show="title"></h3>' +
+        '<div class="popover-content" ng-bind="content"></div>' +
       '</div>';
 
     $templateCache.put('$popover', template);
@@ -23,10 +23,10 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
       template: '$popover',
       trigger: 'click',
       keyboard: true,
+      html: false,
       title: '',
       content: '',
       delay: 0,
-      // html: false,
       container: false
     };
 
@@ -58,7 +58,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'keyboard', 'container', 'delay', 'trigger', 'animation', 'template'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

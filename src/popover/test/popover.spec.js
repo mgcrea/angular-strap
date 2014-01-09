@@ -26,31 +26,35 @@ describe('popover', function () {
 
   var templates = {
     'default': {
-      scope: {popover: {title: 'Title', content: 'Hello Popover<br>This is a multiline message!'}},
+      scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
       element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover></a>'
     },
     'markup-scope': {
       element: '<a bs-popover="popover">click me</a>'
     },
     'markup-ngRepeat': {
-      scope: {items: [{name: 'foo', popover: {title: 'Title', content: 'Hello Popover<br>This is a multiline message!'}}]},
+      scope: {items: [{name: 'foo', popover: {title: 'Title', content: 'Hello Popover!'}}]},
       element: '<ul><li ng-repeat="item in items"><a class="btn" bs-popover="item.popover">{{item.name}}</a></li></ul>'
     },
     'options-animation': {
-      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-animation="animation-flipX" bs-popover>hover me</a>'
+      element: '<a data-animation="animation-flipX" bs-popover="popover">hover me</a>'
     },
     'options-placement': {
-      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-placement="bottom" bs-popover>hover me</a>'
+      element: '<a data-placement="bottom" bs-popover="popover">hover me</a>'
     },
     'options-placement-exotic': {
-      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-placement="bottom-right" bs-popover>hover me</a>'
+      element: '<a data-placement="bottom-right" bs-popover="popover">hover me</a>'
     },
     'options-trigger': {
-      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-trigger="hover" bs-popover>hover me</a>'
+      element: '<a data-trigger="hover" bs-popover="popover">hover me</a>'
+    },
+    'options-html': {
+      scope: {popover: {title: 'Title', content: 'Hello Popover<br>This is a multiline message!'}},
+      element: '<a class="btn" data-html="1" bs-popover="popover"></a>'
     },
     'options-template': {
-      scope: {popover: {title: 'Title', content: 'Hello Popover<br>This is a multiline message!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a title="{{popover.title}}" data-content="{{popover.content}}" data-template="custom" bs-popover>click me</a>'
+      scope: {popover: {title: 'Title', content: 'Hello Popover!', counter: 0}, items: ['foo', 'bar', 'baz']},
+      element: '<a data-template="custom" bs-popover="popover">click me</a>'
     }
   };
 
@@ -155,6 +159,17 @@ describe('popover', function () {
         expect(sandboxEl.children('.popover').length).toBe(1);
         angular.element(elm[0]).triggerHandler('mouseleave');
         expect(sandboxEl.children('.popover').length).toBe(0);
+      });
+
+    });
+
+    describe('html', function () {
+
+      it('should correctly compile inner content', function() {
+        var elm = compileDirective('options-html');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.popover-title').html()).toBe(scope.popover.title);
+        expect(sandboxEl.find('.popover-content').html()).toBe(scope.popover.content);
       });
 
     });

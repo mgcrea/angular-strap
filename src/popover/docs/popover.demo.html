@@ -15,7 +15,7 @@
     <p>Popovers require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
   </div>
 
-  <h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="popover/docs/popover.demo.html" data-content-js-url="popover/docs/popover.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip><i class="fa fa-edit"></i></a></h3>
   <div class="form-group hide">
     <label>Title</label>
     <input type="text" class="form-control" ng-model="popover.title" placeholder="Title">
@@ -62,7 +62,8 @@
   <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-popover</code> attribute</p>
   <div class="callout callout-info">
     <h4>This module supports exotic placement options!</h4>
-    <p>You can position your popover in corners (such as <code>bottom-left</code>) or any other combination two. Requires some CSS to render properly.</p>
+    <p>You can position your popover in corners (such as <code>bottom-left</code>) or any other combination two.</p>
+    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
   </div>
   <div class="table-responsive">
     <table class="table table-bordered table-striped">
@@ -97,15 +98,19 @@
           <td>title</td>
           <td>string</td>
           <td>''</td>
-          <td>default title value if
-            <code>title</code>attribute isn't present</td>
+          <td>default title value if <code>title</code>attribute isn't present</td>
         </tr>
         <tr>
           <td>content</td>
           <td>string</td>
           <td>''</td>
-          <td>default content value if
-            <code>data-content</code>attribute isn't present</td>
+          <td>default content value if <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
         </tr>
         <tr>
           <td>delay</td>
