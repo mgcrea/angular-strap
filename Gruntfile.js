@@ -290,13 +290,15 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
-      fonts: {
+      static: {
         files: [{
           expand: true,
-          cwd: 'bower_components/font-awesome',
-          dest: '<%= yo.pages %>',
+          cwd: '<%= yo.pages %>',
+          dest: '<%= yo.pages %>/static',
           src: [
-            'fonts/*'
+            'images/{,*/}*.png',
+            'scripts/{,*/}*.js',
+            'styles/{,*/}*.css'
           ]
         }]
       },
@@ -414,7 +416,7 @@ module.exports = function (grunt) {
       docs: {
         options:  {
           module: 'mgcrea.ngStrapDocs',
-          usemin: 'scripts/docs.min.js'
+          usemin: 'scripts/docs.tpl.min.js'
         },
         files: [{
           cwd: '<%= yo.src %>',
@@ -504,11 +506,11 @@ module.exports = function (grunt) {
     'ngtemplates:docs',
     'concat:generated',
     'ngmin:docs',
-    'copy:fonts',
     'copy:docs',
     'cssmin:generated',
     'uglify:generated',
     'concat:docs',
+    'copy:static',
     'rev',
     'usemin',
     // 'htmlmin:docs' // breaks code preview
