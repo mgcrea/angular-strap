@@ -462,24 +462,26 @@
           <td>title</td>
           <td>string</td>
           <td>''</td>
-          <td>default title value if
-            <code>title</code>attribute isn't present</td>
+          <td>default title value if <code>title</code>attribute isn't present</td>
         </tr>
         <tr>
           <td>content</td>
           <td>string</td>
           <td>''</td>
-          <td>default content value if
-            <code>data-content</code>attribute isn't present</td>
+          <td>default content value if <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, require <code>ngSanitize</code> to be loaded</td>
         </tr>
         <tr>
           <td>backdrop</td>
-          <td>boolean or the string
-            <code>'static'</code>
+          <td>boolean or the string <code>'static'</code>
           </td>
           <td>true</td>
-          <td>Includes a modal-backdrop element. Alternatively, specify
-            <code>static</code>for a backdrop which doesn't close the modal on click.</td>
+          <td>Includes a modal-backdrop element. Alternatively, specify <code>static</code>for a backdrop which doesn't close the modal on click.</td>
         </tr>
         <tr>
           <td>keyboard</td>
@@ -498,8 +500,7 @@
           <td>string | false</td>
           <td>false</td>
           <td>
-            <p>Appends the popover to a specific element. Example:
-              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+            <p>Appends the popover to a specific element. Example: <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
           </td>
         </tr>
         <tr>
@@ -639,24 +640,26 @@
           <td>title</td>
           <td>string</td>
           <td>''</td>
-          <td>default title value if
-            <code>title</code>attribute isn't present</td>
+          <td>default title value if <code>title</code>attribute isn't present</td>
         </tr>
         <tr>
           <td>content</td>
           <td>string</td>
           <td>''</td>
-          <td>default content value if
-            <code>data-content</code>attribute isn't present</td>
+          <td>default content value if <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, require <code>ngSanitize</code> to be loaded</td>
         </tr>
         <tr>
           <td>backdrop</td>
-          <td>boolean or the string
-            <code>'static'</code>
+          <td>boolean or the string <code>'static'</code>
           </td>
           <td>true</td>
-          <td>Includes a modal-backdrop element. Alternatively, specify
-            <code>static</code>for a backdrop which doesn't close the modal on click.</td>
+          <td>Includes a modal-backdrop element. Alternatively, specify <code>static</code>for a backdrop which doesn't close the modal on click.</td>
         </tr>
         <tr>
           <td>keyboard</td>
@@ -676,7 +679,7 @@
           <td>false</td>
           <td>
             <p>Appends the popover to a specific element. Example:
-              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+ <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
           </td>
         </tr>
         <tr>
@@ -1127,8 +1130,13 @@
           <td>title</td>
           <td>string</td>
           <td>''</td>
-          <td>default title value if
-            <code>title</code>attribute isn't present</td>
+          <td>default title value if <code>title</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
         </tr>
         <tr>
           <td>delay</td>
@@ -1294,15 +1302,19 @@
           <td>title</td>
           <td>string</td>
           <td>''</td>
-          <td>default title value if
-            <code>title</code>attribute isn't present</td>
+          <td>default title value if <code>title</code>attribute isn't present</td>
         </tr>
         <tr>
           <td>content</td>
           <td>string</td>
           <td>''</td>
-          <td>default content value if
-            <code>data-content</code>attribute isn't present</td>
+          <td>default content value if <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, require <code>ngSanitize</code> to be loaded</td>
         </tr>
         <tr>
           <td>delay</td>
@@ -1448,6 +1460,12 @@
           <td>string</td>
           <td>'click'</td>
           <td>how popover is triggered - click | hover | focus | manual</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, require <code>ngSanitize</code> to be loaded</td>
         </tr>
         <tr>
           <td>delay</td>
@@ -1851,13 +1869,13 @@
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/fefd8626.libraries.min.js"></script>
 
-  <script src="scripts/a070a6a4.angular-strap.min.js"></script>
+  <script src="scripts/d45f3f2a.angular-strap.min.js"></script>
 
   <script src="scripts/7b754c28.docs.min.js"></script>
 
-  <script src="scripts/297ca651.docs.tpl.min.js"></script>
+  <script src="scripts/89824989.docs.tpl.min.js"></script>
 
-  <script src="scripts/124e4550.demo.min.js"></script>
+  <script src="scripts/a8de4d5c.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
