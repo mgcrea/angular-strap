@@ -16,7 +16,7 @@
     <p>Dropdowns require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
   </div>
 
-  <h3>Live demo</h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="dropdown/docs/dropdown.demo.html" data-content-js-url="dropdown/docs/dropdown.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip><i class="fa fa-edit"></i></a></h3>
   <pre class="bs-example-scope">$scope.dropdown = {{dropdown | json}};</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
@@ -28,23 +28,111 @@
 
   </div>
 
-
-  <h2 id="dropdowns-usage">Usage</h2>
+  <h2 id="popovers-usage">Usage</h2>
+  <p>Append a <code>bs-dropdown</code>attribute to any element to enable the directive.</p>
   <div class="callout callout-info">
-    <h4>Two-way data-binding</h4>
-    <p>To prevent databinding issues, "the rule of thumb is, if you﻿ use <code>ng-model</code> there has to be a dot somewhere." Miško Hevery.</p>
+    <h4>The module exposes a <code>$dropdown</code>service</h4>
+    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block>
+          var myDropdown = $dropdown(element, {title: 'My Title', content: 'My Content'});
+        </code>
+      </pre>
+    </div>
   </div>
 
-  <h3>Scope methods</h3>
-  <p>Methods available inside the directive scope to toggle visibility.</p>
-
-  <h4>$show()</h4>
-  <p>Reveals the dropdown.</p>
-
-  <h4>$hide()</h4>
-  <p>Hides the dropdown.</p>
-
-  <h4>$toggle()</h4>
-  <p>Toggles the dropdown.</p>
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-dropdown</code> attribute</p>
+  <div class="callout callout-info">
+    <h4>This module supports exotic placement options!</h4>
+    <p>You can position your dropdown in corners (such as <code>bottom-left</code>) or any other combination two.</p>
+    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by <code>ngAnimate</code></td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'right'</td>
+          <td>how to position the popover - top | bottom | left | right, or any combination like bottom-left.</td>
+        </tr>
+        <tr>
+          <td>trigger</td>
+          <td>string</td>
+          <td>'click'</td>
+          <td>how popover is triggered - click | hover | focus | manual</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
+        </tr>
+        <tr>
+          <td>delay</td>
+          <td>number | object</td>
+          <td>0</td>
+          <td>
+            <p>delay showing and hiding the popover (ms) - does not apply to manual trigger type</p>
+            <p>If a number is supplied, delay is applied to both hide/show</p>
+            <p>Object structure is:
+              <code>delay: { show: 500, hide: 100 }</code>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the popover to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$dropdownProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block>
+          angular.module('myApp')
+          .config(function($dropdownProvider) {
+            angular.extend($dropdownProvider.defaults, {
+              animation: 'animation-flipX',
+              trigger: 'hover'
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
 
 </div>

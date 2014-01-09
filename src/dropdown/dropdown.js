@@ -7,7 +7,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
     var template = '' +
       '<ul tabindex="-1" class="dropdown-menu" role="menu">' +
         '<li role="presentation" ng-class="{divider: item.divider}" ng-repeat="item in content" >' +
-          '<a role="menuitem" tabindex="-1" href="{{item.href}}" ng-if="!item.divider" ng-click="$eval(item.click);$hide()" ng-bind-html="item.text"></a>' +
+          '<a role="menuitem" tabindex="-1" href="{{item.href}}" ng-if="!item.divider" ng-click="$eval(item.click);$hide()" ng-bind="item.text"></a>' +
         '</li>' +
       '</ul>';
 
@@ -20,11 +20,14 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
     var defaults = this.defaults = {
       animation: 'animation-fade',
+      prefixClass: 'dropdown',
+      container: false,
       placement: 'bottom-left',
       template: '$dropdown',
       trigger: 'click',
       keyboard: true,
-      container: false
+      html: false,
+      delay: 0
     };
 
     this.$get = function($window, $tooltip) {
@@ -109,7 +112,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'keyboard', 'container', 'delay', 'trigger', 'animation', 'template'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
