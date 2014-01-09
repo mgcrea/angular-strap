@@ -23,14 +23,14 @@ describe('modal', function () {
 
   var templates = {
     'default': {
-      scope: {modal: {title: 'Title', content: 'Hello Modal<br>This is a multiline message!'}},
+      scope: {modal: {title: 'Title', content: 'Hello Modal!'}},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" bs-modal>click me</a>'
     },
     'markup-scope': {
       element: '<a bs-modal="modal">click me</a>'
     },
     'markup-ngRepeat': {
-      scope: {items: [{name: 'foo', modal: {title: 'Title', content: 'Hello Modal<br>This is a multiline message!'}}]},
+      scope: {items: [{name: 'foo', modal: {title: 'Title', content: 'Hello Modal!'}}]},
       element: '<ul><li ng-repeat="item in items"><a title="{{item.modal.title}}" data-content="{{item.modal.content}}" bs-modal>{{item.name}}</a></li></ul>'
     },
     'options-placement': {
@@ -39,8 +39,12 @@ describe('modal', function () {
     'options-placement-exotic': {
       element: '<a data-placement="center" bs-modal="modal">click me</a>'
     },
+    'options-html': {
+      scope: {modal: {title: 'Title', content: 'Hello Modal<br>This is a multiline message!'}},
+      element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-html="1" bs-modal>click me</a>'
+    },
     'options-template': {
-      scope: {modal: {title: 'Title', content: 'Hello Modal<br>This is a multiline message!', counter: 0}, items: ['foo', 'bar', 'baz']},
+      scope: {modal: {title: 'Title', content: 'Hello Modal!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-template="custom" bs-modal>click me</a>'
     }
   };
@@ -127,6 +131,17 @@ describe('modal', function () {
         var elm = compileDirective('options-placement-exotic');
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.children('.modal')).toHaveClass('center');
+      });
+
+    });
+
+    describe('html', function () {
+
+      it('should correctly compile inner content', function() {
+        var elm = compileDirective('options-html');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-title').html()).toBe(scope.modal.title);
+        expect(sandboxEl.find('.modal-body').html()).toBe(scope.modal.content);
       });
 
     });

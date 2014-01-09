@@ -10,7 +10,7 @@
   <h2 id="modals-examples">Examples</h2>
   <p>Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.</p>
 
-  <h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="modal/docs/modal.demo.html" data-content-js-url="modal/docs/modal.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip><i class="fa fa-edit"></i></a></h3>
   <pre class="bs-example-scope">$scope.modal = {{modal | json}};</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
@@ -26,6 +26,31 @@
       <small>(using data-template)</small>
     </button>
 
+  </div>
+
+  <div class="callout callout-info">
+    <h4>Backdrop animation</h4>
+    <p>Backdrop animation being powered by <code>ngAnimate</code>, it requires custom CSS.</p>
+    <pre class="bs-exemple-code">
+      <code class="css" highlight-block>
+        .modal-backdrop.animation-fade {
+          opacity: .5;
+          transition: opacity .15s linear;
+          &.ng-enter {
+            opacity: 0;
+            &.ng-enter-active {
+              opacity: .5;
+            }
+          }
+          &.ng-leave {
+            opacity: .5;
+            &.ng-leave-active {
+              opacity: 0;
+            }
+          }
+        }
+      </code>
+    </pre>
   </div>
 
   <h2 id="modals-usage">Usage</h2>
@@ -84,24 +109,26 @@
           <td>title</td>
           <td>string</td>
           <td>''</td>
-          <td>default title value if
-            <code>title</code>attribute isn't present</td>
+          <td>default title value if <code>title</code>attribute isn't present</td>
         </tr>
         <tr>
           <td>content</td>
           <td>string</td>
           <td>''</td>
-          <td>default content value if
-            <code>data-content</code>attribute isn't present</td>
+          <td>default content value if <code>data-content</code>attribute isn't present</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
         </tr>
         <tr>
           <td>backdrop</td>
-          <td>boolean or the string
-            <code>'static'</code>
+          <td>boolean or the string <code>'static'</code>
           </td>
           <td>true</td>
-          <td>Includes a modal-backdrop element. Alternatively, specify
-            <code>static</code>for a backdrop which doesn't close the modal on click.</td>
+          <td>Includes a modal-backdrop element. Alternatively, specify <code>static</code>for a backdrop which doesn't close the modal on click.</td>
         </tr>
         <tr>
           <td>keyboard</td>
@@ -120,8 +147,7 @@
           <td>string | false</td>
           <td>false</td>
           <td>
-            <p>Appends the popover to a specific element. Example:
-              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+            <p>Appends the popover to a specific element. Example: <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
           </td>
         </tr>
         <tr>
