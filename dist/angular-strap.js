@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.1 - 2014-01-07
+ * @version v2.0.0-beta.2 - 2014-01-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -12,9 +12,11 @@
     'mgcrea.ngStrap.aside',
     'mgcrea.ngStrap.alert',
     'mgcrea.ngStrap.button',
+    'mgcrea.ngStrap.navbar',
     'mgcrea.ngStrap.tooltip',
     'mgcrea.ngStrap.popover',
     'mgcrea.ngStrap.dropdown',
+    'mgcrea.ngStrap.typeahead',
     'mgcrea.ngStrap.scrollspy',
     'mgcrea.ngStrap.affix',
     'mgcrea.ngStrap.tab'
@@ -221,6 +223,7 @@
             'template',
             'placement',
             'keyboard',
+            'html',
             'container',
             'animation',
             'duration'
@@ -258,7 +261,7 @@
   angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal']).run([
     '$templateCache',
     function ($templateCache) {
-      var template = '' + '<div class="aside" tabindex="-1" role="dialog">' + '<div class="aside-dialog">' + '<div class="aside-content">' + '<div class="aside-header" ng-show="title">' + '<button type="button" class="close" ng-click="$hide()">&times;</button>' + '<h4 class="aside-title" ng-bind-html="title"></h4>' + '</div>' + '<div class="aside-body" ng-show="content" ng-bind-html="content"></div>' + '<div class="aside-footer">' + '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' + '</div>' + '</div>' + '</div>' + '</div>';
+      var template = '' + '<div class="aside" tabindex="-1" role="dialog">' + '<div class="aside-dialog">' + '<div class="aside-content">' + '<div class="aside-header" ng-show="title">' + '<button type="button" class="close" ng-click="$hide()">&times;</button>' + '<h4 class="aside-title" ng-bind="title"></h4>' + '</div>' + '<div class="aside-body" ng-show="content" ng-bind="content"></div>' + '<div class="aside-footer">' + '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' + '</div>' + '</div>' + '</div>' + '</div>';
       $templateCache.put('$aside', template);
     }
   ]).provider('$aside', function () {
@@ -271,6 +274,7 @@
         element: null,
         backdrop: true,
         keyboard: true,
+        html: false,
         show: true
       };
     this.$get = [
@@ -306,7 +310,7 @@
             'placement',
             'backdrop',
             'keyboard',
-            'show',
+            'html',
             'container',
             'animation'
           ], function (key) {
@@ -458,17 +462,20 @@
   angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).run([
     '$templateCache',
     function ($templateCache) {
-      var template = '' + '<ul tabindex="-1" class="dropdown-menu" role="menu">' + '<li role="presentation" ng-class="{divider: item.divider}" ng-repeat="item in content" >' + '<a role="menuitem" tabindex="-1" href="{{item.href}}" ng-if="!item.divider" ng-click="$eval(item.click);$hide()" ng-bind-html="item.text"></a>' + '</li>' + '</ul>';
+      var template = '' + '<ul tabindex="-1" class="dropdown-menu" role="menu">' + '<li role="presentation" ng-class="{divider: item.divider}" ng-repeat="item in content" >' + '<a role="menuitem" tabindex="-1" href="{{item.href}}" ng-if="!item.divider" ng-click="$eval(item.click);$hide()" ng-bind="item.text"></a>' + '</li>' + '</ul>';
       $templateCache.put('$dropdown', template);
     }
   ]).provider('$dropdown', function () {
     var defaults = this.defaults = {
         animation: 'animation-fade',
+        prefixClass: 'dropdown',
         placement: 'bottom-left',
         template: '$dropdown',
         trigger: 'click',
+        container: false,
         keyboard: true,
-        container: false
+        html: false,
+        delay: 0
       };
     this.$get = [
       '$window',
@@ -538,10 +545,11 @@
           var options = { scope: scope };
           angular.forEach([
             'placement',
-            'keyboard',
             'container',
             'delay',
             'trigger',
+            'keyboard',
+            'html',
             'animation',
             'template'
           ], function (key) {
@@ -698,8 +706,9 @@
   ]);
   angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions']).run([
     '$templateCache',
-    function ($templateCache) {
-      var template = '' + '<div class="modal" tabindex="-1" role="dialog">' + '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header" ng-show="title">' + '<button type="button" class="close" ng-click="$hide()">&times;</button>' + '<h4 class="modal-title" ng-bind-html="title"></h4>' + '</div>' + '<div class="modal-body" ng-show="content" ng-bind-html="content"></div>' + '<div class="modal-footer">' + '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' + '</div>' + '</div>' + '</div>' + '</div>';
+    '$modal',
+    function ($templateCache, $modal) {
+      var template = '' + '<div class="modal" tabindex="-1" role="dialog">' + '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header" ng-show="title">' + '<button type="button" class="close" ng-click="$hide()">&times;</button>' + '<h4 class="modal-title" ng-bind="title"></h4>' + '</div>' + '<div class="modal-body" ng-show="content" ng-bind="content"></div>' + '<div class="modal-footer">' + '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' + '</div>' + '</div>' + '</div>' + '</div>';
       $templateCache.put('$modal', template);
     }
   ]).provider('$modal', function () {
@@ -712,6 +721,7 @@
         element: null,
         backdrop: true,
         keyboard: true,
+        html: false,
         show: true
       };
     this.$get = [
@@ -729,7 +739,7 @@
         var jqLite = angular.element;
         var trim = String.prototype.trim;
         var bodyElement = jqLite($window.document.body);
-        var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+        var htmlReplaceRegExp = /ng-bind="/gi;
         var findElement = function (query, element) {
           return jqLite((element || document).querySelectorAll(query));
         };
@@ -770,6 +780,8 @@
           $modal.$promise.then(function (template) {
             if (angular.isObject(template))
               template = template.data;
+            if (options.html)
+              template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
             template = trim.apply(template);
             modalLinker = $compile(template);
             $modal.init();
@@ -782,8 +794,14 @@
             }
           };
           $modal.destroy = function () {
-            modalElement.remove();
-            backdropElement.remove();
+            if (modalElement) {
+              modalElement.remove();
+              modalElement = null;
+            }
+            if (backdropElement) {
+              backdropElement.remove();
+              backdropElement = null;
+            }
             scope.$destroy();
           };
           $modal.show = function () {
@@ -857,9 +875,6 @@
     '$sce',
     '$modal',
     function ($window, $location, $sce, $modal) {
-      var forEach = angular.forEach;
-      var isDefined = angular.isDefined;
-      var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       return {
         restrict: 'EAC',
         scope: true,
@@ -869,19 +884,19 @@
               element: element,
               show: false
             };
-          forEach([
+          angular.forEach([
             'template',
             'placement',
             'backdrop',
             'keyboard',
-            'show',
+            'html',
             'container',
             'animation'
           ], function (key) {
-            if (isDefined(attr[key]))
+            if (angular.isDefined(attr[key]))
               options[key] = attr[key];
           });
-          forEach([
+          angular.forEach([
             'title',
             'content'
           ], function (key) {
@@ -907,10 +922,51 @@
       };
     }
   ]);
+  angular.module('mgcrea.ngStrap.navbar', []).provider('$navbar', function () {
+    var defaults = this.defaults = {
+        activeClass: 'active',
+        routeAttr: 'data-match-route'
+      };
+    this.$get = function () {
+      return { defaults: defaults };
+    };
+  }).directive('bsNavbar', [
+    '$window',
+    '$location',
+    '$navbar',
+    function ($window, $location, $navbar) {
+      var defaults = $navbar.defaults;
+      return {
+        restrict: 'A',
+        link: function postLink(scope, element, attr, controller) {
+          var options = defaults;
+          angular.forEach(Object.keys(defaults), function (key) {
+            if (angular.isDefined(attr[key]))
+              options[key] = attr[key];
+          });
+          scope.$watch(function () {
+            return $location.path();
+          }, function (newValue, oldValue) {
+            var liElements = element[0].querySelectorAll('li[' + options.routeAttr + ']');
+            angular.forEach(liElements, function (li) {
+              var liElement = angular.element(li);
+              var pattern = liElement.attr(options.routeAttr);
+              var regexp = new RegExp('^' + pattern.replace('/', '\\/') + '$', ['i']);
+              if (regexp.test(newValue)) {
+                liElement.addClass(options.activeClass);
+              } else {
+                liElement.removeClass(options.activeClass);
+              }
+            });
+          });
+        }
+      };
+    }
+  ]);
   angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).run([
     '$templateCache',
     function ($templateCache) {
-      var template = '' + '<div class="popover" tabindex="-1" ng-show="content" ng-class="{\'in\': $visible}">' + '<div class="arrow"></div>' + '<h3 class="popover-title" ng-bind-html="title" ng-show="title"></h3>' + '<div class="popover-content" ng-bind-html="content"></div>' + '</div>';
+      var template = '' + '<div class="popover" tabindex="-1" ng-show="content" ng-class="{\'in\': $visible}">' + '<div class="arrow"></div>' + '<h3 class="popover-title" ng-bind="title" ng-show="title"></h3>' + '<div class="popover-content" ng-bind="content"></div>' + '</div>';
       $templateCache.put('$popover', template);
     }
   ]).provider('$popover', function () {
@@ -920,6 +976,7 @@
         template: '$popover',
         trigger: 'click',
         keyboard: true,
+        html: false,
         title: '',
         content: '',
         delay: 0,
@@ -949,10 +1006,11 @@
           var options = { scope: scope };
           angular.forEach([
             'placement',
-            'keyboard',
             'container',
             'delay',
             'trigger',
+            'keyboard',
+            'html',
             'animation',
             'template'
           ], function (key) {
@@ -1061,6 +1119,8 @@
             $rootScope.$off('$includeContentLoaded', debouncedCheckOffsets);
           };
           $scrollspy.checkPosition = function () {
+            if (!sortedElements.length)
+              return;
             scrollTop = (isWindowSpy ? $window.pageYOffset : scrollEl.prop('scrollTop')) || 0;
             viewportHeight = Math.max($window.innerHeight, docEl.prop('clientHeight'));
             if (scrollTop < sortedElements[0].offsetTop && activeTarget !== sortedElements[0].target) {
@@ -1247,7 +1307,7 @@
   angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions']).run([
     '$templateCache',
     function ($templateCache) {
-      var template = '' + '<div class="tooltip" ng-show="title">' + '<div class="tooltip-arrow"></div>' + '<div class="tooltip-inner" ng-bind-html="title"></div>' + '</div>';
+      var template = '' + '<div class="tooltip" ng-show="title">' + '<div class="tooltip-arrow"></div>' + '<div class="tooltip-inner" ng-bind="title"></div>' + '</div>';
       $templateCache.put('$tooltip', template);
     }
   ]).provider('$tooltip', function () {
@@ -1259,8 +1319,9 @@
         template: '$tooltip',
         trigger: 'hover focus',
         keyboard: false,
-        type: '',
+        html: false,
         title: '',
+        type: '',
         delay: 0
       };
     this.$get = [
@@ -1276,6 +1337,7 @@
       function ($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions) {
         var trim = String.prototype.trim;
         var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+        var htmlReplaceRegExp = /ng-bind="/gi;
         var findElement = function (query, element) {
           return angular.element((element || document).querySelectorAll(query));
         };
@@ -1283,7 +1345,7 @@
           var $tooltip = {};
           var options = angular.extend({}, defaults, config);
           $tooltip.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template));
-          var scope = options.scope.$new() || $rootScope.$new();
+          var scope = $tooltip.$scope = options.scope.$new() || $rootScope.$new();
           if (options.delay && angular.isString(options.delay)) {
             options.delay = parseFloat(options.delay);
           }
@@ -1302,11 +1364,14 @@
               $tooltip.toggle();
             });
           };
-          var timeout, hoverState, isShown;
+          $tooltip.$isShown = false;
+          var timeout, hoverState;
           var tipLinker, tipElement, tipTemplate;
           $tooltip.$promise.then(function (template) {
             if (angular.isObject(template))
               template = template.data;
+            if (options.html)
+              template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
             template = trim.apply(template);
             tipTemplate = template;
             tipLinker = $compile(template);
@@ -1374,12 +1439,16 @@
               tipElement.addClass(options.prefixClass + '-' + options.type);
             $animate.enter(tipElement, parent, after, function () {
             });
-            isShown = true;
+            $tooltip.$isShown = true;
             scope.$digest();
             requestAnimationFrame($tooltip.$applyPlacement);
             if (options.keyboard) {
-              $tooltip.focus();
-              tipElement.on('keyup', $tooltip.$onKeyUp);
+              if (options.trigger !== 'focus') {
+                $tooltip.focus();
+                tipElement.on('keyup', $tooltip.$onKeyUp);
+              } else {
+                element.on('keyup', $tooltip.$onFocusKeyUp);
+              }
             }
           };
           $tooltip.leave = function () {
@@ -1398,13 +1467,13 @@
             $animate.leave(tipElement, function () {
             });
             scope.$digest();
-            isShown = false;
+            $tooltip.$isShown = false;
             if (options.keyboard) {
               tipElement.off('keyup', $tooltip.$onKeyUp);
             }
           };
           $tooltip.toggle = function () {
-            isShown ? $tooltip.leave() : $tooltip.enter();
+            $tooltip.$isShown ? $tooltip.leave() : $tooltip.enter();
           };
           $tooltip.focus = function () {
             tipElement[0].focus();
@@ -1421,6 +1490,9 @@
           };
           $tooltip.$onKeyUp = function (evt) {
             evt.which === 27 && $tooltip.hide();
+          };
+          $tooltip.$onFocusKeyUp = function (evt) {
+            evt.which === 27 && element[0].blur();
           };
           function getPosition() {
             if (options.container === 'body') {
@@ -1502,6 +1574,8 @@
             'container',
             'delay',
             'trigger',
+            'keyboard',
+            'html',
             'animation',
             'type',
             'template'
@@ -1532,6 +1606,192 @@
             tooltip.destroy();
             options = null;
             tooltip = null;
+          });
+        }
+      };
+    }
+  ]);
+  angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip']).run([
+    '$templateCache',
+    function ($templateCache) {
+      var template = '' + '<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="select">' + '<li role="presentation" ng-repeat="match in $matches" ng-class="{active: $index == $activeIndex}">' + '<a role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind="match.label"></a>' + '</li>' + '</ul>';
+      $templateCache.put('$typeahead', template);
+    }
+  ]).provider('$typeahead', function () {
+    var defaults = this.defaults = {
+        animation: 'animation-fade',
+        prefixClass: 'typeahead',
+        placement: 'bottom-left',
+        template: '$typeahead',
+        trigger: 'focus',
+        container: false,
+        keyboard: true,
+        html: false,
+        delay: 0,
+        minLength: 0,
+        limit: 6
+      };
+    this.$get = [
+      '$window',
+      '$rootScope',
+      '$tooltip',
+      function ($window, $rootScope, $tooltip) {
+        var bodyEl = angular.element($window.document.body);
+        function TypeaheadFactory(element, config) {
+          var $typeahead = {};
+          var options = angular.extend({}, defaults, config);
+          var controller = options.controller;
+          $typeahead = $tooltip(element, options);
+          var parentScope = config.scope;
+          var scope = $typeahead.$scope;
+          scope.$matches = [];
+          scope.$activeIndex = 0;
+          scope.$activate = function (index) {
+            scope.$$postDigest(function () {
+              $typeahead.activate(index);
+            });
+          };
+          scope.$select = function (index, evt) {
+            scope.$$postDigest(function () {
+              $typeahead.select(index);
+            });
+          };
+          scope.$isVisible = function () {
+            return $typeahead.$isVisible();
+          };
+          $typeahead.update = function (matches) {
+            scope.$matches = matches;
+            if (scope.$activeIndex >= matches.length) {
+              scope.$activeIndex = 0;
+            }
+          };
+          $typeahead.activate = function (index) {
+            scope.$activeIndex = index;
+          };
+          $typeahead.select = function (index) {
+            var value = scope.$matches[index].value;
+            if (controller) {
+              controller.$setViewValue(value);
+              controller.$render();
+              if (parentScope)
+                parentScope.$digest();
+            }
+            element[0].blur();
+            scope.$emit('$typeahead.select', value, index);
+            scope.$activeIndex = 0;
+          };
+          $typeahead.$isVisible = function () {
+            if (!options.minLength || !controller) {
+              return scope.$matches.length;
+            }
+            return scope.$matches.length && controller.$viewValue.length >= options.minLength;
+          };
+          $typeahead.$onMouseDown = function (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+          };
+          $typeahead.$onKeyDown = function (evt) {
+            if (!/(38|40|13)/.test(evt.keyCode))
+              return;
+            evt.preventDefault();
+            evt.stopPropagation();
+            if (evt.keyCode === 13) {
+              return $typeahead.select(scope.$activeIndex);
+            }
+            if (evt.keyCode === 38 && scope.$activeIndex > 0)
+              scope.$activeIndex--;
+            else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1)
+              scope.$activeIndex++;
+            else if (angular.isUndefined(scope.$activeIndex))
+              scope.$activeIndex = 0;
+            scope.$digest();
+          };
+          var show = $typeahead.show;
+          $typeahead.show = function () {
+            show();
+            setTimeout(function () {
+              $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
+              if (options.keyboard) {
+                element.on('keydown', $typeahead.$onKeyDown);
+              }
+            });
+          };
+          var hide = $typeahead.hide;
+          $typeahead.hide = function () {
+            $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
+            if (options.keyboard) {
+              element.off('keydown', $typeahead.$onKeyDown);
+            }
+            hide();
+          };
+          return $typeahead;
+        }
+        TypeaheadFactory.defaults = defaults;
+        return TypeaheadFactory;
+      }
+    ];
+  }).directive('bsTypeahead', [
+    '$window',
+    '$parse',
+    '$q',
+    '$typeahead',
+    function ($window, $parse, $q, $typeahead) {
+      var defaults = $typeahead.defaults;
+      var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/;
+      return {
+        restrict: 'EAC',
+        require: 'ngModel',
+        link: function postLink(scope, element, attr, controller) {
+          var options = {
+              scope: scope,
+              controller: controller
+            };
+          angular.forEach([
+            'placement',
+            'container',
+            'delay',
+            'trigger',
+            'keyboard',
+            'html',
+            'animation',
+            'template',
+            'limit',
+            'minLength'
+          ], function (key) {
+            if (angular.isDefined(attr[key]))
+              options[key] = attr[key];
+          });
+          var limit = options.limit || defaults.limit;
+          var ngOptions = attr.ngOptions + ' | filter:$viewValue |\xa0limitTo:' + limit;
+          var match = ngOptions.match(NG_OPTIONS_REGEXP);
+          var displayFn = $parse(match[2] || match[1]), valueName = match[4] || match[6], keyName = match[5], groupByFn = $parse(match[3] || ''), valueFn = $parse(match[2] ? match[1] : valueName), valuesFn = $parse(match[7]);
+          var typeahead = $typeahead(element, options);
+          scope.$watch(attr.ngModel, function (newValue, oldValue) {
+            $q.when(valuesFn(scope, controller)).then(function (values) {
+              if (values.length > limit)
+                values = values.slice(0, limit);
+              var matches = parseValues(values);
+              typeahead.update(matches);
+            });
+          });
+          function parseValues(values) {
+            return values.map(function (match) {
+              var locals = {}, label, value;
+              locals[valueName] = match;
+              label = displayFn(locals);
+              value = valueFn(locals);
+              if (angular.isObject(value))
+                value = label;
+              return {
+                label: label,
+                value: value
+              };
+            });
+          }
+          scope.$on('$destroy', function () {
+            typeahead.destroy();
+            options = null;
+            typeahead = null;
           });
         }
       };

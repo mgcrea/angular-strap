@@ -35,7 +35,7 @@ angular.module('myApp', ['mgcrea.ngStrap']);
 
 ## Developers
 
-Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master) or install with bower `bower install angular-strap`.
+Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, [download the latest release](https://github.com/mgcrea/angular-strap/zipball/master) or install with bower `bower install angular-strap#~2.0.0 --save`.
 
 AngularStrap is tested with `karma` against the latest stable release of AngularJS.
 

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.1 - 2014-01-07
+ * @version v2.0.0-beta.2 - 2014-01-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -9,7 +9,7 @@
 angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal']).run([
   '$templateCache',
   function ($templateCache) {
-    var template = '' + '<div class="aside" tabindex="-1" role="dialog">' + '<div class="aside-dialog">' + '<div class="aside-content">' + '<div class="aside-header" ng-show="title">' + '<button type="button" class="close" ng-click="$hide()">&times;</button>' + '<h4 class="aside-title" ng-bind-html="title"></h4>' + '</div>' + '<div class="aside-body" ng-show="content" ng-bind-html="content"></div>' + '<div class="aside-footer">' + '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' + '</div>' + '</div>' + '</div>' + '</div>';
+    var template = '' + '<div class="aside" tabindex="-1" role="dialog">' + '<div class="aside-dialog">' + '<div class="aside-content">' + '<div class="aside-header" ng-show="title">' + '<button type="button" class="close" ng-click="$hide()">&times;</button>' + '<h4 class="aside-title" ng-bind="title"></h4>' + '</div>' + '<div class="aside-body" ng-show="content" ng-bind="content"></div>' + '<div class="aside-footer">' + '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' + '</div>' + '</div>' + '</div>' + '</div>';
     $templateCache.put('$aside', template);
   }
 ]).provider('$aside', function () {
@@ -22,6 +22,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal']).run([
       element: null,
       backdrop: true,
       keyboard: true,
+      html: false,
       show: true
     };
   this.$get = [
@@ -57,7 +58,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal']).run([
           'placement',
           'backdrop',
           'keyboard',
-          'show',
+          'html',
           'container',
           'animation'
         ], function (key) {
