@@ -49,7 +49,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
         // Common vars
         var options = angular.extend({}, defaults, config);
         $tooltip.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template/*, {cache: true}*/));
-        var scope = options.scope.$new() || $rootScope.$new();
+        var scope = $tooltip.$scope = options.scope.$new() || $rootScope.$new();
         if(options.delay && angular.isString(options.delay)) {
           options.delay = parseFloat(options.delay);
         }
@@ -71,8 +71,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
           });
         };
 
-        // Initial private vars
-        var timeout, hoverState, isShown;
+        $tooltip.$isShown = false;
+
+        // Private vars
+        var timeout, hoverState;
 
         // Fetch, compile then initialize tooltip
         var tipLinker, tipElement, tipTemplate;
@@ -166,14 +168,18 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
           if(options.type) tipElement.addClass(options.prefixClass + '-' + options.type);
 
           $animate.enter(tipElement, parent, after, function() {});
-          isShown = true;
+          $tooltip.$isShown = true;
           scope.$digest();
           requestAnimationFrame($tooltip.$applyPlacement);
 
           // Bind events
           if(options.keyboard) {
-            $tooltip.focus();
-            tipElement.on('keyup', $tooltip.$onKeyUp);
+            if(options.trigger !== 'focus') {
+              $tooltip.focus();
+              tipElement.on('keyup', $tooltip.$onKeyUp);
+            } else {
+              element.on('keyup', $tooltip.$onFocusKeyUp);
+            }
           }
 
         };
@@ -197,7 +203,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
 
           $animate.leave(tipElement, function() {});
           scope.$digest();
-          isShown = false;
+          $tooltip.$isShown = false;
 
           // Unbind events
           if(options.keyboard) {
@@ -207,7 +213,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
         };
 
         $tooltip.toggle = function() {
-          isShown ? $tooltip.leave() : $tooltip.enter();
+          $tooltip.$isShown ? $tooltip.leave() : $tooltip.enter();
         };
 
         $tooltip.focus = function() {
@@ -238,6 +244,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
 
         $tooltip.$onKeyUp = function(evt) {
           evt.which === 27 && $tooltip.hide();
+        };
+
+        $tooltip.$onFocusKeyUp = function(evt) {
+          evt.which === 27 && element[0].blur();
         };
 
         // Private methods
