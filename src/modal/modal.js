@@ -109,8 +109,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions'])
         $modal.destroy = function() {
 
           // Remove element
-          modalElement.remove();
-          backdropElement.remove();
+          if(modalElement) {
+            modalElement.remove();
+            modalElement = null;
+          }
+          if(backdropElement) {
+            backdropElement.remove();
+            backdropElement = null;
+          }
 
           // Destroy scope
           scope.$destroy();
