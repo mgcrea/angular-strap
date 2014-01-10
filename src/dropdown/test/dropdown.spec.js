@@ -27,8 +27,7 @@ describe('dropdown', function () {
       element: '<a bs-dropdown="dropdown">click me</a>'
     },
     'markup-ngRepeat': {
-      scope: {items: [{name: 'foo', dropdown: [{text: 'Another action', href: '#foo'}]}]},
-      element: '<ul><li ng-repeat="item in items"><a bs-dropdown="dropdown">{{item.name}}</a></li></ul>'
+      element: '<ul><li ng-repeat="i in [1, 2, 3]"><a bs-dropdown="dropdown">{{i}}</a></li></ul>'
     },
     'options-animation': {
       element: '<a data-animation="animation-flipX" bs-dropdown="dropdown">click me</a>'
@@ -47,7 +46,6 @@ describe('dropdown', function () {
       element: '<a bs-dropdown="dropdown">click me</a>'
     },
     'options-template': {
-      scope: {dropdown: [{text: 'Another action', href: '#foo'}], items: ['foo', 'bar', 'baz']},
       element: '<a title="{{dropdown.title}}" data-template="custom" bs-dropdown>click me</a>'
     }
   };
@@ -89,9 +87,9 @@ describe('dropdown', function () {
 
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
-      angular.element(elm.find('[bs-dropdown]')).triggerHandler('click');
-      // @TODO FIX-ME!
-      // expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.items[0].dropdown.length);
+      angular.element(elm.find('[bs-dropdown]:eq(0)')).triggerHandler('click');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.dropdown.length);
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.dropdown[0].text);
     });
 
   });
@@ -171,14 +169,14 @@ describe('dropdown', function () {
       });
 
       it('should support template with ngRepeat', function() {
-        $templateCache.put('custom', '<div class="dropdown"><div class="dropdown-inner"><ul><li ng-repeat="item in items">{{item}}</li></ul></div></div>');
+        $templateCache.put('custom', '<div class="dropdown"><div class="dropdown-inner"><ul><li ng-repeat="item in dropdown">{{$index}}</li></ul></div></div>');
         var elm = compileDirective('options-template');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.find('.dropdown-inner').text()).toBe('foobarbaz');
+        expect(sandboxEl.find('.dropdown-inner').text()).toBe('0123');
         // Consecutive toggles
         angular.element(elm[0]).triggerHandler('click');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.find('.dropdown-inner').text()).toBe('foobarbaz');
+        expect(sandboxEl.find('.dropdown-inner').text()).toBe('0123');
       });
 
       it('should support template with ngClick', function() {
