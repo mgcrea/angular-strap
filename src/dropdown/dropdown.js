@@ -15,16 +15,15 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
   })
 
-
   .provider('$dropdown', function() {
 
     var defaults = this.defaults = {
       animation: 'animation-fade',
       prefixClass: 'dropdown',
-      container: false,
       placement: 'bottom-left',
       template: '$dropdown',
       trigger: 'click',
+      container: false,
       keyboard: true,
       html: false,
       delay: 0
@@ -47,7 +46,6 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         // Protected methods
 
         $dropdown.$onKeyDown = function(evt) {
-
           if (!/(38|40)/.test(evt.keyCode)) return;
           evt.preventDefault();
           evt.stopPropagation();
@@ -121,7 +119,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           scope.content = newValue;
         }, true);
 
-        // Initialize popover
+        // Initialize dropdown
         var dropdown = $dropdown(element, options);
 
         // Garbage collection
