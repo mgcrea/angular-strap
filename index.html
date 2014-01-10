@@ -124,14 +124,15 @@
     </div>
   </div>
 </div>
-  <div class="bs-old-docs">
-    <div class="container">
-      <strong>
-        <a href="http://mgcrea.github.io/angular-strap/1.0/">Looking for AngularStrap v1 docs?</a>
-      </strong>
-      We've moved it to a new home while we push forward with AngularStrap 2.
-    </div>
+  <!-- ngInclude: 'docs/views/sections/old-docs.html' -->
+<div class="bs-old-docs">
+  <div class="container">
+    <strong>
+      <a href="http://mgcrea.github.io/angular-strap/1.0/">Looking for AngularStrap v1 docs?</a>
+    </strong>
+    We've moved it to a new home while we push forward with AngularStrap 2.
   </div>
+</div>
 
   <div class="container bs-docs-container">
     <div class="row">
@@ -227,6 +228,15 @@
         <li><a href="#dropdowns-examples">Examples</a>
         </li>
         <li><a href="#dropdowns-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#typeaheads">Typeahead</a>
+      <ul class="nav">
+        <li><a href="#typeaheads-examples">Examples</a>
+        </li>
+        <li><a href="#typeaheads-usage">Usage</a>
         </li>
       </ul>
     </li>
@@ -364,7 +374,7 @@
   <h2 id="modals-examples">Examples</h2>
   <p>Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.</p>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="modal/docs/modal.demo.html" data-content-js-url="modal/docs/modal.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""><i class="fa fa-edit"></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="modal/docs/modal.demo.html" data-content-js-url="modal/docs/modal.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip="">clog.info</a></h3>
   <pre class="bs-example-scope">$scope.modal = {{modal | json}};</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
 
@@ -563,7 +573,7 @@
     <p>Asides require the <a href="#modals">modal plugin</a> to be included.</p>
   </div>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="aside/docs/aside.demo.html" data-content-js-url="aside/docs/aside.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""><i class="fa fa-edit"></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="aside/docs/aside.demo.html" data-content-js-url="aside/docs/aside.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip="">clog.info</a></h3>
   <pre class="bs-example-scope">$scope.aside = {{aside | json}};</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
 
@@ -744,7 +754,7 @@
     <p>Alerts require the <a href="#modals">modal plugin</a> to be included.</p>
   </div>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="alert/docs/alert.demo.html" data-content-js-url="alert/docs/alert.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""><i class="fa fa-edit"></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="alert/docs/alert.demo.html" data-content-js-url="alert/docs/alert.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip="">clog.info</a></h3>
   <pre class="bs-example-scope">$scope.alert = {{alert | json}};</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
 
@@ -915,7 +925,7 @@
       <p>Use <code>bs-checkbox-group</code> and <code>bs-radio-group</code> to easily setup the proper markup at compile time.</p>
     </div>
 
-    <h3 id="buttons-usage">Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="button/docs/button.demo.html" data-content-js-url="button/docs/button.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""><i class="fa fa-edit"></i></a></h3>
+    <h3 id="buttons-usage">Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="button/docs/button.demo.html" data-content-js-url="button/docs/button.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip="">clog.info</a></h3>
 
     <pre class="bs-example-scope">$scope.button = {{button | json}};</pre>
     <div class="bs-example" style="padding-bottom: 24px;" append-source="">
@@ -1041,7 +1051,7 @@
 <div class="bs-docs-section" ng-controller="TooltipDemoCtrl">
 
   <div class="page-header">
-    <h1 id="tooltips">Tooltips <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/tooltip.js" target="_blank">tooltip.js</a>
+    <h1 id="tooltips">Tooltips <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/tooltip/tooltip.js" target="_blank">tooltip.js</a>
     </h1>
     <code>mgcrea.ngStrap.tooltip</code>
   </div>
@@ -1050,7 +1060,7 @@
   <h2 id="tooltips-examples">Examples</h2>
   <p>Add small overlays of content on hover, to any element for housing secondary information.</p>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="tooltip/docs/tooltip.demo.html" data-content-js-url="tooltip/docs/tooltip.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""><i class="fa fa-edit"></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="tooltip/docs/tooltip.demo.html" data-content-js-url="tooltip/docs/tooltip.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip="">clog.info</a></h3>
   <div class="form-group hide">
     <label>Title</label>
     <input type="text" class="form-control" ng-model="tooltip.title" placeholder="Title">
@@ -1206,7 +1216,7 @@
 <div class="bs-docs-section" ng-controller="PopoverDemoCtrl">
 
   <div class="page-header">
-    <h1 id="popovers">Popovers <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/popover.js" target="_blank">popover.js</a>
+    <h1 id="popovers">Popovers <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/popover/popover.js" target="_blank">popover.js</a>
     </h1>
     <code>mgcrea.ngStrap.popover</code>
   </div>
@@ -1220,7 +1230,7 @@
     <p>Popovers require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
   </div>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="popover/docs/popover.demo.html" data-content-js-url="popover/docs/popover.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""><i class="fa fa-edit"></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="popover/docs/popover.demo.html" data-content-js-url="popover/docs/popover.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip="">clog.info</a></h3>
   <div class="form-group hide">
     <label>Title</label>
     <input type="text" class="form-control" ng-model="popover.title" placeholder="Title">
@@ -1384,7 +1394,7 @@
 <div class="bs-docs-section" ng-controller="DropdownDemoCtrl">
 
   <div class="page-header">
-    <h1 id="dropdowns">Dropdowns <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/directives/dropdown.js" target="_blank">dropdown.js</a>
+    <h1 id="dropdowns">Dropdowns <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/dropdown/dropdown.js" target="_blank">dropdown.js</a>
     </h1>
     <code>mgcrea.ngStrap.dropdown</code>
   </div>
@@ -1399,7 +1409,7 @@
     <p>Dropdowns require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
   </div>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="dropdown/docs/dropdown.demo.html" data-content-js-url="dropdown/docs/dropdown.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""><i class="fa fa-edit"></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="dropdown/docs/dropdown.demo.html" data-content-js-url="dropdown/docs/dropdown.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip="">clog.info</a></h3>
   <pre class="bs-example-scope">$scope.dropdown = {{dropdown | json}};</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
 
@@ -1411,7 +1421,7 @@
 
   </div>
 
-  <h2 id="popovers-usage">Usage</h2>
+  <h2 id="dropdowns-usage">Usage</h2>
   <p>Append a <code>bs-dropdown</code>attribute to any element to enable the directive.</p>
   <div class="callout callout-info">
     <h4>The module exposes a <code>$dropdown</code>service</h4>
@@ -1453,14 +1463,14 @@
         <tr>
           <td>placement</td>
           <td>string</td>
-          <td>'right'</td>
-          <td>how to position the popover - top | bottom | left | right, or any combination like bottom-left.</td>
+          <td>'bottom-left'</td>
+          <td>how to position the dropdown - top | bottom | left | right, or any combination like bottom-left.</td>
         </tr>
         <tr>
           <td>trigger</td>
           <td>string</td>
           <td>'click'</td>
-          <td>how popover is triggered - click | hover | focus | manual</td>
+          <td>how dropdown is triggered - click | hover | focus | manual</td>
         </tr>
         <tr>
           <td>html</td>
@@ -1473,7 +1483,7 @@
           <td>number | object</td>
           <td>0</td>
           <td>
-            <p>delay showing and hiding the popover (ms) - does not apply to manual trigger type</p>
+            <p>delay showing and hiding the dropdown (ms) - does not apply to manual trigger type</p>
             <p>If a number is supplied, delay is applied to both hide/show</p>
             <p>Object structure is:
               <code>delay: { show: 500, hide: 100 }</code>
@@ -1485,8 +1495,8 @@
           <td>string | false</td>
           <td>false</td>
           <td>
-            <p>Appends the popover to a specific element. Example:
-              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+            <p>Appends the dropdown to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the dropdown in the flow of the document near the triggering element -&nbsp;which will prevent the dropdown from floating away from the triggering element during a window resize.</p>
           </td>
         </tr>
         <tr>
@@ -1511,6 +1521,177 @@
             angular.extend($dropdownProvider.defaults, {
               animation: 'animation-flipX',
               trigger: 'hover'
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+</div>
+        <!-- ngInclude: 'src/typeahead/docs/typeahead.demo.html' -->
+<div class="bs-docs-section" ng-controller="TypeaheadDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="typeaheads">Typeaheads <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/typeahead/typeahead.js" target="_blank">typeahead.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.typeahead</code>
+  </div>
+
+
+  <h2 id="typeaheads-examples">Examples</h2>
+  <p>Add quick, dynamic typeahead functionality with any form text input.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Dropdowns require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
+  </div>
+
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="typeahead/docs/typeahead.demo.html" data-content-js-url="typeahead/docs/typeahead.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""></a></h3>
+  <pre class="bs-example-scope">$scope.selectedState = "{{selectedState}}";
+$scope.states = {{states}};
+
+$scope.selectedIcon = "{{selectedIcon}}";
+$scope.icons = "{{icons}}";
+
+$scope.selectedAddress = "{{selectedAddress}}";
+</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+    <form class="form-inline" role="form">
+      <div class="form-group">
+        <label><i class="fa fa-globe"></i> State</label>
+        <input type="text" class="form-control" ng-model="selectedState" ng-options="state for state in states" placeholder="Enter state" bs-typeahead="">
+      </div>
+      <div class="form-group">
+        <label>Icon</label>
+        <input type="text" class="form-control" ng-model="selectedIcon" data-html="1" data-animation="animation-flipX" ng-options="icon.value as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead="">
+      </div>
+      <hr>
+      <!-- Using an async data provider -->
+      <div class="form-group">
+        <label><i class="fa fa-home"></i> Address <small>(async via maps.googleapis.com)</small></label>
+        <input type="text" class="form-control" ng-model="selectedAddress" data-html="1" data-animation="animation-flipX" ng-options="address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead="">
+      </div>
+    </form>
+  </div>
+
+
+  <h2 id="typeaheads-usage">Usage</h2>
+  <p>Append a <code>bs-typeahead</code>attribute to any element to enable the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module exposes a <code>$typeahead</code>service</h4>
+    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block="">
+          var myTypeahead = $typeahead(element, {controller: someModelController});
+        </code>
+      </pre>
+    </div>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <div class="callout callout-info">
+    <h4>This module supports exotic placement options!</h4>
+    <p>You can position your typeahead in corners (such as <code>bottom-left</code>) or any other combination two.</p>
+    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by <code>ngAnimate</code></td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'bottom-left'</td>
+          <td>how to position the typeahead - top | bottom | left | right, or any combination like bottom-left.</td>
+        </tr>
+        <tr>
+          <td>trigger</td>
+          <td>string</td>
+          <td>'focus'</td>
+          <td>how typeahead is triggered - click | hover | focus | manual</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
+        </tr>
+        <tr>
+          <td>delay</td>
+          <td>number | object</td>
+          <td>0</td>
+          <td>
+            <p>delay showing and hiding the typeahead (ms) - does not apply to manual trigger type</p>
+            <p>If a number is supplied, delay is applied to both hide/show</p>
+            <p>Object structure is:
+              <code>delay: { show: 500, hide: 100 }</code>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the typeahead to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the typeahead in the flow of the document near the triggering element -&nbsp;which will prevent the typeahead from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path | id</td>
+          <td>'$typeahead'</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>limit</td>
+          <td>number</td>
+          <td>6</td>
+          <td>
+            <p>The max number of items to display in the dropdown.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>minLength</td>
+          <td>number</td>
+          <td>0</td>
+          <td>
+            <p>The minimum character length needed before triggering autocomplete suggestions.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$typeaheadProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block="">
+          angular.module('myApp')
+          .config(function($typeaheadProvider) {
+            angular.extend($typeaheadProvider.defaults, {
+              animation: 'animation-flipX',
+              minLength: 2,
+              limit: 8
             });
           })
         </code>
@@ -1737,7 +1918,7 @@
   <h2 id="tabs-examples">Examples</h2>
   <p>Add quick, dynamic tab functionality to transition through panes of local content.</p>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="tab/docs/tab.demo.html" data-content-js-url="tab/docs/tab.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""><i class="fa fa-edit"></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="tab/docs/tab.demo.html" data-content-js-url="tab/docs/tab.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip="">clog.info</a></h3>
   <pre class="bs-example-scope">$scope.tabs = {{tabs | json}};</pre>
   <div class="bs-example" append-source="">
     <!-- ngModel is optional -->
@@ -1870,13 +2051,13 @@
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/fefd8626.libraries.min.js"></script>
 
-  <script src="scripts/d619be19.angular-strap.min.js"></script>
+  <script src="scripts/34ca26ff.angular-strap.min.js"></script>
 
-  <script src="scripts/7b754c28.docs.min.js"></script>
+  <script src="scripts/52559e65.docs.min.js"></script>
 
-  <script src="scripts/84d26b4a.docs.tpl.min.js"></script>
+  <script src="scripts/81f79397.docs.tpl.min.js"></script>
 
-  <script src="scripts/a8de4d5c.demo.min.js"></script>
+  <script src="scripts/8d9dbb95.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
