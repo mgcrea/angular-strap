@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip'])
+angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
 
   .run(function($templateCache) {
 
@@ -27,7 +27,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip'])
       keyboard: true,
       html: false,
       delay: 0,
-      minLength: 0,
+      minLength: 1,
       limit: 6
     };
 
@@ -86,17 +86,18 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip'])
             controller.$render();
             if(parentScope) parentScope.$digest();
           }
-          element[0].blur();
-          scope.$emit('$typeahead.select', value, index);
-          // scope.$matches = [scope.$matches[index]];
+          if(options.trigger === 'focus') element[0].blur();
+          else if($typeahead.$isShown) $typeahead.hide();
           scope.$activeIndex = 0;
+          // Emit event
+          scope.$emit('$typeahead.select', value, index);
         };
 
         // Protected methods
 
         $typeahead.$isVisible = function() {
           if(!options.minLength || !controller) {
-            return scope.$matches.length;
+            return !!scope.$matches.length;
           }
           // minLength support
           return scope.$matches.length && controller.$viewValue.length >= options.minLength;
@@ -158,10 +159,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip'])
 
   })
 
-  .directive('bsTypeahead', function($window, $parse, $q, $typeahead) {
+  .directive('bsTypeahead', function($window, $parse, $q, $typeahead, $parseOptions) {
 
     var defaults = $typeahead.defaults;
-    var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/;
 
     return {
       restrict: 'EAC',
@@ -176,42 +176,21 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip'])
 
         // Build proper ngOptions
         var limit = options.limit || defaults.limit;
-        var ngOptions = attr.ngOptions + ' | filter:$viewValue | limitTo:' + limit;
-
-        // Parse options
-        var match = ngOptions.match(NG_OPTIONS_REGEXP);
-        var displayFn = $parse(match[2] || match[1]),
-            valueName = match[4] || match[6],
-            keyName = match[5],
-            groupByFn = $parse(match[3] || ''),
-            valueFn = $parse(match[2] ? match[1] : valueName),
-            valuesFn = $parse(match[7]);
+        var parsedOptions = $parseOptions(attr.ngOptions + ' | filter:$viewValue | limitTo:' + limit);
+        console.warn(attr.ngOptions + ' | filter:$viewValue | limitTo:' + limit);
 
         // Initialize typeahead
         var typeahead = $typeahead(element, options);
 
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
-          $q.when(valuesFn(scope, controller))
+          parsedOptions.valuesFn(scope, controller)
           .then(function(values) {
             if(values.length > limit) values = values.slice(0, limit);
-            var matches = parseValues(values);
             // if(matches.length === 1 && matches[0].value === newValue) return;
-            typeahead.update(matches);
+            typeahead.update(values);
           });
         });
-
-        // Helper for parsing values
-        function parseValues(values) {
-          return values.map(function(match) {
-            var locals = {}, label, value;
-            locals[valueName] = match;
-            label = displayFn(locals);
-            value = valueFn(locals);
-            if(angular.isObject(value)) value = label;
-            return {label: label, value: value};
-          });
-        }
 
         // Garbage collection
         scope.$on('$destroy', function() {

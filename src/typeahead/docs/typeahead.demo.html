@@ -12,7 +12,7 @@
 
   <div class="callout callout-danger">
     <h4>Plugin dependency</h4>
-    <p>Dropdowns require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
+    <p>Selects require the <a href="#tooltips">tooltip module</a> and <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/parse-options.js" target="_blank">parseOptions helper</a> module to be loaded.</p>
   </div>
 
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="typeahead/docs/typeahead.demo.html" data-content-js-url="typeahead/docs/typeahead.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip></a></h3>
@@ -32,13 +32,13 @@ $scope.selectedAddress = "{{selectedAddress}}";
       </div>
       <div class="form-group">
         <label>Icon</label>
-        <input type="text" class="form-control" ng-model="selectedIcon" data-html="1" data-animation="animation-flipX" ng-options="icon.value as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-animation="animation-flipX" ng-options="icon.value as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
       </div>
       <hr>
       <!-- Using an async data provider -->
       <div class="form-group">
         <label><i class="fa fa-home"></i> Address <small>(async via maps.googleapis.com)</small></label>
-        <input type="text" class="form-control" ng-model="selectedAddress" data-html="1" data-animation="animation-flipX" ng-options="address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="animation-flipX" ng-options="address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead>
       </div>
     </form>
   </div>
@@ -140,7 +140,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
         <tr>
           <td>minLength</td>
           <td>number</td>
-          <td>0</td>
+          <td>1</td>
           <td>
             <p>The minimum character length needed before triggering autocomplete suggestions.</p>
           </td>
