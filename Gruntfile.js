@@ -229,28 +229,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // The following *-min tasks produce minified files in the dist folder
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yo.src %>/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yo.dist %>/images'
-        }]
-      }
-    },
-    svgmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yo.src %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= yo.dist %>/images'
-        }]
-      }
-    },
-
     // Minify html files
     htmlmin: {
       options: {
@@ -264,13 +242,6 @@ module.exports = function (grunt) {
           src: ['*.html'],//, 'views/{,*/}*.html'],
           dest: '<%= yo.pages %>'
         }]
-      }
-    },
-
-    // Replace Google CDN references
-    cdnify: {
-      dist: {
-        html: ['<%= yo.pages %>/*.html']
       }
     },
 
