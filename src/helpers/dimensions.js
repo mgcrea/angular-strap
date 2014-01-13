@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.jqlite.dimensions', [])
+angular.module('mgcrea.ngStrap.helpers.dimensions', [])
 
   .factory('dimensions', function($document, $window) {
 

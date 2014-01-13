@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.jqlite.debounce', [])
+angular.module('mgcrea.ngStrap.helpers.debounce', [])
 
 .constant('debounce', function(func, wait, immediate) {
   var timeout, args, context, timestamp, result;

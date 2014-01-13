@@ -6,7 +6,7 @@ describe('dimensions', function () {
 
   var lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non velit nulla. Suspendisse sit amet tempus diam. Sed at ultricies neque. Suspendisse id felis a sem placerat ornare. Donec auctor, purus at molestie tempor, arcu enim molestie lacus, ac imperdiet massa urna eu massa. Praesent velit tellus, scelerisque a fermentum ut, ornare in diam. Phasellus egestas molestie feugiat. Vivamus sit amet viverra metus.';
 
-  beforeEach(module('mgcrea.ngStrap.jqlite.dimensions'));
+  beforeEach(module('mgcrea.ngStrap.helpers.dimensions'));
 
   beforeEach(inject(function (_$rootScope_, _$compile_, _dimensions_) {
     scope = _$rootScope_;
