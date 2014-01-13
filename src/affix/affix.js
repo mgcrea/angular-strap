@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.jqlite.dimensions'])
+angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
 
   .provider('$affix', function() {
 
