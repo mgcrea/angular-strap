@@ -12,7 +12,7 @@
 
   <div class="callout callout-danger">
     <h4>Plugin dependency</h4>
-    <p>Popovers require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
+    <p>Popovers require the <a href="#tooltips">tooltip module</a> to be loaded.</p>
   </div>
 
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="popover/docs/popover.demo.html" data-content-js-url="popover/docs/popover.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
@@ -139,6 +139,7 @@
           <td>false</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+            <p>It should be a <code>div.popover</code> element following Twitter Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/popover/popover.js#L7" target="_blank">like this</a>).</p>
           </td>
         </tr>
       </tbody>
