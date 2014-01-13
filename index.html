@@ -198,6 +198,15 @@
       </ul>
     </li>
     <li>
+      <a href="#selects">Select</a>
+      <ul class="nav">
+        <li><a href="#selects-examples">Examples</a>
+        </li>
+        <li><a href="#selects-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+    <li>
       <a href="#navbars">Navbar</a>
       <ul class="nav">
         <li><a href="#navbars-examples">Examples</a>
@@ -237,15 +246,6 @@
         <li><a href="#typeaheads-examples">Examples</a>
         </li>
         <li><a href="#typeaheads-usage">Usage</a>
-        </li>
-      </ul>
-    </li>
-    <li>
-      <a href="#selects">Select</a>
-      <ul class="nav">
-        <li><a href="#selects-examples">Examples</a>
-        </li>
-        <li><a href="#selects-usage">Usage</a>
         </li>
       </ul>
     </li>
@@ -971,6 +971,174 @@
       <h4>Type support</h4>
       <p>Theses directives can handle both <code>strings</code>, <code>numbers</code> and <code>booleans</code> values.</p>
     </div>
+
+</div>
+        <!-- ngInclude: 'src/select/docs/select.demo.html' -->
+<div class="bs-docs-section" ng-controller="SelectDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="selects">Selects <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/select/select.js" target="_blank">select.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.select</code>
+  </div>
+
+
+  <h2 id="selects-examples">Examples</h2>
+  <p>Add quick, dynamic select functionality with any form text input.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Selects require the <a href="#tooltips">tooltip module</a> and <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/parse-options.js" target="_blank">parseOptions helper</a> module to be loaded.</p>
+  </div>
+
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="select/docs/select.demo.html" data-content-js-url="select/docs/select.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""></a></h3>
+  <pre class="bs-example-scope">$scope.selectedIcon = "{{selectedIcon}}";
+$scope.selectedIcons = "{{selectedIcons}}";
+$scope.icons = "{{icons}}";
+</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+
+    <label>Single select:&nbsp;</label>
+    <button type="button" class="btn btn-default" ng-model="selectedIcon" data-html="1" ng-options="icon.value as icon.label for icon in icons" bs-select="">
+      Action <span class="caret"></span>
+    </button>
+    <hr>
+    <label>Multiple select:&nbsp;</label>
+    <button type="button" class="btn btn-default" ng-model="selectedIcons" data-html="1" data-multiple="1" data-animation="animation-flipX" ng-options="icon.value as icon.label for icon in icons" bs-select="">
+      Action <span class="caret"></span>
+    </button>
+  </div>
+
+
+  <h2 id="selects-usage">Usage</h2>
+  <p>Append a <code>bs-select</code>attribute to any element to enable the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module exposes a <code>$select</code>service</h4>
+    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block="">
+          var mySelect = $select(element, {controller: someModelController});
+        </code>
+      </pre>
+    </div>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <div class="callout callout-info">
+    <h4>This module supports exotic placement options!</h4>
+    <p>You can position your select in corners (such as <code>bottom-left</code>) or any other combination two.</p>
+    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by <code>ngAnimate</code></td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'bottom-left'</td>
+          <td>how to position the typeahead - top | bottom | left | right, or any combination like bottom-left.</td>
+        </tr>
+        <tr>
+          <td>trigger</td>
+          <td>string</td>
+          <td>'focus'</td>
+          <td>how typeahead is triggered - click | hover | focus | manual</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
+        </tr>
+        <tr>
+          <td>delay</td>
+          <td>number | object</td>
+          <td>0</td>
+          <td>
+            <p>delay showing and hiding the typeahead (ms) - does not apply to manual trigger type</p>
+            <p>If a number is supplied, delay is applied to both hide/show</p>
+            <p>Object structure is:
+              <code>delay: { show: 500, hide: 100 }</code>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the typeahead to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the typeahead in the flow of the document near the triggering element -&nbsp;which will prevent the typeahead from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path | id</td>
+          <td>'$typeahead'</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>multiple</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether multiple selections should be allowed.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>sort</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>
+            <p>Sort the order of the displayed labels.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>placeholder</td>
+          <td>string</td>
+          <td>'Choose among the following...'</td>
+          <td>
+            <p>Placeholder text when no value is selected.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$selectProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block="">
+          angular.module('myApp')
+          .config(function($selectProvider) {
+            angular.extend($selectProvider.defaults, {
+              animation: 'animation-flipX',
+              sort: false
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
 
 </div>
         <!-- ngInclude: 'src/navbar/docs/navbar.demo.html' -->
@@ -1716,174 +1884,6 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
 </div>
-        <!-- ngInclude: 'src/select/docs/select.demo.html' -->
-<div class="bs-docs-section" ng-controller="SelectDemoCtrl">
-
-  <div class="page-header">
-    <h1 id="selects">Selects <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/select/select.js" target="_blank">select.js</a>
-    </h1>
-    <code>mgcrea.ngStrap.select</code>
-  </div>
-
-
-  <h2 id="selects-examples">Examples</h2>
-  <p>Add quick, dynamic select functionality with any form text input.</p>
-
-  <div class="callout callout-danger">
-    <h4>Plugin dependency</h4>
-    <p>Selects require the <a href="#tooltips">tooltip module</a> and <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/parse-options.js" target="_blank">parseOptions helper</a> module to be loaded.</p>
-  </div>
-
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="select/docs/select.demo.html" data-content-js-url="select/docs/select.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""></a></h3>
-  <pre class="bs-example-scope">$scope.selectedIcon = "{{selectedIcon}}";
-$scope.selectedIcons = "{{selectedIcons}}";
-$scope.icons = "{{icons}}";
-</pre>
-  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
-
-    <label>Single select:&nbsp;</label>
-    <button type="button" class="btn btn-default" ng-model="selectedIcon" data-html="1" ng-options="icon.value as icon.label for icon in icons" bs-select="">
-      Action <span class="caret"></span>
-    </button>
-    <hr>
-    <label>Multiple select:&nbsp;</label>
-    <button type="button" class="btn btn-default" ng-model="selectedIcons" data-html="1" data-multiple="1" data-animation="animation-flipX" ng-options="icon.value as icon.label for icon in icons" bs-select="">
-      Action <span class="caret"></span>
-    </button>
-  </div>
-
-
-  <h2 id="selects-usage">Usage</h2>
-  <p>Append a <code>bs-select</code>attribute to any element to enable the directive.</p>
-  <div class="callout callout-info">
-    <h4>The module exposes a <code>$select</code>service</h4>
-    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
-    <div class="highlight">
-      <pre>
-        <code class="javascript" highlight-block="">
-          var mySelect = $select(element, {controller: someModelController});
-        </code>
-      </pre>
-    </div>
-  </div>
-
-  <h3>Options</h3>
-  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
-  <div class="callout callout-info">
-    <h4>This module supports exotic placement options!</h4>
-    <p>You can position your select in corners (such as <code>bottom-left</code>) or any other combination two.</p>
-    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
-  </div>
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th style="width: 100px;">Name</th>
-          <th style="width: 100px;">type</th>
-          <th style="width: 50px;">default</th>
-          <th>description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>animation</td>
-          <td>string</td>
-          <td>animation-fade</td>
-          <td>apply a CSS animation powered by <code>ngAnimate</code></td>
-        </tr>
-        <tr>
-          <td>placement</td>
-          <td>string</td>
-          <td>'bottom-left'</td>
-          <td>how to position the typeahead - top | bottom | left | right, or any combination like bottom-left.</td>
-        </tr>
-        <tr>
-          <td>trigger</td>
-          <td>string</td>
-          <td>'focus'</td>
-          <td>how typeahead is triggered - click | hover | focus | manual</td>
-        </tr>
-        <tr>
-          <td>html</td>
-          <td>boolean</td>
-          <td>false</td>
-          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
-        </tr>
-        <tr>
-          <td>delay</td>
-          <td>number | object</td>
-          <td>0</td>
-          <td>
-            <p>delay showing and hiding the typeahead (ms) - does not apply to manual trigger type</p>
-            <p>If a number is supplied, delay is applied to both hide/show</p>
-            <p>Object structure is:
-              <code>delay: { show: 500, hide: 100 }</code>
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>container</td>
-          <td>string | false</td>
-          <td>false</td>
-          <td>
-            <p>Appends the typeahead to a specific element. Example:
-              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the typeahead in the flow of the document near the triggering element -&nbsp;which will prevent the typeahead from floating away from the triggering element during a window resize.</p>
-          </td>
-        </tr>
-        <tr>
-          <td>template</td>
-          <td>path | id</td>
-          <td>'$typeahead'</td>
-          <td>
-            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
-          </td>
-        </tr>
-        <tr>
-          <td>multiple</td>
-          <td>boolean</td>
-          <td>false</td>
-          <td>
-            <p>Whether multiple selections should be allowed.</p>
-          </td>
-        </tr>
-        <tr>
-          <td>sort</td>
-          <td>boolean</td>
-          <td>true</td>
-          <td>
-            <p>Sort the order of the displayed labels.</p>
-          </td>
-        </tr>
-        <tr>
-          <td>placeholder</td>
-          <td>string</td>
-          <td>'Choose among the following...'</td>
-          <td>
-            <p>Placeholder text when no value is selected.</p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="callout callout-info">
-    <h4>Default options</h4>
-    <p>You can override global defaults for the plugin with <code>$selectProvider.defaults</code></p>
-    <div class="highlight">
-      <pre class="bs-exemple-code">
-        <code class="javascript" highlight-block="">
-          angular.module('myApp')
-          .config(function($selectProvider) {
-            angular.extend($selectProvider.defaults, {
-              animation: 'animation-flipX',
-              sort: false
-            });
-          })
-        </code>
-      </pre>
-    </div>
-  </div>
-
-</div>
         <!-- ngInclude: 'src/scrollspy/docs/scrollspy.demo.html' -->
 <div class="bs-docs-section">
 
@@ -2235,13 +2235,13 @@ $scope.icons = "{{icons}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/fefd8626.libraries.min.js"></script>
 
-  <script src="scripts/82fce873.angular-strap.min.js"></script>
+  <script src="scripts/8f954053.angular-strap.min.js"></script>
 
   <script src="scripts/82ab5294.docs.min.js"></script>
 
   <script src="scripts/d0f80a3f.docs.tpl.min.js"></script>
 
-  <script src="scripts/be0641ad.demo.min.js"></script>
+  <script src="scripts/bc215de5.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
