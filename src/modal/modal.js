@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions'])
+angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
   .run(function($templateCache, $modal) {
 
@@ -148,7 +148,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions'])
           scope.$isShown = true;
           scope.$digest();
           $modal.focus();
+
           bodyElement.addClass(options.prefixClass + '-open');
+          // if(options.animation) {
+          //   bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
+          // }
 
           // Bind events
           if(options.backdrop) {
@@ -163,7 +167,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions'])
         $modal.hide = function() {
 
           $animate.leave(modalElement, function() {
-            bodyElement.removeClass('modal-open');
+            bodyElement.removeClass(options.prefixClass + '-open');
+            // if(options.animation) {
+            //   bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
+            // }
           });
           if(options.backdrop) {
             $animate.leave(backdropElement, function() {});
