@@ -103,10 +103,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           for (var i = triggers.length; i--;) {
             var trigger = triggers[i];
             if(trigger === 'click') {
-              element.on('click', this.toggle);
+              element.on('click', $tooltip.toggle);
             } else if(trigger !== 'manual') {
-              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', this.enter);
-              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', this.leave);
+              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
             }
           }
 
@@ -119,10 +119,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           for (var i = triggers.length; i--;) {
             var trigger = triggers[i];
             if(trigger === 'click') {
-              element.off('click', this.toggle);
+              element.off('click', $tooltip.toggle);
             } else if(trigger !== 'manual') {
-              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', this.enter);
-              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', this.leave);
+              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
             }
           }
 
