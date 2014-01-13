@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.jqlite.debounce', 'mgcrea.ngStrap.jqlite.dimensions'])
+angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', 'mgcrea.ngStrap.helpers.dimensions'])
 
   .provider('$scrollspy', function() {
 
