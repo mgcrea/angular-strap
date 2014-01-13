@@ -10,6 +10,11 @@
   <h2 id="tooltips-examples">Examples</h2>
   <p>Add small overlays of content on hover, to any element for housing secondary information.</p>
 
+  <div class="callout callout-warning">
+    <h4>Plugin dependency</h4>
+    <p>Tooltip require the <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/dimensions.js" target="_blank">helpers.dimensions</a> module to be loaded.</p>
+  </div>
+
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="tooltip/docs/tooltip.demo.html" data-content-js-url="tooltip/docs/tooltip.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
   <div class="form-group hide">
     <label>Title</label>
@@ -126,6 +131,7 @@
           <td>false</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+            <p>It should be a <code>div.tooltip</code> element following Twitter Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/tooltip/tooltip.js#L7" target="_blank">like this</a>).</p>
           </td>
         </tr>
       </tbody>

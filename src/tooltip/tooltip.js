@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
+angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
   .run(function($templateCache) {
 
@@ -255,7 +255,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions'])
         function getPosition() {
           if(options.container === 'body') {
             return dimensions.offset(element[0]);
-          }  else {
+          } else {
             return dimensions.position(element[0]);
           }
         }
