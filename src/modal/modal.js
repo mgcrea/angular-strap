@@ -94,16 +94,18 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
           template = trim.apply(template);
           modalLinker = $compile(template);
-          // modalElement = modalLinker(scope);
           $modal.init();
         });
 
         $modal.init = function() {
+
+          // Options: show
           if(options.show) {
             scope.$$postDigest(function() {
               $modal.show();
             });
           }
+
         };
 
         $modal.destroy = function() {
@@ -120,6 +122,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
           // Destroy scope
           scope.$destroy();
+
         };
 
         $modal.show = function() {
@@ -146,7 +149,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           }
           $animate.enter(modalElement, parent, after, function() {});
           scope.$isShown = true;
-          scope.$digest();
+          scope.$$phase || scope.$digest();
           $modal.focus();
 
           bodyElement.addClass(options.prefixClass + '-open');
@@ -175,7 +178,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.backdrop) {
             $animate.leave(backdropElement, function() {});
           }
-          scope.$digest();
+          scope.$$phase || scope.$digest();
           scope.$isShown = false;
 
           // Unbind events
