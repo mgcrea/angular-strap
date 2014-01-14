@@ -1,17 +1,20 @@
 'use strict';
 
-describe('tooltip', function () {
+describe('tooltip', function() {
 
-  var $compile, $templateCache, scope, sandboxEl;
+  var bodyEl = $('body'), sandboxEl;
+  var $compile, $templateCache, $tooltip, scope;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.tooltip'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$tooltip_) {
     scope = _$rootScope_.$new();
-    sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
+    bodyEl.html('');
+    sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
     $compile = _$compile_;
     $templateCache = _$templateCache_;
+    $tooltip = _$tooltip_;
   }));
 
   afterEach(function() {
@@ -32,6 +35,9 @@ describe('tooltip', function () {
     'markup-ngRepeat': {
       scope: {items: [{name: 'foo', tooltip: 'Hello Tooltip!'}]},
       element: '<ul><li ng-repeat="item in items"><a title="{{item.tooltip}}" bs-tooltip>{{item.name}}</a></li></ul>'
+    },
+    'markup-ngClick-service': {
+      element: '<a ng-click="showTooltip()">click me</a>'
     },
     'options-animation': {
       element: '<a data-animation="animation-flipX" bs-tooltip="tooltip">hover me</a>'
@@ -66,7 +72,7 @@ describe('tooltip', function () {
 
   // Tests
 
-  describe('with default template', function () {
+  describe('with default template', function() {
 
     it('should open on mouseenter', function() {
       var elm = compileDirective('default');
@@ -103,10 +109,45 @@ describe('tooltip', function () {
 
   });
 
+  describe('using service', function() {
 
-  describe('options', function () {
+    it('should correctly open on next digest', function() {
+      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      scope.$digest();
+      expect(bodyEl.children('.tooltip').length).toBe(0);
+      myTooltip.show();
+      expect(bodyEl.children('.tooltip').length).toBe(1);
+      myTooltip.hide();
+      expect(bodyEl.children('.tooltip').length).toBe(0);
+    });
 
-    describe('animation', function () {
+    it('should correctly be destroyed', function() {
+      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      scope.$digest();
+      expect(bodyEl.children('.tooltip').length).toBe(0);
+      myTooltip.show();
+      expect(bodyEl.children('.tooltip').length).toBe(1);
+      myTooltip.destroy();
+      expect(bodyEl.children('.tooltip').length).toBe(0);
+      expect(bodyEl.children().length).toBe(1);
+    });
+
+    it('should correctly work with ngClick', function() {
+      var elm = compileDirective('markup-ngClick-service');
+      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      scope.showTooltip = function() {
+        myTooltip.$promise.then(myTooltip.show);
+      };
+      expect(bodyEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      expect(bodyEl.children('.tooltip').length).toBe(1);
+    });
+
+  });
+
+  describe('options', function() {
+
+    describe('animation', function() {
 
       it('should default to `animation-fade` animation', function() {
         var elm = compileDirective('default');
@@ -122,7 +163,7 @@ describe('tooltip', function () {
 
     });
 
-    describe('placement', function () {
+    describe('placement', function() {
 
       it('should default to `top` placement', function() {
         var elm = compileDirective('default');
@@ -144,7 +185,7 @@ describe('tooltip', function () {
 
     });
 
-    describe('trigger', function () {
+    describe('trigger', function() {
 
       it('should support an alternative trigger', function() {
         var elm = compileDirective('options-trigger');
@@ -157,7 +198,7 @@ describe('tooltip', function () {
 
     });
 
-    describe('html', function () {
+    describe('html', function() {
 
       it('should correctly compile inner content', function() {
         var elm = compileDirective('options-html');
@@ -167,7 +208,7 @@ describe('tooltip', function () {
 
     });
 
-    describe('template', function () {
+    describe('template', function() {
 
       it('should support custom template', function() {
         $templateCache.put('custom', '<div class="tooltip"><div class="tooltip-inner">foo: {{title}}</div></div>');

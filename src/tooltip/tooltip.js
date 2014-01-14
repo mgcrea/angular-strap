@@ -25,6 +25,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       trigger: 'hover focus',
       keyboard: false,
       html: false,
+      show: false,
       title: '',
       type: '',
       delay: 0
@@ -49,7 +50,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         // Common vars
         var options = angular.extend({}, defaults, config);
         $tooltip.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template/*, {cache: true}*/));
-        var scope = $tooltip.$scope = options.scope.$new() || $rootScope.$new();
+        var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(options.delay && angular.isString(options.delay)) {
           options.delay = parseFloat(options.delay);
         }
@@ -84,7 +85,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           template = trim.apply(template);
           tipTemplate = template;
           tipLinker = $compile(template);
-          // tipElement = tipLinker(scope);
           $tooltip.init();
         });
 
@@ -108,6 +108,13 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
             }
+          }
+
+          // Options: show
+          if(options.show) {
+            scope.$$postDigest(function() {
+              $tooltip.show();
+            });
           }
 
         };
@@ -169,7 +176,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           $animate.enter(tipElement, parent, after, function() {});
           $tooltip.$isShown = true;
-          scope.$digest();
+          scope.$$phase || scope.$digest();
           requestAnimationFrame($tooltip.$applyPlacement);
 
           // Bind events
@@ -202,7 +209,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         $tooltip.hide = function() {
 
           $animate.leave(tipElement, function() {});
-          scope.$digest();
+          scope.$$phase || scope.$digest();
           $tooltip.$isShown = false;
 
           // Unbind events

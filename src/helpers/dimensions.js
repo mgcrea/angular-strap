@@ -104,6 +104,7 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
     var offsetParent = function offsetParentElement(element) {
       var docElement = element.ownerDocument;
       var offsetParent = element.offsetParent || docElement;
+      if(nodeName(offsetParent, '#document')) return docElement.documentElement;
       while(offsetParent && !nodeName(offsetParent, 'html') && fn.css(offsetParent, 'position') === 'static') {
         offsetParent = offsetParent.offsetParent;
       }
