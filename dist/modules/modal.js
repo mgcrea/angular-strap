@@ -1,12 +1,12 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.2 - 2014-01-10
+ * @version v2.0.0-beta.3 - 2014-01-15
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
-angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions']).run([
+angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).run([
   '$templateCache',
   '$modal',
   function ($templateCache, $modal) {
@@ -125,7 +125,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions']).run
           $animate.enter(modalElement, parent, after, function () {
           });
           scope.$isShown = true;
-          scope.$digest();
+          scope.$$phase || scope.$digest();
           $modal.focus();
           bodyElement.addClass(options.prefixClass + '-open');
           if (options.backdrop) {
@@ -137,13 +137,13 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.jqlite.dimensions']).run
         };
         $modal.hide = function () {
           $animate.leave(modalElement, function () {
-            bodyElement.removeClass('modal-open');
+            bodyElement.removeClass(options.prefixClass + '-open');
           });
           if (options.backdrop) {
             $animate.leave(backdropElement, function () {
             });
           }
-          scope.$digest();
+          scope.$$phase || scope.$digest();
           scope.$isShown = false;
           if (options.backdrop) {
             modalElement.off('click', hideOnBackdropClick);

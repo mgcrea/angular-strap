@@ -1,12 +1,12 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.2 - 2014-01-10
+ * @version v2.0.0-beta.3 - 2014-01-15
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
-angular.module('mgcrea.ngStrap.jqlite.debounce', []).constant('debounce', function (func, wait, immediate) {
+angular.module('mgcrea.ngStrap.helpers.debounce', []).constant('debounce', function (func, wait, immediate) {
   var timeout, args, context, timestamp, result;
   return function () {
     context = this;

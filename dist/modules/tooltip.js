@@ -1,12 +1,12 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.2 - 2014-01-10
+ * @version v2.0.0-beta.3 - 2014-01-15
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
-angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions']).run([
+angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).run([
   '$templateCache',
   function ($templateCache) {
     var template = '' + '<div class="tooltip" ng-show="title">' + '<div class="tooltip-arrow"></div>' + '<div class="tooltip-inner" ng-bind="title"></div>' + '</div>';
@@ -22,6 +22,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions']).r
       trigger: 'hover focus',
       keyboard: false,
       html: false,
+      show: false,
       title: '',
       type: '',
       delay: 0
@@ -47,7 +48,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions']).r
         var $tooltip = {};
         var options = angular.extend({}, defaults, config);
         $tooltip.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template));
-        var scope = $tooltip.$scope = options.scope.$new() || $rootScope.$new();
+        var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if (options.delay && angular.isString(options.delay)) {
           options.delay = parseFloat(options.delay);
         }
@@ -90,11 +91,16 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions']).r
           for (var i = triggers.length; i--;) {
             var trigger = triggers[i];
             if (trigger === 'click') {
-              element.on('click', this.toggle);
+              element.on('click', $tooltip.toggle);
             } else if (trigger !== 'manual') {
-              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', this.enter);
-              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', this.leave);
+              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
             }
+          }
+          if (options.show) {
+            scope.$$postDigest(function () {
+              $tooltip.show();
+            });
           }
         };
         $tooltip.destroy = function () {
@@ -102,10 +108,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions']).r
           for (var i = triggers.length; i--;) {
             var trigger = triggers[i];
             if (trigger === 'click') {
-              element.off('click', this.toggle);
+              element.off('click', $tooltip.toggle);
             } else if (trigger !== 'manual') {
-              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', this.enter);
-              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', this.leave);
+              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
             }
           }
           if (tipElement) {
@@ -142,7 +148,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions']).r
           $animate.enter(tipElement, parent, after, function () {
           });
           $tooltip.$isShown = true;
-          scope.$digest();
+          scope.$$phase || scope.$digest();
           requestAnimationFrame($tooltip.$applyPlacement);
           if (options.keyboard) {
             if (options.trigger !== 'focus') {
@@ -168,7 +174,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.jqlite.dimensions']).r
         $tooltip.hide = function () {
           $animate.leave(tipElement, function () {
           });
-          scope.$digest();
+          scope.$$phase || scope.$digest();
           $tooltip.$isShown = false;
           if (options.keyboard) {
             tipElement.off('keyup', $tooltip.$onKeyUp);

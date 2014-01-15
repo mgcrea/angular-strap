@@ -1,12 +1,12 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.2 - 2014-01-10
+ * @version v2.0.0-beta.3 - 2014-01-15
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
-angular.module('mgcrea.ngStrap.jqlite.dimensions', []).factory('dimensions', [
+angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
   '$document',
   '$window',
   function ($document, $window) {
@@ -63,6 +63,8 @@ angular.module('mgcrea.ngStrap.jqlite.dimensions', []).factory('dimensions', [
     var offsetParent = function offsetParentElement(element) {
       var docElement = element.ownerDocument;
       var offsetParent = element.offsetParent || docElement;
+      if (nodeName(offsetParent, '#document'))
+        return docElement.documentElement;
       while (offsetParent && !nodeName(offsetParent, 'html') && fn.css(offsetParent, 'position') === 'static') {
         offsetParent = offsetParent.offsetParent;
       }

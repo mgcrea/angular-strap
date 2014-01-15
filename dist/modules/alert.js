@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.2 - 2014-01-10
+ * @version v2.0.0-beta.3 - 2014-01-15
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -36,7 +36,7 @@ angular.module('mgcrea.ngStrap.alert', []).run([
         if (!options.scope) {
           angular.forEach(['type'], function (key) {
             if (options[key])
-              $alert.scope[key] = options[key];
+              $alert.$scope[key] = options[key];
           });
         }
         var show = $alert.show;
