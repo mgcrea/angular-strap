@@ -1,17 +1,20 @@
 'use strict';
 
-describe('alert', function () {
+describe('alert', function() {
 
-  var $compile, $templateCache, scope, sandboxEl;
+  var bodyEl = $('body'), sandboxEl;
+  var $compile, $templateCache, $alert, scope;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.modal', 'mgcrea.ngStrap.alert'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$alert_) {
     scope = _$rootScope_.$new();
+    bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
+    $alert = _$alert_;
   }));
 
   afterEach(function() {
@@ -32,6 +35,9 @@ describe('alert', function () {
     'markup-ngRepeat': {
       scope: {items: [{name: 'foo', alert: {title: 'Title', content: 'Hello alert!'}}]},
       element: '<ul><li ng-repeat="item in items"><a title="{{item.alert.title}}" data-content="{{item.alert.content}}" bs-alert>{{item.name}}</a></li></ul>'
+    },
+    'markup-ngClick-service': {
+      element: '<a ng-click="showAlert()">click me</a>'
     },
     'options-placement': {
       element: '<a data-placement="left" bs-alert="alert">click me</a>'
@@ -57,7 +63,7 @@ describe('alert', function () {
 
   // Tests
 
-  describe('with default template', function () {
+  describe('with default template', function() {
 
     it('should open on click', function() {
       var elm = compileDirective('default');
@@ -97,10 +103,41 @@ describe('alert', function () {
 
   });
 
+  describe('using service', function() {
 
-  describe('options', function () {
+    it('should correctly open on next digest', function() {
+      var myAlert = $alert(angular.extend({type: 'danger'}, templates['default'].scope.alert));
+      scope.$digest();
+      expect(bodyEl.children('.alert').length).toBe(1);
+      myAlert.hide();
+      expect(bodyEl.children('.alert').length).toBe(0);
+    });
 
-    describe('animation', function () {
+    it('should correctly be destroyed', function() {
+      var myAlert = $alert(templates['default'].scope.alert);
+      scope.$digest();
+      expect(bodyEl.children('.alert').length).toBe(1);
+      myAlert.destroy();
+      expect(bodyEl.children('.alert').length).toBe(0);
+      expect(bodyEl.children().length).toBe(1);
+    });
+
+    it('should correctly work with ngClick', function() {
+      var elm = compileDirective('markup-ngClick-service');
+      var myAlert = $alert(angular.extend({show: false}, templates['default'].scope.alert));
+      scope.showAlert = function() {
+        myAlert.$promise.then(myAlert.show);
+      };
+      expect(bodyEl.children('.alert').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      expect(bodyEl.children('.alert').length).toBe(1);
+    });
+
+  });
+
+  describe('options', function() {
+
+    describe('animation', function() {
 
       it('should default to `animation-fade` animation', function() {
         var elm = compileDirective('default');
@@ -110,7 +147,7 @@ describe('alert', function () {
 
     });
 
-    describe('placement', function () {
+    describe('placement', function() {
 
       it('should default to `null` placement', function() {
         var elm = compileDirective('default');
@@ -126,7 +163,7 @@ describe('alert', function () {
 
     });
 
-    describe('html', function () {
+    describe('html', function() {
 
       it('should correctly compile inner content', function() {
         var elm = compileDirective('options-html');
@@ -137,7 +174,7 @@ describe('alert', function () {
 
     });
 
-    describe('template', function () {
+    describe('template', function() {
 
       it('should support custom template', function() {
         $templateCache.put('custom', '<div class="alert"><div class="alert-inner">foo: {{title}}</div></div>');

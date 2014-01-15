@@ -48,7 +48,7 @@ angular.module('mgcrea.ngStrap.alert', [])
         // Support scope as string options
         if(!options.scope) {
           angular.forEach([/*'title', 'content', */'type'], function(key) {
-            if(options[key]) $alert.scope[key] = options[key];
+            if(options[key]) $alert.$scope[key] = options[key];
           });
         }
 
