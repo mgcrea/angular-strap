@@ -3,18 +3,19 @@
   "description": "AngularStrap - AngularJS directives for Twitter Bootstrap",
   "version": "2.0.0-beta.3",
   "dependencies": {
-    "angular": "~1.2.5",
-    "angular-animate": "~1.2.5",
-    "angular-route": "~1.2.5",
-    "angular-sanitize": "~1.2.5",
+    "angular": "~1.2.9",
     "bootstrap": "~3.0.3"
   },
   "devDependencies": {
-    "angular-mocks": "~1.2.5",
-    "angular-scenario": "~1.2.5",
+    "angular-animate": "~1.2.9",
+    "angular-i18n": "~1.2.9",
+    "angular-mocks": "~1.2.9",
+    "angular-route": "~1.2.9",
+    "angular-sanitize": "~1.2.9",
+    "angular-scenario": "~1.2.9",
+    "fastclick": "~0.6.10",
     "font-awesome": "~4.0.3",
     "highlightjs": "~7.5.0",
-    "fastclick": "~0.6.10",
     "jquery": "~2.0.3"
   }
 }

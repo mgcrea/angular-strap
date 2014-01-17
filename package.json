@@ -36,5 +36,11 @@
   },
   "scripts": {
     "test": "grunt test"
+  },
+  "dependencies": {
+    "grunt-concurrent": "~0.4.3",
+    "grunt-newer": "~0.6.1",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-autoprefixer": "~0.6.4"
   }
 }
