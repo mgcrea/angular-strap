@@ -34,11 +34,10 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
       placeholder: 'Choose among the following...'
     };
 
-    var isTouch = 'ontouchstart' in window;
-
     this.$get = function($window, $document, $rootScope, $tooltip) {
 
       var bodyEl = angular.element($window.document.body);
+      var isTouch = 'createTouch' in $window.document;
 
       function SelectFactory(element, config) {
 
@@ -155,17 +154,13 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         };
 
         $select.$onElementMouseDown = function(evt) {
-          // Close on click while being in focus mode
-          if($window.document.activeElement === element[0]) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          if($select.$isShown) {
             element[0].blur();
-            evt.preventDefault();
-            evt.stopPropagation();
+          } else {
+            element[0].focus();
           }
-        };
-
-        $select.$onClick = function(evt) {
-          // Trigger focus onClick
-          element[0].focus();
         };
 
         $select.$onMouseDown = function(evt) {
@@ -201,13 +196,13 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         var _init = $select.init;
         $select.init = function() {
           _init();
-          element.on('click', $select.$onClick);
+          element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
         };
 
         var _destroy = $select.destroy;
         $select.destroy = function() {
           _destroy();
-          element.off('click', $select.$onClick);
+          element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
         };
 
         var _show = $select.show;
@@ -217,7 +212,6 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             $select.$element.addClass('select-multiple');
           }
           setTimeout(function() {
-            element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
             $select.$element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
             if(options.keyboard) {
               element.on('keydown', $select.$onKeyDown);
@@ -227,7 +221,6 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         var _hide = $select.hide;
         $select.hide = function() {
-          element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
           $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
           if(options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
@@ -257,7 +250,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'multiple'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'placeholder', 'multiple'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
