@@ -164,10 +164,8 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         };
 
         $select.$onClick = function(evt) {
-          // Force focus on mobile devices
-          if(isTouch) {
-            element[0].focus();
-          }
+          // Trigger focus onClick
+          element[0].focus();
         };
 
         $select.$onMouseDown = function(evt) {
