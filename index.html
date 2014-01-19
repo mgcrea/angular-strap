@@ -36,11 +36,11 @@
   <!-- <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"> -->
   <link rel="stylesheet" href="styles/bf4e4fe4.libraries.min.css"/>
 
-  <link rel="stylesheet" href="styles/bfde0436.bootstrap-additions.min.css"/>
+  <link rel="stylesheet" href="styles/a3e5e224.bootstrap-additions.min.css"/>
 
   <link rel="stylesheet" href="styles/12921713.angular-motion.min.css"/>
 
-  <link rel="stylesheet" href="styles/decd7573.main.min.css"/>
+  <link rel="stylesheet" href="styles/e65664eb.main.min.css"/>
 
 </head>
 
@@ -50,7 +50,7 @@
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
   <div class="container">
     <div class="navbar-header">
-      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+      <button class="navbar-toggle" type="button" data-template="views/aside.html" title="Menu" data-container="body" bs-aside="">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -64,7 +64,7 @@
           <a href="./getting-started">Getting started</a>
         </li> -->
         <li>
-          <a href="./">Directives</a>
+          <a href="#directives">Directives</a>
         </li>
 <!--         <li>
           <a href="./customize">Customize</a>
@@ -136,7 +136,7 @@
 
   <div class="container bs-docs-container">
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-3 hidden-sm hidden-xs">
         <!-- ngInclude: 'docs/views/sidebar.html' -->
 <div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-80" bs-affix="" bs-scrollspy-list="">
   <ul class="nav bs-sidenav">
@@ -370,7 +370,8 @@
   </div>
 
 </div>
-        <!-- ngInclude: 'src/modal/docs/modal.demo.html' -->
+        <div id="directives">
+          <!-- ngInclude: 'src/modal/docs/modal.demo.html' -->
 <div class="bs-docs-section" ng-controller="ModalDemoCtrl">
 
   <div class="page-header">
@@ -564,7 +565,7 @@
   <p>Toggles the modal.</p>
 
 </div>
-        <!-- ngInclude: 'src/aside/docs/aside.demo.html' -->
+          <!-- ngInclude: 'src/aside/docs/aside.demo.html' -->
 <div class="bs-docs-section" ng-controller="AsideDemoCtrl">
 
   <div class="page-header">
@@ -745,7 +746,7 @@
   <p>Toggles the aside.</p>
 
 </div>
-        <!-- ngInclude: 'src/alert/docs/alert.demo.html' -->
+          <!-- ngInclude: 'src/alert/docs/alert.demo.html' -->
 <div class="bs-docs-section" ng-controller="AlertDemoCtrl">
 
   <div class="page-header">
@@ -916,7 +917,7 @@
   <p>Toggles the alert.</p>
 
 </div>
-        <!-- ngInclude: 'src/button/docs/button.demo.html' -->
+          <!-- ngInclude: 'src/button/docs/button.demo.html' -->
 <div class="bs-docs-section" ng-controller="ButtonDemoCtrl">
 
   <div class="page-header">
@@ -973,7 +974,7 @@
     </div>
 
 </div>
-        <!-- ngInclude: 'src/select/docs/select.demo.html' -->
+          <!-- ngInclude: 'src/select/docs/select.demo.html' -->
 <div class="bs-docs-section" ng-controller="SelectDemoCtrl">
 
   <div class="page-header">
@@ -1141,7 +1142,7 @@ $scope.icons = "{{icons}}";
   </div>
 
 </div>
-        <!-- ngInclude: 'src/navbar/docs/navbar.demo.html' -->
+          <!-- ngInclude: 'src/navbar/docs/navbar.demo.html' -->
 <div class="bs-docs-section">
 
   <div class="page-header">
@@ -1224,7 +1225,7 @@ $scope.icons = "{{icons}}";
   </div>
 
 </div>
-        <!-- ngInclude: 'src/tooltip/docs/tooltip.demo.html' -->
+          <!-- ngInclude: 'src/tooltip/docs/tooltip.demo.html' -->
 <div class="bs-docs-section" ng-controller="TooltipDemoCtrl">
 
   <div class="page-header">
@@ -1395,7 +1396,7 @@ $scope.icons = "{{icons}}";
   <p>Toggles the tooltip.</p>
 
 </div>
-        <!-- ngInclude: 'src/popover/docs/popover.demo.html' -->
+          <!-- ngInclude: 'src/popover/docs/popover.demo.html' -->
 <div class="bs-docs-section" ng-controller="PopoverDemoCtrl">
 
   <div class="page-header">
@@ -1574,7 +1575,7 @@ $scope.icons = "{{icons}}";
   <p>Toggles the popover.</p>
 
 </div>
-        <!-- ngInclude: 'src/dropdown/docs/dropdown.demo.html' -->
+          <!-- ngInclude: 'src/dropdown/docs/dropdown.demo.html' -->
 <div class="bs-docs-section" ng-controller="DropdownDemoCtrl">
 
   <div class="page-header">
@@ -1713,7 +1714,7 @@ $scope.icons = "{{icons}}";
   </div>
 
 </div>
-        <!-- ngInclude: 'src/typeahead/docs/typeahead.demo.html' -->
+          <!-- ngInclude: 'src/typeahead/docs/typeahead.demo.html' -->
 <div class="bs-docs-section" ng-controller="TypeaheadDemoCtrl">
 
   <div class="page-header">
@@ -1884,7 +1885,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
 </div>
-        <!-- ngInclude: 'src/scrollspy/docs/scrollspy.demo.html' -->
+          <!-- ngInclude: 'src/scrollspy/docs/scrollspy.demo.html' -->
 <div class="bs-docs-section">
 
   <div class="page-header">
@@ -1990,7 +1991,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
 </div>
-        <!-- ngInclude: 'src/affix/docs/affix.demo.html' -->
+          <!-- ngInclude: 'src/affix/docs/affix.demo.html' -->
 <div class="bs-docs-section">
 
   <div class="page-header">
@@ -2089,7 +2090,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
 </div>
-        <!-- ngInclude: 'src/tab/docs/tab.demo.html' -->
+          <!-- ngInclude: 'src/tab/docs/tab.demo.html' -->
 <div class="bs-docs-section" ng-controller="TabDemoCtrl">
 
   <div class="page-header">
@@ -2198,6 +2199,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
 </div>
+        </div>
       </div>
     </div>
   </div>
@@ -2235,9 +2237,9 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/fefd8626.libraries.min.js"></script>
 
-  <script src="scripts/4c559da7.angular-strap.min.js"></script>
+  <script src="scripts/af8d422d.angular-strap.min.js"></script>
 
-  <script src="scripts/5cf445b5.docs.min.js"></script>
+  <script src="scripts/67feeec9.docs.min.js"></script>
 
   <script src="scripts/ae6c22b9.docs.tpl.min.js"></script>
 
