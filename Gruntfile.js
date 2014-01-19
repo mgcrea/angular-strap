@@ -65,9 +65,9 @@ module.exports = function (grunt) {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '{docs,<%= yo.src %>}/{,*/}{,docs/}*.html',
+          '{docs,.dev,<%= yo.src %>}/{,*/}{,docs/}*.html',
           '{docs,.tmp,<%= yo.src %>}/{,*/}*.css',
-          '{docs,.tmp,<%= yo.src %>}/{,*/}*.js',
+          '{docs,.dev,.tmp,<%= yo.src %>}/{,*/}*.js',
           '{docs,<%= yo.src %>}/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -86,6 +86,7 @@ module.exports = function (grunt) {
           open: true,
           base: [
             '.tmp',
+            '.dev',
             'docs',
             '<%= yo.src %>'
           ]

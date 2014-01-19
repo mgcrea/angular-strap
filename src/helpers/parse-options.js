@@ -34,7 +34,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
         $parseOptions.valuesFn = function(scope, controller) {
           return $q.when(valuesFn(scope, controller))
           .then(function(values) {
-            $parseOptions.$values = parseValues(values);
+            $parseOptions.$values = values ? parseValues(values) : {};
             return $parseOptions.$values;
           });
         };
