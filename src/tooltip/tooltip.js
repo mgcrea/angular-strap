@@ -113,7 +113,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // Options: show
           if(options.show) {
             scope.$$postDigest(function() {
-              $tooltip.show();
+              options.trigger === 'focus' ? element[0].focus() : $tooltip.show();
             });
           }
 
