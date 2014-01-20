@@ -5,6 +5,7 @@ angular.module('mgcrea.ngStrap', [
   'mgcrea.ngStrap.alert',
   'mgcrea.ngStrap.button',
   'mgcrea.ngStrap.select',
+  'mgcrea.ngStrap.datepicker',
   'mgcrea.ngStrap.navbar',
   'mgcrea.ngStrap.tooltip',
   'mgcrea.ngStrap.popover',

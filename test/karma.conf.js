@@ -22,6 +22,7 @@ module.exports = function(config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/jquery/jquery.js',
       'src/{,*/}*.js',
+      '.tmp/ngtemplates/{,*/}*.js',
       'test/effroi.js',
       'test/helpers.js',
       'test/async.js',

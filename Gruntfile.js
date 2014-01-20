@@ -318,19 +318,20 @@ module.exports = function (grunt) {
       dist: {
         options: {
           // Replace all 'use strict' statements in the code with a single one at the top
-          banner: '(function(window, document, $, undefined) {\n\'use strict\';\n',
-          footer: '\n})(window, document, window.jQuery);\n',
+          banner: '(function(window, document, undefined) {\n\'use strict\';\n',
+          footer: '\n})(window, document);\n',
           process: function(src, filepath) {
             return '// Source: ' + filepath + '\n' +
               src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
           }
         },
-        files: {
-          '<%= yo.dist %>/<%= pkg.name %>.js': [
-            '<%= yo.src %>/module.js',
-            '<%= yo.src %>/{,*/}*.js'
-          ]
-        }
+        files: [{
+          src: ['<%= yo.src %>/module.js', '<%= yo.src %>/{,*/}*.js'],
+          dest: '<%= yo.dist %>/<%= pkg.name %>.js'
+        }, {
+          src: ['<%= yo.dist %>/modules/{,*/}*.tpl.js'],
+          dest: '<%= yo.dist %>/<%= pkg.name %>.tpl.js'
+        }]
       },
       banner: {
         options: {
@@ -385,6 +386,35 @@ module.exports = function (grunt) {
     },
 
     ngtemplates:  {
+      test: {
+        options:  {
+          module: function(src) { return 'mgcrea.ngStrap.' + src.match(/src\/(.+)\/.*/)[1]; },
+          url: function(url) { return url.replace('src/', ''); }
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          cwd: '<%= yo.src %>',
+          src: '{,*/}/*.tpl.html',
+          dest: '.tmp/ngtemplates',
+          ext: '.tpl.js'
+        }]
+      },
+      dist: {
+        options:  {
+          module: function(src) { return 'mgcrea.ngStrap.' + src.match(/src\/(.+)\/.*/)[1]; },
+          url: function(url) { return url.replace('src/', ''); },
+          usemin: 'scripts/angular-strap.tpl.min.js' // docs
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          cwd: '<%= yo.src %>',
+          src: '{,*/}/*.tpl.html',
+          dest: '<%= yo.dist %>/modules',
+          ext: '.tpl.js'
+        }]
+      },
       docs: {
         options:  {
           module: 'mgcrea.ngStrapDocs',
@@ -395,11 +425,12 @@ module.exports = function (grunt) {
           src: '{,*/}docs/*.html',
           dest: '.tmp/ngtemplates/scripts/src-docs.js'
         },
-        // {
-        //   cwd: '<%= yo.docs %>',
-        //   src: 'views/{,*/}*.html',
-        //   dest: '.tmp/ngtemplates/scripts/docs-views.js'
-        // }
+        {
+          cwd: '<%= yo.docs %>',
+          // src: 'views/{,*/}*.html',
+          src: 'views/{aside,sidebar}.html',
+          dest: '.tmp/ngtemplates/scripts/docs-views.js'
+        }
         ]
       }
     },
@@ -417,6 +448,12 @@ module.exports = function (grunt) {
           src: '{,*/}*.js',
           dest: '<%= yo.dist %>',
           ext: '.min.js'
+        }, {
+          expand: true,
+          cwd: '<%= yo.dist %>',
+          src: '{,*/}*.tpl.js',
+          dest: '<%= yo.dist %>',
+          ext: '.tpl.min.js'
         }]
       }
     },
@@ -455,12 +492,14 @@ module.exports = function (grunt) {
     'clean:server',
     // 'concurrent:test',
     // 'autoprefixer',
+    'ngtemplates:test',
     'connect:test',
     'karma:unit'
   ]);
 
   grunt.registerTask('build', [
     'clean:dist',
+    'ngtemplates:dist',
     'concat:dist',
     'ngmin:dist',
     'ngmin:modules',
@@ -475,6 +514,7 @@ module.exports = function (grunt) {
     'less:docs',
     'autoprefixer',
     'nginclude:docs',
+    'ngtemplates:dist',
     'ngtemplates:docs',
     'concat:generated',
     'ngmin:docs',

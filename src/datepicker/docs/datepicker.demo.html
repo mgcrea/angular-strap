@@ -1,0 +1,51 @@
+<div class="bs-docs-section" ng-controller="DatepickerDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="datepickers">Datepickers <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/datepicker/datepicker.js" target="_blank">datepicker.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.datepicker</code>
+  </div>
+
+
+  <h2 id="datepickers-examples">Examples</h2>
+  <p>Add datepicker functionality with any form text input.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Datepickers require the <a href="#tooltips">tooltip module</a> to be loaded.</p>
+  </div>
+
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="datepicker/docs/datepicker.demo.html" data-content-js-url="datepicker/docs/datepicker.demo.js" ng-plunkr data-placement="right" bs-tooltip></a></h3>
+  <pre class="bs-example-scope">$scope.selectedDate = {{selectedDate}};
+toString($scope.selectedDate) = {{ getType('selectedDate') }};
+$scope.selectedDateNumber = {{selectedDateNumber}};
+toString($scope.selectedDateNumber) = {{ getType('selectedDateNumber') }};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+    <form name="datepickerForm" class="form-inline" role="form">
+      <div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
+        <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as date)</small></label>
+        <input type="text" class="form-control" ng-model="selectedDate" name="date" bs-datepicker>
+      </div>
+      <div class="form-group" ng-class="{'has-error': datepickerForm.date2.$invalid}">
+        <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as number)</small></label>
+        <input type="text" class="form-control" ng-model="selectedDateNumber" data-date-format="yyyy-MM-dd" data-date-type="number" data-min-date="02/10/86" data-max-date="01/01/90" data-autoclose="1" name="date2" bs-datepicker>
+      </div>
+    </form>
+  </div>
+
+
+  <h2 id="datepickers-usage">Usage</h2>
+  <p>Append a <code>bs-datepicker</code>attribute to any element to enable the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module exposes a <code>$datepicker</code>service</h4>
+    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block>
+          var myDatepicker = $datepicker(element, controller);
+        </code>
+      </pre>
+    </div>
+  </div>
+
+</div>
