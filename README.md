@@ -21,8 +21,9 @@ While it worked pretty well, it required a big javascript payload: both jQuery &
 
 >
 ``` html
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
 <script src="//rawgithub.com/mgcrea/angular-strap/master/dist/angular-strap.min.js"></script>
+<script src="//rawgithub.com/mgcrea/angular-strap/master/dist/angular-strap.tpl.min.js"></script>
 ```
 
 + Inject the `ngStrap` module into your app

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.3 - 2014-01-15
+ * @version v2.0.0-beta.4 - 2014-01-20
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -91,7 +91,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).ru
         $modal.init = function () {
           if (options.show) {
             scope.$$postDigest(function () {
-              $modal.show();
+              options.trigger === 'focus' ? element[0].focus() : $modal.show();
             });
           }
         };
@@ -130,6 +130,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).ru
           bodyElement.addClass(options.prefixClass + '-open');
           if (options.backdrop) {
             modalElement.on('click', hideOnBackdropClick);
+            backdropElement.on('click', hideOnBackdropClick);
           }
           if (options.keyboard) {
             modalElement.on('keyup', $modal.$onKeyUp);
@@ -147,6 +148,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).ru
           scope.$isShown = false;
           if (options.backdrop) {
             modalElement.off('click', hideOnBackdropClick);
+            backdropElement.off('click', hideOnBackdropClick);
           }
           if (options.keyboard) {
             modalElement.off('keyup', $modal.$onKeyUp);

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.3 - 2014-01-15
+ * @version v2.0.0-beta.4 - 2014-01-20
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -9,18 +9,12 @@
 angular.module('mgcrea.ngStrap.select', [
   'mgcrea.ngStrap.tooltip',
   'mgcrea.ngStrap.helpers.parseOptions'
-]).run([
-  '$templateCache',
-  function ($templateCache) {
-    var template = '' + '<ul tabindex="-1" class="select dropdown-menu" ng-show="$isVisible()" role="select">' + '<li role="presentation" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}">' + '<a role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind="match.label"></a>' + '<i class="glyphicon glyphicon-ok" ng-if="$isMultiple"></i>' + '</li>' + '</ul>';
-    $templateCache.put('$select', template);
-  }
 ]).provider('$select', function () {
   var defaults = this.defaults = {
       animation: 'animation-fade',
       prefixClass: 'select',
       placement: 'bottom-left',
-      template: '$select',
+      template: 'select/select.tpl.html',
       trigger: 'focus',
       container: false,
       keyboard: true,
@@ -31,7 +25,6 @@ angular.module('mgcrea.ngStrap.select', [
       caretHtml: '&nbsp;<span class="caret"></span>',
       placeholder: 'Choose among the following...'
     };
-  var isTouch = 'ontouchstart' in window;
   this.$get = [
     '$window',
     '$document',
@@ -39,12 +32,10 @@ angular.module('mgcrea.ngStrap.select', [
     '$tooltip',
     function ($window, $document, $rootScope, $tooltip) {
       var bodyEl = angular.element($window.document.body);
-      function SelectFactory(element, config) {
+      var isTouch = 'createTouch' in $window.document;
+      function SelectFactory(element, controller, config) {
         var $select = {};
         var options = angular.extend({}, defaults, config);
-        var controller = options.controller;
-        if (!controller)
-          throw 'ngModelController required';
         $select = $tooltip(element, options);
         var parentScope = config.scope;
         var scope = $select.$scope;
@@ -139,14 +130,11 @@ angular.module('mgcrea.ngStrap.select', [
           return i;
         };
         $select.$onElementMouseDown = function (evt) {
-          if ($window.document.activeElement === element[0]) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          if ($select.$isShown) {
             element[0].blur();
-            evt.preventDefault();
-            evt.stopPropagation();
-          }
-        };
-        $select.$onClick = function (evt) {
-          if (isTouch) {
+          } else {
             element[0].focus();
           }
         };
@@ -177,12 +165,12 @@ angular.module('mgcrea.ngStrap.select', [
         var _init = $select.init;
         $select.init = function () {
           _init();
-          element.on('click', $select.$onClick);
+          element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
         };
         var _destroy = $select.destroy;
         $select.destroy = function () {
           _destroy();
-          element.off('click', $select.$onClick);
+          element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
         };
         var _show = $select.show;
         $select.show = function () {
@@ -191,7 +179,6 @@ angular.module('mgcrea.ngStrap.select', [
             $select.$element.addClass('select-multiple');
           }
           setTimeout(function () {
-            element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
             $select.$element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
             if (options.keyboard) {
               element.on('keydown', $select.$onKeyDown);
@@ -200,7 +187,6 @@ angular.module('mgcrea.ngStrap.select', [
         };
         var _hide = $select.hide;
         $select.hide = function () {
-          element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
           $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
           if (options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
@@ -225,10 +211,7 @@ angular.module('mgcrea.ngStrap.select', [
       restrict: 'EAC',
       require: 'ngModel',
       link: function postLink(scope, element, attr, controller) {
-        var options = {
-            scope: scope,
-            controller: controller
-          };
+        var options = { scope: scope };
         angular.forEach([
           'placement',
           'container',
@@ -238,13 +221,14 @@ angular.module('mgcrea.ngStrap.select', [
           'html',
           'animation',
           'template',
+          'placeholder',
           'multiple'
         ], function (key) {
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
         });
         var parsedOptions = $parseOptions(attr.ngOptions);
-        var select = $select(element, options);
+        var select = $select(element, controller, options);
         scope.$watch(parsedOptions.$match[7], function (newValue, oldValue) {
           parsedOptions.valuesFn(scope, controller).then(function (values) {
             select.update(values);

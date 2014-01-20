@@ -107,14 +107,14 @@ describe('select', function () {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
-      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.icons[0].label);
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
     });
 
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-select]:eq(0)')).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
-      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.icons[0].label);
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
     });
 
   });
@@ -128,7 +128,7 @@ describe('select', function () {
         var elm = compileDirective('options-multiple');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
-        expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.icons[0].label);
+        expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
         expect(sandboxEl.find('.dropdown-menu li > i').length).toBe(scope.icons.length);
       });
 
@@ -202,18 +202,18 @@ describe('select', function () {
         $templateCache.put('custom', '<div class="dropdown"><div class="dropdown-inner">foo: {{icons.length}}</div></div>');
         var elm = compileDirective('options-template');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-inner').text()).toBe('foo: ' + scope.icons.length);
+        expect(sandboxEl.find('.dropdown-inner').text().trim()).toBe('foo: ' + scope.icons.length);
       });
 
       it('should support template with ngRepeat', function() {
         $templateCache.put('custom', '<div class="dropdown"><div class="dropdown-inner"><ul><li ng-repeat="icon in icons">{{icon.label}}</li></ul></div></div>');
         var elm = compileDirective('options-template');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-inner').text()).toBe(scope.icons.map(function(obj) { return obj.label; }).join(''));
+        expect(sandboxEl.find('.dropdown-inner').text().trim()).toBe(scope.icons.map(function(obj) { return obj.label; }).join(''));
         // Consecutive toggles
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(elm[0]).triggerHandler('blur');
-        expect(sandboxEl.find('.dropdown-inner').text()).toBe(scope.icons.map(function(obj) { return obj.label; }).join(''));
+        expect(sandboxEl.find('.dropdown-inner').text().trim()).toBe(scope.icons.map(function(obj) { return obj.label; }).join(''));
       });
 
       it('should support template with ngClick', function() {
