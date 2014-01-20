@@ -7,4 +7,5 @@ bower_components/
 node_modules/
 /pages/
 /docs/
+/coverage/
 !.gitignore
