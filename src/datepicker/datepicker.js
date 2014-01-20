@@ -22,7 +22,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
       maxDate: +Infinity,
       startView: 0,
       minView: 0,
-      weekStart: 1
+      weekStart: 0
     };
 
     this.$get = function($window, $document, $rootScope, $sce, $locale, dateFilter, datepickerViews, $tooltip) {

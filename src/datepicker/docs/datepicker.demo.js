@@ -4,7 +4,8 @@ angular.module('mgcrea.ngStrapDocs')
 
 .config(function($datepickerProvider) {
   angular.extend($datepickerProvider.defaults, {
-    dateFormat: 'dd/MM/yyyy'
+    dateFormat: 'dd/MM/yyyy',
+    weekStart: 1
   });
 })
 
