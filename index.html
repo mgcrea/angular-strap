@@ -88,7 +88,7 @@
         <!-- <li class="muted">·</li> -->
         <li>
           <a href="//github.com/mgcrea/angular-strap/releases" target="_blank">
-            <i class="fa fa-download"></i>&nbsp;v2.0.0-beta.3
+            <i class="fa fa-download"></i>&nbsp;v2.0.0-beta.4
             <!-- <img src="//badge.fury.io/bo/angular-strap.png"/> -->
           </a>
         </li>
@@ -207,6 +207,15 @@
       </ul>
     </li>
     <li>
+      <a href="#datepickers">Datepicker</a>
+      <ul class="nav">
+        <li><a href="#datepickers-examples">Examples</a>
+        </li>
+        <li><a href="#datepickers-usage">Usage</a>
+        </li>
+      </ul>
+    </li>
+    <li>
       <a href="#navbars">Navbar</a>
       <ul class="nav">
         <li><a href="#navbars-examples">Examples</a>
@@ -321,6 +330,17 @@
     <pre>
       <code class="bash" highlight-block="">
         $ bower install angular-strap#~2.0.0 --save
+      </code>
+    </pre>
+  </div>
+
+  <p>Load the required libraries.</p>
+  <div class="highlight">
+    <pre>
+      <code class="html" highlight-block="">
+&lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"&gt;&lt;/script&gt;
+&lt;script src="bower_components/angular-strap/dist/angular-strap.min.js"&gt;&lt;/script&gt;
+&lt;script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"&gt;&lt;/script&gt;
       </code>
     </pre>
   </div>
@@ -1019,7 +1039,7 @@ $scope.icons = "{{icons}}";
     <div class="highlight">
       <pre>
         <code class="javascript" highlight-block="">
-          var mySelect = $select(element, {controller: someModelController});
+          var mySelect = $select(element, controller);
         </code>
       </pre>
     </div>
@@ -1136,6 +1156,58 @@ $scope.icons = "{{icons}}";
               sort: false
             });
           })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+</div>
+          <!-- ngInclude: 'src/datepicker/docs/datepicker.demo.html' -->
+<div class="bs-docs-section" ng-controller="DatepickerDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="datepickers">Datepickers <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/datepicker/datepicker.js" target="_blank">datepicker.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.datepicker</code>
+  </div>
+
+
+  <h2 id="datepickers-examples">Examples</h2>
+  <p>Add datepicker functionality with any form text input.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Datepickers require the <a href="#tooltips">tooltip module</a> to be loaded.</p>
+  </div>
+
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="datepicker/docs/datepicker.demo.html" data-content-js-url="datepicker/docs/datepicker.demo.js" ng-plunkr="" data-placement="right" bs-tooltip=""></a></h3>
+  <pre class="bs-example-scope">$scope.selectedDate = {{selectedDate}};
+toString($scope.selectedDate) = {{ getType('selectedDate') }};
+$scope.selectedDateNumber = {{selectedDateNumber}};
+toString($scope.selectedDateNumber) = {{ getType('selectedDateNumber') }};</pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+    <form name="datepickerForm" class="form-inline" role="form">
+      <div class="form-group" ng-class="{&apos;has-error&apos;: datepickerForm.date.$invalid}">
+        <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as date)</small></label>
+        <input type="text" class="form-control" ng-model="selectedDate" name="date" bs-datepicker="">
+      </div>
+      <div class="form-group" ng-class="{&apos;has-error&apos;: datepickerForm.date2.$invalid}">
+        <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as number)</small></label>
+        <input type="text" class="form-control" ng-model="selectedDateNumber" data-date-format="yyyy-MM-dd" data-date-type="number" data-min-date="02/10/86" data-max-date="01/01/90" data-autoclose="1" name="date2" bs-datepicker="">
+      </div>
+    </form>
+  </div>
+
+
+  <h2 id="datepickers-usage">Usage</h2>
+  <p>Append a <code>bs-datepicker</code>attribute to any element to enable the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module exposes a <code>$datepicker</code>service</h4>
+    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block="">
+          var myDatepicker = $datepicker(element, controller);
         </code>
       </pre>
     </div>
@@ -2237,13 +2309,15 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/fefd8626.libraries.min.js"></script>
 
-  <script src="scripts/23853fd5.angular-strap.min.js"></script>
+  <script src="scripts/a8642907.angular-strap.min.js"></script>
 
-  <script src="scripts/bf4d18cd.docs.min.js"></script>
+  <script src="scripts/9bec4261.angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/61e17952.docs.tpl.min.js"></script>
+  <script src="scripts/b4aca7cd.docs.min.js"></script>
 
-  <script src="scripts/69a0f7eb.demo.min.js"></script>
+  <script src="scripts/7553c979.docs.tpl.min.js"></script>
+
+  <script src="scripts/f75ce23a.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
