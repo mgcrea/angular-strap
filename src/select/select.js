@@ -2,27 +2,13 @@
 
 angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
 
-  .run(function($templateCache) {
-
-    var template = '' +
-      '<ul tabindex="-1" class="select dropdown-menu" ng-show="$isVisible()" role="select">' +
-        '<li role="presentation" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}">' +
-          '<a role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind="match.label"></a>' +
-          '<i class="glyphicon glyphicon-ok" ng-if="$isMultiple"></i>' +
-        '</li>' +
-      '</ul>';
-
-    $templateCache.put('$select', template);
-
-  })
-
   .provider('$select', function() {
 
     var defaults = this.defaults = {
       animation: 'animation-fade',
       prefixClass: 'select',
       placement: 'bottom-left',
-      template: '$select',
+      template: 'select/select.tpl.html',
       trigger: 'focus',
       container: false,
       keyboard: true,
