@@ -64,7 +64,7 @@ module.exports = function(config) {
 
     coverageReporter: {
       type: 'lcov',
-      dir: 'coverage/'
+      dir: 'test/coverage/'
     },
 
     // coverage reporter generates the coverage

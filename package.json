@@ -30,7 +30,9 @@
     "grunt-usemin": "~2.0.2",
     "jshint-stylish": "~0.1.5",
     "karma-coverage": "~0.1.4",
-    "load-grunt-tasks": "~0.2.1"
+    "load-grunt-tasks": "~0.2.1",
+    "grunt-nginclude": "~0.2.1",
+    "grunt-karma-coveralls": "~2.3.0"
   },
   "engines": {
     "node": ">=0.8.0"

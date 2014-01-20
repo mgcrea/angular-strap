@@ -7,5 +7,5 @@ bower_components/
 node_modules/
 /pages/
 /docs/
-/coverage/
+/test/coverage/
 !.gitignore
