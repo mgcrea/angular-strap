@@ -39,14 +39,12 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
       var bodyEl = angular.element($window.document.body);
       var isTouch = 'createTouch' in $window.document;
 
-      function SelectFactory(element, config) {
+      function SelectFactory(element, controller, config) {
 
         var $select = {};
 
         // Common vars
         var options = angular.extend({}, defaults, config);
-        var controller = options.controller;
-        if(!controller) throw 'ngModelController required';
 
         $select = $tooltip(element, options);
         var parentScope = config.scope;
@@ -249,7 +247,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
       link: function postLink(scope, element, attr, controller) {
 
         // Directive options
-        var options = {scope: scope, controller: controller};
+        var options = {scope: scope};
         angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'placeholder', 'multiple'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
@@ -265,7 +263,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         var parsedOptions = $parseOptions(attr.ngOptions);
 
         // Initialize select
-        var select = $select(element, options);
+        var select = $select(element, controller, options);
 
         // Watch ngOptions values for changes
         scope.$watch(parsedOptions.$match[7], function(newValue, oldValue) {
