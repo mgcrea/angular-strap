@@ -43,11 +43,23 @@ describe('datepicker', function() {
     'options-trigger': {
       element: '<div class="btn" data-trigger="hover" ng-model="datepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-datepicker></div>'
     },
-    'options-autoclose': {
-      element: '<input type="text" ng-model="selectedDate" data-autoclose="1" bs-datepicker>'
-    },
     'options-template': {
       element: '<input type="text" data-template="custom" ng-model="selectedDate" bs-datepicker>'
+    },
+    'options-dateFormat': {
+      scope: {selectedDate: new Date(Date.UTC(1986, 1, 22))},
+      element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" bs-datepicker>'
+    },
+    'options-minDate': {
+      scope: {selectedDate: new Date(Date.UTC(1986, 1, 22)), minDate: '02/22/86'},
+      element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
+    },
+    'options-maxDate': {
+      scope: {selectedDate: new Date(Date.UTC(1986, 1, 22)), maxDate: '02/22/86'},
+      element: '<input type="text" ng-model="selectedDate" data-max-date="{{maxDate}}" bs-datepicker>'
+    },
+    'options-autoclose': {
+      element: '<input type="text" ng-model="selectedDate" data-autoclose="1" bs-datepicker>'
     }
   };
 
@@ -127,8 +139,7 @@ describe('datepicker', function() {
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
-        // @TODO fix me
-        // expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
       });
 
     });
@@ -200,6 +211,44 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('blur');
         expect(angular.element(sandboxEl.find('.dropdown-inner > .btn')[0]).triggerHandler('click'));
         expect(scope.dropdown.counter).toBe(2);
+      });
+
+    });
+
+    describe('dateFormat', function() {
+
+      it('should support a custom dateFormat', function() {
+        var elm = compileDirective('options-dateFormat');
+        expect(elm.val()).toBe('1986-02-22');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
+        expect(elm.val()).toBe('1986-01-25');
+      });
+
+    });
+
+    describe('minDate', function() {
+
+      it('should support a dynamic minDate', function() {
+        var elm = compileDirective('options-minDate');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(28);
+        scope.minDate = '02/12/86';
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(18);
+      });
+
+    });
+
+    describe('maxDate', function() {
+
+      it('should support a dynamic maxDate', function() {
+        var elm = compileDirective('options-maxDate');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(7);
+        scope.maxDate = '02/12/86';
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(17);
       });
 
     });

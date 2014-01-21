@@ -76,7 +76,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             controller.$setViewValue(date);
             controller.$render();
             if(options.autoclose && !keepMode) {
-              options.trigger === 'focus' ? element[0].blur() : $datepicker.hide();
+              $datepicker.hide(true);
             }
           } else {
             angular.extend(viewDate, {year: date.getUTCFullYear(), month: date.getUTCMonth(), date: date.getUTCDate()});
@@ -134,7 +134,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
 
           if(evt.keyCode === 13) {
             if(!$datepicker.$mode) {
-              return options.trigger === 'focus' ? element[0].blur() : $datepicker.hide();
+              return $datepicker.hide(true);
             } else {
               return scope.$apply(function() { $datepicker.setMode($datepicker.$mode - 1); });
             }
@@ -174,12 +174,12 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
         };
 
         var _hide = $datepicker.hide;
-        $datepicker.hide = function() {
+        $datepicker.hide = function(blur) {
           $datepicker.$element.off(isTouch ? 'touchstart' : 'mousedown', $datepicker.$onMouseDown);
           if(options.keyboard) {
             element.off('keydown', $datepicker.$onKeyDown);
           }
-          _hide();
+          _hide(blur);
         };
 
         return $datepicker;
@@ -336,18 +336,18 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
 
         // Observe attributes for changes
         angular.forEach(['minDate', 'maxDate'], function(key) {
-          attr[key] && attr.$observe(key, function(newValue, oldValue) {
+          // console.warn('attr.$observe(%s)', key, attr[key]);
+          angular.isDefined(attr[key]) && attr.$observe(key, function(newValue) {
+            // console.warn('attr.$observe(%s)=%o', key, newValue, !!datepicker);
             if(newValue === 'now' || newValue === 'today') newValue = null;
+            if(newValue.match(/^".+"$/)) newValue = newValue.substr(1, newValue.length - 2);
             datepicker.$options[key] = +new Date(newValue);
-            angular.isDefined(oldValue) && requestAnimationFrame(function() {
-              datepicker && datepicker.$build();
-            });
+            !isNaN(datepicker.$options[key]) && datepicker.$build();
           });
         });
 
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
-          // console.warn('$watch', newValue);
           datepicker.update(controller.$dateValue);
         });
 
@@ -386,7 +386,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
         // viewValue -> element
         controller.$render = function() {
           // console.warn('$render("%s"): viewValue=%o', element.attr('ng-model'), controller.$viewValue);
-          element.val(controller.$isEmpty(controller.$viewValue) ? '' : dateFilter(controller.$viewValue, options.dateFormat));
+          element.val(isNaN(controller.$dateValue.getTime()) ? '' : dateFilter(controller.$dateValue, options.dateFormat));
         };
 
         // Garbage collection
@@ -451,7 +451,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getUTCDay() + 1 - options.weekStart) * 864e5);
               for(var i = 0; i < 35; i++) {
                 day = new Date(+firstDate + i * 864e5);
-                days.push({date: day, label: dateFilter(day, this.format), selected: this.isSelected(day), muted: day.getUTCMonth() !== viewDate.month, disabled: this.isDisabled(day)});
+                days.push({date: day, label: dateFilter(day, this.format), selected: picker.$date && this.isSelected(day), muted: day.getUTCMonth() !== viewDate.month, disabled: this.isDisabled(day)});
               }
               scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
               scope.labels = dayLabelHtml;
@@ -461,7 +461,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               scope.height = (this.height - 75) / scope.rows.length;
             },
             isSelected: function(date) {
-              return date.getUTCFullYear() === picker.$date.getUTCFullYear() && date.getUTCMonth() === picker.$date.getUTCMonth() && date.getUTCDate() === picker.$date.getUTCDate();
+              return picker.$date && date.getUTCFullYear() === picker.$date.getUTCFullYear() && date.getUTCMonth() === picker.$date.getUTCMonth() && date.getUTCDate() === picker.$date.getUTCDate();
             },
             isDisabled: function(date) {
               return date.getTime() < options.minDate || date.getTime() > options.maxDate;
@@ -502,7 +502,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               scope.height = (this.height - 50) / scope.rows.length;
             },
             isSelected: function(date) {
-              return date.getUTCFullYear() === picker.$date.getUTCFullYear() && date.getUTCMonth() === picker.$date.getUTCMonth();
+              return picker.$date && date.getUTCFullYear() === picker.$date.getUTCFullYear() && date.getUTCMonth() === picker.$date.getUTCMonth();
             },
             isDisabled: function(date) {
               var lastDate = +new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0));
@@ -545,7 +545,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               scope.height = (this.height - 50) / scope.rows.length;
             },
             isSelected: function(date) {
-              return date.getUTCFullYear() === picker.$date.getUTCFullYear();
+              return picker.$date && date.getUTCFullYear() === picker.$date.getUTCFullYear();
             },
             isDisabled: function(date) {
               var lastDate = +new Date(Date.UTC(date.getUTCFullYear(), 1, 0));
