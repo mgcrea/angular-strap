@@ -1186,19 +1186,30 @@ $scope.icons = "{{icons}}";
   </div>
 
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="datepicker/docs/datepicker.demo.html" data-content-js-url="datepicker/docs/datepicker.demo.js" ng-plunkr="" data-placement="right" bs-tooltip=""></a></h3>
-  <pre class="bs-example-scope">$scope.selectedDate = {{selectedDate}};
-toString($scope.selectedDate) = {{ getType('selectedDate') }};
-$scope.selectedDateNumber = {{selectedDateNumber}};
-toString($scope.selectedDateNumber) = {{ getType('selectedDateNumber') }};</pre>
+  <pre class="bs-example-scope">$scope.selectedDate = {{selectedDate}}; // &lt;- {{ getType('selectedDate') }}
+$scope.selectedDateAsNumber = {{selectedDateAsNumber}}; // &lt;- {{ getType('selectedDateAsNumber') }}</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
     <form name="datepickerForm" class="form-inline" role="form">
+      <!-- Classic example -->
       <div class="form-group" ng-class="{&apos;has-error&apos;: datepickerForm.date.$invalid}">
         <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as date)</small></label>
         <input type="text" class="form-control" ng-model="selectedDate" name="date" bs-datepicker="">
       </div>
+      <!-- Custom example -->
       <div class="form-group" ng-class="{&apos;has-error&apos;: datepickerForm.date2.$invalid}">
         <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as number)</small></label>
-        <input type="text" class="form-control" ng-model="selectedDateNumber" data-date-format="yyyy-MM-dd" data-date-type="number" data-min-date="02/10/86" data-max-date="01/01/90" data-autoclose="1" name="date2" bs-datepicker="">
+        <input type="text" class="form-control" ng-model="selectedDateAsNumber" data-date-format="yyyy-MM-dd" data-date-type="number" data-min-date="02/10/86" data-max-date="01/01/90" data-autoclose="1" name="date2" bs-datepicker="">
+      </div>
+      <hr>
+      <!-- Date range example -->
+      <div class="form-group">
+        <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range <small>(dynamic)</small></label><br>
+        <div class="form-group">
+          <input type="text" class="form-control" ng-model="fromDate" data-max-date="{{untilDate}}" data-autoclose="1" placeholder="From" bs-datepicker="">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" ng-model="untilDate" data-min-date="{{fromDate}}" data-autoclose="1" placeholder="Until" bs-datepicker="">
+        </div>
       </div>
     </form>
   </div>
@@ -1663,7 +1674,7 @@ toString($scope.selectedDateNumber) = {{ getType('selectedDateNumber') }};</pre>
     </button>
 
     <!-- You can also use data-attrs to assign scope variables -->
-    <button type="button" class="btn btn-lg btn-primary" data-placement="top-right" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover="">Click to toggle popover
+    <button type="button" class="btn btn-lg btn-primary" data-placement="top-right" title="{{popover.title}}" data-content="{{popover.content}}" data-trigger="focus" bs-popover="">Click to toggle popover
       <br>
       <small>(using data-attrs)</small>
     </button>
@@ -2470,15 +2481,15 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/fefd8626.libraries.min.js"></script>
 
-  <script src="scripts/f8d8184f.angular-strap.min.js"></script>
+  <script src="scripts/0e850687.angular-strap.min.js"></script>
 
-  <script src="scripts/9bec4261.angular-strap.tpl.min.js"></script>
+  <script src="scripts/9eeff448.angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/b4aca7cd.docs.min.js"></script>
+  <script src="scripts/dec10e2d.docs.min.js"></script>
 
-  <script src="scripts/506a03f4.docs.tpl.min.js"></script>
+  <script src="scripts/489f81ae.docs.tpl.min.js"></script>
 
-  <script src="scripts/e2aa76ef.demo.min.js"></script>
+  <script src="scripts/689333bb.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
