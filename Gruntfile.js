@@ -390,7 +390,8 @@ module.exports = function (grunt) {
         options:  {
           module: function(src) { return 'mgcrea.ngStrap.' + src.match(/src\/(.+)\/.*/)[1]; },
           url: function(url) { return url.replace('src/', ''); },
-          htmlmin: { collapseWhitespace: true }
+          htmlmin: { collapseWhitespace: true },
+          usemin: 'scripts/angular-strap.tpl.min.js' // docs
         },
         files: [{
           expand: true,
@@ -406,7 +407,6 @@ module.exports = function (grunt) {
           module: function(src) { return 'mgcrea.ngStrap.' + src.match(/src\/(.+)\/.*/)[1]; },
           url: function(url) { return url.replace('src/', ''); },
           htmlmin: { collapseWhitespace: true },
-          usemin: 'scripts/angular-strap.tpl.min.js' // docs
         },
         files: [{
           expand: true,
@@ -524,7 +524,7 @@ module.exports = function (grunt) {
     'less:docs',
     'autoprefixer',
     'nginclude:docs',
-    'ngtemplates:dist',
+    'ngtemplates:test',
     'ngtemplates:docs',
     'concat:generated',
     'ngmin:docs',
