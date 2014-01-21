@@ -245,10 +245,10 @@ describe('datepicker', function() {
       it('should support a dynamic maxDate', function() {
         var elm = compileDirective('options-maxDate');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(7);
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(6);
         scope.maxDate = '02/12/86';
         scope.$digest();
-        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(17);
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(16);
       });
 
     });

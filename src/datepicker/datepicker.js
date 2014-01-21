@@ -338,10 +338,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
         angular.forEach(['minDate', 'maxDate'], function(key) {
           // console.warn('attr.$observe(%s)', key, attr[key]);
           angular.isDefined(attr[key]) && attr.$observe(key, function(newValue) {
-            // console.warn('attr.$observe(%s)=%o', key, newValue, !!datepicker);
+            // console.warn('attr.$observe(%s)=%o', key, newValue);
             if(newValue === 'now' || newValue === 'today') newValue = null;
             if(newValue.match(/^".+"$/)) newValue = newValue.substr(1, newValue.length - 2);
-            datepicker.$options[key] = +new Date(newValue);
+            var parsedDate = new Date(newValue);
+            datepicker.$options[key] = parsedDate.getTime() - parsedDate.getTimezoneOffset() * 6e4;
             !isNaN(datepicker.$options[key]) && datepicker.$build();
           });
         });
