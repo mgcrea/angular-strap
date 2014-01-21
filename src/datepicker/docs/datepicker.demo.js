@@ -12,7 +12,9 @@ angular.module('mgcrea.ngStrapDocs')
 .controller('DatepickerDemoCtrl', function($scope, $http) {
 
   $scope.selectedDate = new Date();
-  $scope.selectedDateNumber = Date.UTC(1986, 1, 22);
+  $scope.selectedDateAsNumber = Date.UTC(1986, 1, 22);
+  // $scope.fromDate = new Date();
+  // $scope.untilDate = new Date();
   $scope.getType = function(key) {
     return Object.prototype.toString.call($scope[key]);
   };
