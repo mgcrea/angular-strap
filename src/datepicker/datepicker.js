@@ -63,9 +63,10 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
         $datepicker.update = function(date) {
           // console.warn('$datepicker.update() newValue=%o', date);
           if(!isNaN(date.getTime())) {
-            var firstBuild = angular.isUndefined($datepicker.$date);
             $datepicker.$date = date;
-            $picker.update.call($picker, date, firstBuild);
+            $picker.update.call($picker, date);
+          } else if(!$picker.built) {
+            $datepicker.$build();
           }
         };
 
@@ -438,7 +439,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             height: 250,
             steps: { month: 1 },
             update: function(date, force) {
-              if(force || date.getUTCFullYear() !== viewDate.year || date.getUTCMonth() !== viewDate.month) {
+              if(!this.built || force || date.getUTCFullYear() !== viewDate.year || date.getUTCMonth() !== viewDate.month) {
                 angular.extend(viewDate, {year: picker.$date.getUTCFullYear(), month: picker.$date.getUTCMonth(), date: picker.$date.getUTCDate()});
                 picker.$build();
               } else if(date.getUTCDate() !== viewDate.date) {
@@ -460,6 +461,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               scope.width = 100 / this.split;
               // scope.height = 100 / scope.rows.length;
               scope.height = (this.height - 75) / scope.rows.length;
+              this.built = true;
             },
             isSelected: function(date) {
               return picker.$date && date.getUTCFullYear() === picker.$date.getUTCFullYear() && date.getUTCMonth() === picker.$date.getUTCMonth() && date.getUTCDate() === picker.$date.getUTCDate();
@@ -480,8 +482,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             split: 4,
             height: 250,
             steps: { year: 1 },
-            update: function(date) {
-              if(date.getUTCFullYear() !== viewDate.year) {
+            update: function(date, force) {
+              if(!this.built || date.getUTCFullYear() !== viewDate.year) {
                 angular.extend(viewDate, {year: picker.$date.getUTCFullYear(), month: picker.$date.getUTCMonth(), date: picker.$date.getUTCDate()});
                 picker.$build();
               } else if(date.getUTCMonth() !== viewDate.month) {
@@ -501,6 +503,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               scope.width = 100 / this.split;
               // scope.height = 100 / scope.rows.length;
               scope.height = (this.height - 50) / scope.rows.length;
+              this.built = true;
             },
             isSelected: function(date) {
               return picker.$date && date.getUTCFullYear() === picker.$date.getUTCFullYear() && date.getUTCMonth() === picker.$date.getUTCMonth();
@@ -522,8 +525,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             split: 4,
             height: 250,
             steps: { year: 12 },
-            update: function(date) {
-              if(parseInt(date.getUTCFullYear()/20, 10) !== parseInt(viewDate.year/20, 10)) {
+            update: function(date, force) {
+              if(!this.built || force || parseInt(date.getUTCFullYear()/20, 10) !== parseInt(viewDate.year/20, 10)) {
                 angular.extend(viewDate, {year: picker.$date.getUTCFullYear(), month: picker.$date.getUTCMonth(), date: picker.$date.getUTCDate()});
                 picker.$build();
               } else if(date.getUTCFullYear() !== viewDate.year) {
@@ -544,6 +547,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               scope.width = 100 / this.split;
               // scope.height = 100 / scope.rows.length;
               scope.height = (this.height - 50) / scope.rows.length;
+              this.built = true;
             },
             isSelected: function(date) {
               return picker.$date && date.getUTCFullYear() === picker.$date.getUTCFullYear();

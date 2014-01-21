@@ -28,6 +28,13 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date()},
       element: '<input type="text" ng-model="selectedDate" bs-datepicker>'
     },
+    'value-undefined': {
+      element: '<input type="text" ng-model="selectedUndefined" bs-datepicker>'
+    },
+    'value-past': {
+      scope: {selectedDate: new Date(Date.UTC(1986, 1, 22))},
+      element: '<input type="text" ng-model="selectedDate" bs-datepicker>'
+    },
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><input type="text" ng-model="selectedDate" bs-datepicker></li></ul>'
     },
@@ -98,6 +105,18 @@ describe('datepicker', function() {
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
     });
 
+    it('should correctly support undefined values', function() {
+      var elm = compileDirective('value-undefined');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(5);
+      expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
+    });
+
+    // iit('should only build the datepicker once', function() {
+    //   var elm = compileDirective('value-past');
+    //   angular.element(elm[0]).triggerHandler('focus');
+    // });
+
     it('should correctly display active date', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
@@ -113,6 +132,37 @@ describe('datepicker', function() {
 
   });
 
+  // describe('using service', function() {
+
+  //   it('should correctly open on next digest', function() {
+  //     var myModal = $modal(templates['default'].scope.modal);
+  //     scope.$digest();
+  //     expect(bodyEl.children('.modal').length).toBe(1);
+  //     myModal.hide();
+  //     expect(bodyEl.children('.modal').length).toBe(0);
+  //   });
+
+  //   it('should correctly be destroyed', function() {
+  //     var myModal = $modal(angular.extend(templates['default'].scope.modal));
+  //     scope.$digest();
+  //     expect(bodyEl.children('.modal').length).toBe(1);
+  //     myModal.destroy();
+  //     expect(bodyEl.children('.modal').length).toBe(0);
+  //     expect(bodyEl.children().length).toBe(1);
+  //   });
+
+  //   it('should correctly work with ngClick', function() {
+  //     var elm = compileDirective('markup-ngClick-service');
+  //     var myModal = $modal(angular.extend({show: false}, templates['default'].scope.modal));
+  //     scope.showModal = function() {
+  //       myModal.$promise.then(myModal.show);
+  //     };
+  //     expect(bodyEl.children('.modal').length).toBe(0);
+  //     angular.element(elm[0]).triggerHandler('click');
+  //     expect(bodyEl.children('.modal').length).toBe(1);
+  //   });
+
+  // });
 
   describe('options', function() {
 
