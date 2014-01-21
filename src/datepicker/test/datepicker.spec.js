@@ -58,11 +58,11 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" bs-datepicker>'
     },
     'options-minDate': {
-      scope: {selectedDate: new Date(Date.UTC(1986, 1, 22)), minDate: '02/22/86'},
+      scope: {selectedDate: new Date('02/22/86'), minDate: '02/20/86'},
       element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
     },
     'options-maxDate': {
-      scope: {selectedDate: new Date(Date.UTC(1986, 1, 22)), maxDate: '02/22/86'},
+      scope: {selectedDate: new Date('02/22/86'), maxDate: '02/24/86'},
       element: '<input type="text" ng-model="selectedDate" data-max-date="{{maxDate}}" bs-datepicker>'
     },
     'options-autoclose': {
@@ -282,7 +282,9 @@ describe('datepicker', function() {
       it('should support a dynamic minDate', function() {
         var elm = compileDirective('options-minDate');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(28);
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(26);
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(19)').is(':disabled')).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
         scope.minDate = '02/12/86';
         scope.$digest();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(18);
@@ -295,7 +297,9 @@ describe('datepicker', function() {
       it('should support a dynamic maxDate', function() {
         var elm = compileDirective('options-maxDate');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(6);
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(4);
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
         scope.maxDate = '02/12/86';
         scope.$digest();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(16);
