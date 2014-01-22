@@ -2,18 +2,6 @@
 
 angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
-  .run(function($templateCache) {
-
-    var template = '' +
-      '<div class="tooltip" ng-show="title">' +
-        '<div class="tooltip-arrow"></div>' +
-        '<div class="tooltip-inner" ng-bind="title"></div>' +
-      '</div>';
-
-    $templateCache.put('$tooltip', template);
-
-  })
-
   .provider('$tooltip', function() {
 
     var defaults = this.defaults = {
@@ -21,7 +9,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       prefixClass: 'tooltip',
       container: false,
       placement: 'top',
-      template: '$tooltip',
+      template: 'tooltip/tooltip.tpl.html',
       trigger: 'hover focus',
       keyboard: false,
       html: false,
