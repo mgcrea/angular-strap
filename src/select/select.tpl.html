@@ -1,8 +1,8 @@
 <ul tabindex="-1" class="select dropdown-menu" ng-show="$isVisible()" role="select">
   <li role="presentation" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}">
     <a role="menuitem" tabindex="-1" ng-click="$select($index, $event)">
-      {{match.label}}
-      <i class="glyphicon glyphicon-ok pull-right" ng-if="$isMultiple"></i>
+      <div ng-bind="match.label"></div>
+      <i class="glyphicon glyphicon-ok pull-right" ng-if="$isMultiple && $isActive($index)"></i>
     </a>
   </li>
 </ul>
