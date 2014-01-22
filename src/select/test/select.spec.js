@@ -31,7 +31,7 @@ describe('select', function () {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><div class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></div></li></ul>'
     },
     'options-multiple': {
-      scope: {selectedIcons: [], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<div class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></div>'
     },
     'options-animation': {
@@ -129,7 +129,7 @@ describe('select', function () {
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
         expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
-        expect(sandboxEl.find('.dropdown-menu li > i').length).toBe(scope.icons.length);
+        expect(sandboxEl.find('.dropdown-menu li > a > i').length).toBe(scope.selectedIcons.length);
       });
 
     });
@@ -191,7 +191,7 @@ describe('select', function () {
         var elm = compileDirective('options-html');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
-        expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[0].label);
+        expect(sandboxEl.find('.dropdown-menu li:eq(0) a > div').html()).toBe(scope.icons[0].label);
       });
 
     });
