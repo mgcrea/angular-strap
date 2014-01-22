@@ -48,13 +48,17 @@ describe('typeahead', function () {
     },
     'options-template': {
       element: '<input type="text" data-template="custom" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
+    },
+    'options-minLength': {
+      element: '<input type="text" ng-model="selectedState" data-min-length="0" ng-options="state for state in states" bs-typeahead>'
     }
   };
 
-  function compileDirective(template, locals) {
+  function compileDirective(template, locals, hook) {
     template = templates[template];
     angular.extend(scope, template.scope || templates['default'].scope, locals);
     var element = $(template.element).appendTo(sandboxEl);
+    if(angular.isFunction(hook)) hook(scope);
     element = $compile(element)(scope);
     scope.$digest();
     return jQuery(element[0]);
@@ -198,13 +202,14 @@ describe('typeahead', function () {
 
   });
 
+  describe('minLength', function() {
 
-  describe('$isVisible method', function() {
     it('should not throw when ngModel.$viewValue is undefined', function() {
-      scope.items = [ "one", "two", "three" ];
-      var element = $compile('<input type="text" class="form-control" ng-model="selected" data-min-length="0" data-html="1" ng-options="item as item for item in items" bs-typeahead>')(scope);
+      var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
       scope.$digest();
       expect(scope.$$childHead.$isVisible).not.toThrow();
     });
+
   });
+
 });
