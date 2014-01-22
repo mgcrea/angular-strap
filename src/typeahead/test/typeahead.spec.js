@@ -198,4 +198,13 @@ describe('typeahead', function () {
 
   });
 
+
+  describe('$isVisible method', function() {
+    it('should not throw when ngModel.$viewValue is undefined', function() {
+      scope.items = [ "one", "two", "three" ];
+      var element = $compile('<input type="text" class="form-control" ng-model="selected" data-min-length="0" data-html="1" ng-options="item as item for item in items" bs-typeahead>')(scope);
+      scope.$digest();
+      expect(scope.$$childHead.$isVisible).not.toThrow();
+    });
+  });
 });
