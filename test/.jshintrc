@@ -5,7 +5,7 @@
   "jquery": true,
   "bitwise": true,
   "camelcase": false,
-  "curly": true,
+  "curly": false,
   "eqeqeq": true,
   "immed": true,
   "indent": 2,
@@ -19,6 +19,9 @@
   "strict": true,
   "trailing": true,
   "smarttabs": true,
+  "boss": false,
+  "eqnull": false,
+  "expr": true,
   "globals": {
     "after": false,
     "afterEach": false,
@@ -33,4 +36,3 @@
     "spyOn": false
   }
 }
-
