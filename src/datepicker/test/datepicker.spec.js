@@ -67,6 +67,9 @@ describe('datepicker', function() {
     },
     'options-autoclose': {
       element: '<input type="text" ng-model="selectedDate" data-autoclose="1" bs-datepicker>'
+    },
+    'options-useNative': {
+      element: '<input type="text" ng-model="selectedDate" data-use-native="1" bs-datepicker>'
     }
   };
 
@@ -303,6 +306,16 @@ describe('datepicker', function() {
         scope.maxDate = '02/12/86';
         scope.$digest();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(16);
+      });
+
+    });
+
+    describe('useNative', function() {
+
+      it('should correctly compile template according to useNative', function() {
+        var elm = compileDirective('options-useNative');
+        angular.element(elm[0]).triggerHandler('focus');
+        // @TODO ?
       });
 
     });

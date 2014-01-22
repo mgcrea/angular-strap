@@ -15,6 +15,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
       html: false,
       delay: 0,
       // lang: $locale.id,
+      useNative: false,
       dateType: 'date',
       dateFormat: 'shortDate',
       autoclose: false,
@@ -29,6 +30,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
 
       var bodyEl = angular.element($window.document.body);
       var isTouch = 'createTouch' in $window.document;
+      var isAppleTouch = /(iP(a|o)d|iPhone)/g.test($window.navigator.userAgent);
       if(!defaults.lang) defaults.lang = $locale.id;
 
       function DatepickerFactory(element, controller, config) {
@@ -124,6 +126,9 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
           // Emulate click for mobile devices
           if(isTouch) {
             var targetEl = angular.element(evt.target);
+            if(targetEl[0].nodeName.toLowerCase() === 'span') {
+              targetEl = targetEl.parent();
+            }
             targetEl.triggerHandler('click');
           }
         };
@@ -152,15 +157,36 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
           el.selected = $datepicker.$isSelected(el.date);
         }
 
+        function focusElement() {
+          element[0].focus();
+        }
+
         // Overrides
 
         var _init = $datepicker.init;
         $datepicker.init = function() {
+          if(isAppleTouch && options.useNative) {
+            element.prop('type', 'date');
+            element.css('-webkit-appearance', 'textfield');
+            return;
+          } else if(isTouch) {
+            element.prop('type', 'text');
+            element.attr('readonly', 'true');
+            element.on('click', focusElement);
+          }
           if(controller.$dateValue) {
             $datepicker.$date = controller.$dateValue;
             $datepicker.$build();
           }
           _init();
+        };
+
+        var _destroy = $datepicker.destroy;
+        $datepicker.destroy = function() {
+          if(isAppleTouch && options.useNative) {
+            element.off('click', focusElement);
+          }
+          _destroy();
         };
 
         var _show = $datepicker.show;
@@ -317,8 +343,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
 
   .directive('bsDatepicker', function($window, $parse, $q, $locale, dateFilter, $datepicker, $dateParser, $timeout) {
 
+    var isAppleTouch = /(iP(a|o)d|iPhone)/g.test($window.navigator.userAgent);
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
-    var moment = window.moment;
 
     return {
       restrict: 'EAC',
@@ -327,11 +353,12 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'lang'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'useNative', 'lang'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // Initialize datepicker
+        if(isAppleTouch && options.useNative) options.dateFormat = 'yyyy-MM-dd';
         var datepicker = $datepicker(element, controller, options);
         options = datepicker.$options;
 
