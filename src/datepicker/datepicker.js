@@ -126,7 +126,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
           // Emulate click for mobile devices
           if(isTouch) {
             var targetEl = angular.element(evt.target);
-            if(targetEl[0].nodeName.toLowerCase() === 'span') {
+            if(targetEl[0].nodeName.toLowerCase() !== 'button') {
               targetEl = targetEl.parent();
             }
             targetEl.triggerHandler('click');
