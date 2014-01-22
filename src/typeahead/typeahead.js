@@ -100,7 +100,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             return !!scope.$matches.length;
           }
           // minLength support
-          return scope.$matches.length && controller.$viewValue.length >= options.minLength;
+          return scope.$matches.length && typeof controller.$viewValue === 'string' && controller.$viewValue.length >= options.minLength;
         };
 
         $typeahead.$onMouseDown = function(evt) {
