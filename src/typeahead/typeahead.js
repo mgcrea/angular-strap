@@ -2,26 +2,13 @@
 
 angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
 
-  .run(function($templateCache) {
-
-    var template = '' +
-      '<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="select">' +
-        '<li role="presentation" ng-repeat="match in $matches" ng-class="{active: $index == $activeIndex}">' +
-          '<a role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind="match.label"></a>' +
-        '</li>' +
-      '</ul>';
-
-    $templateCache.put('$typeahead', template);
-
-  })
-
   .provider('$typeahead', function() {
 
     var defaults = this.defaults = {
       animation: 'animation-fade',
       prefixClass: 'typeahead',
       placement: 'bottom-left',
-      template: '$typeahead',
+      template: 'typeahead/typeahead.tpl.html',
       trigger: 'focus',
       container: false,
       keyboard: true,
