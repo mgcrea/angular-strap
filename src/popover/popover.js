@@ -2,25 +2,12 @@
 
 angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
-  .run(function($templateCache) {
-
-    var template = '' +
-      '<div class="popover" ng-show="content" ng-class="{\'in\': $visible}">' +
-        '<div class="arrow"></div>' +
-        '<h3 class="popover-title" ng-bind="title" ng-show="title"></h3>' +
-        '<div class="popover-content" ng-bind="content"></div>' +
-      '</div>';
-
-    $templateCache.put('$popover', template);
-
-  })
-
   .provider('$popover', function() {
 
     var defaults = this.defaults = {
       animation: 'animation-fade',
       placement: 'right',
-      template: '$popover',
+      template: 'popover/popover.tpl.html',
       trigger: 'click',
       keyboard: true,
       html: false,
