@@ -97,16 +97,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           $modal.init();
         });
 
-        $modal.init = function() {
-
-          // Options: show
-          if(options.show) {
-            scope.$$postDigest(function() {
-              options.trigger === 'focus' ? element[0].focus() : $modal.show();
-            });
-          }
-
-        };
+       $modal.init = function () {
+          	var element = element || undefined;
+            if (options.show) {
+              scope.$$postDigest(function () {
+                options.trigger === 'focus' && element ? element[0].focus() : $modal.show();
+              });
+            }
+          };
 
         $modal.destroy = function() {
 
