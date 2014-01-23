@@ -6,24 +6,13 @@ angular.module('mgcrea.ngStrap.tab', [])
 
     $templateCache.put('$pane', '{{pane.content}}');
 
-    var template = '<ul class="nav nav-tabs">' +
-      '<li ng-repeat="pane in panes" ng-class="{active:$index==active}">' +
-        '<a data-toggle="tab" ng-click="setActive($index, $event)" data-index="{{$index}}">{{pane.title}}</a>' +
-      '</li>' +
-    '</ul>' +
-    '<div class="tab-content">' +
-      '<div ng-repeat="pane in panes" class="tab-pane" ng-class="[$index==active?\'active\':\'\']" ng-include="pane.template || \'$pane\'"></div>' +
-    '</div>';
-
-    $templateCache.put('$tabs', template);
-
   })
 
   .provider('$tab', function() {
 
     var defaults = this.defaults = {
       animation: 'animation-fade',
-      template: '$tabs'
+      template: 'tab/tab.tpl.html'
     };
 
     this.$get = function() {
