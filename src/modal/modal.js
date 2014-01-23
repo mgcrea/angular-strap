@@ -102,7 +102,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           // Options: show
           if(options.show) {
             scope.$$postDigest(function() {
-              options.trigger === 'focus' ? element[0].focus() : $modal.show();
+              $modal.show();
             });
           }
 
