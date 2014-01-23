@@ -88,7 +88,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Fetch, compile then initialize modal
         var modalLinker, modalElement;
-        var backdropElement = jqLite('<div class="' + options.prefixClass + '-backdrop"/>');
+        var backdropElement = jqLite('<div class="' + options.prefixClass + '-backdrop in"/>');
         $modal.$promise.then(function(template) {
           if(angular.isObject(template)) template = template.data;
           if(options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
