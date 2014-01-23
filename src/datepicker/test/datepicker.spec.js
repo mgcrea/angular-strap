@@ -33,7 +33,7 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedUndefined" bs-datepicker>'
     },
     'value-past': {
-      scope: {selectedDate: new Date(Date.UTC(1986, 1, 22))},
+      scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" bs-datepicker>'
     },
     'markup-ngRepeat': {
@@ -55,7 +55,7 @@ describe('datepicker', function() {
       element: '<input type="text" data-template="custom" ng-model="selectedDate" bs-datepicker>'
     },
     'options-dateFormat': {
-      scope: {selectedDate: new Date(Date.UTC(1986, 1, 22))},
+      scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" bs-datepicker>'
     },
     'options-minDate': {
@@ -153,9 +153,48 @@ describe('datepicker', function() {
 
     });
 
+    it('should correctly navigate to upper year view', function() {
+      var elm = compileDirective('default');
+      var date = today.getDate(), month = today.getMonth();
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(scope.$$childHead.$mode).toBe(0);
+      angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
+      angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
+      expect(scope.$$childHead.$mode).toBe(2);
+    });
+
+    describe('once in year view', function() {
+
+      it('should correctly compile inner content', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
+        expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(3);
+        expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(4 * 3);
+        // expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(today, 'yyyy'));
+      });
+
+      it('should correctly display active date', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
+        expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text()).toBe(dateFilter(today, 'yyyy'));
+      });
+
+    });
+
     it('should correctly support undefined values', function() {
       var elm = compileDirective('value-undefined');
       angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(5);
+      expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
+    });
+
+    it('should support ngRepeat markup', function() {
+      var elm = compileDirective('markup-ngRepeat');
+      angular.element(elm.find('[bs-datepicker]:eq(0)')).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(5);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
     });
@@ -164,13 +203,6 @@ describe('datepicker', function() {
     //   var elm = compileDirective('value-past');
     //   angular.element(elm[0]).triggerHandler('focus');
     // });
-
-    it('should support ngRepeat markup', function() {
-      var elm = compileDirective('markup-ngRepeat');
-      angular.element(elm.find('[bs-datepicker]:eq(0)')).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(5);
-      expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
-    });
 
   });
 
