@@ -191,7 +191,7 @@ describe('select', function () {
         var elm = compileDirective('options-html');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
-        expect(sandboxEl.find('.dropdown-menu li:eq(0) a > div').html()).toBe(scope.icons[0].label);
+        expect(sandboxEl.find('.dropdown-menu li:eq(0) a > span').html()).toBe(scope.icons[0].label);
       });
 
     });
