@@ -45,8 +45,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
         var pickerViews = datepickerViews($datepicker);
         $datepicker.$views = pickerViews.views;
         var viewDate = pickerViews.viewDate;
-        $datepicker.$mode = options.startView;
-        var $picker = $datepicker.$views[$datepicker.$mode];
+        scope.$mode = options.startView;
+        var $picker = $datepicker.$views[scope.$mode];
 
         // Scope methods
 
@@ -57,7 +57,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
           $datepicker.$selectPane(value);
         };
         scope.$toggleMode = function() {
-          $datepicker.setMode(($datepicker.$mode + 1) % $datepicker.$views.length);
+          $datepicker.setMode((scope.$mode + 1) % $datepicker.$views.length);
         };
 
         // Public methods
@@ -73,9 +73,9 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
         };
 
         $datepicker.select = function(date, keepMode) {
-          // console.warn('$datepicker.select', date, $datepicker.$mode);
+          // console.warn('$datepicker.select', date, scope.$mode);
           if(!angular.isDate(date)) date = new Date(date);
-          if(!$datepicker.$mode || keepMode) {
+          if(!scope.$mode || keepMode) {
             controller.$setViewValue(date);
             controller.$render();
             if(options.autoclose && !keepMode) {
@@ -83,15 +83,15 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             }
           } else {
             angular.extend(viewDate, {year: date.getUTCFullYear(), month: date.getUTCMonth(), date: date.getUTCDate()});
-            $datepicker.setMode($datepicker.$mode - 1);
+            $datepicker.setMode(scope.$mode - 1);
             $datepicker.$build();
           }
         };
 
         $datepicker.setMode = function(mode) {
           // console.warn('$datepicker.setMode', mode);
-          $datepicker.$mode = mode;
-          $picker = $datepicker.$views[$datepicker.$mode];
+          scope.$mode = mode;
+          $picker = $datepicker.$views[scope.$mode];
           $datepicker.$build();
         };
 
@@ -139,10 +139,10 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
           evt.stopPropagation();
 
           if(evt.keyCode === 13) {
-            if(!$datepicker.$mode) {
+            if(!scope.$mode) {
               return $datepicker.hide(true);
             } else {
-              return scope.$apply(function() { $datepicker.setMode($datepicker.$mode - 1); });
+              return scope.$apply(function() { $datepicker.setMode(scope.$mode - 1); });
             }
           }
 
