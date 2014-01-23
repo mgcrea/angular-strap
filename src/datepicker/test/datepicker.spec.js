@@ -61,6 +61,14 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date('02/22/86'), minDate: '02/20/86'},
       element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
     },
+    'options-minDate-today': {
+      scope: {},
+      element: '<input type="text" ng-model="selectedDate" data-min-date="today" bs-datepicker>'
+    },
+    'options-maxDate-today': {
+      scope: {},
+      element: '<input type="text" ng-model="selectedDate" data-max-date="today" bs-datepicker>'
+    },
     'options-maxDate': {
       scope: {selectedDate: new Date('02/22/86'), maxDate: '02/24/86'},
       element: '<input type="text" ng-model="selectedDate" data-max-date="{{maxDate}}" bs-datepicker>'
@@ -293,6 +301,14 @@ describe('datepicker', function() {
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(18);
       });
 
+      it('should support today as minDate', function() {
+        var elm = compileDirective('options-minDate-today');
+        angular.element(elm[0]).triggerHandler('focus');
+        var date = new Date(), today = date.getDate();
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + today + ')').is(':disabled')).toBeFalsy();
+      });
+
     });
 
     describe('maxDate', function() {
@@ -306,6 +322,14 @@ describe('datepicker', function() {
         scope.maxDate = '02/12/86';
         scope.$digest();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length).toBe(16);
+      });
+
+      it('should support today as maxDate', function() {
+        var elm = compileDirective('options-maxDate-today');
+        angular.element(elm[0]).triggerHandler('focus');
+        var date = new Date(), today = date.getDate();
+        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + today + ')').is(':disabled')).toBeFalsy();
       });
 
     });

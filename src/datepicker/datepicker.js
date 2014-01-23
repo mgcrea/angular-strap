@@ -367,8 +367,10 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
           // console.warn('attr.$observe(%s)', key, attr[key]);
           angular.isDefined(attr[key]) && attr.$observe(key, function(newValue) {
             // console.warn('attr.$observe(%s)=%o', key, newValue);
-            if(newValue === 'now' || newValue === 'today') newValue = null;
-            if(newValue.match(/^".+"$/)) {
+            if(newValue === 'today') {
+              var today = new Date();
+              datepicker.$options[key] = +new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), (key === 'minDate' ? 1 : 0));
+            } else if(angular.isString(newValue) && newValue.match(/^".+"$/)) {
               datepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
             } else {
               var parsedDate = new Date(newValue);
