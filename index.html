@@ -1201,7 +1201,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
       <!-- Custom example -->
       <div class="form-group" ng-class="{&apos;has-error&apos;: datepickerForm.date2.$invalid}">
         <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as number)</small></label>
-        <input type="text" class="form-control" ng-model="selectedDateAsNumber" data-date-format="yyyy-MM-dd" data-date-type="number" data-min-date="02/10/86" data-max-date="01/01/90" data-autoclose="1" name="date2" bs-datepicker="">
+        <input type="text" class="form-control" ng-model="selectedDateAsNumber" data-date-format="yyyy-MM-dd" data-date-type="number" data-min-date="02/10/86" data-max-date="today" data-autoclose="1" name="date2" bs-datepicker="">
       </div>
       <hr>
       <!-- Date range example -->
@@ -1332,7 +1332,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>date*</td>
           <td>-Infinity</td>
           <td>
-            <p>Minimum allowed date for selection <small>(* fed into the <code>Date</code> constructor)</small>.</p>
+            <p>Minimum allowed date for selection <small>(* fed into the <code>Date</code> constructor)</small>. You can use the string "today" that will resolve the current date.</p>
           </td>
         </tr>
         <tr>
@@ -1340,7 +1340,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>date*</td>
           <td>+Infinity</td>
           <td>
-            <p>Maximum allowed date for selection <small>(* fed into the <code>Date</code> constructor)</small>.</p>
+            <p>Maximum allowed date for selection <small>(* fed into the <code>Date</code> constructor)</small>. You can use the string "today" that will resolve the current date.</p>
           </td>
         </tr>
         <tr>
@@ -2484,13 +2484,13 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/fefd8626.libraries.min.js"></script>
 
-  <script src="scripts/83bf787a.angular-strap.min.js"></script>
+  <script src="scripts/a4a1249b.angular-strap.min.js"></script>
 
   <script src="scripts/ca3800df.angular-strap.tpl.min.js"></script>
 
   <script src="scripts/52590b37.docs.min.js"></script>
 
-  <script src="scripts/3aebb115.docs.tpl.min.js"></script>
+  <script src="scripts/a29c416e.docs.tpl.min.js"></script>
 
   <script src="scripts/9205ee2a.demo.min.js"></script>
 
