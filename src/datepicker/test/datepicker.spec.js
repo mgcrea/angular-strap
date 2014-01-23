@@ -2,17 +2,18 @@
 
 describe('datepicker', function() {
 
-  var $compile, $templateCache, $datepicker, scope, sandboxEl, today;
+  var $compile, $templateCache, $datepicker, dateFilter, scope, sandboxEl, today;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.datepicker'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$datepicker_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$datepicker_, _dateFilter_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $datepicker = _$datepicker_;
+    dateFilter = _dateFilter_;
     today = new Date();
   }));
 
@@ -114,6 +115,42 @@ describe('datepicker', function() {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(5);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
+      expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(today, 'MMMM yyyy'));
+    });
+
+    it('should correctly display active date', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(today.getUTCDate());
+    });
+
+    it('should correctly navigate to upper month view', function() {
+      var elm = compileDirective('default');
+      var date = today.getDate(), month = today.getMonth();
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(scope.$$childHead.$mode).toBe(0);
+      angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
+      expect(scope.$$childHead.$mode).toBe(1);
+    });
+
+    describe('once in month view', function() {
+
+      it('should correctly compile inner content', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
+        expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(3);
+        expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(4 * 3);
+        expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(today, 'yyyy'));
+      });
+
+      it('should correctly display active date', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
+        expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text()).toBe(dateFilter(today, 'MMM'));
+      });
+
     });
 
     it('should correctly support undefined values', function() {
@@ -127,12 +164,6 @@ describe('datepicker', function() {
     //   var elm = compileDirective('value-past');
     //   angular.element(elm[0]).triggerHandler('focus');
     // });
-
-    it('should correctly display active date', function() {
-      var elm = compileDirective('default');
-      angular.element(elm[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(today.getUTCDate());
-    });
 
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
@@ -304,9 +335,9 @@ describe('datepicker', function() {
       it('should support today as minDate', function() {
         var elm = compileDirective('options-minDate-today');
         angular.element(elm[0]).triggerHandler('focus');
-        var date = new Date(), today = date.getDate();
+        var todayDate = today.getDate();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + today + ')').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ')').is(':disabled')).toBeFalsy();
       });
 
     });
