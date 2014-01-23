@@ -75,14 +75,15 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
         $datepicker.select = function(date, keepMode) {
           // console.warn('$datepicker.select', date, scope.$mode);
           if(!angular.isDate(date)) date = new Date(date);
+          controller.$dateValue.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
           if(!scope.$mode || keepMode) {
-            controller.$setViewValue(date);
+            controller.$setViewValue(controller.$dateValue);
             controller.$render();
             if(options.autoclose && !keepMode) {
               $datepicker.hide(true);
             }
           } else {
-            angular.extend(viewDate, {year: date.getUTCFullYear(), month: date.getUTCMonth(), date: date.getUTCDate()});
+            angular.extend(viewDate, {year: date.getFullYear(), month: date.getMonth(), date: date.getDate()});
             $datepicker.setMode(scope.$mode - 1);
             $datepicker.$build();
           }
@@ -383,7 +384,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
           datepicker.update(controller.$dateValue);
-        });
+        }, true);
 
         var dateParser = $dateParser({format: options.dateFormat, lang: options.lang});
 
@@ -472,11 +473,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             height: 250,
             steps: { month: 1 },
             update: function(date, force) {
-              if(!this.built || force || date.getUTCFullYear() !== viewDate.year || date.getUTCMonth() !== viewDate.month) {
-                angular.extend(viewDate, {year: picker.$date.getUTCFullYear(), month: picker.$date.getUTCMonth(), date: picker.$date.getUTCDate()});
+              if(!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
+                angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$build();
-              } else if(date.getUTCDate() !== viewDate.date) {
-                viewDate.date = picker.$date.getUTCDate();
+              } else if(date.getDate() !== viewDate.date) {
+                viewDate.date = picker.$date.getDate();
                 picker.$updateSelected();
               }
             },
@@ -486,8 +487,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               // dump('firstDayOfMonth', firstDayOfMonth);
               var days = [], day;
               for(var i = 0; i < 35; i++) {
-                day = new Date(firstDate.getUTCFullYear(), firstDate.getUTCMonth(), firstDate.getUTCDate() + i);
-                days.push({date: day, label: dateFilter(day, this.format), selected: picker.$date && this.isSelected(day), muted: day.getUTCMonth() !== viewDate.month, disabled: this.isDisabled(day)});
+                day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
+                days.push({date: day, label: dateFilter(day, this.format), selected: picker.$date && this.isSelected(day), muted: day.getMonth() !== viewDate.month, disabled: this.isDisabled(day)});
               }
               scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
               scope.labels = dayLabelHtml;
@@ -518,11 +519,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             height: 250,
             steps: { year: 1 },
             update: function(date, force) {
-              if(!this.built || date.getUTCFullYear() !== viewDate.year) {
-                angular.extend(viewDate, {year: picker.$date.getUTCFullYear(), month: picker.$date.getUTCMonth(), date: picker.$date.getUTCDate()});
+              if(!this.built || date.getFullYear() !== viewDate.year) {
+                angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$build();
-              } else if(date.getUTCMonth() !== viewDate.month) {
-                angular.extend(viewDate, {month: picker.$date.getUTCMonth(), date: picker.$date.getUTCDate()});
+              } else if(date.getMonth() !== viewDate.month) {
+                angular.extend(viewDate, {month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$updateSelected();
               }
             },
@@ -546,11 +547,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               return picker.$date && date.getFullYear() === picker.$date.getFullYear() && date.getMonth() === picker.$date.getMonth();
             },
             isDisabled: function(date) {
-              var lastDate = +new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0));
+              var lastDate = +new Date(date.getFullYear(), date.getMonth() + 1, 0);
               return lastDate < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
-              var actualMonth = picker.$date.getUTCMonth();
+              var actualMonth = picker.$date.getMonth();
               if(evt.keyCode === 37) picker.select(picker.$date.setMonth(actualMonth - 1), true);
               else if(evt.keyCode === 38) picker.select(picker.$date.setMonth(actualMonth - 4), true);
               else if(evt.keyCode === 39) picker.select(picker.$date.setMonth(actualMonth + 1), true);
@@ -563,11 +564,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             height: 250,
             steps: { year: 12 },
             update: function(date, force) {
-              if(!this.built || force || parseInt(date.getUTCFullYear()/20, 10) !== parseInt(viewDate.year/20, 10)) {
-                angular.extend(viewDate, {year: picker.$date.getUTCFullYear(), month: picker.$date.getUTCMonth(), date: picker.$date.getUTCDate()});
+              if(!this.built || force || parseInt(date.getFullYear()/20, 10) !== parseInt(viewDate.year/20, 10)) {
+                angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$build();
-              } else if(date.getUTCFullYear() !== viewDate.year) {
-                angular.extend(viewDate, {year: picker.$date.getUTCFullYear(), month: picker.$date.getUTCMonth(), date: picker.$date.getUTCDate()});
+              } else if(date.getFullYear() !== viewDate.year) {
+                angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$updateSelected();
               }
             },
@@ -575,7 +576,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               var firstYear = viewDate.year - viewDate.year % (this.split * 3);
               var years = [], year;
               for (var i = 0; i < 12; i++) {
-                year = new Date(Date.UTC(firstYear + i, 0, 1));
+                year = new Date(firstYear + i, 0, 1);
                 years.push({date: year, label: dateFilter(year, this.format), selected: picker.$isSelected(year), disabled: this.isDisabled(year)});
               }
               scope.title = years[0].label + '-' + years[years.length - 1].label;
@@ -590,11 +591,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               return picker.$date && date.getFullYear() === picker.$date.getFullYear();
             },
             isDisabled: function(date) {
-              var lastDate = +new Date(Date.UTC(date.getUTCFullYear() + 1, 0, 0));
+              var lastDate = +new Date(date.getFullYear() + 1, 0, 0);
               return lastDate < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
-              var actualYear = picker.$date.getUTCFullYear();
+              var actualYear = picker.$date.getFullYear();
               if(evt.keyCode === 37) picker.select(picker.$date.setYear(actualYear - 1), true);
               else if(evt.keyCode === 38) picker.select(picker.$date.setYear(actualYear - 4), true);
               else if(evt.keyCode === 39) picker.select(picker.$date.setYear(actualYear + 1), true);
