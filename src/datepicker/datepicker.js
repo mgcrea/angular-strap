@@ -482,7 +482,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             },
             build: function() {
               var days = [], day;
-              var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
+              var firstDayOfMonth = new Date(Date.UTC(viewDate.year, viewDate.month, 1));
               var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getUTCDay() + 1 - options.weekStart) * 864e5);
               // lastDate = new Date(Date.UTC(firstDate.getUTCFullYear(), firstDate.getUTCMonth(), firstDate.getUTCDate() + 1, 0, 0, 0, -1));
               for(var i = 0; i < 35; i++) {
@@ -529,7 +529,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
             build: function() {
               var months = [], month;
               for (var i = 0; i < 12; i++) {
-                month = new Date(viewDate.year, i, 1);
+                month = new Date(Date.UTC(viewDate.year, i, 1));
                 months.push({date: month, label: dateFilter(month, this.format), selected: picker.$isSelected(month), disabled: this.isDisabled(month)});
               }
               scope.title = dateFilter(month, 'yyyy');
@@ -573,7 +573,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
               var firstYear = viewDate.year - viewDate.year % (this.split * 3);
               var years = [], year;
               for (var i = 0; i < 12; i++) {
-                year = new Date(firstYear + i, 0, 1);
+                year = new Date(Date.UTC(firstYear + i, 0, 1));
                 years.push({date: year, label: dateFilter(year, this.format), selected: picker.$isSelected(year), disabled: this.isDisabled(year)});
               }
               scope.title = years[0].label + '-' + years[years.length - 1].label;
