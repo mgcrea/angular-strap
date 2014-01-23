@@ -9,6 +9,7 @@ before_script:
   - sleep 3 # give xvfb some time to start
   - npm install -gq grunt-cli bower coveralls
   - bower install --dev
+  - date --rfc-2822
 
 script:
   - grunt jshint test coveralls build
