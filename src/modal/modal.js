@@ -2,35 +2,13 @@
 
 angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
-  .run(function($templateCache, $modal) {
-
-    var template = '' +
-      '<div class="modal" tabindex="-1" role="dialog">' +
-        '<div class="modal-dialog">' +
-          '<div class="modal-content">' +
-            '<div class="modal-header" ng-show="title">' +
-              '<button type="button" class="close" ng-click="$hide()">&times;</button>' +
-              '<h4 class="modal-title" ng-bind="title"></h4>' +
-            '</div>'+
-            '<div class="modal-body" ng-show="content" ng-bind="content"></div>'+
-            '<div class="modal-footer">' +
-              '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-
-    $templateCache.put('$modal', template);
-
-  })
-
   .provider('$modal', function() {
 
     var defaults = this.defaults = {
       animation: 'animation-fade',
       prefixClass: 'modal',
       placement: 'top',
-      template: '$modal',
+      template: 'modal/modal.tpl.html',
       contentTemplate: false,
       container: false,
       element: null,
@@ -91,7 +69,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         // Support contentTemplate option
-        if(options.contentTemplate) { console.warn('in');
+        if(options.contentTemplate) {
           $modal.$promise = $modal.$promise.then(function(template) {
             if(angular.isObject(template)) template = template.data;
             var templateEl = angular.element(template);
