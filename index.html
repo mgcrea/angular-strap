@@ -550,6 +550,15 @@
           <td>false</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+            <p>It should be a <code>div.modal</code> element following Twitter Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/modal/modal.tpl.html" target="_blank">like this</a>).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>contentTemplate</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, fetches the partial and includes it as the inner content, can be either a remote URL or a cached template id.</p>
           </td>
         </tr>
       </tbody>
@@ -603,9 +612,9 @@
     <p>Asides require the <a href="#modals">modal plugin</a> to be included.</p>
   </div>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="aside/docs/aside.demo.html" data-content-js-url="aside/docs/aside.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip="">clog.info</a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="aside/docs/aside.demo.html" data-content-js-url="aside/docs/aside.demo.js" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""></a></h3>
   <pre class="bs-example-scope">$scope.aside = {{aside | json}};</pre>
-  <div class="bs-example" style="padding-bottom: 24px;" append-source="">
+  <div class="bs-example" append-source="">
 
     <!-- Button to trigger a default aside with a scope as an object {title:'', content:'', etc.} -->
     <button type="button" class="btn btn-lg btn-primary" bs-aside="aside">Click to toggle aside
@@ -723,12 +732,21 @@
  <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
           </td>
         </tr>
-        <tr>
+<tr>
           <td>template</td>
           <td>path</td>
           <td>false</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+            <p>It should be a <code>div.aside</code> element following Twitter Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/aside/aside.tpl.html" target="_blank">like this</a>).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>contentTemplate</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, fetches the partial and includes it as the inner content, can be either a remote URL or a cached template id.</p>
           </td>
         </tr>
       </tbody>
@@ -1606,7 +1624,15 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>false</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
-            <p>It should be a <code>div.tooltip</code> element following Twitter Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/tooltip/tooltip.js#L7" target="_blank">like this</a>).</p>
+            <p>It should be a <code>div.tooltip</code> element following Twitter Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/tooltip/tooltip.tpl.html" target="_blank">like this</a>).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>contentTemplate</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, fetches the partial and includes it as the inner content, can be either a remote URL or a cached template id.</p>
           </td>
         </tr>
       </tbody>
@@ -1785,7 +1811,15 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>false</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
-            <p>It should be a <code>div.popover</code> element following Twitter Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/popover/popover.js#L7" target="_blank">like this</a>).</p>
+            <p>It should be a <code>div.popover</code> element following Twitter Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/popover/popover.tpl.html" target="_blank">like this</a>).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>contentTemplate</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, fetches the partial and includes it as the inner content, can be either a remote URL or a cached template id.</p>
           </td>
         </tr>
       </tbody>
@@ -2484,15 +2518,15 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/fefd8626.libraries.min.js"></script>
 
-  <script src="scripts/e4e329ce.angular-strap.min.js"></script>
+  <script src="scripts/e8f1d295.angular-strap.min.js"></script>
 
-  <script src="scripts/db023850.angular-strap.tpl.min.js"></script>
+  <script src="scripts/7e83807a.angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/ab7789f7.docs.min.js"></script>
+  <script src="scripts/b0edd437.docs.min.js"></script>
 
-  <script src="scripts/b5756d34.docs.tpl.min.js"></script>
+  <script src="scripts/31a438a2.docs.tpl.min.js"></script>
 
-  <script src="scripts/a0d6c600.demo.min.js"></script>
+  <script src="scripts/23fc1927.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
