@@ -44,6 +44,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           options.delay = parseFloat(options.delay);
         }
 
+        // Support scope as string options
+        if(!options.scope && options.title) {
+          $tooltip.$scope.title = options.title;
+        }
+
         // Provide scope helpers
         scope.$hide = function() {
           scope.$$postDigest(function() {
