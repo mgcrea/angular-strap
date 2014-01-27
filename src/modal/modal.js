@@ -31,6 +31,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       prefixClass: 'modal',
       placement: 'top',
       template: '$modal',
+      contentTemplate: false,
       container: false,
       element: null,
       backdrop: true,
@@ -46,6 +47,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       var trim = String.prototype.trim;
       var bodyElement = jqLite($window.document.body);
       var htmlReplaceRegExp = /ng-bind="/ig;
+
+      // Helper functions
+
       var findElement = function(query, element) {
         return jqLite((element || document).querySelectorAll(query));
       };
@@ -56,7 +60,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Common vars
         var options = angular.extend({}, defaults, config);
-        $modal.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template/*, {cache: true}*/));
+        $modal.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template));
         var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(!options.element && !options.container) {
           options.container = 'body';
@@ -85,6 +89,22 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             $modal.toggle();
           });
         };
+
+        // Support contentTemplate option
+        if(options.contentTemplate) { console.warn('in');
+          $modal.$promise = $modal.$promise.then(function(template) {
+            if(angular.isObject(template)) template = template.data;
+            var templateEl = angular.element(template);
+            return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate, {cache: $templateCache}))
+            .then(function(contentTemplate) {
+              if(angular.isObject(contentTemplate)) contentTemplate = contentTemplate.data;
+              var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
+              // Drop the default footer
+              if(!config.template) contentEl.next().remove();
+              return templateEl[0].outerHTML;
+            });
+          });
+        }
 
         // Fetch, compile then initialize modal
         var modalLinker, modalElement;
@@ -239,7 +259,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation'], function(key) {
+        angular.forEach(['template', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
