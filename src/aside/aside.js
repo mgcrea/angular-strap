@@ -12,7 +12,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
               '<button type="button" class="close" ng-click="$hide()">&times;</button>' +
               '<h4 class="aside-title" ng-bind="title"></h4>' +
             '</div>' +
-            '<div class="aside-body" ng-show="content" ng-bind="content"></div>' +
+            '<div class="aside-body" ng-bind="content"></div>' +
             '<div class="aside-footer">' +
               '<button type="button" class="btn btn-default" ng-click="$hide()">Close</button>' +
             '</div>' +
@@ -31,6 +31,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
       prefixClass: 'aside',
       placement: 'right',
       template: '$aside',
+      contentTemplate: false,
       container: false,
       element: null,
       backdrop: true,
@@ -70,7 +71,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
       link: function postLink(scope, element, attr, transclusion) {
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation'], function(key) {
+        angular.forEach(['template', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

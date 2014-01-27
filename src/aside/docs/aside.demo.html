@@ -15,9 +15,9 @@
     <p>Asides require the <a href="#modals">modal plugin</a> to be included.</p>
   </div>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="aside/docs/aside.demo.html" data-content-js-url="aside/docs/aside.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="aside/docs/aside.demo.html" data-content-js-url="aside/docs/aside.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip></a></h3>
   <pre class="bs-example-scope">$scope.aside = {{aside | json}};</pre>
-  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+  <div class="bs-example" append-source>
 
     <!-- Button to trigger a default aside with a scope as an object {title:'', content:'', etc.} -->
     <button type="button" class="btn btn-lg btn-primary" bs-aside="aside">Click to toggle aside
@@ -135,12 +135,21 @@
  <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
           </td>
         </tr>
-        <tr>
+<tr>
           <td>template</td>
           <td>path</td>
           <td>false</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+            <p>It should be a <code>div.aside</code> element following Twitter Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/aside/aside.tpl.html" target="_blank">like this</a>).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>contentTemplate</td>
+          <td>path</td>
+          <td>false</td>
+          <td>
+            <p>If provided, fetches the partial and includes it as the inner content, can be either a remote URL or a cached template id.</p>
           </td>
         </tr>
       </tbody>
