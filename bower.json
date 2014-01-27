@@ -2,6 +2,26 @@
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Twitter Bootstrap",
   "version": "2.0.0-beta.4",
+  "keywords": [
+    "angular",
+    "bootstrap"
+  ],
+  "homepage": "http://mgcrea.github.io/angular-strap",
+  "bugs": "https://github.com/mgcrea/angular-strap/issues",
+  "author": {
+    "name": "Olivier Louvignes",
+    "email": "olivier@mg-crea.com",
+    "url": "https://github.com/mgcrea"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mgcrea/angular-strap.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
   "main": [
     "dist/angular-strap.min.js",
     "dist/angular-strap.tpl.min.js"
@@ -14,6 +34,7 @@
     "angular-animate": "~1.2.9",
     "angular-i18n": "~1.2.9",
     "angular-mocks": "~1.2.9",
+    "angular-motion": "~0.3.0",
     "angular-route": "~1.2.9",
     "angular-sanitize": "~1.2.9",
     "angular-scenario": "~1.2.9",
