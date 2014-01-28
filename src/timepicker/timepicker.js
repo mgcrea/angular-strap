@@ -229,11 +229,6 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             element.attr('readonly', 'true');
             element.on('click', focusElement);
           }
-          // Redundant with the watched update?
-          // if(controller.$dateValue) {
-          //   $timepicker.$date = controller.$dateValue;
-          //   $timepicker.$build();
-          // }
           _init();
         };
 
