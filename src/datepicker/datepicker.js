@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
+angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser', 'mgcrea.ngStrap.tooltip'])
 
   .provider('$datepicker', function() {
 
@@ -221,127 +221,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
 
   })
 
-  .provider('$dateParser', function($localeProvider) {
-
-    var proto = Date.prototype;
-
-    function isNumeric(n) {
-      return !isNaN(parseFloat(n)) && isFinite(n);
-    }
-
-    var defaults = this.defaults = {
-      format: 'shortDate'
-    };
-
-    this.$get = function($locale) {
-
-      if(!defaults.lang) defaults.lang = $locale.id;
-
-      var DateParserFactory = function(options) {
-
-        var $dateParser = {};
-        window.$locale = $locale;
-
-        var regExpMap = {
-          '/'     : '[\\/]',
-          '-'     : '[-]',
-          '.'     : '[.]',
-          ' '     : '[\\s]',
-          'EEEE'  : '((?:' + $locale.DATETIME_FORMATS.DAY.join('|') + '))',
-          'EEE'   : '((?:' + $locale.DATETIME_FORMATS.SHORTDAY.join('|') + '))',
-          'dd'    : '((?:(?:[0-2]?[0-9]{1})|(?:[3][01]{1})))',
-          'd'     : '((?:(?:[0-2]?[0-9]{1})|(?:[3][01]{1})))',
-          'MMMM'  : '((?:' + $locale.DATETIME_FORMATS.MONTH.join('|') + '))',
-          'MMM'   : '((?:' + $locale.DATETIME_FORMATS.SHORTMONTH.join('|') + '))',
-          'MM'    : '((?:[0]?[1-9]|[1][012]))',
-          'M'     : '((?:[0]?[1-9]|[1][012]))',
-          'yyyy'  : '((?:(?:[1]{1}[0-9]{1}[0-9]{1}[0-9]{1})|(?:[2]{1}[0-9]{3}))(?![[0-9]]))',
-          'yy'    : '((?:(?:[0-9]{1}[0-9]{1}))(?![[0-9]]))'
-        };
-
-        var setFnMap = {
-          // 'EEEE'  : function(value) { return this.setUTCDay($locale.DATETIME_FORMATS.MONTH.indexOf(value)); },
-          // 'EEE'   : function(value) { return this.setUTCDay($locale.DATETIME_FORMATS.SHORTMONTH.indexOf(value)); },
-          'dd'    : proto.setUTCDate,
-          'd'     : proto.setUTCDate,
-          'MMMM'  : function(value) { return this.setUTCMonth($locale.DATETIME_FORMATS.MONTH.indexOf(value)); },
-          'MMM'   : function(value) { return this.setUTCMonth($locale.DATETIME_FORMATS.SHORTMONTH.indexOf(value)); },
-          'MM'    : function(value) { return this.setUTCMonth(1 * value - 1); },
-          'M'     : function(value) { return this.setUTCMonth(1 * value - 1); },
-          'yyyy'  : proto.setUTCFullYear,
-          'yy'    : function(value) { return this.setUTCFullYear(2000 + 1 * value); },
-          'y'    : proto.setUTCFullYear
-        };
-
-        var regex, setMap;
-
-        $dateParser.init = function() {
-          $dateParser.$format = $locale.DATETIME_FORMATS[options.format] || options.format;
-          regex = regExpForFormat($dateParser.$format);
-          setMap = setMapForFormat($dateParser.$format);
-        };
-
-        $dateParser.isValid = function(date) {
-          if(angular.isDate(date)) return !isNaN(date.getTime());
-          return regex.test(date);
-        };
-
-        $dateParser.parse = function(value, baseDate) {
-          if(angular.isDate(value)) return value;
-          var matches = regex.exec(value);
-          if(!matches) return false;
-          var date = baseDate || new Date(0);
-          for(var i = 0; i < matches.length - 1; i++) {
-            setMap[i] && setMap[i].call(date, matches[i+1]);
-          }
-          return date;
-        };
-
-        // Private functions
-
-        function setMapForFormat(format) {
-          var keys = Object.keys(setFnMap), i;
-          var map = [], sortedMap = [];
-          // Map to setFn
-          for(i = 0; i < keys.length; i++) {
-            if(['/', '.', '-', ' '].indexOf(keys[i]) !== -1) continue;
-            if(format.split(keys[i]).length > 1) {
-              var index = format.search(keys[i]);
-              format = format.split(keys[i]).join('');
-              if(setFnMap[keys[i]]) map[index] = setFnMap[keys[i]];
-            }
-          }
-          // Sort result map
-          angular.forEach(map, function(v) {
-            sortedMap.push(v);
-          });
-          return sortedMap;
-        }
-
-        function regExpForFormat(format) {
-          var keys = Object.keys(regExpMap), i;
-          // Abstract replaces to avoid collisions
-          for(i = 0; i < keys.length; i++) {
-            format = format.split(keys[i]).join('${' + i + '}');
-          }
-          // Replace abstracted values
-          for(i = 0; i < keys.length; i++) {
-            format = format.split('${' + i + '}').join(regExpMap[keys[i]]);
-          }
-          return new RegExp('^' + format + '$', ['i']);
-        }
-
-        $dateParser.init();
-        return $dateParser;
-
-      };
-
-      return DateParserFactory;
-
-    };
-
-  })
-
   .directive('bsDatepicker', function($window, $parse, $q, $locale, dateFilter, $datepicker, $dateParser, $timeout) {
 
     var isAppleTouch = /(iP(a|o)d|iPhone)/g.test($window.navigator.userAgent);
@@ -394,10 +273,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
           var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
           if(!parsedDate || isNaN(parsedDate.getTime())) {
             controller.$setValidity('date', false);
-            return;
           } else {
             var isValid = parsedDate.getTime() >= options.minDate &&  parsedDate.getTime() <= options.maxDate;
             controller.$setValidity('date', isValid);
+            // Only update the model when we have a valid date
+            if(isValid) controller.$dateValue = parsedDate;
           }
           controller.$dateValue = parsedDate;
           if(options.dateType === 'string') {
@@ -414,7 +294,13 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.tooltip'])
         // modelValue -> $formatters -> viewValue
         controller.$formatters.push(function(modelValue) {
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
-          controller.$dateValue = angular.isDate(modelValue) ? modelValue : new Date(modelValue);
+          var date = angular.isDate(modelValue) ? modelValue : new Date(modelValue);
+          // Setup default value?
+          // if(isNaN(date.getTime())) {
+          //   var today = new Date();
+          //   date = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+          // }
+          controller.$dateValue = date;
           return controller.$dateValue;
         });
 

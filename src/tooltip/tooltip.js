@@ -45,7 +45,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         }
 
         // Support scope as string options
-        if(!options.scope && options.title) {
+        if(options.title) {
           $tooltip.$scope.title = options.title;
         }
 

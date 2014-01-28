@@ -1,22 +1,17 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.4 - 2014-01-20
+ * @version v2.0.0-rc.1 - 2014-01-28
  * @link http://mgcrea.github.io/angular-strap
- * @author Olivier Louvignes <olivier@mg-crea.com>
+ * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
-angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).run([
-  '$templateCache',
-  function ($templateCache) {
-    var template = '' + '<div class="popover" tabindex="-1" ng-show="content" ng-class="{\'in\': $visible}">' + '<div class="arrow"></div>' + '<h3 class="popover-title" ng-bind="title" ng-show="title"></h3>' + '<div class="popover-content" ng-bind="content"></div>' + '</div>';
-    $templateCache.put('$popover', template);
-  }
-]).provider('$popover', function () {
+angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$popover', function () {
   var defaults = this.defaults = {
       animation: 'animation-fade',
       placement: 'right',
-      template: '$popover',
+      template: 'popover/popover.tpl.html',
+      contentTemplate: false,
       trigger: 'click',
       keyboard: true,
       html: false,
@@ -30,7 +25,11 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).run([
     function ($tooltip) {
       function PopoverFactory(element, config) {
         var options = angular.extend({}, defaults, config);
-        return $tooltip(element, options);
+        var $popover = $tooltip(element, options);
+        if (options.content) {
+          $popover.$scope.content = options.content;
+        }
+        return $popover;
       }
       return PopoverFactory;
     }
@@ -48,14 +47,15 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).run([
       link: function postLink(scope, element, attr) {
         var options = { scope: scope };
         angular.forEach([
+          'template',
+          'contentTemplate',
           'placement',
           'container',
           'delay',
           'trigger',
           'keyboard',
           'html',
-          'animation',
-          'template'
+          'animation'
         ], function (key) {
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];

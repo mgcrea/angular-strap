@@ -12,12 +12,12 @@
 
   <div class="callout callout-danger">
     <h4>Plugin dependency</h4>
-    <p>Datepickers require the <a href="#tooltips">tooltip module</a> to be loaded.</p>
+    <p>Timepickers require the <a href="#tooltips">tooltip module</a> and <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/date-parser.js" target="_blank">dateParser helper</a> module to be loaded.</p>
   </div>
 
   <div class="callout callout-info">
-    <h4>Strong support for locales</h4>
-    <p>This datepicker leverages the <a href="http://docs.angularjs.org/api/ng.$locale">$locale</a> service. You just have to load the proper <a href="http://docs.angularjs.org/guide/i18n">i18n</a> file to seamlessly translate your datepickers.</p>
+    <h4>Support for locales</h4>
+    <p>This module leverages the <a href="http://docs.angularjs.org/api/ng.$locale">$locale</a> service. You just have to load the proper <a href="http://docs.angularjs.org/guide/i18n">i18n</a> file to seamlessly translate your datepickers.</p>
   </div>
 
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="datepicker/docs/datepicker.demo.html" data-content-js-url="datepicker/docs/datepicker.demo.js" ng-plunkr data-placement="right" bs-tooltip></a></h3>
@@ -28,7 +28,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
 </pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
     <form name="datepickerForm" class="form-inline" role="form">
-      <!-- Classic example -->
+      <!-- Basic example -->
       <div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
         <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as date)</small></label>
         <input type="text" class="form-control" ng-model="selectedDate" name="date" bs-datepicker>
@@ -61,7 +61,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
     <div class="highlight">
       <pre>
         <code class="javascript" highlight-block>
-          var myDatepicker = $datepicker(element, controller);
+          var myDatepicker = $datepicker(element, ngModelController);
         </code>
       </pre>
     </div>

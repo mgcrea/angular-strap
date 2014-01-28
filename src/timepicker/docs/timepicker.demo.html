@@ -1,0 +1,228 @@
+<div class="bs-docs-section" ng-controller="TimepickerDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="timepickers">Timepickers <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/timepicker/timepicker.js" target="_blank">timepicker.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.timepicker</code>
+  </div>
+
+
+  <h2 id="timepickers-examples">Examples</h2>
+  <p>Add quick, dynamic timepicker functionality with any form text input.</p>
+
+  <div class="callout callout-danger">
+    <h4>Plugin dependency</h4>
+    <p>Timepickers require the <a href="#tooltips">tooltip module</a> and <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/date-parser.js" target="_blank">dateParser helper</a> module to be loaded.</p>
+  </div>
+
+  <div class="callout callout-info">
+    <h4>Support for locales</h4>
+    <p>This module leverages the <a href="http://docs.angularjs.org/api/ng.$locale">$locale</a> service. You just have to load the proper <a href="http://docs.angularjs.org/guide/i18n">i18n</a> file to seamlessly translate your timepickers.</p>
+  </div>
+
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="timepicker/docs/timepicker.demo.html" data-content-js-url="timepicker/docs/timepicker.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip></a></h3>
+  <pre class="bs-example-scope">$scope.time = {{time}}; // (formatted: {{time | date:'shortTime'}})
+$scope.selectedTimeAsNumber = {{selectedTimeAsNumber}}; // (formatted: {{selectedTimeAsNumber | date:'shortTime'}})
+$scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}})
+  </pre>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+    <form name="timepickerForm" class="form-inline" role="form">
+
+      <!-- Basic example -->
+      <div class="form-group" ng-class="{'has-error': timepickerForm.time.$invalid}">
+        <label class="control-label"><i class="fa fa-clock-o"></i> Time <small>(as date)</small></label>
+        <input type="text" class="form-control" size="1" ng-model="time" name="time" required bs-timepicker>
+      </div>
+
+      <!-- Custom example -->
+      <div class="form-group" ng-class="{'has-error': timepickerForm.time2.$invalid}">
+        <label class="control-label"><i class="fa fa-clock-o"></i> Time <small>(as number)</small></label>
+        <input type="text" class="form-control" size="1" ng-model="selectedTimeAsNumber" data-time-format="HH:mm" data-time-type="number" data-min-time="10:00" data-max-time="13:30" data-autoclose="1" name="time2" bs-timepicker>
+      </div>
+      <hr>
+
+      <!-- Datetime example -->
+      <div class="form-group">
+        <label class="control-label"><i class="fa fa-calendar"></i> Datetime picker</label><br>
+        <div class="form-group">
+          <input type="text" size="10" class="form-control" ng-model="sharedDate" data-autoclose="1" placeholder="Date" bs-datepicker>
+        </div>
+        <div class="form-group">
+          <input type="text" size="8" class="form-control" ng-model="sharedDate" data-autoclose="1" placeholder="Time" bs-timepicker>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <h2 id="timepickers-usage">Usage</h2>
+  <p>Append a <code>bs-timepicker</code>attribute to any element to enable the directive.</p>
+  <div class="callout callout-info">
+    <h4>The module exposes a <code>$timepicker</code>service</h4>
+    <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
+    <div class="highlight">
+      <pre>
+        <code class="javascript" highlight-block>
+          var myTimepicker = $timepicker(element, ngModelController);
+        </code>
+      </pre>
+    </div>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <div class="callout callout-info">
+    <h4>This module supports exotic placement options!</h4>
+    <p>You can position your select in corners (such as <code>bottom-left</code>) or any other combination two.</p>
+    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>animation-fade</td>
+          <td>apply a CSS animation powered by <code>ngAnimate</code></td>
+        </tr>
+        <tr>
+          <td>placement</td>
+          <td>string</td>
+          <td>'bottom-left'</td>
+          <td>how to position the typeahead - top | bottom | left | right, or any combination like bottom-left.</td>
+        </tr>
+        <tr>
+          <td>trigger</td>
+          <td>string</td>
+          <td>'focus'</td>
+          <td>how typeahead is triggered - click | hover | focus | manual</td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
+        </tr>
+        <tr>
+          <td>delay</td>
+          <td>number | object</td>
+          <td>0</td>
+          <td>
+            <p>delay showing and hiding the typeahead (ms) - does not apply to manual trigger type</p>
+            <p>If a number is supplied, delay is applied to both hide/show</p>
+            <p>Object structure is:
+              <code>delay: { show: 500, hide: 100 }</code>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>container</td>
+          <td>string | false</td>
+          <td>false</td>
+          <td>
+            <p>Appends the typeahead to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the typeahead in the flow of the document near the triggering element -&nbsp;which will prevent the typeahead from floating away from the triggering element during a window resize.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>path | id</td>
+          <td>'$typeahead'</td>
+          <td>
+            <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>timeFormat</td>
+          <td>string</td>
+          <td>'shortTime'</td>
+          <td>
+            <p>Rendering format of your time, leverages <a href="http://docs.angularjs.org/api/ng.filter:date">ng.filter:date</a>.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>timeType</td>
+          <td>string</td>
+          <td>'time'</td>
+          <td>
+            <p>Expected model type of your time - date | number | iso | string</p>
+          </td>
+        </tr>
+        <tr>
+          <td>autoclose</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether the picker should close itself upon select.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>minTime</td>
+          <td>date*</td>
+          <td>-Infinity</td>
+          <td>
+            <p>Minimum allowed time for selection <small>(parsed against current format)</small>. You can use the string "now" that will resolve the current time.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>maxTime</td>
+          <td>date*</td>
+          <td>+Infinity</td>
+          <td>
+            <p>Maximum allowed time for selection <small>(parsed against current format)</small>. You can use the string "now" that will resolve the current time.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>length</td>
+          <td>number</td>
+          <td>5</td>
+          <td>
+            <p>Length of the timepicker (should be an even number).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>hourStep</td>
+          <td>number</td>
+          <td>1</td>
+          <td>
+            <p>Default step for hours.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>minuteStep</td>
+          <td>number</td>
+          <td>5</td>
+          <td>
+            <p>Default step for minutes.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$timepickerProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block>
+          angular.module('myApp')
+          .config(function($timepickerProvider) {
+            angular.extend($timepickerProvider.defaults, {
+              timeFormat: 'HH:mm',
+              length: 7
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+</div>

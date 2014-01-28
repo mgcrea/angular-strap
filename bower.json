@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Twitter Bootstrap",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-rc.1",
   "keywords": [
     "angular",
     "bootstrap"
@@ -25,6 +25,11 @@
   "main": [
     "dist/angular-strap.min.js",
     "dist/angular-strap.tpl.min.js"
+  ],
+  "ignore": [
+    "docs",
+    "test",
+    "CONTRIBUTING.md"
   ],
   "dependencies": {
     "angular": "~1.2.9",
