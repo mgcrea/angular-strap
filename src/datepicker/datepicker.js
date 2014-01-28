@@ -352,7 +352,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         var views = [{
             format: 'dd',
             split: 7,
-            height: 250,
             steps: { month: 1 },
             update: function(date, force) {
               if(!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
@@ -374,9 +373,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
               scope.labels = dayLabelHtml;
               scope.rows = split(days, this.split);
-              scope.width = 100 / this.split;
-              // scope.height = 100 / scope.rows.length;
-              scope.height = (this.height - 75) / scope.rows.length;
               this.built = true;
             },
             isSelected: function(date) {
@@ -397,7 +393,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             name: 'month',
             format: 'MMM',
             split: 4,
-            height: 250,
             steps: { year: 1 },
             update: function(date, force) {
               if(!this.built || date.getFullYear() !== viewDate.year) {
@@ -419,9 +414,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               scope.title = dateFilter(month, 'yyyy');
               scope.labels = false;
               scope.rows = split(months, this.split);
-              scope.width = 100 / this.split;
-              // scope.height = 100 / scope.rows.length;
-              scope.height = (this.height - 50) / scope.rows.length;
               this.built = true;
             },
             isSelected: function(date) {
@@ -442,7 +434,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             name: 'year',
             format: 'yyyy',
             split: 4,
-            height: 250,
             steps: { year: 12 },
             update: function(date, force) {
               if(!this.built || force || parseInt(date.getFullYear()/20, 10) !== parseInt(viewDate.year/20, 10)) {
@@ -463,9 +454,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               scope.title = years[0].label + '-' + years[years.length - 1].label;
               scope.labels = false;
               scope.rows = split(years, this.split);
-              scope.width = 100 / this.split;
-              // scope.height = 100 / scope.rows.length;
-              scope.height = (this.height - 50) / scope.rows.length;
               this.built = true;
             },
             isSelected: function(date) {

@@ -113,8 +113,8 @@ describe('datepicker', function() {
     it('should correctly compile inner content', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(5);
-      expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
+      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(7 * 5);
+      expect(sandboxEl.find('.dropdown-menu tbody td .btn').length).toBe(7 * 5);
       expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(today, 'MMMM yyyy'));
       var todayDate = today.getDate();
       var firstDate = sandboxEl.find('.dropdown-menu tbody .btn:eq(0)').text() * 1;
@@ -142,7 +142,7 @@ describe('datepicker', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
-        expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(3);
+        expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(4 * 3);
         expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(4 * 3);
         expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(today, 'yyyy'));
       });
@@ -173,7 +173,7 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
         angular.element(sandboxEl.find('.dropdown-menu thead button:eq(1)')[0]).triggerHandler('click');
-        expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(3);
+        expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(4 * 3);
         expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(4 * 3);
         // expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(today, 'yyyy'));
       });
@@ -191,14 +191,14 @@ describe('datepicker', function() {
     it('should correctly support undefined values', function() {
       var elm = compileDirective('value-undefined');
       angular.element(elm[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(5);
+      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(7 * 5);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
     });
 
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-datepicker]:eq(0)')).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(5);
+      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(7 * 5);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
     });
 
