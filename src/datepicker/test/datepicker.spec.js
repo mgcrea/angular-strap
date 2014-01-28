@@ -121,7 +121,7 @@ describe('datepicker', function() {
     it('should correctly display active date', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(today.getUTCDate());
+      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(today.getDate());
     });
 
     it('should correctly navigate to upper month view', function() {
