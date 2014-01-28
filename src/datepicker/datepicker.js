@@ -372,7 +372,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getUTCDay() + 1 - options.weekStart) * 864e5);
               // dump('firstDayOfMonth', firstDayOfMonth);
               var days = [], day;
-              for(var i = 0; i < 35; i++) {
+              for(var i = 1; i < 36; i++) {
                 day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
                 days.push({date: day, label: dateFilter(day, this.format), selected: picker.$date && this.isSelected(day), muted: day.getMonth() !== viewDate.month, disabled: this.isDisabled(day)});
               }
