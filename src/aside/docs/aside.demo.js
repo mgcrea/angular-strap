@@ -4,6 +4,7 @@ angular.module('mgcrea.ngStrapDocs')
 
 .config(function($asideProvider) {
   angular.extend($asideProvider.defaults, {
+    container: 'body',
     html: true
   });
 })

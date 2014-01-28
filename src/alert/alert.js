@@ -45,11 +45,9 @@ angular.module('mgcrea.ngStrap.alert', [])
 
         $alert = $modal(options);
 
-        // Support scope as string options
-        if(!options.scope) {
-          angular.forEach([/*'title', 'content', */'type'], function(key) {
-            if(options[key]) $alert.$scope[key] = options[key];
-          });
+        // Support scope as string options [/*title, content, */type]
+        if(options.type) {
+          $alert.$scope.type = options.type;
         }
 
         // Support auto-close duration
