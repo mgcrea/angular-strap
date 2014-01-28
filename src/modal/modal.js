@@ -75,7 +75,13 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             var templateEl = angular.element(template);
             return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate, {cache: $templateCache}))
             .then(function(contentTemplate) {
-              if(angular.isObject(contentTemplate)) contentTemplate = contentTemplate.data;
+              // $templateCache returns an array of response
+              if(angular.isArray(contentTemplate)) {
+                contentTemplate = contentTemplate[1];
+              } else if (angular.isObject(contentTemplate)) {
+                // othewise $http promise resolves with http resources
+                contentTemplate = contentTemplate.data;
+              }
               var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
               // Drop the default footer
               if(!config.template) contentEl.next().remove();
