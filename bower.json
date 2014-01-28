@@ -26,6 +26,11 @@
     "dist/angular-strap.min.js",
     "dist/angular-strap.tpl.min.js"
   ],
+  "ignore": [
+    "docs",
+    "test",
+    "CONTRIBUTING.md"
+  ],
   "dependencies": {
     "angular": "~1.2.9",
     "bootstrap": "~3.0.3"
