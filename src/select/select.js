@@ -251,8 +251,9 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         // Initialize select
         var select = $select(element, controller, options);
 
-        // Watch ngOptions values for changes
-        scope.$watch(parsedOptions.$match[7], function(newValue, oldValue) {
+        // Watch ngOptions values before filtering for changes
+        var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
+        scope.$watch(watchedOptions, function(newValue, oldValue) {
           parsedOptions.valuesFn(scope, controller)
           .then(function(values) {
             select.update(values);

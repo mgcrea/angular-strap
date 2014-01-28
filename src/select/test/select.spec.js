@@ -30,6 +30,9 @@ describe('select', function () {
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><div class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></div></li></ul>'
     },
+    'markup-ngOptions-filtered': {
+      element: '<div class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons | orderBy:\'icon.value\'" bs-select></div>'
+    },
     'options-multiple': {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<div class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></div>'
@@ -115,6 +118,12 @@ describe('select', function () {
       angular.element(elm.find('[bs-select]:eq(0)')).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
+    });
+
+    it('should support ngOptions with filters', function() {
+      var elm = compileDirective('markup-ngOptions-filtered');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
     });
 
   });
