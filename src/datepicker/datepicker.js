@@ -175,10 +175,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             element.attr('readonly', 'true');
             element.on('click', focusElement);
           }
-          if(controller.$dateValue) {
-            $datepicker.$date = controller.$dateValue;
-            $datepicker.$build();
-          }
           _init();
         };
 
@@ -369,8 +365,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             },
             build: function() {
               var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
-              var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getUTCDay() + 1 - options.weekStart) * 864e5);
-              // dump('firstDayOfMonth', firstDayOfMonth);
+              var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() - options.weekStart) * 864e5);
               var days = [], day;
               for(var i = 0; i < 35; i++) {
                 day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);

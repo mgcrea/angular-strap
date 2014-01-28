@@ -116,12 +116,15 @@ describe('datepicker', function() {
       expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(5);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
       expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(today, 'MMMM yyyy'));
+      var todayDate = today.getDate();
+      var firstDate = sandboxEl.find('.dropdown-menu tbody .btn:eq(0)').text() * 1;
+      expect(new Date(today.getFullYear(), today.getMonth() - (firstDate !== 1 ? 1 : 0), firstDate).getDay()).toBe($datepicker.defaults.weekStart);
     });
 
     it('should correctly display active date', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(today.getUTCDate());
+      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(today.getDate());
     });
 
     it('should correctly navigate to upper month view', function() {
