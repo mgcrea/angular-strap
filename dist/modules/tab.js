@@ -1,8 +1,8 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.4 - 2014-01-20
+ * @version v2.0.0-rc.1 - 2014-01-28
  * @link http://mgcrea.github.io/angular-strap
- * @author Olivier Louvignes <olivier@mg-crea.com>
+ * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
@@ -10,13 +10,11 @@ angular.module('mgcrea.ngStrap.tab', []).run([
   '$templateCache',
   function ($templateCache) {
     $templateCache.put('$pane', '{{pane.content}}');
-    var template = '<ul class="nav nav-tabs">' + '<li ng-repeat="pane in panes" ng-class="{active:$index==active}">' + '<a data-toggle="tab" ng-click="setActive($index, $event)" data-index="{{$index}}">{{pane.title}}</a>' + '</li>' + '</ul>' + '<div class="tab-content">' + '<div ng-repeat="pane in panes" class="tab-pane" ng-class="[$index==active?\'active\':\'\']" ng-include="pane.template || \'$pane\'"></div>' + '</div>';
-    $templateCache.put('$tabs', template);
   }
 ]).provider('$tab', function () {
   var defaults = this.defaults = {
       animation: 'animation-fade',
-      template: '$tabs'
+      template: 'tab/tab.tpl.html'
     };
   this.$get = function () {
     return { defaults: defaults };

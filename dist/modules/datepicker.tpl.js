@@ -1,8 +1,8 @@
 /**
  * angular-strap
- * @version v2.0.0-beta.4 - 2014-01-20
+ * @version v2.0.0-rc.1 - 2014-01-28
  * @link http://mgcrea.github.io/angular-strap
- * @author Olivier Louvignes <olivier@mg-crea.com>
+ * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 angular.module('mgcrea.ngStrap.datepicker').run(['$templateCache', function($templateCache) {
