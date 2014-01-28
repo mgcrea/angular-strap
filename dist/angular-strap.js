@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.1 - 2014-01-28
+ * @version v2.0.0-rc.1 - 2014-01-29
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -612,10 +612,6 @@
               element.attr('readonly', 'true');
               element.on('click', focusElement);
             }
-            if (controller.$dateValue) {
-              $datepicker.$date = controller.$dateValue;
-              $datepicker.$build();
-            }
             _init();
           };
           var _destroy = $datepicker.destroy;
@@ -785,7 +781,6 @@
               {
                 format: 'dd',
                 split: 7,
-                height: 250,
                 steps: { month: 1 },
                 update: function (date, force) {
                   if (!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
@@ -802,7 +797,7 @@
                 },
                 build: function () {
                   var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
-                  var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getUTCDay() + 1 - options.weekStart) * 86400000);
+                  var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() - options.weekStart) * 86400000);
                   var days = [], day;
                   for (var i = 0; i < 35; i++) {
                     day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
@@ -817,8 +812,6 @@
                   scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
                   scope.labels = dayLabelHtml;
                   scope.rows = split(days, this.split);
-                  scope.width = 100 / this.split;
-                  scope.height = (this.height - 75) / scope.rows.length;
                   this.built = true;
                 },
                 isSelected: function (date) {
@@ -843,7 +836,6 @@
                 name: 'month',
                 format: 'MMM',
                 split: 4,
-                height: 250,
                 steps: { year: 1 },
                 update: function (date, force) {
                   if (!this.built || date.getFullYear() !== viewDate.year) {
@@ -876,8 +868,6 @@
                   scope.title = dateFilter(month, 'yyyy');
                   scope.labels = false;
                   scope.rows = split(months, this.split);
-                  scope.width = 100 / this.split;
-                  scope.height = (this.height - 50) / scope.rows.length;
                   this.built = true;
                 },
                 isSelected: function (date) {
@@ -903,7 +893,6 @@
                 name: 'year',
                 format: 'yyyy',
                 split: 4,
-                height: 250,
                 steps: { year: 12 },
                 update: function (date, force) {
                   if (!this.built || force || parseInt(date.getFullYear() / 20, 10) !== parseInt(viewDate.year / 20, 10)) {
@@ -937,8 +926,6 @@
                   scope.title = years[0].label + '-' + years[years.length - 1].label;
                   scope.labels = false;
                   scope.rows = split(years, this.split);
-                  scope.width = 100 / this.split;
-                  scope.height = (this.height - 50) / scope.rows.length;
                   this.built = true;
                 },
                 isSelected: function (date) {
@@ -1373,8 +1360,6 @@
               locals[valueName] = match;
               label = displayFn(locals);
               value = valueFn(locals);
-              if (angular.isObject(value))
-                value = label;
               return {
                 label: label,
                 value: value
@@ -1458,7 +1443,7 @@
               if (angular.isObject(template))
                 template = template.data;
               var templateEl = angular.element(template);
-              return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate, { cache: $templateCache })).then(function (contentTemplate) {
+              return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate)).then(function (contentTemplate) {
                 if (angular.isObject(contentTemplate))
                   contentTemplate = contentTemplate.data;
                 var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
@@ -2166,7 +2151,8 @@
           });
           var parsedOptions = $parseOptions(attr.ngOptions);
           var select = $select(element, controller, options);
-          scope.$watch(parsedOptions.$match[7], function (newValue, oldValue) {
+          var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
+          scope.$watch(watchedOptions, function (newValue, oldValue) {
             parsedOptions.valuesFn(scope, controller).then(function (values) {
               select.update(values);
               controller.$render();

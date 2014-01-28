@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.1 - 2014-01-28
+ * @version v2.0.0-rc.1 - 2014-01-29
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -33,8 +33,6 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', []).provider('$parseOption
             locals[valueName] = match;
             label = displayFn(locals);
             value = valueFn(locals);
-            if (angular.isObject(value))
-              value = label;
             return {
               label: label,
               value: value

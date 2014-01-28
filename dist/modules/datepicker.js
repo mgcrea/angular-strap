@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.1 - 2014-01-28
+ * @version v2.0.0-rc.1 - 2014-01-29
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -162,10 +162,6 @@ angular.module('mgcrea.ngStrap.datepicker', [
             element.prop('type', 'text');
             element.attr('readonly', 'true');
             element.on('click', focusElement);
-          }
-          if (controller.$dateValue) {
-            $datepicker.$date = controller.$dateValue;
-            $datepicker.$build();
           }
           _init();
         };
@@ -336,7 +332,6 @@ angular.module('mgcrea.ngStrap.datepicker', [
             {
               format: 'dd',
               split: 7,
-              height: 250,
               steps: { month: 1 },
               update: function (date, force) {
                 if (!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
@@ -353,7 +348,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
               },
               build: function () {
                 var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
-                var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getUTCDay() + 1 - options.weekStart) * 86400000);
+                var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() - options.weekStart) * 86400000);
                 var days = [], day;
                 for (var i = 0; i < 35; i++) {
                   day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
@@ -368,8 +363,6 @@ angular.module('mgcrea.ngStrap.datepicker', [
                 scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
                 scope.labels = dayLabelHtml;
                 scope.rows = split(days, this.split);
-                scope.width = 100 / this.split;
-                scope.height = (this.height - 75) / scope.rows.length;
                 this.built = true;
               },
               isSelected: function (date) {
@@ -394,7 +387,6 @@ angular.module('mgcrea.ngStrap.datepicker', [
               name: 'month',
               format: 'MMM',
               split: 4,
-              height: 250,
               steps: { year: 1 },
               update: function (date, force) {
                 if (!this.built || date.getFullYear() !== viewDate.year) {
@@ -427,8 +419,6 @@ angular.module('mgcrea.ngStrap.datepicker', [
                 scope.title = dateFilter(month, 'yyyy');
                 scope.labels = false;
                 scope.rows = split(months, this.split);
-                scope.width = 100 / this.split;
-                scope.height = (this.height - 50) / scope.rows.length;
                 this.built = true;
               },
               isSelected: function (date) {
@@ -454,7 +444,6 @@ angular.module('mgcrea.ngStrap.datepicker', [
               name: 'year',
               format: 'yyyy',
               split: 4,
-              height: 250,
               steps: { year: 12 },
               update: function (date, force) {
                 if (!this.built || force || parseInt(date.getFullYear() / 20, 10) !== parseInt(viewDate.year / 20, 10)) {
@@ -488,8 +477,6 @@ angular.module('mgcrea.ngStrap.datepicker', [
                 scope.title = years[0].label + '-' + years[years.length - 1].label;
                 scope.labels = false;
                 scope.rows = split(years, this.split);
-                scope.width = 100 / this.split;
-                scope.height = (this.height - 50) / scope.rows.length;
                 this.built = true;
               },
               isSelected: function (date) {

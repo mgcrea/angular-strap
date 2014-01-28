@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.1 - 2014-01-28
+ * @version v2.0.0-rc.1 - 2014-01-29
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -76,7 +76,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).pr
             if (angular.isObject(template))
               template = template.data;
             var templateEl = angular.element(template);
-            return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate, { cache: $templateCache })).then(function (contentTemplate) {
+            return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate)).then(function (contentTemplate) {
               if (angular.isObject(contentTemplate))
                 contentTemplate = contentTemplate.data;
               var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);

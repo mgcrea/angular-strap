@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.1 - 2014-01-28
+ * @version v2.0.0-rc.1 - 2014-01-29
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -229,7 +229,8 @@ angular.module('mgcrea.ngStrap.select', [
         });
         var parsedOptions = $parseOptions(attr.ngOptions);
         var select = $select(element, controller, options);
-        scope.$watch(parsedOptions.$match[7], function (newValue, oldValue) {
+        var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
+        scope.$watch(watchedOptions, function (newValue, oldValue) {
           parsedOptions.valuesFn(scope, controller).then(function (values) {
             select.update(values);
             controller.$render();
