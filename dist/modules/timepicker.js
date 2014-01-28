@@ -83,7 +83,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
             $timepicker.$build();
           }
         };
-        $timepicker.select = function (date, index) {
+        $timepicker.select = function (date, index, keep) {
           if (!angular.isDate(date))
             date = new Date(date);
           if (index === 0)
@@ -92,7 +92,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
             controller.$dateValue.setMinutes(date.getMinutes());
           controller.$setViewValue(controller.$dateValue);
           controller.$render();
-          if (options.autoclose) {
+          if (options.autoclose && !keep) {
             $timepicker.hide(true);
           }
         };
@@ -213,7 +213,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
               return createSelection(hoursLength + 1 + minutesLength + 1, hoursLength + 1 + minutesLength + 3);
             $timepicker.switchMeridian();
           }
-          $timepicker.select(newDate, selectedIndex);
+          $timepicker.select(newDate, selectedIndex, true);
           parentScope.$digest();
         };
         function createSelection(start, end) {
