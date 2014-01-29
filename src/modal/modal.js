@@ -21,15 +21,15 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
     this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions) {
 
       var forEach = angular.forEach;
-      var jqLite = angular.element;
       var trim = String.prototype.trim;
-      var bodyElement = jqLite($window.document.body);
+      var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+      var bodyElement = angular.element($window.document.body);
       var htmlReplaceRegExp = /ng-bind="/ig;
 
       // Helper functions
 
       var findElement = function(query, element) {
-        return jqLite((element || document).querySelectorAll(query));
+        return angular.element((element || document).querySelectorAll(query));
       };
 
       function ModalFactory(config) {
@@ -86,7 +86,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Fetch, compile then initialize modal
         var modalLinker, modalElement;
-        var backdropElement = jqLite('<div class="' + options.prefixClass + '-backdrop"/>');
+        var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
         $modal.$promise.then(function(template) {
           if(angular.isObject(template)) template = template.data;
           if(options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
@@ -198,9 +198,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         $modal.focus = function() {
-
-          modalElement[0].focus();
-
+          // Focus once the enter-animation has started
+          requestAnimationFrame(function() {
+            modalElement[0].focus();
+          });
         };
 
         // Protected methods
