@@ -32,13 +32,18 @@ module.exports = function(config) {
     ],
 
     // list of files / patterns to exclude
-    exclude: [],
+    exclude: [
+    ],
+
+    // test results reporter to use
+    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
+    reporters: ['progress', 'coverage'],
 
     // web server port
     port: 8080,
 
     // level of logging
-    // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
 
     // enable / disable watching file and executing tests whenever any file changes
@@ -62,13 +67,11 @@ module.exports = function(config) {
       'src/{,*/}*.js': 'coverage'
     },
 
+    // Coverage reporter generates the coverage
     coverageReporter: {
       type: 'lcov',
       dir: 'test/coverage/'
-    },
-
-    // coverage reporter generates the coverage
-    reporters: ['progress', 'coverage']
+    }
 
   });
 
