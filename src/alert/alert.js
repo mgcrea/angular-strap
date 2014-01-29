@@ -6,32 +6,21 @@
 
 angular.module('mgcrea.ngStrap.alert', [])
 
-  .run(function($templateCache) {
-
-    var template =  '' +
-      '<div class="alert" tabindex="-1" ng-class="[type ? \'alert-\' + type : null]">' +
-        '<button type="button" class="close" ng-click="$hide()">&times;</button>' +
-        '<strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span>' +
-      '</div>';
-
-    $templateCache.put('$alert', template);
-
-  })
-
   .provider('$alert', function() {
 
     var defaults = this.defaults = {
       animation: 'animation-fade',
       prefixClass: 'alert',
       placement: null,
-      template: '$alert',
+      template: 'alert/alert.tpl.html',
       container: false,
       element: null,
       backdrop: false,
       keyboard: true,
       show: true,
       // Specific options
-      duration: false
+      duration: false,
+      type: false
     };
 
     this.$get = function($modal, $timeout) {
