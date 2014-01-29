@@ -148,7 +148,12 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           $animate.enter(modalElement, parent, after, function() {});
           scope.$isShown = true;
           scope.$$phase || scope.$digest();
-          $modal.focus();
+          // Focus once the enter-animation has started
+          // Weird PhantomJS bug hack
+          var el = modalElement[0];
+          requestAnimationFrame(function() {
+            el.focus();
+          });
 
           bodyElement.addClass(options.prefixClass + '-open');
           // if(options.animation) {
@@ -198,10 +203,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         $modal.focus = function() {
-          // Focus once the enter-animation has started
-          requestAnimationFrame(function() {
-            modalElement[0].focus();
-          });
+          modalElement[0].focus();
         };
 
         // Protected methods
