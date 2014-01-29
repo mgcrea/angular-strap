@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.1 - 2014-01-29
+ * @version v2.0.0-rc.2 - 2014-01-29
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -11,7 +11,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
   'mgcrea.ngStrap.tooltip'
 ]).provider('$datepicker', function () {
   var defaults = this.defaults = {
-      animation: 'animation-fade',
+      animation: 'am-fade',
       prefixClass: 'datepicker',
       placement: 'bottom-left',
       template: 'datepicker/datepicker.tpl.html',
@@ -72,14 +72,14 @@ angular.module('mgcrea.ngStrap.datepicker', [
             $datepicker.$build();
           }
         };
-        $datepicker.select = function (date, keepMode) {
+        $datepicker.select = function (date, keep) {
           if (!angular.isDate(date))
             date = new Date(date);
           controller.$dateValue.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
-          if (!scope.$mode || keepMode) {
+          if (!scope.$mode || keep) {
             controller.$setViewValue(controller.$dateValue);
             controller.$render();
-            if (options.autoclose && !keepMode) {
+            if (options.autoclose && !keep) {
               $datepicker.hide(true);
             }
           } else {

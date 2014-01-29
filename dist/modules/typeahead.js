@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.1 - 2014-01-29
+ * @version v2.0.0-rc.2 - 2014-01-29
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -11,7 +11,7 @@ angular.module('mgcrea.ngStrap.typeahead', [
   'mgcrea.ngStrap.helpers.parseOptions'
 ]).provider('$typeahead', function () {
   var defaults = this.defaults = {
-      animation: 'animation-fade',
+      animation: 'am-fade',
       prefixClass: 'typeahead',
       placement: 'bottom-left',
       template: 'typeahead/typeahead.tpl.html',

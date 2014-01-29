@@ -1,12 +1,20 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.1 - 2014-01-29
+ * @version v2.0.0-rc.2 - 2014-01-29
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 (function(window, document, undefined) {
 'use strict';
+// Source: dist/modules/alert.tpl.js
+angular.module('mgcrea.ngStrap.alert').run(['$templateCache', function($templateCache) {
+$templateCache.put('alert/alert.tpl.html',
+    "<div class=\"alert\" tabindex=\"-1\" ng-class=\"[type ? 'alert-' + type : null]\"><button type=\"button\" class=\"close\" ng-click=\"$hide()\">&times;</button> <strong ng-bind=\"title\"></strong>&nbsp;<span ng-bind-html=\"content\"></span></div>"
+  );
+
+}]);
+
 // Source: dist/modules/aside.tpl.js
 angular.module('mgcrea.ngStrap.aside').run(['$templateCache', function($templateCache) {
 $templateCache.put('aside/aside.tpl.html',
@@ -18,7 +26,7 @@ $templateCache.put('aside/aside.tpl.html',
 // Source: dist/modules/datepicker.tpl.js
 angular.module('mgcrea.ngStrap.datepicker').run(['$templateCache', function($templateCache) {
 $templateCache.put('datepicker/datepicker.tpl.html',
-    "<div class=\"dropdown-menu datepicker\" style=\"max-width: 320px\"><table style=\"table-layout: fixed; height: 100%; width: 100%\"><thead><tr class=\"text-center\"><th><button tabindex=\"-1\" type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$selectPane(-1)\"><i class=\"glyphicon glyphicon-chevron-left\"></i></button></th><th colspan=\"5\"><button tabindex=\"-1\" type=\"button\" class=\"btn btn-default btn-block text-strong\" ng-click=\"$toggleMode()\"><strong style=\"text-transform: capitalize\" ng-bind=\"title\"></strong></button></th><th><button tabindex=\"-1\" type=\"button\" class=\"btn btn-default pull-right\" ng-click=\"$selectPane(+1)\"><i class=\"glyphicon glyphicon-chevron-right\"></i></button></th></tr><tr ng-show=\"labels\" ng-bind-html=\"labels\"></tr></thead><tbody><tr ng-repeat=\"(i, row) in rows\"><td class=\"text-center\" ng-repeat=\"(j, el) in row\"><button tabindex=\"-1\" type=\"button\" class=\"btn btn-default\" style=\"width: 100%\" ng-class=\"{'btn-primary': el.selected}\" ng-click=\"$select(el.date)\" ng-disabled=\"el.disabled\"><span ng-class=\"{'text-muted': el.muted}\" ng-bind=\"el.label\"></span></button></td></tr></tbody></table></div>"
+    "<div class=\"dropdown-menu datepicker\" ng-class=\"'datepicker-mode-' + $mode\" style=\"max-width: 320px\"><table style=\"table-layout: fixed; height: 100%; width: 100%\"><thead><tr class=\"text-center\"><th><button tabindex=\"-1\" type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$selectPane(-1)\"><i class=\"glyphicon glyphicon-chevron-left\"></i></button></th><th colspan=\"{{ rows[0].length - 2 }}\"><button tabindex=\"-1\" type=\"button\" class=\"btn btn-default btn-block text-strong\" ng-click=\"$toggleMode()\"><strong style=\"text-transform: capitalize\" ng-bind=\"title\"></strong></button></th><th><button tabindex=\"-1\" type=\"button\" class=\"btn btn-default pull-right\" ng-click=\"$selectPane(+1)\"><i class=\"glyphicon glyphicon-chevron-right\"></i></button></th></tr><tr ng-show=\"labels\" ng-bind-html=\"labels\"></tr></thead><tbody><tr ng-repeat=\"(i, row) in rows\" height=\"{{ 100 / rows.length }}%\"><td class=\"text-center\" ng-repeat=\"(j, el) in row\"><button tabindex=\"-1\" type=\"button\" class=\"btn btn-default\" style=\"width: 100%\" ng-class=\"{'btn-primary': el.selected}\" ng-click=\"$select(el.date)\" ng-disabled=\"el.disabled\"><span ng-class=\"{'text-muted': el.muted}\" ng-bind=\"el.label\"></span></button></td></tr></tbody></table></div>"
   );
 
 }]);

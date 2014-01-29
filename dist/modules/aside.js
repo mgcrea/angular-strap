@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.1 - 2014-01-29
+ * @version v2.0.0-rc.2 - 2014-01-29
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -8,7 +8,7 @@
 'use strict';
 angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal']).provider('$aside', function () {
   var defaults = this.defaults = {
-      animation: 'animation-fadeAndSlideRight',
+      animation: 'am-fade-and-slide-right',
       prefixClass: 'aside',
       placement: 'right',
       template: 'aside/aside.tpl.html',
