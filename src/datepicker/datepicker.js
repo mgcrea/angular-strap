@@ -72,14 +72,14 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
           }
         };
 
-        $datepicker.select = function(date, keepMode) {
+        $datepicker.select = function(date, keep) {
           // console.warn('$datepicker.select', date, scope.$mode);
           if(!angular.isDate(date)) date = new Date(date);
           controller.$dateValue.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
-          if(!scope.$mode || keepMode) {
+          if(!scope.$mode || keep) {
             controller.$setViewValue(controller.$dateValue);
             controller.$render();
-            if(options.autoclose && !keepMode) {
+            if(options.autoclose && !keep) {
               $datepicker.hide(true);
             }
           } else {
