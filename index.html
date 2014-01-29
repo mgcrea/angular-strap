@@ -34,11 +34,10 @@
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"> -->
   <!-- <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"> -->
-  <link rel="stylesheet" href="styles/c343c79c.libraries.min.css"/>
+
+  <link rel="stylesheet" href="styles/fd35dd20.libraries.min.css"/>
 
   <link rel="stylesheet" href="styles/a3e5e224.bootstrap-additions.min.css"/>
-
-  <link rel="stylesheet" href="styles/12921713.angular-motion.min.css"/>
 
   <link rel="stylesheet" href="styles/c84b2f98.main.min.css"/>
 
@@ -392,11 +391,20 @@
     </pre>
   </div>
 
+  <h2 id="project-contribute">Animations</h2>
+  <p>AngularStrap leverages AngularJS <code>ngAnimate</code> module to provide animations to the directives. Therefore, it requires to load custom CSS code as <code>ngAnimate</code> comes with a very specific markup.</p>
   <div class="callout callout-info">
-    <h4>Animations</h4>
-    <p>AngularStrap leverages AngularJS <code>ngAnimate</code> module to provide animations to the directives. Therefore, it requires to load custom CSS code as <code>ngAnimate</code> comes with a very specific markup.</p>
-    <p>To use them you must use <code>angular-motion.css</code> from the <a href="//github.com/mgcrea/angular-motion" target="_blank">AngularMotion</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/angular-motion.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
+    <h4>AngularMotion</h4>
+    <p>Theses docs rely on the <code>angular-motion.css</code> stylesheet from the <a href="//github.com/mgcrea/angular-motion" target="_blank">AngularMotion</a> project.</p>
+    <div class="highlight">
+      <pre>
+        <code class="bash" highlight-block="">
+          $ bower install angular-motion --save
+        </code>
+      </pre>
+    </div>
   </div>
+
 
 </div>
         <div id="directives">
@@ -418,13 +426,13 @@
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
 
     <!-- Button to trigger a default modal with a scope as an object {title:'', content:'', etc.} -->
-    <button type="button" class="btn btn-lg btn-primary" data-placement="center" data-animation="animation-fadeAndScale" bs-modal="modal">Click to toggle modal
+    <button type="button" class="btn btn-lg btn-primary" data-animation="am-fade-and-scale" data-placement="center" bs-modal="modal">Click to toggle modal
       <br>
       <small>(using an object)</small>
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-animation="animation-flipX" data-template="modal/docs/modal.tpl.demo.html" bs-modal="modal">Custom Modal
+    <button type="button" class="btn btn-lg btn-danger" data-animation="am-fade-and-slide-top" data-template="modal/docs/modal.tpl.demo.html" bs-modal="modal">Custom Modal
       <br>
       <small>(using data-template)</small>
     </button>
@@ -436,7 +444,7 @@
     <p>Backdrop animation being powered by <code>ngAnimate</code>, it requires custom CSS.</p>
     <pre class="bs-exemple-code">
       <code class="css" highlight-block="">
-        .modal-backdrop.animation-fade {
+        .modal-backdrop.am-fade {
           opacity: .5;
           transition: opacity .15s linear;
           &.ng-enter {
@@ -499,7 +507,7 @@
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by ngAnimate</td>
         </tr>
         <tr>
@@ -582,7 +590,7 @@
           angular.module('myApp')
           .config(function($modalProvider) {
             angular.extend($modalProvider.defaults, {
-              animation: 'animation-flipX'
+              animation: 'am-flip-x'
             });
           })
         </code>
@@ -632,7 +640,7 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-template="aside/docs/aside.tpl.demo.html" data-placement="left" data-animation="animation-slide-left" bs-aside="aside" data-container="body">Custom aside
+    <button type="button" class="btn btn-lg btn-danger" data-template="aside/docs/aside.tpl.demo.html" data-placement="left" data-animation="am-slide-left" bs-aside="aside" data-container="body">Custom aside
       <br>
       <small>(using data-template)</small>
     </button>
@@ -686,7 +694,7 @@
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fadeAndSlideRight</td>
+          <td>am-fade-and-slide-right</td>
           <td>apply a CSS animation powered by ngAnimate</td>
         </tr>
         <tr>
@@ -770,7 +778,7 @@
           angular.module('myApp')
           .config(function($asideProvider) {
             angular.extend($asideProvider.defaults, {
-              animation: 'animation-fadeAndSlideLeft',
+              animation: 'am-fadeAndSlideLeft',
               placement: 'left'
             });
           })
@@ -828,7 +836,7 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="animation-fadeAndSlideTop" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
+    <button type="button" class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="am-fadeAndSlideTop" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
       <br>
       <small>(using data-template)</small>
     </button>
@@ -874,7 +882,7 @@
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by ngAnimate</td>
         </tr>
         <tr>
@@ -941,7 +949,7 @@
           angular.module('myApp')
           .config(function($alertProvider) {
             angular.extend($alertProvider.defaults, {
-              animation: 'animation-fadeAndSlideTop',
+              animation: 'am-fade-and-slide-top',
               placement: 'top'
             });
           })
@@ -1052,7 +1060,7 @@ $scope.icons = "{{icons}}";
     </button>
     <hr>
     <label>Multiple select:&nbsp;</label>
-    <button type="button" class="btn btn-default" ng-model="selectedIcons" data-html="1" data-multiple="1" data-animation="animation-flipX" ng-options="icon.value as icon.label for icon in icons" bs-select="">
+    <button type="button" class="btn btn-default" ng-model="selectedIcons" data-html="1" data-multiple="1" data-animation="am-flip-x" ng-options="icon.value as icon.label for icon in icons" bs-select="">
       Action <span class="caret"></span>
     </button>
   </div>
@@ -1093,7 +1101,7 @@ $scope.icons = "{{icons}}";
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -1179,7 +1187,7 @@ $scope.icons = "{{icons}}";
           angular.module('myApp')
           .config(function($selectProvider) {
             angular.extend($selectProvider.defaults, {
-              animation: 'animation-flipX',
+              animation: 'am-flip-x',
               sort: false
             });
           })
@@ -1235,10 +1243,10 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
       <div class="form-group">
         <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range <small>(dynamic)</small></label><br>
         <div class="form-group">
-          <input type="text" class="form-control" ng-model="fromDate" data-max-date="{{untilDate}}" data-autoclose="1" placeholder="From" bs-datepicker="">
+          <input type="text" class="form-control" ng-model="fromDate" data-max-date="{{untilDate}}" placeholder="From" bs-datepicker="">
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" ng-model="untilDate" data-min-date="{{fromDate}}" data-autoclose="1" placeholder="Until" bs-datepicker="">
+          <input type="text" class="form-control" ng-model="untilDate" data-min-date="{{fromDate}}" placeholder="Until" bs-datepicker="">
         </div>
       </div>
     </form>
@@ -1280,7 +1288,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -1509,7 +1517,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -1755,7 +1763,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
 
     <!-- Markup for a default tooltip with a scope passed as an object {title:''} -->
-    <p>Tight pants next level keffiyeh <a href="" data-animation="animation-flipX" bs-tooltip="tooltip">you probably</a> haven't heard of them. Photo booth beard raw denim letterpress vegan messenger bag stumptown.</p>
+    <p>Tight pants next level keffiyeh <a href="" data-animation="am-flip-x" bs-tooltip="tooltip">you probably</a> haven't heard of them. Photo booth beard raw denim letterpress vegan messenger bag stumptown.</p>
 
     <div class="input-group col-xs-5">
       <span class="input-group-btn">
@@ -1765,7 +1773,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
       <input type="text" class="form-control" data-placement="right" data-type="info" data-container="body" placeholder="Focus to toggle tooltip" data-trigger="focus" bs-tooltip="tooltip">
     </div>
     <div class="checkbox">
-      <label data-placement="bottom" data-animation="animation-fadeAndScale" data-type="info" bs-tooltip="tooltip">
+      <label data-placement="bottom" data-animation="am-fadeAndScale" data-type="info" bs-tooltip="tooltip">
         <input type="checkbox" ng-model="tooltip.checked"> Remember me
       </label>
     </div>
@@ -1808,7 +1816,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -1885,7 +1893,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           angular.module('myApp')
           .config(function($tooltipProvider) {
             angular.extend($tooltipProvider.defaults, {
-              animation: 'animation-flipX',
+              animation: 'am-flip-x',
               trigger: 'hover'
             });
           })
@@ -1935,7 +1943,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
   <pre class="bs-example-scope">$scope.popover = {{popover | json}};</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
     <!-- Button to trigger a default popover with a scope as an object {title:'', content:'', etc.} -->
-    <button type="button" class="btn btn-lg btn-primary" data-placement="bottom" data-animation="animation-flipX" bs-popover="popover">Click to toggle popover
+    <button type="button" class="btn btn-lg btn-primary" data-placement="bottom" data-animation="am-flip-x" bs-popover="popover">Click to toggle popover
       <br>
       <small>(using an object)</small>
     </button>
@@ -1947,7 +1955,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" title="{{popover.title}}" data-content="{{popover.content}}" data-template="popover/docs/popover.tpl.demo.html" data-animation="animation-flipX" bs-popover="">Custom Popover
+    <button type="button" class="btn btn-lg btn-danger" title="{{popover.title}}" data-content="{{popover.content}}" data-template="popover/docs/popover.tpl.demo.html" data-animation="am-flip-x" bs-popover="">Custom Popover
       <br>
       <small>(using data-template)</small>
     </button>
@@ -1989,7 +1997,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -2072,7 +2080,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           angular.module('myApp')
           .config(function($popoverProvider) {
             angular.extend($popoverProvider.defaults, {
-              animation: 'animation-flipX',
+              animation: 'am-flip-x',
               trigger: 'hover'
             });
           })
@@ -2118,7 +2126,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
 
     <!-- Button to trigger a default dropdown with a scope as an object [{title:'', content:'', etc.}] -->
-    <button type="button" class="btn btn-lg btn-primary" data-animation="animation-flipX" bs-dropdown="dropdown">Click to toggle dropdown
+    <button type="button" class="btn btn-lg btn-primary" data-animation="am-flip-x" bs-dropdown="dropdown">Click to toggle dropdown
       <br>
       <small>(using an object)</small>
     </button>
@@ -2161,7 +2169,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -2223,7 +2231,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           angular.module('myApp')
           .config(function($dropdownProvider) {
             angular.extend($dropdownProvider.defaults, {
-              animation: 'animation-flipX',
+              animation: 'am-flip-x',
               trigger: 'hover'
             });
           })
@@ -2268,13 +2276,13 @@ $scope.selectedAddress = "{{selectedAddress}}";
       </div>
       <div class="form-group">
         <label>Icon</label>
-        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-animation="animation-flipX" ng-options="icon.value as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead="">
+        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-animation="am-flip-x" ng-options="icon.value as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead="">
       </div>
       <hr>
       <!-- Using an async data provider -->
       <div class="form-group">
         <label><i class="fa fa-home"></i> Address <small>(async via maps.googleapis.com)</small></label>
-        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="animation-flipX" ng-options="address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead="">
+        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" ng-options="address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead="">
       </div>
     </form>
   </div>
@@ -2315,7 +2323,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -2393,7 +2401,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
           angular.module('myApp')
           .config(function($typeaheadProvider) {
             angular.extend($typeaheadProvider.defaults, {
-              animation: 'animation-flipX',
+              animation: 'am-flip-x',
               minLength: 2,
               limit: 8
             });
@@ -2500,7 +2508,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
           angular.module('myApp')
           .config(function($scrollspyProvider) {
             angular.extend($scrollspyProvider.defaults, {
-              animation: 'animation-fadeAndSlideTop',
+              animation: 'am-fade-and-slide-top',
               placement: 'top'
             });
           })
@@ -2599,7 +2607,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
           angular.module('myApp')
           .config(function($affixProvider) {
             angular.extend($affixProvider.defaults, {
-              animation: 'animation-fadeAndSlideTop',
+              animation: 'am-fade-and-slide-top',
               placement: 'top'
             });
           })
@@ -2650,7 +2658,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
     <p>Pane animation is done with <code>ngClass('active')</code> callbacks and require custom CSS.</p>
     <pre class="bs-exemple-code">
       <code class="css" highlight-block="">
-        .tabs.animation-fade .tab-pane {
+        .tabs.am-fade .tab-pane {
           opacity: 1;
           transition: opacity .3s ease;
           min-height:60px;
@@ -2686,7 +2694,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation to the popover with <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -2709,7 +2717,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
           angular.module('myApp')
           .config(function($tabProvider) {
             angular.extend($tabProvider.defaults, {
-              animation: 'animation-flipX'
+              animation: 'am-flip-x'
             });
           })
         </code>
@@ -2756,15 +2764,15 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/c8505824.libraries.min.js"></script>
 
-  <script src="scripts/f8d9c276.angular-strap.min.js"></script>
+  <script src="scripts/f3a02e80.angular-strap.min.js"></script>
 
-  <script src="scripts/39c2af6d.angular-strap.tpl.min.js"></script>
+  <script src="scripts/591491bb.angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/af74554f.docs.min.js"></script>
+  <script src="scripts/83086455.docs.min.js"></script>
 
-  <script src="scripts/1fc3f83b.docs.tpl.min.js"></script>
+  <script src="scripts/d804ca24.docs.tpl.min.js"></script>
 
-  <script src="scripts/3dfcda6c.demo.min.js"></script>
+  <script src="scripts/ecfaad78.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
