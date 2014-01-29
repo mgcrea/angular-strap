@@ -182,8 +182,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.backdrop) {
             $animate.leave(backdropElement, function() {});
           }
-          scope.$$phase || scope.$digest();
           scope.$isShown = false;
+          scope.$$phase || scope.$digest();
 
           // Unbind events
           if(options.backdrop) {
