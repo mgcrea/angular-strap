@@ -37,7 +37,7 @@ describe('popover', function () {
       element: '<ul><li ng-repeat="item in items"><a class="btn" bs-popover="item.popover">{{item.name}}</a></li></ul>'
     },
     'options-animation': {
-      element: '<a data-animation="animation-flipX" bs-popover="popover">hover me</a>'
+      element: '<a data-animation="am-flip-x" bs-popover="popover">hover me</a>'
     },
     'options-placement': {
       element: '<a data-placement="bottom" bs-popover="popover">hover me</a>'
@@ -114,16 +114,16 @@ describe('popover', function () {
 
     describe('animation', function () {
 
-      it('should default to `animation-fade` animation', function() {
+      it('should default to `am-fade` animation', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.popover').hasClass('animation-fade')).toBeTruthy();
+        expect(sandboxEl.children('.popover').hasClass('am-fade')).toBeTruthy();
       });
 
       it('should support custom animation', function() {
         var elm = compileDirective('options-animation');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.popover').hasClass('animation-flipX')).toBeTruthy();
+        expect(sandboxEl.children('.popover').hasClass('am-flip-x')).toBeTruthy();
       });
 
     });

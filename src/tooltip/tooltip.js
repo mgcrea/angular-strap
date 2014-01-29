@@ -5,7 +5,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
   .provider('$tooltip', function() {
 
     var defaults = this.defaults = {
-      animation: 'animation-fade',
+      animation: 'am-fade',
       prefixClass: 'tooltip',
       container: false,
       placement: 'top',
@@ -24,6 +24,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
       var trim = String.prototype.trim;
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+      var isTouch = 'createTouch' in $window.document;
       var htmlReplaceRegExp = /ng-bind="/ig;
 
       // Helper functions
@@ -105,6 +106,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
               hide: options.delay
             };
           }
+
+          // Replace trigger on touch devices ?
+          // if(isTouch && options.trigger === defaults.trigger) {
+          //   options.trigger.replace(/hover/g, 'click');
+          // }
 
           // Options: trigger
           var triggers = options.trigger.split(' ');

@@ -21,7 +21,7 @@
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
     <!-- Button to trigger a default dropdown with a scope as an object [{title:'', content:'', etc.}] -->
-    <button type="button" class="btn btn-lg btn-primary" data-animation="animation-flipX" bs-dropdown="dropdown">Click to toggle dropdown
+    <button type="button" class="btn btn-lg btn-primary" data-animation="am-flip-x" bs-dropdown="dropdown">Click to toggle dropdown
       <br />
       <small>(using an object)</small>
     </button>
@@ -64,7 +64,7 @@
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -126,7 +126,7 @@
           angular.module('myApp')
           .config(function($dropdownProvider) {
             angular.extend($dropdownProvider.defaults, {
-              animation: 'animation-flipX',
+              animation: 'am-flip-x',
               trigger: 'hover'
             });
           })

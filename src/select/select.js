@@ -5,7 +5,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
   .provider('$select', function() {
 
     var defaults = this.defaults = {
-      animation: 'animation-fade',
+      animation: 'am-fade',
       prefixClass: 'select',
       placement: 'bottom-left',
       template: 'select/select.tpl.html',

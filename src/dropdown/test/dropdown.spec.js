@@ -30,7 +30,7 @@ describe('dropdown', function () {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><a bs-dropdown="dropdown">{{i}}</a></li></ul>'
     },
     'options-animation': {
-      element: '<a data-animation="animation-flipX" bs-dropdown="dropdown">click me</a>'
+      element: '<a data-animation="am-flip-x" bs-dropdown="dropdown">click me</a>'
     },
     'options-placement': {
       element: '<a data-placement="bottom" bs-dropdown="dropdown">click me</a>'
@@ -99,16 +99,16 @@ describe('dropdown', function () {
 
     describe('animation', function () {
 
-      it('should default to `animation-fade` animation', function() {
+      it('should default to `am-fade` animation', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.dropdown-menu').hasClass('animation-fade')).toBeTruthy();
+        expect(sandboxEl.children('.dropdown-menu').hasClass('am-fade')).toBeTruthy();
       });
 
       it('should support custom animation', function() {
         var elm = compileDirective('options-animation');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.dropdown-menu').hasClass('animation-flipX')).toBeTruthy();
+        expect(sandboxEl.children('.dropdown-menu').hasClass('am-flip-x')).toBeTruthy();
       });
 
     });

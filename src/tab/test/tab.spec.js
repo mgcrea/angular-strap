@@ -34,7 +34,7 @@ describe('tab', function () {
       element: '<div ng-model="tab.active" bs-tabs="tabs"></div>'
     },
     'options-animation': {
-      element: '<div data-animation="animation-flipX" bs-tabs="tabs"></div>'
+      element: '<div data-animation="am-flip-x" bs-tabs="tabs"></div>'
     },
     'options-template': {
       element: '<div data-template="custom" bs-tabs="tabs"></div>'
@@ -100,14 +100,14 @@ describe('tab', function () {
 
     describe('animation', function () {
 
-      it('should default to `animation-fade` animation', function() {
+      it('should default to `am-fade` animation', function() {
         var elm = compileDirective('default');
-        expect(sandboxEl.children('.tabs').hasClass('animation-fade')).toBeTruthy();
+        expect(sandboxEl.children('.tabs').hasClass('am-fade')).toBeTruthy();
       });
 
       it('should support custom animation', function() {
         var elm = compileDirective('options-animation');
-        expect(sandboxEl.children('.tabs').hasClass('animation-flipX')).toBeTruthy();
+        expect(sandboxEl.children('.tabs').hasClass('am-flip-x')).toBeTruthy();
       });
 
     });

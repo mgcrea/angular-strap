@@ -40,7 +40,7 @@ describe('tooltip', function() {
       element: '<a ng-click="showTooltip()">click me</a>'
     },
     'options-animation': {
-      element: '<a data-animation="animation-flipX" bs-tooltip="tooltip">hover me</a>'
+      element: '<a data-animation="am-flip-x" bs-tooltip="tooltip">hover me</a>'
     },
     'options-placement': {
       element: '<a data-placement="bottom" bs-tooltip="tooltip">hover me</a>'
@@ -149,16 +149,16 @@ describe('tooltip', function() {
 
     describe('animation', function() {
 
-      it('should default to `animation-fade` animation', function() {
+      it('should default to `am-fade` animation', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('mouseenter');
-        expect(sandboxEl.children('.tooltip').hasClass('animation-fade')).toBeTruthy();
+        expect(sandboxEl.children('.tooltip').hasClass('am-fade')).toBeTruthy();
       });
 
       it('should support custom animation', function() {
         var elm = compileDirective('options-animation');
         angular.element(elm[0]).triggerHandler('mouseenter');
-        expect(sandboxEl.children('.tooltip').hasClass('animation-flipX')).toBeTruthy();
+        expect(sandboxEl.children('.tooltip').hasClass('am-flip-x')).toBeTruthy();
       });
 
     });

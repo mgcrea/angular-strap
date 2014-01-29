@@ -5,7 +5,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
   .provider('$datepicker', function() {
 
     var defaults = this.defaults = {
-      animation: 'animation-fade',
+      animation: 'am-fade',
       prefixClass: 'datepicker',
       placement: 'bottom-left',
       template: 'datepicker/datepicker.tpl.html',

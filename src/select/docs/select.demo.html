@@ -28,7 +28,7 @@ $scope.icons = "{{icons}}";
     </button>
     <hr>
     <label>Multiple select:&nbsp;</label>
-    <button type="button" class="btn btn-default" ng-model="selectedIcons" data-html="1" data-multiple="1" data-animation="animation-flipX" ng-options="icon.value as icon.label for icon in icons" bs-select>
+    <button type="button" class="btn btn-default" ng-model="selectedIcons" data-html="1" data-multiple="1" data-animation="am-flip-x" ng-options="icon.value as icon.label for icon in icons" bs-select>
       Action <span class="caret"></span>
     </button>
   </div>
@@ -69,7 +69,7 @@ $scope.icons = "{{icons}}";
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -155,7 +155,7 @@ $scope.icons = "{{icons}}";
           angular.module('myApp')
           .config(function($selectProvider) {
             angular.extend($selectProvider.defaults, {
-              animation: 'animation-flipX',
+              animation: 'am-flip-x',
               sort: false
             });
           })

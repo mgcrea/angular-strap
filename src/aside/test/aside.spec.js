@@ -102,10 +102,10 @@ describe('aside', function () {
 
     describe('animation', function () {
 
-      it('should default to `animation-fadeAndSlideRight` animation', function() {
+      it('should default to `am-fade-and-slide-right` animation', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.aside')).toHaveClass('animation-fadeAndSlideRight');
+        expect(sandboxEl.children('.aside')).toHaveClass('am-fade-and-slide-right');
       });
 
     });

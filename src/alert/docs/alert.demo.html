@@ -32,7 +32,7 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="animation-fadeAndSlideTop" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
+    <button type="button" class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="am-fadeAndSlideTop" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
       <br />
       <small>(using data-template)</small>
     </button>
@@ -78,7 +78,7 @@
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by ngAnimate</td>
         </tr>
         <tr>
@@ -145,7 +145,7 @@
           angular.module('myApp')
           .config(function($alertProvider) {
             angular.extend($alertProvider.defaults, {
-              animation: 'animation-fadeAndSlideTop',
+              animation: 'am-fade-and-slide-top',
               placement: 'top'
             });
           })

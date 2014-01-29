@@ -32,13 +32,13 @@ $scope.selectedAddress = "{{selectedAddress}}";
       </div>
       <div class="form-group">
         <label>Icon</label>
-        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-animation="animation-flipX" ng-options="icon.value as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-animation="am-flip-x" ng-options="icon.value as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
       </div>
       <hr>
       <!-- Using an async data provider -->
       <div class="form-group">
         <label><i class="fa fa-home"></i> Address <small>(async via maps.googleapis.com)</small></label>
-        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="animation-flipX" ng-options="address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" ng-options="address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead>
       </div>
     </form>
   </div>
@@ -79,7 +79,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation powered by <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -157,7 +157,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
           angular.module('myApp')
           .config(function($typeaheadProvider) {
             angular.extend($typeaheadProvider.defaults, {
-              animation: 'animation-flipX',
+              animation: 'am-flip-x',
               minLength: 2,
               limit: 8
             });

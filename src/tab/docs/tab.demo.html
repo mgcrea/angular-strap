@@ -38,7 +38,7 @@
     <p>Pane animation is done with <code>ngClass('active')</code> callbacks and require custom CSS.</p>
     <pre class="bs-exemple-code">
       <code class="css" highlight-block>
-        .tabs.animation-fade .tab-pane {
+        .tabs.am-fade .tab-pane {
           opacity: 1;
           transition: opacity .3s ease;
           min-height:60px;
@@ -74,7 +74,7 @@
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fade</td>
+          <td>am-fade</td>
           <td>apply a CSS animation to the popover with <code>ngAnimate</code></td>
         </tr>
         <tr>
@@ -97,7 +97,7 @@
           angular.module('myApp')
           .config(function($tabProvider) {
             angular.extend($tabProvider.defaults, {
-              animation: 'animation-flipX'
+              animation: 'am-flip-x'
             });
           })
         </code>

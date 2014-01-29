@@ -5,7 +5,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
   .provider('$popover', function() {
 
     var defaults = this.defaults = {
-      animation: 'animation-fade',
+      animation: 'am-fade',
       placement: 'right',
       template: 'popover/popover.tpl.html',
       contentTemplate: false,

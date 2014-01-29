@@ -9,7 +9,7 @@ angular.module('mgcrea.ngStrap.alert', [])
   .provider('$alert', function() {
 
     var defaults = this.defaults = {
-      animation: 'animation-fade',
+      animation: 'am-fade',
       prefixClass: 'alert',
       placement: null,
       template: 'alert/alert.tpl.html',

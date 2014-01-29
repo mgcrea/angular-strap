@@ -38,7 +38,7 @@ describe('select', function () {
       element: '<div class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></div>'
     },
     'options-animation': {
-      element: '<div class="btn" data-animation="animation-flipX" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></div>'
+      element: '<div class="btn" data-animation="am-flip-x" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></div>'
     },
     'options-placement': {
       element: '<div class="btn" data-placement="bottom" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></div>'
@@ -145,16 +145,16 @@ describe('select', function () {
 
     describe('animation', function () {
 
-      it('should default to `animation-fade` animation', function() {
+      it('should default to `am-fade` animation', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.children('.dropdown-menu').hasClass('animation-fade')).toBeTruthy();
+        expect(sandboxEl.children('.dropdown-menu').hasClass('am-fade')).toBeTruthy();
       });
 
       it('should support custom animation', function() {
         var elm = compileDirective('options-animation');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.children('.dropdown-menu').hasClass('animation-flipX')).toBeTruthy();
+        expect(sandboxEl.children('.dropdown-menu').hasClass('am-flip-x')).toBeTruthy();
       });
 
     });

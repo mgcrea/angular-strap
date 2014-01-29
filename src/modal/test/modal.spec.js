@@ -142,10 +142,10 @@ describe('modal', function() {
 
     describe('animation', function() {
 
-      it('should default to `animation-fade` animation', function() {
+      it('should default to `am-fade` animation', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.children('.modal')).toHaveClass('animation-fade');
+        expect(sandboxEl.children('.modal')).toHaveClass('am-fade');
       });
 
     });

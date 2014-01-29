@@ -5,7 +5,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
   .provider('$aside', function() {
 
     var defaults = this.defaults = {
-      animation: 'animation-fadeAndSlideRight',
+      animation: 'am-fade-and-slide-right',
       prefixClass: 'aside',
       placement: 'right',
       template: 'aside/aside.tpl.html',

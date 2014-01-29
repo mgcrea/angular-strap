@@ -5,7 +5,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
   .provider('$timepicker', function() {
 
     var defaults = this.defaults = {
-      animation: 'animation-fade',
+      animation: 'am-fade',
       prefixClass: 'timepicker',
       placement: 'bottom-left',
       template: 'timepicker/timepicker.tpl.html',

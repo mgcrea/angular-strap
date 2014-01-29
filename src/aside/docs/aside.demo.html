@@ -26,7 +26,7 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-template="aside/docs/aside.tpl.demo.html" data-placement="left" data-animation="animation-slide-left" bs-aside="aside" data-container="body">Custom aside
+    <button type="button" class="btn btn-lg btn-danger" data-template="aside/docs/aside.tpl.demo.html" data-placement="left" data-animation="am-slide-left" bs-aside="aside" data-container="body">Custom aside
       <br />
       <small>(using data-template)</small>
     </button>
@@ -80,7 +80,7 @@
         <tr>
           <td>animation</td>
           <td>string</td>
-          <td>animation-fadeAndSlideRight</td>
+          <td>am-fade-and-slide-right</td>
           <td>apply a CSS animation powered by ngAnimate</td>
         </tr>
         <tr>
@@ -164,7 +164,7 @@
           angular.module('myApp')
           .config(function($asideProvider) {
             angular.extend($asideProvider.defaults, {
-              animation: 'animation-fadeAndSlideLeft',
+              animation: 'am-fadeAndSlideLeft',
               placement: 'left'
             });
           })
