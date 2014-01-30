@@ -29,6 +29,9 @@ describe('tooltip', function() {
       scope: {tooltip: {title: 'Hello Tooltip!'}},
       element: '<a title="{{tooltip.title}}" bs-tooltip>hover me</a>'
     },
+    'markup-button': {
+      element: '<button type="button" bs-tooltip="tooltip">hover me</button>'
+    },
     'markup-scope': {
       element: '<a bs-tooltip="tooltip">hover me</a>'
     },
@@ -105,6 +108,14 @@ describe('tooltip', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-tooltip]')).triggerHandler('mouseenter');
       expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.items[0].tooltip);
+    });
+
+    it('should support button markup', function() {
+      var elm = compileDirective('markup-button');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('click');
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
     });
 
   });

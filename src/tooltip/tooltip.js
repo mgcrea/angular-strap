@@ -114,15 +114,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           // Options: trigger
           var triggers = options.trigger.split(' ');
-          for (var i = triggers.length; i--;) {
-            var trigger = triggers[i];
+          angular.forEach(triggers, function(trigger) {
             if(trigger === 'click') {
               element.on('click', $tooltip.toggle);
             } else if(trigger !== 'manual') {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
             }
-          }
+          });
 
           // Options: show
           if(options.show) {
@@ -177,6 +176,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           var parent = options.container ? findElement(options.container) : null;
           var after = options.container ? null : element;
 
+          // Remove any existing tipElement
+          if(tipElement) tipElement.remove();
           // Fetch a cloned element linked from template
           tipElement = $tooltip.$element = tipLinker(scope, function(clonedElement, scope) {});
 
@@ -223,7 +224,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $tooltip.hide = function(blur) {
 
-          $animate.leave(tipElement, function() {});
+          $animate.leave(tipElement, function() {
+            tipElement = null;
+          });
           scope.$$phase || scope.$digest();
           $tooltip.$isShown = false;
 
