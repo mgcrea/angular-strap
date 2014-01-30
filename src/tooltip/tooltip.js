@@ -77,7 +77,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           $tooltip.$promise = $tooltip.$promise.then(function(template) {
             if(angular.isObject(template)) template = template.data;
             var templateEl = angular.element(template);
-            return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate, {cache: $templateCache}))
+            return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate))
             .then(function(contentTemplate) {
               if(angular.isObject(contentTemplate)) contentTemplate = contentTemplate.data;
               findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
