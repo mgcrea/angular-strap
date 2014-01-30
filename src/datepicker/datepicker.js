@@ -64,7 +64,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $datepicker.update = function(date) {
           // console.warn('$datepicker.update() newValue=%o', date);
-          if(!isNaN(date.getTime())) {
+          if(angular.isDate(date) && !isNaN(date.getTime())) {
             $datepicker.$date = date;
             $picker.update.call($picker, date);
           } else if(!$picker.built) {
@@ -74,7 +74,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $datepicker.select = function(date, keep) {
           // console.warn('$datepicker.select', date, scope.$mode);
-          if(!angular.isDate(date)) date = new Date(date);
+          if(!angular.isDate(controller.$dateValue)) controller.$dateValue = new Date(date);
           controller.$dateValue.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
           if(!scope.$mode || keep) {
             controller.$setViewValue(controller.$dateValue);
