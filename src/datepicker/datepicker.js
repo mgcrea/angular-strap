@@ -219,7 +219,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
   .directive('bsDatepicker', function($window, $parse, $q, $locale, dateFilter, $datepicker, $dateParser, $timeout) {
 
-    var isAppleTouch = /(iP(a|o)d|iPhone)/g.test($window.navigator.userAgent);
+    var defaults = $datepicker.defaults;
+    var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
     return {
@@ -234,7 +235,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         });
 
         // Initialize datepicker
-        if(isAppleTouch && options.useNative) options.dateFormat = 'yyyy-MM-dd';
+        if(isNative && options.useNative) options.dateFormat = 'yyyy-MM-dd';
         var datepicker = $datepicker(element, controller, options);
         options = datepicker.$options;
 
