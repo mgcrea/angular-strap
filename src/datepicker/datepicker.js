@@ -30,7 +30,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
       var bodyEl = angular.element($window.document.body);
       var isTouch = 'createTouch' in $window.document;
-      var isAppleTouch = /(iP(a|o)d|iPhone)/g.test($window.navigator.userAgent);
+      var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
       if(!defaults.lang) defaults.lang = $locale.id;
 
       function DatepickerFactory(element, controller, config) {
@@ -166,7 +166,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         var _init = $datepicker.init;
         $datepicker.init = function() {
-          if(isAppleTouch && options.useNative) {
+          if(isNative && options.useNative) {
             element.prop('type', 'date');
             element.css('-webkit-appearance', 'textfield');
             return;
@@ -180,7 +180,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         var _destroy = $datepicker.destroy;
         $datepicker.destroy = function() {
-          if(isAppleTouch && options.useNative) {
+          if(isNative && options.useNative) {
             element.off('click', focusElement);
           }
           _destroy();
