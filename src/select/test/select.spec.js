@@ -90,7 +90,7 @@ describe('select', function () {
       var elm = compileDirective('default');
       expect(sandboxEl.children('.dropdown-menu.select').length).toBe(0);
       angular.element(elm[0]).triggerHandler('focus');
-      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')).triggerHandler('click');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a')[0]).triggerHandler('click');
       // @TODO fixme
       // expect(sandboxEl.children('.dropdown-menu.select').length).toBe(0);
     });
@@ -128,6 +128,18 @@ describe('select', function () {
 
   });
 
+  describe('ngOptions', function () {
+
+    it('should correctly watch for changes', function() {
+      var elm = compileDirective('default');
+      scope.icons.unshift({value: 'Bullhorn', label: '> Bullhorn'});
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
+    });
+
+  });
 
   describe('options', function () {
 
