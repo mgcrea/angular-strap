@@ -4,7 +4,7 @@
 describe('affix', function () {
 
   var $compile, scope, sandboxEl;
-  var mouse = effroi.mouse;
+  // var mouse = effroi.mouse;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.affix'));

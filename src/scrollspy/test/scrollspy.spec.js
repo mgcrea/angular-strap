@@ -4,7 +4,7 @@
 describe('affix', function () {
 
   var $compile, scope, sandboxEl;
-  var mouse = effroi.mouse;
+  // var mouse = effroi.mouse;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.affix'));
@@ -24,10 +24,11 @@ describe('affix', function () {
 
   var templates = {
     'default': {
-      element: '<div class="container" style="height: 2000px">' +
-               '  <div style="height: 200px; background: blue;"></div>' +
-               '  <div style="width: 100px; height: 100px; background: red; margin-top:20px;" bs-affix data-offset-top="-50" data-offset-bottom="1000"></div>' +
-               '</div>'
+      element: '<ul>' +
+               '  <li data-target="#modals" bs-scrollspy>' +
+               '    <a href="#modals">Modal</a>' +
+               '  </li>' +
+               '</ul>'
     }
   };
 
