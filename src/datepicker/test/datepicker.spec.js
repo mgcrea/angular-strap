@@ -195,6 +195,15 @@ describe('datepicker', function() {
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
     });
 
+    it('should correctly support invalid values', function() {
+      var elm = compileDirective('default');
+      elm.val('invalid');
+      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(today.getDate());
+      angular.element(sandboxEl.find('.dropdown-menu tbody td .btn-primary')[0]).triggerHandler('click');
+    });
+
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-datepicker]:eq(0)')).triggerHandler('focus');
