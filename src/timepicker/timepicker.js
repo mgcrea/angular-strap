@@ -74,6 +74,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $timepicker.select = function(date, index, keep) {
           // console.warn('$timepicker.select', date, scope.$mode);
+          if(isNaN(controller.$dateValue.getTime())) controller.$dateValue = new Date(1970, 0, 1);
           if(!angular.isDate(date)) date = new Date(date);
           if(index === 0) controller.$dateValue.setHours(date.getHours());
           else if(index === 1) controller.$dateValue.setMinutes(date.getMinutes());
@@ -349,8 +350,8 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         controller.$formatters.push(function(modelValue) {
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
           var date = angular.isDate(modelValue) ? modelValue : new Date(modelValue);
-          // Default value is next hour
-          if(isNaN(date.getTime())) date = new Date(new Date().setMinutes(0) + 36e5);
+          // Setup default value: next hour?
+          // if(isNaN(date.getTime())) date = new Date(new Date().setMinutes(0) + 36e5);
           controller.$dateValue = date;
           return controller.$dateValue;
         });

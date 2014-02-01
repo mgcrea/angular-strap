@@ -31,13 +31,13 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
       <!-- Basic example -->
       <div class="form-group" ng-class="{'has-error': timepickerForm.time.$invalid}">
         <label class="control-label"><i class="fa fa-clock-o"></i> Time <small>(as date)</small></label>
-        <input type="text" class="form-control" size="1" ng-model="time" name="time" required bs-timepicker>
+        <input type="text" class="form-control" size="8" ng-model="time" name="time" required bs-timepicker>
       </div>
 
       <!-- Custom example -->
       <div class="form-group" ng-class="{'has-error': timepickerForm.time2.$invalid}">
         <label class="control-label"><i class="fa fa-clock-o"></i> Time <small>(as number)</small></label>
-        <input type="text" class="form-control" size="1" ng-model="selectedTimeAsNumber" data-time-format="HH:mm" data-time-type="number" data-min-time="10:00" data-max-time="13:30" data-autoclose="1" name="time2" bs-timepicker>
+        <input type="text" class="form-control" size="5" ng-model="selectedTimeAsNumber" data-time-format="HH:mm" data-time-type="number" data-min-time="10:00" data-max-time="13:30" data-autoclose="1" name="time2" bs-timepicker>
       </div>
       <hr>
 
