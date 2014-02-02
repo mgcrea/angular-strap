@@ -80,7 +80,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate))
             .then(function(contentTemplate) {
               if(angular.isObject(contentTemplate)) contentTemplate = contentTemplate.data;
-              findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
+              if (findElement('[ng-bind="title"]', templateEl[0]).length)
+								findElement('[ng-bind="title"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
+							else
+								findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
               return templateEl[0].outerHTML;
             });
           });
