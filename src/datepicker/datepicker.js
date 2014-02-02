@@ -267,6 +267,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         // viewValue -> $parsers -> modelValue
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
+          // Null values should correctly reset the model value & validity
+          if(!viewValue) {
+            controller.$setValidity('date', true);
+            return;
+          }
           var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
           if(!parsedDate || isNaN(parsedDate.getTime())) {
             controller.$setValidity('date', false);
@@ -276,7 +281,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             // Only update the model when we have a valid date
             if(isValid) controller.$dateValue = parsedDate;
           }
-          controller.$dateValue = parsedDate;
           if(options.dateType === 'string') {
             return dateFilter(viewValue, options.dateFormat);
           } else if(options.dateType === 'number') {

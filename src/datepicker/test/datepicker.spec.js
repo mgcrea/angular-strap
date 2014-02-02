@@ -204,6 +204,13 @@ describe('datepicker', function() {
       angular.element(sandboxEl.find('.dropdown-menu tbody td .btn-primary')[0]).triggerHandler('click');
     });
 
+    it('should handle null values', function() {
+      var elm = compileDirective('default');
+      elm.val('');
+      angular.element(elm[0]).triggerHandler('change');
+      expect(scope.selectedDate).toBeUndefined();
+    });
+
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-datepicker]:eq(0)')).triggerHandler('focus');
