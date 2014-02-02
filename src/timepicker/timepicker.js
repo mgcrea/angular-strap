@@ -63,7 +63,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $timepicker.update = function(date) {
           // console.warn('$timepicker.update() newValue=%o', date);
-          if(!isNaN(date.getTime())) {
+          if(angular.isDate(date) && !isNaN(date.getTime())) {
             $timepicker.$date = date;
             angular.extend(viewDate, {hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds(), millisecond: date.getMilliseconds()});
             $timepicker.$build();
@@ -326,6 +326,11 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         // viewValue -> $parsers -> modelValue
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
+          // Null values should correctly reset the model value & validity
+          if(!viewValue) {
+            controller.$setValidity('date', true);
+            return;
+          }
           var parsedTime = dateParser.parse(viewValue, controller.$dateValue);
           if(!parsedTime || isNaN(parsedTime.getTime())) {
             controller.$setValidity('date', false);

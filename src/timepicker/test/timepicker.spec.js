@@ -134,6 +134,23 @@ describe('timepicker', function() {
       expect(angular.isDate(scope.selectedUndefined)).toBeTruthy();
     });
 
+    it('should correctly support invalid values', function() {
+      var elm = compileDirective('default');
+      elm.val('invalid');
+      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text().trim() * 1).toBe(today.getHours());
+      angular.element(sandboxEl.find('.dropdown-menu tbody tr:eq(0) td:eq(0) .btn')[0]).triggerHandler('click');
+      expect(scope.selectedTime.getHours()).not.toBe(today.getHours());
+    });
+
+    it('should handle null values', function() {
+      var elm = compileDirective('default');
+      elm.val('');
+      angular.element(elm[0]).triggerHandler('change');
+      expect(scope.selectedTime).toBeUndefined();
+    });
+
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-timepicker]:eq(0)')).triggerHandler('focus');
