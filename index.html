@@ -43,9 +43,9 @@
 
   <link rel="stylesheet" href="styles/fd35dd20.libraries.min.css"/>
 
-  <link rel="stylesheet" href="styles/e9a4b490.bootstrap-additions.min.css"/>
+  <link rel="stylesheet" href="styles/51329c4e.bootstrap-additions.min.css"/>
 
-  <link rel="stylesheet" href="styles/80933199.main.min.css"/>
+  <link rel="stylesheet" href="styles/2ade94ab.main.min.css"/>
 
 </head>
 
@@ -55,7 +55,7 @@
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
   <div class="container">
     <div class="navbar-header">
-      <button class="navbar-toggle" type="button" data-template="views/aside.html" title="Menu" data-container="body" bs-aside="">
+      <button class="navbar-toggle" type="button" data-template="views/aside.html" data-animation="am-fade-and-slide-left" data-placement="left" title="Menu" data-container="body" bs-aside="">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -141,9 +141,9 @@
 
   <div class="container bs-docs-container">
     <div class="row">
-      <div class="col-md-3 hidden-sm hidden-xs">
-        <!-- ngInclude: 'docs/views/sidebar.html' -->
-<div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-80" bs-affix="" bs-scrollspy-list="">
+      <div class="col-md-2 hidden-sm hidden-xs">
+        <!-- ngInclude: 'docs/views/affixed-sidebar.html' -->
+<div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-100" bs-affix="" bs-scrollspy-list="">
   <ul class="nav bs-sidenav">
 <!--     <li>
       <a href="#js-overview">Overview</a>
@@ -320,9 +320,10 @@
     </li> -->
 
   </ul>
+
 </div>
       </div>
-      <div class="col-md-9">
+      <div class="col-md-10">
         <!-- ngInclude: 'docs/views/sections/getting-started.html' -->
 <div class="bs-docs-section">
 
@@ -830,7 +831,7 @@
   <div class="bs-example" style="padding-bottom: 24px;" append-source="">
 
     <!-- Button to trigger a default alert with a scope as an object {title:'', content:'', etc.} -->
-    <button type="button" class="btn btn-lg btn-primary" data-placement="top-right" data-duration="3" bs-alert="alert">Click to toggle alert
+    <button type="button" class="btn btn-lg btn-primary" data-placement="top-right" data-container="body" data-duration="3" bs-alert="alert">Click to toggle alert
       <br>
       <small>(using an object)</small>
     </button>
@@ -1464,13 +1465,13 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
       <!-- Basic example -->
       <div class="form-group" ng-class="{&apos;has-error&apos;: timepickerForm.time.$invalid}">
         <label class="control-label"><i class="fa fa-clock-o"></i> Time <small>(as date)</small></label>
-        <input type="text" class="form-control" size="1" ng-model="time" name="time" required bs-timepicker="">
+        <input type="text" class="form-control" size="8" ng-model="time" name="time" bs-timepicker="">
       </div>
 
       <!-- Custom example -->
       <div class="form-group" ng-class="{&apos;has-error&apos;: timepickerForm.time2.$invalid}">
         <label class="control-label"><i class="fa fa-clock-o"></i> Time <small>(as number)</small></label>
-        <input type="text" class="form-control" size="1" ng-model="selectedTimeAsNumber" data-time-format="HH:mm" data-time-type="number" data-min-time="10:00" data-max-time="13:30" data-autoclose="1" name="time2" bs-timepicker="">
+        <input type="text" class="form-control" size="5" ng-model="selectedTimeAsNumber" data-time-format="HH:mm" data-time-type="number" data-min-time="10:00" data-max-time="13:30" data-autoclose="1" name="time2" bs-timepicker="">
       </div>
       <hr>
 
@@ -2770,15 +2771,15 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/abfbf540.libraries.min.js"></script>
 
-  <script src="scripts/9c5aad2f.angular-strap.min.js"></script>
+  <script src="scripts/59ad233c.angular-strap.min.js"></script>
 
-  <script src="scripts/4661a964.angular-strap.tpl.min.js"></script>
+  <script src="scripts/d147e563.angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/37cc30b0.docs.min.js"></script>
+  <script src="scripts/5febd64e.docs.min.js"></script>
 
-  <script src="scripts/90cb0f91.docs.tpl.min.js"></script>
+  <script src="scripts/5ab71e6f.docs.tpl.min.js"></script>
 
-  <script src="scripts/8828f1bc.demo.min.js"></script>
+  <script src="scripts/018d1db7.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
