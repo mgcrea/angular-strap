@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.2 - 2014-01-29
+ * @version v2.0.0-rc.2 - 2014-01-30
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -50,7 +50,7 @@ $templateCache.put('modal/modal.tpl.html',
 // Source: dist/modules/popover.tpl.js
 angular.module('mgcrea.ngStrap.popover').run(['$templateCache', function($templateCache) {
 $templateCache.put('popover/popover.tpl.html',
-    "<div class=\"popover\" ng-show=\"content\"><div class=\"arrow\"></div><h3 class=\"popover-title\" ng-bind=\"title\" ng-show=\"title\"></h3><div class=\"popover-content\" ng-bind=\"content\"></div></div>"
+    "<div class=\"popover\"><div class=\"arrow\"></div><h3 class=\"popover-title\" ng-bind=\"title\" ng-show=\"title\"></h3><div class=\"popover-content\" ng-bind=\"content\"></div></div>"
   );
 
 }]);
@@ -82,7 +82,7 @@ $templateCache.put('timepicker/timepicker.tpl.html',
 // Source: dist/modules/tooltip.tpl.js
 angular.module('mgcrea.ngStrap.tooltip').run(['$templateCache', function($templateCache) {
 $templateCache.put('tooltip/tooltip.tpl.html',
-    "<div class=\"tooltip\" ng-show=\"title\"><div class=\"tooltip-arrow\"></div><div class=\"tooltip-inner\" ng-bind=\"title\"></div></div>"
+    "<div class=\"tooltip in\" ng-show=\"title\"><div class=\"tooltip-arrow\"></div><div class=\"tooltip-inner\" ng-bind=\"title\"></div></div>"
   );
 
 }]);

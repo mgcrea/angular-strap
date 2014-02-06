@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.2 - 2014-01-29
+ * @version v2.0.0-rc.2 - 2014-01-30
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -73,7 +73,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
             if (angular.isObject(template))
               template = template.data;
             var templateEl = angular.element(template);
-            return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate, { cache: $templateCache })).then(function (contentTemplate) {
+            return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate)).then(function (contentTemplate) {
               if (angular.isObject(contentTemplate))
                 contentTemplate = contentTemplate.data;
               findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
@@ -100,15 +100,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
             };
           }
           var triggers = options.trigger.split(' ');
-          for (var i = triggers.length; i--;) {
-            var trigger = triggers[i];
+          angular.forEach(triggers, function (trigger) {
             if (trigger === 'click') {
               element.on('click', $tooltip.toggle);
             } else if (trigger !== 'manual') {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
             }
-          }
+          });
           if (options.show) {
             scope.$$postDigest(function () {
               options.trigger === 'focus' ? element[0].focus() : $tooltip.show();
@@ -146,6 +145,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
         $tooltip.show = function () {
           var parent = options.container ? findElement(options.container) : null;
           var after = options.container ? null : element;
+          if (tipElement)
+            tipElement.remove();
           tipElement = $tooltip.$element = tipLinker(scope, function (clonedElement, scope) {
           });
           tipElement.css({
@@ -187,6 +188,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
         };
         $tooltip.hide = function (blur) {
           $animate.leave(tipElement, function () {
+            tipElement = null;
           });
           scope.$$phase || scope.$digest();
           $tooltip.$isShown = false;

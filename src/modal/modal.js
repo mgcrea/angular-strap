@@ -6,6 +6,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
     var defaults = this.defaults = {
       animation: 'am-fade',
+      backdropAnimation: 'am-fade',
       prefixClass: 'modal',
       placement: 'top',
       template: 'modal/modal.tpl.html',
@@ -137,7 +138,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           // Options: animation
           if(options.animation) {
             if(options.backdrop) {
-              backdropElement.addClass('am-fade');
+              backdropElement.addClass(option.backdropAnimation);
             }
             modalElement.addClass(options.animation);
           }

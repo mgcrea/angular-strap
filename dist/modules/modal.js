@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.2 - 2014-01-29
+ * @version v2.0.0-rc.2 - 2014-01-30
  * @link http://mgcrea.github.io/angular-strap
  * @author [object Object]
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -9,6 +9,7 @@
 angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).provider('$modal', function () {
   var defaults = this.defaults = {
       animation: 'am-fade',
+      backdropAnimation: 'am-fade',
       prefixClass: 'modal',
       placement: 'top',
       template: 'modal/modal.tpl.html',
@@ -123,7 +124,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).pr
           modalElement.css({ display: 'block' }).addClass(options.placement);
           if (options.animation) {
             if (options.backdrop) {
-              backdropElement.addClass('am-fade');
+              backdropElement.addClass(option.backdropAnimation);
             }
             modalElement.addClass(options.animation);
           }
