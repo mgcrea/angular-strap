@@ -33,6 +33,11 @@ describe('select', function () {
     'markup-ngOptions-filtered': {
       element: '<button type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons | orderBy:\'icon.value\'" bs-select></button>'
     },
+    'markup-ngOptions-array': {
+      scope: {selectedMonth: 0, months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']},
+      element: '<div type="button" class="btn" ng-model="selectedMonth" ng-options="months.indexOf(month) as month for month in months" bs-select></div>'
+      // element: '<select type="button" class="btn" ng-model="selectedMonth" ng-options="months.indexOf(month) as month for month in months"></select>'
+    },
     'options-multiple': {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
@@ -89,10 +94,10 @@ describe('select', function () {
     it('should close on select', function() {
       var elm = compileDirective('default');
       expect(sandboxEl.children('.dropdown-menu.select').length).toBe(0);
+      expect(elm.text().trim()).toBe('Choose among the following...');
       angular.element(elm[0]).triggerHandler('focus');
-      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a')[0]).triggerHandler('click');
-      // @TODO fixme
-      // expect(sandboxEl.children('.dropdown-menu.select').length).toBe(0);
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+      expect(scope.selectedIcon).toBe(scope.icons[1].value);
     });
 
     it('should correctly compile inner content', function() {
@@ -126,6 +131,17 @@ describe('select', function () {
       var elm = compileDirective('markup-ngOptions-filtered');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
+    });
+
+    it('should support ngOptions with arrays', function() {
+      var elm = compileDirective('markup-ngOptions-array');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(elm.text().trim()).toBe(scope.months[scope.selectedMonth]);
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.months.length);
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+      scope.$digest();
+      expect(scope.selectedMonth).toBe(1);
     });
 
   });

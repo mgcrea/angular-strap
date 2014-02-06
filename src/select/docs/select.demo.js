@@ -13,4 +13,7 @@ angular.module('mgcrea.ngStrapDocs')
     {value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}
   ];
 
+  $scope.selectedMonth = 0;
+  $scope.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 });

@@ -42,11 +42,11 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
         // Private functions
 
         function parseValues(values) {
-          return values.map(function(match) {
+          return values.map(function(match, index) {
             var locals = {}, label, value;
             locals[valueName] = match;
             label = displayFn(locals);
-            value = valueFn(locals);
+            value = valueFn(locals) || index;
             return {label: label, value: value};
           });
         }
