@@ -87,7 +87,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         }
 
         // Fetch, compile then initialize tooltip
-        var tipLinker, tipElement, tipTemplate;
+        var tipLinker, tipElement, tipTemplate, tipContainer;
         $tooltip.$promise.then(function(template) {
           if(angular.isObject(template)) template = template.data;
           if(options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
@@ -111,6 +111,13 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // if(isTouch && options.trigger === defaults.trigger) {
           //   options.trigger.replace(/hover/g, 'click');
           // }
+
+          // Options : container
+          if(options.container === 'self') {
+            tipContainer = element;
+          } else if(options.container) {
+            tipContainer = findElement(options.container);
+          }
 
           // Options: trigger
           var triggers = options.trigger.split(' ');
@@ -173,7 +180,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $tooltip.show = function() {
 
-          var parent = options.container ? findElement(options.container) : null;
+          var parent = options.container ? tipContainer : null;
           var after = options.container ? null : element;
 
           // Remove any existing tipElement
