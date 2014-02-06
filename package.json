@@ -26,7 +26,7 @@
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-angular-templates": "~0.5.1",
-    "grunt-autoprefixer": "~0.6.4",
+    "grunt-autoprefixer": "~0.6.5",
     "grunt-concurrent": "~0.4.3",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "~0.3.0",
@@ -36,7 +36,7 @@
     "grunt-contrib-htmlmin": "~0.1.3",
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-contrib-less": "~0.9.0",
-    "grunt-contrib-uglify": "~0.3.1",
+    "grunt-contrib-uglify": "~0.3.2",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-karma": "~0.6.2",
     "grunt-newer": "~0.6.1",
@@ -44,9 +44,9 @@
     "grunt-rev": "~0.1.0",
     "grunt-usemin": "~2.0.2",
     "jshint-stylish": "~0.1.5",
-    "karma-coverage": "~0.1.4",
+    "karma-coverage": "~0.1.5",
     "load-grunt-tasks": "~0.3.0",
-    "grunt-nginclude": "~0.2.1",
+    "grunt-nginclude": "~0.3.1",
     "grunt-karma-coveralls": "~2.3.0"
   },
   "engines": {
