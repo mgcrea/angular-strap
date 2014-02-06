@@ -130,6 +130,25 @@ describe('timepicker', function() {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr').length).toBe($timepicker.defaults.length);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 4);
+      angular.element(sandboxEl.find('.dropdown-menu tbody button:eq(0)')[0]).triggerHandler('click');
+      expect(angular.isDate(scope.selectedUndefined)).toBeTruthy();
+    });
+
+    it('should correctly support invalid values', function() {
+      var elm = compileDirective('default');
+      elm.val('invalid');
+      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text().trim() * 1).toBe(today.getHours() % 12);
+      angular.element(sandboxEl.find('.dropdown-menu tbody tr:eq(0) td:eq(0) .btn')[0]).triggerHandler('click');
+      expect(scope.selectedTime.getHours()).not.toBe(today.getHours());
+    });
+
+    it('should handle null values', function() {
+      var elm = compileDirective('default');
+      elm.val('');
+      angular.element(elm[0]).triggerHandler('change');
+      expect(scope.selectedTime).toBeUndefined();
     });
 
     it('should support ngRepeat markup', function() {

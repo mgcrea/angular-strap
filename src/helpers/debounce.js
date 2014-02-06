@@ -2,6 +2,8 @@
 
 angular.module('mgcrea.ngStrap.helpers.debounce', [])
 
+// @source jashkenas/underscore
+// @url https://github.com/jashkenas/underscore/blob/1.5.2/underscore.js#L693
 .constant('debounce', function(func, wait, immediate) {
   var timeout, args, context, timestamp, result;
   return function() {
@@ -26,6 +28,9 @@ angular.module('mgcrea.ngStrap.helpers.debounce', [])
   };
 })
 
+
+// @source jashkenas/underscore
+// @url https://github.com/jashkenas/underscore/blob/1.5.2/underscore.js#L661
 .constant('throttle', function(func, wait, options) {
   var context, args, result;
   var timeout = null;
@@ -52,6 +57,5 @@ angular.module('mgcrea.ngStrap.helpers.debounce', [])
     }
     return result;
   };
-
 });
 

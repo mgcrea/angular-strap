@@ -195,6 +195,22 @@ describe('datepicker', function() {
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 5);
     });
 
+    it('should correctly support invalid values', function() {
+      var elm = compileDirective('default');
+      elm.val('invalid');
+      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(today.getDate());
+      angular.element(sandboxEl.find('.dropdown-menu tbody td .btn-primary')[0]).triggerHandler('click');
+    });
+
+    it('should handle null values', function() {
+      var elm = compileDirective('default');
+      elm.val('');
+      angular.element(elm[0]).triggerHandler('change');
+      expect(scope.selectedDate).toBeUndefined();
+    });
+
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-datepicker]:eq(0)')).triggerHandler('focus');
@@ -396,7 +412,7 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         var date = new Date(), today = date.getDate();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + today + ')').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + today + '):eq(0)').is(':disabled')).toBeFalsy();
       });
 
     });

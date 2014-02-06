@@ -90,20 +90,9 @@ describe('select', function () {
       var elm = compileDirective('default');
       expect(sandboxEl.children('.dropdown-menu.select').length).toBe(0);
       angular.element(elm[0]).triggerHandler('focus');
-      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')).triggerHandler('click');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a')[0]).triggerHandler('click');
       // @TODO fixme
       // expect(sandboxEl.children('.dropdown-menu.select').length).toBe(0);
-    });
-
-    it('should select active value', function() {
-      var elm = compileDirective('default');
-      scope.selectedIcon = 'Heart';
-      scope.$digest();
-      expect(elm.text().trim()).toBe(scope.icons[2].label);
-      angular.element(elm[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(1);
-      // @TODO fixme
-      // expect(sandboxEl.find('.dropdown-menu li.active').index()).toBe(2);
     });
 
     it('should correctly compile inner content', function() {
@@ -120,6 +109,19 @@ describe('select', function () {
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
     });
 
+  });
+
+  describe('ngOptions', function () {
+
+    it('should correctly watch for changes', function() {
+      var elm = compileDirective('default');
+      scope.icons.unshift({value: 'Bullhorn', label: '> Bullhorn'});
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
+    });
+
     it('should support ngOptions with filters', function() {
       var elm = compileDirective('markup-ngOptions-filtered');
       angular.element(elm[0]).triggerHandler('focus');
@@ -128,6 +130,19 @@ describe('select', function () {
 
   });
 
+  describe('ngModel', function () {
+
+    it('should correctly watch for changes', function() {
+      var elm = compileDirective('default');
+      scope.selectedIcon = scope.icons[2].value;
+      scope.$digest();
+      expect(elm.text().trim()).toBe(scope.icons[2].label);
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(1);
+      expect(sandboxEl.find('.dropdown-menu li.active').index()).toBe(2);
+    });
+
+  });
 
   describe('options', function () {
 

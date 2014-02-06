@@ -30,7 +30,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
       var bodyEl = angular.element($window.document.body);
       var isTouch = 'createTouch' in $window.document;
-      var isAppleTouch = /(iP(a|o)d|iPhone)/g.test($window.navigator.userAgent);
+      var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
       if(!defaults.lang) defaults.lang = $locale.id;
 
       function DatepickerFactory(element, controller, config) {
@@ -64,7 +64,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $datepicker.update = function(date) {
           // console.warn('$datepicker.update() newValue=%o', date);
-          if(!isNaN(date.getTime())) {
+          if(angular.isDate(date) && !isNaN(date.getTime())) {
             $datepicker.$date = date;
             $picker.update.call($picker, date);
           } else if(!$picker.built) {
@@ -74,7 +74,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $datepicker.select = function(date, keep) {
           // console.warn('$datepicker.select', date, scope.$mode);
-          if(!angular.isDate(date)) date = new Date(date);
+          if(!angular.isDate(controller.$dateValue)) controller.$dateValue = new Date(date);
           controller.$dateValue.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
           if(!scope.$mode || keep) {
             controller.$setViewValue(controller.$dateValue);
@@ -166,7 +166,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         var _init = $datepicker.init;
         $datepicker.init = function() {
-          if(isAppleTouch && options.useNative) {
+          if(isNative && options.useNative) {
             element.prop('type', 'date');
             element.css('-webkit-appearance', 'textfield');
             return;
@@ -180,7 +180,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         var _destroy = $datepicker.destroy;
         $datepicker.destroy = function() {
-          if(isAppleTouch && options.useNative) {
+          if(isNative && options.useNative) {
             element.off('click', focusElement);
           }
           _destroy();
@@ -219,7 +219,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
   .directive('bsDatepicker', function($window, $parse, $q, $locale, dateFilter, $datepicker, $dateParser, $timeout) {
 
-    var isAppleTouch = /(iP(a|o)d|iPhone)/g.test($window.navigator.userAgent);
+    var defaults = $datepicker.defaults;
+    var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
     return {
@@ -234,7 +235,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         });
 
         // Initialize datepicker
-        if(isAppleTouch && options.useNative) options.dateFormat = 'yyyy-MM-dd';
+        if(isNative && options.useNative) options.dateFormat = 'yyyy-MM-dd';
         var datepicker = $datepicker(element, controller, options);
         options = datepicker.$options;
 
@@ -266,6 +267,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         // viewValue -> $parsers -> modelValue
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
+          // Null values should correctly reset the model value & validity
+          if(!viewValue) {
+            controller.$setValidity('date', true);
+            return;
+          }
           var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
           if(!parsedDate || isNaN(parsedDate.getTime())) {
             controller.$setValidity('date', false);
@@ -275,7 +281,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             // Only update the model when we have a valid date
             if(isValid) controller.$dateValue = parsedDate;
           }
-          controller.$dateValue = parsedDate;
           if(options.dateType === 'string') {
             return dateFilter(viewValue, options.dateFormat);
           } else if(options.dateType === 'number') {
