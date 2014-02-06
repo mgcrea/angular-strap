@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.button', [])
+angular.module('mgcrea.ngStrap.button', ['ngAnimate'])
 
   .provider('$button', function() {
 
@@ -35,7 +35,7 @@ angular.module('mgcrea.ngStrap.button', [])
 
   })
 
-  .directive('bsCheckbox', function($button) {
+  .directive('bsCheckbox', function($window, $button, $$animateReflow) {
 
     var defaults = $button.defaults;
     var constantValueRegExp = /^(true|false|\d+)$/;
@@ -77,10 +77,10 @@ angular.module('mgcrea.ngStrap.button', [])
         controller.$render = function () {
           // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
           var isActive = angular.equals(controller.$modelValue, trueValue);
-          if(isInput) {
-            element[0].checked = isActive;
-          }
-          activeElement.toggleClass(options.activeClass, isActive);
+          $$animateReflow(function() {
+            if(isInput) element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
         };
 
         // view -> model
@@ -121,7 +121,7 @@ angular.module('mgcrea.ngStrap.button', [])
 
   })
 
-  .directive('bsRadio', function($button) {
+  .directive('bsRadio', function($window, $button, $$animateReflow) {
 
     var defaults = $button.defaults;
     var constantValueRegExp = /^(true|false|\d+)$/;
@@ -143,10 +143,10 @@ angular.module('mgcrea.ngStrap.button', [])
         controller.$render = function () {
           // console.warn('$render', element.attr('value'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
           var isActive = angular.equals(controller.$modelValue, value);
-          if(isInput) {
-            element[0].checked = isActive;
-          }
-          activeElement.toggleClass(options.activeClass, isActive);
+          $$animateReflow(function() {
+            if(isInput) element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
         };
 
         // view -> model
