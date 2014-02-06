@@ -2,7 +2,7 @@
 
 [![Banner](http://mgcrea.github.io/angular-strap/images/6af654d7.snippet.png)](http://mgcrea.github.io/angular-strap)
 
-AngularStrap is a set of native directives that enables seamless integration of [Twitter Bootstrap 3.0+](https://github.com/twbs/bootstrap) into your [AngularJS 1.2.0+](https://github.com/angular/angular.js) app.
+AngularStrap is a set of native directives that enables seamless integration of [Twitter Bootstrap 3.0+](https://github.com/twbs/bootstrap) into your [AngularJS 1.2.9+](https://github.com/angular/angular.js) app.
 
 >
 AngularStrap was initially written to provide AngularJS wrapping directives for Twitter Bootstrap. It used to leverage the javascript code written by Bootstrap's contributors to minimize work, retro-compatibility issues & time to market.
@@ -17,14 +17,16 @@ While it worked pretty well, it required a big javascript payload: both jQuery &
 
 ## Quick start
 
-+ Include the required libraries (cdn/local)
++ Include the required libraries (`ngAnimate` can be [mocked out](https://github.com/mgcrea/angular-strap/wiki/angular-animate-mock.js), only the `$$animateReflow` service is used).
 
 >
 ``` html
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-animate.min.js"></script>
 <script src="//rawgithub.com/mgcrea/angular-strap/master/dist/angular-strap.min.js"></script>
 <script src="//rawgithub.com/mgcrea/angular-strap/master/dist/angular-strap.tpl.min.js"></script>
 ```
+
 
 + Inject the `ngStrap` module into your app
 
