@@ -371,10 +371,29 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
               var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() - options.weekStart) * 864e5);
               var days = [], day;
-              for(var i = 0; i < 35; i++) {
+
+              function generateDays(i) {
                 day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
-                days.push({date: day, label: dateFilter(day, this.format), selected: picker.$date && this.isSelected(day), muted: day.getMonth() !== viewDate.month, disabled: this.isDisabled(day)});
+                days.push({
+                  date: day,
+                  label: dateFilter(day, this.format),
+                  selected: picker.$date && this.isSelected(day),
+                  muted: day.getMonth() !== viewDate.month,
+                  disabled: this.isDisabled(day)
+                });
+              };
+
+              // we generate one more day to find if all the day of current month are pushed
+              for (var i = 0; i < 36; i++) {
+                generateDays.call(this, i);
               }
+              // if that's not the case, we add a new line
+              if (days.pop().date.getMonth() === viewDate.month) {
+                for (var i = 35; i < (35 + this.split); i++) {
+                  generateDays.call(this, i);
+                }
+              }
+
               scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
               scope.labels = dayLabelHtml;
               scope.rows = split(days, this.split);
