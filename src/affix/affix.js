@@ -10,7 +10,6 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
 
     this.$get = function($window, dimensions) {
 
-      var windowEl = angular.element($window);
       var bodyEl = angular.element($window.document.body);
 
       function AffixFactory(element, config) {
@@ -26,6 +25,25 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
             initialOffsetTop = 0,
             affixed = null,
             unpin = null;
+
+        var target = options.target;
+        var getScrollTop, getScrollHeight;
+        if(options.target[0] === $window) {
+          getScrollTop = function() {
+            return $window.pageYOffset;
+          };
+          getScrollHeight = function() {
+            return $window.document.body.scrollHeight;
+          };
+        }
+        else {
+          getScrollTop = function() {
+            return options.target[0].scrollTop;
+          };
+          getScrollHeight = function() {
+            return options.target[0].scrollHeight
+          };
+        }
 
         var parent = element.parent();
         // Options: custom parent
@@ -64,7 +82,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
         if(options.offsetBottom) {
           if(options.offsetParent && options.offsetBottom.match(/^[-+]\d+$/)) {
             // add 1 pixel due to rounding problems...
-            offsetBottom = $window.document.body.scrollHeight - (dimensions.offset(parent[0]).top + dimensions.height(parent[0])) + (options.offsetBottom * 1) + 1;
+            offsetBottom = getScrollHeight() - (dimensions.offset(parent[0]).top + dimensions.height(parent[0])) + (options.offsetBottom * 1) + 1;
           }
           else {
             offsetBottom = options.offsetBottom * 1;
@@ -76,8 +94,8 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
           initialOffsetTop = dimensions.offset(element[0]).top + initialAffixTop;
 
           // Bind events
-          windowEl.on('scroll', this.checkPosition);
-          windowEl.on('click', this.checkPositionWithEventLoop);
+          target.on('scroll', this.checkPosition);
+          target.on('click', this.checkPositionWithEventLoop);
           // Both of these checkPosition() calls are necessary for the case where
           // the user hits refresh after scrolling to the bottom of the page.
           this.checkPosition();
@@ -88,8 +106,8 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
         $affix.destroy = function() {
 
           // Unbind events
-          windowEl.off('scroll', this.checkPosition);
-          windowEl.off('click', this.checkPositionWithEventLoop);
+          target.off('scroll', this.checkPosition);
+          target.off('click', this.checkPositionWithEventLoop);
 
         };
 
@@ -102,7 +120,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
         $affix.checkPosition = function() {
           // if (!this.$element.is(':visible')) return
 
-          var scrollTop = $window.pageYOffset;
+          var scrollTop = getScrollTop();
           var position = dimensions.offset(element[0]);
           var elementHeight = dimensions.height(element[0]);
 
@@ -143,8 +161,8 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
 
         function getRequiredAffixClass(unpin, position, elementHeight) {
 
-          var scrollTop = $window.pageYOffset;
-          var scrollHeight = $window.document.body.scrollHeight;
+          var scrollTop = getScrollTop();
+          var scrollHeight = getScrollHeight();
 
           if(scrollTop <= offsetTop) {
             return 'top';
@@ -169,13 +187,18 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
 
   })
 
-  .directive('bsAffix', function($affix, dimensions) {
+  .directive('bsAffix', function($affix, $window) {
 
     return {
       restrict: 'EAC',
-      link: function postLink(scope, element, attr) {
+      require: '^?bsAffixTarget',
+      link: function postLink(scope, element, attr, affixTarget) {
 
-        var options = {scope: scope, offsetTop: 'auto'};
+        var options = {
+          scope: scope,
+          offsetTop: 'auto',
+          target: affixTarget ? affixTarget.$element : angular.element($window)
+        };
         angular.forEach(['offsetTop', 'offsetBottom', 'offsetParent', 'offsetUnpin'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
@@ -189,4 +212,12 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
       }
     };
 
+  })
+
+  .directive('bsAffixTarget', function () {
+    return {
+      controller: ['$element', function ($element) {
+        this.$element = $element;
+      }]
+    };
   });
