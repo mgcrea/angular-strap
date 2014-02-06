@@ -1355,10 +1355,13 @@
               locals[valueName] = match;
               label = displayFn(locals);
               value = valueFn(locals);
-              return {
+              var return_obj = {
                 label: label,
                 value: value
               };
+              if(groupByFn)
+                return_obj['groupBy'] = groupByFn(locals);
+              return return_obj;
             });
           }
           $parseOptions.init();
