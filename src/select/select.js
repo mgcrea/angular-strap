@@ -242,12 +242,13 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
-        // if(element[0].nodeName.toLowerCase() === 'select') {
-        //   var inputEl = element;
-        //   inputEl.css('display', 'none');
-        //   element = angular.element('<div class="btn btn-default"></div>');
-        //   inputEl.after(element);
-        // }
+        // Add support for select markup
+        if(element[0].nodeName.toLowerCase() === 'select') {
+          var inputEl = element;
+          inputEl.css('display', 'none');
+          element = angular.element('<button type="button" class="btn btn-default"></button>');
+          inputEl.after(element);
+        }
 
         // Build proper ngOptions
         var parsedOptions = $parseOptions(attr.ngOptions);
