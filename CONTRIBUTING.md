@@ -1,5 +1,8 @@
 # Contributing
 
+## Submitting issues
+Any bug-related issue should come with a reproducible test-case, use the Plunker links in the docs to easily create one.
+
 ## Important notes
 Please don't edit files in the `dist` subdirectory as they are generated via Grunt. You'll find source code in the `src` subdirectory!
 
