@@ -35,7 +35,7 @@ angular.module('mgcrea.ngStrap.button', ['ngAnimate'])
 
   })
 
-  .directive('bsCheckbox', function($window, $button, $$animateReflow) {
+  .directive('bsCheckbox', function($button, $$animateReflow) {
 
     var defaults = $button.defaults;
     var constantValueRegExp = /^(true|false|\d+)$/;
@@ -121,7 +121,7 @@ angular.module('mgcrea.ngStrap.button', ['ngAnimate'])
 
   })
 
-  .directive('bsRadio', function($window, $button, $$animateReflow) {
+  .directive('bsRadio', function($button, $$animateReflow) {
 
     var defaults = $button.defaults;
     var constantValueRegExp = /^(true|false|\d+)$/;
