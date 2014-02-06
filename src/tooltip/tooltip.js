@@ -224,6 +224,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $tooltip.hide = function(blur) {
 
+          if(!$tooltip.$isShown) return; //Do nothing if the tooltip is not shown
+
           $animate.leave(tipElement, function() {
             tipElement = null;
           });

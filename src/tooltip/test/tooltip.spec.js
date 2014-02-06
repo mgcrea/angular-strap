@@ -132,6 +132,13 @@ describe('tooltip', function() {
       expect(bodyEl.children('.tooltip').length).toBe(0);
     });
 
+    it('should do nothing when hiding an already hidden popup', function() {
+      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      scope.$digest();
+      myTooltip.hide();
+      expect(bodyEl.children('.tooltip').length).toBe(0);
+    });
+
     it('should correctly be destroyed', function() {
       var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
       scope.$digest();
