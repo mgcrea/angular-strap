@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
+angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.dimensions'])
 
   .provider('$tooltip', function() {
 
@@ -20,10 +20,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       delay: 0
     };
 
-    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions) {
+    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions, $$animateReflow) {
 
       var trim = String.prototype.trim;
-      var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var isTouch = 'createTouch' in $window.document;
       var htmlReplaceRegExp = /ng-bind="/ig;
 
@@ -199,7 +198,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           $animate.enter(tipElement, parent, after, function() {});
           $tooltip.$isShown = true;
           scope.$$phase || scope.$digest();
-          requestAnimationFrame($tooltip.$applyPlacement);
+          $$animateReflow($tooltip.$applyPlacement);
 
           // Bind events
           if(options.keyboard) {
@@ -215,7 +214,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $tooltip.leave = function() {
 
-          if(!$tooltip.$isShown) return;
           clearTimeout(timeout);
           hoverState = 'out';
           if (!options.delay || !options.delay.hide) {
@@ -231,7 +229,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $tooltip.hide = function(blur) {
 
-          if(!$tooltip.$isShown) return; //Do nothing if the tooltip is not shown
+          if(!$tooltip.$isShown) return;
 
           $animate.leave(tipElement, function() {
             tipElement = null;
@@ -366,9 +364,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
   })
 
-  .directive('bsTooltip', function($window, $location, $sce, $tooltip) {
-
-    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+  .directive('bsTooltip', function($window, $location, $sce, $tooltip, $$animateReflow) {
 
     return {
       restrict: 'EAC',
@@ -385,7 +381,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         angular.forEach(['title'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
             scope[key] = newValue;
-            angular.isDefined(oldValue) && requestAnimationFrame(function() {
+            angular.isDefined(oldValue) && $$animateReflow(function() {
               tooltip && tooltip.$applyPlacement();
             });
           });
@@ -398,7 +394,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           } else {
             scope.content = newValue;
           }
-          angular.isDefined(oldValue) && requestAnimationFrame(function() {
+          angular.isDefined(oldValue) && $$animateReflow(function() {
             tooltip && tooltip.$applyPlacement();
           });
         }, true);
