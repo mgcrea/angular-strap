@@ -43,7 +43,7 @@
 
   <link rel="stylesheet" href="styles/fd35dd20.libraries.min.css"/>
 
-  <link rel="stylesheet" href="styles/51329c4e.bootstrap-additions.min.css"/>
+  <link rel="stylesheet" href="styles/3cd559e7.bootstrap-additions.min.css"/>
 
   <link rel="stylesheet" href="styles/2ade94ab.main.min.css"/>
 
@@ -51,7 +51,8 @@
 
 <body ontouchstart="" ng-controller="MainCtrl">
 
-  <!-- ngInclude: 'docs/views/navbar.html' -->
+  <div>
+<!-- ngInclude: 'views/navbar.html' -->
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
   <div class="container">
     <div class="navbar-header">
@@ -101,7 +102,10 @@
     </nav>
   </div>
 </header>
-  <!-- ngInclude: 'docs/views/header.html' -->
+<!--/ngInclude: 'views/navbar.html' -->
+</div>
+  <div>
+<!-- ngInclude: 'views/header.html' -->
 <div class="bs-header" id="content">
   <div class="container">
     <div class="col-md-9">
@@ -129,7 +133,10 @@
     </div>
   </div>
 </div>
-  <!-- ngInclude: 'docs/views/sections/old-docs.html' -->
+<!--/ngInclude: 'views/header.html' -->
+</div>
+  <div>
+<!-- ngInclude: 'views/sections/old-docs.html' -->
 <div class="bs-old-docs">
   <div class="container">
     <strong>
@@ -138,11 +145,14 @@
     We've moved it to a new home while we push forward with AngularStrap 2.
   </div>
 </div>
+<!--/ngInclude: 'views/sections/old-docs.html' -->
+</div>
 
   <div class="container bs-docs-container">
     <div class="row">
       <div class="col-md-2 hidden-sm hidden-xs">
-        <!-- ngInclude: 'docs/views/affixed-sidebar.html' -->
+        <div>
+<!-- ngInclude: 'views/affixed-sidebar.html' -->
 <div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-100" bs-affix="" bs-scrollspy-list="">
   <ul class="nav bs-sidenav">
 <!--     <li>
@@ -322,9 +332,12 @@
   </ul>
 
 </div>
+<!--/ngInclude: 'views/affixed-sidebar.html' -->
+</div>
       </div>
       <div class="col-md-10">
-        <!-- ngInclude: 'docs/views/sections/getting-started.html' -->
+        <div>
+<!-- ngInclude: 'views/sections/getting-started.html' -->
 <div class="bs-docs-section">
 
   <div class="page-header">
@@ -414,8 +427,11 @@
 
 
 </div>
+<!--/ngInclude: 'views/sections/getting-started.html' -->
+</div>
         <div id="directives">
-          <!-- ngInclude: 'src/modal/docs/modal.demo.html' -->
+          <div>
+<!-- ngInclude: 'modal/docs/modal.demo.html' -->
 <div class="bs-docs-section" ng-controller="ModalDemoCtrl">
 
   <div class="page-header">
@@ -618,7 +634,10 @@
   <p>Toggles the modal.</p>
 
 </div>
-          <!-- ngInclude: 'src/aside/docs/aside.demo.html' -->
+<!--/ngInclude: 'modal/docs/modal.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'aside/docs/aside.demo.html' -->
 <div class="bs-docs-section" ng-controller="AsideDemoCtrl">
 
   <div class="page-header">
@@ -808,7 +827,10 @@
   <p>Toggles the aside.</p>
 
 </div>
-          <!-- ngInclude: 'src/alert/docs/alert.demo.html' -->
+<!--/ngInclude: 'aside/docs/aside.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'alert/docs/alert.demo.html' -->
 <div class="bs-docs-section" ng-controller="AlertDemoCtrl">
 
   <div class="page-header">
@@ -979,7 +1001,10 @@
   <p>Toggles the alert.</p>
 
 </div>
-          <!-- ngInclude: 'src/button/docs/button.demo.html' -->
+<!--/ngInclude: 'alert/docs/alert.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'button/docs/button.demo.html' -->
 <div class="bs-docs-section" ng-controller="ButtonDemoCtrl">
 
   <div class="page-header">
@@ -1036,7 +1061,10 @@
     </div>
 
 </div>
-          <!-- ngInclude: 'src/select/docs/select.demo.html' -->
+<!--/ngInclude: 'button/docs/button.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'select/docs/select.demo.html' -->
 <div class="bs-docs-section" ng-controller="SelectDemoCtrl">
 
   <div class="page-header">
@@ -1204,7 +1232,10 @@ $scope.icons = "{{icons}}";
   </div>
 
 </div>
-          <!-- ngInclude: 'src/datepicker/docs/datepicker.demo.html' -->
+<!--/ngInclude: 'select/docs/select.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'datepicker/docs/datepicker.demo.html' -->
 <div class="bs-docs-section" ng-controller="DatepickerDemoCtrl">
 
   <div class="page-header">
@@ -1431,7 +1462,10 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
   </div>
 
 </div>
-          <!-- ngInclude: 'src/timepicker/docs/timepicker.demo.html' -->
+<!--/ngInclude: 'datepicker/docs/datepicker.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'timepicker/docs/timepicker.demo.html' -->
 <div class="bs-docs-section" ng-controller="TimepickerDemoCtrl">
 
   <div class="page-header">
@@ -1660,7 +1694,10 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
   </div>
 
 </div>
-          <!-- ngInclude: 'src/navbar/docs/navbar.demo.html' -->
+<!--/ngInclude: 'timepicker/docs/timepicker.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'navbar/docs/navbar.demo.html' -->
 <div class="bs-docs-section">
 
   <div class="page-header">
@@ -1743,7 +1780,10 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
   </div>
 
 </div>
-          <!-- ngInclude: 'src/tooltip/docs/tooltip.demo.html' -->
+<!--/ngInclude: 'navbar/docs/navbar.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'tooltip/docs/tooltip.demo.html' -->
 <div class="bs-docs-section" ng-controller="TooltipDemoCtrl">
 
   <div class="page-header">
@@ -1922,7 +1962,10 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
   <p>Toggles the tooltip.</p>
 
 </div>
-          <!-- ngInclude: 'src/popover/docs/popover.demo.html' -->
+<!--/ngInclude: 'tooltip/docs/tooltip.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'popover/docs/popover.demo.html' -->
 <div class="bs-docs-section" ng-controller="PopoverDemoCtrl">
 
   <div class="page-header">
@@ -2109,7 +2152,10 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
   <p>Toggles the popover.</p>
 
 </div>
-          <!-- ngInclude: 'src/dropdown/docs/dropdown.demo.html' -->
+<!--/ngInclude: 'popover/docs/popover.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'dropdown/docs/dropdown.demo.html' -->
 <div class="bs-docs-section" ng-controller="DropdownDemoCtrl">
 
   <div class="page-header">
@@ -2248,7 +2294,10 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
   </div>
 
 </div>
-          <!-- ngInclude: 'src/typeahead/docs/typeahead.demo.html' -->
+<!--/ngInclude: 'dropdown/docs/dropdown.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'typeahead/docs/typeahead.demo.html' -->
 <div class="bs-docs-section" ng-controller="TypeaheadDemoCtrl">
 
   <div class="page-header">
@@ -2419,7 +2468,10 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
 </div>
-          <!-- ngInclude: 'src/scrollspy/docs/scrollspy.demo.html' -->
+<!--/ngInclude: 'typeahead/docs/typeahead.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'scrollspy/docs/scrollspy.demo.html' -->
 <div class="bs-docs-section">
 
   <div class="page-header">
@@ -2525,7 +2577,10 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
 </div>
-          <!-- ngInclude: 'src/affix/docs/affix.demo.html' -->
+<!--/ngInclude: 'scrollspy/docs/scrollspy.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'affix/docs/affix.demo.html' -->
 <div class="bs-docs-section">
 
   <div class="page-header">
@@ -2624,7 +2679,10 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
 </div>
-          <!-- ngInclude: 'src/tab/docs/tab.demo.html' -->
+<!--/ngInclude: 'affix/docs/affix.demo.html' -->
+</div>
+          <div>
+<!-- ngInclude: 'tab/docs/tab.demo.html' -->
 <div class="bs-docs-section" ng-controller="TabDemoCtrl">
 
   <div class="page-header">
@@ -2733,12 +2791,15 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
 </div>
+<!--/ngInclude: 'tab/docs/tab.demo.html' -->
+</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ngInclude: 'docs/views/footer.html' -->
+  <div>
+<!-- ngInclude: 'views/footer.html' -->
 <footer class="bs-footer">
   <div class="container">
     <p class="pull-right"><a href="#">Back to top</a>
@@ -2761,6 +2822,8 @@ $scope.selectedAddress = "{{selectedAddress}}";
     </ul>
   </div>
 </footer>
+<!--/ngInclude: 'views/footer.html' -->
+</div>
 
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-sanitize.min.js"></script>
@@ -2769,17 +2832,17 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular/angular.js"></script> -->
   <!-- <script src="bower_components/angular-sanitize/angular-sanitize.js"></script> -->
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
-  <script src="scripts/abfbf540.libraries.min.js"></script>
+  <script src="scripts/24e6ca81.libraries.min.js"></script>
 
-  <script src="scripts/e3a6711c.angular-strap.min.js"></script>
+  <script src="scripts/be48f1a4.angular-strap.min.js"></script>
 
-  <script src="scripts/d147e563.angular-strap.tpl.min.js"></script>
+  <script src="scripts/c39d7e3f.angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/5febd64e.docs.min.js"></script>
+  <script src="scripts/f232efe6.docs.min.js"></script>
 
-  <script src="scripts/5ab71e6f.docs.tpl.min.js"></script>
+  <script src="scripts/2c824457.docs.tpl.min.js"></script>
 
-  <script src="scripts/018d1db7.demo.min.js"></script>
+  <script src="scripts/40800261.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
