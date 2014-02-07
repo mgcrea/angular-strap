@@ -5,6 +5,7 @@ describe('bs-radio', function () {
   var $compile, $q, $animate, scope, sandboxEl;
 
   beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
   beforeEach(module('mgcrea.ngStrap.button'));
 
   beforeEach(inject(function (_$rootScope_, _$compile_, _$q_, _$animate_) {
