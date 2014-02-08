@@ -139,7 +139,7 @@ describe('timepicker', function() {
       elm.val('invalid');
       angular.element(elm[0]).triggerHandler('change');
       angular.element(elm[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text().trim() * 1).toBe(today.getHours() % 12);
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text().trim() * 1 % 12).toBe(today.getHours() % 12);
       angular.element(sandboxEl.find('.dropdown-menu tbody tr:eq(0) td:eq(0) .btn')[0]).triggerHandler('click');
       expect(scope.selectedTime.getHours()).not.toBe(today.getHours());
     });
