@@ -26,19 +26,13 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
       var isTouch = 'createTouch' in $window.document;
       var htmlReplaceRegExp = /ng-bind="/ig;
 
-      // Helper functions
-
-      var findElement = function(query, element) {
-        return angular.element((element || document).querySelectorAll(query));
-      };
-
       function TooltipFactory(element, config) {
 
         var $tooltip = {};
 
         // Common vars
         var options = $tooltip.$options = angular.extend({}, defaults, config);
-        $tooltip.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template));
+        $tooltip.$promise = fetchTemplate(options.template);
         var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(options.delay && angular.isString(options.delay)) {
           options.delay = parseFloat(options.delay);
@@ -74,11 +68,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
         // Support contentTemplate option
         if(options.contentTemplate) {
           $tooltip.$promise = $tooltip.$promise.then(function(template) {
-            if(angular.isObject(template)) template = template.data;
             var templateEl = angular.element(template);
-            return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate))
+            return fetchTemplate(options.contentTemplate)
             .then(function(contentTemplate) {
-              if(angular.isObject(contentTemplate)) contentTemplate = contentTemplate.data;
               findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
               return templateEl[0].outerHTML;
             });
@@ -356,6 +348,23 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
 
         return $tooltip;
 
+      }
+
+      // Helper functions
+
+      function findElement(query, element) {
+        return angular.element((element || document).querySelectorAll(query));
+      }
+
+      function fetchTemplate(template) {
+        return $q.when($templateCache.get(template) || $http.get(template))
+        .then(function(res) {
+          if(angular.isObject(res)) {
+            $templateCache.put(template, res.data);
+            return res.data;
+          }
+          return res;
+        });
       }
 
       return TooltipFactory;
