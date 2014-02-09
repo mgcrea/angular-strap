@@ -389,7 +389,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
         // Observe scope attributes for change
         angular.forEach(['title'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
-            scope[key] = newValue;
+            scope[key] = $sce.getTrustedHtml(newValue);
             angular.isDefined(oldValue) && $$animateReflow(function() {
               tooltip && tooltip.$applyPlacement();
             });
