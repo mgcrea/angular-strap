@@ -26,19 +26,13 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       var bodyElement = angular.element($window.document.body);
       var htmlReplaceRegExp = /ng-bind="/ig;
 
-      // Helper functions
-
-      var findElement = function(query, element) {
-        return angular.element((element || document).querySelectorAll(query));
-      };
-
       function ModalFactory(config) {
 
         var $modal = {};
 
         // Common vars
         var options = angular.extend({}, defaults, config);
-        $modal.$promise = $q.when($templateCache.get(options.template) || $http.get(options.template));
+        $modal.$promise = fetchTemplate(options.template);
         var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(!options.element && !options.container) {
           options.container = 'body';
@@ -71,13 +65,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         // Support contentTemplate option
         if(options.contentTemplate) {
           $modal.$promise = $modal.$promise.then(function(template) {
-            if(angular.isObject(template)) template = template.data;
             var templateEl = angular.element(template);
-            return $q.when($templateCache.get(options.contentTemplate) || $http.get(options.contentTemplate))
+            return fetchTemplate(options.contentTemplate)
             .then(function(contentTemplate) {
-              if(angular.isObject(contentTemplate)) contentTemplate = contentTemplate.data;
               var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
-              // Drop the default footer
+              // Drop the default footer as you probably don't want it if you use a custom contentTemplate
               if(!config.template) contentEl.next().remove();
               return templateEl[0].outerHTML;
             });
@@ -223,6 +215,23 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         return $modal;
 
+      }
+
+      // Helper functions
+
+      function findElement(query, element) {
+        return angular.element((element || document).querySelectorAll(query));
+      }
+
+      function fetchTemplate(template) {
+        return $q.when($templateCache.get(template) || $http.get(template))
+        .then(function(res) {
+          if(angular.isObject(res)) {
+            $templateCache.put(template, res.data);
+            return res.data;
+          }
+          return res;
+        });
       }
 
       return ModalFactory;
