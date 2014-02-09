@@ -1710,7 +1710,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
   <h2 id="navbars-examples">Examples</h2>
   <p>Add quick, dynamic navbar functionality to transition through active/inactive states.</p>
 
-  <h3>Live demo <a class="small" href="#" target="_blank"><i class="fa fa-edit" data-title="edit in plunker" data-placement="right" bs-tooltip=""></i></a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="navbar/docs/navbar.demo.html" ng-plunkr="" data-title="edit in plunker" data-placement="right" bs-tooltip=""></a></h3>
   <pre class="bs-example-scope">$location.path() = "{{$location.path()}}";</pre>
   <div class="bs-example" append-source="">
     <div class="navbar navbar-default" role="navigation" bs-navbar="">
@@ -2338,7 +2338,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
       <!-- Using an async data provider -->
       <div class="form-group">
         <label><i class="fa fa-home"></i> Address <small>(async via maps.googleapis.com)</small></label>
-        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" ng-options="address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead="">
+        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" ng-options="address.formatted_address as address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead="">
       </div>
     </form>
   </div>
@@ -2834,15 +2834,15 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/24e6ca81.libraries.min.js"></script>
 
-  <script src="scripts/be48f1a4.angular-strap.min.js"></script>
+  <script src="scripts/1c35e107.angular-strap.min.js"></script>
 
-  <script src="scripts/c39d7e3f.angular-strap.tpl.min.js"></script>
+  <script src="scripts/1a4662b3.angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/196ef2b8.docs.min.js"></script>
+  <script src="scripts/4b175de6.docs.min.js"></script>
 
-  <script src="scripts/2c824457.docs.tpl.min.js"></script>
+  <script src="scripts/a83ede11.docs.tpl.min.js"></script>
 
-  <script src="scripts/40800261.demo.min.js"></script>
+  <script src="scripts/b095c87e.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
