@@ -63,11 +63,11 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
     },
     'options-minDate-today': {
-      scope: {},
+      scope: {selectedDate: new Date()},
       element: '<input type="text" ng-model="selectedDate" data-min-date="today" bs-datepicker>'
     },
     'options-maxDate-today': {
-      scope: {},
+      scope: {selectedDate: new Date()},
       element: '<input type="text" ng-model="selectedDate" data-max-date="today" bs-datepicker>'
     },
     'options-maxDate': {
@@ -388,8 +388,8 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         var todayDate = today.getDate();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
-        // @TODO fails on travis, fixme
-        // expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ')').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)')).toHaveClass('btn-primary');
       });
 
     });
@@ -410,9 +410,10 @@ describe('datepicker', function() {
       it('should support today as maxDate', function() {
         var elm = compileDirective('options-maxDate-today');
         angular.element(elm[0]).triggerHandler('focus');
-        var date = new Date(), today = date.getDate();
+        var todayDate = today.getDate();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + today + '):eq(0)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)')).toHaveClass('btn-primary');
       });
 
     });

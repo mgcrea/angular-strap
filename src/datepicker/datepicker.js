@@ -67,9 +67,9 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
           if(angular.isDate(date) && !isNaN(date.getTime())) {
             $datepicker.$date = date;
             $picker.update.call($picker, date);
-          } else if(!$picker.built) {
-            $datepicker.$build();
           }
+          // Build only if pristine
+          $datepicker.$build(true);
         };
 
         $datepicker.select = function(date, keep) {
@@ -98,8 +98,10 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         // Protected methods
 
-        $datepicker.$build = function() {
+        $datepicker.$build = function(pristine) {
           // console.warn('$datepicker.$build() viewDate=%o', viewDate);
+          if(pristine === true && $picker.built) return;
+          if(pristine === false && !$picker.built) return;
           $picker.build.call($picker);
         };
 
@@ -253,7 +255,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               datepicker.$options[key] = +new Date(newValue);
             }
             // console.warn(angular.isDate(newValue), newValue);
-            !isNaN(datepicker.$options[key]) && datepicker.$build();
+            // Build only if dirty
+            !isNaN(datepicker.$options[key]) && datepicker.$build(false);
           });
         });
 
@@ -384,7 +387,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return picker.$date && date.getFullYear() === picker.$date.getFullYear() && date.getMonth() === picker.$date.getMonth() && date.getDate() === picker.$date.getDate();
             },
             isDisabled: function(date) {
-              // dump(new Date(options.minDate));
               return date.getTime() < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
@@ -410,7 +412,6 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             },
             build: function() {
               var firstMonth = new Date(viewDate.year, 0, 1);
-              // dump('firstMonth', firstMonth);
               var months = [], month;
               for (var i = 0; i < 12; i++) {
                 month = new Date(viewDate.year, i, 1);
