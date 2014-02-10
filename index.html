@@ -94,7 +94,7 @@
         <!-- <li class="muted">·</li> -->
         <li>
           <a href="//github.com/mgcrea/angular-strap/releases" target="_blank">
-            <i class="fa fa-download"></i>&nbsp;v2.0.0-rc.2
+            <i class="fa fa-download"></i>&nbsp;v2.0.0-rc.3
             <!-- <img src="//badge.fury.io/bo/angular-strap.png"/> -->
           </a>
         </li>
@@ -532,6 +532,12 @@
           <td>string</td>
           <td>am-fade</td>
           <td>apply a CSS animation powered by ngAnimate</td>
+        </tr>
+        <tr>
+          <td>backdropAnimation</td>
+          <td>string</td>
+          <td>am-fade</td>
+          <td>apply a CSS animation to backdrop powered by ngAnimate</td>
         </tr>
         <tr>
           <td>placement</td>
@@ -1433,7 +1439,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           </td>
         </tr>
         <tr>
-          <td>weekStart</td>
+          <td>startWeek</td>
           <td>number</td>
           <td>1</td>
           <td>
@@ -1453,7 +1459,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           .config(function($datepickerProvider) {
             angular.extend($datepickerProvider.defaults, {
               dateFormat: 'dd/MM/yyyy',
-              weekStart: 1
+              startWeek: 1
             });
           })
         </code>
@@ -2607,6 +2613,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
 
   <h2 id="affix-usage">Usage</h2>
   <p>Append a <code>bs-affix</code>attribute to any element to enable the plugin.</p>
+  <p>You can affix inside a custom container with the <code>bs-affix-target</code> attribute added to any parent element.</p>
   <div class="callout callout-info">
     <h4>The module also exposes an <code>$affix</code>service</h4>
     <p>Available for programmatic use (mainly inside a directive as it requires an element).</p>
@@ -2834,15 +2841,15 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
   <script src="scripts/24e6ca81.libraries.min.js"></script>
 
-  <script src="scripts/1c35e107.angular-strap.min.js"></script>
+  <script src="scripts/514c438f.angular-strap.min.js"></script>
 
-  <script src="scripts/1a4662b3.angular-strap.tpl.min.js"></script>
+  <script src="scripts/d981a088.angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/4b175de6.docs.min.js"></script>
+  <script src="scripts/0ab3dca3.docs.min.js"></script>
 
-  <script src="scripts/a83ede11.docs.tpl.min.js"></script>
+  <script src="scripts/8a004a8e.docs.tpl.min.js"></script>
 
-  <script src="scripts/b095c87e.demo.min.js"></script>
+  <script src="scripts/179f8fa5.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
