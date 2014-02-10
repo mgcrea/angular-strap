@@ -195,7 +195,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           </td>
         </tr>
         <tr>
-          <td>weekStart</td>
+          <td>startWeek</td>
           <td>number</td>
           <td>1</td>
           <td>
@@ -215,7 +215,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           .config(function($datepickerProvider) {
             angular.extend($datepickerProvider.defaults, {
               dateFormat: 'dd/MM/yyyy',
-              weekStart: 1
+              startWeek: 1
             });
           })
         </code>

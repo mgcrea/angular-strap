@@ -59,7 +59,7 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" bs-datepicker>'
     },
     'options-minDate': {
-      scope: {selectedDate: new Date('02/22/86'), minDate: '02/20/86'},
+      scope: {selectedDate: new Date(1986, 1, 22), minDate: '02/20/86'},
       element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
     },
     'options-minDate-today': {
@@ -71,8 +71,12 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" data-max-date="today" bs-datepicker>'
     },
     'options-maxDate': {
-      scope: {selectedDate: new Date('02/22/86'), maxDate: '02/24/86'},
+      scope: {selectedDate: new Date(1986, 1, 22), maxDate: '02/24/86'},
       element: '<input type="text" ng-model="selectedDate" data-max-date="{{maxDate}}" bs-datepicker>'
+    },
+    'options-startWeek': {
+      scope: {selectedDate: new Date(2015, 1, 22), startWeek: 1},
+      element: '<input type="text" ng-model="selectedDate" data-start-week="{{startWeek}}" bs-datepicker>'
     },
     'options-autoclose': {
       element: '<input type="text" ng-model="selectedDate" data-autoclose="1" bs-datepicker>'
@@ -118,7 +122,7 @@ describe('datepicker', function() {
       expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(today, 'MMMM yyyy'));
       var todayDate = today.getDate();
       var firstDate = sandboxEl.find('.dropdown-menu tbody .btn:eq(0)').text() * 1;
-      expect(new Date(today.getFullYear(), today.getMonth() - (firstDate !== 1 ? 1 : 0), firstDate).getDay()).toBe($datepicker.defaults.weekStart);
+      expect(new Date(today.getFullYear(), today.getMonth() - (firstDate !== 1 ? 1 : 0), firstDate).getDay()).toBe($datepicker.defaults.startWeek);
     });
 
     it('should correctly display active date', function() {
@@ -414,6 +418,17 @@ describe('datepicker', function() {
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
         expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)').is(':disabled')).toBeFalsy();
         expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)')).toHaveClass('btn-primary');
+      });
+
+    });
+
+    describe('startWeek', function() {
+
+      it('should support a dynamic startWeek', function() {
+        var elm = compileDirective('options-startWeek');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu thead tr:eq(1) th:eq(0)').text()).toBe('Mon');
+        expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('31');
       });
 
     });
