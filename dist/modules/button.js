@@ -1,12 +1,12 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.2 - 2014-01-29
+ * @version v2.0.0-rc.3 - 2014-02-10
  * @link http://mgcrea.github.io/angular-strap
- * @author [object Object]
+ * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
-angular.module('mgcrea.ngStrap.button', []).provider('$button', function () {
+angular.module('mgcrea.ngStrap.button', ['ngAnimate']).provider('$button', function () {
   var defaults = this.defaults = {
       activeClass: 'active',
       toggleEvent: 'click'
@@ -31,7 +31,8 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function () {
   };
 }).directive('bsCheckbox', [
   '$button',
-  function ($button) {
+  '$$animateReflow',
+  function ($button, $$animateReflow) {
     var defaults = $button.defaults;
     var constantValueRegExp = /^(true|false|\d+)$/;
     return {
@@ -60,10 +61,11 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function () {
         }
         controller.$render = function () {
           var isActive = angular.equals(controller.$modelValue, trueValue);
-          if (isInput) {
-            element[0].checked = isActive;
-          }
-          activeElement.toggleClass(options.activeClass, isActive);
+          $$animateReflow(function () {
+            if (isInput)
+              element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
         };
         element.bind(options.toggleEvent, function () {
           scope.$apply(function () {
@@ -94,7 +96,8 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function () {
   };
 }).directive('bsRadio', [
   '$button',
-  function ($button) {
+  '$$animateReflow',
+  function ($button, $$animateReflow) {
     var defaults = $button.defaults;
     var constantValueRegExp = /^(true|false|\d+)$/;
     return {
@@ -107,10 +110,11 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function () {
         var value = constantValueRegExp.test(attr.value) ? scope.$eval(attr.value) : attr.value;
         controller.$render = function () {
           var isActive = angular.equals(controller.$modelValue, value);
-          if (isInput) {
-            element[0].checked = isActive;
-          }
-          activeElement.toggleClass(options.activeClass, isActive);
+          $$animateReflow(function () {
+            if (isInput)
+              element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
         };
         element.bind(options.toggleEvent, function () {
           scope.$apply(function () {

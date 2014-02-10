@@ -1,8 +1,8 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.2 - 2014-01-29
+ * @version v2.0.0-rc.3 - 2014-02-10
  * @link http://mgcrea.github.io/angular-strap
- * @author [object Object]
+ * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 (function(window, document, undefined) {
@@ -10,7 +10,7 @@
 // Source: dist/modules/alert.tpl.js
 angular.module('mgcrea.ngStrap.alert').run(['$templateCache', function($templateCache) {
 $templateCache.put('alert/alert.tpl.html',
-    "<div class=\"alert\" tabindex=\"-1\" ng-class=\"[type ? 'alert-' + type : null]\"><button type=\"button\" class=\"close\" ng-click=\"$hide()\">&times;</button> <strong ng-bind=\"title\"></strong>&nbsp;<span ng-bind-html=\"content\"></span></div>"
+    "<div class=\"alert alert-dismissable\" tabindex=\"-1\" ng-class=\"[type ? 'alert-' + type : null]\"><button type=\"button\" class=\"close\" ng-click=\"$hide()\">&times;</button> <strong ng-bind=\"title\"></strong>&nbsp;<span ng-bind-html=\"content\"></span></div>"
   );
 
 }]);
@@ -50,7 +50,7 @@ $templateCache.put('modal/modal.tpl.html',
 // Source: dist/modules/popover.tpl.js
 angular.module('mgcrea.ngStrap.popover').run(['$templateCache', function($templateCache) {
 $templateCache.put('popover/popover.tpl.html',
-    "<div class=\"popover\" ng-show=\"content\"><div class=\"arrow\"></div><h3 class=\"popover-title\" ng-bind=\"title\" ng-show=\"title\"></h3><div class=\"popover-content\" ng-bind=\"content\"></div></div>"
+    "<div class=\"popover\"><div class=\"arrow\"></div><h3 class=\"popover-title\" ng-bind=\"title\" ng-show=\"title\"></h3><div class=\"popover-content\" ng-bind=\"content\"></div></div>"
   );
 
 }]);
@@ -82,7 +82,7 @@ $templateCache.put('timepicker/timepicker.tpl.html',
 // Source: dist/modules/tooltip.tpl.js
 angular.module('mgcrea.ngStrap.tooltip').run(['$templateCache', function($templateCache) {
 $templateCache.put('tooltip/tooltip.tpl.html',
-    "<div class=\"tooltip\" ng-show=\"title\"><div class=\"tooltip-arrow\"></div><div class=\"tooltip-inner\" ng-bind=\"title\"></div></div>"
+    "<div class=\"tooltip in\" ng-show=\"title\"><div class=\"tooltip-arrow\"></div><div class=\"tooltip-inner\" ng-bind=\"title\"></div></div>"
   );
 
 }]);

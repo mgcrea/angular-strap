@@ -1,8 +1,8 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.2 - 2014-01-29
+ * @version v2.0.0-rc.3 - 2014-02-10
  * @link http://mgcrea.github.io/angular-strap
- * @author [object Object]
+ * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
@@ -60,17 +60,7 @@ angular.module('mgcrea.ngStrap.select', [
         };
         $select.update = function (matches) {
           scope.$matches = matches;
-          if (controller.$modelValue && matches.length) {
-            if (options.multiple && angular.isArray(controller.$modelValue)) {
-              scope.$activeIndex = controller.$modelValue.map(function (value) {
-                return $select.$getIndex(value);
-              });
-            } else {
-              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
-            }
-          } else if (scope.$activeIndex >= matches.length) {
-            scope.$activeIndex = options.multiple ? [] : 0;
-          }
+          $select.$updateActiveIndex();
         };
         $select.activate = function (index) {
           if (options.multiple) {
@@ -103,6 +93,19 @@ angular.module('mgcrea.ngStrap.select', [
               $select.hide();
           }
           scope.$emit('$select.select', value, index);
+        };
+        $select.$updateActiveIndex = function () {
+          if (controller.$modelValue && scope.$matches.length) {
+            if (options.multiple && angular.isArray(controller.$modelValue)) {
+              scope.$activeIndex = controller.$modelValue.map(function (value) {
+                return $select.$getIndex(value);
+              });
+            } else {
+              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
+            }
+          } else if (scope.$activeIndex >= scope.$matches.length) {
+            scope.$activeIndex = options.multiple ? [] : 0;
+          }
         };
         $select.$isVisible = function () {
           if (!options.minLength || !controller) {
@@ -227,6 +230,12 @@ angular.module('mgcrea.ngStrap.select', [
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
         });
+        if (element[0].nodeName.toLowerCase() === 'select') {
+          var inputEl = element;
+          inputEl.css('display', 'none');
+          element = angular.element('<button type="button" class="btn btn-default"></button>');
+          inputEl.after(element);
+        }
         var parsedOptions = $parseOptions(attr.ngOptions);
         var select = $select(element, controller, options);
         var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
@@ -235,7 +244,10 @@ angular.module('mgcrea.ngStrap.select', [
             select.update(values);
             controller.$render();
           });
-        });
+        }, true);
+        scope.$watch(attr.ngModel, function (newValue, oldValue) {
+          select.$updateActiveIndex();
+        }, true);
         controller.$render = function () {
           var selected, index;
           if (options.multiple && angular.isArray(controller.$modelValue)) {
