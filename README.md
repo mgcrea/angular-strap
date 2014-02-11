@@ -2,7 +2,7 @@
 
 [![Banner](http://mgcrea.github.io/angular-strap/images/6af654d7.snippet.png)](http://mgcrea.github.io/angular-strap)
 
-AngularStrap is a set of native directives that enables seamless integration of [Twitter Bootstrap 3.0+](https://github.com/twbs/bootstrap) into your [AngularJS 1.2.9+](https://github.com/angular/angular.js) app.
+AngularStrap is a set of native directives that enables seamless integration of [Twitter Bootstrap 3.0+](https://github.com/twbs/bootstrap) into your [AngularJS 1.2+](https://github.com/angular/angular.js) app.
 
 >
 AngularStrap was initially written to provide AngularJS wrapping directives for Twitter Bootstrap. It used to leverage the javascript code written by Bootstrap's contributors to minimize work, retro-compatibility issues & time to market.
