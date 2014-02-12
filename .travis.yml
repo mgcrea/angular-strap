@@ -7,7 +7,7 @@ before_script:
   - export PHANTOMJS_BIN=/usr/local/phantomjs/bin/phantomjs
   - sh -e /etc/init.d/xvfb start
   - sleep 3 # give xvfb some time to start
-  - npm install -gq grunt-cli bower coveralls
+  - npm install -gq grunt-cli https://github.com/bower/bower/tarball/master coveralls
   - bower install --dev
   - date --rfc-2822
 
