@@ -2,16 +2,19 @@
 
 describe('timepicker', function() {
 
-  var $compile, $templateCache, $timepicker, dateFilter, scope, sandboxEl, today;
+  var $compile, $templateCache, $animate, $timepicker, dateFilter, scope, sandboxEl, today;
 
+  beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.timepicker'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$timepicker_, _dateFilter_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timepicker_, _dateFilter_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
+    $animate = _$animate_;
     $timepicker = _$timepicker_;
     dateFilter = _dateFilter_;
     today = new Date();
@@ -89,6 +92,12 @@ describe('timepicker', function() {
     element = $compile(element)(scope);
     scope.$digest();
     return jQuery(element[0]);
+  }
+
+  function triggerKeyDown(elm, keyCode) {
+    var evt = $.Event('keydown');
+    evt.which = evt.keyCode = keyCode;
+    angular.element(elm[0]).triggerHandler(evt);
   }
 
   // Tests
@@ -294,6 +303,20 @@ describe('timepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         expect(angular.element(sandboxEl.find('.dropdown-inner > .btn')[0]).triggerHandler('click'));
         expect(scope.dropdown.counter).toBe(2);
+      });
+
+    });
+
+    describe('keyboard', function() {
+
+      it('should support keyboard navigation', function() {
+        var elm = compileDirective('default');
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+        elm[0].focus();
+        $animate.triggerReflow();
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+        //@TODO fixme
+        triggerKeyDown(elm, 38);
       });
 
     });

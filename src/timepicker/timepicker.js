@@ -162,7 +162,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           }
         };
 
-        $timepicker.$onKeyDown = function(evt) {
+        $timepicker.$onKeyDown = function(evt) { dump('in');
           if (!/(38|37|39|40|13)/.test(evt.keyCode) || evt.shiftKey || evt.altKey) return;
           evt.preventDefault();
           evt.stopPropagation();

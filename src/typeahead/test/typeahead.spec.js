@@ -90,6 +90,14 @@ describe('typeahead', function () {
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.states[0]);
     });
 
+    it('should correctly select a value', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      expect(scope.selectedState).toBe(scope.states[0]);
+    });
+
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-typeahead]:eq(0)')).triggerHandler('focus');
