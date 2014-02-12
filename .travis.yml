@@ -8,7 +8,7 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - sleep 3 # give xvfb some time to start
   - npm install -gq grunt-cli https://github.com/bower/bower/tarball/master coveralls
-  - bower install --dev
+  - bower install --dev --config.interactive=0
   - date --rfc-2822
 
 script:
