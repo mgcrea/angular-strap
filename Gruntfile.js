@@ -466,12 +466,15 @@ module.exports = function (grunt) {
         browsers: ['PhantomJS']
       },
       unit: {
-        singleRun: true,
         options: {
           reporters: ['dots', 'coverage']
-        }
+        },
+        singleRun: true,
       },
       server: {
+        options: {
+          reporters: ['progress']
+        },
         autoWatch: true
       }
     },

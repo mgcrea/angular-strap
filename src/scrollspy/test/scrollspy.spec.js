@@ -7,10 +7,10 @@ describe('affix', function () {
   // var mouse = effroi.mouse;
 
   beforeEach(module('ngSanitize'));
-  beforeEach(module('mgcrea.ngStrap.affix'));
+  beforeEach(module('mgcrea.ngStrap.scrollspy'));
 
   beforeEach(inject(function (_$rootScope_, _$compile_) {
-    scope = _$rootScope_;
+    scope = _$rootScope_.$new();
     $compile = _$compile_;
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo('body');
   }));
