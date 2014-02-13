@@ -66,7 +66,7 @@ describe('timepicker', function() {
       element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-time-format="HH:mm" bs-timepicker>'
     },
     'options-timeType-number': {
-      scope: {selectedTime: 9 * 36e5 + 30 * 6e4},
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30).getTime()},
       element: '<input type="text" ng-model="selectedTime" data-time-type="number" data-time-format="HH:mm" bs-timepicker>'
     },
     'options-minTime': {
@@ -355,13 +355,12 @@ describe('timepicker', function() {
 
       it('should support a number timeType', function() {
         var elm = compileDirective('options-timeType-number');
-        // @TODO UTC?
         expect(elm.val()).toBe('10:30');
-        expect(scope.selectedTime).toBe(9 * 36e5 + 30 * 6e4);
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 10, 30).getTime());
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
         expect(elm.val()).toBe('09:30');
-        expect(scope.selectedTime).toBe(8 * 36e5 + 30 * 6e4);
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30).getTime());
       });
 
     });
