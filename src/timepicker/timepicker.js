@@ -162,7 +162,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           }
         };
 
-        $timepicker.$onKeyDown = function(evt) { dump('in');
+        $timepicker.$onKeyDown = function(evt) {
           if (!/(38|37|39|40|13)/.test(evt.keyCode) || evt.shiftKey || evt.altKey) return;
           evt.preventDefault();
           evt.stopPropagation();
@@ -354,7 +354,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         // modelValue -> $formatters -> viewValue
         controller.$formatters.push(function(modelValue) {
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
-          var date = angular.isDate(modelValue) ? modelValue : new Date(modelValue);
+          var date = options.timeType === 'string' ? dateParser.parse(modelValue, controller.$dateValue) : new Date(modelValue);
           // Setup default value: next hour?
           // if(isNaN(date.getTime())) date = new Date(new Date().setMinutes(0) + 36e5);
           controller.$dateValue = date;
