@@ -295,7 +295,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         });
 
         // Initialize timepicker
-        if(isNative && options.useNative) options.timeFormat = 'HH:mm';
+        if(isNative && (options.useNative || defaults.useNative)) options.timeFormat = 'HH:mm';
         var timepicker = $timepicker(element, controller, options);
         options = timepicker.$options;
 
