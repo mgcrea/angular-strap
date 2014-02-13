@@ -59,8 +59,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
             $tooltip.toggle();
           });
         };
-
-        $tooltip.$isShown = false;
+        scope.$isShown = false;
 
         // Private vars
         var timeout, hoverState;
@@ -188,7 +187,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           if(options.type) tipElement.addClass(options.prefixClass + '-' + options.type);
 
           $animate.enter(tipElement, parent, after, function() {});
-          $tooltip.$isShown = true;
+          scope.$isShown = true;
           scope.$$phase || scope.$digest();
           $$animateReflow($tooltip.$applyPlacement);
 
@@ -221,13 +220,13 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
 
         $tooltip.hide = function(blur) {
 
-          if(!$tooltip.$isShown) return;
+          if(!scope.$isShown) return;
 
           $animate.leave(tipElement, function() {
             tipElement = null;
           });
+          scope.$isShown = false;
           scope.$$phase || scope.$digest();
-          $tooltip.$isShown = false;
 
           // Unbind events
           if(options.keyboard) {
@@ -242,7 +241,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
         };
 
         $tooltip.toggle = function() {
-          $tooltip.$isShown ? $tooltip.leave() : $tooltip.enter();
+          scope.$isShown ? $tooltip.leave() : $tooltip.enter();
         };
 
         $tooltip.focus = function() {
