@@ -56,7 +56,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
         // Support scope as data-attrs
         angular.forEach(['title', 'content'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
-            scope[key] = $sce.getTrustedHtml(newValue);
+            scope[key] = $sce.trustAsHtml(newValue);
           });
         });
 
