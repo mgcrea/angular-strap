@@ -149,9 +149,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           });
 
           bodyElement.addClass(options.prefixClass + '-open');
-          // if(options.animation) {
-          //   bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
-          // }
+          if(options.animation) {
+            bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
+          }
 
           // Bind events
           if(options.backdrop) {
@@ -168,9 +168,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
           $animate.leave(modalElement, function() {
             bodyElement.removeClass(options.prefixClass + '-open');
-            // if(options.animation) {
-            //   bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
-            // }
+            if(options.animation) {
+              bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
+            }
           });
           if(options.backdrop) {
             $animate.leave(backdropElement, function() {});
