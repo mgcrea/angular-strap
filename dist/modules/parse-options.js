@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.3 - 2014-02-10
+ * @version v2.0.0-rc.3 - 2014-02-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -14,8 +14,10 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', []).provider('$parseOption
     function ($parse, $q) {
       function ParseOptionsFactory(attr, config) {
         var $parseOptions = {};
+        // Common vars
         var options = angular.extend({}, defaults, config);
         $parseOptions.$values = [];
+        // Private vars
         var match, displayFn, valueName, keyName, groupByFn, valueFn, valuesFn;
         $parseOptions.init = function () {
           $parseOptions.$match = match = attr.match(options.regexp);
@@ -27,6 +29,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', []).provider('$parseOption
             return $parseOptions.$values;
           });
         };
+        // Private functions
         function parseValues(values) {
           return values.map(function (match, index) {
             var locals = {}, label, value;

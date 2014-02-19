@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.3 - 2014-02-10
+ * @version v2.0.0-rc.3 - 2014-02-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -26,13 +26,16 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
       var matchesSelector = Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector;
       function DropdownFactory(element, config) {
         var $dropdown = {};
+        // Common vars
         var options = angular.extend({}, defaults, config);
         $dropdown = $tooltip(element, options);
+        // Protected methods
         $dropdown.$onKeyDown = function (evt) {
           if (!/(38|40)/.test(evt.keyCode))
             return;
           evt.preventDefault();
           evt.stopPropagation();
+          // Retrieve focused index
           var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
           if (!items.length)
             return;
@@ -41,6 +44,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
             if (matchesSelector && matchesSelector.call(el, ':focus'))
               index = i;
           });
+          // Navigate with keyboard
           if (evt.keyCode === 38 && index > 0)
             index--;
           else if (evt.keyCode === 40 && index < items.length - 1)
@@ -49,6 +53,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
             index = 0;
           items.eq(index)[0].focus();
         };
+        // Overrides
         var show = $dropdown.show;
         $dropdown.show = function () {
           show();
@@ -63,6 +68,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
           bodyEl.off('click', onBodyClick);
           hide();
         };
+        // Private functions
         function onBodyClick(evt) {
           if (evt.target === element[0])
             return;
@@ -83,6 +89,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
       restrict: 'EAC',
       scope: true,
       link: function postLink(scope, element, attr, transclusion) {
+        // Directive options
         var options = { scope: scope };
         angular.forEach([
           'placement',
@@ -97,10 +104,13 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
         });
+        // Support scope as an object
         attr.bsDropdown && scope.$watch(attr.bsDropdown, function (newValue, oldValue) {
           scope.content = newValue;
         }, true);
+        // Initialize dropdown
         var dropdown = $dropdown(element, options);
+        // Garbage collection
         scope.$on('$destroy', function () {
           dropdown.destroy();
           options = null;
