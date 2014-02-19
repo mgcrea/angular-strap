@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.3 - 2014-02-10
+ * @version v2.0.0-rc.3 - 2014-02-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -35,6 +35,7 @@ angular.module('mgcrea.ngStrap.select', [
       var isTouch = 'createTouch' in $window.document;
       function SelectFactory(element, controller, config) {
         var $select = {};
+        // Common vars
         var options = angular.extend({}, defaults, config);
         $select = $tooltip(element, options);
         var parentScope = config.scope;
@@ -58,6 +59,7 @@ angular.module('mgcrea.ngStrap.select', [
         scope.$isActive = function (index) {
           return $select.$isActive(index);
         };
+        // Public methods
         $select.update = function (matches) {
           scope.$matches = matches;
           $select.$updateActiveIndex();
@@ -86,14 +88,17 @@ angular.module('mgcrea.ngStrap.select', [
           controller.$render();
           if (parentScope)
             parentScope.$digest();
+          // Hide if single select
           if (!options.multiple) {
             if (options.trigger === 'focus')
               element[0].blur();
             else if ($select.$isShown)
               $select.hide();
           }
+          // Emit event
           scope.$emit('$select.select', value, index);
         };
+        // Protected methods
         $select.$updateActiveIndex = function () {
           if (controller.$modelValue && scope.$matches.length) {
             if (options.multiple && angular.isArray(controller.$modelValue)) {
@@ -111,6 +116,7 @@ angular.module('mgcrea.ngStrap.select', [
           if (!options.minLength || !controller) {
             return scope.$matches.length;
           }
+          // minLength support
           return scope.$matches.length && controller.$viewValue.length >= options.minLength;
         };
         $select.$isActive = function (index) {
@@ -142,8 +148,10 @@ angular.module('mgcrea.ngStrap.select', [
           }
         };
         $select.$onMouseDown = function (evt) {
+          // Prevent blur on mousedown on .dropdown-menu
           evt.preventDefault();
           evt.stopPropagation();
+          // Emulate click for mobile devices
           if (isTouch) {
             var targetEl = angular.element(evt.target);
             targetEl.triggerHandler('click');
@@ -154,9 +162,11 @@ angular.module('mgcrea.ngStrap.select', [
             return;
           evt.preventDefault();
           evt.stopPropagation();
+          // Select with enter
           if (evt.keyCode === 13) {
             return $select.select(scope.$activeIndex);
           }
+          // Navigate with keyboard
           if (evt.keyCode === 38 && scope.$activeIndex > 0)
             scope.$activeIndex--;
           else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1)
@@ -165,6 +175,7 @@ angular.module('mgcrea.ngStrap.select', [
             scope.$activeIndex = 0;
           scope.$digest();
         };
+        // Overrides
         var _init = $select.init;
         $select.init = function () {
           _init();
@@ -214,6 +225,7 @@ angular.module('mgcrea.ngStrap.select', [
       restrict: 'EAC',
       require: 'ngModel',
       link: function postLink(scope, element, attr, controller) {
+        // Directive options
         var options = { scope: scope };
         angular.forEach([
           'placement',
@@ -230,25 +242,34 @@ angular.module('mgcrea.ngStrap.select', [
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
         });
+        // Add support for select markup
         if (element[0].nodeName.toLowerCase() === 'select') {
           var inputEl = element;
           inputEl.css('display', 'none');
           element = angular.element('<button type="button" class="btn btn-default"></button>');
           inputEl.after(element);
         }
+        // Build proper ngOptions
         var parsedOptions = $parseOptions(attr.ngOptions);
+        // Initialize select
         var select = $select(element, controller, options);
+        // Watch ngOptions values before filtering for changes
         var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
         scope.$watch(watchedOptions, function (newValue, oldValue) {
+          // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
           parsedOptions.valuesFn(scope, controller).then(function (values) {
             select.update(values);
             controller.$render();
           });
         }, true);
+        // Watch model for changes
         scope.$watch(attr.ngModel, function (newValue, oldValue) {
+          // console.warn('scope.$watch(%s)', attr.ngModel, newValue, oldValue);
           select.$updateActiveIndex();
         }, true);
+        // Model rendering in view
         controller.$render = function () {
+          // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
           var selected, index;
           if (options.multiple && angular.isArray(controller.$modelValue)) {
             selected = controller.$modelValue.map(function (value) {
@@ -261,6 +282,7 @@ angular.module('mgcrea.ngStrap.select', [
           }
           element.html((selected ? selected : attr.placeholder || defaults.placeholder) + defaults.caretHtml);
         };
+        // Garbage collection
         scope.$on('$destroy', function () {
           select.destroy();
           options = null;
