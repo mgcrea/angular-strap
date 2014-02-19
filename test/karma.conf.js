@@ -19,7 +19,7 @@ module.exports = function(config) {
       'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/jquery/jquery.js',
+      'bower_components/jquery/dist/jquery.js',
       'src/{,*/}*.js',
       '.tmp/ngtemplates/{,*/}*.js',
       'test/effroi.js',
