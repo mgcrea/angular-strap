@@ -29,9 +29,6 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date()},
       element: '<input type="text" ng-model="selectedDate" bs-datepicker>'
     },
-    'value-undefined': {
-      element: '<input type="text" ng-model="selectedUndefined" bs-datepicker>'
-    },
     'value-past': {
       scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" bs-datepicker>'
@@ -192,9 +189,18 @@ describe('datepicker', function() {
 
     });
 
-    it('should correctly support undefined values', function() {
-      var elm = compileDirective('value-undefined');
+    it('should correctly support null values', function() {
+      var elm = compileDirective('default', {selectedDate: null});
       angular.element(elm[0]).triggerHandler('focus');
+      expect(elm.val()).toBe('');
+      expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(7 * 6);
+      expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 6);
+    });
+
+    it('should correctly support undefined values', function() {
+      var elm = compileDirective('default', {selectedDate: undefined});
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(elm.val()).toBe('');
       expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(7 * 6);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 6);
     });
@@ -208,7 +214,7 @@ describe('datepicker', function() {
       angular.element(sandboxEl.find('.dropdown-menu tbody td .btn-primary')[0]).triggerHandler('click');
     });
 
-    it('should handle null values', function() {
+    it('should handle empty values', function() {
       var elm = compileDirective('default');
       elm.val('');
       angular.element(elm[0]).triggerHandler('change');
