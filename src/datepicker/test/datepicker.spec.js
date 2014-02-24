@@ -76,7 +76,7 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" data-max-date="{{maxDate}}" bs-datepicker>'
     },
     'options-startWeek': {
-      scope: {selectedDate: new Date(2015, 1, 22), startWeek: 1},
+      scope: {selectedDate: new Date(2014, 1, 22), startWeek: 1},
       element: '<input type="text" ng-model="selectedDate" data-start-week="{{startWeek}}" bs-datepicker>'
     },
     'options-autoclose': {
@@ -454,7 +454,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-startWeek');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu thead tr:eq(1) th:eq(0)').text()).toBe('Mon');
-        expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('31');
+        expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('27');
       });
 
     });
