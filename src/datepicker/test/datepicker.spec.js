@@ -36,6 +36,10 @@ describe('datepicker', function() {
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><input type="text" ng-model="selectedDate" bs-datepicker></li></ul>'
     },
+    'markup-ngChange': {
+      scope: {selectedDate: new Date(1986, 1, 22), onChange: function() {}},
+      element: '<input type="text" ng-model="selectedDate" ng-change="onChange()" bs-datepicker>'
+    },
     'options-animation': {
       element: '<div class="btn" data-animation="am-flip-x" ng-model="datepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-datepicker></div>'
     },
@@ -85,7 +89,7 @@ describe('datepicker', function() {
 
   function compileDirective(template, locals) {
     template = templates[template];
-    angular.extend(scope, template.scope || templates['default'].scope, locals);
+    angular.extend(scope, angular.copy(template.scope || templates['default'].scope), locals);
     var element = $(template.element).appendTo(sandboxEl);
     element = $compile(element)(scope);
     scope.$digest();
@@ -126,6 +130,14 @@ describe('datepicker', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(today.getDate());
+      expect(elm.val()).toBe((today.getMonth() + 1) + '/' + today.getDate() + '/' + (today.getFullYear() + '').substr(2));
+    });
+
+    it('should correctly select a new date', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(15)')[0]).triggerHandler('click');
+      expect(elm.val()).toBe((today.getMonth() + 1) + '/15/' + (today.getFullYear() + '').substr(2));
     });
 
     it('should correctly navigate to upper month view', function() {
@@ -226,6 +238,14 @@ describe('datepicker', function() {
       angular.element(elm.find('[bs-datepicker]:eq(0)')).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(7 * 6);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 6);
+    });
+
+    it('should support ngChange markup', function() {
+      var elm = compileDirective('markup-ngChange');
+      angular.element(elm[0]).triggerHandler('focus');
+      var spy = spyOn(scope, 'onChange').andCallThrough();
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:eq(1)')[0]).triggerHandler('click');
+      expect(spy).toHaveBeenCalled();
     });
 
     // iit('should only build the datepicker once', function() {
