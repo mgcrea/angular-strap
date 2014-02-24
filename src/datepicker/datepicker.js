@@ -374,7 +374,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             },
             build: function() {
               var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
-              var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() + options.startWeek) * 864e5);
+              var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() - options.startWeek) * 864e5);
               var days = [], day;
               for(var i = 0; i < 42; i++) { // < 7 * 6
                 day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
