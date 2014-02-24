@@ -496,6 +496,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'ngtemplates:test',
       'concurrent:server',
       'autoprefixer',
       'connect:livereload',
