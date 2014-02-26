@@ -66,17 +66,37 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           scope.$activeIndex = index;
         };
 
-        $typeahead.select = function(index) {
-          var value = scope.$matches[index].value;
-          if(controller) {
-            controller.$setViewValue(value);
+        $typeahead.completeSelection = function(value)
+        {
+          if (controller) {
+            if (value)
+              controller.$setViewValue(value);
             controller.$render();
-            if(parentScope) parentScope.$digest();
+            if (parentScope)
+              parentScope.$digest();
           }
-          if(options.trigger === 'focus') element[0].blur();
-          else if($typeahead.$isShown) $typeahead.hide();
+          if (options.trigger === 'focus')
+            element[0].blur();
+          else if ($typeahead.$isShown)
+            $typeahead.hide();
+        }
+        
+        $typeahead.select = function (index) {
+
+          if (!scope.$matches[index])
+          {
+            if (options.noMatchEnter)
+            {
+              scope.$eval(options.noMatchEnter);
+              $typeahead.completeSelection();
+              scope.$apply();
+            }
+            return;
+          }
+
+          var value = scope.$matches[index].value;
+          $typeahead.completeSelection(value);
           scope.$activeIndex = 0;
-          // Emit event
           scope.$emit('$typeahead.select', value, index);
         };
 
@@ -157,7 +177,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'limit', 'minLength'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'limit', 'minLength', 'noMatchEnter'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
