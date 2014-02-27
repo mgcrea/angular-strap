@@ -2,19 +2,21 @@
 
 describe('datepicker', function() {
 
-  var $compile, $templateCache, $datepicker, dateFilter, scope, sandboxEl, today;
+  var bodyEl = $('body'), sandboxEl;
+  var $compile, $templateCache, dateFilter, $datepicker, scope, today;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.datepicker'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$datepicker_, _dateFilter_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _dateFilter_, _$datepicker_) {
     scope = _$rootScope_.$new();
-    sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
-    $datepicker = _$datepicker_;
     dateFilter = _dateFilter_;
     today = new Date();
+    bodyEl.html('');
+    sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
+    $datepicker = _$datepicker_;
   }));
 
   afterEach(function() {
@@ -418,8 +420,8 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         var todayDate = today.getDate();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)')).toHaveClass('btn-primary');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').length).toBe(1);
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').is(':disabled')).toBeFalsy();
       });
 
     });
@@ -442,8 +444,8 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         var todayDate = today.getDate();
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + '):eq(0)')).toHaveClass('btn-primary');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').length).toBe(1);
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').is(':disabled')).toBeFalsy();
       });
 
     });
