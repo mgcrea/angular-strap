@@ -175,6 +175,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
+          scope.$modelValue = newValue; //Set model value on the scope to custom templates can use it.
           parsedOptions.valuesFn(scope, controller)
           .then(function(values) {
             if(values.length > limit) values = values.slice(0, limit);
