@@ -15,6 +15,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       html: false,
       delay: 0,
       minLength: 1,
+      filter: 'filter',
       limit: 6
     };
 
@@ -157,13 +158,17 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'limit', 'minLength'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // Build proper ngOptions
+        var filter = options.filter || defaults.filter;
         var limit = options.limit || defaults.limit;
-        var parsedOptions = $parseOptions(attr.ngOptions + ' | filter:$viewValue | limitTo:' + limit);
+        var ngOptions = attr.ngOptions;
+        if(options.filter) ngOptions += ' | ' + filter + ':$viewValue';
+        if(options.limit) ngOptions += ' | limitTo:' + limit;
+        var parsedOptions = $parseOptions(ngOptions);
 
         // Initialize typeahead
         var typeahead = $typeahead(element, options);
