@@ -61,6 +61,10 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" bs-datepicker>'
     },
+    'options-strictFormat': {
+      scope: {selectedDate: new Date(1986, 1, 4)},
+      element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-M-d" data-strict-format="1" bs-datepicker>'
+    },
     'options-minDate': {
       scope: {selectedDate: new Date(1986, 1, 22), minDate: '02/20/86'},
       element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
@@ -398,6 +402,19 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)')).triggerHandler('click');
         expect(elm.val()).toBe('1986-01-26');
+      });
+
+    });
+
+    describe('strictFormat', function () {
+
+      it('should support strict format date parse', function () {
+        var elm = compileDirective('options-strictFormat');
+        expect(elm.val()).toBe('1986-2-4');
+        elm.val('1996-4-7');
+        angular.element(elm[0]).triggerHandler('change');
+        expect(elm.val()).toBe('1996-4-7');
+        expect(elm.hasClass('ng-valid')).toBe(true);
       });
 
     });
