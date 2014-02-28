@@ -6,7 +6,8 @@ angular.module('mgcrea.ngStrap.navbar', [])
 
     var defaults = this.defaults = {
       activeClass: 'active',
-      routeAttr: 'data-match-route'
+      routeAttr: 'data-match-route',
+      strict: false
     };
 
     this.$get = function() {
@@ -24,7 +25,7 @@ angular.module('mgcrea.ngStrap.navbar', [])
       link: function postLink(scope, element, attr, controller) {
 
         // Directive options
-        var options = defaults;
+        var options = angular.copy(defaults);
         angular.forEach(Object.keys(defaults), function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
@@ -41,8 +42,11 @@ angular.module('mgcrea.ngStrap.navbar', [])
           angular.forEach(liElements, function(li) {
 
             var liElement = angular.element(li);
-            var pattern = liElement.attr(options.routeAttr);
-            var regexp = new RegExp('^' + pattern.replace('/', '\\/') + '$', ['i']);
+            var pattern = liElement.attr(options.routeAttr).replace('/', '\\/');
+            if(options.strict) {
+              pattern = '^' + pattern + '$';
+            }
+            var regexp = new RegExp(pattern, ['i']);
 
             if(regexp.test(newValue)) {
               liElement.addClass(options.activeClass);
