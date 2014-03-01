@@ -138,7 +138,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           }
           $animate.enter(modalElement, parent, after, function() {});
           scope.$isShown = true;
-          scope.$$phase || scope.$digest();
+          $rootScope.$$phase || $rootScope.$digest();
           // Focus once the enter-animation has started
           // Weird PhantomJS bug hack
           var el = modalElement[0];
@@ -174,7 +174,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             $animate.leave(backdropElement, function() {});
           }
           scope.$isShown = false;
-          scope.$$phase || scope.$digest();
+          $rootScope.$$phase || $rootScope.$digest();
 
           // Unbind events
           if(options.backdrop) {
