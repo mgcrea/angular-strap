@@ -320,7 +320,7 @@ describe('timepicker', function() {
       it('should support keyboard navigation', function() {
         var elm = compileDirective('default');
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
-        elm[0].focus();
+        angular.element(elm[0]).triggerHandler('focus');
         $animate.triggerReflow();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
         //@TODO fixme

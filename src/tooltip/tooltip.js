@@ -113,11 +113,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           var triggers = options.trigger.split(' ');
           angular.forEach(triggers, function(trigger) {
             if(trigger === 'click') {
-              element.on('click', $tooltip.toggle);
+              element.on('click', applyCallback('toggle'));
             } else if(trigger !== 'manual') {
-              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', applyCallback('enter'));
+              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', applyCallback('leave'));
+              trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', applyCallback('$onFocusElementMouseDown'));
             }
           });
 
@@ -190,16 +190,15 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
 
           $animate.enter(tipElement, parent, after, function() {});
           scope.$isShown = true;
-          scope.$$phase || scope.$digest();
           $$animateReflow($tooltip.$applyPlacement);
 
           // Bind events
           if(options.keyboard) {
             if(options.trigger !== 'focus') {
               $tooltip.focus();
-              tipElement.on('keyup', $tooltip.$onKeyUp);
+              tipElement.on('keyup', applyCallback('$onKeyUp'));
             } else {
-              element.on('keyup', $tooltip.$onFocusKeyUp);
+              element.on('keyup', applyCallback('$onFocusKeyUp'));
             }
           }
 
@@ -228,7 +227,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
             tipElement = null;
           });
           scope.$isShown = false;
-          scope.$$phase || scope.$digest();
 
           // Unbind events
           if(options.keyboard) {
@@ -288,6 +286,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
         };
 
         // Private methods
+
+        function applyCallback(name) {
+          return function () {
+            scope.$apply($tooltip[name]);
+          };
+        }
 
         function getPosition() {
           if(options.container === 'body') {
