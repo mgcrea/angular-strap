@@ -143,9 +143,9 @@ describe('tooltip', function() {
       scope.$digest();
       expect(bodyEl.children('.tooltip').length).toBe(0);
       myTooltip.show();
-      $animate.triggerReflow();
       expect(bodyEl.children('.tooltip').length).toBe(1);
       myTooltip.hide();
+      scope.$digest();
       expect(bodyEl.children('.tooltip').length).toBe(0);
     });
 
@@ -177,6 +177,19 @@ describe('tooltip', function() {
       expect(bodyEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('click');
       expect(bodyEl.children('.tooltip').length).toBe(1);
+    });
+
+    it('should correctly work with an isolated scope', function (done) {
+      var isolatedScope = scope.$new(true);
+      angular.extend(isolatedScope, templates['default'].scope.tooltip);
+      var myTooltip = $tooltip(sandboxEl, {scope: isolatedScope});
+      scope.$digest();
+      scope.$apply(function () {
+        expect(bodyEl.children('.tooltip').length).toBe(0);
+        myTooltip.show();
+        expect(bodyEl.children('.tooltip').length).toBe(1);
+        done();
+      });
     });
 
   });
