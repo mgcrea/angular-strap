@@ -5,8 +5,8 @@ angular.module('mgcrea.ngStrapDocs')
 .controller('DropdownDemoCtrl', function($scope, $window) {
 
   $scope.dropdown = [
-    {text: 'Another action', href: '#anotherAction'},
-    {text: 'Something else here', click: '$alert(\'working ngClick!\')'},
+    {text: 'Another action', href: '#anAction'},
+    {text: 'Something else here', click: '#anotherAction'},
     {divider: true},
     {text: 'Separated link', href: '#separatedLink'}
   ];
