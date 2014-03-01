@@ -40,11 +40,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         }
 
         // Support scope as string options
-        if(!options.scope) {
-          forEach(['title', 'content'], function(key) {
-            if(options[key]) scope[key] = options[key];
-          });
-        }
+        forEach(['title', 'content'], function(key) {
+          if(options[key]) scope[key] = options[key];
+        });
 
         // Provide scope helpers
         scope.$hide = function() {
