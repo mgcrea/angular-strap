@@ -166,8 +166,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var filter = options.filter || defaults.filter;
         var limit = options.limit || defaults.limit;
         var ngOptions = attr.ngOptions;
-        if(options.filter) ngOptions += ' | ' + filter + ':$viewValue';
-        if(options.limit) ngOptions += ' | limitTo:' + limit;
+        if(filter) ngOptions += ' | ' + filter + ':$viewValue';
+        if(limit) ngOptions += ' | limitTo:' + limit;
         var parsedOptions = $parseOptions(ngOptions);
 
         // Initialize typeahead

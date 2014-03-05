@@ -90,6 +90,15 @@ describe('typeahead', function () {
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.states[0]);
     });
 
+    it('should correctly filter the dropdown list when input changes', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val(scope.states[0]);
+      angular.element(elm[0]).triggerHandler('change');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(1);
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.states[0]);
+    });
+
     it('should correctly select a value', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
