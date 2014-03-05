@@ -45,6 +45,14 @@ describe('select', function () {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
+    'options-maxLength': {
+      scope: {selectedIcons: ['Globe', 'Heart', 'Camera'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" data-multiple="1" data-max-length="2" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
+    'options-maxLengthHtml': {
+      scope: {selectedIcons: ['Globe', 'Heart', 'Camera'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" data-multiple="1" data-max-length="2" data-max-length-html="foo" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
     'options-animation': {
       element: '<button type="button" class="btn" data-animation="am-flip-x" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
@@ -180,6 +188,24 @@ describe('select', function () {
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
         expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
         expect(sandboxEl.find('.dropdown-menu li > a > i').length).toBe(scope.selectedIcons.length);
+      });
+
+    });
+
+    describe('maxLength', function () {
+
+      it('should correctly support maxLength option', function() {
+        var elm = compileDirective('options-maxLength');
+        expect(elm.text().trim()).toBe(scope.selectedIcons.length + ' ' + $select.defaults.maxLengthHtml);
+      });
+
+    });
+
+    describe('maxLengthHtml', function () {
+
+      it('should correctly support maxLengthHtml option', function() {
+        var elm = compileDirective('options-maxLengthHtml');
+        expect(elm.text().trim()).toBe(scope.selectedIcons.length + ' ' + 'foo');
       });
 
     });
