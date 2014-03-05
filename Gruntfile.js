@@ -169,8 +169,7 @@ module.exports = function (grunt) {
       },
       docs: {
         options: {
-          cleancss: true,
-          report: 'gzip'
+          cleancss: false
         },
         files: [{
           expand: true,
@@ -282,6 +281,17 @@ module.exports = function (grunt) {
             'images/*',
             '1.0/**/*'
           ]
+        }, {
+          src: 'bower_components/angular-motion/dist/angular-motion.css',
+          dest: '<%= yo.pages %>/styles/angular-motion.css'
+        }, {
+          src: '.tmp/styles/bootstrap-additions.css',
+          dest: '<%= yo.pages %>/styles/bootstrap-additions.css'
+        }, {
+          expand: true,
+          cwd: '<%= yo.dist %>',
+          dest: '<%= yo.pages %>/dist',
+          src: '{,*/}*.{js,map}'
         }]
       }
     },
