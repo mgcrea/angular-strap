@@ -59,7 +59,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
             $tooltip.toggle();
           });
         };
-        scope.$isShown = false;
+        $tooltip.$isShown = scope.$isShown = false;
 
         // Private vars
         var timeout, hoverState;
@@ -189,7 +189,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           if(options.type) tipElement.addClass(options.prefixClass + '-' + options.type);
 
           $animate.enter(tipElement, parent, after, function() {});
-          scope.$isShown = true;
+          $tooltip.$isShown = scope.$isShown = true;
           scope.$$phase || scope.$digest();
           $$animateReflow($tooltip.$applyPlacement);
 
@@ -222,12 +222,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
 
         $tooltip.hide = function(blur) {
 
-          if(!scope.$isShown) return;
+          if(!$tooltip.$isShown) return;
 
           $animate.leave(tipElement, function() {
             tipElement = null;
           });
-          scope.$isShown = false;
+          $tooltip.$isShown = scope.$isShown = false;
           scope.$$phase || scope.$digest();
 
           // Unbind events
@@ -243,7 +243,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
         };
 
         $tooltip.toggle = function() {
-          scope.$isShown ? $tooltip.leave() : $tooltip.enter();
+          $tooltip.$isShown ? $tooltip.leave() : $tooltip.enter();
         };
 
         $tooltip.focus = function() {
@@ -284,7 +284,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           evt.preventDefault();
           evt.stopPropagation();
           // Some browsers do not auto-focus buttons (eg. Safari)
-          scope.$isShown ? element[0].blur() : element[0].focus();
+          $tooltip.$isShown ? element[0].blur() : element[0].focus();
         };
 
         // Private methods
