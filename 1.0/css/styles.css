@@ -1,0 +1,198 @@
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
+}
+.hide-text {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+.input-block-level {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+html,
+body {
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+button,
+select,
+textarea,
+input,
+pre {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+@media (max-width: 979px) {
+  header {
+    margin-top: -20px;
+  }
+}
+body > .navbar .brand {
+  font-weight: 200;
+  color: #f7f7f7;
+}
+body > .navbar .travis-btn {
+  float: right;
+  padding: 10px 20px 0;
+}
+@media (max-width: 979px) {
+  body > .navbar .travis-btn {
+    padding-right: 10px;
+  }
+}
+.bs-docs-social {
+  background: rgba(245, 245, 245, 0.15);
+  border-top: 1px solid rgba(245, 245, 245, 0.25);
+  border-bottom: 1px solid rgba(221, 221, 221, 0.25);
+}
+.bs-docs-social ul.bs-docs-social-buttons li {
+  padding: 5px 0px;
+}
+.btn-plnkr {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+}
+.btn-small.btn-plnkr {
+  top: 7px;
+}
+.authors-social-buttons {
+  vertical-align: middle;
+  display: inline-block;
+  margin: 4px 0 0 4px;
+}
+/* Github-Ribbon
+-------------------------------------------------- */
+.github-ribbon {
+  background-color: #121621;
+  display: block;
+  position: absolute;
+  top: 3.2em;
+  right: -3.7em;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  -webkit-box-shadow: 0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;
+  -moz-box-shadow: 0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;
+  -ms-box-shadow: 0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;
+  -o-box-shadow: 0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;
+  box-shadow: 0 0 0 1px #1d212e inset,0 0 2px 1px #fff inset,0 0 1em #888;
+  color: rgba(255, 255, 255, 0.9);
+  display: block;
+  padding: .6em 3.5em;
+  font: bold 0.82em sans-serif;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 1px -1px 8px rgba(0, 0, 0, 0.6);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.github-ribbon {
+  z-index: 2;
+  /*@media (max-width: 979px) {
+		display: none;
+	}*/
+
+}
+/* Docs Customization
+-------------------------------------------------- */
+.js .bs-docs-sidenav {
+  visibility: hidden;
+}
+.js .bs-docs-sidenav.animated {
+  -webkit-animation: fadeIn 1.3s ease-in 1s;
+  -moz-animation: fadeIn 1.3s ease-in 1s;
+  -ms-animation: fadeIn 1.3s ease-in 1s;
+  visibility: visible;
+}
+.page-header h1 > small > a {
+  color: #999;
+}
+.page-header h1 > small > a:hover {
+  text-decoration: none;
+}
+.bootstrap-select .btn:focus {
+  outline: none !important;
+}
+.bs-docs-sidenav .active .icon-chevron-right, .bs-docs-sidenav .active a:hover .icon-chevron-right {
+  background-image: none !important;
+}
+/*.bootstrap-select .btn-primary i {
+  background-image: url("../img/glyphicons-halflings-white.png");
+}*/
+/* AngularJS Forms Validation
+-------------------------------------------------- */
+input.ng-invalid,
+textarea.ng-invalid,
+select.ng-invalid {
+  color: #b94a48;
+  border-color: #ee5f5b;
+}
+input.ng-invalid:focus,
+textarea.ng-invalid:focus,
+select.ng-invalid:focus {
+  -webkit-box-shadow: 0 0 6px #f8b9b7;
+  -moz-box-shadow: 0 0 6px #f8b9b7;
+  box-shadow: 0 0 6px #f8b9b7;
+  border-color: #e9322d;
+}
+/* Popover
+-------------------------------------------------- */
+.popover .form-actions {
+  margin: 0 -14px -29px;
+  padding: 9px 10px 10px;
+  border-radius: 0 0 5px 5px;
+}
+/* Jumbotrons
+-------------------------------------------------- */
+/* Base class
+------------------------- */
+.jumbotron {
+  /*@media (max-width: 980px) {
+		margin-top: 50px;
+	}*/
+
+  overflow: hidden;
+  position: relative;
+  padding: 60px 0 40px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
+  background: #f7f7f7 url("./../img/background.jpg");
+  background-size: cover;
+  background-position: 50% 30%;
+  -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.2), inset 0 -3px 7px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.2), inset 0 -3px 7px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.2), inset 0 -3px 7px rgba(0, 0, 0, 0.2);
+}
+@media (max-width: 979px) {
+  .jumbotron {
+    background-position: 50% 20%;
+  }
+}
+.jumbotron:after {
+  opacity: .15;
+  background: none;
+}
