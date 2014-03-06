@@ -82,14 +82,18 @@ describe('dropdown', function () {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('click');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.dropdown.length);
-      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.dropdown[0].text);
+      expect(sandboxEl.find('.dropdown-menu a:eq(0)').text()).toBe(scope.dropdown[0].text);
+      expect(sandboxEl.find('.dropdown-menu a:eq(0)').attr('href')).toBe(scope.dropdown[0].href);
+      expect(sandboxEl.find('.dropdown-menu a:eq(0)').attr('ng-click')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu a:eq(1)').attr('href')).toBeDefined();
+      expect(sandboxEl.find('.dropdown-menu a:eq(1)').attr('ng-click')).toBe('$eval(item.click);$hide()');
     });
 
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-dropdown]:eq(0)')).triggerHandler('click');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.dropdown.length);
-      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.dropdown[0].text);
+      expect(sandboxEl.find('.dropdown-menu a:eq(0)').text()).toBe(scope.dropdown[0].text);
     });
 
   });
@@ -154,7 +158,7 @@ describe('dropdown', function () {
         var elm = compileDirective('options-html');
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.dropdown.length);
-        expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.dropdown[0].text);
+        expect(sandboxEl.find('.dropdown-menu a:eq(0)').text()).toBe(scope.dropdown[0].text);
       });
 
     });
