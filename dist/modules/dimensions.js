@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.3 - 2014-02-10
+ * @version v2.0.0-rc.4 - 2014-03-06
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -12,12 +12,24 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
   function ($document, $window) {
     var jqLite = angular.element;
     var fn = {};
+    /**
+     * Test the element nodeName
+     * @param element
+     * @param name
+     */
     var nodeName = fn.nodeName = function (element, name) {
         return element.nodeName && element.nodeName.toLowerCase() === name.toLowerCase();
       };
+    /**
+     * Returns the element computed style
+     * @param element
+     * @param prop
+     * @param extra
+     */
     fn.css = function (element, prop, extra) {
       var value;
       if (element.currentStyle) {
+        //IE
         value = element.currentStyle[prop];
       } else if (window.getComputedStyle) {
         value = window.getComputedStyle(element)[prop];
@@ -26,6 +38,12 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
       }
       return extra === true ? parseFloat(value) || 0 : value;
     };
+    /**
+     * Provides read-only equivalent of jQuery's offset function:
+     * @required-by bootstrap-tooltip, bootstrap-affix
+     * @url http://api.jquery.com/offset/
+     * @param element
+     */
     fn.offset = function (element) {
       var boxRect = element.getBoundingClientRect();
       var docElement = element.ownerDocument;
@@ -36,23 +54,35 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
         left: boxRect.left + (window.pageXOffset || docElement.documentElement.scrollLeft) - (docElement.documentElement.clientLeft || 0)
       };
     };
+    /**
+     * Provides read-only equivalent of jQuery's position function
+     * @required-by bootstrap-tooltip, bootstrap-affix
+     * @url http://api.jquery.com/offset/
+     * @param element
+     */
     fn.position = function (element) {
       var offsetParentRect = {
           top: 0,
           left: 0
         }, offsetParentElement, offset;
+      // Fixed elements are offset from window (parentOffset = {top:0, left: 0}, because it is it's only offset parent
       if (fn.css(element, 'position') === 'fixed') {
+        // We assume that getBoundingClientRect is available when computed position is fixed
         offset = element.getBoundingClientRect();
       } else {
+        // Get *real* offsetParentElement
         offsetParentElement = offsetParent(element);
         offset = fn.offset(element);
+        // Get correct offsets
         offset = fn.offset(element);
         if (!nodeName(offsetParentElement, 'html')) {
           offsetParentRect = fn.offset(offsetParentElement);
         }
+        // Add offsetParent borders
         offsetParentRect.top += fn.css(offsetParentElement, 'borderTopWidth', true);
         offsetParentRect.left += fn.css(offsetParentElement, 'borderLeftWidth', true);
       }
+      // Subtract parent offsets and element margins
       return {
         width: element.offsetWidth,
         height: element.offsetHeight,
@@ -60,6 +90,11 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
         left: offset.left - offsetParentRect.left - fn.css(element, 'marginLeft', true)
       };
     };
+    /**
+     * Returns the closest, non-statically positioned offsetParent of a given element
+     * @required-by fn.position
+     * @param element
+     */
     var offsetParent = function offsetParentElement(element) {
       var docElement = element.ownerDocument;
       var offsetParent = element.offsetParent || docElement;
@@ -70,6 +105,13 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
       }
       return offsetParent || docElement.documentElement;
     };
+    /**
+     * Provides equivalent of jQuery's height function
+     * @required-by bootstrap-affix
+     * @url http://api.jquery.com/height/
+     * @param element
+     * @param outer
+     */
     fn.height = function (element, outer) {
       var value = element.offsetHeight;
       if (outer) {
@@ -79,6 +121,13 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
       }
       return value;
     };
+    /**
+     * Provides equivalent of jQuery's height function
+     * @required-by bootstrap-affix
+     * @url http://api.jquery.com/width/
+     * @param element
+     * @param outer
+     */
     fn.width = function (element, outer) {
       var value = element.offsetWidth;
       if (outer) {

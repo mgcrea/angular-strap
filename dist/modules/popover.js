@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.3 - 2014-02-10
+ * @version v2.0.0-rc.4 - 2014-03-06
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -24,8 +24,10 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$
     '$tooltip',
     function ($tooltip) {
       function PopoverFactory(element, config) {
+        // Common vars
         var options = angular.extend({}, defaults, config);
         var $popover = $tooltip(element, options);
+        // Support scope as string options [/*title, */content]
         if (options.content) {
           $popover.$scope.content = options.content;
         }
@@ -45,6 +47,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$
       restrict: 'EAC',
       scope: true,
       link: function postLink(scope, element, attr) {
+        // Directive options
         var options = { scope: scope };
         angular.forEach([
           'template',
@@ -60,17 +63,19 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
         });
+        // Support scope as data-attrs
         angular.forEach([
           'title',
           'content'
         ], function (key) {
           attr[key] && attr.$observe(key, function (newValue, oldValue) {
-            scope[key] = $sce.getTrustedHtml(newValue);
+            scope[key] = $sce.trustAsHtml(newValue);
             angular.isDefined(oldValue) && requestAnimationFrame(function () {
               popover && popover.$applyPlacement();
             });
           });
         });
+        // Support scope as an object
         attr.bsPopover && scope.$watch(attr.bsPopover, function (newValue, oldValue) {
           if (angular.isObject(newValue)) {
             angular.extend(scope, newValue);
@@ -81,7 +86,9 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$
             popover && popover.$applyPlacement();
           });
         }, true);
+        // Initialize popover
         var popover = $popover(element, options);
+        // Garbage collection
         scope.$on('$destroy', function () {
           popover.destroy();
           options = null;

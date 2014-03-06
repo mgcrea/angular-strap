@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.3 - 2014-02-10
+ * @version v2.0.0-rc.4 - 2014-03-06
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -10,6 +10,7 @@ angular.module('mgcrea.ngStrap.scrollspy', [
   'mgcrea.ngStrap.helpers.debounce',
   'mgcrea.ngStrap.helpers.dimensions'
 ]).provider('$scrollspy', function () {
+  // Pool of registered spies
   var spies = this.$$spies = {};
   var defaults = this.defaults = {
       debounce: 150,
@@ -27,21 +28,26 @@ angular.module('mgcrea.ngStrap.scrollspy', [
       var windowEl = angular.element($window);
       var docEl = angular.element($document.prop('documentElement'));
       var bodyEl = angular.element($window.document.body);
+      // Helper functions
       function nodeName(element, name) {
         return element[0].nodeName && element[0].nodeName.toLowerCase() === name.toLowerCase();
       }
       function ScrollSpyFactory(config) {
+        // Common vars
         var options = angular.extend({}, defaults, config);
         if (!options.element)
           options.element = bodyEl;
         var isWindowSpy = nodeName(options.element, 'body');
         var scrollEl = isWindowSpy ? windowEl : options.element;
         var scrollId = isWindowSpy ? 'window' : options.id;
+        // Use existing spy
         if (spies[scrollId]) {
           spies[scrollId].$$count++;
           return spies[scrollId];
         }
         var $scrollspy = {};
+        // Private vars
+        var unbindViewContentLoaded, unbindIncludeContentLoaded;
         var trackedElements = $scrollspy.$trackedElements = [];
         var sortedElements = [];
         var activeTarget;
@@ -51,39 +57,49 @@ angular.module('mgcrea.ngStrap.scrollspy', [
         var viewportHeight;
         var scrollTop;
         $scrollspy.init = function () {
+          // Setup internal ref counter
           this.$$count = 1;
+          // Bind events
           debouncedCheckPosition = debounce(this.checkPosition, options.debounce);
           throttledCheckPosition = throttle(this.checkPosition, options.throttle);
           scrollEl.on('click', this.checkPositionWithEventLoop);
           windowEl.on('resize', debouncedCheckPosition);
           scrollEl.on('scroll', throttledCheckPosition);
           debouncedCheckOffsets = debounce(this.checkOffsets, options.debounce);
-          $rootScope.$on('$viewContentLoaded', debouncedCheckOffsets);
-          $rootScope.$on('$includeContentLoaded', debouncedCheckOffsets);
+          unbindViewContentLoaded = $rootScope.$on('$viewContentLoaded', debouncedCheckOffsets);
+          unbindIncludeContentLoaded = $rootScope.$on('$includeContentLoaded', debouncedCheckOffsets);
           debouncedCheckOffsets();
+          // Register spy for reuse
           if (scrollId) {
             spies[scrollId] = $scrollspy;
           }
         };
         $scrollspy.destroy = function () {
+          // Check internal ref counter
           this.$$count--;
           if (this.$$count > 0) {
             return;
           }
+          // Unbind events
           scrollEl.off('click', this.checkPositionWithEventLoop);
           windowEl.off('resize', debouncedCheckPosition);
           scrollEl.off('scroll', debouncedCheckPosition);
-          $rootScope.$off('$viewContentLoaded', debouncedCheckOffsets);
-          $rootScope.$off('$includeContentLoaded', debouncedCheckOffsets);
+          unbindViewContentLoaded();
+          unbindIncludeContentLoaded();
         };
         $scrollspy.checkPosition = function () {
+          // Not ready yet
           if (!sortedElements.length)
             return;
+          // Calculate the scroll position
           scrollTop = (isWindowSpy ? $window.pageYOffset : scrollEl.prop('scrollTop')) || 0;
+          // Calculate the viewport height for use by the components
           viewportHeight = Math.max($window.innerHeight, docEl.prop('clientHeight'));
+          // Activate first element if scroll is smaller
           if (scrollTop < sortedElements[0].offsetTop && activeTarget !== sortedElements[0].target) {
             return $scrollspy.$activateElement(sortedElements[0]);
           }
+          // Activate proper element
           for (var i = sortedElements.length; i--;) {
             if (angular.isUndefined(sortedElements[i].offsetTop) || sortedElements[i].offsetTop === null)
               continue;
@@ -99,6 +115,7 @@ angular.module('mgcrea.ngStrap.scrollspy', [
         $scrollspy.checkPositionWithEventLoop = function () {
           setTimeout(this.checkPosition, 1);
         };
+        // Protected methods
         $scrollspy.$activateElement = function (element) {
           if (activeTarget) {
             var activeElement = $scrollspy.$getTrackedElement(activeTarget);
@@ -120,6 +137,7 @@ angular.module('mgcrea.ngStrap.scrollspy', [
             return obj.target === target;
           })[0];
         };
+        // Track offsets behavior
         $scrollspy.checkOffsets = function () {
           angular.forEach(trackedElements, function (trackedElement) {
             var targetElement = document.querySelector(trackedElement.target);
@@ -153,6 +171,7 @@ angular.module('mgcrea.ngStrap.scrollspy', [
         $scrollspy.activate = function (i) {
           trackedElements[i].addClass('active');
         };
+        // Initialize plugin
         $scrollspy.init();
         return $scrollspy;
       }
