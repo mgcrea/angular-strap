@@ -159,7 +159,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.keyboard) {
             modalElement.on('keyup', $modal.$onKeyUp);
           }
-
+          
+          // Fire show event up the scope tree
+          scope.$emit('modal.show', $modal);
         };
 
         $modal.hide = function() {
@@ -184,7 +186,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.keyboard) {
             modalElement.off('keyup', $modal.$onKeyUp);
           }
-
+          
+          // Fire hide event up the scope tree
+          scope.$emit('modal.hide', $modal);
         };
 
         $modal.toggle = function() {
