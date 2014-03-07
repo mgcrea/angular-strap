@@ -66,7 +66,7 @@ module.exports = function (grunt) {
         files: [
           '{docs,.dev,<%= yo.src %>}/{,*/}{,docs/}*.html',
           '{docs,.tmp,<%= yo.src %>}/{,*/}*.css',
-          '{docs,.dev,.tmp,<%= yo.src %>}/{,*/}*.js',
+          '{docs,.dev,.tmp,<%= yo.src %>}/{,*/}{,docs/}*.js',
           '{docs,<%= yo.src %>}/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
