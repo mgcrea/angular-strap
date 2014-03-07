@@ -143,16 +143,6 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           return i;
         };
 
-        $select.$onElementMouseDown = function(evt) {
-          evt.preventDefault();
-          evt.stopPropagation();
-          if($select.$isShown) {
-            element[0].blur();
-          } else {
-            element[0].focus();
-          }
-        };
-
         $select.$onMouseDown = function(evt) {
           // Prevent blur on mousedown on .dropdown-menu
           evt.preventDefault();
@@ -182,18 +172,6 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         };
 
         // Overrides
-
-        var _init = $select.init;
-        $select.init = function() {
-          _init();
-          element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
-        };
-
-        var _destroy = $select.destroy;
-        $select.destroy = function() {
-          _destroy();
-          element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
-        };
 
         var _show = $select.show;
         $select.show = function() {
