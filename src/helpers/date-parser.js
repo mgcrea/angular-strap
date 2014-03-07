@@ -42,8 +42,9 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         'MMM'   : $locale.DATETIME_FORMATS.SHORTMONTH.join('|'),
         'MM'    : '[0][1-9]|[1][012]',
         'M'     : options.strict ? '[1-9]|[1][012]' : '[0][1-9]|[1][012]',
-        'yyyy'  : '(?:(?:[1]{1}[0-9]{1}[0-9]{1}[0-9]{1})|(?:[2]{1}[0-9]{3}))(?![[0-9]])',
-        'yy'    : '(?:(?:[0-9]{1}[0-9]{1}))(?![[0-9]])'
+        'yyyy'  : '[1]{1}[0-9]{3}|[2]{1}[0-9]{3}',
+        'yy'    : '[0-9]{2}',
+        'y'     : options.strict ? '[1-9]{1}[0-9]{1}' : '[0-9]{2}',
       };
 
       var setFnMap = {
