@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.4 - 2014-03-06
+ * @version v2.0.0-rc.4 - 2014-03-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -140,15 +140,6 @@ angular.module('mgcrea.ngStrap.select', [
             return;
           return i;
         };
-        $select.$onElementMouseDown = function (evt) {
-          evt.preventDefault();
-          evt.stopPropagation();
-          if ($select.$isShown) {
-            element[0].blur();
-          } else {
-            element[0].focus();
-          }
-        };
         $select.$onMouseDown = function (evt) {
           // Prevent blur on mousedown on .dropdown-menu
           evt.preventDefault();
@@ -178,16 +169,6 @@ angular.module('mgcrea.ngStrap.select', [
           scope.$digest();
         };
         // Overrides
-        var _init = $select.init;
-        $select.init = function () {
-          _init();
-          element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
-        };
-        var _destroy = $select.destroy;
-        $select.destroy = function () {
-          _destroy();
-          element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onElementMouseDown);
-        };
         var _show = $select.show;
         $select.show = function () {
           _show();
