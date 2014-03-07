@@ -42,6 +42,10 @@ describe('timepicker', function() {
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><input type="text" ng-model="selectedTime" bs-timepicker></li></ul>'
     },
+    'markup-ngChange': {
+      scope: {selectedDate: new Date(1970, 0, 1, 10, 30), onChange: function() {}},
+      element: '<input type="text" ng-model="selectedTime" ng-change="onChange()" bs-timepicker>'
+    },
     'options-animation': {
       element: '<div class="btn" data-animation="am-flip-x" ng-model="timepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-timepicker></div>'
     },
@@ -173,6 +177,14 @@ describe('timepicker', function() {
       angular.element(elm.find('[bs-timepicker]:eq(0)')).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr').length).toBe($timepicker.defaults.length);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 4);
+    });
+
+    it('should support ngChange markup', function() {
+      var elm = compileDirective('markup-ngChange');
+      angular.element(elm[0]).triggerHandler('focus');
+      var spy = spyOn(scope, 'onChange').andCallThrough();
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:eq(1)')[0]).triggerHandler('click');
+      expect(spy).toHaveBeenCalled();
     });
 
     // iit('should only build the timepicker once', function() {
