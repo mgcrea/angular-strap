@@ -492,7 +492,8 @@ module.exports = function (grunt) {
     coveralls: {
       options: {
         /*jshint camelcase: false */
-        coverage_dir: 'test/coverage/PhantomJS 1.9.7 (Linux)/'
+        coverage_dir: 'test/coverage/PhantomJS 1.9.7 (Linux)/',
+        force: true
       }
     }
 
