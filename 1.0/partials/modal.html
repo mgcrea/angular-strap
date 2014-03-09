@@ -1,0 +1,24 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="myModalLabel">Modal header</h3>
+</div>
+<div class="modal-body">
+  <form>
+    <fieldset>
+      <legend>Legend</legend>
+      <label>Label name</label>
+      <input type="text" placeholder="Type something…" autofocus="autofocus">
+      <span class="help-block">Example block-level help text here.</span>
+      <label class="checkbox">
+        <input type="checkbox"> Check me out
+      </label>
+    </fieldset>
+  </form>
+  <p>{{modal.content}}</p>
+  <br />
+  <pre>2 + 3 = {{ 2 + 3 }}</pre>
+</div>
+<div class="modal-footer">
+  <button class="btn" ng-click="dismiss()">Close</button>
+  <button class="btn btn-primary" ng-click="modal.saved=true;dismiss()">Save changes</button>
+</div>
