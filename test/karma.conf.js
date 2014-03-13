@@ -66,6 +66,10 @@ module.exports = function(config) {
       'src/{,*/}*.js': 'coverage'
     },
 
+    plugins: [
+      'karma-jasmine'
+    ],
+
     // Coverage reporter generates the coverage
     coverageReporter: {
       reporters:[
@@ -73,7 +77,6 @@ module.exports = function(config) {
         {type: 'text-summary', dir:'test/coverage/'}
       ]
     }
-
 
   });
 
