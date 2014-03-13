@@ -30,6 +30,10 @@ describe('typeahead', function () {
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><input type="text" ng-model="selectedState" ng-options="state for state in states" bs-typeahead></li></ul>'
     },
+    'markup-objectValue': {
+      scope: {selectedIcon: '', icons: [{value: 'Gear', label: '<i class="fa fa-gear"></i> Gear'}, {value: 'Globe', label: '<i class="fa fa-globe"></i> Globe'}, {value: 'Heart', label: '<i class="fa fa-heart"></i> Heart'}, {value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}]},
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon as icon.label for icon in icons" bs-typeahead>'
+    },
     'options-animation': {
       element: '<input type="text" data-animation="am-flip-x" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
     },
@@ -112,6 +116,15 @@ describe('typeahead', function () {
       angular.element(elm.find('[bs-typeahead]:eq(0)')).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.states[0]);
+    });
+
+    it('should support objectValue markup', function() {
+      var elm = compileDirective('markup-objectValue');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[0].label);
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      expect(scope.selectedIcon).toBe(scope.icons[0]);
+      expect(elm.val()).toBe(jQuery('div').html(scope.icons[0].label).text().trim());
     });
 
   });

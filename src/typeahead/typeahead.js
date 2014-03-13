@@ -70,7 +70,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.select = function(index) {
           var value = scope.$matches[index].value;
           if(controller) {
-            controller.$setViewValue(value);
+            controller.$setViewValue(scope.$matches[index]);
             controller.$render();
             if(parentScope) parentScope.$digest();
           }
@@ -181,6 +181,18 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             // if(matches.length === 1 && matches[0].value === newValue) return;
             typeahead.update(values);
           });
+        });
+
+        // viewValue -> element
+        controller.$render = function() {
+          if(controller.$isEmpty(controller.$viewValue)) return element.val('');
+          element.val(controller.$viewValue.label.replace(/<(?:.|\n)*?>/gm, '').trim());
+        };
+
+        // viewValue -> $parsers -> modelValue
+        controller.$parsers.unshift(function(viewValue) {
+          if(!viewValue) return;
+          return viewValue.value;
         });
 
         // Garbage collection
