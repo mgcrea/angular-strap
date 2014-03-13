@@ -70,7 +70,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.select = function(index) {
           var value = scope.$matches[index].value;
           if(controller) {
-            controller.$setViewValue(scope.$matches[index]);
+            controller.$setViewValue(value);
             controller.$render();
             if(parentScope) parentScope.$digest();
           }
@@ -89,6 +89,16 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           }
           // minLength support
           return scope.$matches.length && angular.isString(controller.$viewValue) && controller.$viewValue.length >= options.minLength;
+        };
+
+        $typeahead.$getIndex = function(value) {
+          var l = scope.$matches.length, i = l;
+          if(!l) return;
+          for(i = l; i--;) {
+            if(scope.$matches[i].value === value) break;
+          }
+          if(i < 0) return;
+          return i;
         };
 
         $typeahead.$onMouseDown = function(evt) {
@@ -172,6 +182,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Initialize typeahead
         var typeahead = $typeahead(element, options);
+        // if(!dump) var dump = console.error.bind(console);
 
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
@@ -180,20 +191,19 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             if(values.length > limit) values = values.slice(0, limit);
             // if(matches.length === 1 && matches[0].value === newValue) return;
             typeahead.update(values);
+            // Queue a new rendering that will leverage collection loading
+            controller.$render();
           });
         });
 
-        // viewValue -> element
-        controller.$render = function() {
+        // Model rendering in view
+        controller.$render = function () {
+          // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
           if(controller.$isEmpty(controller.$viewValue)) return element.val('');
-          element.val(controller.$viewValue.label.replace(/<(?:.|\n)*?>/gm, '').trim());
+          var index = typeahead.$getIndex(controller.$modelValue);
+          var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : '';
+          element.val(selected.replace(/<(?:.|\n)*?>/gm, '').trim());
         };
-
-        // viewValue -> $parsers -> modelValue
-        controller.$parsers.unshift(function(viewValue) {
-          if(!viewValue) return;
-          return angular.isObject(viewValue) ? viewValue.value : viewValue;
-        });
 
         // Garbage collection
         scope.$on('$destroy', function() {
