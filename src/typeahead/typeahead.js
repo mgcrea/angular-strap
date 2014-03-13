@@ -189,6 +189,12 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           element.val(controller.$viewValue.label.replace(/<(?:.|\n)*?>/gm, '').trim());
         };
 
+        // viewValue -> $parsers -> modelValue
+        controller.$parsers.unshift(function(viewValue) {
+          if(!viewValue) return;
+          return angular.isObject(viewValue) ? viewValue.value : viewValue;
+        });
+
         // Garbage collection
         scope.$on('$destroy', function() {
           typeahead.destroy();
