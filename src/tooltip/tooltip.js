@@ -190,7 +190,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
 
           $animate.enter(tipElement, parent, after, function() {});
           $tooltip.$isShown = scope.$isShown = true;
-          scope.$$phase || scope.$digest();
+          scope.$$phase || scope.$root.$$phase || scope.$digest();
           $$animateReflow($tooltip.$applyPlacement);
 
           // Bind events
@@ -228,7 +228,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
             tipElement = null;
           });
           $tooltip.$isShown = scope.$isShown = false;
-          scope.$$phase || scope.$digest();
+          scope.$$phase || scope.$root.$$phase || scope.$digest();
 
           // Unbind events
           if(options.keyboard) {
