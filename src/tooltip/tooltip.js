@@ -112,9 +112,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           // Options: trigger
           var triggers = options.trigger.split(' ');
           angular.forEach(triggers, function(trigger) {
-            if(trigger === 'click') {
+            if(trigger === 'click' && typeof element === 'object') {
               element.on('click', $tooltip.toggle);
-            } else if(trigger !== 'manual') {
+            } else if(trigger !== 'manual' && typeof element === 'object') {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
               trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
