@@ -321,13 +321,17 @@ a[ng-click] {
  * Fancy tooltips
  *
  */
-.tooltip.tooltip-info.top .tooltip-arrow {
+.tooltip.tooltip-info.top .tooltip-arrow,
+.tooltip.tooltip-info.top-left .tooltip-arrow,
+.tooltip.tooltip-info.top-right .tooltip-arrow {
   border-top-color: #d9edf7;
 }
 .tooltip.tooltip-info.right .tooltip-arrow {
   border-right-color: #d9edf7;
 }
-.tooltip.tooltip-info.bottom .tooltip-arrow {
+.tooltip.tooltip-info.bottom .tooltip-arrow,
+.tooltip.tooltip-info.bottom-left .tooltip-arrow,
+.tooltip.tooltip-info.bottom-right .tooltip-arrow {
   border-bottom-color: #d9edf7;
 }
 .tooltip.tooltip-info.left .tooltip-arrow {
@@ -344,13 +348,17 @@ a[ng-click] {
 .tooltip.tooltip-info .tooltip-inner .alert-link {
   color: #245269;
 }
-.tooltip.tooltip-success.top .tooltip-arrow {
+.tooltip.tooltip-success.top .tooltip-arrow,
+.tooltip.tooltip-success.top-left .tooltip-arrow,
+.tooltip.tooltip-success.top-right .tooltip-arrow {
   border-top-color: #dff0d8;
 }
 .tooltip.tooltip-success.right .tooltip-arrow {
   border-right-color: #dff0d8;
 }
-.tooltip.tooltip-success.bottom .tooltip-arrow {
+.tooltip.tooltip-success.bottom .tooltip-arrow,
+.tooltip.tooltip-success.bottom-left .tooltip-arrow,
+.tooltip.tooltip-success.bottom-right .tooltip-arrow {
   border-bottom-color: #dff0d8;
 }
 .tooltip.tooltip-success.left .tooltip-arrow {
@@ -367,13 +375,17 @@ a[ng-click] {
 .tooltip.tooltip-success .tooltip-inner .alert-link {
   color: #2b542c;
 }
-.tooltip.tooltip-danger.top .tooltip-arrow {
+.tooltip.tooltip-danger.top .tooltip-arrow,
+.tooltip.tooltip-danger.top-left .tooltip-arrow,
+.tooltip.tooltip-danger.top-right .tooltip-arrow {
   border-top-color: #f2dede;
 }
 .tooltip.tooltip-danger.right .tooltip-arrow {
   border-right-color: #f2dede;
 }
-.tooltip.tooltip-danger.bottom .tooltip-arrow {
+.tooltip.tooltip-danger.bottom .tooltip-arrow,
+.tooltip.tooltip-danger.bottom-left .tooltip-arrow,
+.tooltip.tooltip-danger.bottom-right .tooltip-arrow {
   border-bottom-color: #f2dede;
 }
 .tooltip.tooltip-danger.left .tooltip-arrow {
@@ -389,4 +401,57 @@ a[ng-click] {
 }
 .tooltip.tooltip-danger .tooltip-inner .alert-link {
   color: #843534;
+}
+/*
+ * Tooltip corner placement
+ *
+ * Inherit exotic positionning from basic ones & fix arrow placement
+ */
+.tooltip.top-left {
+  margin-top: -3px;
+  padding: 5px 0;
+}
+.tooltip.top-left .tooltip-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #000000;
+  left: 10%;
+}
+.tooltip.top-right {
+  margin-top: -3px;
+  padding: 5px 0;
+}
+.tooltip.top-right .tooltip-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #000000;
+  left: 90%;
+}
+.tooltip.bottom-left {
+  margin-top: 3px;
+  padding: 5px 0;
+}
+.tooltip.bottom-left .tooltip-arrow {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #000000;
+  left: 10%;
+}
+.tooltip.bottom-right {
+  margin-top: 3px;
+  padding: 5px 0;
+}
+.tooltip.bottom-right .tooltip-arrow {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #000000;
+  left: 90%;
 }

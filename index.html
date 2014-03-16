@@ -42,7 +42,7 @@
 
   <link rel="stylesheet" href="styles/05ef9f12.angular-motion.min.css"/>
 
-  <link rel="stylesheet" href="styles/875ecd1c.bootstrap-additions.min.css"/>
+  <link rel="stylesheet" href="styles/9d38d78c.bootstrap-additions.min.css"/>
 
   <link rel="stylesheet" href="styles/a705ff2d.main.min.css"/>
 
@@ -1836,12 +1836,12 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
     <div class="input-group col-xs-5">
       <span class="input-group-btn">
         <!-- You can also use data-attrs to assign scope variables -->
-        <button class="btn btn-primary" type="button" data-trigger="click" data-type="success" title="{{tooltip.title}}" bs-tooltip="">Click me</button>
+        <button class="btn btn-primary" type="button" data-trigger="click" data-type="success" data-title="{{tooltip.title}}" bs-tooltip="">Click me</button>
       </span>
       <input type="text" class="form-control" data-placement="right" data-type="info" data-container="body" placeholder="Focus to toggle tooltip" data-trigger="focus" bs-tooltip="tooltip">
     </div>
     <div class="checkbox">
-      <label data-placement="bottom" data-type="info" data-animation="am-fade-and-scale" bs-tooltip="tooltip">
+      <label data-placement="bottom-left" data-type="info" data-animation="am-fade-and-scale" bs-tooltip="tooltip">
         <input type="checkbox" ng-model="tooltip.checked"> Remember me
       </label>
     </div>
@@ -2353,7 +2353,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
       </div>
       <div class="form-group">
         <label>Icon</label>
-        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-animation="am-flip-x" ng-options="icon.value as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead="">
+        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-animation="am-flip-x" ng-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead="">
       </div>
       <hr>
       <!-- Using an async data provider -->
@@ -2854,17 +2854,17 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <!-- <script src="bower_components/angular/angular.js"></script> -->
   <!-- <script src="bower_components/angular-sanitize/angular-sanitize.js"></script> -->
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
-  <script src="scripts/e7b5f510.libraries.min.js"></script>
+  <script src="scripts/26888a56.libraries.min.js"></script>
 
-  <script src="scripts/63e0232e.angular-strap.min.js"></script>
+  <script src="scripts/192dadeb.angular-strap.min.js"></script>
 
-  <script src="scripts/275555a9.angular-strap.tpl.min.js"></script>
+  <script src="scripts/938a0988.angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/31238e79.docs.min.js"></script>
+  <script src="scripts/69715422.docs.min.js"></script>
 
-  <script src="scripts/4e0b6801.docs.tpl.min.js"></script>
+  <script src="scripts/307c013f.docs.tpl.min.js"></script>
 
-  <script src="scripts/39c85cde.demo.min.js"></script>
+  <script src="scripts/cbb39957.demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
