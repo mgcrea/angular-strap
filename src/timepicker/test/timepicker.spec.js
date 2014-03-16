@@ -148,6 +148,7 @@ describe('timepicker', function() {
 
     it('should correctly support undefined values', function() {
       var elm = compileDirective('value-undefined');
+      expect(elm.val()).toBe('');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr').length).toBe($timepicker.defaults.length);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 4);
