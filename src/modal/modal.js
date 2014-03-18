@@ -19,7 +19,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       show: true
     };
 
-    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions) {
+    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
 
       var forEach = angular.forEach;
       var trim = String.prototype.trim;
@@ -41,7 +41,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Support scope as string options
         forEach(['title', 'content'], function(key) {
-          if(options[key]) scope[key] = options[key];
+          if(options[key]) scope[key] = $sce.trustAsHtml(options[key]);
         });
 
         // Provide scope helpers
