@@ -193,6 +193,52 @@ describe('tooltip', function() {
 
   });
 
+  describe('show / hide events', function() {
+
+    it('should dispatch show and show.before events', function() {
+      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      var emit = spyOn(myTooltip.$scope, '$emit');
+      scope.$digest();
+      myTooltip.show();
+
+      expect(emit).toHaveBeenCalledWith('tooltip.show.before', myTooltip);
+      // show only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('tooltip.show', myTooltip);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('tooltip.show', myTooltip);
+    });
+
+    it('should dispatch hide and hide.before events', function() {
+      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      scope.$digest();
+      myTooltip.show();
+
+      var emit = spyOn(myTooltip.$scope, '$emit');
+      myTooltip.hide();
+
+      expect(emit).toHaveBeenCalledWith('tooltip.hide.before', myTooltip);
+      // hide only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('tooltip.hide', myTooltip);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('tooltip.hide', myTooltip);
+    });
+
+    it('should namespace show/hide events using the prefixClass', function() {
+      var myTooltip = $tooltip(sandboxEl, angular.extend({prefixClass: 'datepicker'}, templates['default'].scope.tooltip));
+      var emit = spyOn(myTooltip.$scope, '$emit');
+      scope.$digest();
+      myTooltip.show();
+      myTooltip.hide();
+      $animate.triggerCallbacks();
+
+      expect(emit).toHaveBeenCalledWith('datepicker.show.before', myTooltip);
+      expect(emit).toHaveBeenCalledWith('datepicker.show', myTooltip);
+      expect(emit).toHaveBeenCalledWith('datepicker.hide.before', myTooltip);
+      expect(emit).toHaveBeenCalledWith('datepicker.hide', myTooltip);
+    });
+
+  });
+
   describe('options', function() {
 
     describe('animation', function() {

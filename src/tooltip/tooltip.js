@@ -172,6 +172,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
 
         $tooltip.show = function() {
 
+          scope.$emit(options.prefixClass + '.show.before', $tooltip);
           var parent = options.container ? tipContainer : null;
           var after = options.container ? null : element;
 
@@ -188,7 +189,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           // Options: type
           if(options.type) tipElement.addClass(options.prefixClass + '-' + options.type);
 
-          $animate.enter(tipElement, parent, after, function() {});
+          $animate.enter(tipElement, parent, after, function() {
+            scope.$emit(options.prefixClass + '.show', $tooltip);
+          });
           $tooltip.$isShown = scope.$isShown = true;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
           $$animateReflow($tooltip.$applyPlacement);
@@ -223,8 +226,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
         $tooltip.hide = function(blur) {
 
           if(!$tooltip.$isShown) return;
+          scope.$emit(options.prefixClass + '.hide.before', $tooltip);
 
           $animate.leave(tipElement, function() {
+            scope.$emit(options.prefixClass + '.hide', $tooltip);
             tipElement = null;
           });
           $tooltip.$isShown = scope.$isShown = false;
