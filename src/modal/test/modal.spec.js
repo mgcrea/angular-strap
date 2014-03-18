@@ -3,18 +3,20 @@
 describe('modal', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $compile, $templateCache, $modal, scope;
+  var $compile, $templateCache, $modal, $animate, scope;
 
   beforeEach(module('ngSanitize'));
+  beforeEach(module('ngAnimateMock'));
   beforeEach(module('mgcrea.ngStrap.modal'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$modal_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$modal_, _$animate_) {
     scope = _$rootScope_.$new();
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $modal = _$modal_;
+    $animate = _$animate_;
   }));
 
   afterEach(function() {
@@ -146,6 +148,48 @@ describe('modal', function() {
       expect(bodyEl.children('.modal').length).toBe(0);
       angular.element(elm[0]).triggerHandler('click');
       expect(bodyEl.children('.modal').length).toBe(1);
+    });
+
+  });
+
+  describe('show / hide events', function() {
+
+    it('should dispatch show and show.before events', function() {
+      var myModal = $modal(templates['default'].scope.modal);
+      var emit = spyOn(myModal.$scope, '$emit');
+      scope.$digest();
+
+      expect(emit).toHaveBeenCalledWith('modal.show.before', myModal);
+      // show only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('modal.show', myModal);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('modal.show', myModal);
+    });
+
+    it('should dispatch hide and hide.before events', function() {
+      var myModal = $modal(templates['default'].scope.modal);
+      scope.$digest();
+      var emit = spyOn(myModal.$scope, '$emit');
+      myModal.hide();
+
+      expect(emit).toHaveBeenCalledWith('modal.hide.before', myModal);
+      // hide only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('modal.hide', myModal);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('modal.hide', myModal);
+    });
+
+    it('should namespace show/hide events using the prefixClass', function() {
+      var myModal = $modal(angular.extend({prefixClass: 'alert'}, templates['default'].scope.modal));
+      var emit = spyOn(myModal.$scope, '$emit');
+      scope.$digest();
+      myModal.hide();
+      $animate.triggerCallbacks();
+
+      expect(emit).toHaveBeenCalledWith('alert.show.before', myModal);
+      expect(emit).toHaveBeenCalledWith('alert.show', myModal);
+      expect(emit).toHaveBeenCalledWith('alert.hide.before', myModal);
+      expect(emit).toHaveBeenCalledWith('alert.hide', myModal);
     });
 
   });

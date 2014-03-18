@@ -116,6 +116,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $modal.show = function() {
 
+          scope.$emit(options.prefixClass + '.show.before', $modal);
           var parent = options.container ? findElement(options.container) : null;
           var after = options.container ? null : options.element;
 
@@ -136,7 +137,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.backdrop) {
             $animate.enter(backdropElement, bodyElement, null, function() {});
           }
-          $animate.enter(modalElement, parent, after, function() {});
+          $animate.enter(modalElement, parent, after, function() {
+            scope.$emit(options.prefixClass + '.show', $modal);
+          });
           scope.$isShown = true;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
           // Focus once the enter-animation has started
@@ -159,12 +162,13 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.keyboard) {
             modalElement.on('keyup', $modal.$onKeyUp);
           }
-
         };
 
         $modal.hide = function() {
 
+          scope.$emit(options.prefixClass + '.hide.before', $modal);
           $animate.leave(modalElement, function() {
+            scope.$emit(options.prefixClass + '.hide', $modal);
             bodyElement.removeClass(options.prefixClass + '-open');
             if(options.animation) {
               bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
@@ -184,7 +188,6 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.keyboard) {
             modalElement.off('keyup', $modal.$onKeyUp);
           }
-
         };
 
         $modal.toggle = function() {
