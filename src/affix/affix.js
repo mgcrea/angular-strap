@@ -76,26 +76,26 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions'])
           initialOffsetTop = dimensions.offset(element[0]).top + initialAffixTop;
 
           // Bind events
-          targetEl.on('scroll', this.checkPosition);
-          targetEl.on('click', this.checkPositionWithEventLoop);
+          targetEl.on('scroll', $affix.checkPosition);
+          targetEl.on('click', $affix.checkPositionWithEventLoop);
           // Both of these checkPosition() calls are necessary for the case where
           // the user hits refresh after scrolling to the bottom of the page.
-          this.checkPosition();
-          this.checkPositionWithEventLoop();
+          $affix.checkPosition();
+          $affix.checkPositionWithEventLoop();
 
         };
 
         $affix.destroy = function() {
 
           // Unbind events
-          targetEl.off('scroll', this.checkPosition);
-          targetEl.off('click', this.checkPositionWithEventLoop);
+          targetEl.off('scroll', $affix.checkPosition);
+          targetEl.off('click', $affix.checkPositionWithEventLoop);
 
         };
 
         $affix.checkPositionWithEventLoop = function() {
 
-          setTimeout(this.checkPosition, 1);
+          setTimeout($affix.checkPosition, 1);
 
         };
 
