@@ -32,7 +32,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         var $modal = {};
 
         // Common vars
-        var options = angular.extend({}, defaults, config);
+        var options = $modal.$options = angular.extend({}, defaults, config);
         $modal.$promise = fetchTemplate(options.template);
         var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(!options.element && !options.container) {
