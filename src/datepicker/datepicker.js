@@ -254,7 +254,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             } else if(angular.isString(newValue) && newValue.match(/^".+"$/)) {
               datepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
             } else {
-              datepicker.$options[key] = +new Date(newValue);
+              datepicker.$options[key] = +new Date(parseInt(newValue,10));
             }
             // console.warn(angular.isDate(newValue), newValue);
             // Build only if dirty
