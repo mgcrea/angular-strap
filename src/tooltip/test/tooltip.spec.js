@@ -179,15 +179,11 @@ describe('tooltip', function() {
       expect(bodyEl.children('.tooltip').length).toBe(1);
     });
 
-    it('should correctly work with ngClick in isolated scope', function() {
-      var template = templates['markup-ngClick-service'];
-      var iScope = scope.$new(true);
-      var element = $(template.element).appendTo(sandboxEl);
-      var elm = $compile(element)(iScope);
-      iScope.$digest();
-
-      var myTooltip = $tooltip(sandboxEl, angular.extend({scope:iScope,trigger: 'manual'}, templates['default'].scope.tooltip));
-      iScope.showTooltip = function() {
+    it('should correctly work with ngClick with an isolated scope', function() {
+      scope = scope.$new(true);
+      var elm = compileDirective('markup-ngClick-service');
+      var myTooltip = $tooltip(sandboxEl, {scope:scope, trigger: 'manual'});
+      scope.showTooltip = function() {
         myTooltip.$promise.then(myTooltip.show);
       };
       expect(bodyEl.children('.tooltip').length).toBe(0);
