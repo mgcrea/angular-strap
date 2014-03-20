@@ -136,15 +136,11 @@ describe('modal', function() {
       expect(bodyEl.children('.modal').length).toBe(1);
     });
 
-    it('should correctly work with ngClick in isolated scope', function() {
-      var template = templates['markup-ngClick-service'];
-      var iScope = scope.$new(true);
-      var element = $(template.element).appendTo(sandboxEl);
-      var elm = $compile(element)(iScope);
-      iScope.$digest();
-
-      var myModal = $modal(angular.extend({show: false,scope: iScope}, templates['default'].scope.modal));
-      iScope.showModal = function() {
+    it('should correctly work with ngClick with an isolated scope', function() {
+      scope = scope.$new(true);
+      var elm = compileDirective('markup-ngClick-service');
+      var myModal = $modal(angular.extend({show: false, scope: scope}, templates['default'].scope.modal));
+      scope.showModal = function() {
         myModal.$promise.then(myModal.show);
       };
       expect(bodyEl.children('.modal').length).toBe(0);
