@@ -94,8 +94,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           if(parentScope) parentScope.$digest();
           // Hide if single select
           if(!options.multiple) {
-            if(options.trigger === 'focus') element[0].blur();
-            else if($select.$isShown) $select.hide();
+            $select.hide();
           }
           // Emit event
           scope.$emit('$select.select', value, index);
@@ -155,12 +154,12 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         };
 
         $select.$onKeyDown = function(evt) {
-          if (!/(38|40|13)/.test(evt.keyCode)) return;
+          if (!/(9|13|38|40)/.test(evt.keyCode)) return;
           evt.preventDefault();
           evt.stopPropagation();
 
           // Select with enter
-          if(evt.keyCode === 13) {
+          if(evt.keyCode === 13 || evt.keyCode === 9) {
             return $select.select(scope.$activeIndex);
           }
 
