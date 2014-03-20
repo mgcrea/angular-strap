@@ -194,6 +194,48 @@ describe('modal', function() {
 
   });
 
+  describe('show / hide events', function() {
+
+    it('should dispatch show and show.before events', function() {
+      var myModal = $modal(templates['default'].scope.modal);
+      var emit = spyOn(myModal.$scope, '$emit');
+      scope.$digest();
+
+      expect(emit).toHaveBeenCalledWith('modal.show.before', myModal);
+      // show only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('modal.show', myModal);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('modal.show', myModal);
+    });
+
+    it('should dispatch hide and hide.before events', function() {
+      var myModal = $modal(templates['default'].scope.modal);
+      scope.$digest();
+      var emit = spyOn(myModal.$scope, '$emit');
+      myModal.hide();
+
+      expect(emit).toHaveBeenCalledWith('modal.hide.before', myModal);
+      // hide only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('modal.hide', myModal);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('modal.hide', myModal);
+    });
+
+    it('should namespace show/hide events using the prefixClass', function() {
+      var myModal = $modal(angular.extend({prefixClass: 'alert'}, templates['default'].scope.modal));
+      var emit = spyOn(myModal.$scope, '$emit');
+      scope.$digest();
+      myModal.hide();
+      $animate.triggerCallbacks();
+
+      expect(emit).toHaveBeenCalledWith('alert.show.before', myModal);
+      expect(emit).toHaveBeenCalledWith('alert.show', myModal);
+      expect(emit).toHaveBeenCalledWith('alert.hide.before', myModal);
+      expect(emit).toHaveBeenCalledWith('alert.hide', myModal);
+    });
+
+  });
+
   describe('options', function() {
 
     describe('animation', function() {
