@@ -224,8 +224,8 @@ describe('tooltip', function() {
       expect(emit).toHaveBeenCalledWith('tooltip.hide', myTooltip);
     });
 
-    it('should namespace show/hide events using the prefixClass', function() {
-      var myTooltip = $tooltip(sandboxEl, angular.extend({prefixClass: 'datepicker'}, templates['default'].scope.tooltip));
+    it('should namespace show/hide events using the prefixEvent', function() {
+      var myTooltip = $tooltip(sandboxEl, angular.extend({prefixEvent: 'datepicker'}, templates['default'].scope.tooltip));
       var emit = spyOn(myTooltip.$scope, '$emit');
       scope.$digest();
       myTooltip.show();
