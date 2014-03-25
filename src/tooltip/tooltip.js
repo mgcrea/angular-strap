@@ -228,15 +228,17 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           if(!$tooltip.$isShown) return;
           scope.$emit(options.prefixClass + '.hide.before', $tooltip);
 
-          $animate.leave(tipElement, function() {
-            scope.$emit(options.prefixClass + '.hide', $tooltip);
-            tipElement = null;
-          });
+          if(tipElement !== null) {
+	        $animate.leave(tipElement, function() {
+	          scope.$emit(options.prefixClass + '.hide', $tooltip);
+	          tipElement = null;
+	        });
+	      }
           $tooltip.$isShown = scope.$isShown = false;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
 
           // Unbind events
-          if(options.keyboard) {
+          if(options.keyboard && tipElement !== null) {
             tipElement.off('keyup', $tooltip.$onKeyUp);
           }
 
