@@ -57,6 +57,10 @@ describe('datepicker', function() {
     'options-template': {
       element: '<input type="text" data-template="custom" ng-model="selectedDate" bs-datepicker>'
     },
+    'options-typeStringDateFormat': {
+      scope: {selectedDate: '22/02/1986'},
+      element: '<input type="text" ng-model="selectedDate" data-date-type="string" data-date-format="dd/MM/yyyy" bs-datepicker>'
+    },
     'options-dateFormat': {
       scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" bs-datepicker>'
@@ -390,6 +394,18 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         expect(angular.element(sandboxEl.find('.dropdown-inner > .btn')[0]).triggerHandler('click'));
         expect(scope.dropdown.counter).toBe(2);
+      });
+
+    });
+
+    describe('type', function() {
+
+      it('should support string type with a dateFormat', function() {
+        var elm = compileDirective('options-typeStringDateFormat');
+        expect(elm.val()).toBe('22/02/1986');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
+        expect(elm.val()).toBe('16/02/1986');
       });
 
     });

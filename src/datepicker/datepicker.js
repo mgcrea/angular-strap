@@ -301,7 +301,14 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         controller.$formatters.push(function(modelValue) {
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
           if(angular.isUndefined(modelValue) || modelValue === null) return;
-          var date = angular.isDate(modelValue) ? modelValue : new Date(modelValue);
+          var date;
+          if(angular.isDate(modelValue)) {
+            date = modelValue;
+          } else if(options.dateType === 'string') {
+            date = dateParser.parse(modelValue);
+          } else {
+            date = new Date(modelValue);
+          }
           // Setup default value?
           // if(isNaN(date.getTime())) {
           //   var today = new Date();
