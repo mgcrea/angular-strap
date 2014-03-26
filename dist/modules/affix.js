@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.4 - 2014-03-07
+ * @version v2.0.0-rc.4 - 2014-03-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -60,20 +60,20 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions']).pr
         $affix.init = function () {
           initialOffsetTop = dimensions.offset(element[0]).top + initialAffixTop;
           // Bind events
-          targetEl.on('scroll', this.checkPosition);
-          targetEl.on('click', this.checkPositionWithEventLoop);
+          targetEl.on('scroll', $affix.checkPosition);
+          targetEl.on('click', $affix.checkPositionWithEventLoop);
           // Both of these checkPosition() calls are necessary for the case where
           // the user hits refresh after scrolling to the bottom of the page.
-          this.checkPosition();
-          this.checkPositionWithEventLoop();
+          $affix.checkPosition();
+          $affix.checkPositionWithEventLoop();
         };
         $affix.destroy = function () {
           // Unbind events
-          targetEl.off('scroll', this.checkPosition);
-          targetEl.off('click', this.checkPositionWithEventLoop);
+          targetEl.off('scroll', $affix.checkPosition);
+          targetEl.off('click', $affix.checkPositionWithEventLoop);
         };
         $affix.checkPositionWithEventLoop = function () {
-          setTimeout(this.checkPosition, 1);
+          setTimeout($affix.checkPosition, 1);
         };
         $affix.checkPosition = function () {
           // if (!this.$element.is(':visible')) return

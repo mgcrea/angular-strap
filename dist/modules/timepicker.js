@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.4 - 2014-03-07
+ * @version v2.0.0-rc.4 - 2014-03-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -168,7 +168,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
             targetDate = new Date(1970, 0, 1, viewDate.hour + value * options.length, viewDate.minute);
             angular.extend(viewDate, { hour: targetDate.getHours() });
           } else if (index === 1) {
-            targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute + value * options.length * 5);
+            targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute + value * options.length * options.minuteStep);
             angular.extend(viewDate, { minute: targetDate.getMinutes() });
           }
           $timepicker.$build();
@@ -391,7 +391,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
           } else if (options.timeType === 'iso') {
             return controller.$dateValue.toISOString();
           } else {
-            return controller.$dateValue;
+            return new Date(controller.$dateValue);
           }
         });
         // modelValue -> $formatters -> viewValue
