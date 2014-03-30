@@ -117,6 +117,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         $modal.show = function() {
 
           scope.$emit(options.prefixClass + '.show.before', $modal);
+          bodyElement = angular.element($window.document.body);
           var parent = options.container ? findElement(options.container) : null;
           var after = options.container ? null : options.element;
 
