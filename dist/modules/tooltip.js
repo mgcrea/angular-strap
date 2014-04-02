@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.4 - 2014-03-07
+ * @version v2.0.0-rc.4 - 2014-04-02
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -163,6 +163,7 @@ angular.module('mgcrea.ngStrap.tooltip', [
           }, options.delay.show);
         };
         $tooltip.show = function () {
+          scope.$emit(options.prefixClass + '.show.before', $tooltip);
           var parent = options.container ? tipContainer : null;
           var after = options.container ? null : element;
           // Remove any existing tipElement
@@ -184,9 +185,10 @@ angular.module('mgcrea.ngStrap.tooltip', [
           if (options.type)
             tipElement.addClass(options.prefixClass + '-' + options.type);
           $animate.enter(tipElement, parent, after, function () {
+            scope.$emit(options.prefixClass + '.show', $tooltip);
           });
           $tooltip.$isShown = scope.$isShown = true;
-          scope.$$phase || scope.$digest();
+          scope.$$phase || scope.$root.$$phase || scope.$digest();
           $$animateReflow($tooltip.$applyPlacement);
           // Bind events
           if (options.keyboard) {
@@ -213,11 +215,13 @@ angular.module('mgcrea.ngStrap.tooltip', [
         $tooltip.hide = function (blur) {
           if (!$tooltip.$isShown)
             return;
+          scope.$emit(options.prefixClass + '.hide.before', $tooltip);
           $animate.leave(tipElement, function () {
+            scope.$emit(options.prefixClass + '.hide', $tooltip);
             tipElement = null;
           });
           $tooltip.$isShown = scope.$isShown = false;
-          scope.$$phase || scope.$digest();
+          scope.$$phase || scope.$root.$$phase || scope.$digest();
           // Unbind events
           if (options.keyboard) {
             tipElement.off('keyup', $tooltip.$onKeyUp);
