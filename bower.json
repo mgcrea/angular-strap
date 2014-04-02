@@ -33,6 +33,7 @@
   ],
   "dependencies": {
     "angular": "~1.2.10",
+    "angular-animate": "~1.2.10",
     "bootstrap": "~3.1.0"
   },
   "devDependencies": {
