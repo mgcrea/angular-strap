@@ -8,6 +8,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       animation: 'am-fade',
       backdropAnimation: 'am-fade',
       prefixClass: 'modal',
+      prefixEvent: 'modal',
       placement: 'top',
       template: 'modal/modal.tpl.html',
       contentTemplate: false,
@@ -116,7 +117,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $modal.show = function() {
 
-          scope.$emit(options.prefixClass + '.show.before', $modal);
+          scope.$emit(options.prefixEvent + '.show.before', $modal);
           var parent = options.container ? findElement(options.container) : null;
           var after = options.container ? null : options.element;
 
@@ -138,7 +139,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             $animate.enter(backdropElement, bodyElement, null, function() {});
           }
           $animate.enter(modalElement, parent, after, function() {
-            scope.$emit(options.prefixClass + '.show', $modal);
+            scope.$emit(options.prefixEvent + '.show', $modal);
           });
           scope.$isShown = true;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
@@ -166,9 +167,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $modal.hide = function() {
 
-          scope.$emit(options.prefixClass + '.hide.before', $modal);
+          scope.$emit(options.prefixEvent + '.hide.before', $modal);
           $animate.leave(modalElement, function() {
-            scope.$emit(options.prefixClass + '.hide', $modal);
+            scope.$emit(options.prefixEvent + '.hide', $modal);
             bodyElement.removeClass(options.prefixClass + '-open');
             if(options.animation) {
               bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
