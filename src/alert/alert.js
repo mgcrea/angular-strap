@@ -18,6 +18,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
       backdrop: false,
       keyboard: true,
       show: true,
+      dismissable: true,
       // Specific options
       duration: false,
       type: false
@@ -71,7 +72,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration'], function(key) {
+        angular.forEach(['template', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
