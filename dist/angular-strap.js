@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.4 - 2014-03-07
+ * @version v2.0.0-rc.4 - 2014-04-03
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -80,20 +80,20 @@
           $affix.init = function () {
             initialOffsetTop = dimensions.offset(element[0]).top + initialAffixTop;
             // Bind events
-            targetEl.on('scroll', this.checkPosition);
-            targetEl.on('click', this.checkPositionWithEventLoop);
+            targetEl.on('scroll', $affix.checkPosition);
+            targetEl.on('click', $affix.checkPositionWithEventLoop);
             // Both of these checkPosition() calls are necessary for the case where
             // the user hits refresh after scrolling to the bottom of the page.
-            this.checkPosition();
-            this.checkPositionWithEventLoop();
+            $affix.checkPosition();
+            $affix.checkPositionWithEventLoop();
           };
           $affix.destroy = function () {
             // Unbind events
-            targetEl.off('scroll', this.checkPosition);
-            targetEl.off('click', this.checkPositionWithEventLoop);
+            targetEl.off('scroll', $affix.checkPosition);
+            targetEl.off('click', $affix.checkPositionWithEventLoop);
           };
           $affix.checkPositionWithEventLoop = function () {
-            setTimeout(this.checkPosition, 1);
+            setTimeout($affix.checkPosition, 1);
           };
           $affix.checkPosition = function () {
             // if (!this.$element.is(':visible')) return
@@ -199,7 +199,7 @@
   // @BUG: following snippet won't compile correctly
   // @TODO: submit issue to core
   // '<span ng-if="title"><strong ng-bind="title"></strong>&nbsp;</span><span ng-bind-html="content"></span>' +
-  angular.module('mgcrea.ngStrap.alert', []).provider('$alert', function () {
+  angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal']).provider('$alert', function () {
     var defaults = this.defaults = {
         animation: 'am-fade',
         prefixClass: 'alert',
@@ -848,7 +848,14 @@
             // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
             if (angular.isUndefined(modelValue) || modelValue === null)
               return;
-            var date = angular.isDate(modelValue) ? modelValue : new Date(modelValue);
+            var date;
+            if (angular.isDate(modelValue)) {
+              date = modelValue;
+            } else if (options.dateType === 'string') {
+              date = dateParser.parse(modelValue);
+            } else {
+              date = new Date(modelValue);
+            }
             // Setup default value?
             // if(isNaN(date.getTime())) {
             //   var today = new Date();
@@ -1236,8 +1243,9 @@
                 'MMM': $locale.DATETIME_FORMATS.SHORTMONTH.join('|'),
                 'MM': '[0][1-9]|[1][012]',
                 'M': options.strict ? '[1-9]|[1][012]' : '[0][1-9]|[1][012]',
-                'yyyy': '(?:(?:[1]{1}[0-9]{1}[0-9]{1}[0-9]{1})|(?:[2]{1}[0-9]{3}))(?![[0-9]])',
-                'yy': '(?:(?:[0-9]{1}[0-9]{1}))(?![[0-9]])'
+                'yyyy': '[1]{1}[0-9]{3}|[2]{1}[0-9]{3}',
+                'yy': '[0-9]{2}',
+                'y': options.strict ? '[1-9]{1}[0-9]{1}' : '[0-9]{2}'
               };
             var setFnMap = {
                 'sss': proto.setMilliseconds,
@@ -1598,8 +1606,9 @@
       '$http',
       '$animate',
       '$timeout',
+      '$sce',
       'dimensions',
-      function ($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions) {
+      function ($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
         var forEach = angular.forEach;
         var trim = String.prototype.trim;
         var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
@@ -1608,7 +1617,7 @@
         function ModalFactory(config) {
           var $modal = {};
           // Common vars
-          var options = angular.extend({}, defaults, config);
+          var options = $modal.$options = angular.extend({}, defaults, config);
           $modal.$promise = fetchTemplate(options.template);
           var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
           if (!options.element && !options.container) {
@@ -1620,7 +1629,7 @@
             'content'
           ], function (key) {
             if (options[key])
-              scope[key] = options[key];
+              scope[key] = $sce.trustAsHtml(options[key]);
           });
           // Provide scope helpers
           scope.$hide = function () {
@@ -1685,6 +1694,7 @@
             scope.$destroy();
           };
           $modal.show = function () {
+            scope.$emit(options.prefixClass + '.show.before', $modal);
             var parent = options.container ? findElement(options.container) : null;
             var after = options.container ? null : options.element;
             // Fetch a cloned element linked from template
@@ -1704,9 +1714,10 @@
               });
             }
             $animate.enter(modalElement, parent, after, function () {
+              scope.$emit(options.prefixClass + '.show', $modal);
             });
             scope.$isShown = true;
-            scope.$$phase || scope.$digest();
+            scope.$$phase || scope.$root.$$phase || scope.$digest();
             // Focus once the enter-animation has started
             // Weird PhantomJS bug hack
             var el = modalElement[0];
@@ -1727,7 +1738,9 @@
             }
           };
           $modal.hide = function () {
+            scope.$emit(options.prefixClass + '.hide.before', $modal);
             $animate.leave(modalElement, function () {
+              scope.$emit(options.prefixClass + '.hide', $modal);
               bodyElement.removeClass(options.prefixClass + '-open');
               if (options.animation) {
                 bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
@@ -1738,7 +1751,7 @@
               });
             }
             scope.$isShown = false;
-            scope.$$phase || scope.$digest();
+            scope.$$phase || scope.$root.$$phase || scope.$digest();
             // Unbind events
             if (options.backdrop) {
               modalElement.off('click', hideOnBackdropClick);
@@ -2064,6 +2077,9 @@
             scrollEl.off('scroll', debouncedCheckPosition);
             unbindViewContentLoaded();
             unbindIncludeContentLoaded();
+            if (scrollId) {
+              delete spies[scrollId];
+            }
           };
           $scrollspy.checkPosition = function () {
             // Not ready yet
@@ -2289,10 +2305,7 @@
               parentScope.$digest();
             // Hide if single select
             if (!options.multiple) {
-              if (options.trigger === 'focus')
-                element[0].blur();
-              else if ($select.$isShown)
-                $select.hide();
+              $select.hide();
             }
             // Emit event
             scope.$emit('$select.select', value, index);
@@ -2348,12 +2361,12 @@
             }
           };
           $select.$onKeyDown = function (evt) {
-            if (!/(38|40|13)/.test(evt.keyCode))
+            if (!/(9|13|38|40)/.test(evt.keyCode))
               return;
             evt.preventDefault();
             evt.stopPropagation();
             // Select with enter
-            if (evt.keyCode === 13) {
+            if (evt.keyCode === 13 || evt.keyCode === 9) {
               return $select.select(scope.$activeIndex);
             }
             // Navigate with keyboard
@@ -2704,7 +2717,7 @@
               targetDate = new Date(1970, 0, 1, viewDate.hour + value * options.length, viewDate.minute);
               angular.extend(viewDate, { hour: targetDate.getHours() });
             } else if (index === 1) {
-              targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute + value * options.length * 5);
+              targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute + value * options.length * options.minuteStep);
               angular.extend(viewDate, { minute: targetDate.getMinutes() });
             }
             $timepicker.$build();
@@ -2927,7 +2940,7 @@
             } else if (options.timeType === 'iso') {
               return controller.$dateValue.toISOString();
             } else {
-              return controller.$dateValue;
+              return new Date(controller.$dateValue);
             }
           });
           // modelValue -> $formatters -> viewValue
@@ -2943,6 +2956,7 @@
           controller.$render = function () {
             // console.warn('$render("%s"): viewValue=%o', element.attr('ng-model'), controller.$viewValue);
             element.val(isNaN(controller.$dateValue.getTime()) ? '' : dateFilter(controller.$dateValue, options.timeFormat));
+            controller.$setViewValue(element.val());
           };
           // Garbage collection
           scope.$on('$destroy', function () {
@@ -3112,6 +3126,7 @@
             }, options.delay.show);
           };
           $tooltip.show = function () {
+            scope.$emit(options.prefixClass + '.show.before', $tooltip);
             var parent = options.container ? tipContainer : null;
             var after = options.container ? null : element;
             // Remove any existing tipElement
@@ -3133,9 +3148,10 @@
             if (options.type)
               tipElement.addClass(options.prefixClass + '-' + options.type);
             $animate.enter(tipElement, parent, after, function () {
+              scope.$emit(options.prefixClass + '.show', $tooltip);
             });
             $tooltip.$isShown = scope.$isShown = true;
-            scope.$$phase || scope.$digest();
+            scope.$$phase || scope.$root.$$phase || scope.$digest();
             $$animateReflow($tooltip.$applyPlacement);
             // Bind events
             if (options.keyboard) {
@@ -3162,11 +3178,13 @@
           $tooltip.hide = function (blur) {
             if (!$tooltip.$isShown)
               return;
+            scope.$emit(options.prefixClass + '.hide.before', $tooltip);
             $animate.leave(tipElement, function () {
+              scope.$emit(options.prefixClass + '.hide', $tooltip);
               tipElement = null;
             });
             $tooltip.$isShown = scope.$isShown = false;
-            scope.$$phase || scope.$digest();
+            scope.$$phase || scope.$root.$$phase || scope.$digest();
             // Unbind events
             if (options.keyboard) {
               tipElement.off('keyup', $tooltip.$onKeyUp);
@@ -3429,6 +3447,18 @@
             // minLength support
             return scope.$matches.length && angular.isString(controller.$viewValue) && controller.$viewValue.length >= options.minLength;
           };
+          $typeahead.$getIndex = function (value) {
+            var l = scope.$matches.length, i = l;
+            if (!l)
+              return;
+            for (i = l; i--;) {
+              if (scope.$matches[i].value === value)
+                break;
+            }
+            if (i < 0)
+              return;
+            return i;
+          };
           $typeahead.$onMouseDown = function (evt) {
             // Prevent blur on mousedown
             evt.preventDefault();
@@ -3521,6 +3551,7 @@
           var parsedOptions = $parseOptions(ngOptions);
           // Initialize typeahead
           var typeahead = $typeahead(element, options);
+          // if(!dump) var dump = console.error.bind(console);
           // Watch model for changes
           scope.$watch(attr.ngModel, function (newValue, oldValue) {
             parsedOptions.valuesFn(scope, controller).then(function (values) {
@@ -3528,8 +3559,19 @@
                 values = values.slice(0, limit);
               // if(matches.length === 1 && matches[0].value === newValue) return;
               typeahead.update(values);
+              // Queue a new rendering that will leverage collection loading
+              controller.$render();
             });
           });
+          // Model rendering in view
+          controller.$render = function () {
+            // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
+            if (controller.$isEmpty(controller.$viewValue))
+              return element.val('');
+            var index = typeahead.$getIndex(controller.$modelValue);
+            var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
+            element.val(selected.replace(/<(?:.|\n)*?>/gm, '').trim());
+          };
           // Garbage collection
           scope.$on('$destroy', function () {
             typeahead.destroy();

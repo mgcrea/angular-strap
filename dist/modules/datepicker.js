@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.4 - 2014-03-07
+ * @version v2.0.0-rc.4 - 2014-04-03
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -328,7 +328,14 @@ angular.module('mgcrea.ngStrap.datepicker', [
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
           if (angular.isUndefined(modelValue) || modelValue === null)
             return;
-          var date = angular.isDate(modelValue) ? modelValue : new Date(modelValue);
+          var date;
+          if (angular.isDate(modelValue)) {
+            date = modelValue;
+          } else if (options.dateType === 'string') {
+            date = dateParser.parse(modelValue);
+          } else {
+            date = new Date(modelValue);
+          }
           // Setup default value?
           // if(isNaN(date.getTime())) {
           //   var today = new Date();
