@@ -234,6 +234,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
 	          scope.$emit(options.prefixEvent + '.hide', $tooltip);
 	          tipElement = null;
 	        });
+	      } else {
+		      scope.$emit(options.prefixEvent + '.hide', $tooltip);
 	      }
           $tooltip.$isShown = scope.$isShown = false;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
