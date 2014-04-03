@@ -66,9 +66,9 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $datepicker.update = function(date) {
           // console.warn('$datepicker.update() newValue=%o', date);
-          if(angular.isDate(date) && !isNaN(date.getTime())) {
-            $datepicker.$date = date;
-            $picker.update.call($picker, date);
+          if (date === undefined || date === null || angular.isDate(date) && !isNaN(date.getTime())) {
+            $datepicker.$date = new Date();
+            $picker.update.call($picker, new Date());
           }
           // Build only if pristine
           $datepicker.$build(true);
@@ -264,7 +264,12 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
-          datepicker.update(controller.$dateValue);
+          if (newValue === undefined || newValue === null) {
+            element.val("");
+            datepicker.update(undefined);
+          } else {
+            datepicker.update(controller.$dateValue);
+          }
         }, true);
 
         var dateParser = $dateParser({format: options.dateFormat, lang: options.lang, strict: options.strictFormat});
@@ -372,7 +377,13 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             split: 7,
             steps: { month: 1 },
             update: function(date, force) {
-              if(!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
+              if (date === undefined || date == null) {
+                delete viewDate.year;
+                delete viewDate.month;
+                delete viewDate.date;
+                picker.$build();
+                picker.$updateSelected();
+              } else if(!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
                 angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$build();
               } else if(date.getDate() !== viewDate.date) {
