@@ -180,7 +180,7 @@ describe('modal', function() {
     });
 
     it('should namespace show/hide events using the prefixClass', function() {
-      var myModal = $modal(angular.extend({prefixClass: 'alert'}, templates['default'].scope.modal));
+      var myModal = $modal(angular.extend({prefixEvent: 'alert'}, templates['default'].scope.modal));
       var emit = spyOn(myModal.$scope, '$emit');
       scope.$digest();
       myModal.hide();
