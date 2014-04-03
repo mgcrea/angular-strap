@@ -179,7 +179,7 @@ describe('modal', function() {
       expect(emit).toHaveBeenCalledWith('modal.hide', myModal);
     });
 
-    it('should namespace show/hide events using the prefixClass', function() {
+    it('should namespace show/hide events using the prefixEvent', function() {
       var myModal = $modal(angular.extend({prefixEvent: 'alert'}, templates['default'].scope.modal));
       var emit = spyOn(myModal.$scope, '$emit');
       scope.$digest();

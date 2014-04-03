@@ -7,6 +7,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
     var defaults = this.defaults = {
       animation: 'am-fade',
       prefixClass: 'tooltip',
+      prefixEvent: 'tooltip',
       container: false,
       placement: 'top',
       template: 'tooltip/tooltip.tpl.html',
@@ -172,7 +173,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
 
         $tooltip.show = function() {
 
-          scope.$emit(options.prefixClass + '.show.before', $tooltip);
+          scope.$emit(options.prefixEvent + '.show.before', $tooltip);
           var parent = options.container ? tipContainer : null;
           var after = options.container ? null : element;
 
@@ -190,7 +191,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           if(options.type) tipElement.addClass(options.prefixClass + '-' + options.type);
 
           $animate.enter(tipElement, parent, after, function() {
-            scope.$emit(options.prefixClass + '.show', $tooltip);
+            scope.$emit(options.prefixEvent + '.show', $tooltip);
           });
           $tooltip.$isShown = scope.$isShown = true;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
@@ -226,11 +227,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
         $tooltip.hide = function(blur) {
 
           if(!$tooltip.$isShown) return;
-          scope.$emit(options.prefixClass + '.hide.before', $tooltip);
+          scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
 
           if(tipElement !== null) {
 	        $animate.leave(tipElement, function() {
-	          scope.$emit(options.prefixClass + '.hide', $tooltip);
+	          scope.$emit(options.prefixEvent + '.hide', $tooltip);
 	          tipElement = null;
 	        });
 	      }
