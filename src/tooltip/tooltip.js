@@ -176,8 +176,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           var parent = options.container ? tipContainer : null;
           var after = options.container ? null : element;
 
-          // Remove any existing tipElement
-          if(tipElement) tipElement.remove();
+          // Hide any existing tipElement
+          if(tipElement) tipElement[0].style.display = 'none';
           // Fetch a cloned element linked from template
           tipElement = $tooltip.$element = tipLinker(scope, function(clonedElement, scope) {});
 
@@ -228,7 +228,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           if(!$tooltip.$isShown) return;
           scope.$emit(options.prefixClass + '.hide.before', $tooltip);
 
-          $animate.leave(tipElement, function() {
+          tipElement && $animate.leave(tipElement, function() {
             scope.$emit(options.prefixClass + '.hide', $tooltip);
             tipElement = null;
           });
