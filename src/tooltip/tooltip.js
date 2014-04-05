@@ -194,7 +194,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           });
           $tooltip.$isShown = scope.$isShown = true;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
-          $$rAF($tooltip.$applyPlacement);
+          $$rAF($tooltip.$applyPlacement); // var a = bodyEl.offsetWidth + 1; ?
 
           // Bind events
           if(options.keyboard) {

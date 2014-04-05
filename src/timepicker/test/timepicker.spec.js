@@ -334,8 +334,9 @@ describe('timepicker', function() {
         var elm = compileDirective('default');
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         elm[0].focus();
-        $animate.triggerReflow();
+        $animate.triggerCallbacks();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+        // dump(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text());
         //@TODO fixme
         triggerKeyDown(elm, 38);
       });

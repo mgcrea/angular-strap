@@ -2,15 +2,15 @@
 
 describe('bs-radio', function () {
 
-  var $compile, $q, $animate, scope, sandboxEl;
+  var $compile, $q, $$rAF, scope, sandboxEl;
 
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('mgcrea.ngStrap.button'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$q_, _$animate_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$q_, _$$rAF_) {
     scope = _$rootScope_;
-    $animate = _$animate_;
+    $$rAF = _$$rAF_;
     $compile = _$compile_;
     $q = _$q_;
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo('body');
@@ -75,7 +75,7 @@ describe('bs-radio', function () {
     var element = $(template.element).appendTo(sandboxEl);
     element = $compile(element)(scope);
     scope.$digest();
-    $animate.triggerReflow();
+    $$rAF.flush();
     return jQuery(element[0]);
   }
 
@@ -92,7 +92,7 @@ describe('bs-radio', function () {
       expect(secondChild.children('input').is(':checked')).toBeTruthy();
       scope.radio.value = 'left';
       scope.$digest();
-      $animate.triggerReflow();
+      $$rAF.flush();
       expect(firstChild).toHaveClass('active');
       expect(firstChild.children('input').is(':checked')).toBeTruthy();
       expect(secondChild).not.toHaveClass('active');
@@ -108,7 +108,7 @@ describe('bs-radio', function () {
       expect(secondChild.children('input').is(':checked')).toBeTruthy();
       scope.radio.value = true;
       scope.$digest();
-      $animate.triggerReflow();
+      $$rAF.flush();
       expect(firstChild).toHaveClass('active');
       expect(firstChild.children('input').is(':checked')).toBeTruthy();
       expect(secondChild).not.toHaveClass('active');
@@ -124,7 +124,7 @@ describe('bs-radio', function () {
       expect(secondChild.children('input').is(':checked')).toBeFalsy();
       scope.radio.value = 0;
       scope.$digest();
-      $animate.triggerReflow();
+      $$rAF.flush();
       expect(firstChild).not.toHaveClass('active');
       expect(firstChild.children('input').is(':checked')).toBeFalsy();
       expect(secondChild).toHaveClass('active');
@@ -140,7 +140,7 @@ describe('bs-radio', function () {
       expect(secondChild.children('input').is(':checked')).toBeTruthy();
       scope.radio.value = 'yes';
       scope.$digest();
-      $animate.triggerReflow();
+      $$rAF.flush();
       expect(firstChild).toHaveClass('active');
       expect(firstChild.children('input').is(':checked')).toBeTruthy();
       expect(secondChild).not.toHaveClass('active');
@@ -171,7 +171,7 @@ describe('bs-radio', function () {
       expect(secondChild).not.toHaveClass('active');
       scope.radio.value = 'right';
       scope.$digest();
-      $animate.triggerReflow();
+      $$rAF.flush();
       expect(firstChild).not.toHaveClass('active');
       expect(secondChild).toHaveClass('active');
     });
@@ -183,7 +183,7 @@ describe('bs-radio', function () {
       expect(secondChild).not.toHaveClass('active');
       scope.radio.value = 0;
       scope.$digest();
-      $animate.triggerReflow();
+      $$rAF.flush();
       expect(firstChild).not.toHaveClass('active');
       expect(secondChild).toHaveClass('active');
     });
