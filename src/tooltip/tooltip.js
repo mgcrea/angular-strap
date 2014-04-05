@@ -20,7 +20,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
       delay: 0
     };
 
-    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions, $$animateReflow) {
+    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, dimensions, $$rAF) {
 
       var trim = String.prototype.trim;
       var isTouch = 'createTouch' in $window.document;
@@ -194,7 +194,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           });
           $tooltip.$isShown = scope.$isShown = true;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
-          $$animateReflow($tooltip.$applyPlacement);
+          $$rAF($tooltip.$applyPlacement);
 
           // Bind events
           if(options.keyboard) {
@@ -386,7 +386,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
 
   })
 
-  .directive('bsTooltip', function($window, $location, $sce, $tooltip, $$animateReflow) {
+  .directive('bsTooltip', function($window, $location, $sce, $tooltip, $$rAF) {
 
     return {
       restrict: 'EAC',
@@ -403,7 +403,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
         angular.forEach(['title'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
             scope[key] = $sce.trustAsHtml(newValue);
-            angular.isDefined(oldValue) && $$animateReflow(function() {
+            angular.isDefined(oldValue) && $$rAF(function() {
               tooltip && tooltip.$applyPlacement();
             });
           });
@@ -416,7 +416,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           } else {
             scope.content = newValue;
           }
-          angular.isDefined(oldValue) && $$animateReflow(function() {
+          angular.isDefined(oldValue) && $$rAF(function() {
             tooltip && tooltip.$applyPlacement();
           });
         }, true);
