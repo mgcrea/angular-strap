@@ -113,7 +113,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           evt.stopPropagation();
 
           // Select with enter
-          if(evt.keyCode === 13) {
+          if(evt.keyCode === 13 && scope.$matches.length) {
             return $typeahead.select(scope.$activeIndex);
           }
 

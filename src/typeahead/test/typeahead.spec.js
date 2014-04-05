@@ -72,6 +72,12 @@ describe('typeahead', function () {
     return jQuery(element[0]);
   }
 
+  function triggerKeyDown(elm, keyCode) {
+    var evt = $.Event('keydown');
+    evt.which = evt.keyCode = keyCode;
+    angular.element(elm[0]).triggerHandler(evt);
+  }
+
   // Tests
 
   describe('with default template', function () {
@@ -124,6 +130,13 @@ describe('typeahead', function () {
       angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
       expect(scope.selectedState).toBe(scope.states[0]);
     });
+
+    // @TODO
+    // it('should correctly select a value', function(done) {
+    //   var elm = compileDirective('default');
+    //   angular.element(elm[0]).triggerHandler('focus');
+    //   elm.val('notintthelist');
+    // });
 
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
