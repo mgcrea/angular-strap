@@ -252,7 +252,7 @@ gulp.task('karma:server', ['templates:test'], function() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress'],
     autoWatch: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
