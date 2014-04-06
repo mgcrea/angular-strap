@@ -217,6 +217,8 @@ describe('datepicker', function() {
       expect(elm.val()).toBe('');
       expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(7 * 6);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 6);
+      elm.val('0');
+      angular.element(elm[0]).triggerHandler('change');
     });
 
     it('should correctly support undefined values', function() {
@@ -225,6 +227,8 @@ describe('datepicker', function() {
       expect(elm.val()).toBe('');
       expect(sandboxEl.find('.dropdown-menu tbody td').length).toBe(7 * 6);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe(7 * 6);
+      elm.val('0');
+      angular.element(elm[0]).triggerHandler('change');
     });
 
     it('should correctly support invalid values', function() {
