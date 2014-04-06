@@ -18,6 +18,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
       useNative: false,
       dateType: 'date',
       dateFormat: 'shortDate',
+      dayFormat: 'dd',
       strictFormat: false,
       autoclose: false,
       minDate: -Infinity,
@@ -236,7 +237,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'strictFormat', 'startWeek', 'useNative', 'lang', 'startView', 'minView'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'useNative', 'lang', 'startView', 'minView'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -379,7 +380,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         var timezoneOffset = startDate.getTimezoneOffset() * 6e4;
 
         var views = [{
-            format: 'dd',
+            format: options.dayFormat,
             split: 7,
             steps: { month: 1 },
             update: function(date, force) {
