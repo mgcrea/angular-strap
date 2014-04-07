@@ -19,7 +19,8 @@
   },
   "licenses": [
     {
-      "type": "MIT"
+      "type": "MIT",
+      "url": "https://github.com/mgcrea/angular-strap/blob/master/LICENSE.md"
     }
   ],
   "dependencies": {},
@@ -48,9 +49,9 @@
     "karma-phantomjs-launcher": "^0.1.4"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "gulp test"
   }
 }
