@@ -253,6 +253,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             if(newValue === 'today') {
               var today = new Date();
               datepicker.$options[key] = +new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), 0, 0, 0, (key === 'minDate' ? 0 : -1));
+            } else if(angular.isString(newValue) && newValue.match(/^".+"$/)) { // Support {{ dateObj }}
+              datepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
             } else if(isNumeric(newValue)) {
               datepicker.$options[key] = +new Date(parseInt(newValue, 10));
             } else {
@@ -283,7 +285,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             controller.$setValidity('date', false);
             return;
           } else {
-            var isValid = parsedDate.getTime() >= options.minDate &&  parsedDate.getTime() <= options.maxDate;
+            var isValid = (isNaN(datepicker.$options.minDate) || parsedDate.getTime() >= datepicker.$options.minDate) &&
+              (isNaN(datepicker.$options.maxDate) || parsedDate.getTime() <= datepicker.$options.maxDate);
             controller.$setValidity('date', isValid);
             // Only update the model when we have a valid date
             if(isValid) controller.$dateValue = parsedDate;

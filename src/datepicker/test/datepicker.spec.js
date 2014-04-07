@@ -77,13 +77,29 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date()},
       element: '<input type="text" ng-model="selectedDate" data-min-date="today" bs-datepicker>'
     },
-    'options-maxDate-today': {
-      scope: {selectedDate: new Date()},
-      element: '<input type="text" ng-model="selectedDate" data-max-date="today" bs-datepicker>'
+    'options-minDate-date': {
+      scope: {selectedDate: new Date(1986, 1, 22), minDate: new Date(1986, 1, 20)},
+      element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
+    },
+    'options-minDate-number': {
+      scope: {selectedDate: new Date(1986, 1, 22)},
+      element: '<input type="text" ng-model="selectedDate" data-min-date="509238000000" bs-datepicker>'
     },
     'options-maxDate': {
       scope: {selectedDate: new Date(1986, 1, 22), maxDate: '02/24/86'},
       element: '<input type="text" ng-model="selectedDate" data-max-date="{{maxDate}}" bs-datepicker>'
+    },
+    'options-maxDate-today': {
+      scope: {selectedDate: new Date()},
+      element: '<input type="text" ng-model="selectedDate" data-max-date="today" bs-datepicker>'
+    },
+    'options-maxDate-date': {
+      scope: {selectedDate: new Date(1986, 1, 22), maxDate: new Date(1986, 1, 24)},
+      element: '<input type="text" ng-model="selectedDate" data-max-date="{{maxDate}}" bs-datepicker>'
+    },
+    'options-maxDate-number': {
+      scope: {selectedDate: new Date(1986, 1, 22)},
+      element: '<input type="text" ng-model="selectedDate" data-max-date="509583600000" bs-datepicker>'
     },
     'options-startWeek': {
       scope: {selectedDate: new Date(2014, 1, 22), startWeek: 1},
@@ -461,6 +477,20 @@ describe('datepicker', function() {
         expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').is(':disabled')).toBeFalsy();
       });
 
+      it('should support number as minDate', function() {
+        var elm = compileDirective('options-minDate-number');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(19)').is(':disabled')).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+      });
+
+      it('should support Date object as minDate', function() {
+        var elm = compileDirective('options-minDate-date');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(19)').is(':disabled')).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+      });
+
     });
 
     describe('maxDate', function() {
@@ -483,6 +513,20 @@ describe('datepicker', function() {
         expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
         expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').length).toBe(1);
         expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').is(':disabled')).toBeFalsy();
+      });
+
+      it('should support number as maxDate', function() {
+        var elm = compileDirective('options-maxDate-number');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
+      });
+
+      it('should support Date object as maxDate', function() {
+        var elm = compileDirective('options-maxDate-date');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
       });
 
     });
