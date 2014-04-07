@@ -71,7 +71,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
             var templateEl = angular.element(template);
             return fetchTemplate(options.contentTemplate)
             .then(function(contentTemplate) {
-              findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
+              var contentEl = findElement('[ng-bind="content"]', templateEl[0]);
+              if(!contentEl.length) contentEl = findElement('[ng-bind="title"]', templateEl[0]);
+              contentEl.removeAttr('ng-bind').html(contentTemplate);
               return templateEl[0].outerHTML;
             });
           });
