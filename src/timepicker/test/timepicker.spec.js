@@ -376,9 +376,9 @@ describe('timepicker', function() {
         expect(elm.val()).toBe('');
         expect(scope.selectedTime).toBe(null);
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
-        expect(elm.val()).toBe('09:00');
-        expect(scope.selectedTime).toBe('09:00');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:eq(0)')).triggerHandler('click');
+        expect(elm.val()).toBeTruthy();
+        expect(scope.selectedTime).toBeTruthy();
       });
 
       it('should support a number timeType', function() {
@@ -398,11 +398,10 @@ describe('timepicker', function() {
       it('should support a dynamic minTime', function() {
         var elm = compileDirective('options-minTime');
         angular.element(elm[0]).triggerHandler('focus');
-        // @TODO fixme
-        // expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeTruthy();
-        // scope.minTime = '08:30 AM';
-        // scope.$digest();
-        // expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeTruthy();
+        scope.minTime = '08:30 AM';
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeFalsy();
       });
 
       it('should support now as minTime', function() {
@@ -420,11 +419,10 @@ describe('timepicker', function() {
       it('should support a dynamic maxTime', function() {
         var elm = compileDirective('options-maxTime');
         angular.element(elm[0]).triggerHandler('focus');
-        // @TODO fixme
-        // expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeTruthy();
-        // scope.maxTime = '10:30 AM';
-        // scope.$digest();
-        // expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeFalsy();
+        scope.maxTime = '10:30 AM';
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeTruthy();
       });
 
       it('should support now as maxTime', function() {
