@@ -407,7 +407,7 @@ module.exports = function (grunt) {
           flatten: true,
           cwd: '<%= yo.src %>',
           src: '{,*/}/*.tpl.html',
-          dest: '.tmp/ngtemplates',
+          dest: '.tmp/templates',
           ext: '.tpl.js'
         }]
       },
@@ -434,13 +434,13 @@ module.exports = function (grunt) {
         files: [{
           cwd: '<%= yo.src %>',
           src: '{,*/}docs/*.html',
-          dest: '.tmp/ngtemplates/scripts/src-docs.js'
+          dest: '.tmp/templates/scripts/src-docs.js'
         },
         {
           cwd: '<%= yo.docs %>',
           // src: 'views/{,*/}*.html',
           src: 'views/{aside,sidebar}.html',
-          dest: '.tmp/ngtemplates/scripts/docs-views.js'
+          dest: '.tmp/templates/scripts/docs-views.js'
         }
         ]
       }
