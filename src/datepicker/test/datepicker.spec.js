@@ -82,8 +82,8 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
     },
     'options-minDate-number': {
-      scope: {selectedDate: new Date(1986, 1, 22)},
-      element: '<input type="text" ng-model="selectedDate" data-min-date="509238000000" bs-datepicker>'
+      scope: {selectedDate: new Date(1986, 1, 22), minDate: +new Date(1986, 1, 20)},
+      element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
     },
     'options-maxDate': {
       scope: {selectedDate: new Date(1986, 1, 22), maxDate: '02/24/86'},
@@ -98,8 +98,8 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" data-max-date="{{maxDate}}" bs-datepicker>'
     },
     'options-maxDate-number': {
-      scope: {selectedDate: new Date(1986, 1, 22)},
-      element: '<input type="text" ng-model="selectedDate" data-max-date="509583600000" bs-datepicker>'
+      scope: {selectedDate: new Date(1986, 1, 22), maxDate: +new Date(1986, 1, 24)},
+      element: '<input type="text" ng-model="selectedDate" data-max-date="{{maxDate}}" bs-datepicker>'
     },
     'options-startWeek': {
       scope: {selectedDate: new Date(2014, 1, 22), startWeek: 1},
