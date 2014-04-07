@@ -69,6 +69,10 @@ describe('timepicker', function() {
       scope: {selectedTime: '10:30'},
       element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-time-format="HH:mm" bs-timepicker>'
     },
+    'options-timeType-string-null': {
+      scope: {selectedTime: null},
+      element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-time-format="HH:mm" bs-timepicker>'
+    },
     'options-timeType-number': {
       scope: {selectedTime: new Date(1970, 0, 1, 10, 30).getTime()},
       element: '<input type="text" ng-model="selectedTime" data-time-type="number" data-time-format="HH:mm" bs-timepicker>'
@@ -365,6 +369,16 @@ describe('timepicker', function() {
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
         expect(elm.val()).toBe('09:30');
         expect(scope.selectedTime).toBe('09:30');
+      });
+
+      it('should support a string timeType with a null value', function() {
+        var elm = compileDirective('options-timeType-string-null');
+        expect(elm.val()).toBe('');
+        expect(scope.selectedTime).toBe(null);
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
+        expect(elm.val()).toBe('09:00');
+        expect(scope.selectedTime).toBe('09:00');
       });
 
       it('should support a number timeType', function() {
