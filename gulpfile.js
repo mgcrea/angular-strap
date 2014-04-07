@@ -34,19 +34,19 @@ var banner = gutil.template('/**\n' +
 //
 var clean = require('gulp-clean');
 gulp.task('clean:dev', function() {
-  gulp.src(['.tmp/*'], {read: false})
+  return gulp.src(['.tmp/*'], {read: false})
     .pipe(clean());
 });
 gulp.task('clean:test', function() {
-  gulp.src(['test/.tmp/*'], {read: false})
+  return gulp.src(['test/.tmp/*'], {read: false})
     .pipe(clean());
 });
 gulp.task('clean:dist', function() {
-  gulp.src(['.tmp/*', paths.dist + '/*'], {read: false})
+  return gulp.src(['.tmp/*', paths.dist + '/*'], {read: false})
     .pipe(clean());
 });
 gulp.task('clean:pages', function() {
-  gulp.src([paths.pages + '/*', '!' + paths.pages + '/.git'], {read: false})
+  return gulp.src([paths.pages + '/*', '!' + paths.pages + '/.git'], {read: false})
     .pipe(clean());
 });
 
@@ -163,7 +163,7 @@ gulp.task('templates:dist', function() {
 });
 gulp.task('templates:test', function() {
   // Build individual modules
-  gulp.src(paths.templates, {cwd: paths.src})
+  return gulp.src(paths.templates, {cwd: paths.src})
     .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
     .pipe(ngtemplate({module: function(src) { return 'mgcrea.ngStrap.' + src.split('/')[0]; }}))
     .pipe(ngmin())
