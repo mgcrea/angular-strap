@@ -170,6 +170,16 @@ describe('datepicker', function() {
       expect(elm.val()).toBe((today.getMonth() + 1) + '/15/' + (today.getFullYear() + '').substr(2));
     });
 
+    it('should correctly be cleared when model is cleared', function() {
+      var elm = compileDirective('default');
+      scope.selectedDate = null;
+      scope.$digest();
+      expect(elm.val()).toBe('');
+      scope.selectedDate = new Date(1986, 1, 22);
+      scope.$digest();
+      expect(elm.val()).toBe('2/22/86');
+    });
+
     it('should correctly navigate to upper month view', function() {
       var elm = compileDirective('default');
       var date = today.getDate(), month = today.getMonth();

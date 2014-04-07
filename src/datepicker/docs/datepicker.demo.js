@@ -19,4 +19,8 @@ angular.module('mgcrea.ngStrapDocs')
     return Object.prototype.toString.call($scope[key]);
   };
 
+  $scope.clearDates = function() {
+    $scope.selectedDate = null;
+  };
+
 });
