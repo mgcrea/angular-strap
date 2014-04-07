@@ -1,4 +1,4 @@
-# [AngularStrap](http://mgcrea.github.io/angular-strap) [![Build Status](https://secure.travis-ci.org/mgcrea/angular-strap.png?branch=master)](http://travis-ci.org/#!/mgcrea/angular-strap) [![Dependency Status](https://gemnasium.com/mgcrea/angular-strap.png)](https://gemnasium.com/mgcrea/angular-strap) [![Coverage Status](https://coveralls.io/repos/mgcrea/angular-strap/badge.png?branch=master)](https://coveralls.io/r/mgcrea/angular-strap?branch=master)
+# [AngularStrap](http://mgcrea.github.io/angular-strap) [![Build Status](https://secure.travis-ci.org/mgcrea/angular-strap.png?branch=master)](http://travis-ci.org/#!/mgcrea/angular-strap) [![Dependency Status](https://david-dm.org/mgcrea/angular-strap#dev-badge-embed)](https://david-dm.org/mgcrea/angular-strap#info=devDependencies) [![Coverage Status](https://coveralls.io/repos/mgcrea/angular-strap/badge.png?branch=master)](https://coveralls.io/r/mgcrea/angular-strap?branch=master)
 
 [![Banner](http://mgcrea.github.io/angular-strap/images/6af654d7.snippet.png)](http://mgcrea.github.io/angular-strap)
 
