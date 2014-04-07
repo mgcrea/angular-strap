@@ -19,6 +19,8 @@ While it worked pretty well, it required a big javascript payload: both jQuery &
 
 ## Quick start
 
++ Include the required libraries:
+
 >
 ``` html
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
@@ -26,7 +28,7 @@ While it worked pretty well, it required a big javascript payload: both jQuery &
 <script src="//rawgithub.com/mgcrea/angular-strap/master/dist/angular-strap.tpl.min.js"></script>
 ```
 
-+ Inject the `ngStrap` module into your app
++ Inject the `ngStrap` module into your app:
 
 >
 ``` javascript
