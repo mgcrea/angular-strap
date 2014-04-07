@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.4 - 2014-03-07
+ * @version v2.0.0 - 2014-04-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -89,7 +89,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
         };
         $timepicker.select = function (date, index, keep) {
           // console.warn('$timepicker.select', date, scope.$mode);
-          if (isNaN(controller.$dateValue.getTime()))
+          if (!controller.$dateValue || isNaN(controller.$dateValue.getTime()))
             controller.$dateValue = new Date(1970, 0, 1);
           if (!angular.isDate(date))
             date = new Date(date);
@@ -168,7 +168,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
             targetDate = new Date(1970, 0, 1, viewDate.hour + value * options.length, viewDate.minute);
             angular.extend(viewDate, { hour: targetDate.getHours() });
           } else if (index === 1) {
-            targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute + value * options.length * 5);
+            targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute + value * options.length * options.minuteStep);
             angular.extend(viewDate, { minute: targetDate.getMinutes() });
           }
           $timepicker.$build();
@@ -329,7 +329,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
           'timeType',
           'timeFormat',
           'useNative',
-          'lang'
+          'hourStep',
+          'minuteStep'
         ], function (key) {
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
@@ -391,14 +392,23 @@ angular.module('mgcrea.ngStrap.timepicker', [
           } else if (options.timeType === 'iso') {
             return controller.$dateValue.toISOString();
           } else {
-            return controller.$dateValue;
+            return new Date(controller.$dateValue);
           }
         });
         // modelValue -> $formatters -> viewValue
         controller.$formatters.push(function (modelValue) {
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
-          var date = options.timeType === 'string' ? dateParser.parse(modelValue, controller.$dateValue) : new Date(modelValue);
-          // Setup default value: next hour?
+          var date;
+          if (angular.isUndefined(modelValue) || modelValue === null) {
+            date = NaN;
+          } else if (angular.isDate(modelValue)) {
+            date = modelValue;
+          } else if (options.timeType === 'string') {
+            date = dateParser.parse(modelValue);
+          } else {
+            date = new Date(modelValue);
+          }
+          // Setup default value?
           // if(isNaN(date.getTime())) date = new Date(new Date().setMinutes(0) + 36e5);
           controller.$dateValue = date;
           return controller.$dateValue;
@@ -406,7 +416,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
         // viewValue -> element
         controller.$render = function () {
           // console.warn('$render("%s"): viewValue=%o', element.attr('ng-model'), controller.$viewValue);
-          element.val(isNaN(controller.$dateValue.getTime()) ? '' : dateFilter(controller.$dateValue, options.timeFormat));
+          element.val(!controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : dateFilter(controller.$dateValue, options.timeFormat));
         };
         // Garbage collection
         scope.$on('$destroy', function () {

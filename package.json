@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Twitter Bootstrap",
-  "version": "2.0.0-rc.4",
+  "version": "2.0.0",
   "keywords": [
     "angular",
     "bootstrap"
@@ -26,12 +26,12 @@
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.6.0",
-    "gulp-autoprefixer": "0.0.6",
+    "gulp-autoprefixer": "0.0.7",
     "gulp-changed": "^0.3.0",
     "gulp-clean": "^0.2.4",
     "gulp-cleancss": "^0.2.1",
     "gulp-concat-util": "^0.2.2",
-    "gulp-connect": "^2.0.2",
+    "gulp-connect": "^2.0.4",
     "gulp-htmlmin": "^0.1.2",
     "gulp-less": "^1.2.3",
     "gulp-nginclude": "^0.4.3",
@@ -43,7 +43,7 @@
     "gulp-usemin": "^0.3.3",
     "gulp-util": "^2.2.14",
     "gulp-watch": "^0.5.3",
-    "karma": "^0.12.3",
+    "karma": "^0.12.4",
     "karma-coverage": "^0.2.1",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4"

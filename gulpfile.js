@@ -121,7 +121,7 @@ gulp.task('scripts:dist', function() {
     .pipe(concat.header(banner))
     .pipe(gulp.dest('dist/modules'))
     .pipe(rename(function(path) { path.extname = '.min.js'; }))
-    .pipe(uglify({outSourceMap: false}))
+    .pipe(uglify({outSourceMap: true}))
     .pipe(concat.header(banner))
     .pipe(gulp.dest('dist/modules'));
 
@@ -140,8 +140,8 @@ gulp.task('templates:dist', function() {
     .pipe(ngtemplate({module: function(src) { return 'mgcrea.ngStrap.' + src.split('/')[0]; }}))
     .pipe(ngmin())
     .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + this.path + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
-    .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n'))
-    .pipe(concat.footer('\n})(window, document);\n'))
+    .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
+    .pipe(concat.footer('\n\n})(window, document);\n'))
     .pipe(concat.header(banner))
     .pipe(gulp.dest('dist'))
     .pipe(rename(function(path) { path.extname = '.min.js'; }))

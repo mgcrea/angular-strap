@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.4 - 2014-03-07
+ * @version v2.0.0 - 2014-04-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -228,7 +228,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
   function ($window, $parse, $q, $locale, dateFilter, $datepicker, $dateParser, $timeout) {
     var defaults = $datepicker.defaults;
     var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
-    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+    var isNumeric = function (n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    };
     return {
       restrict: 'EAC',
       require: 'ngModel',
@@ -277,11 +279,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
               var today = new Date();
               datepicker.$options[key] = +new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), 0, 0, 0, key === 'minDate' ? 0 : -1);
             } else if (angular.isString(newValue) && newValue.match(/^".+"$/)) {
+              // Support {{ dateObj }}
               datepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
+            } else if (isNumeric(newValue)) {
+              datepicker.$options[key] = +new Date(parseInt(newValue, 10));
             } else {
               datepicker.$options[key] = +new Date(newValue);
             }
-            // console.warn(angular.isDate(newValue), newValue);
             // Build only if dirty
             !isNaN(datepicker.$options[key]) && datepicker.$build(false);
           });
@@ -306,8 +310,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
           var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
           if (!parsedDate || isNaN(parsedDate.getTime())) {
             controller.$setValidity('date', false);
+            return;
           } else {
-            var isValid = parsedDate.getTime() >= options.minDate && parsedDate.getTime() <= options.maxDate;
+            var isValid = (isNaN(datepicker.$options.minDate) || parsedDate.getTime() >= datepicker.$options.minDate) && (isNaN(datepicker.$options.maxDate) || parsedDate.getTime() <= datepicker.$options.maxDate);
             controller.$setValidity('date', isValid);
             // Only update the model when we have a valid date
             if (isValid)
@@ -326,9 +331,16 @@ angular.module('mgcrea.ngStrap.datepicker', [
         // modelValue -> $formatters -> viewValue
         controller.$formatters.push(function (modelValue) {
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
-          if (angular.isUndefined(modelValue) || modelValue === null)
-            return;
-          var date = angular.isDate(modelValue) ? modelValue : new Date(modelValue);
+          var date;
+          if (angular.isUndefined(modelValue) || modelValue === null) {
+            date = NaN;
+          } else if (angular.isDate(modelValue)) {
+            date = modelValue;
+          } else if (options.dateType === 'string') {
+            date = dateParser.parse(modelValue);
+          } else {
+            date = new Date(modelValue);
+          }
           // Setup default value?
           // if(isNaN(date.getTime())) {
           //   var today = new Date();
@@ -363,6 +375,10 @@ angular.module('mgcrea.ngStrap.datepicker', [
       arrays.push(arr.splice(0, size));
     }
     return arrays;
+  }
+  // Modulus operator
+  function mod(n, m) {
+    return (n % m + m) % m;
   }
   this.$get = [
     '$locale',
@@ -401,8 +417,11 @@ angular.module('mgcrea.ngStrap.datepicker', [
                 }
               },
               build: function () {
-                var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
-                var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() - options.startWeek) * 86400000);
+                var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1), firstDayOfMonthOffset = firstDayOfMonth.getTimezoneOffset();
+                var firstDate = new Date(+firstDayOfMonth - mod(firstDayOfMonth.getDay() - options.startWeek, 6) * 86400000), firstDateOffset = firstDate.getTimezoneOffset();
+                // Handle daylight time switch
+                if (firstDateOffset !== firstDayOfMonthOffset)
+                  firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60000);
                 var days = [], day;
                 for (var i = 0; i < 42; i++) {
                   // < 7 * 6
