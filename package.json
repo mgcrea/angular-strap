@@ -30,6 +30,7 @@
     "gulp-autoprefixer": "0.0.6",
     "gulp-changed": "^0.3.0",
     "gulp-clean": "^0.2.4",
+    "gulp-cleancss": "^0.2.1",
     "gulp-connect": "^2.0.2",
     "gulp-htmlmin": "^0.1.2",
     "gulp-less": "^1.2.3",
