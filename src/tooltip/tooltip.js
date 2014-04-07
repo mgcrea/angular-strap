@@ -415,7 +415,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['ngAnimate', 'mgcrea.ngStrap.helpers.d
           if(angular.isObject(newValue)) {
             angular.extend(scope, newValue);
           } else {
-            scope.content = newValue;
+            scope.title = newValue;
           }
           angular.isDefined(oldValue) && $$rAF(function() {
             tooltip && tooltip.$applyPlacement();
