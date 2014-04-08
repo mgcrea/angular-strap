@@ -96,19 +96,19 @@ angular.module('mgcrea.ngStrap.typeahead').run([
   }
 ]);
 
-// Source: alert.tpl.demo.js
-angular.module('mgcrea.ngStrap.alert').run([
-  '$templateCache',
-  function ($templateCache) {
-    $templateCache.put('alert/docs/alert.tpl.demo.html', '<div class="alert" tabindex="-1" ng-class="[type ? \'alert-\' + type : null]"><button type="button" class="close" ng-click="$hide()">&times;</button> <strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span></div>');
-  }
-]);
-
 // Source: aside.tpl.demo.js
 angular.module('mgcrea.ngStrap.aside').run([
   '$templateCache',
   function ($templateCache) {
     $templateCache.put('aside/docs/aside.tpl.demo.html', '<div class="aside" tabindex="-1" role="dialog"><div class="aside-dialog"><div class="aside-content"><div class="aside-header" ng-show="title"><button type="button" class="close" ng-click="$hide()">&times;</button><h4 class="aside-title" ng-bind-html="title"></h4></div><div class="aside-body" ng-show="content"><h4>Text in aside</h4><p ng-bind-html="content"></p><pre>2 + 3 = {{ 2 + 3 }}</pre><h4>Popover in aside</h4><p>This <button type="button" class="btn btn-default popover-test" data-title="A Title" data-content="And here\'s some amazing content. It\'s very engaging. right?" bs-popover="">button</button> should trigger a popover on click.</p><h4>Tooltips in aside</h4><p><a href="#" class="tooltip-test" data-title="Tooltip" bs-tooltip="">This link</a> and <a href="#" class="tooltip-test" data-title="Tooltip" bs-tooltip="">that link</a> should have tooltips on hover.</p></div><div class="aside-footer"><button type="button" class="btn btn-default" ng-click="$hide()">Close</button> <button type="button" class="btn btn-primary" ng-click="$hide()">Save changes</button></div></div></div></div>');
+  }
+]);
+
+// Source: alert.tpl.demo.js
+angular.module('mgcrea.ngStrap.alert').run([
+  '$templateCache',
+  function ($templateCache) {
+    $templateCache.put('alert/docs/alert.tpl.demo.html', '<div class="alert" tabindex="-1" ng-class="[type ? \'alert-\' + type : null]"><button type="button" class="close" ng-click="$hide()">&times;</button> <strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span></div>');
   }
 ]);
 
