@@ -12,3 +12,6 @@ before_script:
   - gulp --version
   - bower --version
   - date --rfc-2822
+
+script:
+  - gulp test coveralls build

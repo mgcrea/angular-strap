@@ -38,7 +38,7 @@ gulp.task('clean:dev', function() {
     .pipe(clean());
 });
 gulp.task('clean:test', function() {
-  return gulp.src(['test/.tmp/*'], {read: false})
+  return gulp.src(['test/.tmp/*', 'test/coverage/*'], {read: false})
     .pipe(clean());
 });
 gulp.task('clean:dist', function() {
@@ -251,22 +251,27 @@ gulp.task('usemin:pages', function() {
 
 // TEST
 //
+var jshint = require('gulp-jshint');
+var stylish = require('jshint-stylish');
+gulp.task('jshint', function() {
+  gulp.src(paths.scripts, {cwd: paths.src})
+    .pipe(changed(paths.scripts))
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish));
+});
 var karma = require('karma').server;
-gulp.task('karma:unit', ['templates:test'], function() {
-
+gulp.task('karma:unit', ['templates:test'], function(next) {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
-    reporters: ['dots'],
+    reporters: ['dots', 'coverage'],
     singleRun: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    process.exit(code);
+    next();
   });
-
 });
-gulp.task('karma:server', ['templates:test'], function() {
-
+gulp.task('karma:server', ['templates:test'], function(next) {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -274,9 +279,13 @@ gulp.task('karma:server', ['templates:test'], function() {
     autoWatch: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    process.exit(code);
+    next();
   });
-
+});
+var coveralls = require('gulp-coveralls');
+gulp.task('coveralls', ['karma:unit'], function() {
+  gulp.src('test/coverage/**/lcov.info')
+    .pipe(coveralls());
 });
 
 
@@ -291,7 +300,7 @@ gulp.task('copy:pages', function() {
 // DEFAULT
 //
 gulp.task('default', ['build']);
-gulp.task('test', ['clean:test', 'karma:unit']);
+gulp.task('test', ['clean:test', 'jshint', 'karma:unit']);
 gulp.task('build', ['clean:dist', 'templates:dist', 'scripts:dist']);
 gulp.task('pages', ['clean:pages', 'styles:docs', 'usemin:pages', 'templates:docs', 'copy:pages']);
 gulp.task('serve', ['clean:dist', 'styles:docs', 'connect:docs', 'watch:docs', 'watch:dev', 'open:docs']);
