@@ -14,4 +14,4 @@ before_script:
   - date --rfc-2822
 
 script:
-  - gulp karma:travis
+  - gulp jshint karma:unit
