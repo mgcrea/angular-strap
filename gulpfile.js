@@ -283,7 +283,7 @@ gulp.task('karma:server', ['templates:test'], function() {
     process.exit(code);
   });
 });
-gulp.task('karma:travis', function() {
+gulp.task('karma:travis', ['templates:test'], function() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
