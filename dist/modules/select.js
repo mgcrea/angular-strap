@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0-rc.4 - 2014-03-07
+ * @version v2.0.0 - 2014-04-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -92,10 +92,7 @@ angular.module('mgcrea.ngStrap.select', [
             parentScope.$digest();
           // Hide if single select
           if (!options.multiple) {
-            if (options.trigger === 'focus')
-              element[0].blur();
-            else if ($select.$isShown)
-              $select.hide();
+            $select.hide();
           }
           // Emit event
           scope.$emit('$select.select', value, index);
@@ -151,12 +148,12 @@ angular.module('mgcrea.ngStrap.select', [
           }
         };
         $select.$onKeyDown = function (evt) {
-          if (!/(38|40|13)/.test(evt.keyCode))
+          if (!/(9|13|38|40)/.test(evt.keyCode))
             return;
           evt.preventDefault();
           evt.stopPropagation();
           // Select with enter
-          if (evt.keyCode === 13) {
+          if (evt.keyCode === 13 || evt.keyCode === 9) {
             return $select.select(scope.$activeIndex);
           }
           // Navigate with keyboard

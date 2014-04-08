@@ -9,7 +9,7 @@
   <meta name="description" content="AngularJS 1.2+ native directives for Twitter Bootstrap 3.">
 
   <!-- Sets initial viewport load and disables zooming  -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> -->
@@ -38,13 +38,13 @@
   <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"> -->
   <!-- <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"> -->
 
-  <link rel="stylesheet" href="styles/c343c79c.libraries.min.css"/>
+  <link rel="stylesheet" href="styles/libraries.min.css"/>
 
-  <link rel="stylesheet" href="styles/05ef9f12.angular-motion.min.css"/>
+  <link rel="stylesheet" href="styles/angular-motion.min.css"/>
 
-  <link rel="stylesheet" href="styles/9d38d78c.bootstrap-additions.min.css"/>
+  <link rel="stylesheet" href="styles/bootstrap-additions.min.css"/>
 
-  <link rel="stylesheet" href="styles/a705ff2d.main.min.css"/>
+  <link rel="stylesheet" href="styles/main.min.css"/>
 
 </head>
 
@@ -55,7 +55,7 @@
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
   <div class="container">
     <div class="navbar-header">
-      <button class="navbar-toggle" type="button" data-template="views/aside.html" data-animation="am-fade-and-slide-left" data-placement="left" title="Menu" data-container="body" bs-aside="">
+      <button class="navbar-toggle" type="button" data-template="views/partials/aside.tpl.html" data-animation="am-fade-and-slide-left" data-placement="left" title="Menu" data-container="body" bs-aside="">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -93,7 +93,7 @@
         <!-- <li class="muted">·</li> -->
         <li>
           <a href="//github.com/mgcrea/angular-strap/releases" target="_blank">
-            <i class="fa fa-download"></i>&nbsp;v2.0.0-rc.4
+            <i class="fa fa-download"></i>&nbsp;<span ng-bind="version"></span>
             <!-- <img src="//badge.fury.io/bo/angular-strap.png"/> -->
           </a>
         </li>
@@ -365,13 +365,12 @@
   <div class="highlight">
     <pre>
       <code class="html" highlight-block="">
-&lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"&gt;&lt;/script&gt;
-&lt;script src="bower_components/angular-strap/dist/angular-strap.min.js"&gt;&lt;/script&gt;
-&lt;script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"&gt;&lt;/script&gt;
+        &lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"&gt;&lt;/script&gt; &lt;script src="bower_components/angular-strap/dist/angular-strap.min.js"&gt;&lt;/script&gt; &lt;script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"&gt;&lt;/script&gt;
       </code>
     </pre>
   </div>
-  <p>Inject the <code>mgcrea.ngStrap</code> module into your application.</p>
+  <p>Inject the
+    <code>mgcrea.ngStrap</code>module into your application.</p>
   <div class="highlight">
     <pre>
       <code class="javascript" highlight-block="">
@@ -385,11 +384,7 @@
     <div class="highlight">
       <pre>
         <code class="javascript" highlight-block="">
-          angular.module('myApp', [
-            'mgcrea.ngStrap.modal',
-            'mgcrea.ngStrap.aside',
-            'mgcrea.ngStrap.tooltip'
-          ]);
+          angular.module('myApp', [ 'mgcrea.ngStrap.modal', 'mgcrea.ngStrap.aside', 'mgcrea.ngStrap.tooltip' ]);
         </code>
       </pre>
     </div>
@@ -400,21 +395,19 @@
   <div class="highlight">
     <pre>
       <code class="bash" highlight-block="">
-        // Serve and watch docs, ideal to hack!
-        $ grunt serve
-        // Continuous integration
-        $ grunt karma:server
-        // Build AngularStrap
-        $ grunt build
+        // Serve and watch docs, ideal to hack! $ grunt serve // Continuous integration $ grunt karma:server // Build AngularStrap $ grunt build
       </code>
     </pre>
   </div>
 
   <h2 id="project-animations">Animations</h2>
-  <p>AngularStrap leverages AngularJS <code>ngAnimate</code> module to provide animations to the directives. Therefore, it requires to load custom CSS code as <code>ngAnimate</code> comes with a very specific markup.</p>
+  <p>AngularStrap leverages AngularJS
+    <code>ngAnimate</code>module to provide animations to the directives. Therefore, it requires to load custom CSS code as
+    <code>ngAnimate</code>comes with a very specific markup.</p>
   <div class="callout callout-info">
     <h4>AngularMotion</h4>
-    <p>Theses docs rely on the <code>angular-motion.css</code> stylesheet from the <a href="//github.com/mgcrea/angular-motion" target="_blank">AngularMotion</a> project.</p>
+    <p>Theses docs rely on the
+      <code>angular-motion.css</code>stylesheet from the <a href="//github.com/mgcrea/angular-motion" target="_blank">AngularMotion</a> project.</p>
     <div class="highlight">
       <pre>
         <code class="bash" highlight-block="">
@@ -604,6 +597,14 @@
           <td>false</td>
           <td>
             <p>If provided, fetches the partial and includes it as the inner content, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>prefixEvent</td>
+          <td>string</td>
+          <td>'modal'</td>
+          <td>
+            <p>If provided, prefixes the events '.hide' '.hide.after' '.show' and '.show.after' with the passed in value. With the default value these events are 'modal.hide' 'modal.hide.after' 'modal.show' and 'modal.show.after'</p>
           </td>
         </tr>
       </tbody>
@@ -1949,6 +1950,14 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
             <p>If provided, fetches the partial and includes it as the inner content, can be either a remote URL or a cached template id.</p>
           </td>
         </tr>
+        <tr>
+          <td>prefixEvent</td>
+          <td>string</td>
+          <td>'modal'</td>
+          <td>
+            <p>If provided, prefixes the events '.hide' '.hide.after' '.show' and '.show.after' with the passed in value. With the default value these events are 'modal.hide' 'modal.hide.after' 'modal.show' and 'modal.show.after'</p>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -2847,24 +2856,24 @@ $scope.selectedAddress = "{{selectedAddress}}";
 <!--/ngInclude: 'views/footer.html' -->
 </div>
 
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-sanitize.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-animate.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-route.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-animate.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
   <!-- <script src="bower_components/angular/angular.js"></script> -->
   <!-- <script src="bower_components/angular-sanitize/angular-sanitize.js"></script> -->
   <!-- <script src="bower_components/angular-animate/angular-animate.js"></script> -->
-  <script src="scripts/26888a56.libraries.min.js"></script>
+  <script src="scripts/libraries.min.js"></script>
 
-  <script src="scripts/192dadeb.angular-strap.min.js"></script>
+  <script src="scripts/angular-strap.min.js"></script>
 
-  <script src="scripts/938a0988.angular-strap.tpl.min.js"></script>
+  <script src="scripts/angular-strap.tpl.min.js"></script>
 
-  <script src="scripts/69715422.docs.min.js"></script>
+  <script src="scripts/docs.min.js"></script>
 
-  <script src="scripts/307c013f.docs.tpl.min.js"></script>
+  <script src="scripts/docs.tpl.min.js"></script>
 
-  <script src="scripts/cbb39957.demo.min.js"></script>
+  <script src="scripts/demo.min.js"></script>
 
   <!-- Analytics
   ================================================== -->
