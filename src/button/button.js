@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.button')
+angular.module('mgcrea.ngStrap.button', [])
 
   .provider('$button', function() {
 
