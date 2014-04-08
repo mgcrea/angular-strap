@@ -15,8 +15,8 @@ var paths = {
   pages: 'pages',
   scripts: '*/*.js',
   templates: '{,*/}*.tpl.html',
-  views: 'views/{,*/}*.html',
-  images: 'images/**/*.{jpg,png,svg}',
+  views: 'views/**/*.html',
+  images: 'images/{,*/}*.{jpg,png,svg}',
   styles: 'styles/*.less',
   data: 'data/{,*/}*.json'
 };
@@ -139,7 +139,7 @@ gulp.task('templates:dist', function() {
     .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
     .pipe(ngtemplate({module: function(src) { return 'mgcrea.ngStrap.' + src.split('/')[0]; }}))
     .pipe(ngmin())
-    .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + this.path + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
+    .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
     .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
     .pipe(concat.footer('\n\n})(window, document);\n'))
     .pipe(concat.header(banner))
@@ -172,13 +172,31 @@ gulp.task('templates:test', function() {
     .pipe(gulp.dest('test/.tmp/templates'));
 });
 gulp.task('templates:docs', function() {
-  gulp.src(paths.views, {cwd: paths.docs})
+  gulp.src(paths.views, {cwd: paths.docs, base: paths.docs})
     .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
     .pipe(ngtemplate({module: 'mgcrea.ngStrapDocs'}))
-    // .pipe(ngmin())
-    // .pipe(rename(function(path){ path.dirname = ''; })) // flatten
-    // .pipe(concat.header(banner))
-    .pipe(gulp.dest('.tmp/templates'));
+    .pipe(ngmin())
+    .pipe(concat('docs.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
+    .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
+    .pipe(concat.footer('\n\n})(window, document);\n'))
+    .pipe(gulp.dest('pages/scripts'))
+    .pipe(rename(function(path) { path.extname = '.min.js'; }))
+    .pipe(uglify({outSourceMap: false}))
+    .pipe(concat.header(banner))
+    .pipe(gulp.dest('pages/scripts'));
+  gulp.src([paths.templates, '{,*/}docs/*.tpl.demo.html'], {cwd: paths.src})
+    .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
+    .pipe(ngtemplate({module: function(src) { return 'mgcrea.ngStrap.' + src.split('/')[0]; }}))
+    .pipe(ngmin())
+    .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
+    .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
+    .pipe(concat.footer('\n\n})(window, document);\n'))
+    .pipe(concat.header(banner))
+    .pipe(gulp.dest('pages/scripts'))
+    .pipe(rename(function(path) { path.extname = '.min.js'; }))
+    .pipe(uglify({outSourceMap: true}))
+    .pipe(concat.header(banner))
+    .pipe(gulp.dest('pages/scripts'));
 });
 
 
@@ -224,7 +242,7 @@ gulp.task('usemin:pages', function() {
   gulp.src('index.html', {cwd: paths.docs})
     .pipe(nginclude({assetsDirs: [paths.src]}))
     .pipe(usemin({
-      js: [uglify(), concat.header(banner)],
+      js: [ngmin(), uglify(), concat.header(banner)],
       css: [cleancss(), concat.header(banner)]
     }))
     .pipe(gulp.dest('pages'));
@@ -262,22 +280,12 @@ gulp.task('karma:server', ['templates:test'], function() {
 });
 
 
-// // COPY
-// // ----------------------------------
-// gulp.task('copy:dist', function() {
-//   // @TODO clean up this so the files keep them ref path
-//   // @TODO usemin?
-//   gulp.src([paths.images, paths.data], {cwd: paths.src, base: paths.src})
-//     .pipe(gulp.dest('dist'));
-// });
-
-// gulp.task('copy_bower', function() {
-//   return gulp.src([
-//     'app/bower_components/angular/angular.*',
-//     'app/bower_components/bootstrap/dist/**/*'
-//   ])
-//     .pipe(gulp.dest('dist/bower_components'));
-// });
+// COPY
+//
+gulp.task('copy:pages', function() {
+  gulp.src(['favicon.ico', '1.0', paths.images], {cwd: paths.docs, base: paths.docs})
+    .pipe(gulp.dest('pages'));
+});
 
 
 // DEFAULT
@@ -285,6 +293,6 @@ gulp.task('karma:server', ['templates:test'], function() {
 gulp.task('default', ['build']);
 gulp.task('test', ['clean:test', 'karma:unit']);
 gulp.task('build', ['clean:dist', 'templates:dist', 'scripts:dist']);
-gulp.task('pages', ['clean:pages', 'styles:docs', 'usemin:pages']);
+gulp.task('pages', ['clean:pages', 'styles:docs', 'usemin:pages', 'templates:docs', 'copy:pages']);
 gulp.task('serve', ['clean:dist', 'styles:docs', 'connect:docs', 'watch:docs', 'watch:dev', 'open:docs']);
 
