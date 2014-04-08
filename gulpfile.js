@@ -46,7 +46,7 @@ gulp.task('clean:dist', function() {
     .pipe(clean());
 });
 gulp.task('clean:pages', function() {
-  return gulp.src([paths.pages + '/*', '!' + paths.pages + '/1.0', '!' + paths.pages + '/.git'], {read: false})
+  return gulp.src([paths.pages + '/*', '!' + paths.pages + '/1.0', '!' + paths.pages + '/static', '!' + paths.pages + '/dist', '!' + paths.pages + '/.git'], {read: false})
     .pipe(clean());
 });
 
@@ -104,7 +104,7 @@ gulp.task('scripts:dist', function() {
   // Build unified package
   gulp.src(['module.js', paths.scripts], {cwd: paths.src})
     .pipe(ngmin())
-    .pipe(concat(pkg.name + '.js', {process: function(src) { return '// Source: ' + this.path + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
+    .pipe(concat(pkg.name + '.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
     .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n'))
     .pipe(concat.footer('\n})(window, document);\n'))
     .pipe(concat.header(banner))
