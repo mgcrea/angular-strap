@@ -46,7 +46,7 @@ gulp.task('clean:dist', function() {
     .pipe(clean());
 });
 gulp.task('clean:pages', function() {
-  return gulp.src([paths.pages + '/*', '!' + paths.pages + '/.git'], {read: false})
+  return gulp.src([paths.pages + '/*', '!' + paths.pages + '/1.0', '!' + paths.pages + '/.git'], {read: false})
     .pipe(clean());
 });
 
@@ -283,7 +283,7 @@ gulp.task('karma:server', ['templates:test'], function() {
 // COPY
 //
 gulp.task('copy:pages', function() {
-  gulp.src(['favicon.ico', '1.0', paths.images], {cwd: paths.docs, base: paths.docs})
+  gulp.src(['favicon.ico', paths.images], {cwd: paths.docs, base: paths.docs})
     .pipe(gulp.dest('pages'));
 });
 
