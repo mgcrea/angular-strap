@@ -260,18 +260,19 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter(stylish));
 });
 var karma = require('karma').server;
-gulp.task('karma:unit', ['templates:test'], function(next) {
+var coveralls = require('gulp-coveralls');
+gulp.task('karma:unit', ['templates:test'], function() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
-    reporters: ['dots', 'coverage'],
+    reporters: ['dots'],
     singleRun: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    next();
+    process.exit(code);
   });
 });
-gulp.task('karma:server', ['templates:test'], function(next) {
+gulp.task('karma:server', ['templates:test'], function() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -279,13 +280,24 @@ gulp.task('karma:server', ['templates:test'], function(next) {
     autoWatch: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    next();
+    process.exit(code);
   });
 });
-var coveralls = require('gulp-coveralls');
-gulp.task('coveralls', ['karma:unit'], function() {
-  gulp.src('test/coverage/**/lcov.info')
-    .pipe(coveralls());
+gulp.task('karma:travis', function() {
+  karma.start({
+    configFile: path.join(__dirname, 'test/karma.conf.js'),
+    browsers: ['PhantomJS'],
+    reporters: ['dots', 'coverage'],
+    singleRun: true
+  }, function(code) {
+    gutil.log('Karma has exited with ' + code);
+    gulp.src('test/coverage/**/lcov.info')
+      .pipe(coveralls())
+      .on('end', function() {
+        process.exit(code);
+      });
+  });
+
 });
 
 
