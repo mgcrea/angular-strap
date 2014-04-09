@@ -35,8 +35,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
 
-        scope.$matches = [];
-        scope.$activeIndex = 0;
+        scope.$resetMatches = function(){
+          scope.$matches = [];
+          scope.$activeIndex = 0;
+        };
+        scope.$resetMatches();
 
         scope.$activate = function(index) {
           scope.$$postDigest(function() {
@@ -74,9 +77,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             controller.$render();
             if(parentScope) parentScope.$digest();
           }
-          if(options.trigger === 'focus') element[0].blur();
-          else if($typeahead.$isShown) $typeahead.hide();
-          scope.$activeIndex = 0;
+          scope.$resetMatches();
           // Emit event
           scope.$emit('$typeahead.select', value, index);
         };
