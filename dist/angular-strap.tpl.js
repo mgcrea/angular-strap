@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0 - 2014-04-07
+ * @version v2.0.0 - 2014-04-09
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -8,7 +8,7 @@
 (function(window, document, undefined) {
 'use strict';
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/alert/alert.tpl.js
+// Source: alert.tpl.js
 angular.module('mgcrea.ngStrap.alert').run([
   '$templateCache',
   function ($templateCache) {
@@ -16,7 +16,7 @@ angular.module('mgcrea.ngStrap.alert').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/aside/aside.tpl.js
+// Source: aside.tpl.js
 angular.module('mgcrea.ngStrap.aside').run([
   '$templateCache',
   function ($templateCache) {
@@ -24,7 +24,7 @@ angular.module('mgcrea.ngStrap.aside').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/datepicker/datepicker.tpl.js
+// Source: datepicker.tpl.js
 angular.module('mgcrea.ngStrap.datepicker').run([
   '$templateCache',
   function ($templateCache) {
@@ -32,7 +32,7 @@ angular.module('mgcrea.ngStrap.datepicker').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/dropdown/dropdown.tpl.js
+// Source: dropdown.tpl.js
 angular.module('mgcrea.ngStrap.dropdown').run([
   '$templateCache',
   function ($templateCache) {
@@ -40,7 +40,7 @@ angular.module('mgcrea.ngStrap.dropdown').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/modal/modal.tpl.js
+// Source: modal.tpl.js
 angular.module('mgcrea.ngStrap.modal').run([
   '$templateCache',
   function ($templateCache) {
@@ -48,7 +48,7 @@ angular.module('mgcrea.ngStrap.modal').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/popover/popover.tpl.js
+// Source: popover.tpl.js
 angular.module('mgcrea.ngStrap.popover').run([
   '$templateCache',
   function ($templateCache) {
@@ -56,7 +56,7 @@ angular.module('mgcrea.ngStrap.popover').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/select/select.tpl.js
+// Source: select.tpl.js
 angular.module('mgcrea.ngStrap.select').run([
   '$templateCache',
   function ($templateCache) {
@@ -64,7 +64,7 @@ angular.module('mgcrea.ngStrap.select').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/tab/tab.tpl.js
+// Source: tab.tpl.js
 angular.module('mgcrea.ngStrap.tab').run([
   '$templateCache',
   function ($templateCache) {
@@ -72,7 +72,7 @@ angular.module('mgcrea.ngStrap.tab').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/timepicker/timepicker.tpl.js
+// Source: timepicker.tpl.js
 angular.module('mgcrea.ngStrap.timepicker').run([
   '$templateCache',
   function ($templateCache) {
@@ -80,7 +80,7 @@ angular.module('mgcrea.ngStrap.timepicker').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/tooltip/tooltip.tpl.js
+// Source: tooltip.tpl.js
 angular.module('mgcrea.ngStrap.tooltip').run([
   '$templateCache',
   function ($templateCache) {
@@ -88,7 +88,7 @@ angular.module('mgcrea.ngStrap.tooltip').run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/typeahead/typeahead.tpl.js
+// Source: typeahead.tpl.js
 angular.module('mgcrea.ngStrap.typeahead').run([
   '$templateCache',
   function ($templateCache) {

@@ -35,6 +35,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
 
+        var givefocus;
+
         scope.$matches = [];
         scope.$activeIndex = 0;
 
@@ -79,6 +81,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           scope.$activeIndex = 0;
           // Emit event
           scope.$emit('$typeahead.select', value, index);
+
+          givefocus = scope.$on('tooltip.hide', function() {
+            element.focus();
+          });
         };
 
         // Protected methods
@@ -108,6 +114,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.$onKeyDown = function(evt) {
+          givefocus && givefocus();
+
           if (!/(38|40|13)/.test(evt.keyCode)) return;
           evt.preventDefault();
           evt.stopPropagation();

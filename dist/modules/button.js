@@ -1,12 +1,12 @@
 /**
  * angular-strap
- * @version v2.0.0 - 2014-04-07
+ * @version v2.0.0 - 2014-04-09
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
-angular.module('mgcrea.ngStrap.button', ['ngAnimate']).provider('$button', function () {
+angular.module('mgcrea.ngStrap.button', []).provider('$button', function () {
   var defaults = this.defaults = {
       activeClass: 'active',
       toggleEvent: 'click'
