@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0 - 2014-04-07
+ * @version v2.0.0 - 2014-04-09
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -38,6 +38,7 @@ angular.module('mgcrea.ngStrap.typeahead', [
         $typeahead = $tooltip(element, options);
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
+        var givefocus;
         scope.$matches = [];
         scope.$activeIndex = 0;
         scope.$activate = function (index) {
@@ -78,6 +79,9 @@ angular.module('mgcrea.ngStrap.typeahead', [
           scope.$activeIndex = 0;
           // Emit event
           scope.$emit('$typeahead.select', value, index);
+          givefocus = scope.$on('tooltip.hide', function () {
+            element.focus();
+          });
         };
         // Protected methods
         $typeahead.$isVisible = function () {
@@ -105,6 +109,7 @@ angular.module('mgcrea.ngStrap.typeahead', [
           evt.stopPropagation();
         };
         $typeahead.$onKeyDown = function (evt) {
+          givefocus && givefocus();
           if (!/(38|40|13)/.test(evt.keyCode))
             return;
           evt.preventDefault();
