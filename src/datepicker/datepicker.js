@@ -402,6 +402,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
                 days.push({date: day, label: dateFilter(day, this.format), selected: picker.$date && this.isSelected(day), muted: day.getMonth() !== viewDate.month, disabled: this.isDisabled(day)});
               }
               scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
+              scope.showLabels = true;
               scope.labels = weekDaysLabelsHtml;
               scope.rows = split(days, this.split);
               this.built = true;
@@ -441,7 +442,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
                 months.push({date: month, label: dateFilter(month, this.format), selected: picker.$isSelected(month), disabled: this.isDisabled(month)});
               }
               scope.title = dateFilter(month, 'yyyy');
-              scope.labels = false;
+              scope.showLabels = false;
               scope.rows = split(months, this.split);
               this.built = true;
             },
@@ -481,7 +482,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
                 years.push({date: year, label: dateFilter(year, this.format), selected: picker.$isSelected(year), disabled: this.isDisabled(year)});
               }
               scope.title = years[0].label + '-' + years[years.length - 1].label;
-              scope.labels = false;
+              scope.showLabels = false;
               scope.rows = split(years, this.split);
               this.built = true;
             },
