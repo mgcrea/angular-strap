@@ -413,11 +413,15 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return date.getTime() < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
-              var actualTime = picker.$date.getTime();
-              if(evt.keyCode === 37) picker.select(new Date(actualTime - 1 * 864e5), true);
-              else if(evt.keyCode === 38) picker.select(new Date(actualTime - 7 * 864e5), true);
-              else if(evt.keyCode === 39) picker.select(new Date(actualTime + 1 * 864e5), true);
-              else if(evt.keyCode === 40) picker.select(new Date(actualTime + 7 * 864e5), true);
+              var actualTime = picker.$date.getTime(),
+                  newDate;
+
+              if(evt.keyCode === 37) newDate = new Date(actualTime - 1 * 864e5);
+              else if(evt.keyCode === 38) newDate = new Date(actualTime - 7 * 864e5);
+              else if(evt.keyCode === 39) newDate = new Date(actualTime + 1 * 864e5);
+              else if(evt.keyCode === 40) newDate = new Date(actualTime + 7 * 864e5);
+
+              if (!this.isDisabled(newDate)) picker.select(newDate, true);
             }
           }, {
             name: 'month',
@@ -453,11 +457,15 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return lastDate < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
-              var actualMonth = picker.$date.getMonth();
-              if(evt.keyCode === 37) picker.select(new Date(picker.$date.setMonth(actualMonth - 1)), true);
-              else if(evt.keyCode === 38) picker.select(new Date(picker.$date.setMonth(actualMonth - 4)), true);
-              else if(evt.keyCode === 39) picker.select(new Date(picker.$date.setMonth(actualMonth + 1)), true);
-              else if(evt.keyCode === 40) picker.select(new Date(picker.$date.setMonth(actualMonth + 4)), true);
+              var actualMonth = picker.$date.getMonth(),
+                  newDate = new Date(picker.$date);
+
+              if(evt.keyCode === 37) newDate.setMonth(actualMonth - 1);
+              else if(evt.keyCode === 38) newDate.setMonth(actualMonth - 4);
+              else if(evt.keyCode === 39) newDate.setMonth(actualMonth + 1);
+              else if(evt.keyCode === 40) newDate.setMonth(actualMonth + 4);
+
+              if (!this.isDisabled(newDate)) picker.select(newDate, true);
             }
           }, {
             name: 'year',
@@ -493,11 +501,15 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return lastDate < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
-              var actualYear = picker.$date.getFullYear();
-              if(evt.keyCode === 37) picker.select(new Date(picker.$date.setYear(actualYear - 1)), true);
-              else if(evt.keyCode === 38) picker.select(new Date(picker.$date.setYear(actualYear - 4)), true);
-              else if(evt.keyCode === 39) picker.select(new Date(picker.$date.setYear(actualYear + 1)), true);
-              else if(evt.keyCode === 40) picker.select(new Date(picker.$date.setYear(actualYear + 4)), true);
+              var actualYear = picker.$date.getFullYear(),
+                  newDate = new Date(picker.$date);
+
+              if(evt.keyCode === 37) newDate.setYear(actualYear - 1);
+              else if(evt.keyCode === 38) newDate.setYear(actualYear - 4);
+              else if(evt.keyCode === 39) newDate.setYear(actualYear + 1);
+              else if(evt.keyCode === 40) newDate.setYear(actualYear + 4);
+
+              if (!this.isDisabled(newDate)) picker.select(newDate, true);
             }
           }];
 
