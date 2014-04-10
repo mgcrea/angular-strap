@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0 - 2014-04-07
+ * @version v2.0.1 - 2014-04-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -213,16 +213,16 @@ angular.module('mgcrea.ngStrap.timepicker', [
             if (lateralMove)
               return createSelection(0, hoursLength);
             if (evt.keyCode === 38)
-              newDate.setHours(hours - options.hourStep);
+              newDate.setHours(hours - parseInt(options.hourStep, 10));
             else if (evt.keyCode === 40)
-              newDate.setHours(hours + options.hourStep);
+              newDate.setHours(hours + parseInt(options.hourStep, 10));
           } else if (selectedIndex === 1) {
             if (lateralMove)
               return createSelection(hoursLength + 1, hoursLength + 1 + minutesLength);
             if (evt.keyCode === 38)
-              newDate.setMinutes(minutes - options.minuteStep);
+              newDate.setMinutes(minutes - parseInt(options.minuteStep, 10));
             else if (evt.keyCode === 40)
-              newDate.setMinutes(minutes + options.minuteStep);
+              newDate.setMinutes(minutes + parseInt(options.minuteStep, 10));
           } else if (selectedIndex === 2) {
             if (lateralMove)
               return createSelection(hoursLength + 1 + minutesLength + 1, hoursLength + 1 + minutesLength + 3);

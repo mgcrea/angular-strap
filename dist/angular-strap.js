@@ -1,13 +1,13 @@
 /**
  * angular-strap
- * @version v2.0.0 - 2014-04-07
+ * @version v2.0.1 - 2014-04-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 (function(window, document, undefined) {
 'use strict';
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/module.js
+// Source: module.js
 angular.module('mgcrea.ngStrap', [
   'mgcrea.ngStrap.modal',
   'mgcrea.ngStrap.aside',
@@ -26,7 +26,7 @@ angular.module('mgcrea.ngStrap', [
   'mgcrea.ngStrap.tab'
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/affix/affix.js
+// Source: affix.js
 angular.module('mgcrea.ngStrap.affix', [
   'mgcrea.ngStrap.helpers.dimensions',
   'mgcrea.ngStrap.helpers.debounce'
@@ -211,7 +211,7 @@ angular.module('mgcrea.ngStrap.affix', [
   };
 });
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/alert/alert.js
+// Source: alert.js
 // @BUG: following snippet won't compile correctly
 // @TODO: submit issue to core
 // '<span ng-if="title"><strong ng-bind="title"></strong>&nbsp;</span><span ng-bind-html="content"></span>' +
@@ -319,7 +319,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal']).provider('$aler
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/aside/aside.js
+// Source: aside.js
 angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal']).provider('$aside', function () {
   var defaults = this.defaults = {
       animation: 'am-fade-and-slide-right',
@@ -409,8 +409,8 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal']).provider('$asid
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/button/button.js
-angular.module('mgcrea.ngStrap.button', ['ngAnimate']).provider('$button', function () {
+// Source: button.js
+angular.module('mgcrea.ngStrap.button', []).provider('$button', function () {
   var defaults = this.defaults = {
       activeClass: 'active',
       toggleEvent: 'click'
@@ -544,7 +544,7 @@ angular.module('mgcrea.ngStrap.button', ['ngAnimate']).provider('$button', funct
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/datepicker/datepicker.js
+// Source: datepicker.js
 angular.module('mgcrea.ngStrap.datepicker', [
   'mgcrea.ngStrap.helpers.dateParser',
   'mgcrea.ngStrap.tooltip'
@@ -1044,13 +1044,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
               onKeyDown: function (evt) {
                 var actualMonth = picker.$date.getMonth();
                 if (evt.keyCode === 37)
-                  picker.select(picker.$date.setMonth(actualMonth - 1), true);
+                  picker.select(new Date(picker.$date.setMonth(actualMonth - 1)), true);
                 else if (evt.keyCode === 38)
-                  picker.select(picker.$date.setMonth(actualMonth - 4), true);
+                  picker.select(new Date(picker.$date.setMonth(actualMonth - 4)), true);
                 else if (evt.keyCode === 39)
-                  picker.select(picker.$date.setMonth(actualMonth + 1), true);
+                  picker.select(new Date(picker.$date.setMonth(actualMonth + 1)), true);
                 else if (evt.keyCode === 40)
-                  picker.select(picker.$date.setMonth(actualMonth + 4), true);
+                  picker.select(new Date(picker.$date.setMonth(actualMonth + 4)), true);
               }
             },
             {
@@ -1102,13 +1102,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
               onKeyDown: function (evt) {
                 var actualYear = picker.$date.getFullYear();
                 if (evt.keyCode === 37)
-                  picker.select(picker.$date.setYear(actualYear - 1), true);
+                  picker.select(new Date(picker.$date.setYear(actualYear - 1)), true);
                 else if (evt.keyCode === 38)
-                  picker.select(picker.$date.setYear(actualYear - 4), true);
+                  picker.select(new Date(picker.$date.setYear(actualYear - 4)), true);
                 else if (evt.keyCode === 39)
-                  picker.select(picker.$date.setYear(actualYear + 1), true);
+                  picker.select(new Date(picker.$date.setYear(actualYear + 1)), true);
                 else if (evt.keyCode === 40)
-                  picker.select(picker.$date.setYear(actualYear + 4), true);
+                  picker.select(new Date(picker.$date.setYear(actualYear + 4)), true);
               }
             }
           ];
@@ -1121,7 +1121,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
   ];
 });
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/dropdown/dropdown.js
+// Source: dropdown.js
 angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('$dropdown', function () {
   var defaults = this.defaults = {
       animation: 'am-fade',
@@ -1239,7 +1239,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/helpers/date-parser.js
+// Source: date-parser.js
 angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', [
   '$localeProvider',
   function ($localeProvider) {
@@ -1383,7 +1383,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/helpers/debounce.js
+// Source: debounce.js
 angular.module('mgcrea.ngStrap.helpers.debounce', []).constant('debounce', function (func, wait, immediate) {
   var timeout, args, context, timestamp, result;
   return function () {
@@ -1437,7 +1437,7 @@ angular.module('mgcrea.ngStrap.helpers.debounce', []).constant('debounce', funct
   };
 });
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/helpers/dimensions.js
+// Source: dimensions.js
 angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
   '$document',
   '$window',
@@ -1573,7 +1573,7 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/helpers/parse-options.js
+// Source: parse-options.js
 angular.module('mgcrea.ngStrap.helpers.parseOptions', []).provider('$parseOptions', function () {
   var defaults = this.defaults = { regexp: /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/ };
   this.$get = [
@@ -1618,7 +1618,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', []).provider('$parseOption
   ];
 });
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/helpers/raf.js
+// Source: raf.js
 angular.version.minor < 3 && angular.version.dot < 14 && angular.module('ng').factory('$$rAF', [
   '$window',
   '$timeout',
@@ -1657,7 +1657,7 @@ angular.version.minor < 3 && angular.version.dot < 14 && angular.module('ng').fa
      //   };
      // });
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/modal/modal.js
+// Source: modal.js
 angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).provider('$modal', function () {
   var defaults = this.defaults = {
       animation: 'am-fade',
@@ -1933,7 +1933,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).pr
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/navbar/navbar.js
+// Source: navbar.js
 angular.module('mgcrea.ngStrap.navbar', []).provider('$navbar', function () {
   var defaults = this.defaults = {
       activeClass: 'active',
@@ -1982,7 +1982,7 @@ angular.module('mgcrea.ngStrap.navbar', []).provider('$navbar', function () {
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/popover/popover.js
+// Source: popover.js
 angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$popover', function () {
   var defaults = this.defaults = {
       animation: 'am-fade',
@@ -2076,7 +2076,230 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/select/select.js
+// Source: scrollspy.js
+angular.module('mgcrea.ngStrap.scrollspy', [
+  'mgcrea.ngStrap.helpers.debounce',
+  'mgcrea.ngStrap.helpers.dimensions'
+]).provider('$scrollspy', function () {
+  // Pool of registered spies
+  var spies = this.$$spies = {};
+  var defaults = this.defaults = {
+      debounce: 150,
+      throttle: 100,
+      offset: 100
+    };
+  this.$get = [
+    '$window',
+    '$document',
+    '$rootScope',
+    'dimensions',
+    'debounce',
+    'throttle',
+    function ($window, $document, $rootScope, dimensions, debounce, throttle) {
+      var windowEl = angular.element($window);
+      var docEl = angular.element($document.prop('documentElement'));
+      var bodyEl = angular.element($window.document.body);
+      // Helper functions
+      function nodeName(element, name) {
+        return element[0].nodeName && element[0].nodeName.toLowerCase() === name.toLowerCase();
+      }
+      function ScrollSpyFactory(config) {
+        // Common vars
+        var options = angular.extend({}, defaults, config);
+        if (!options.element)
+          options.element = bodyEl;
+        var isWindowSpy = nodeName(options.element, 'body');
+        var scrollEl = isWindowSpy ? windowEl : options.element;
+        var scrollId = isWindowSpy ? 'window' : options.id;
+        // Use existing spy
+        if (spies[scrollId]) {
+          spies[scrollId].$$count++;
+          return spies[scrollId];
+        }
+        var $scrollspy = {};
+        // Private vars
+        var unbindViewContentLoaded, unbindIncludeContentLoaded;
+        var trackedElements = $scrollspy.$trackedElements = [];
+        var sortedElements = [];
+        var activeTarget;
+        var debouncedCheckPosition;
+        var throttledCheckPosition;
+        var debouncedCheckOffsets;
+        var viewportHeight;
+        var scrollTop;
+        $scrollspy.init = function () {
+          // Setup internal ref counter
+          this.$$count = 1;
+          // Bind events
+          debouncedCheckPosition = debounce(this.checkPosition, options.debounce);
+          throttledCheckPosition = throttle(this.checkPosition, options.throttle);
+          scrollEl.on('click', this.checkPositionWithEventLoop);
+          windowEl.on('resize', debouncedCheckPosition);
+          scrollEl.on('scroll', throttledCheckPosition);
+          debouncedCheckOffsets = debounce(this.checkOffsets, options.debounce);
+          unbindViewContentLoaded = $rootScope.$on('$viewContentLoaded', debouncedCheckOffsets);
+          unbindIncludeContentLoaded = $rootScope.$on('$includeContentLoaded', debouncedCheckOffsets);
+          debouncedCheckOffsets();
+          // Register spy for reuse
+          if (scrollId) {
+            spies[scrollId] = $scrollspy;
+          }
+        };
+        $scrollspy.destroy = function () {
+          // Check internal ref counter
+          this.$$count--;
+          if (this.$$count > 0) {
+            return;
+          }
+          // Unbind events
+          scrollEl.off('click', this.checkPositionWithEventLoop);
+          windowEl.off('resize', debouncedCheckPosition);
+          scrollEl.off('scroll', debouncedCheckPosition);
+          unbindViewContentLoaded();
+          unbindIncludeContentLoaded();
+          if (scrollId) {
+            delete spies[scrollId];
+          }
+        };
+        $scrollspy.checkPosition = function () {
+          // Not ready yet
+          if (!sortedElements.length)
+            return;
+          // Calculate the scroll position
+          scrollTop = (isWindowSpy ? $window.pageYOffset : scrollEl.prop('scrollTop')) || 0;
+          // Calculate the viewport height for use by the components
+          viewportHeight = Math.max($window.innerHeight, docEl.prop('clientHeight'));
+          // Activate first element if scroll is smaller
+          if (scrollTop < sortedElements[0].offsetTop && activeTarget !== sortedElements[0].target) {
+            return $scrollspy.$activateElement(sortedElements[0]);
+          }
+          // Activate proper element
+          for (var i = sortedElements.length; i--;) {
+            if (angular.isUndefined(sortedElements[i].offsetTop) || sortedElements[i].offsetTop === null)
+              continue;
+            if (activeTarget === sortedElements[i].target)
+              continue;
+            if (scrollTop < sortedElements[i].offsetTop)
+              continue;
+            if (sortedElements[i + 1] && scrollTop > sortedElements[i + 1].offsetTop)
+              continue;
+            return $scrollspy.$activateElement(sortedElements[i]);
+          }
+        };
+        $scrollspy.checkPositionWithEventLoop = function () {
+          setTimeout(this.checkPosition, 1);
+        };
+        // Protected methods
+        $scrollspy.$activateElement = function (element) {
+          if (activeTarget) {
+            var activeElement = $scrollspy.$getTrackedElement(activeTarget);
+            if (activeElement) {
+              activeElement.source.removeClass('active');
+              if (nodeName(activeElement.source, 'li') && nodeName(activeElement.source.parent().parent(), 'li')) {
+                activeElement.source.parent().parent().removeClass('active');
+              }
+            }
+          }
+          activeTarget = element.target;
+          element.source.addClass('active');
+          if (nodeName(element.source, 'li') && nodeName(element.source.parent().parent(), 'li')) {
+            element.source.parent().parent().addClass('active');
+          }
+        };
+        $scrollspy.$getTrackedElement = function (target) {
+          return trackedElements.filter(function (obj) {
+            return obj.target === target;
+          })[0];
+        };
+        // Track offsets behavior
+        $scrollspy.checkOffsets = function () {
+          angular.forEach(trackedElements, function (trackedElement) {
+            var targetElement = document.querySelector(trackedElement.target);
+            trackedElement.offsetTop = targetElement ? dimensions.offset(targetElement).top : null;
+            if (options.offset && trackedElement.offsetTop !== null)
+              trackedElement.offsetTop -= options.offset * 1;
+          });
+          sortedElements = trackedElements.filter(function (el) {
+            return el.offsetTop !== null;
+          }).sort(function (a, b) {
+            return a.offsetTop - b.offsetTop;
+          });
+          debouncedCheckPosition();
+        };
+        $scrollspy.trackElement = function (target, source) {
+          trackedElements.push({
+            target: target,
+            source: source
+          });
+        };
+        $scrollspy.untrackElement = function (target, source) {
+          var toDelete;
+          for (var i = trackedElements.length; i--;) {
+            if (trackedElements[i].target === target && trackedElements[i].source === source) {
+              toDelete = i;
+              break;
+            }
+          }
+          trackedElements = trackedElements.splice(toDelete, 1);
+        };
+        $scrollspy.activate = function (i) {
+          trackedElements[i].addClass('active');
+        };
+        // Initialize plugin
+        $scrollspy.init();
+        return $scrollspy;
+      }
+      return ScrollSpyFactory;
+    }
+  ];
+}).directive('bsScrollspy', [
+  '$rootScope',
+  'debounce',
+  'dimensions',
+  '$scrollspy',
+  function ($rootScope, debounce, dimensions, $scrollspy) {
+    return {
+      restrict: 'EAC',
+      link: function postLink(scope, element, attr) {
+        var options = { scope: scope };
+        angular.forEach([
+          'offset',
+          'target'
+        ], function (key) {
+          if (angular.isDefined(attr[key]))
+            options[key] = attr[key];
+        });
+        var scrollspy = $scrollspy(options);
+        scrollspy.trackElement(options.target, element);
+        scope.$on('$destroy', function () {
+          scrollspy.untrackElement(options.target, element);
+          scrollspy.destroy();
+          options = null;
+          scrollspy = null;
+        });
+      }
+    };
+  }
+]).directive('bsScrollspyList', [
+  '$rootScope',
+  'debounce',
+  'dimensions',
+  '$scrollspy',
+  function ($rootScope, debounce, dimensions, $scrollspy) {
+    return {
+      restrict: 'A',
+      compile: function postLink(element, attr) {
+        var children = element[0].querySelectorAll('li > a[href]');
+        angular.forEach(children, function (child) {
+          var childEl = angular.element(child);
+          childEl.parent().attr('bs-scrollspy', '').attr('data-target', childEl.attr('href'));
+        });
+      }
+    };
+  }
+]);
+
+// Source: select.js
 angular.module('mgcrea.ngStrap.select', [
   'mgcrea.ngStrap.tooltip',
   'mgcrea.ngStrap.helpers.parseOptions'
@@ -2351,230 +2574,7 @@ angular.module('mgcrea.ngStrap.select', [
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/scrollspy/scrollspy.js
-angular.module('mgcrea.ngStrap.scrollspy', [
-  'mgcrea.ngStrap.helpers.debounce',
-  'mgcrea.ngStrap.helpers.dimensions'
-]).provider('$scrollspy', function () {
-  // Pool of registered spies
-  var spies = this.$$spies = {};
-  var defaults = this.defaults = {
-      debounce: 150,
-      throttle: 100,
-      offset: 100
-    };
-  this.$get = [
-    '$window',
-    '$document',
-    '$rootScope',
-    'dimensions',
-    'debounce',
-    'throttle',
-    function ($window, $document, $rootScope, dimensions, debounce, throttle) {
-      var windowEl = angular.element($window);
-      var docEl = angular.element($document.prop('documentElement'));
-      var bodyEl = angular.element($window.document.body);
-      // Helper functions
-      function nodeName(element, name) {
-        return element[0].nodeName && element[0].nodeName.toLowerCase() === name.toLowerCase();
-      }
-      function ScrollSpyFactory(config) {
-        // Common vars
-        var options = angular.extend({}, defaults, config);
-        if (!options.element)
-          options.element = bodyEl;
-        var isWindowSpy = nodeName(options.element, 'body');
-        var scrollEl = isWindowSpy ? windowEl : options.element;
-        var scrollId = isWindowSpy ? 'window' : options.id;
-        // Use existing spy
-        if (spies[scrollId]) {
-          spies[scrollId].$$count++;
-          return spies[scrollId];
-        }
-        var $scrollspy = {};
-        // Private vars
-        var unbindViewContentLoaded, unbindIncludeContentLoaded;
-        var trackedElements = $scrollspy.$trackedElements = [];
-        var sortedElements = [];
-        var activeTarget;
-        var debouncedCheckPosition;
-        var throttledCheckPosition;
-        var debouncedCheckOffsets;
-        var viewportHeight;
-        var scrollTop;
-        $scrollspy.init = function () {
-          // Setup internal ref counter
-          this.$$count = 1;
-          // Bind events
-          debouncedCheckPosition = debounce(this.checkPosition, options.debounce);
-          throttledCheckPosition = throttle(this.checkPosition, options.throttle);
-          scrollEl.on('click', this.checkPositionWithEventLoop);
-          windowEl.on('resize', debouncedCheckPosition);
-          scrollEl.on('scroll', throttledCheckPosition);
-          debouncedCheckOffsets = debounce(this.checkOffsets, options.debounce);
-          unbindViewContentLoaded = $rootScope.$on('$viewContentLoaded', debouncedCheckOffsets);
-          unbindIncludeContentLoaded = $rootScope.$on('$includeContentLoaded', debouncedCheckOffsets);
-          debouncedCheckOffsets();
-          // Register spy for reuse
-          if (scrollId) {
-            spies[scrollId] = $scrollspy;
-          }
-        };
-        $scrollspy.destroy = function () {
-          // Check internal ref counter
-          this.$$count--;
-          if (this.$$count > 0) {
-            return;
-          }
-          // Unbind events
-          scrollEl.off('click', this.checkPositionWithEventLoop);
-          windowEl.off('resize', debouncedCheckPosition);
-          scrollEl.off('scroll', debouncedCheckPosition);
-          unbindViewContentLoaded();
-          unbindIncludeContentLoaded();
-          if (scrollId) {
-            delete spies[scrollId];
-          }
-        };
-        $scrollspy.checkPosition = function () {
-          // Not ready yet
-          if (!sortedElements.length)
-            return;
-          // Calculate the scroll position
-          scrollTop = (isWindowSpy ? $window.pageYOffset : scrollEl.prop('scrollTop')) || 0;
-          // Calculate the viewport height for use by the components
-          viewportHeight = Math.max($window.innerHeight, docEl.prop('clientHeight'));
-          // Activate first element if scroll is smaller
-          if (scrollTop < sortedElements[0].offsetTop && activeTarget !== sortedElements[0].target) {
-            return $scrollspy.$activateElement(sortedElements[0]);
-          }
-          // Activate proper element
-          for (var i = sortedElements.length; i--;) {
-            if (angular.isUndefined(sortedElements[i].offsetTop) || sortedElements[i].offsetTop === null)
-              continue;
-            if (activeTarget === sortedElements[i].target)
-              continue;
-            if (scrollTop < sortedElements[i].offsetTop)
-              continue;
-            if (sortedElements[i + 1] && scrollTop > sortedElements[i + 1].offsetTop)
-              continue;
-            return $scrollspy.$activateElement(sortedElements[i]);
-          }
-        };
-        $scrollspy.checkPositionWithEventLoop = function () {
-          setTimeout(this.checkPosition, 1);
-        };
-        // Protected methods
-        $scrollspy.$activateElement = function (element) {
-          if (activeTarget) {
-            var activeElement = $scrollspy.$getTrackedElement(activeTarget);
-            if (activeElement) {
-              activeElement.source.removeClass('active');
-              if (nodeName(activeElement.source, 'li') && nodeName(activeElement.source.parent().parent(), 'li')) {
-                activeElement.source.parent().parent().removeClass('active');
-              }
-            }
-          }
-          activeTarget = element.target;
-          element.source.addClass('active');
-          if (nodeName(element.source, 'li') && nodeName(element.source.parent().parent(), 'li')) {
-            element.source.parent().parent().addClass('active');
-          }
-        };
-        $scrollspy.$getTrackedElement = function (target) {
-          return trackedElements.filter(function (obj) {
-            return obj.target === target;
-          })[0];
-        };
-        // Track offsets behavior
-        $scrollspy.checkOffsets = function () {
-          angular.forEach(trackedElements, function (trackedElement) {
-            var targetElement = document.querySelector(trackedElement.target);
-            trackedElement.offsetTop = targetElement ? dimensions.offset(targetElement).top : null;
-            if (options.offset && trackedElement.offsetTop !== null)
-              trackedElement.offsetTop -= options.offset * 1;
-          });
-          sortedElements = trackedElements.filter(function (el) {
-            return el.offsetTop !== null;
-          }).sort(function (a, b) {
-            return a.offsetTop - b.offsetTop;
-          });
-          debouncedCheckPosition();
-        };
-        $scrollspy.trackElement = function (target, source) {
-          trackedElements.push({
-            target: target,
-            source: source
-          });
-        };
-        $scrollspy.untrackElement = function (target, source) {
-          var toDelete;
-          for (var i = trackedElements.length; i--;) {
-            if (trackedElements[i].target === target && trackedElements[i].source === source) {
-              toDelete = i;
-              break;
-            }
-          }
-          trackedElements = trackedElements.splice(toDelete, 1);
-        };
-        $scrollspy.activate = function (i) {
-          trackedElements[i].addClass('active');
-        };
-        // Initialize plugin
-        $scrollspy.init();
-        return $scrollspy;
-      }
-      return ScrollSpyFactory;
-    }
-  ];
-}).directive('bsScrollspy', [
-  '$rootScope',
-  'debounce',
-  'dimensions',
-  '$scrollspy',
-  function ($rootScope, debounce, dimensions, $scrollspy) {
-    return {
-      restrict: 'EAC',
-      link: function postLink(scope, element, attr) {
-        var options = { scope: scope };
-        angular.forEach([
-          'offset',
-          'target'
-        ], function (key) {
-          if (angular.isDefined(attr[key]))
-            options[key] = attr[key];
-        });
-        var scrollspy = $scrollspy(options);
-        scrollspy.trackElement(options.target, element);
-        scope.$on('$destroy', function () {
-          scrollspy.untrackElement(options.target, element);
-          scrollspy.destroy();
-          options = null;
-          scrollspy = null;
-        });
-      }
-    };
-  }
-]).directive('bsScrollspyList', [
-  '$rootScope',
-  'debounce',
-  'dimensions',
-  '$scrollspy',
-  function ($rootScope, debounce, dimensions, $scrollspy) {
-    return {
-      restrict: 'A',
-      compile: function postLink(element, attr) {
-        var children = element[0].querySelectorAll('li > a[href]');
-        angular.forEach(children, function (child) {
-          var childEl = angular.element(child);
-          childEl.parent().attr('bs-scrollspy', '').attr('data-target', childEl.attr('href'));
-        });
-      }
-    };
-  }
-]);
-
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/tab/tab.js
+// Source: tab.js
 angular.module('mgcrea.ngStrap.tab', []).run([
   '$templateCache',
   function ($templateCache) {
@@ -2637,7 +2637,7 @@ angular.module('mgcrea.ngStrap.tab', []).run([
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/timepicker/timepicker.js
+// Source: timepicker.js
 angular.module('mgcrea.ngStrap.timepicker', [
   'mgcrea.ngStrap.helpers.dateParser',
   'mgcrea.ngStrap.tooltip'
@@ -2845,16 +2845,16 @@ angular.module('mgcrea.ngStrap.timepicker', [
             if (lateralMove)
               return createSelection(0, hoursLength);
             if (evt.keyCode === 38)
-              newDate.setHours(hours - options.hourStep);
+              newDate.setHours(hours - parseInt(options.hourStep, 10));
             else if (evt.keyCode === 40)
-              newDate.setHours(hours + options.hourStep);
+              newDate.setHours(hours + parseInt(options.hourStep, 10));
           } else if (selectedIndex === 1) {
             if (lateralMove)
               return createSelection(hoursLength + 1, hoursLength + 1 + minutesLength);
             if (evt.keyCode === 38)
-              newDate.setMinutes(minutes - options.minuteStep);
+              newDate.setMinutes(minutes - parseInt(options.minuteStep, 10));
             else if (evt.keyCode === 40)
-              newDate.setMinutes(minutes + options.minuteStep);
+              newDate.setMinutes(minutes + parseInt(options.minuteStep, 10));
           } else if (selectedIndex === 2) {
             if (lateralMove)
               return createSelection(hoursLength + 1 + minutesLength + 1, hoursLength + 1 + minutesLength + 3);
@@ -3061,11 +3061,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/tooltip/tooltip.js
-angular.module('mgcrea.ngStrap.tooltip', [
-  'ngAnimate',
-  'mgcrea.ngStrap.helpers.dimensions'
-]).provider('$tooltip', function () {
+// Source: tooltip.js
+angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).provider('$tooltip', function () {
   var defaults = this.defaults = {
       animation: 'am-fade',
       prefixClass: 'tooltip',
@@ -3463,7 +3460,7 @@ angular.module('mgcrea.ngStrap.tooltip', [
   }
 ]);
 
-// Source: /Users/olivier/Dropbox/Projects/angular-strap/src/typeahead/typeahead.js
+// Source: typeahead.js
 angular.module('mgcrea.ngStrap.typeahead', [
   'mgcrea.ngStrap.tooltip',
   'mgcrea.ngStrap.helpers.parseOptions'
@@ -3496,8 +3493,11 @@ angular.module('mgcrea.ngStrap.typeahead', [
         $typeahead = $tooltip(element, options);
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
-        scope.$matches = [];
-        scope.$activeIndex = 0;
+        scope.$resetMatches = function () {
+          scope.$matches = [];
+          scope.$activeIndex = 0;
+        };
+        scope.$resetMatches();
         scope.$activate = function (index) {
           scope.$$postDigest(function () {
             $typeahead.activate(index);
@@ -3529,11 +3529,7 @@ angular.module('mgcrea.ngStrap.typeahead', [
             if (parentScope)
               parentScope.$digest();
           }
-          if (options.trigger === 'focus')
-            element[0].blur();
-          else if ($typeahead.$isShown)
-            $typeahead.hide();
-          scope.$activeIndex = 0;
+          scope.$resetMatches();
           // Emit event
           scope.$emit('$typeahead.select', value, index);
         };

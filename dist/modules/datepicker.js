@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.0 - 2014-04-07
+ * @version v2.0.1 - 2014-04-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -505,13 +505,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
               onKeyDown: function (evt) {
                 var actualMonth = picker.$date.getMonth();
                 if (evt.keyCode === 37)
-                  picker.select(picker.$date.setMonth(actualMonth - 1), true);
+                  picker.select(new Date(picker.$date.setMonth(actualMonth - 1)), true);
                 else if (evt.keyCode === 38)
-                  picker.select(picker.$date.setMonth(actualMonth - 4), true);
+                  picker.select(new Date(picker.$date.setMonth(actualMonth - 4)), true);
                 else if (evt.keyCode === 39)
-                  picker.select(picker.$date.setMonth(actualMonth + 1), true);
+                  picker.select(new Date(picker.$date.setMonth(actualMonth + 1)), true);
                 else if (evt.keyCode === 40)
-                  picker.select(picker.$date.setMonth(actualMonth + 4), true);
+                  picker.select(new Date(picker.$date.setMonth(actualMonth + 4)), true);
               }
             },
             {
@@ -563,13 +563,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
               onKeyDown: function (evt) {
                 var actualYear = picker.$date.getFullYear();
                 if (evt.keyCode === 37)
-                  picker.select(picker.$date.setYear(actualYear - 1), true);
+                  picker.select(new Date(picker.$date.setYear(actualYear - 1)), true);
                 else if (evt.keyCode === 38)
-                  picker.select(picker.$date.setYear(actualYear - 4), true);
+                  picker.select(new Date(picker.$date.setYear(actualYear - 4)), true);
                 else if (evt.keyCode === 39)
-                  picker.select(picker.$date.setYear(actualYear + 1), true);
+                  picker.select(new Date(picker.$date.setYear(actualYear + 1)), true);
                 else if (evt.keyCode === 40)
-                  picker.select(picker.$date.setYear(actualYear + 4), true);
+                  picker.select(new Date(picker.$date.setYear(actualYear + 4)), true);
               }
             }
           ];

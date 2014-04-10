@@ -1,15 +1,12 @@
 /**
  * angular-strap
- * @version v2.0.0 - 2014-04-07
+ * @version v2.0.1 - 2014-04-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
-angular.module('mgcrea.ngStrap.tooltip', [
-  'ngAnimate',
-  'mgcrea.ngStrap.helpers.dimensions'
-]).provider('$tooltip', function () {
+angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).provider('$tooltip', function () {
   var defaults = this.defaults = {
       animation: 'am-fade',
       prefixClass: 'tooltip',
