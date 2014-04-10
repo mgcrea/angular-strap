@@ -183,20 +183,22 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             else if(evt.keyCode === 39) selectedIndex = selectedIndex < count - 1 ? selectedIndex + 1 : 0;
           }
 
+          var selectRange = [0,hoursLength];
           // Update values (up, down)
           if(selectedIndex === 0) {
-            if(lateralMove) return createSelection(0, hoursLength);
             if(evt.keyCode === 38) newDate.setHours(hours - parseInt(options.hourStep, 10));
             else if(evt.keyCode === 40) newDate.setHours(hours + parseInt(options.hourStep, 10));
+            selectRange = [0, hoursLength];
           } else if(selectedIndex === 1) {
-            if(lateralMove) return createSelection(hoursLength + 1, hoursLength + 1 + minutesLength);
             if(evt.keyCode === 38) newDate.setMinutes(minutes - parseInt(options.minuteStep, 10));
             else if(evt.keyCode === 40) newDate.setMinutes(minutes + parseInt(options.minuteStep, 10));
+            selectRange = [hoursLength + 1, hoursLength + 1 + minutesLength];
           } else if(selectedIndex === 2) {
-            if(lateralMove) return createSelection(hoursLength + 1 + minutesLength + 1, hoursLength + 1 + minutesLength + 3);
-            $timepicker.switchMeridian();
+            if(!lateralMove) $timepicker.switchMeridian();
+            selectRange = [hoursLength + 1 + minutesLength + 1, hoursLength + 1 + minutesLength + 3];
           }
           $timepicker.select(newDate, selectedIndex, true);
+          createSelection(selectRange[0], selectRange[1]);
           parentScope.$digest();
         };
 
