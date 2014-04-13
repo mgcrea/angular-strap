@@ -67,7 +67,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         var hide = $dropdown.hide;
         $dropdown.hide = function() {
-          options.keyboard && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+          options.keyboard && $dropdown.$element && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
           bodyEl.off('click', onBodyClick);
           hide();
         };
