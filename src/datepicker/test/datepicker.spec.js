@@ -450,8 +450,8 @@ describe('datepicker', function() {
         var elm = compileDirective('options-dateFormat');
         expect(elm.val()).toBe('1986-02-22');
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)')).triggerHandler('click');
-        expect(elm.val()).toBe('1986-02-26');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+        expect(elm.val()).toBe('1986-02-24');
       });
 
     });
@@ -559,7 +559,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-startWeek-bis');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu thead tr:eq(1) th:eq(0)').text()).toBe('Sat');
-        expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('29');
+        expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('28');
       });
 
     });
