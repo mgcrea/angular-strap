@@ -559,7 +559,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-startWeek-bis');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu thead tr:eq(1) th:eq(0)').text()).toBe('Sat');
-        expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('29');
+        expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('28');
       });
 
     });
