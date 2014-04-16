@@ -67,11 +67,11 @@
             var myModal = $modal({title: 'My Title', content: 'My Content', show: true});
 
             // Pre-fetch an external template populated with a custom scope
-            var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.tpl.demo.html'});
+            var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.tpl.demo.html', show: false});
             // Show when some event occurs (use $promise property to ensure the template has been loaded)
-            myOtherModal.$promise.then(function() {
-              myOtherModal.show();
-            })
+            $scope.showModal = function() {
+              myOtherModal.$promise.then(myOtherModal.show);
+            };
           })
         </code>
       </pre>
