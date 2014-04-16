@@ -183,6 +183,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             else if(evt.keyCode === 39) selectedIndex = selectedIndex < count - 1 ? selectedIndex + 1 : 0;
           }
 
+          var selectRange = [0,hoursLength];
           // Update values (up, down)
           var selectRange = [0, hoursLength];
           if(selectedIndex === 0) {
