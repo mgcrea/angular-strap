@@ -414,8 +414,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return date.getTime() < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
-              var actualTime = picker.$date.getTime(),
-                  newDate;
+              var actualTime = picker.$date.getTime();
+              var newDate;
 
               if(evt.keyCode === 37) newDate = new Date(actualTime - 1 * 864e5);
               else if(evt.keyCode === 38) newDate = new Date(actualTime - 7 * 864e5);
@@ -458,8 +458,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return lastDate < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
-              var actualMonth = picker.$date.getMonth(),
-                  newDate = new Date(picker.$date);
+              var actualMonth = picker.$date.getMonth();
+              var newDate = new Date(picker.$date);
 
               if(evt.keyCode === 37) newDate.setMonth(actualMonth - 1);
               else if(evt.keyCode === 38) newDate.setMonth(actualMonth - 4);
