@@ -82,11 +82,12 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if(controller) {
             controller.$setViewValue(value);
             controller.$render();
-            scope.$resetMatches();
             if(parentScope) parentScope.$digest();
           }
           // Emit event
           scope.$emit('$typeahead.select', value, index);
+
+          scope.$apply(scope.$resetMatches);
         };
 
         // Protected methods
