@@ -86,7 +86,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         if(angular.isDate(value)) return value;
         var matches = regex.exec(value);
         if(!matches) return false;
-        var date = baseDate || new Date(0, 0, 1);
+        var date = baseDate || new Date(1970, 0, 1);
         for(var i = 0; i < matches.length - 1; i++) {
           setMap[i] && setMap[i].call(date, matches[i+1]);
         }
