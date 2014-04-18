@@ -35,6 +35,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
 
+        scope.$changeIsSelect = false;
         scope.$resetMatches = function(){
           scope.$matches = [];
           scope.$activeIndex = 0;
@@ -60,6 +61,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         // Public methods
 
         $typeahead.update = function(matches) {
+          if(scope.$changeIsSelect) {
+            scope.$changeIsSelect = false;
+            return;
+          }
+
           scope.$matches = matches;
           if(scope.$activeIndex >= matches.length) {
             scope.$activeIndex = 0;
@@ -71,13 +77,14 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.select = function(index) {
+          scope.$changeIsSelect = true;
           var value = scope.$matches[index].value;
           if(controller) {
             controller.$setViewValue(value);
             controller.$render();
+            scope.$resetMatches();
             if(parentScope) parentScope.$digest();
           }
-          scope.$resetMatches();
           // Emit event
           scope.$emit('$typeahead.select', value, index);
         };
