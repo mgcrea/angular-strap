@@ -14,7 +14,7 @@ angular.module('mgcrea.ngStrapDocs')
 
   // Controller usage example
   /*
-  var myTooltip = $tooltip(angular.element(document.querySelector('#test')), {title: 'Hello tooltip', placement: 'right', show: false});
+  var myTooltip = $tooltip(angular.element(document.querySelector('#test')), {title: 'Hello tooltip', placement: 'right'});
   $scope.showTooltip = function() {
     myTooltip.$promise.then(myTooltip.show);
   };
