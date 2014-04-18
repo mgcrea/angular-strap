@@ -155,6 +155,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           hide();
         };
 
+        $typeahead.$onFocusElementMouseDown = function (evt) {};
+
         return $typeahead;
 
       }
