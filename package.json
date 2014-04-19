@@ -46,7 +46,7 @@
     "gulp-util": "^2.2.14",
     "gulp-watch": "^0.5.4",
     "jshint-stylish": "^0.1.5",
-    "karma": "^0.12.6",
+    "karma": "^0.12.9",
     "karma-coverage": "^0.2.1",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4"

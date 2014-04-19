@@ -36,8 +36,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var scope = $typeahead.$scope;
 
         scope.$resetMatches = function(){
-          scope.$matches = [];
-          scope.$activeIndex = 0;
+          scope.$evalAsync(function(){
+            scope.$matches = [];
+            scope.$activeIndex = 0;
+          });
         };
         scope.$resetMatches();
 

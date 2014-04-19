@@ -172,7 +172,7 @@ gulp.task('templates:test', function() {
     .pipe(gulp.dest('test/.tmp/templates'));
 });
 gulp.task('templates:docs', function() {
-  gulp.src(paths.views, {cwd: paths.docs, base: paths.docs})
+  gulp.src(['views/sidebar.html', 'views/partials/*.html'], {cwd: paths.docs, base: paths.docs})
     .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
     .pipe(ngtemplate({module: 'mgcrea.ngStrapDocs'}))
     .pipe(ngmin())
@@ -216,7 +216,7 @@ gulp.task('styles:pages', function() {
   gulp.src(paths.styles, {cwd: paths.docs})
     .pipe(less())
     .pipe(prefix('last 1 version', '> 1%', 'ie 8'))
-    .pipe(gulp.dest('dist/styles'));
+    .pipe(gulp.dest('pages'))
 });
 
 // VIEWS
