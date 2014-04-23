@@ -25,7 +25,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "gulp": "^3.6.0",
+    "gulp": "^3.6.1",
     "gulp-autoprefixer": "0.0.7",
     "gulp-changed": "^0.3.0",
     "gulp-clean": "^0.2.4",
@@ -44,7 +44,7 @@
     "gulp-uglify": "^0.2.1",
     "gulp-usemin": "^0.3.3",
     "gulp-util": "^2.2.14",
-    "gulp-watch": "^0.5.4",
+    "gulp-watch": "^0.6.2",
     "jshint-stylish": "^0.1.5",
     "karma": "^0.12.9",
     "karma-coverage": "^0.2.1",
