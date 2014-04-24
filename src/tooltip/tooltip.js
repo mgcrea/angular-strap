@@ -135,7 +135,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 		  // Options: target
 		  if(options.target) {
 			  options.target = (angular.isElement(options.target)) ? options.target : findElement(options.target)[0];
-			  //console.log('element',options.target);
 		  }
 
         };
