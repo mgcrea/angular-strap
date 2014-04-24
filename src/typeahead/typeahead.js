@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
+angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions', 'mgcrea.ngStrap.helpers.debounce'])
 
   .provider('$typeahead', function() {
 
@@ -16,7 +16,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       delay: 0,
       minLength: 1,
       filter: 'filter',
-      limit: 6
+      limit: 6,
+      debounce: 300
     };
 
     this.$get = function($window, $rootScope, $tooltip) {
@@ -160,7 +161,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
   })
 
-  .directive('bsTypeahead', function($window, $parse, $q, $typeahead, $parseOptions) {
+  .directive('bsTypeahead', function($window, $parse, $q, $typeahead, $parseOptions, debounce) {
 
     var defaults = $typeahead.defaults;
 
@@ -171,7 +172,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'debounce'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -188,7 +189,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         // if(!dump) var dump = console.error.bind(console);
 
         // Watch model for changes
-        scope.$watch(attr.ngModel, function(newValue, oldValue) {
+        var debouncedWatch = debounce(function(newValue, oldValue) {
           scope.$modelValue = newValue; //Set model value on the scope to custom templates can use it.
           parsedOptions.valuesFn(scope, controller)
           .then(function(values) {
@@ -198,7 +199,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             // Queue a new rendering that will leverage collection loading
             controller.$render();
           });
-        });
+        }, typeahead.$options.debounce);
+        scope.$watch(attr.ngModel, debouncedWatch);
 
         // Model rendering in view
         controller.$render = function () {
