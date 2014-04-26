@@ -7,9 +7,9 @@ AngularStrap is a set of native directives that enables seamless integration of 
 - The only required dependency is [Twitter Bootstrap CSS Styles](https://github.com/twbs/bootstrap/blob/master/dist/css/bootstrap.css)!
 
 >
-AngularStrap was initially written to provide AngularJS wrapping directives for Twitter Bootstrap. It used to leverage the javascript code written by Bootstrap's contributors to minimize work, retro-compatibility issues & time to market.
+AngularStrap was initially written to provide AngularJS wrapping directives for Twitter Bootstrap. It used to leverage the JavaScript code written by Bootstrap's contributors to minimize work, retro-compatibility issues & time to market.
 >
-While it worked pretty well, it required a big javascript payload: both jQuery & Twitter Bootstrap libraries. When the 1.2 release of AngularJS showed up with the ngAnimate module, greatly simplifying DOM manipulation, we knew it was time for a rewrite!
+While it worked pretty well, it required a big JavaScript payload: both jQuery & Twitter Bootstrap libraries. When the 1.2 release of AngularJS showed up with the ngAnimate module, greatly simplifying DOM manipulation, we knew it was time for a rewrite!
 
 ## Documentation and examples
 
@@ -31,7 +31,7 @@ While it worked pretty well, it required a big javascript payload: both jQuery &
 + Inject the `ngStrap` module into your app:
 
 >
-``` javascript
+``` JavaScript
 angular.module('myApp', ['mgcrea.ngStrap']);
 ```
 
