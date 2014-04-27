@@ -153,7 +153,7 @@ angular.module('mgcrea.ngStrap.select', [
           evt.preventDefault();
           evt.stopPropagation();
           // Select with enter
-          if (evt.keyCode === 13 || evt.keyCode === 9) {
+          if (!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
             return $select.select(scope.$activeIndex);
           }
           // Navigate with keyboard
@@ -185,7 +185,7 @@ angular.module('mgcrea.ngStrap.select', [
           if (options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
           }
-          _hide();
+          _hide(true);
         };
         return $select;
       }
