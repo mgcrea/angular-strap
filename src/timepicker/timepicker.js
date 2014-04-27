@@ -134,7 +134,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           } else if(index === 1) {
             selectedTime = date.getTime() + viewDate.hour * 36e5;
           }
-          return selectedTime < options.minTime || selectedTime > options.maxTime;
+          return selectedTime < options.minTime * 1 || selectedTime > options.maxTime * 1;
         };
 
         $timepicker.$moveIndex = function(value, index) {
@@ -314,7 +314,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             } else if(angular.isString(newValue) && newValue.match(/^".+"$/)) {
               timepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
             } else {
-              timepicker.$options[key] = dateParser.parse(newValue);
+              timepicker.$options[key] = dateParser.parse(newValue, new Date(1970, 0, 1, 0));
             }
             !isNaN(timepicker.$options[key]) && timepicker.$build();
           });
