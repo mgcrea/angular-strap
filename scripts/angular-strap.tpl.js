@@ -72,19 +72,19 @@ angular.module('mgcrea.ngStrap.tab').run([
   }
 ]);
 
-// Source: tooltip.tpl.js
-angular.module('mgcrea.ngStrap.tooltip').run([
-  '$templateCache',
-  function ($templateCache) {
-    $templateCache.put('tooltip/tooltip.tpl.html', '<div class="tooltip in" ng-show="title"><div class="tooltip-arrow"></div><div class="tooltip-inner" ng-bind="title"></div></div>');
-  }
-]);
-
 // Source: timepicker.tpl.js
 angular.module('mgcrea.ngStrap.timepicker').run([
   '$templateCache',
   function ($templateCache) {
     $templateCache.put('timepicker/timepicker.tpl.html', '<div class="dropdown-menu timepicker" style="min-width: 0px;width: auto"><table height="100%"><thead><tr class="text-center"><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$moveIndex(-1, 0)"><i class="glyphicon glyphicon-chevron-up"></i></button></th><th>&nbsp;</th><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$moveIndex(-1, 1)"><i class="glyphicon glyphicon-chevron-up"></i></button></th></tr></thead><tbody><tr ng-repeat="(i, row) in rows"><td class="text-center"><button tabindex="-1" style="width: 100%" type="button" class="btn btn-default" ng-class="{\'btn-primary\': row[0].selected}" ng-click="$select(row[0].date, 0)" ng-disabled="row[0].disabled"><span ng-class="{\'text-muted\': row[0].muted}" ng-bind="row[0].label"></span></button></td><td><span ng-bind="i == midIndex ? \':\' : \' \'"></span></td><td class="text-center"><button tabindex="-1" ng-if="row[1].date" style="width: 100%" type="button" class="btn btn-default" ng-class="{\'btn-primary\': row[1].selected}" ng-click="$select(row[1].date, 1)" ng-disabled="row[1].disabled"><span ng-class="{\'text-muted\': row[1].muted}" ng-bind="row[1].label"></span></button></td><td ng-if="showAM">&nbsp;</td><td ng-if="showAM"><button tabindex="-1" ng-show="i == midIndex - !isAM * 1" style="width: 100%" type="button" ng-class="{\'btn-primary\': !!isAM}" class="btn btn-default" ng-click="$switchMeridian()" ng-disabled="el.disabled">AM</button> <button tabindex="-1" ng-show="i == midIndex + 1 - !isAM * 1" style="width: 100%" type="button" ng-class="{\'btn-primary\': !isAM}" class="btn btn-default" ng-click="$switchMeridian()" ng-disabled="el.disabled">PM</button></td></tr></tbody><tfoot><tr class="text-center"><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$moveIndex(1, 0)"><i class="glyphicon glyphicon-chevron-down"></i></button></th><th>&nbsp;</th><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$moveIndex(1, 1)"><i class="glyphicon glyphicon-chevron-down"></i></button></th></tr></tfoot></table></div>');
+  }
+]);
+
+// Source: tooltip.tpl.js
+angular.module('mgcrea.ngStrap.tooltip').run([
+  '$templateCache',
+  function ($templateCache) {
+    $templateCache.put('tooltip/tooltip.tpl.html', '<div class="tooltip in" ng-show="title"><div class="tooltip-arrow"></div><div class="tooltip-inner" ng-bind="title"></div></div>');
   }
 ]);
 
@@ -96,19 +96,19 @@ angular.module('mgcrea.ngStrap.typeahead').run([
   }
 ]);
 
-// Source: aside.tpl.demo.js
-angular.module('mgcrea.ngStrap.aside').run([
-  '$templateCache',
-  function ($templateCache) {
-    $templateCache.put('aside/docs/aside.tpl.demo.html', '<div class="aside" tabindex="-1" role="dialog"><div class="aside-dialog"><div class="aside-content"><div class="aside-header" ng-show="title"><button type="button" class="close" ng-click="$hide()">&times;</button><h4 class="aside-title" ng-bind-html="title"></h4></div><div class="aside-body" ng-show="content"><h4>Text in aside</h4><p ng-bind-html="content"></p><pre>2 + 3 = {{ 2 + 3 }}</pre><h4>Popover in aside</h4><p>This <button type="button" class="btn btn-default popover-test" data-title="A Title" data-content="And here\'s some amazing content. It\'s very engaging. right?" bs-popover="">button</button> should trigger a popover on click.</p><h4>Tooltips in aside</h4><p><a href="#" class="tooltip-test" data-title="Tooltip" bs-tooltip="">This link</a> and <a href="#" class="tooltip-test" data-title="Tooltip" bs-tooltip="">that link</a> should have tooltips on hover.</p></div><div class="aside-footer"><button type="button" class="btn btn-default" ng-click="$hide()">Close</button> <button type="button" class="btn btn-primary" ng-click="$hide()">Save changes</button></div></div></div></div>');
-  }
-]);
-
 // Source: alert.tpl.demo.js
 angular.module('mgcrea.ngStrap.alert').run([
   '$templateCache',
   function ($templateCache) {
     $templateCache.put('alert/docs/alert.tpl.demo.html', '<div class="alert" tabindex="-1" ng-class="[type ? \'alert-\' + type : null]"><button type="button" class="close" ng-click="$hide()">&times;</button> <strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span></div>');
+  }
+]);
+
+// Source: aside.tpl.demo.js
+angular.module('mgcrea.ngStrap.aside').run([
+  '$templateCache',
+  function ($templateCache) {
+    $templateCache.put('aside/docs/aside.tpl.demo.html', '<div class="aside" tabindex="-1" role="dialog"><div class="aside-dialog"><div class="aside-content"><div class="aside-header" ng-show="title"><button type="button" class="close" ng-click="$hide()">&times;</button><h4 class="aside-title" ng-bind-html="title"></h4></div><div class="aside-body" ng-show="content"><h4>Text in aside</h4><p ng-bind-html="content"></p><pre>2 + 3 = {{ 2 + 3 }}</pre><h4>Popover in aside</h4><p>This <button type="button" class="btn btn-default popover-test" data-title="A Title" data-content="And here\'s some amazing content. It\'s very engaging. right?" bs-popover="">button</button> should trigger a popover on click.</p><h4>Tooltips in aside</h4><p><a href="#" class="tooltip-test" data-title="Tooltip" bs-tooltip="">This link</a> and <a href="#" class="tooltip-test" data-title="Tooltip" bs-tooltip="">that link</a> should have tooltips on hover.</p></div><div class="aside-footer"><button type="button" class="btn btn-default" ng-click="$hide()">Close</button> <button type="button" class="btn btn-primary" ng-click="$hide()">Save changes</button></div></div></div></div>');
   }
 ]);
 
