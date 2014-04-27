@@ -192,7 +192,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           if(options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
           }
-          _hide();
+          _hide(true);
         };
 
         return $select;
