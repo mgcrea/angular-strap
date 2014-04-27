@@ -116,8 +116,8 @@ describe('typeahead', function () {
       elm.val(scope.states[0].substr(0, 2));
       expect(elm.val()).toBe(scope.states[0].substr(0, 2));
       angular.element(elm[0]).triggerHandler('change');
-      elm.val(elm.val() + scope.states[0].substr(2, 5));
-      expect(elm.val()).toBe(scope.states[0].substr(0, 2 + 5));
+      elm.val(elm.val() + scope.states[0].substr(2, 4));
+      expect(elm.val()).toBe(scope.states[0].substr(0, 2 + 4));
       angular.element(elm[0]).triggerHandler('change');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(1);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.states[0]);
