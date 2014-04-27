@@ -159,7 +159,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           evt.stopPropagation();
 
           // Select with enter
-          if(evt.keyCode === 13 || evt.keyCode === 9) {
+          if(!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
             return $select.select(scope.$activeIndex);
           }
 
