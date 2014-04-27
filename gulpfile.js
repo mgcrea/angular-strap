@@ -238,7 +238,7 @@ gulp.task('views:dist', function() {
 var usemin = require('gulp-usemin');
 var nginclude = require('gulp-nginclude');
 var cleancss = require('gulp-cleancss');
-gulp.task('usemin:pages', function() {
+gulp.task('usemin:pages', ['styles:docs'], function() {
   gulp.src('index.html', {cwd: paths.docs})
     .pipe(nginclude({assetsDirs: [paths.src]}))
     .pipe(usemin({
@@ -314,6 +314,6 @@ gulp.task('copy:pages', function() {
 gulp.task('default', ['build']);
 gulp.task('test', ['clean:test', 'jshint', 'karma:unit']);
 gulp.task('build', ['clean:dist', 'templates:dist', 'scripts:dist']);
-gulp.task('pages', ['clean:pages', 'styles:docs', 'usemin:pages', 'templates:docs', 'copy:pages']);
+gulp.task('pages', ['clean:pages', 'usemin:pages', 'templates:docs', 'copy:pages']);
 gulp.task('serve', ['clean:dist', 'styles:docs', 'connect:docs', 'watch:docs', 'watch:dev', 'open:docs']);
 
