@@ -81,7 +81,7 @@
         </li> -->
         <li>
           <a class="travis-btn" href="//travis-ci.org/#!/mgcrea/angular-strap" target="_blank">
-            <img src="//secure.travis-ci.org/mgcrea/angular-strap.png?branch=master">
+            <img src="//secure.travis-ci.org/mgcrea/angular-strap.svg?branch=master">
           </a>
         </li>
         <li>
@@ -359,7 +359,7 @@
   </div> -->
 
   <h2 id="project-quickstart">Quick Start</h2>
-  <p>Install and manage AngularStrap with <a href="http://bower.io">Bower</a>.</p>
+  <p>Install and manage AngularStrap with <a href="http://bower.io">Bower</a>. <small>You can also use <a href="https://www.nuget.org/packages/angular-strap">NuGet</a>.</small></p>
   <div class="highlight">
     <pre>
       <code class="bash" highlight-block="">
@@ -500,11 +500,11 @@
             var myModal = $modal({title: 'My Title', content: 'My Content', show: true});
 
             // Pre-fetch an external template populated with a custom scope
-            var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.tpl.demo.html'});
+            var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.tpl.demo.html', show: false});
             // Show when some event occurs (use $promise property to ensure the template has been loaded)
-            myOtherModal.$promise.then(function() {
-              myOtherModal.show();
-            })
+            $scope.showModal = function() {
+              myOtherModal.$promise.then(myOtherModal.show);
+            };
           })
         </code>
       </pre>
@@ -977,6 +977,14 @@
           <td>false</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>duration</td>
+          <td>number | false</td>
+          <td>false</td>
+          <td>
+            <p>If provided, the number of seconds the alert should be displayed for before it is automatically closed. Default keeps alert open until explicity closed.</p>
           </td>
         </tr>
       </tbody>
