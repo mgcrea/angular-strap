@@ -133,11 +133,16 @@ gulp.task('scripts:dist', function() {
 var ngtemplate = require('gulp-ngtemplate');
 var uglify = require('gulp-uglify');
 var ngmin = require('gulp-ngmin');
+
+function createModuleName(src) {
+  return 'mgcrea.ngStrap.' + src.split(path.sep)[0];
+}
+
 gulp.task('templates:dist', function() {
   // Build unified package
   gulp.src(paths.templates, {cwd: paths.src})
     .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
-    .pipe(ngtemplate({module: function(src) { return 'mgcrea.ngStrap.' + src.split('/')[0]; }}))
+    .pipe(ngtemplate({module: createModuleName}))
     .pipe(ngmin())
     .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
     .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
@@ -151,7 +156,7 @@ gulp.task('templates:dist', function() {
   // Build individual modules
   gulp.src(paths.templates, {cwd: paths.src})
     .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
-    .pipe(ngtemplate({module: function(src) { return 'mgcrea.ngStrap.' + src.split('/')[0]; }}))
+    .pipe(ngtemplate({module: createModuleName}))
     .pipe(ngmin())
     .pipe(rename(function(path){ path.dirname = ''; })) // flatten
     .pipe(concat.header(banner))
@@ -165,7 +170,7 @@ gulp.task('templates:test', function() {
   // Build individual modules
   return gulp.src(paths.templates, {cwd: paths.src})
     .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
-    .pipe(ngtemplate({module: function(src) { return 'mgcrea.ngStrap.' + src.split('/')[0]; }}))
+    .pipe(ngtemplate({module: createModuleName}))
     .pipe(ngmin())
     .pipe(rename(function(path){ path.dirname = ''; })) // flatten
     .pipe(concat.header(banner))
@@ -186,7 +191,7 @@ gulp.task('templates:docs', function() {
     .pipe(gulp.dest('pages/scripts'));
   gulp.src([paths.templates, '{,*/}docs/*.tpl.demo.html'], {cwd: paths.src})
     .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
-    .pipe(ngtemplate({module: function(src) { return 'mgcrea.ngStrap.' + src.split('/')[0]; }}))
+    .pipe(ngtemplate({module: createModuleName}))
     .pipe(ngmin())
     .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
     .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
