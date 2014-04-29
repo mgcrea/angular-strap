@@ -5,6 +5,8 @@
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
+ 
+(function(window, document, undefined) {
 'use strict';
 angular.module('mgcrea.ngStrap.affix', [
   'mgcrea.ngStrap.helpers.dimensions',
@@ -189,3 +191,5 @@ angular.module('mgcrea.ngStrap.affix', [
     ]
   };
 });
+
+})(window, document);
