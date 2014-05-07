@@ -232,9 +232,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(!$tooltip.$isShown) return;
           scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
 
-	        $animate.leave(tipElement, function() {
-	          scope.$emit(options.prefixEvent + '.hide', $tooltip);
-	        });
+          $animate.leave(tipElement, function() {
+            scope.$emit(options.prefixEvent + '.hide', $tooltip);
+          });
 
           $tooltip.$isShown = scope.$isShown = false;
           scope.$$phase || scope.$root.$$phase || scope.$digest();
