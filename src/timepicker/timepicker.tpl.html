@@ -3,16 +3,16 @@
   <thead>
     <tr class="text-center">
       <th>
-        <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$moveIndex(-1, 0)">
-          <i class="{{$iconUp}}"></i>
+        <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 0)">
+          <i class="{{ $iconUp }}"></i>
         </button>
       </th>
       <th>
         &nbsp;
       </th>
       <th>
-        <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$moveIndex(-1, 1)">
-          <i class="{{$iconUp}}"></i>
+        <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 1)">
+          <i class="{{ $iconUp }}"></i>
         </button>
       </th>
     </tr>
@@ -44,16 +44,16 @@
   <tfoot>
     <tr class="text-center">
       <th>
-        <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$moveIndex(1, 0)">
-          <i class="{{$iconDown}}"></i>
+        <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(1, 0)">
+          <i class="{{ $iconDown }}"></i>
         </button>
       </th>
       <th>
         &nbsp;
       </th>
       <th>
-        <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$moveIndex(1, 1)">
-          <i class="{{$iconDown}}"></i>
+        <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(1, 1)">
+          <i class="{{ $iconDown }}"></i>
         </button>
       </th>
     </tr>

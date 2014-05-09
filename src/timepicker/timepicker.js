@@ -26,7 +26,8 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
       hourStep: 1,
       minuteStep: 5,
       iconUp: 'glyphicon glyphicon-chevron-up',
-      iconDown: 'glyphicon glyphicon-chevron-down'
+      iconDown: 'glyphicon glyphicon-chevron-down',
+      arrowBehavior: 'pager'
     };
 
     this.$get = function($window, $document, $rootScope, $sce, $locale, dateFilter, $tooltip) {
@@ -143,6 +144,28 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             selectedTime = date.getTime() + viewDate.hour * 36e5;
           }
           return selectedTime < options.minTime * 1 || selectedTime > options.maxTime * 1;
+        };
+
+        scope.$arrowAction = function (value, index) {
+          if (options.arrowBehavior === 'picker') {
+            $timepicker.$setTimeByStep(value,index);
+          } else {
+            $timepicker.$moveIndex(value,index);
+          }
+        };
+
+        $timepicker.$setTimeByStep = function(value, index) {
+          var newDate = new Date($timepicker.$date);
+          var hours = newDate.getHours(), hoursLength = dateFilter(newDate, 'h').length;
+          var minutes = newDate.getMinutes(), minutesLength = dateFilter(newDate, 'mm').length;
+          if (index === 0) {
+            newDate.setHours(hours + (parseInt(options.hourStep, 10) * value));
+          }
+          else {
+            newDate.setMinutes(minutes + (parseInt(options.minuteStep, 10) * value));
+          }
+          $timepicker.select(newDate, index, true);
+          parentScope.$digest();
         };
 
         $timepicker.$moveIndex = function(value, index) {
@@ -301,7 +324,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'length'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'length', 'arrowBehavior'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
