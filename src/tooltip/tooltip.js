@@ -186,7 +186,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           tipElement = $tooltip.$element = tipLinker(scope, function(clonedElement, scope) {});
 
           // Set the initial positioning.
-          tipElement.css({top: '0px', left: '0px', display: 'block'}).addClass(options.placement);
+          tipElement.css({top: '-9999px', left: '-9999px', display: 'block'}).addClass(options.placement);
 
           // Options: animation
           if(options.animation) tipElement.addClass(options.animation);
