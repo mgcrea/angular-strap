@@ -44,8 +44,8 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
       var boxRect = element.getBoundingClientRect();
       var docElement = element.ownerDocument;
       return {
-        width: element.offsetWidth,
-        height: element.offsetHeight,
+        width: boxRect.width || element.offsetWidth,
+        height: boxRect.height || element.offsetHeight,
         top: boxRect.top + (window.pageYOffset || docElement.documentElement.scrollTop) - (docElement.documentElement.clientTop || 0),
         left: boxRect.left + (window.pageXOffset || docElement.documentElement.scrollLeft) - (docElement.documentElement.clientLeft || 0)
       };
