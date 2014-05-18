@@ -20,7 +20,8 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
       show: true,
       // Specific options
       duration: false,
-      type: false
+      type: false,
+	  dismissable: true
     };
 
     this.$get = function($modal, $timeout) {
@@ -34,8 +35,9 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         $alert = $modal(options);
 
-        // Support scope as string options [/*title, content, */type]
-        if(options.type) {
+        // Support scope as string options [/*title, content, */ type, dismissable]
+        $alert.$scope.dismissable = options.dismissable;
+		if(options.type) {
           $alert.$scope.type = options.type;
         }
 
@@ -71,7 +73,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration'], function(key) {
+        angular.forEach(['template', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
