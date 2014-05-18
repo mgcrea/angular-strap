@@ -21,7 +21,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
       // Specific options
       duration: false,
       type: false,
-	  dismissable: true
+      dismissable: true
     };
 
     this.$get = function($modal, $timeout) {
@@ -36,8 +36,8 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
         $alert = $modal(options);
 
         // Support scope as string options [/*title, content, */ type, dismissable]
-        $alert.$scope.dismissable = options.dismissable;
-		if(options.type) {
+        $alert.$scope.dismissable = !!options.dismissable;
+        if(options.type) {
           $alert.$scope.type = options.type;
         }
 
