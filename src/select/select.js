@@ -19,7 +19,8 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
       caretHtml: '&nbsp;<span class="caret"></span>',
       placeholder: 'Choose among the following...',
       maxLength: 3,
-      maxLengthHtml: 'selected'
+      maxLengthHtml: 'selected',
+      iconCheckmark: 'glyphicon glyphicon-ok'
     };
 
     this.$get = function($window, $document, $rootScope, $tooltip) {
@@ -41,6 +42,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         scope.$matches = [];
         scope.$activeIndex = 0;
         scope.$isMultiple = options.multiple;
+        scope.$iconCheckmark = options.iconCheckmark;
 
         scope.$activate = function(index) {
           scope.$$postDigest(function() {
