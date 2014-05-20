@@ -4,7 +4,7 @@
     <tr class="text-center">
       <th>
         <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$selectPane(-1)">
-          <i class="glyphicon glyphicon-chevron-left"></i>
+          <i class="{{$iconLeft}}"></i>
         </button>
       </th>
       <th colspan="{{ rows[0].length - 2 }}">
@@ -14,7 +14,7 @@
       </th>
       <th>
         <button tabindex="-1" type="button" class="btn btn-default pull-right" ng-click="$selectPane(+1)">
-          <i class="glyphicon glyphicon-chevron-right"></i>
+          <i class="{{$iconRight}}"></i>
         </button>
       </th>
     </tr>
