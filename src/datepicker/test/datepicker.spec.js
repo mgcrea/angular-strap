@@ -118,6 +118,10 @@ describe('datepicker', function() {
     },
     'options-useNative': {
       element: '<input type="text" ng-model="selectedDate" data-use-native="1" bs-datepicker>'
+    },
+    'options-modelDateFormat': {
+      scope: {selectedDate: '2014-12-01' },
+      element: '<input type="text" ng-model="selectedDate" data-date-format="dd/MM/yyyy" data-model-date-format="yyyy-MM-dd" data-date-type="string" bs-datepicker>'
     }
   };
 
@@ -584,6 +588,29 @@ describe('datepicker', function() {
         // @TODO ?
       });
 
+    });
+
+  });
+
+  describe('dateModelFormat', function() {
+
+    it('should support a custom modelDateFormat', function() {
+      var elm = compileDirective('options-modelDateFormat');
+
+      // Should have the predefined value
+      expect(elm.val()).toBe('01/12/2014');
+
+      // Should correctly set the model value if set via the datepicker
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+      expect(elm.val()).toBe('24/12/2014');
+      expect(scope.selectedDate).toBe('2014-12-24');
+
+      // Should correctly set the model if the date is manually typed into the input
+      elm.val('20/11/2014');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(scope.selectedDate).toBe('2014-11-20');
     });
 
   });

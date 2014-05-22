@@ -82,13 +82,15 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         return regex.test(date);
       };
 
-      $dateParser.parse = function(value, baseDate) {
+      $dateParser.parse = function(value, baseDate, format) {
+        var formatRegex = format ? regExpForFormat(format) : regex;
+        var formatSetMap = format ? setMapForFormat(format): setMap;
         if(angular.isDate(value)) return value;
-        var matches = regex.exec(value);
+        var matches = formatRegex.exec(value);
         if(!matches) return false;
         var date = baseDate || new Date(0, 0, 1);
         for(var i = 0; i < matches.length - 1; i++) {
-          setMap[i] && setMap[i].call(date, matches[i+1]);
+          formatSetMap[i] && formatSetMap[i].call(date, matches[i+1]);
         }
         return date;
       };
