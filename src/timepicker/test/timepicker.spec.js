@@ -98,6 +98,10 @@ describe('timepicker', function() {
     },
     'options-useNative': {
       element: '<input type="text" ng-model="selectedTime" data-use-native="1" bs-timepicker>'
+    },
+    'options-modelTimeFormat': {
+      scope: {selectedTime: '12:20:00'},
+      element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-model-time-format="HH:mm:ss" data-time-format="HH:mm" bs-timepicker>'
     }
   };
 
@@ -443,6 +447,29 @@ describe('timepicker', function() {
         // @TODO ?
       });
 
+    });
+
+  });
+
+  describe('modelTimeFormat', function() {
+
+    it('should support a custom modelTimeFormat', function() {
+      var elm = compileDirective('options-modelTimeFormat');
+
+      // Should have the predefined value
+      expect(elm.val()).toBe('12:20');
+
+      // Should correctly set the model value if set via the datepicker
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(13)')).triggerHandler('click');
+      expect(elm.val()).toBe('13:20');
+      expect(scope.selectedTime).toBe('13:20:00');
+
+      // Should correctly set the model if the date is manually typed into the input
+      elm.val('10:00');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(scope.selectedTime).toBe('10:00:00');
     });
 
   });
