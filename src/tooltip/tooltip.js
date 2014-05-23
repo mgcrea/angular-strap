@@ -149,11 +149,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             }
           }
 
-          // Remove element
-          if(tipElement) {
-            tipElement.remove();
-            tipElement = null;
-          }
+
+          scope.$$postDigest(function() {
+              // Remove element
+              if(tipElement) {
+                tipElement.remove();
+                tipElement = null;
+              }
+          });
 
           //cancel pending callbacks
           clearTimeout(timeout);
