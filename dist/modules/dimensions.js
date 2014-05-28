@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.2 - 2014-04-27
+ * @version v2.0.2 - 2014-05-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -48,8 +48,8 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', [
       var boxRect = element.getBoundingClientRect();
       var docElement = element.ownerDocument;
       return {
-        width: element.offsetWidth,
-        height: element.offsetHeight,
+        width: boxRect.width || element.offsetWidth,
+        height: boxRect.height || element.offsetHeight,
         top: boxRect.top + (window.pageYOffset || docElement.documentElement.scrollTop) - (docElement.documentElement.clientTop || 0),
         left: boxRect.left + (window.pageXOffset || docElement.documentElement.scrollLeft) - (docElement.documentElement.clientLeft || 0)
       };
