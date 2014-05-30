@@ -36,7 +36,6 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         var options = angular.extend({}, defaults, config);
 
         $select = $tooltip(element, options);
-        var parentScope = config.scope;
         var scope = $select.$scope;
 
         scope.$matches = [];
@@ -84,20 +83,18 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         $select.select = function(index) {
           var value = scope.$matches[index].value;
-          $select.activate(index);
-          if(options.multiple) {
-            controller.$setViewValue(scope.$activeIndex.map(function(index) {
-              return scope.$matches[index].value;
-            }));
-          } else {
-            controller.$setViewValue(value);
-          }
-          controller.$render();
-          if(parentScope) parentScope.$digest();
-          // Hide if single select
-          if(!options.multiple) {
-            $select.hide();
-          }
+          scope.$apply(function() {
+            $select.activate(index);
+            if(options.multiple) {
+              controller.$setViewValue(scope.$activeIndex.map(function(index) {
+                return scope.$matches[index].value;
+              }));
+            } else {
+              controller.$setViewValue(value);
+              // Hide if single select
+              $select.hide();
+            }
+          });
           // Emit event
           scope.$emit('$select.select', value, index);
         };
