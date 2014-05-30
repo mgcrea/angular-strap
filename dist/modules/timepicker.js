@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.2 - 2014-04-27
+ * @version v2.0.2 - 2014-05-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -28,7 +28,9 @@ angular.module('mgcrea.ngStrap.timepicker', [
       maxTime: +Infinity,
       length: 5,
       hourStep: 1,
-      minuteStep: 5
+      minuteStep: 5,
+      iconUp: 'glyphicon glyphicon-chevron-up',
+      iconDown: 'glyphicon glyphicon-chevron-down'
     };
   this.$get = [
     '$window',
@@ -61,6 +63,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
           };
         var format = $locale.DATETIME_FORMATS[options.timeFormat] || options.timeFormat;
         var formats = /(h+)[:]?(m+)[ ]?(a?)/i.exec(format).slice(1);
+        scope.$iconUp = options.iconUp;
+        scope.$iconDown = options.iconDown;
         // Scope methods
         scope.$select = function (date, index) {
           $timepicker.select(date, index);
