@@ -155,7 +155,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             tipElement = null;
           }
 
-          //cancel pending callbacks
+          // Cancel pending callbacks
           clearTimeout(timeout);
 
           // Destroy scope
