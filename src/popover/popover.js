@@ -15,7 +15,8 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
       title: '',
       content: '',
       delay: 0,
-      container: false
+      container: false,
+      target: null
     };
 
     this.$get = function($tooltip) {
@@ -53,7 +54,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation'], function(key) {
+        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'target'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
