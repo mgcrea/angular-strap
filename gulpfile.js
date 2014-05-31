@@ -317,7 +317,7 @@ gulp.task('copy:pages', function() {
 // DEFAULT
 //
 gulp.task('default', ['build']);
-gulp.task('test', ['clean:test', 'jshint', 'karma:unit']);
+gulp.task('test', ['clean:test', 'jshint', 'templates:test', 'karma:unit']);
 gulp.task('build', ['clean:dist', 'templates:dist', 'scripts:dist']);
 gulp.task('pages', ['clean:pages', 'usemin:pages', 'templates:docs', 'copy:pages']);
 gulp.task('serve', ['clean:dist', 'styles:docs', 'connect:docs', 'watch:docs', 'watch:dev', 'open:docs']);
