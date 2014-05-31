@@ -178,7 +178,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             $select.$element.addClass('select-multiple');
           }
           setTimeout(function() {
-            $select.$element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
+            $select.$element.on(isTouch && 'touchstart' in element ? 'touchstart' : 'mousedown', $select.$onMouseDown);
             if(options.keyboard) {
               element.on('keydown', $select.$onKeyDown);
             }
@@ -187,7 +187,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         var _hide = $select.hide;
         $select.hide = function() {
-          $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
+          $select.$element.off(isTouch && 'touchstart' in element ? 'touchstart' : 'mousedown', $select.$onMouseDown);
           if(options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
           }

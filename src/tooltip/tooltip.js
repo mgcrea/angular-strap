@@ -122,7 +122,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             } else if(trigger !== 'manual') {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+              nodeName === 'button' && trigger !== 'hover' && element.on(isTouch && 'touchstart' in element ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
             }
           });
 
@@ -151,7 +151,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             } else if(trigger !== 'manual') {
               element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              nodeName === 'button' && trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+              nodeName === 'button' && trigger !== 'hover' && element.off(isTouch && 'touchstart' in element ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
             }
           }
 
