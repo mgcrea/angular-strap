@@ -150,7 +150,7 @@ angular.module('mgcrea.ngStrap.button', [])
         };
 
         // view -> model
-        element.bind(options.toggleEvent, function() {
+        activeElement.bind(options.toggleEvent, function() {
           scope.$apply(function () {
             // console.warn('!click', element.attr('value'), 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue, 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue);
             controller.$setViewValue(value);
