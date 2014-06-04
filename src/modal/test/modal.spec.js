@@ -274,6 +274,16 @@ describe('modal', function() {
 
     });
 
+    describe('container', function() {
+      it('accepts element object', function() {
+      	var testElm = angular.element('<div></div>');
+      	sandboxEl.append(testElm);
+        var myModal = $modal(angular.extend({}, templates['default'].scope.modal, {container: testElm}));
+        scope.$digest();
+        expect(angular.element(testElm.children()[0]).hasClass('modal')).toBeTruthy();
+      });
+    });
+
   });
 
 });

@@ -111,6 +111,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // Options : container
           if(options.container === 'self') {
             tipContainer = element;
+          } else if(angular.isElement(options.container)) {
+            tipContainer = options.container;
           } else if(options.container) {
             tipContainer = findElement(options.container);
           }

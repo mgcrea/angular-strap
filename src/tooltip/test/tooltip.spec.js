@@ -378,6 +378,18 @@ describe('tooltip', function() {
 
     });
 
+    describe('container', function() {
+      it('accepts element object', function() {
+      	var testElm = angular.element('<div></div>');
+      	sandboxEl.append(testElm);
+        var myTooltip = $tooltip(sandboxEl, angular.extend({}, templates['default'].scope.tooltip, {container: testElm}));
+        scope.$digest();
+        myTooltip.show();
+        $animate.triggerCallbacks();
+        expect(angular.element(testElm.children()[0]).hasClass('tooltip')).toBeTruthy();
+      });
+    });
+
   });
 
 });
