@@ -85,9 +85,11 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          popover.destroy();
-          options = null;
-          popover = null;
+		if (popover !== null) {
+			  popover.destroy();
+			  options = null;
+			  popover = null;
+		  }
         });
 
       }
