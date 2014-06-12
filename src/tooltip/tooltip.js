@@ -414,7 +414,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Observe scope attributes for change
         angular.forEach(['title'], function(key) {
-          attr[key] && attr.$observe(key, function(newValue, oldValue) {
+          attr.$observe(key, function(newValue, oldValue) {
             scope[key] = $sce.trustAsHtml(newValue);
             angular.isDefined(oldValue) && $$rAF(function() {
               tooltip && tooltip.$applyPlacement();
