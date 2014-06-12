@@ -172,7 +172,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             scope.$emit(options.prefixEvent + '.hide', $modal);
             bodyElement.removeClass(options.prefixClass + '-open');
             if(options.animation) {
-              bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
+              bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
             }
           });
           if(options.backdrop) {
