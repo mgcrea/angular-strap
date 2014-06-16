@@ -266,6 +266,9 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             } else {
               selected = selected.join(', ');
             }
+            if (controller.$modelValue.length === 0) {
+              select.$scope.$activeIndex = [];
+            }
           } else {
             index = select.$getIndex(controller.$modelValue);
             selected = angular.isDefined(index) ? select.$scope.$matches[index].label : false;
