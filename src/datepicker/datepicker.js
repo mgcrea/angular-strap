@@ -88,7 +88,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               el.disabled = $picker.isDisabled(el.date);
             });
           }
-        }
+        };
 
         $datepicker.select = function(date, keep) {
           // console.warn('$datepicker.select', date, scope.$mode);
