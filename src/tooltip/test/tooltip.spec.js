@@ -238,6 +238,17 @@ describe('tooltip', function() {
       expect(emit).toHaveBeenCalledWith('datepicker.hide', myTooltip);
     });
 
+    it('should be invisible until it is positioned', inject(function ($$rAF) {
+      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      scope.$digest();
+      myTooltip.show();
+
+      expect(bodyEl.children('.tooltip').css('visibility')).toBe('hidden');
+
+      // Positioning and visibility occurs inside the rAF callback.
+      $$rAF.flush();
+      expect(bodyEl.children('.tooltip').css('visibility')).toBe('visible');
+    }));
   });
 
   describe('options', function() {
