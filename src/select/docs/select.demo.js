@@ -15,9 +15,5 @@ angular.module('mgcrea.ngStrapDocs')
 
   $scope.selectedMonth = 0;
   $scope.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  $scope.fn = function(v) {
-    console.warn('fn', v);
-    return v;
-  }
 
 });

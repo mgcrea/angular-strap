@@ -23,7 +23,7 @@ $scope.icons = "{{icons}}";
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
     <label>Single select:&nbsp;</label>
-    <button type="button" class="btn btn-default" ng-model="selectedIcon" data-html="1" ng-options="icon.value as fn(icon.label) for icon in icons" bs-select>
+    <button type="button" class="btn btn-default" ng-model="selectedIcon" data-html="1" ng-options="icon.value as icon.label for icon in icons" bs-select>
       Action <span class="caret"></span>
     </button>
     <hr>
