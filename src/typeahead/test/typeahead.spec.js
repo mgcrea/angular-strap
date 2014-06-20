@@ -31,6 +31,10 @@ describe('typeahead', function () {
       scope: {selectedState: 'Alaska', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
       element: '<input type="text" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
     },
+    'single-match': {
+      scope: {selectedCode: '', codes: ['000000', '000001']},
+      element: '<input type="text" ng-model="selecteCode" ng-options="code for code in codes" bs-typeahead>'
+    },
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><input type="text" ng-model="selectedState" ng-options="state for state in states" bs-typeahead></li></ul>'
     },
@@ -129,6 +133,19 @@ describe('typeahead', function () {
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
       angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
       expect(scope.selectedState).toBe(scope.states[0]);
+    });
+
+    it('should only show one match when there is only one match left', function () {
+      var elm = compileDirective('single-match');
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val(scope.codes[0].substr(0, 5)); // 00000
+      expect(elm.val()).toBe(scope.codes[0].substr(0, 5));
+      angular.element(elm[0]).triggerHandler('change');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(2); // 000000 & 000001
+      elm.val(scope.codes[0].substr(0, 6)); // 000000
+      expect(elm.val()).toBe(scope.codes[0].substr(0, 6));
+      angular.element(elm[0]).triggerHandler('change');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(1); // 000000
     });
 
     // @TODO
