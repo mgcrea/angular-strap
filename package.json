@@ -42,6 +42,7 @@
     "gulp-ngtemplate": "^0.2.3",
     "gulp-open": "^0.2.8",
     "gulp-rename": "^1.2.0",
+    "gulp-sourcemaps": "^0.4.1",
     "gulp-uglify": "^0.3.0",
     "gulp-usemin": "^0.3.5",
     "gulp-util": "^2.2.17",
