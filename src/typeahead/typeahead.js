@@ -202,9 +202,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           parsedOptions.valuesFn(scope, controller)
           .then(function(values) {
             if(values.length > limit) values = values.slice(0, limit);
+            typeahead.update(values);
             // Do not re-queue an update if a correct value has been selected
             if(values.length === 1 && values[0].value === newValue) return;
-            typeahead.update(values);
             // Queue a new rendering that will leverage collection loading
             controller.$render();
           });
