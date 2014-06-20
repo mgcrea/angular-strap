@@ -25,6 +25,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
+    "chalk": "^0.4.0",
     "gulp": "^3.8.1",
     "gulp-autoprefixer": "0.0.7",
     "gulp-changed": "^0.4.0",
@@ -49,7 +50,9 @@
     "karma": "^0.12.16",
     "karma-coverage": "^0.2.4",
     "karma-jasmine": "^0.1.5",
-    "karma-phantomjs-launcher": "^0.1.4"
+    "karma-phantomjs-launcher": "^0.1.4",
+    "run-sequence": "^0.3.6",
+    "stream-combiner": "^0.2.1"
   },
   "engines": {
     "node": ">= 0.8.0"
