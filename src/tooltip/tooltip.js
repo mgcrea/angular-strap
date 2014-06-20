@@ -27,6 +27,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       var trim = String.prototype.trim;
       var isTouch = 'createTouch' in $window.document;
       var htmlReplaceRegExp = /ng-bind="/ig;
+      
 
       function TooltipFactory(element, config) {
 
@@ -76,7 +77,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
               var contentEl = findElement('[ng-bind="content"]', templateEl[0]);
               if(!contentEl.length) contentEl = findElement('[ng-bind="title"]', templateEl[0]);
               contentEl.removeAttr('ng-bind').html(contentTemplate);
-              return templateEl[0].outerHTML;
+              return outerHTML(templateEl[0]);
             });
           });
         }
@@ -391,6 +392,20 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           }
           return res;
         });
+      }
+
+      function outerHTML(node) {
+        // shim for ff 10 and below (from pure.js)
+        function outerHTMLShim(n) {
+          var div = document.createElement('div'),
+              h;
+          div.appendChild(n.cloneNode(true));
+          h = div.innerHTML;
+          div = null;
+          return h;
+        }
+
+        return node.outerHTML || outerHTMLShim(node);
       }
 
       return TooltipFactory;
