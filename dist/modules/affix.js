@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.3 - 2014-05-30
+ * @version v2.0.3 - 2014-06-18
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -64,9 +64,6 @@ angular.module('mgcrea.ngStrap.affix', [
           var elementHeight = dimensions.height(element[0]);
           // Get required affix class according to position
           var affix = getRequiredAffixClass(unpin, position, elementHeight);
-          // Did affix status changed this last check?
-          if (affixed === affix)
-            return;
           affixed = affix;
           // Add proper affix class
           element.removeClass(reset).addClass('affix' + (affix !== 'middle' ? '-' + affix : ''));

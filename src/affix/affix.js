@@ -85,8 +85,6 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
           // Get required affix class according to position
           var affix = getRequiredAffixClass(unpin, position, elementHeight);
 
-          // Did affix status changed this last check?
-          if(affixed === affix) return;
           affixed = affix;
 
           // Add proper affix class
