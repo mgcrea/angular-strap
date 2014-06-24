@@ -82,20 +82,16 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $datepicker.updateDisabledDates = function(dateRanges) {
           options.disabledDateRanges = dateRanges;
-
           for(var i = 0, l = scope.rows.length; i < l; i++) {
-            angular.forEach(scope.rows[i], function(el) {
-              el.disabled = $picker.isDisabled(el.date);
-            });
+            angular.forEach(scope.rows[i], $datepicker.$setDisabledEl);
           }
-        }
+        };
 
         $datepicker.select = function(date, keep) {
           // console.warn('$datepicker.select', date, scope.$mode);
           if(!angular.isDate(controller.$dateValue)) controller.$dateValue = new Date(date);
-          controller.$dateValue.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
           if(!scope.$mode || keep) {
-            controller.$setViewValue(controller.$dateValue);
+            controller.$setViewValue(date);
             controller.$render();
             if(options.autoclose && !keep) {
               $datepicker.hide(true);
@@ -131,6 +127,10 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $datepicker.$isSelected = function(date) {
           return $picker.isSelected(date);
+        };
+
+        $datepicker.$setDisabledEl = function(el) {
+          el.disabled = $picker.isDisabled(el.date);
         };
 
         $datepicker.$selectPane = function(value) {
@@ -293,8 +293,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
           return ranges;
         }
 
-        if (angular.isDefined(attr['disabledDates'])) {
-          scope.$watch(attr['disabledDates'], function(disabledRanges, previousValue) {
+        if (angular.isDefined(attr.disabledDates)) {
+          scope.$watch(attr.disabledDates, function(disabledRanges, previousValue) {
             disabledRanges = normalizeDateRanges(disabledRanges);
             previousValue = normalizeDateRanges(previousValue);
 
