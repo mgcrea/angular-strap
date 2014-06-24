@@ -91,7 +91,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
           // console.warn('$datepicker.select', date, scope.$mode);
           if(!angular.isDate(controller.$dateValue)) controller.$dateValue = new Date(date);
           if(!scope.$mode || keep) {
-            controller.$setViewValue(date);
+            controller.$setViewValue(angular.copy(date));
             controller.$render();
             if(options.autoclose && !keep) {
               $datepicker.hide(true);
