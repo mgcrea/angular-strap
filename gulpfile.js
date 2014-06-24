@@ -11,22 +11,8 @@ var pkg = require('./package.json');
 var chalk = require('chalk');
 var fs = require('fs');
 
-
-// var paths = {
-//   src: 'src',
-//   dist: 'dist',
-//   tmp: '.tmp',
-//   docs: 'docs',
-//   pages: 'pages',
-//   // scripts: '*/*.js',
-//   scripts: 'scripts/**/*.js',
-//   index: 'index.html',
-//   views: 'views/**/*.html',
-//   templates: '{,*/}*.tpl.html',
-//   images: 'images/{,*/}*.{jpg,png,svg}',
-//   styles: 'styles/*.less',
-//   data: 'data/{,*/}*.json'
-// };
+// CONFIG
+//
 
 var src = {
   cwd: 'src',
@@ -47,6 +33,11 @@ var docs = {
   styles: 'styles/*.less',
 };
 
+var ports = {
+  docs: 9090,
+  pages: 9090
+};
+
 var banner = gutil.template('/**\n' +
   ' * <%= pkg.name %>\n' +
   ' * @version v<%= pkg.version %> - <%= today %>\n' +
@@ -59,7 +50,7 @@ var banner = gutil.template('/**\n' +
 // CLEAN
 //
 var clean = require('gulp-clean');
-gulp.task('clean:dev', function() {
+gulp.task('clean:tmp', function() {
   return gulp.src(['.tmp/*'], {read: false})
     .pipe(clean());
 });
@@ -68,7 +59,7 @@ gulp.task('clean:test', function() {
     .pipe(clean());
 });
 gulp.task('clean:dist', function() {
-  return gulp.src(['.tmp/*', src.dist + '/*'], {read: false})
+  return gulp.src([src.dist + '/*'], {read: false})
     .pipe(clean());
 });
 gulp.task('clean:pages', function() {
@@ -83,24 +74,24 @@ var connect = require('gulp-connect');
 gulp.task('connect:docs', function() {
   connect.server({
     root: ['.tmp', '.dev', docs.cwd, src.cwd],
-    port: 9000,
+    port: ports.docs,
     livereload: true
   });
 });
 gulp.task('connect:pages', function() {
   connect.server({
     root: [docs.dist],
-    port: 8080,
+    port: ports.pages,
   });
 });
 var chrome = require('gulp-open');
 gulp.task('open:docs', function(){
   gulp.src(docs.index, {cwd: docs.cwd})
-  .pipe(chrome('', {url: 'http://localhost:' + 9000}));
+  .pipe(chrome('', {url: 'http://localhost:' + ports.docs}));
 });
 gulp.task('open:pages', function(){
   gulp.src(docs.index, {cwd: docs.dist})
-  .pipe(chrome('', {url: 'http://localhost:' + 8080}));
+  .pipe(chrome('', {url: 'http://localhost:' + ports.pages}));
 });
 
 
@@ -109,7 +100,7 @@ gulp.task('open:pages', function(){
 var watch = require('gulp-watch');
 gulp.task('watch:docs', function() {
   watch({glob: path.join(docs.cwd, docs.scripts)}).pipe(connect.reload());
-  watch({glob: path.join(docs.cwd, docs.styles)}, ['styles:docs']);
+  watch({glob: path.join(docs.cwd, 'styles/**/*.less')}, ['styles:docs']);
   watch({glob: [path.join(docs.cwd, docs.index), path.join(docs.cwd, docs.views)]}).pipe(connect.reload());
 });
 gulp.task('watch:dev', function() {
@@ -322,7 +313,7 @@ safeLess.on('error', function(err) {
 gulp.task('styles:docs', function() {
   return gulp.src(docs.styles, {cwd: docs.cwd, base: docs.cwd})
     .pipe(changed('.tmp/styles'))
-    .pipe(safeLess)
+    .pipe(less())
     .pipe(prefix('last 1 version'))
     .pipe(gulp.dest(docs.tmp))
     .pipe(connect.reload());
