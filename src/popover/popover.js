@@ -80,6 +80,13 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
           });
         }, true);
 
+        // Visibility binding support
+        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
+          if(!popover || !angular.isDefined(newValue)) return;
+          if(angular.isString(newValue)) newValue = newValue.match(',?(popover),?');
+          newValue === true ? popover.show() : popover.hide();
+        });
+
         // Initialize popover
         var popover = $popover(element, options);
 

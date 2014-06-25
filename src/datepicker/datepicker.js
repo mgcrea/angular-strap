@@ -256,6 +256,13 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
+        // Visibility binding support
+        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
+          if(!datepicker || !angular.isDefined(newValue)) return;
+          if(angular.isString(newValue)) newValue = newValue.match(',?(datepicker),?');
+          newValue === true ? datepicker.show() : datepicker.hide();
+        });
+
         // Initialize datepicker
         if(isNative && options.useNative) options.dateFormat = 'yyyy-MM-dd';
         var datepicker = $datepicker(element, controller, options);
