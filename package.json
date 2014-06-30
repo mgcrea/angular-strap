@@ -59,6 +59,6 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp jshint karma:unit"
   }
 }
