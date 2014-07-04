@@ -45,6 +45,10 @@ describe('select', function () {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
+    'options-multiple-all-none-buttons': {
+      scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
     'options-maxLength': {
       scope: {selectedIcons: ['Globe', 'Heart', 'Camera'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" data-max-length="2" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
@@ -188,6 +192,18 @@ describe('select', function () {
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
         expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
         expect(sandboxEl.find('.dropdown-menu li > a > i').length).toBe(scope.selectedIcons.length);
+      });
+
+      it('should select and deselect all items', function() {
+        var elm = compileDirective('options-multiple-all-none-buttons');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu li > div > button').length).toBe(2);
+        
+        expect(angular.element(sandboxEl.find('.dropdown-menu li > div > button')[0]).triggerHandler('click'));
+        expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(4);
+        
+        expect(angular.element(sandboxEl.find('.dropdown-menu li > div > button')[1]).triggerHandler('click'));
+        expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(0);
       });
 
     });
