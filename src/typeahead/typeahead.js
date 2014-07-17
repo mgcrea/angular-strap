@@ -184,6 +184,16 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         // Initialize typeahead
         var typeahead = $typeahead(element, controller, options);
 
+        // Watch ngOptions values before filtering for changes
+        var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
+        scope.$watch(watchedOptions, function (newValue, oldValue) {
+          // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
+          parsedOptions.valuesFn(scope, controller).then(function (values) {
+            typeahead.update(values);
+            controller.$render();
+          });
+        }, true);
+
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
           // console.warn('$watch', element.attr('ng-model'), newValue);

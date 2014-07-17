@@ -156,6 +156,17 @@ describe('typeahead', function () {
 
   });
 
+  describe('ngOptions', function () {
+
+    it('should correctly watch for changes', function() {
+      var elm = compileDirective('default');
+      scope.states.shift();
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.states[0]);
+    });
+
+  });
 
   describe('options', function () {
 
