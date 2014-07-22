@@ -108,7 +108,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.$onKeyDown = function(evt) {
           if (!/(38|40|13)/.test(evt.keyCode)) return;
           evt.preventDefault();
-          evt.stopPropagation();
+
+          if ($typeahead.$isVisible()) {
+            evt.stopPropagation();
+          }
 
           // Select with enter
           if(evt.keyCode === 13 && scope.$matches.length) {
