@@ -2686,6 +2686,69 @@ angular.module('mgcrea.ngStrap.select', [
   }
 ]);
 
+// Source: tab.js
+angular.module('mgcrea.ngStrap.tab', []).run([
+  '$templateCache',
+  function ($templateCache) {
+    $templateCache.put('$pane', '{{pane.content}}');
+  }
+]).provider('$tab', function () {
+  var defaults = this.defaults = {
+      animation: 'am-fade',
+      template: 'tab/tab.tpl.html'
+    };
+  this.$get = function () {
+    return { defaults: defaults };
+  };
+}).directive('bsTabs', [
+  '$window',
+  '$animate',
+  '$tab',
+  function ($window, $animate, $tab) {
+    var defaults = $tab.defaults;
+    return {
+      restrict: 'EAC',
+      scope: true,
+      require: '?ngModel',
+      templateUrl: function (element, attr) {
+        return attr.template || defaults.template;
+      },
+      link: function postLink(scope, element, attr, controller) {
+        // Directive options
+        var options = defaults;
+        angular.forEach(['animation'], function (key) {
+          if (angular.isDefined(attr[key]))
+            options[key] = attr[key];
+        });
+        // Require scope as an object
+        attr.bsTabs && scope.$watch(attr.bsTabs, function (newValue, oldValue) {
+          scope.panes = newValue;
+        }, true);
+        // Add base class
+        element.addClass('tabs');
+        // Support animations
+        if (options.animation) {
+          element.addClass(options.animation);
+        }
+        scope.active = scope.activePane = 0;
+        // view -> model
+        scope.setActive = function (index, ev) {
+          scope.active = index;
+          if (controller) {
+            controller.$setViewValue(index);
+          }
+        };
+        // model -> view
+        if (controller) {
+          controller.$render = function () {
+            scope.active = controller.$modelValue * 1;
+          };
+        }
+      }
+    };
+  }
+]);
+
 // Source: timepicker.js
 angular.module('mgcrea.ngStrap.timepicker', [
   'mgcrea.ngStrap.helpers.dateParser',
@@ -3134,69 +3197,6 @@ angular.module('mgcrea.ngStrap.timepicker', [
           options = null;
           timepicker = null;
         });
-      }
-    };
-  }
-]);
-
-// Source: tab.js
-angular.module('mgcrea.ngStrap.tab', []).run([
-  '$templateCache',
-  function ($templateCache) {
-    $templateCache.put('$pane', '{{pane.content}}');
-  }
-]).provider('$tab', function () {
-  var defaults = this.defaults = {
-      animation: 'am-fade',
-      template: 'tab/tab.tpl.html'
-    };
-  this.$get = function () {
-    return { defaults: defaults };
-  };
-}).directive('bsTabs', [
-  '$window',
-  '$animate',
-  '$tab',
-  function ($window, $animate, $tab) {
-    var defaults = $tab.defaults;
-    return {
-      restrict: 'EAC',
-      scope: true,
-      require: '?ngModel',
-      templateUrl: function (element, attr) {
-        return attr.template || defaults.template;
-      },
-      link: function postLink(scope, element, attr, controller) {
-        // Directive options
-        var options = defaults;
-        angular.forEach(['animation'], function (key) {
-          if (angular.isDefined(attr[key]))
-            options[key] = attr[key];
-        });
-        // Require scope as an object
-        attr.bsTabs && scope.$watch(attr.bsTabs, function (newValue, oldValue) {
-          scope.panes = newValue;
-        }, true);
-        // Add base class
-        element.addClass('tabs');
-        // Support animations
-        if (options.animation) {
-          element.addClass(options.animation);
-        }
-        scope.active = scope.activePane = 0;
-        // view -> model
-        scope.setActive = function (index, ev) {
-          scope.active = index;
-          if (controller) {
-            controller.$setViewValue(index);
-          }
-        };
-        // model -> view
-        if (controller) {
-          controller.$render = function () {
-            scope.active = controller.$modelValue * 1;
-          };
-        }
       }
     };
   }
@@ -3730,6 +3730,7 @@ angular.module('mgcrea.ngStrap.typeahead', [
           if (!/(38|40|13)/.test(evt.keyCode))
             return;
           evt.preventDefault();
+          // Let ngSubmit pass if the typeahead tip is hidden
           if ($typeahead.$isVisible()) {
             evt.stopPropagation();
           }
@@ -3796,6 +3797,7 @@ angular.module('mgcrea.ngStrap.typeahead', [
           'filter',
           'limit',
           'minLength',
+          'watchOptions',
           'selectMode'
         ], function (key) {
           if (angular.isDefined(attr[key]))
@@ -3812,15 +3814,18 @@ angular.module('mgcrea.ngStrap.typeahead', [
         var parsedOptions = $parseOptions(ngOptions);
         // Initialize typeahead
         var typeahead = $typeahead(element, controller, options);
-        // Watch ngOptions values before filtering for changes
-        var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
-        scope.$watch(watchedOptions, function (newValue, oldValue) {
-          // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
-          parsedOptions.valuesFn(scope, controller).then(function (values) {
-            typeahead.update(values);
-            controller.$render();
-          });
-        }, true);
+        // Watch options on demand
+        if (options.watchOptions) {
+          // Watch ngOptions values before filtering for changes, drop function calls
+          var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '').trim();
+          scope.$watch(watchedOptions, function (newValue, oldValue) {
+            // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
+            parsedOptions.valuesFn(scope, controller).then(function (values) {
+              typeahead.update(values);
+              controller.$render();
+            });
+          }, true);
+        }
         // Watch model for changes
         scope.$watch(attr.ngModel, function (newValue, oldValue) {
           // console.warn('$watch', element.attr('ng-model'), newValue);
@@ -3835,10 +3840,12 @@ angular.module('mgcrea.ngStrap.typeahead', [
             }
             if (values.length > limit)
               values = values.slice(0, limit);
-            typeahead.update(values);
+            var isVisible = typeahead.$isVisible();
+            isVisible && typeahead.update(values);
             // Do not re-queue an update if a correct value has been selected
             if (values.length === 1 && values[0].value === newValue)
               return;
+            !isVisible && typeahead.update(values);
             // Queue a new rendering that will leverage collection loading
             controller.$render();
           });
