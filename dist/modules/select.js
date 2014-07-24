@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.3 - 2014-05-30
+ * @version v2.0.4 - 2014-07-24
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -13,6 +13,7 @@ angular.module('mgcrea.ngStrap.select', [
   var defaults = this.defaults = {
       animation: 'am-fade',
       prefixClass: 'select',
+      prefixEvent: '$select',
       placement: 'bottom-left',
       template: 'select/select.tpl.html',
       trigger: 'focus',
@@ -21,6 +22,7 @@ angular.module('mgcrea.ngStrap.select', [
       html: false,
       delay: 0,
       multiple: false,
+      allNoneButtons: false,
       sort: true,
       caretHtml: '&nbsp;<span class="caret"></span>',
       placeholder: 'Choose among the following...',
@@ -45,6 +47,7 @@ angular.module('mgcrea.ngStrap.select', [
         scope.$matches = [];
         scope.$activeIndex = 0;
         scope.$isMultiple = options.multiple;
+        scope.$showAllNoneButtons = options.allNoneButtons && options.multiple;
         scope.$iconCheckmark = options.iconCheckmark;
         scope.$activate = function (index) {
           scope.$$postDigest(function () {
@@ -61,6 +64,20 @@ angular.module('mgcrea.ngStrap.select', [
         };
         scope.$isActive = function (index) {
           return $select.$isActive(index);
+        };
+        scope.$selectAll = function () {
+          for (var i = 0; i < scope.$matches.length; i++) {
+            if (!scope.$isActive(i)) {
+              scope.$select(i);
+            }
+          }
+        };
+        scope.$selectNone = function () {
+          for (var i = 0; i < scope.$matches.length; i++) {
+            if (scope.$isActive(i)) {
+              scope.$select(i);
+            }
+          }
         };
         // Public methods
         $select.update = function (matches) {
@@ -93,7 +110,7 @@ angular.module('mgcrea.ngStrap.select', [
             }
           });
           // Emit event
-          scope.$emit('$select.select', value, index);
+          scope.$emit(options.prefixEvent + '.select', value, index);
         };
         // Protected methods
         $select.$updateActiveIndex = function () {
@@ -216,6 +233,7 @@ angular.module('mgcrea.ngStrap.select', [
           'template',
           'placeholder',
           'multiple',
+          'allNoneButtons',
           'maxLength',
           'maxLengthHtml'
         ], function (key) {

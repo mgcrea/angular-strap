@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.3 - 2014-05-30
+ * @version v2.0.4 - 2014-07-24
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -120,7 +120,12 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).pr
         };
         $modal.show = function () {
           scope.$emit(options.prefixEvent + '.show.before', $modal);
-          var parent = options.container ? findElement(options.container) : null;
+          var parent;
+          if (angular.isElement(options.container)) {
+            parent = options.container;
+          } else {
+            parent = options.container ? findElement(options.container) : null;
+          }
           var after = options.container ? null : options.element;
           // Fetch a cloned element linked from template
           modalElement = $modal.$element = modalLinker(scope, function (clonedElement, scope) {
@@ -168,7 +173,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions']).pr
             scope.$emit(options.prefixEvent + '.hide', $modal);
             bodyElement.removeClass(options.prefixClass + '-open');
             if (options.animation) {
-              bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
+              bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
             }
           });
           if (options.backdrop) {

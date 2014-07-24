@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Bootstrap",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "keywords": [
     "angular",
     "bootstrap"
@@ -52,8 +52,8 @@
     "karma-coverage": "^0.2.4",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
-    "run-sequence": "^0.3.6",
-    "stream-combiner": "^0.2.1"
+    "merge-stream": "^0.1.5",
+    "run-sequence": "^0.3.6"
   },
   "engines": {
     "node": ">= 0.8.0"

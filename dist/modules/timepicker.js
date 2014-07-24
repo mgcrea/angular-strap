@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.3 - 2014-05-30
+ * @version v2.0.4 - 2014-07-24
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -355,6 +355,14 @@ angular.module('mgcrea.ngStrap.timepicker', [
         ], function (key) {
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
+        });
+        // Visibility binding support
+        attr.bsShow && scope.$watch(attr.bsShow, function (newValue, oldValue) {
+          if (!timepicker || !angular.isDefined(newValue))
+            return;
+          if (angular.isString(newValue))
+            newValue = newValue.match(',?(timepicker),?');
+          newValue === true ? timepicker.show() : timepicker.hide();
         });
         // Initialize timepicker
         if (isNative && (options.useNative || defaults.useNative))
