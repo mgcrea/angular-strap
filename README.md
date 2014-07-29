@@ -4,4 +4,4 @@ AngularStrap Fork
 
 ### Changes 
 
-* (Bug Fix) Typeahead issue with input cursor move to the back other values have updated.
+* (Bug Fix) Typeahead issue with input cursor move to the back after values have updated.
