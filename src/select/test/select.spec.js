@@ -75,7 +75,15 @@ describe('select', function () {
     },
     'options-template': {
       element: '<button type="button" class="btn" data-template="custom" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
-    }
+    },
+    'options-reload-events-data': {
+      scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select reload-events="iconsLoaded"></button>'
+    },
+    'options-reload-events-placeholder': {
+        scope: {selectedIcon: '', icons: [], myPlaceHolder: 'Init Value'},
+        element: '<button type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select reload-events="placeHolderLoaded" placeholder="myPlaceHolder"></button>'
+    },
   };
 
   function compileDirective(template, locals) {
@@ -321,6 +329,35 @@ describe('select', function () {
         expect(angular.element(sandboxEl.find('.dropdown-inner > .btn')[0]).triggerHandler('click'));
         expect(scope.dropdown.counter).toBe(2);
       });
+
+    });
+
+    describe('reload-events', function () {
+
+        it('should reload data after emitting reload-event', function () {
+            var elm = compileDirective('options-reload-events-data');
+            angular.element(elm[0]).triggerHandler('focus');
+            var firstIconLabel = scope.icons[0].label;
+            expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(firstIconLabel);
+            scope.icons[0].label += 'Changed';
+            angular.element(elm[0]).triggerHandler('focus');
+            expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(firstIconLabel);
+            scope.$root.$emit('iconsLoaded');
+            angular.element(elm[0]).triggerHandler('focus');
+            expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(firstIconLabel + 'Changed');
+        });
+
+        it('should reload place holder after emitting reload-event', function () {
+            var elm = compileDirective('options-reload-events-placeholder');
+            angular.element(elm[0]).triggerHandler('focus');
+            expect(elm.text().trim()).toBe('Init Value');
+            scope.myPlaceHolder = 'New Value';
+            angular.element(elm[0]).triggerHandler('focus');
+            expect(elm.text().trim()).toBe('Init Value');
+            scope.$root.$emit('placeHolderLoaded');
+            angular.element(elm[0]).triggerHandler('focus');
+            expect(elm.text().trim()).toBe('New Value');
+        });
 
     });
 
