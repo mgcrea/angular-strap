@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.4 - 2014-07-24
+ * @version v2.0.4 - 2014-07-29
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -1222,6 +1222,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
         var options = angular.extend({}, defaults, config);
         var scope = $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         $dropdown = $tooltip(element, options);
+        var parentEl = element.parent();
         // Protected methods
         $dropdown.$onKeyDown = function (evt) {
           if (!/(38|40)/.test(evt.keyCode))
@@ -1254,13 +1255,13 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
             options.keyboard && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
             bodyEl.on('click', onBodyClick);
           });
-          $dropdown.$element.parent().toggleClass('open');
+          parentEl.hasClass('dropdown') && parentEl.addClass('open');
         };
         var hide = $dropdown.hide;
         $dropdown.hide = function () {
           options.keyboard && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
           bodyEl.off('click', onBodyClick);
-          $dropdown.$element.parent().toggleClass('open');
+          parentEl.hasClass('dropdown') && parentEl.removeClass('open');
           hide();
         };
         // Private functions
@@ -2686,69 +2687,6 @@ angular.module('mgcrea.ngStrap.select', [
   }
 ]);
 
-// Source: tab.js
-angular.module('mgcrea.ngStrap.tab', []).run([
-  '$templateCache',
-  function ($templateCache) {
-    $templateCache.put('$pane', '{{pane.content}}');
-  }
-]).provider('$tab', function () {
-  var defaults = this.defaults = {
-      animation: 'am-fade',
-      template: 'tab/tab.tpl.html'
-    };
-  this.$get = function () {
-    return { defaults: defaults };
-  };
-}).directive('bsTabs', [
-  '$window',
-  '$animate',
-  '$tab',
-  function ($window, $animate, $tab) {
-    var defaults = $tab.defaults;
-    return {
-      restrict: 'EAC',
-      scope: true,
-      require: '?ngModel',
-      templateUrl: function (element, attr) {
-        return attr.template || defaults.template;
-      },
-      link: function postLink(scope, element, attr, controller) {
-        // Directive options
-        var options = defaults;
-        angular.forEach(['animation'], function (key) {
-          if (angular.isDefined(attr[key]))
-            options[key] = attr[key];
-        });
-        // Require scope as an object
-        attr.bsTabs && scope.$watch(attr.bsTabs, function (newValue, oldValue) {
-          scope.panes = newValue;
-        }, true);
-        // Add base class
-        element.addClass('tabs');
-        // Support animations
-        if (options.animation) {
-          element.addClass(options.animation);
-        }
-        scope.active = scope.activePane = 0;
-        // view -> model
-        scope.setActive = function (index, ev) {
-          scope.active = index;
-          if (controller) {
-            controller.$setViewValue(index);
-          }
-        };
-        // model -> view
-        if (controller) {
-          controller.$render = function () {
-            scope.active = controller.$modelValue * 1;
-          };
-        }
-      }
-    };
-  }
-]);
-
 // Source: timepicker.js
 angular.module('mgcrea.ngStrap.timepicker', [
   'mgcrea.ngStrap.helpers.dateParser',
@@ -3197,6 +3135,69 @@ angular.module('mgcrea.ngStrap.timepicker', [
           options = null;
           timepicker = null;
         });
+      }
+    };
+  }
+]);
+
+// Source: tab.js
+angular.module('mgcrea.ngStrap.tab', []).run([
+  '$templateCache',
+  function ($templateCache) {
+    $templateCache.put('$pane', '{{pane.content}}');
+  }
+]).provider('$tab', function () {
+  var defaults = this.defaults = {
+      animation: 'am-fade',
+      template: 'tab/tab.tpl.html'
+    };
+  this.$get = function () {
+    return { defaults: defaults };
+  };
+}).directive('bsTabs', [
+  '$window',
+  '$animate',
+  '$tab',
+  function ($window, $animate, $tab) {
+    var defaults = $tab.defaults;
+    return {
+      restrict: 'EAC',
+      scope: true,
+      require: '?ngModel',
+      templateUrl: function (element, attr) {
+        return attr.template || defaults.template;
+      },
+      link: function postLink(scope, element, attr, controller) {
+        // Directive options
+        var options = defaults;
+        angular.forEach(['animation'], function (key) {
+          if (angular.isDefined(attr[key]))
+            options[key] = attr[key];
+        });
+        // Require scope as an object
+        attr.bsTabs && scope.$watch(attr.bsTabs, function (newValue, oldValue) {
+          scope.panes = newValue;
+        }, true);
+        // Add base class
+        element.addClass('tabs');
+        // Support animations
+        if (options.animation) {
+          element.addClass(options.animation);
+        }
+        scope.active = scope.activePane = 0;
+        // view -> model
+        scope.setActive = function (index, ev) {
+          scope.active = index;
+          if (controller) {
+            controller.$setViewValue(index);
+          }
+        };
+        // model -> view
+        if (controller) {
+          controller.$render = function () {
+            scope.active = controller.$modelValue * 1;
+          };
+        }
       }
     };
   }
@@ -3858,7 +3859,10 @@ angular.module('mgcrea.ngStrap.typeahead', [
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? selected.label : selected;
-          element.val(selected.replace(/<(?:.|\n)*?>/gm, '').trim());
+          var value = selected.replace(/<(?:.|\n)*?>/gm, '').trim();
+          if (element.val() !== value) {
+            element.val(value);
+          }
         };
         // Garbage collection
         scope.$on('$destroy', function () {
