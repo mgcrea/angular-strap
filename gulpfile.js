@@ -396,6 +396,7 @@ gulp.task('karma:server', ['templates:test'], function() {
     process.exit(code);
   });
 });
+// codeclimate-test-reporter
 gulp.task('karma:travis', ['templates:test'], function() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
