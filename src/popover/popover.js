@@ -6,6 +6,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
     var defaults = this.defaults = {
       animation: 'am-fade',
+      customClass: '',
       container: false,
       target: false,
       placement: 'right',
@@ -54,7 +55,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'target', 'delay', 'trigger', 'keyboard', 'html', 'animation'], function(key) {
+        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'target', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'customClass'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
