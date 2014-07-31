@@ -111,7 +111,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         }
         // Sort result map
         angular.forEach(map, function(v) {
-          sortedMap.push(v);
+          if(v) sortedMap.push(v);
         });
         return sortedMap;
       }
