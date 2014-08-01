@@ -254,6 +254,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           $animate.leave(tipElement, function() {
             scope.$emit(options.prefixEvent + '.hide', $tooltip);
+
+            // Allow to blur the input when hidden, like when pressing enter key
+            if(blur && options.trigger === 'focus') {
+              return element[0].blur();
+            }
           });
 
           $tooltip.$isShown = scope.$isShown = false;
@@ -262,11 +267,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // Unbind events
           if(options.keyboard && tipElement !== null) {
             tipElement.off('keyup', $tooltip.$onKeyUp);
-          }
-
-          // Allow to blur the input when hidden, like when pressing enter key
-          if(blur && options.trigger === 'focus') {
-            return element[0].blur();
           }
 
         };
