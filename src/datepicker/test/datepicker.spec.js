@@ -113,6 +113,10 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date(2014, 6, 15), startWeek: 6},
       element: '<input type="text" ng-model="selectedDate" data-start-week="{{startWeek}}" bs-datepicker>'
     },
+    'options-startDate': {
+      scope: {startDate: '02/03/04'},
+      element: '<input type="text" ng-model="selectedDate" data-start-date="{{startDate}}" bs-datepicker>'
+    },
     'options-autoclose': {
       element: '<input type="text" ng-model="selectedDate" data-autoclose="1" bs-datepicker>'
     },
@@ -576,6 +580,16 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu thead tr:eq(1) th:eq(0)').text()).toBe('Sat');
         expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('28');
+      });
+
+    });
+
+    describe('startDate', function() {
+
+      it('should support a dynamic startDate', function() {
+        var elm = compileDirective('options-startDate');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(new Date(scope.startDate), 'MMMM yyyy'));
       });
 
     });
