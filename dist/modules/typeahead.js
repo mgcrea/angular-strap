@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.4 - 2014-07-24
+ * @version v2.0.4 - 2014-07-29
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -233,7 +233,10 @@ angular.module('mgcrea.ngStrap.typeahead', [
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? selected.label : selected;
-          element.val(selected.replace(/<(?:.|\n)*?>/gm, '').trim());
+          var value = selected.replace(/<(?:.|\n)*?>/gm, '').trim();
+          if (element.val().trim() !== value) {
+            element.val(value);
+          }
         };
         // Garbage collection
         scope.$on('$destroy', function () {

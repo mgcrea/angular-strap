@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.4 - 2014-07-24
+ * @version v2.0.4 - 2014-07-29
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -1222,6 +1222,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
         var options = angular.extend({}, defaults, config);
         var scope = $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         $dropdown = $tooltip(element, options);
+        var parentEl = element.parent();
         // Protected methods
         $dropdown.$onKeyDown = function (evt) {
           if (!/(38|40)/.test(evt.keyCode))
@@ -1254,13 +1255,13 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
             options.keyboard && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
             bodyEl.on('click', onBodyClick);
           });
-          $dropdown.$element.parent().toggleClass('open');
+          parentEl.hasClass('dropdown') && parentEl.addClass('open');
         };
         var hide = $dropdown.hide;
         $dropdown.hide = function () {
           options.keyboard && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
           bodyEl.off('click', onBodyClick);
-          $dropdown.$element.parent().toggleClass('open');
+          parentEl.hasClass('dropdown') && parentEl.removeClass('open');
           hide();
         };
         // Private functions
@@ -3858,7 +3859,10 @@ angular.module('mgcrea.ngStrap.typeahead', [
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? selected.label : selected;
-          element.val(selected.replace(/<(?:.|\n)*?>/gm, '').trim());
+          var value = selected.replace(/<(?:.|\n)*?>/gm, '').trim();
+          if (element.val().trim() !== value) {
+            element.val(value);
+          }
         };
         // Garbage collection
         scope.$on('$destroy', function () {

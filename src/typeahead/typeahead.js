@@ -229,7 +229,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? selected.label : selected;
-          element.val(selected.replace(/<(?:.|\n)*?>/gm, '').trim());
+          var value = selected.replace(/<(?:.|\n)*?>/gm, '').trim();
+          if (element.val().trim() !== value) {
+            element.val(value);
+          }
         };
 
         // Garbage collection
