@@ -378,9 +378,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          if (datepicker) {
-            datepicker.destroy();
-          }
+          if(datepicker) datepicker.destroy();
           options = null;
           datepicker = null;
         });

@@ -457,7 +457,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          tooltip.destroy();
+          if(tooltip) tooltip.destroy();
           options = null;
           tooltip = null;
         });
