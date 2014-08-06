@@ -282,6 +282,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               datepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
             } else if(isNumeric(newValue)) {
               datepicker.$options[key] = +new Date(parseInt(newValue, 10));
+            } else if (angular.isString(newValue) && 0 === newValue.length) { // Reset date
+              datepicker.$options[key] = key === 'maxDate' ? +Infinity : -Infinity;
             } else {
               datepicker.$options[key] = +new Date(newValue);
             }
