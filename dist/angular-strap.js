@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.4 - 2014-07-24
+ * @version v2.0.5 - 2014-08-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -573,6 +573,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
       startView: 0,
       minView: 0,
       startWeek: 0,
+      daysOfWeekDisabled: '',
       iconLeft: 'glyphicon glyphicon-chevron-left',
       iconRight: 'glyphicon glyphicon-chevron-right'
     };
@@ -587,8 +588,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
     '$tooltip',
     function ($window, $document, $rootScope, $sce, $locale, dateFilter, datepickerViews, $tooltip) {
       var bodyEl = angular.element($window.document.body);
-      var isTouch = 'createTouch' in $window.document;
       var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
+      var isTouch = 'createTouch' in $window.document && isNative;
       if (!defaults.lang)
         defaults.lang = $locale.id;
       function DatepickerFactory(element, controller, config) {
@@ -811,12 +812,14 @@ angular.module('mgcrea.ngStrap.datepicker', [
           'dayFormat',
           'strictFormat',
           'startWeek',
+          'startDate',
           'useNative',
           'lang',
           'startView',
           'minView',
           'iconLeft',
-          'iconRight'
+          'iconRight',
+          'daysOfWeekDisabled'
         ], function (key) {
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
@@ -829,9 +832,10 @@ angular.module('mgcrea.ngStrap.datepicker', [
             newValue = newValue.match(',?(datepicker),?');
           newValue === true ? datepicker.show() : datepicker.hide();
         });
-        // Initialize datepicker
+        // Set expected iOS format
         if (isNative && options.useNative)
           options.dateFormat = 'yyyy-MM-dd';
+        // Initialize datepicker
         var datepicker = $datepicker(element, controller, options);
         options = datepicker.$options;
         // Observe attributes for changes
@@ -850,6 +854,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
               datepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
             } else if (isNumeric(newValue)) {
               datepicker.$options[key] = +new Date(parseInt(newValue, 10));
+            } else if (angular.isString(newValue) && 0 === newValue.length) {
+              // Reset date
+              datepicker.$options[key] = key === 'maxDate' ? +Infinity : -Infinity;
             } else {
               datepicker.$options[key] = +new Date(newValue);
             }
@@ -943,9 +950,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
         };
         // Garbage collection
         scope.$on('$destroy', function () {
-          if (datepicker) {
+          if (datepicker)
             datepicker.destroy();
-          }
           options = null;
           datepicker = null;
         });
@@ -980,7 +986,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         var weekDaysMin = $locale.DATETIME_FORMATS.SHORTDAY;
         var weekDaysLabels = weekDaysMin.slice(options.startWeek).concat(weekDaysMin.slice(0, options.startWeek));
         var weekDaysLabelsHtml = $sce.trustAsHtml('<th class="dow text-center">' + weekDaysLabels.join('</th><th class="dow text-center">') + '</th>');
-        var startDate = picker.$date || new Date();
+        var startDate = picker.$date || (options.startDate ? new Date(options.startDate) : new Date());
         var viewDate = {
             year: startDate.getFullYear(),
             month: startDate.getMonth(),
@@ -1036,6 +1042,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
                 var time = date.getTime();
                 // Disabled because of min/max date.
                 if (time < options.minDate || time > options.maxDate)
+                  return true;
+                // Disabled due to being a disabled day of the week
+                if (options.daysOfWeekDisabled.indexOf(date.getDay()) !== -1)
                   return true;
                 // Disabled because of disabled date range.
                 if (options.disabledDateRanges) {
@@ -1222,6 +1231,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
         var options = angular.extend({}, defaults, config);
         var scope = $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         $dropdown = $tooltip(element, options);
+        var parentEl = element.parent();
         // Protected methods
         $dropdown.$onKeyDown = function (evt) {
           if (!/(38|40)/.test(evt.keyCode))
@@ -1254,13 +1264,13 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
             options.keyboard && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
             bodyEl.on('click', onBodyClick);
           });
-          $dropdown.$element.parent().toggleClass('open');
+          parentEl.hasClass('dropdown') && parentEl.addClass('open');
         };
         var hide = $dropdown.hide;
         $dropdown.hide = function () {
           options.keyboard && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
           bodyEl.off('click', onBodyClick);
-          $dropdown.$element.parent().toggleClass('open');
+          parentEl.hasClass('dropdown') && parentEl.removeClass('open');
           hide();
         };
         // Private functions
@@ -1433,7 +1443,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
             }
             // Sort result map
             angular.forEach(map, function (v) {
-              sortedMap.push(v);
+              if (v)
+                sortedMap.push(v);
             });
             return sortedMap;
           }
@@ -2071,6 +2082,7 @@ angular.module('mgcrea.ngStrap.navbar', []).provider('$navbar', function () {
 angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$popover', function () {
   var defaults = this.defaults = {
       animation: 'am-fade',
+      customClass: '',
       container: false,
       target: false,
       placement: 'right',
@@ -2122,7 +2134,8 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$
           'trigger',
           'keyboard',
           'html',
-          'animation'
+          'animation',
+          'customClass'
         ], function (key) {
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
@@ -2426,7 +2439,8 @@ angular.module('mgcrea.ngStrap.select', [
     '$tooltip',
     function ($window, $document, $rootScope, $tooltip) {
       var bodyEl = angular.element($window.document.body);
-      var isTouch = 'createTouch' in $window.document;
+      var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
+      var isTouch = 'createTouch' in $window.document && isNative;
       function SelectFactory(element, controller, config) {
         var $select = {};
         // Common vars
@@ -2775,7 +2789,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
       hourStep: 1,
       minuteStep: 5,
       iconUp: 'glyphicon glyphicon-chevron-up',
-      iconDown: 'glyphicon glyphicon-chevron-down'
+      iconDown: 'glyphicon glyphicon-chevron-down',
+      arrowBehavior: 'pager'
     };
   this.$get = [
     '$window',
@@ -2787,8 +2802,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
     '$tooltip',
     function ($window, $document, $rootScope, $sce, $locale, dateFilter, $tooltip) {
       var bodyEl = angular.element($window.document.body);
-      var isTouch = 'createTouch' in $window.document;
       var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
+      var isTouch = 'createTouch' in $window.document && isNative;
       if (!defaults.lang)
         defaults.lang = $locale.id;
       function timepickerFactory(element, controller, config) {
@@ -2912,6 +2927,25 @@ angular.module('mgcrea.ngStrap.timepicker', [
             selectedTime = date.getTime() + viewDate.hour * 3600000;
           }
           return selectedTime < options.minTime * 1 || selectedTime > options.maxTime * 1;
+        };
+        scope.$arrowAction = function (value, index) {
+          if (options.arrowBehavior === 'picker') {
+            $timepicker.$setTimeByStep(value, index);
+          } else {
+            $timepicker.$moveIndex(value, index);
+          }
+        };
+        $timepicker.$setTimeByStep = function (value, index) {
+          var newDate = new Date($timepicker.$date);
+          var hours = newDate.getHours(), hoursLength = dateFilter(newDate, 'h').length;
+          var minutes = newDate.getMinutes(), minutesLength = dateFilter(newDate, 'mm').length;
+          if (index === 0) {
+            newDate.setHours(hours - parseInt(options.hourStep, 10) * value);
+          } else {
+            newDate.setMinutes(minutes - parseInt(options.minuteStep, 10) * value);
+          }
+          $timepicker.select(newDate, index, true);
+          parentScope.$digest();
         };
         $timepicker.$moveIndex = function (value, index) {
           var targetDate;
@@ -3095,7 +3129,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
           'useNative',
           'hourStep',
           'minuteStep',
-          'length'
+          'length',
+          'arrowBehavior'
         ], function (key) {
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
@@ -3436,16 +3471,16 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
           scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
           $animate.leave(tipElement, function () {
             scope.$emit(options.prefixEvent + '.hide', $tooltip);
+            // Allow to blur the input when hidden, like when pressing enter key
+            if (blur && options.trigger === 'focus') {
+              return element[0].blur();
+            }
           });
           $tooltip.$isShown = scope.$isShown = false;
           scope.$$phase || scope.$root && scope.$root.$$phase || scope.$digest();
           // Unbind events
           if (options.keyboard && tipElement !== null) {
             tipElement.off('keyup', $tooltip.$onKeyUp);
-          }
-          // Allow to blur the input when hidden, like when pressing enter key
-          if (blur && options.trigger === 'focus') {
-            return element[0].blur();
           }
         };
         $tooltip.toggle = function () {
@@ -3621,7 +3656,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
         var tooltip = $tooltip(element, options);
         // Garbage collection
         scope.$on('$destroy', function () {
-          tooltip.destroy();
+          if (tooltip)
+            tooltip.destroy();
           options = null;
           tooltip = null;
         });
@@ -3729,9 +3765,9 @@ angular.module('mgcrea.ngStrap.typeahead', [
         $typeahead.$onKeyDown = function (evt) {
           if (!/(38|40|13)/.test(evt.keyCode))
             return;
-          evt.preventDefault();
           // Let ngSubmit pass if the typeahead tip is hidden
           if ($typeahead.$isVisible()) {
+            evt.preventDefault();
             evt.stopPropagation();
           }
           // Select with enter

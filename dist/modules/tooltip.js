@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.4 - 2014-07-24
+ * @version v2.0.5 - 2014-08-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -239,16 +239,16 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
           scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
           $animate.leave(tipElement, function () {
             scope.$emit(options.prefixEvent + '.hide', $tooltip);
+            // Allow to blur the input when hidden, like when pressing enter key
+            if (blur && options.trigger === 'focus') {
+              return element[0].blur();
+            }
           });
           $tooltip.$isShown = scope.$isShown = false;
           scope.$$phase || scope.$root && scope.$root.$$phase || scope.$digest();
           // Unbind events
           if (options.keyboard && tipElement !== null) {
             tipElement.off('keyup', $tooltip.$onKeyUp);
-          }
-          // Allow to blur the input when hidden, like when pressing enter key
-          if (blur && options.trigger === 'focus') {
-            return element[0].blur();
           }
         };
         $tooltip.toggle = function () {
@@ -424,7 +424,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
         var tooltip = $tooltip(element, options);
         // Garbage collection
         scope.$on('$destroy', function () {
-          tooltip.destroy();
+          if (tooltip)
+            tooltip.destroy();
           options = null;
           tooltip = null;
         });

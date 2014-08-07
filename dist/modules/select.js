@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.4 - 2014-07-24
+ * @version v2.0.5 - 2014-08-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -37,7 +37,8 @@ angular.module('mgcrea.ngStrap.select', [
     '$tooltip',
     function ($window, $document, $rootScope, $tooltip) {
       var bodyEl = angular.element($window.document.body);
-      var isTouch = 'createTouch' in $window.document;
+      var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
+      var isTouch = 'createTouch' in $window.document && isNative;
       function SelectFactory(element, controller, config) {
         var $select = {};
         // Common vars
