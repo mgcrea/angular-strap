@@ -28,7 +28,8 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
     this.$get = function($window, $document, $rootScope, $tooltip) {
 
       var bodyEl = angular.element($window.document.body);
-      var isTouch = 'createTouch' in $window.document;
+      var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
+      var isTouch = ('createTouch' in $window.document) && isNative;
 
       function SelectFactory(element, controller, config) {
 
@@ -65,7 +66,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         scope.$isActive = function(index) {
           return $select.$isActive(index);
         };
-        
+
         scope.$selectAll = function () {
           for (var i = 0; i < scope.$matches.length; i++) {
             if (!scope.$isActive(i)) {
@@ -73,7 +74,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             }
           }
         };
-                            
+
         scope.$selectNone = function () {
           for (var i = 0; i < scope.$matches.length; i++) {
             if (scope.$isActive(i)) {

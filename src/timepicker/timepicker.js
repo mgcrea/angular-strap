@@ -32,8 +32,8 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
     this.$get = function($window, $document, $rootScope, $sce, $locale, dateFilter, $tooltip) {
 
       var bodyEl = angular.element($window.document.body);
-      var isTouch = 'createTouch' in $window.document;
       var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
+      var isTouch = ('createTouch' in $window.document) && isNative;
       if(!defaults.lang) defaults.lang = $locale.id;
 
       function timepickerFactory(element, controller, config) {
