@@ -111,6 +111,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         }
         // Sort result map
         angular.forEach(map, function(v) {
+          // conditional required since angular.forEach broke around v1.2.21
+          // related pr: https://github.com/angular/angular.js/pull/8525
           if(v) sortedMap.push(v);
         });
         return sortedMap;
