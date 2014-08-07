@@ -260,7 +260,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         $timepicker.show = function() {
           _show();
           setTimeout(function() {
-            $timepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
+            $timepicker.$element.on(isTouch && 'touchstart' in element ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
             if(options.keyboard) {
               element.on('keydown', $timepicker.$onKeyDown);
             }
@@ -269,7 +269,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         var _hide = $timepicker.hide;
         $timepicker.hide = function(blur) {
-          $timepicker.$element.off(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
+          $timepicker.$element.off(isTouch && 'touchstart' in element ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
           if(options.keyboard) {
             element.off('keydown', $timepicker.$onKeyDown);
           }
