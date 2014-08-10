@@ -234,7 +234,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          typeahead.destroy();
+          if (typeahead) typeahead.destroy();
           options = null;
           typeahead = null;
         });

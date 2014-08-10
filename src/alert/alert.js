@@ -101,7 +101,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          alert.destroy();
+          if (alert) alert.destroy();
           options = null;
           alert = null;
         });
