@@ -77,7 +77,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          aside.destroy();
+          if (aside) aside.destroy();
           options = null;
           aside = null;
         });

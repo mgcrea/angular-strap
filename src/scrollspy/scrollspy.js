@@ -221,8 +221,10 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
         scrollspy.trackElement(options.target, element);
 
         scope.$on('$destroy', function() {
-          scrollspy.untrackElement(options.target, element);
-          scrollspy.destroy();
+          if (scrollspy) {
+            scrollspy.untrackElement(options.target, element);
+            scrollspy.destroy();
+          }
           options = null;
           scrollspy = null;
         });

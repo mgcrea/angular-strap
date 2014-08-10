@@ -115,7 +115,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          dropdown.destroy();
+          if (dropdown) dropdown.destroy();
           options = null;
           dropdown = null;
         });

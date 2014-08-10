@@ -295,7 +295,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          select.destroy();
+          if (select) select.destroy();
           options = null;
           select = null;
         });

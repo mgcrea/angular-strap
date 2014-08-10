@@ -285,7 +285,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          modal.destroy();
+          if (modal) modal.destroy();
           options = null;
           modal = null;
         });

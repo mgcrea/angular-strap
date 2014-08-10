@@ -419,7 +419,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          timepicker.destroy();
+          if (timepicker) timepicker.destroy();
           options = null;
           timepicker = null;
         });
