@@ -206,6 +206,21 @@ describe('modal', function() {
 
     });
 
+    describe('keyboard', function() {
+
+      it('should dismiss and stopPropagation if ESC is pressed', function() {
+        var myModal = $modal(templates['default'].scope.modal);
+        scope.$digest();
+        expect(bodyEl.children('.modal').length).toBe(1);
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        spyOn(evt, 'stopPropagation');
+        myModal.$onKeyUp(evt);
+        expect(bodyEl.children('.modal').length).toBe(0);
+        expect(evt.stopPropagation).toHaveBeenCalled();
+      });
+
+    });
+
     describe('placement', function() {
 
       it('should default to `top` placement', function() {
