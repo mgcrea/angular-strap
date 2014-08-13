@@ -219,6 +219,16 @@ describe('modal', function() {
         expect(evt.stopPropagation).toHaveBeenCalled();
       });
 
+      it('should NOT stopPropagation if ESC is pressed while modal is hidden', function() {
+        var myModal = $modal(templates['default'].scope.modal);
+        scope.$digest();
+        myModal.hide();
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        spyOn(evt, 'stopPropagation');
+        myModal.$onKeyUp(evt);
+        expect(evt.stopPropagation).not.toHaveBeenCalled();
+      });
+
     });
 
     describe('placement', function() {
