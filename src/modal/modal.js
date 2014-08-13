@@ -210,7 +210,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $modal.$onKeyUp = function(evt) {
 
-          if (evt.which === 27) {
+          if (evt.which === 27 && scope.$isShown) {
             $modal.hide();
             evt.stopPropagation();
           }
