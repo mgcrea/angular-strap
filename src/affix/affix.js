@@ -208,6 +208,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
         var affix = $affix(element, options);
         scope.$on('$destroy', function() {
+          affix.destroy()
           options = null;
           affix = null;
         });

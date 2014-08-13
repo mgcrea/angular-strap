@@ -6,14 +6,6 @@ describe('affix', function () {
   var $compile, scope, sandboxEl;
   // var mouse = effroi.mouse;
 
-  beforeEach(module('ngSanitize'));
-  beforeEach(module('mgcrea.ngStrap.affix'));
-
-  beforeEach(inject(function (_$rootScope_, _$compile_) {
-    scope = _$rootScope_;
-    $compile = _$compile_;
-    sandboxEl = $('<div>').attr('id', 'sandbox').appendTo('body');
-  }));
 
   afterEach(function() {
     sandboxEl.remove();
@@ -39,11 +31,19 @@ describe('affix', function () {
     scope.$digest();
     return jQuery(element[0]);
   }
-
+  function sandboxSetup(_$rootScope_, _$compile_) {
+    scope = _$rootScope_;
+    $compile = _$compile_;
+    sandboxEl = $('<div>').attr('id', 'sandbox').appendTo('body');
+  }
   // Tests
 
   describe('default', function () {
 
+    beforeEach(module('ngSanitize'));
+    beforeEach(module('mgcrea.ngStrap.affix'));
+
+    beforeEach(inject(sandboxSetup));
 
     it('should support window.scrollTo', function() {
       var elm = compileDirective('default');
@@ -62,6 +62,35 @@ describe('affix', function () {
       // @bug karma does not suppport scrollTo
       // github.com/karma-runner/karma/issues/345
       expect(1).toBe(1);
+    });
+
+  });
+
+
+  describe('when the directive scope is destroyed', function(){
+    var $affix;
+    beforeEach(function(){
+      angular.module('test.mgcrea.ngStrap.affix', []).config(function($provide){
+        $affix = jasmine.createSpy('$affix')
+        $provide.value('$affix', $affix)
+      });
+      
+    });
+    beforeEach(module('ngSanitize'));
+    beforeEach(module('mgcrea.ngStrap.affix'));
+    beforeEach(module('test.mgcrea.ngStrap.affix'));
+    
+    beforeEach(inject(sandboxSetup));
+
+    it('should call destory on the affix instance to remove event listeners and cleanup', function(){
+      var affixInstance = jasmine.createSpyObj('$affixInstance', ['destroy'])
+      $affix.andReturn(affixInstance);
+      
+      var elm = compileDirective('default');
+      expect($affix).toHaveBeenCalled();
+      scope.$destroy();
+      expect(affixInstance.destroy).toHaveBeenCalled();
+      
     });
 
   });
