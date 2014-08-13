@@ -304,6 +304,15 @@ describe('tooltip', function() {
         expect(evt.stopPropagation).toHaveBeenCalled();
       });
 
+      it('should NOT stopPropagation if ESC is pressed while tooltip is hidden', function() {
+        var myTooltip = $tooltip(sandboxEl, angular.extend({trigger: 'click'}, templates['options-keyboard'].scope.tooltip));
+        scope.$digest();
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        spyOn(evt, 'stopPropagation');
+        myTooltip.$onKeyUp(evt);
+        expect(evt.stopPropagation).not.toHaveBeenCalled();
+      });
+
       it('should blur and stopPropagation if ESC is pressed when trigger === "focus"', function() {
         var myTooltip = $tooltip(sandboxEl, angular.extend({trigger: 'focus'}, templates['options-keyboard'].scope.tooltip));
         spyOn(sandboxEl[0], 'blur');
