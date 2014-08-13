@@ -302,11 +302,17 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         $tooltip.$onKeyUp = function(evt) {
-          evt.which === 27 && $tooltip.hide();
+          if (evt.which === 27) {
+            $tooltip.hide();
+            evt.stopPropagation();
+          }
         };
 
         $tooltip.$onFocusKeyUp = function(evt) {
-          evt.which === 27 && element[0].blur();
+          if (evt.which === 27) {
+            element[0].blur();
+            evt.stopPropagation();
+          }
         };
 
         $tooltip.$onFocusElementMouseDown = function(evt) {
