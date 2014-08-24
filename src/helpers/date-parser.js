@@ -6,6 +6,9 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
 
   var proto = Date.prototype;
 
+  function noop() {
+  }
+
   function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
@@ -57,6 +60,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         'H'     : proto.setHours,
         'hh'    : proto.setHours,
         'h'     : proto.setHours,
+        'EEEE'  : noop,
+        'EEE'   : noop,
         'dd'    : proto.setDate,
         'd'     : proto.setDate,
         'a'     : function(value) { var hours = this.getHours(); return this.setHours(value.match(/pm/i) ? hours + 12 : hours); },
@@ -106,7 +111,9 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
           if(format.split(keys[i]).length > 1) {
             var index = clonedFormat.search(keys[i]);
             format = format.split(keys[i]).join('');
-            if(setFnMap[keys[i]]) map[index] = setFnMap[keys[i]];
+            if(setFnMap[keys[i]]) {
+              map[index] = setFnMap[keys[i]];
+            }
           }
         }
         // Sort result map

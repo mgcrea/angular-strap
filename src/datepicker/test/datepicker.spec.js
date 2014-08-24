@@ -69,6 +69,10 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" bs-datepicker>'
     },
+    'options-dateFormat-alt': {
+      scope: {selectedDate: new Date(1986, 1, 22)},
+      element: '<input type="text" ng-model="selectedDate" data-date-format="EEEE MMMM d, yyyy" bs-datepicker>'
+    },
     'options-strictFormat': {
       scope: {selectedDate: new Date(1986, 1, 4)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-M-d" data-strict-format="1" bs-datepicker>'
@@ -132,7 +136,7 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" data-days-of-week-disabled="{{daysOfWeekDisabled}}" bs-datepicker>'
     },
     'options-daysOfWeekDisabled-bis': {
-      scope: {selectedDate: new Date(2014, 6, 27), daysOfWeekDisabled: "0246"},
+      scope: {selectedDate: new Date(2014, 6, 27), daysOfWeekDisabled: '0246'},
       element: '<input type="text" ng-model="selectedDate" data-days-of-week-disabled="{{daysOfWeekDisabled}}" bs-datepicker>'
     },
   };
@@ -480,6 +484,14 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
         expect(elm.val()).toBe('1986-02-24');
+      });
+
+      it('should support an alternative custom dateFormat', function() {
+        var elm = compileDirective('options-dateFormat-alt');
+        expect(elm.val()).toBe('Saturday February 22, 1986');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+        expect(elm.val()).toBe('Monday February 24, 1986');
       });
 
     });
