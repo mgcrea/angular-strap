@@ -3519,9 +3519,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
         // Private methods
         function getPosition() {
           if (options.container === 'body') {
-            return dimensions.offset(options.target[0] || element[0]);
+            return dimensions.offset(options.target || element[0]);
           } else {
-            return dimensions.position(options.target[0] || element[0]);
+            return dimensions.position(options.target || element[0]);
           }
         }
         function getCalculatedOffset(placement, position, actualWidth, actualHeight) {
