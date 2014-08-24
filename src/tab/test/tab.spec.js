@@ -23,21 +23,25 @@ describe('tab', function () {
 
   var templates = {
     'default': {
-      scope: {tab: {active: 1, counter: 0},tabs: [
+      element: '<div bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+    },
+    'template-ngRepeat': {
+      scope: {tabs: [
         {title:'Home', content: 'Raw denim you probably haven\'t heard of...'},
         {title:'Profile', content: 'Food truck fixie locavore...'},
         {title:'About', content: 'Etsy mixtape wayfarers...'}
       ]},
-      element: '<div bs-tabs="tabs"></div>'
+      element: '<div bs-tabs><div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
     },
     'binding-ngModel': {
-      element: '<div ng-model="tab.active" bs-tabs="tabs"></div>'
+      scope: {tab: {active: 1}},
+      element: '<div ng-model="tab.active" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
     },
     'options-animation': {
-      element: '<div data-animation="am-flip-x" bs-tabs="tabs"></div>'
+      element: '<div data-animation="am-flip-x" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
     },
     'options-template': {
-      element: '<div data-template="custom" bs-tabs="tabs"></div>'
+      element: '<div data-template="custom" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
     }
   };
 
@@ -56,6 +60,30 @@ describe('tab', function () {
 
     it('should correctly compile inner content', function() {
       var elm = compileDirective('default');
+      expect(sandboxEl.find('.nav-tabs > li').length).toBe(2);
+      expect(sandboxEl.find('.nav-tabs > li:eq(0)').text()).toBe('title-1');
+      expect(sandboxEl.find('.tab-content > .tab-pane').length).toBe(2);
+      expect(sandboxEl.find('.tab-content > .tab-pane:eq(0)').text()).toBe('content-1');
+    });
+
+    it('should navigate between panes on click', function() {
+      var elm = compileDirective('default');
+      expect(sandboxEl.find('.nav-tabs > li.active').text()).toBe('title-1');
+      expect(sandboxEl.find('.tab-content > .tab-pane.active').text()).toBe('content-1');
+      sandboxEl.find('.nav-tabs > li:eq(1) > a').triggerHandler('click');
+      expect(sandboxEl.find('.nav-tabs > li.active').text()).toBe('title-2');
+      expect(sandboxEl.find('.tab-content > .tab-pane.active').text()).toBe('content-2');
+      sandboxEl.find('.nav-tabs > li:eq(0) > a').triggerHandler('click');
+      expect(sandboxEl.find('.nav-tabs > li.active').text()).toBe('title-1');
+      expect(sandboxEl.find('.tab-content > .tab-pane.active').text()).toBe('content-1');
+    });
+
+  });
+
+  describe('with ngRepeat template', function () {
+
+    it('should correctly compile inner content', function() {
+      var elm = compileDirective('template-ngRepeat');
       expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);
       expect(sandboxEl.find('.nav-tabs > li:eq(0)').text()).toBe(scope.tabs[0].title);
       expect(sandboxEl.find('.tab-content > .tab-pane').length).toBe(scope.tabs.length);
@@ -63,7 +91,7 @@ describe('tab', function () {
     });
 
     it('should navigate between panes on click', function() {
-      var elm = compileDirective('default');
+      var elm = compileDirective('template-ngRepeat');
       expect(sandboxEl.find('.nav-tabs > li.active').text()).toBe(scope.tabs[0].title);
       expect(sandboxEl.find('.tab-content > .tab-pane.active').text()).toBe(scope.tabs[0].content);
       sandboxEl.find('.nav-tabs > li:eq(1) > a').triggerHandler('click');
@@ -82,7 +110,7 @@ describe('tab', function () {
       var elm = compileDirective('binding-ngModel');
       expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(scope.tab.active);
       expect(sandboxEl.find('.tab-content > .tab-pane.active').index()).toBe(scope.tab.active);
-      scope.tab.active = 2;
+      scope.tab.active = 0;
       scope.$digest();
       expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(scope.tab.active);
       expect(sandboxEl.find('.tab-content > .tab-pane.active').index()).toBe(scope.tab.active);
@@ -102,12 +130,12 @@ describe('tab', function () {
 
       it('should default to `am-fade` animation', function() {
         var elm = compileDirective('default');
-        expect(sandboxEl.children('.tabs').hasClass('am-fade')).toBeTruthy();
+        expect(sandboxEl.find('[bs-pane]').hasClass('am-fade')).toBeTruthy();
       });
 
       it('should support custom animation', function() {
         var elm = compileDirective('options-animation');
-        expect(sandboxEl.children('.tabs').hasClass('am-flip-x')).toBeTruthy();
+        expect(sandboxEl.find('[bs-pane]').hasClass('am-flip-x')).toBeTruthy();
       });
 
     });
@@ -115,17 +143,9 @@ describe('tab', function () {
     describe('template', function () {
 
       it('should support custom template', function() {
-        $templateCache.put('custom', '<div class="tabs"><div class="tab-pane" ng-repeat="pane in panes">foo: {{pane.content}}</div></div>');
+        $templateCache.put('custom', '<div ng-transclude class="tab-content-primary"></div>');
         var elm = compileDirective('options-template');
-        expect(sandboxEl.find('.tab-pane:eq(0)').text()).toBe('foo: ' + scope.tabs[0].content);
-      });
-
-      it('should support template with ngClick', function() {
-        $templateCache.put('custom', '<div class="tabs"><div class="tab-pane" ng-repeat="pane in panes"><a class="btn" ng-click="tab.counter=tab.counter+1">{{foo.title}}</a></div></div>');
-        var elm = compileDirective('options-template');
-        angular.element(elm[0]).triggerHandler('mouseenter');
-        expect(angular.element(sandboxEl.find('.tab-pane:eq(0) > .btn')[0]).triggerHandler('click'));
-        expect(scope.tab.counter).toBe(1);
+        expect(sandboxEl.find('.tab-content-primary .tab-pane:eq(0)').text()).toBe('content-1');
       });
 
     });

@@ -6,53 +6,50 @@
     <code>mgcrea.ngStrap.tab</code>
   </div>
 
-
   <h2 id="tabs-examples">Examples</h2>
   <p>Add quick, dynamic tab functionality to transition through panes of local content.</p>
 
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="tab/docs/tab.demo.html" data-content-js-url="tab/docs/tab.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
-  <pre class="bs-example-scope">$scope.tabs = {{tabs | json}};</pre>
+  <pre class="bs-example-scope">$scope.tabs = {{tabs | json}};
+$scope.tabs.activeTab = {{ tabs.activeTab }};
+  </pre>
   <div class="bs-example" append-source>
     <!-- ngModel is optional -->
-    <div ng-model="tabs.activeTab" bs-tabs="tabs">
+    <div ng-model="tabs.activeTab" bs-tabs>
+      <div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>
     </div>
   </div>
-  <div class="bs-example" style="padding-bottom: 24px;">
-    <label>activeTab:</label>
-    <strong class="text-danger">{{tabs.activeTab}}</strong>&nbsp;
+  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+    <!-- control a tab with ngModel -->
     <div class="btn-group" ng-model="tabs.activeTab" bs-radio-group>
-      <label class="btn btn-default">
-        <input type="radio" class="btn btn-default" value="0">First</label>
-      <label class="btn btn-default">
-        <input type="radio" class="btn btn-default" value="1">Second</label>
-      <label class="btn btn-default">
-        <input type="radio" class="btn btn-default" value="2">Third</label>
+      <label class="btn btn-default" ng-repeat="tab in tabs">
+        <input type="radio" class="btn btn-default" value="{{ $index }}">Tab n°{{ $index + 1 }}
+      </label>
     </div>
+    <div class="btn btn-default" ng-click="pushTab()">Add new tab</div>
   </div>
 
   <h2 id="tabs-usage">Usage</h2>
-  <p>Append a <code>bs-tabs</code>attribute to any element to enable the directive.</p>
+  <p>Append a <code>bs-tabs</code> attribute to any element and several children <code>bs-pane</code> attributes to children elements to enable the directive.</p>
 
   <div class="callout callout-info">
     <h4>Custom animations</h4>
-    <p>Pane animation is done with <code>ngClass('active')</code> callbacks and require custom CSS.</p>
+    <p>Pane animation is done with the <code>active</code> class and requires custom CSS.</p>
     <pre class="bs-exemple-code">
       <code class="css" highlight-block>
-        .tabs.am-fade .tab-pane {
-          opacity: 1;
-          transition: opacity .3s ease;
-          min-height:60px;
-          &.active-add {
-            display: block;
-            opacity: 0;
-            &.active-add-active {
-              opacity: 1;
-            }
-          }
-          &.active-remove {
-            display: none;
-          }
-        }
+.tab-pane.am-fade {
+  animation-duration: .3s;
+  animation-timing-function: ease;
+  animation-fill-mode: backwards;
+  opacity: 1;
+
+  &.active-remove {
+    display: none !important;
+  }
+  &.active-add {
+    animation-name: fadeIn;
+  }
+}
       </code>
     </pre>
   </div>
