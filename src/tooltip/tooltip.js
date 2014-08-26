@@ -141,6 +141,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             });
           }
 
+          // Reset show() for normal operation
+          $tooltip.show = $tooltip.$show;
         };
 
         $tooltip.destroy = function() {
@@ -186,7 +188,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         };
 
+        // Pre-init show implementation
         $tooltip.show = function() {
+            $tooltip.$promise.then(function() {
+                $tooltip.$show();
+            });
+        };
+
+        $tooltip.$show = function() {
 
           scope.$emit(options.prefixEvent + '.show.before', $tooltip);
           var parent = options.container ? tipContainer : null;
