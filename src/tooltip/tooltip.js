@@ -187,6 +187,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         $tooltip.show = function() {
+          // Check, whether template is loaded
+          if (!tipLinker) {
+              // Post-pone show till template is loaded
+              $tooltip.$promise.then(function() {
+                  $tooltip.show();
+              });
+              return;
+          }
 
           scope.$emit(options.prefixEvent + '.show.before', $tooltip);
           var parent = options.container ? tipContainer : null;
