@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.5 - 2014-08-07
+ * @version v2.0.5 - 2014-08-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -14,7 +14,8 @@ angular.module('mgcrea.ngStrap.tab', []).run([
 ]).provider('$tab', function () {
   var defaults = this.defaults = {
       animation: 'am-fade',
-      template: 'tab/tab.tpl.html'
+      template: 'tab/tab.tpl.html',
+      'base-class': 'tabs'
     };
   this.$get = function () {
     return { defaults: defaults };
@@ -44,7 +45,7 @@ angular.module('mgcrea.ngStrap.tab', []).run([
           scope.panes = newValue;
         }, true);
         // Add base class
-        element.addClass('tabs');
+        element.addClass(defaults['base-class']);
         // Support animations
         if (options.animation) {
           element.addClass(options.animation);

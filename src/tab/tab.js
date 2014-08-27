@@ -6,7 +6,8 @@ angular.module('mgcrea.ngStrap.tab', [])
 
     var defaults = this.defaults = {
       animation: 'am-fade',
-      template: 'tab/tab.tpl.html'
+      template: 'tab/tab.tpl.html',
+      'base-class': 'tabs'
     };
 
     var controller = this.controller = function($scope, $element, $attrs) {
@@ -63,7 +64,7 @@ angular.module('mgcrea.ngStrap.tab', [])
         var bsTabsCtrl = controllers[1];
 
         // Add base class
-        element.addClass('tabs');
+        element.addClass(defaults['base-class']);
 
         if(ngModelCtrl) {
 
