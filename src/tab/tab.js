@@ -12,7 +12,8 @@ angular.module('mgcrea.ngStrap.tab', [])
 
     var defaults = this.defaults = {
       animation: 'am-fade',
-      template: 'tab/tab.tpl.html'
+      template: 'tab/tab.tpl.html',
+      'base-class': 'tabs'
     };
 
     this.$get = function() {
@@ -46,7 +47,7 @@ angular.module('mgcrea.ngStrap.tab', [])
         }, true);
 
         // Add base class
-        element.addClass('tabs');
+        element.addClass(defaults['base-class']);
 
         // Support animations
         if(options.animation) {
