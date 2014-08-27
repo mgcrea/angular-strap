@@ -39,7 +39,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         $tooltip.$promise = fetchTemplate(options.template);
         var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(options.delay && angular.isString(options.delay)) {
-          options.delay = parseFloat(options.delay);
+          try {
+            options.delay = angular.fromJson(options.delay);
+          }
+          catch (e) {
+            options.delay = parseFloat(options.delay);
+          }
         }
 
         // Support scope as string options
