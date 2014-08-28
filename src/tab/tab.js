@@ -86,13 +86,11 @@ angular.module('mgcrea.ngStrap.tab', [])
 
   })
 
-  .directive('bsPane', function($window, $animate) {
+  .directive('bsPane', function($window, $animate, $sce) {
 
     return {
       require: ['^?ngModel', '^bsTabs'],
-      scope: {
-        title: '@'
-      },
+      scope: true,
       link: function postLink(scope, element, attrs, controllers) {
 
         var ngModelCtrl = controllers[0];
@@ -100,6 +98,11 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         // Add base class
         element.addClass('tab-pane');
+
+        // Observe title attribute for change
+        attrs.$observe('title', function(newValue, oldValue) {
+          scope.title = $sce.trustAsHtml(newValue);
+        });
 
         // Add animation class
         if(bsTabsCtrl.$options.animation) {
