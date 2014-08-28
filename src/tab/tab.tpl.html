@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs" role="tablist">
+<ul class="nav" role="tablist" ng-class="$classConfig">
   <li ng-repeat="$pane in $panes" ng-class="{active: $index == $panes.$active}">
     <a role="tab" data-toggle="tab" ng-click="$setActive($index)" data-index="{{ $index }}" ng-bind-html="$pane.title"></a>
   </li>

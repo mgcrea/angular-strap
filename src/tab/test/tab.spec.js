@@ -33,6 +33,18 @@ describe('tab', function () {
       ]},
       element: '<div bs-tabs><div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
     },
+    'template-usePills': {
+      element: '<div bs-tabs="tabs" data-use-pills="1"></div>'
+    },
+    'template-justified': {
+      element: '<div bs-tabs="tabs" data-justified="1"></div>'
+    },
+    'template-stacked': {
+      element: '<div bs-tabs="tabs" data-stacked="1"></div>'
+    },
+    'template-pills-stacked': {
+      element: '<div bs-tabs="tabs" data-use-pills="1" data-stacked="1"></div>'
+    },
     'binding-ngModel': {
       scope: {tab: {active: 1}},
       element: '<div ng-model="tab.active" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
@@ -100,6 +112,36 @@ describe('tab', function () {
       sandboxEl.find('.nav-tabs > li:eq(0) > a').triggerHandler('click');
       expect(sandboxEl.find('.nav-tabs > li.active').text()).toBe(scope.tabs[0].title);
       expect(sandboxEl.find('.tab-content > .tab-pane.active').text()).toBe(scope.tabs[0].content);
+    });
+
+  });
+
+  describe('with template modifiers', function () {
+
+    it('should correctly apply `.nav-pills` to container el', function() {
+      var elm = compileDirective('template-usePills');
+      expect(sandboxEl.find('.nav-tabs').length).toBe(0);
+      expect(sandboxEl.find('.nav-pills').length).toBe(1);
+    });
+
+    it('should correctly apply `.nav-justified` to container el', function() {
+      var elm = compileDirective('template-justified');
+      expect(sandboxEl.find('.nav-tabs').length).toBe(1);
+      expect(sandboxEl.find('.nav-justified').length).toBe(1);
+    });
+
+    it('should correctly apply `.nav-stacked` if `attrs.usePills` truthy', function() {
+      var elm = compileDirective('template-pills-stacked');
+      expect(sandboxEl.find('.nav-tabs').length).toBe(0);
+      expect(sandboxEl.find('.nav-pills').length).toBe(1);
+      expect(sandboxEl.find('.nav-stacked').length).toBe(1);
+    });
+
+    it('should not apply `.nav-stacked` when `attrs.usePills` falsey', function() {
+      var elm = compileDirective('template-stacked');
+      expect(sandboxEl.find('.nav-tabs').length).toBe(1);
+      expect(sandboxEl.find('.nav-pills').length).toBe(0);
+      expect(sandboxEl.find('.nav-stacked').length).toBe(0);
     });
 
   });
