@@ -44,7 +44,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
   })
 
-  .directive('bsPopover', function($window, $location, $sce, $popover) {
+  .directive('bsPopover', function($window, $sce, $popover) {
 
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
