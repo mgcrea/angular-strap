@@ -62,7 +62,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
   })
 
-  .directive('bsAlert', function($window, $location, $sce, $alert) {
+  .directive('bsAlert', function($window, $sce, $alert) {
 
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
