@@ -92,7 +92,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
   })
 
-  .directive('bsDropdown', function($window, $location, $sce, $dropdown) {
+  .directive('bsDropdown', function($window, $sce, $dropdown) {
 
     return {
       restrict: 'EAC',
