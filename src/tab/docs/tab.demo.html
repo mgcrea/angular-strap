@@ -19,6 +19,10 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
       <div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>
     </div>
   </div>
+  <div class="bs-example" append-source>
+    <!-- ngModel is optional -->
+    <div ng-model="tabs.activeTab" bs-tabs="tabs" data-use-pills="1" data-justified="1"></div>
+  </div>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
     <!-- control a tab with ngModel -->
     <div class="btn-group" ng-model="tabs.activeTab" bs-radio-group>

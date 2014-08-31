@@ -65,6 +65,19 @@ angular.module('mgcrea.ngStrap.tab', [])
         // Add base class
         element.addClass('tabs');
 
+        // Evaluate template modifiers against appropriate scope
+        angular.forEach(['usePills', 'justified', 'stacked'], function (attr) {
+          if (angular.isDefined(attrs[attr])) scope['$'+attr] = scope.$eval(attrs[attr]);
+        });
+
+        // Define template ngClass config object
+        scope.$classConfig = {
+          'nav-tabs': !scope.$usePills,
+          'nav-pills': scope.$usePills,
+          'nav-justified': scope.$justified,
+          'nav-stacked': scope.$usePills && scope.$stacked
+        };
+
         if(ngModelCtrl) {
 
           // Update the modelValue following
