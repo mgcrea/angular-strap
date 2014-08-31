@@ -42,6 +42,9 @@ describe('tab', function () {
     },
     'options-template': {
       element: '<div data-template="custom" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+    },
+    'options-navClass': {
+      element: '<div data-nav-class="nav-pills nav-stacked" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
     }
   };
 
@@ -146,6 +149,15 @@ describe('tab', function () {
         $templateCache.put('custom', '<div ng-transclude class="tab-content-primary"></div>');
         var elm = compileDirective('options-template');
         expect(sandboxEl.find('.tab-content-primary .tab-pane:eq(0)').text()).toBe('content-1');
+      });
+
+    });
+
+    describe('navClass', function () {
+
+      it('should support custom navClass', function() {
+        var elm = compileDirective('options-navClass');
+        expect(sandboxEl.find('.nav')[0].className).toBe('nav nav-pills nav-stacked');
       });
 
     });
