@@ -7,7 +7,8 @@ angular.module('mgcrea.ngStrap.tab', [])
     var defaults = this.defaults = {
       animation: 'am-fade',
       template: 'tab/tab.tpl.html',
-      navClass: 'nav-tabs'
+      navClass: 'nav-tabs',
+      activeClass: 'active'
     };
 
     var controller = this.controller = function($scope, $element, $attrs) {
@@ -15,9 +16,13 @@ angular.module('mgcrea.ngStrap.tab', [])
 
       // Attributes options
       self.$options = angular.copy(defaults);
-      angular.forEach(['animation'], function(key) {
+      angular.forEach(['animation', 'navClass', 'activeClass'], function(key) {
         if(angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
+
+      // Publish options on scope
+      $scope.$navClass = self.$options.navClass;
+      $scope.$activeClass = self.$options.activeClass;
 
       self.$panes = $scope.$panes = [];
 
@@ -62,9 +67,6 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         var ngModelCtrl = controllers[0];
         var bsTabsCtrl = controllers[1];
-
-        // Add base class
-        scope.$navClass = attrs.navClass || defaults.navClass;
 
         if(ngModelCtrl) {
 
@@ -116,7 +118,7 @@ angular.module('mgcrea.ngStrap.tab', [])
         function render() {
           var index = bsTabsCtrl.$panes.indexOf(scope);
           var active = bsTabsCtrl.$panes.$active;
-          $animate[index === active ? 'addClass' : 'removeClass'](element, 'active');
+          $animate[index === active ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
         }
 
         bsTabsCtrl.$viewChangeListeners.push(function() {

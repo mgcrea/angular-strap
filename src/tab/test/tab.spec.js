@@ -45,6 +45,9 @@ describe('tab', function () {
     },
     'options-navClass': {
       element: '<div data-nav-class="nav-pills nav-stacked" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+    },
+    'options-activeClass': {
+      element: '<div data-active-class="in" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
     }
   };
 
@@ -161,6 +164,24 @@ describe('tab', function () {
       });
 
     });
+
+    describe('activeClass', function () {
+
+      it('should support custom activeClass', function() {
+        var elm = compileDirective('options-activeClass');
+        expect(sandboxEl.find('.nav-tabs > li.active').length).toBe(0);
+        expect(sandboxEl.find('.nav-tabs > li.in').text()).toBe('title-1');
+        expect(sandboxEl.find('.tab-content > .tab-pane.in').text()).toBe('content-1');
+        sandboxEl.find('.nav-tabs > li:eq(1) > a').triggerHandler('click');
+        expect(sandboxEl.find('.nav-tabs > li.in').text()).toBe('title-2');
+        expect(sandboxEl.find('.tab-content > .tab-pane.in').text()).toBe('content-2');
+        sandboxEl.find('.nav-tabs > li:eq(0) > a').triggerHandler('click');
+        expect(sandboxEl.find('.nav-tabs > li.in').text()).toBe('title-1');
+        expect(sandboxEl.find('.tab-content > .tab-pane.in').text()).toBe('content-1');
+      });
+
+    });
+
 
   });
 
