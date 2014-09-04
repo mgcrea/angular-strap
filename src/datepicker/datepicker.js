@@ -264,11 +264,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
           newValue === true ? datepicker.show() : datepicker.hide();
         });
 
-        // Set expected iOS format
-        if(isNative && options.useNative) options.dateFormat = 'yyyy-MM-dd';
         // Initialize datepicker
         var datepicker = $datepicker(element, controller, options);
         options = datepicker.$options;
+        // Set expected iOS format
+        if(isNative && options.useNative) options.dateFormat = 'yyyy-MM-dd';
 
         // Observe attributes for changes
         angular.forEach(['minDate', 'maxDate'], function(key) {
