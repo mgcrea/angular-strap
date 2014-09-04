@@ -1,4 +1,6 @@
 'use strict';
+// bower install angular#^1.2 --save; bower install angular-animate#^1.2 angular-i18n#^1.2 angular-mocks#^1.2 angular-route#^1.2 angular-sanitize#^1.2 angular-scenario#^1.2 --save-dev
+// bower install angular#^1.3 --save; bower install angular-animate#^1.3 angular-i18n#^1.3 angular-mocks#^1.3 angular-route#^1.3 angular-sanitize#^1.3 angular-scenario#^1.3 --save-dev
 
 var gulp = require('gulp');
 var path = require('path');
@@ -31,6 +33,9 @@ var docs = {
   scripts: 'scripts/**/*.js',
   images: 'images/{,*/}*.{jpg,png,svg}',
   styles: 'styles/*.less',
+  watch: {
+    styles: 'styles/**/*.less'
+  }
 };
 
 var ports = {
@@ -99,12 +104,20 @@ gulp.task('open:pages', function(){
 //
 var watch = require('gulp-watch');
 gulp.task('watch:docs', function() {
-  watch({glob: path.join(docs.cwd, docs.scripts)}).pipe(connect.reload());
-  watch({glob: path.join(docs.cwd, 'styles/**/*.less')}, ['styles:docs']);
-  watch({glob: [path.join(docs.cwd, docs.index), path.join(docs.cwd, docs.views)]}).pipe(connect.reload());
+  watch({glob: docs.scripts, gaze: {cwd: docs.cwd}}, function(files) {
+    return files.pipe(connect.reload());
+  });
+  watch({glob: docs.watch.styles, gaze: {cwd: docs.cwd}}, function(files) {
+    return gulp.start('styles:docs');
+  });
+  watch({glob: [docs.index, docs.views], gaze: {cwd: docs.cwd}}, function(files) {
+    return files.pipe(connect.reload());
+  });
 });
 gulp.task('watch:dev', function() {
-  watch({glob: [path.join(src.cwd, src.index), path.join(src.cwd, src.scripts)]}).pipe(connect.reload());
+  watch({glob: src.scripts, gaze: {cwd: src.cwd}}, function(files) {
+    return files.pipe(connect.reload());
+  });
 });
 
 
@@ -441,6 +454,6 @@ gulp.task('pages', function() {
   runSequence('clean:pages', 'styles:docs', 'views:pages', ['templates:pages', 'scripts:pages', 'copy:pages']);
 });
 gulp.task('serve', function() {
-  runSequence('clean:tmp', ['styles:docs', 'connect:docs'], ['open:docs', 'watch:docs']); // , 'watch:dev'
+  runSequence('clean:tmp', ['styles:docs', 'connect:docs'], ['open:docs', 'watch:docs', 'watch:dev']);
 });
 gulp.task('serve:pages', ['connect:pages', 'open:pages']);
