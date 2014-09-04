@@ -42,6 +42,12 @@ describe('tab', function () {
     },
     'options-animation': {
       element: '<div data-animation="am-flip-x" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
+    },
+    'options-activeClass': {
+      element: '<div data-active-class="active" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
+    },
+    'options-disallowToggle': {
+      element: '<div data-disallow-toggle="true" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     }
   };
 
@@ -64,6 +70,8 @@ describe('tab', function () {
       sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
       expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
       expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeTruthy();
+      sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+      expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
     });
 
   });
@@ -110,6 +118,30 @@ describe('tab', function () {
       it('should support custom animation', function() {
         var elm = compileDirective('options-animation');
         expect(sandboxEl.find('[bs-collapse-target]').hasClass('am-flip-x')).toBeTruthy();
+      });
+
+    });
+
+    describe('activeClass', function () {
+
+      it('should support custom activeClass', function() {
+        var elm = compileDirective('options-activeClass');
+        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
+        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('active')).toBeTruthy();
+        sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('active')).toBeFalsy();
+        expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('active')).toBeTruthy();
+      });
+
+    });
+
+    describe('disallowToggle', function () {
+
+      it('should support disallowToggle flag', function() {
+        var elm = compileDirective('options-disallowToggle');
+        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+        sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
+        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
       });
 
     });

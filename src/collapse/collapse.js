@@ -5,7 +5,9 @@ angular.module('mgcrea.ngStrap.collapse', [])
   .provider('$collapse', function() {
 
     var defaults = this.defaults = {
-      animation: 'am-collapse'
+      animation: 'am-collapse',
+      disallowToggle: false,
+      activeClass: 'in'
     };
 
     var controller = this.controller = function($scope, $element, $attrs) {
@@ -13,7 +15,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
       // Attributes options
       self.$options = angular.copy(defaults);
-      angular.forEach(['animation'], function(key) {
+      angular.forEach(['animation', 'disallowToggle', 'activeClass'], function(key) {
         if(angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
@@ -31,7 +33,11 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
       self.$targets.$active = 0;
       self.$setActive = $scope.$setActive = function(value) {
-        self.$targets.$active = self.$targets.$active === value ? -1 : value;
+        if(!self.$options.disallowToggle) {
+          self.$targets.$active = self.$targets.$active === value ? -1 : value;
+        } else {
+          self.$targets.$active = value;
+        }
         self.$viewChangeListeners.forEach(function(fn) {
           fn();
         });
@@ -130,7 +136,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
         function render() {
           var index = bsCollapseCtrl.$targets.indexOf(element);
           var active = bsCollapseCtrl.$targets.$active;
-          $animate[index === active ? 'addClass' : 'removeClass'](element, 'in');
+          $animate[index === active ? 'addClass' : 'removeClass'](element, bsCollapseCtrl.$options.activeClass);
         }
 
         bsCollapseCtrl.$viewChangeListeners.push(function() {
