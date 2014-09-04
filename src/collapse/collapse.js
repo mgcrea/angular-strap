@@ -99,7 +99,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
         // Add base attr
         element.attr('data-toggle', 'collapse');
 
-        // Push pane to parent bsTabs controller
+        // Push pane to parent bsCollapse controller
         bsCollapseCtrl.$registerToggle(element);
         element.on('click', function() {
           var index = attrs.bsCollapseToggle || bsCollapseCtrl.$toggles.indexOf(element);
@@ -130,7 +130,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
           element.addClass(bsCollapseCtrl.$options.animation);
         }
 
-        // Push pane to parent bsTabs controller
+        // Push pane to parent bsCollapse controller
         bsCollapseCtrl.$registerTarget(element);
 
         function render() {
