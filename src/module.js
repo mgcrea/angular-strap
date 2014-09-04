@@ -15,4 +15,5 @@ angular.module('mgcrea.ngStrap', [
   'mgcrea.ngStrap.scrollspy',
   'mgcrea.ngStrap.affix',
   'mgcrea.ngStrap.tab',
+  'mgcrea.ngStrap.collapse'
 ]);

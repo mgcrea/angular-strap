@@ -1,0 +1,111 @@
+<div class="bs-docs-section" ng-controller="CollapseDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="tabs">Collapses <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/collapse/collapse.js" target="_blank">collapse.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.collapse</code>
+  </div>
+
+  <h2 id="collapses-examples">Examples</h2>
+  <p>Add quick, dynamic collapsable functionality to transition through panels of local content.</p>
+
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="collapses/docs/collapse.demo.html" data-content-js-url="collapses/docs/collapse.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
+  <pre class="bs-example-scope">$scope.panels = {{panels | json}};
+$scope.panels.activePanel = {{ panels.activePanel }};
+  </pre>
+  <div class="bs-example" append-source>
+    <!-- ngModel is optional -->
+    <div class="panel-group" bs-collapse>
+      <div class="panel panel-default" ng-repeat="panel in panels">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a bs-collapse-toggle>
+              {{ panel.title }}
+            </a>
+          </h4>
+        </div>
+        <div class="panel-collapse" bs-collapse-target>
+          <div class="panel-body">
+            {{ panel.body }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+    <!-- control a collapse panel with ngModel -->
+    <div class="btn-group" ng-model="panels.activePanel" bs-radio-group>
+      <label class="btn btn-default" ng-repeat="panel in panels">
+        <input type="radio" class="btn btn-default" value="{{ $index }}">Panel n°{{ $index + 1 }}
+      </label>
+    </div>
+    <div class="btn btn-default" ng-click="pushPanel()">Add new panel</div>
+  </div>
+
+  <h2 id="tabs-usage">Usage</h2>
+  <p>Append a <code>bs-collapse</code> attribute to any element and several <code>bs-collapse-toggle</code>,<code>bs-collapse-target</code> attributes to children elements to enable the directive.</p>
+
+  <div class="callout callout-info">
+    <h4>Custom animations</h4>
+    <p>Pane animation is done with the <code>active</code> class and requires custom CSS.</p>
+    <pre class="bs-exemple-code">
+      <code class="css" highlight-block>
+.panel-collapse.am-collapse {
+  animation-duration: .3s;
+  animation-timing-function: ease;
+  animation-fill-mode: backwards;
+  overflow: hidden;
+  &.in-remove {
+    animation-name: collapse;
+    display: block;
+  }
+  &.in-add {
+    animation-name: expand;
+  }
+}
+      </code>
+    </pre>
+  </div>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data attributes or as an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object on
+    <code>bs-tabs</code>. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p><code>bs-collapse-toggle</code> can be hard mapped to a <code>bs-collapse-target</code> by passing its target index to the attribute (<code>bs-collapse-toggle="1"</code>)</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>animation</td>
+          <td>string</td>
+          <td>am-fade</td>
+          <td>apply a CSS animation to the popover with <code>ngAnimate</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$tabProvider.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block>
+          angular.module('myApp')
+          .config(function($tabProvider) {
+            angular.extend($tabProvider.defaults, {
+              animation: 'am-flip-x'
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+</div>
