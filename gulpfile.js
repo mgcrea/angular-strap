@@ -386,7 +386,6 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter(stylish));
 });
 var karma = require('karma').server;
-var coveralls = require('gulp-coveralls');
 gulp.task('karma:unit', ['templates:test'], function() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
@@ -418,11 +417,11 @@ gulp.task('karma:travis', ['templates:test'], function() {
     singleRun: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    gulp.src('test/coverage/**/lcov.info')
-      .pipe(coveralls())
-      .on('end', function() {
-        process.exit(code);
-      });
+    // gulp.src('test/coverage/**/lcov.info')
+    //   .pipe(coveralls())
+    //   .on('end', function() {
+    //     process.exit(code);
+    //   });
   });
 
 });
