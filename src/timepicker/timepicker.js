@@ -372,7 +372,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             controller.$setValidity('date', true);
             return;
           }
-          var parsedTime = dateParser.parse(viewValue, controller.$dateValue);
+          var parsedTime = angular.isDate(viewValue) ? viewValue : dateParser.parse(viewValue, controller.$dateValue);
           if(!parsedTime || isNaN(parsedTime.getTime())) {
             controller.$setValidity('date', false);
           } else {

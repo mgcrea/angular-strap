@@ -146,7 +146,20 @@ describe('timepicker', function() {
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 4);
     });
 
-    it('should correctly display active time', function() {
+    it('should correctly update time', function() {
+      var elm = compileDirective('value-past');
+      // Should have the predefined value
+      expect(elm.val()).toBe('10:30 AM');
+      // Should correctly set the model value if set via the datepicker
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(12)')).triggerHandler('click');
+      expect(elm.val()).toBe('12:30 PM');
+      expect(scope.selectedTime.toISOString().substr(0, 10)).toBe('1970-01-01');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(12)')).triggerHandler('click');
+      expect(scope.selectedTime.toISOString().substr(0, 10)).toBe('1970-01-01');
+    });
+
+    it('should correctly update time', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
@@ -470,6 +483,7 @@ describe('timepicker', function() {
       angular.element(elm[0]).triggerHandler('change');
       scope.$digest();
       expect(scope.selectedTime).toBe('10:00:00');
+
     });
 
   });
