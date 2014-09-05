@@ -1,7 +1,7 @@
 <div class="bs-docs-section" ng-controller="CollapseDemoCtrl">
 
   <div class="page-header">
-    <h1 id="tabs">Collapses <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/collapse/collapse.js" target="_blank">collapse.js</a>
+    <h1 id="collapses">Collapses <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/collapse/collapse.js" target="_blank">collapse.js</a>
     </h1>
     <code>mgcrea.ngStrap.collapse</code>
   </div>
@@ -15,7 +15,7 @@ $scope.panels.activePanel = {{ panels.activePanel }};
   </pre>
   <div class="bs-example" append-source>
     <!-- ngModel is optional -->
-    <div class="panel-group" bs-collapse>
+    <div class="panel-group" ng-model="panels.activePanel" bs-collapse>
       <div class="panel panel-default" ng-repeat="panel in panels">
         <div class="panel-heading">
           <h4 class="panel-title">
@@ -42,7 +42,7 @@ $scope.panels.activePanel = {{ panels.activePanel }};
     <div class="btn btn-default" ng-click="pushPanel()">Add new panel</div>
   </div>
 
-  <h2 id="tabs-usage">Usage</h2>
+  <h2 id="collapses-usage">Usage</h2>
   <p>Append a <code>bs-collapse</code> attribute to any element and several <code>bs-collapse-toggle</code>,<code>bs-collapse-target</code> attributes to children elements to enable the directive.</p>
 
   <div class="callout callout-info">
@@ -69,7 +69,7 @@ $scope.panels.activePanel = {{ panels.activePanel }};
 
   <h3>Options</h3>
   <p>Options can be passed via data attributes or as an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object on
-    <code>bs-tabs</code>. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+    <code>bs-collapse</code>. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
   <p><code>bs-collapse-toggle</code> can be hard mapped to a <code>bs-collapse-target</code> by passing its target index to the attribute (<code>bs-collapse-toggle="1"</code>)</p>
   <div class="table-responsive">
     <table class="table table-bordered table-striped">
@@ -109,13 +109,13 @@ $scope.panels.activePanel = {{ panels.activePanel }};
   </div>
   <div class="callout callout-info">
     <h4>Default options</h4>
-    <p>You can override global defaults for the plugin with <code>$tabProvider.defaults</code></p>
+    <p>You can override global defaults for the plugin with <code>$collapseProvider.defaults</code></p>
     <div class="highlight">
       <pre class="bs-exemple-code">
         <code class="javascript" highlight-block>
           angular.module('myApp')
-          .config(function($tabProvider) {
-            angular.extend($tabProvider.defaults, {
+          .config(function($collapseProvider) {
+            angular.extend($collapseProvider.defaults, {
               animation: 'am-flip-x'
             });
           })
