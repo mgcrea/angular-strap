@@ -16,6 +16,9 @@ before_script:
 script:
   - gulp jshint karma:unit
 
+after_script:
+  - cat test/coverage/*/lcov.info | codeclimate
+
 addons:
   code_climate:
     repo_token: b5ed978a0e88f95b003a668583ae70815e18cd71019d526023b5e9c7703ec076
