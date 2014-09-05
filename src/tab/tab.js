@@ -59,7 +59,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       require: ['?ngModel', 'bsTabs'],
       transclude: true,
       scope: true,
-      controller: $tab.controller,
+      controller: ['$scope', '$element', '$attrs', $tab.controller],
       templateUrl: function(element, attr) {
         return attr.template || defaults.template;
       },

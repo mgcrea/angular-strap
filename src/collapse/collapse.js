@@ -60,7 +60,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
     return {
       require: ['?ngModel', 'bsCollapse'],
-      controller: $collapse.controller,
+      controller: ['$scope', '$element', '$attrs', $collapse.controller],
       link: function postLink(scope, element, attrs, controllers) {
 
         var ngModelCtrl = controllers[0];
