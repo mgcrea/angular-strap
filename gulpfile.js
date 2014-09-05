@@ -418,6 +418,7 @@ gulp.task('karma:travis', ['templates:test'], function() {
     singleRun: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
+    process.exit(code);
     // gulp.src('test/coverage/**/lcov.info')
     //   .pipe(coveralls())
     //   .on('end', function() {
