@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.5 - 2014-08-07
+ * @version v2.1.0 - 2014-09-05
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -130,7 +130,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
           });
           // Options: target
           if (options.target) {
-            options.target = angular.isElement(options.target) ? options.target : findElement(options.target)[0];
+            options.target = angular.isElement(options.target) ? options.target : findElement(options.target);
           }
           // Options: show
           if (options.show) {
@@ -273,10 +273,16 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
           tipElement.css(tipPosition);
         };
         $tooltip.$onKeyUp = function (evt) {
-          evt.which === 27 && $tooltip.hide();
+          if (evt.which === 27 && $tooltip.$isShown) {
+            $tooltip.hide();
+            evt.stopPropagation();
+          }
         };
         $tooltip.$onFocusKeyUp = function (evt) {
-          evt.which === 27 && element[0].blur();
+          if (evt.which === 27) {
+            element[0].blur();
+            evt.stopPropagation();
+          }
         };
         $tooltip.$onFocusElementMouseDown = function (evt) {
           evt.preventDefault();
@@ -417,7 +423,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
           if (!tooltip || !angular.isDefined(newValue))
             return;
           if (angular.isString(newValue))
-            newValue = newValue.match(',?(tooltip),?');
+            newValue = !!newValue.match(',?(tooltip),?');
           newValue === true ? tooltip.show() : tooltip.hide();
         });
         // Initialize popover

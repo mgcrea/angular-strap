@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.5 - 2014-08-07
+ * @version v2.1.0 - 2014-09-05
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -138,7 +138,7 @@ angular.module('mgcrea.ngStrap.affix', [
           }
         }
         function getScrollTop() {
-          return targetEl[0] === $window ? $window.pageYOffset : targetEl[0] === $window;
+          return targetEl[0] === $window ? $window.pageYOffset : targetEl[0].scrollTop;
         }
         function getScrollHeight() {
           return targetEl[0] === $window ? $window.document.body.scrollHeight : targetEl[0].scrollHeight;
@@ -173,6 +173,7 @@ angular.module('mgcrea.ngStrap.affix', [
         });
         var affix = $affix(element, options);
         scope.$on('$destroy', function () {
+          affix && affix.destroy();
           options = null;
           affix = null;
         });

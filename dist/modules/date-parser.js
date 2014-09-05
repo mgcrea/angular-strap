@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.5 - 2014-08-07
+ * @version v2.1.0 - 2014-09-05
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -10,6 +10,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
   '$localeProvider',
   function ($localeProvider) {
     var proto = Date.prototype;
+    function noop() {
+    }
     function isNumeric(n) {
       return !isNaN(parseFloat(n)) && isFinite(n);
     }
@@ -57,6 +59,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
               'H': proto.setHours,
               'hh': proto.setHours,
               'h': proto.setHours,
+              'EEEE': noop,
+              'EEE': noop,
               'dd': proto.setDate,
               'd': proto.setDate,
               'a': function (value) {
@@ -116,12 +120,15 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
               if (format.split(keys[i]).length > 1) {
                 var index = clonedFormat.search(keys[i]);
                 format = format.split(keys[i]).join('');
-                if (setFnMap[keys[i]])
+                if (setFnMap[keys[i]]) {
                   map[index] = setFnMap[keys[i]];
+                }
               }
             }
             // Sort result map
             angular.forEach(map, function (v) {
+              // conditional required since angular.forEach broke around v1.2.21
+              // related pr: https://github.com/angular/angular.js/pull/8525
               if (v)
                 sortedMap.push(v);
             });

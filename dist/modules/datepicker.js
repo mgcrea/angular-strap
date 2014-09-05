@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.5 - 2014-08-07
+ * @version v2.1.0 - 2014-09-05
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -288,15 +288,15 @@ angular.module('mgcrea.ngStrap.datepicker', [
           if (!datepicker || !angular.isDefined(newValue))
             return;
           if (angular.isString(newValue))
-            newValue = newValue.match(',?(datepicker),?');
+            newValue = !!newValue.match(',?(datepicker),?');
           newValue === true ? datepicker.show() : datepicker.hide();
         });
-        // Set expected iOS format
-        if (isNative && options.useNative)
-          options.dateFormat = 'yyyy-MM-dd';
         // Initialize datepicker
         var datepicker = $datepicker(element, controller, options);
         options = datepicker.$options;
+        // Set expected iOS format
+        if (isNative && options.useNative)
+          options.dateFormat = 'yyyy-MM-dd';
         // Observe attributes for changes
         angular.forEach([
           'minDate',
@@ -473,6 +473,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
               build: function () {
                 var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1), firstDayOfMonthOffset = firstDayOfMonth.getTimezoneOffset();
                 var firstDate = new Date(+firstDayOfMonth - mod(firstDayOfMonth.getDay() - options.startWeek, 7) * 86400000), firstDateOffset = firstDate.getTimezoneOffset();
+                var today = new Date().toDateString();
                 // Handle daylight time switch
                 if (firstDateOffset !== firstDayOfMonthOffset)
                   firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60000);
@@ -482,6 +483,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
                   day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
                   days.push({
                     date: day,
+                    isToday: day.toDateString() === today,
                     label: dateFilter(day, this.format),
                     selected: picker.$date && this.isSelected(day),
                     muted: day.getMonth() !== viewDate.month,

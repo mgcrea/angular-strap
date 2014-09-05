@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.5 - 2014-08-07
+ * @version v2.1.0 - 2014-09-05
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -86,10 +86,9 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
   ];
 }).directive('bsDropdown', [
   '$window',
-  '$location',
   '$sce',
   '$dropdown',
-  function ($window, $location, $sce, $dropdown) {
+  function ($window, $sce, $dropdown) {
     return {
       restrict: 'EAC',
       scope: true,
@@ -113,11 +112,20 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip']).provider('
         attr.bsDropdown && scope.$watch(attr.bsDropdown, function (newValue, oldValue) {
           scope.content = newValue;
         }, true);
+        // Visibility binding support
+        attr.bsShow && scope.$watch(attr.bsShow, function (newValue, oldValue) {
+          if (!dropdown || !angular.isDefined(newValue))
+            return;
+          if (angular.isString(newValue))
+            newValue = !!newValue.match(',?(dropdown),?');
+          newValue === true ? dropdown.show() : dropdown.hide();
+        });
         // Initialize dropdown
         var dropdown = $dropdown(element, options);
         // Garbage collection
         scope.$on('$destroy', function () {
-          dropdown.destroy();
+          if (dropdown)
+            dropdown.destroy();
           options = null;
           dropdown = null;
         });
