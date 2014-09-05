@@ -124,6 +124,7 @@ gulp.task('watch:dev', function() {
 // SCRIPTS
 //
 var uglify = require('gulp-uglify');
+var ngAnnotate = require('gulp-ng-annotate');
 var ngmin = require('gulp-ngmin');
 var concat = require('gulp-concat-util');
 var sourcemaps = require('gulp-sourcemaps');
@@ -134,7 +135,7 @@ gulp.task('scripts:dist', function(foo) {
     // Build unified package
     gulp.src([src.index, src.scripts], {cwd: src.cwd})
       .pipe(sourcemaps.init())
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat(pkg.name + '.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n'))
       .pipe(concat.footer('\n})(window, document);\n'))
@@ -149,7 +150,7 @@ gulp.task('scripts:dist', function(foo) {
     // Build individual modules
     gulp.src(src.scripts, {cwd: src.cwd})
       .pipe(sourcemaps.init())
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(rename(function(path){ path.dirname = ''; })) // flatten
       .pipe(concat.header(banner))
       .pipe(gulp.dest(path.join(src.dist, 'modules')))
@@ -211,7 +212,7 @@ gulp.task('templates:dist', function() {
     gulp.src(src.templates, {cwd: src.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: createModuleName}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
       .pipe(concat.footer('\n\n})(window, document);\n'))
@@ -226,7 +227,7 @@ gulp.task('templates:dist', function() {
     gulp.src(src.templates, {cwd: src.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: createModuleName}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(rename(function(path){ path.dirname = ''; })) // flatten
       .pipe(concat.header(banner))
       .pipe(gulp.dest(path.join(src.dist, 'modules')))
@@ -252,7 +253,7 @@ gulp.task('templates:pages', function() {
     gulp.src(['views/sidebar.html', 'views/partials/*.html'], {cwd: docs.cwd, base: docs.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: 'mgcrea.ngStrapDocs'}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat('docs.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
       .pipe(concat.footer('\n\n})(window, document);\n'))
@@ -266,7 +267,7 @@ gulp.task('templates:pages', function() {
     gulp.src('*/docs/*.tpl.demo.html', {cwd: src.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: 'mgcrea.ngStrapDocs'}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat('demo.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
       .pipe(concat.footer('\n\n})(window, document);\n'))
@@ -281,7 +282,7 @@ gulp.task('templates:pages', function() {
     gulp.src(src.templates, {cwd: src.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: createModuleName}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
       .pipe(concat.footer('\n\n})(window, document);\n'))
