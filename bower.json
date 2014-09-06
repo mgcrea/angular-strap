@@ -24,8 +24,8 @@
     }
   ],
   "main": [
-    "dist/angular-strap.min.js",
-    "dist/angular-strap.tpl.min.js"
+    "dist/angular-strap.js",
+    "dist/angular-strap.tpl.js"
   ],
   "ignore": [
     "docs",
