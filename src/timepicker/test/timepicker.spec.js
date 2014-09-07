@@ -146,7 +146,15 @@ describe('timepicker', function() {
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 4);
     });
 
-    it('should correctly update time', function() {
+    it('should correctly display time', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+    });
+
+    it('should correctly update the model when the view is updated', function() {
       var elm = compileDirective('value-past');
       // Should have the predefined value
       expect(elm.val()).toBe('10:30 AM');
@@ -159,12 +167,15 @@ describe('timepicker', function() {
       expect(scope.selectedTime.toISOString().substr(0, 10)).toBe('1970-01-01');
     });
 
-    it('should correctly update time', function() {
-      var elm = compileDirective('default');
+    it('should correctly parse input time', function() {
+      var elm = compileDirective('value-past');
       angular.element(elm[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+      elm.val('12:30 AM');
+      angular.element(elm[0]).triggerHandler('change');
+      expect(scope.selectedTime.getHours()).toBe(0);
+      elm.val('12:30 PM');
+      angular.element(elm[0]).triggerHandler('change');
+      expect(scope.selectedTime.getHours()).toBe(12);
     });
 
     it('should correctly support undefined values', function() {
