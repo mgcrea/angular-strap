@@ -102,20 +102,21 @@ gulp.task('open:pages', function(){
 
 // WATCH
 //
+
 var watch = require('gulp-watch');
 gulp.task('watch:docs', function() {
-  watch({glob: docs.scripts, gaze: {cwd: docs.cwd}}, function(files) {
+  watch(docs.scripts, {cwd: docs.cwd}, function(files) {
     return files.pipe(connect.reload());
   });
-  watch({glob: docs.watch.styles, gaze: {cwd: docs.cwd}}, function(files) {
+  watch(docs.watch.styles, {cwd: docs.cwd}, function(files) {
     return gulp.start('styles:docs');
   });
-  watch({glob: [docs.index, docs.views], gaze: {cwd: docs.cwd}}, function(files) {
+  watch([docs.index, docs.views], {cwd: docs.cwd}, function(files) {
     return files.pipe(connect.reload());
   });
 });
 gulp.task('watch:dev', function() {
-  watch({glob: src.scripts, gaze: {cwd: src.cwd}}, function(files) {
+  watch(src.scripts, {cwd: src.cwd}, function(files) {
     return files.pipe(connect.reload());
   });
 });
