@@ -208,9 +208,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // Options: custom classes
           if(options.customClass) tipElement.addClass(options.customClass);
 
-          $animate.enter(tipElement, parent, after, function() {
-            scope.$emit(options.prefixEvent + '.show', $tooltip);
-          });
+          // Support v1.3+ $animate
+          // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
+          var promise = $animate.enter(tipElement, parent, after, enterAnimateCallback);
+          if(promise && promise.then) promise.then(enterAnimateCallback);
+
           $tooltip.$isShown = scope.$isShown = true;
           scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
           $$rAF(function () {
@@ -232,6 +234,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         };
 
+        function enterAnimateCallback() {
+          scope.$emit(options.prefixEvent + '.show', $tooltip);
+        }
+
         $tooltip.leave = function() {
 
           clearTimeout(timeout);
@@ -252,14 +258,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(!$tooltip.$isShown) return;
           scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
 
-          $animate.leave(tipElement, function() {
-            scope.$emit(options.prefixEvent + '.hide', $tooltip);
-
-            // Allow to blur the input when hidden, like when pressing enter key
-            if(blur && options.trigger === 'focus') {
-              return element[0].blur();
-            }
-          });
+          // Support v1.3+ $animate
+          // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
+          var promise = $animate.leave(tipElement, leaveAnimateCallback);
+          if(promise && promise.then) promise.then(leaveAnimateCallback);
 
           $tooltip.$isShown = scope.$isShown = false;
           scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
@@ -270,6 +272,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           }
 
         };
+
+        function leaveAnimateCallback() {
+          scope.$emit(options.prefixEvent + '.hide', $tooltip);
+          // Allow to blur the input when hidden, like when pressing enter key
+          if(blur && options.trigger === 'focus') {
+            return element[0].blur();
+          }
+        }
 
         $tooltip.toggle = function() {
           $tooltip.$isShown ? $tooltip.leave() : $tooltip.enter();
