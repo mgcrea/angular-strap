@@ -117,7 +117,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $modal.show = function() {
 
-          scope.$emit(options.prefixEvent + '.show.before', $modal);
+          if(scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
+            return;
+          }
           var parent;
           if(angular.isElement(options.container)) {
             parent = options.container;
@@ -178,7 +180,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $modal.hide = function() {
 
-          scope.$emit(options.prefixEvent + '.hide.before', $modal);
+          if(scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
+            return;
+          }
           var promise = $animate.leave(modalElement, leaveAnimateCallback);
           // Support v1.3+ $animate
           // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
