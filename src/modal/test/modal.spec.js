@@ -3,13 +3,14 @@
 describe('modal', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $compile, $templateCache, $modal, $animate, scope;
+  var $compile, $templateCache, $modal, $animate, $rootScope, scope;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('mgcrea.ngStrap.modal'));
 
   beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$modal_, _$animate_) {
+    $rootScope = _$rootScope_;
     scope = _$rootScope_.$new();
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
@@ -156,7 +157,7 @@ describe('modal', function() {
 
     it('should dispatch show and show.before events', function() {
       var myModal = $modal(templates['default'].scope.modal);
-      var emit = spyOn(myModal.$scope, '$emit');
+      var emit = spyOn(myModal.$scope, '$emit').andCallThrough();
       scope.$digest();
 
       expect(emit).toHaveBeenCalledWith('modal.show.before', myModal);
@@ -169,7 +170,7 @@ describe('modal', function() {
     it('should dispatch hide and hide.before events', function() {
       var myModal = $modal(templates['default'].scope.modal);
       scope.$digest();
-      var emit = spyOn(myModal.$scope, '$emit');
+      var emit = spyOn(myModal.$scope, '$emit').andCallThrough();
       myModal.hide();
 
       expect(emit).toHaveBeenCalledWith('modal.hide.before', myModal);
@@ -181,7 +182,7 @@ describe('modal', function() {
 
     it('should namespace show/hide events using the prefixEvent', function() {
       var myModal = $modal(angular.extend({prefixEvent: 'alert'}, templates['default'].scope.modal));
-      var emit = spyOn(myModal.$scope, '$emit');
+      var emit = spyOn(myModal.$scope, '$emit').andCallThrough();
       scope.$digest();
       myModal.hide();
       $animate.triggerCallbacks();
@@ -192,6 +193,30 @@ describe('modal', function() {
       expect(emit).toHaveBeenCalledWith('alert.hide', myModal);
     });
 
+    it("should can cancel show on show.before event", function() {
+      $rootScope.$on('modal.show.before', function(e) {
+        e.preventDefault();
+      });
+      $rootScope.$on('modal.show', function() {
+        throw new Error('modal should not be shown');
+      });
+      var myModal = $modal(templates['default'].scope.modal);
+      scope.$digest();  
+      $animate.triggerCallbacks();
+    });
+
+    it("should can cancel hide on hide.before event", function() {
+      $rootScope.$on('modal.hide.before', function(e) {
+        e.preventDefault();
+      });
+      $rootScope.$on('modal.hide', function() {
+        throw new Error('modal should not be hidden');
+      });
+      var myModal = $modal(templates['default'].scope.modal);
+      scope.$digest();  
+      myModal.hide();
+      $animate.triggerCallbacks();
+    });
   });
 
   describe('options', function() {
