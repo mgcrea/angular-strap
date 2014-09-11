@@ -1,0 +1,1394 @@
+/*csslint ids: false, overqualified-elements: false, fallback-colors: false*/
+
+/*!
+ * Bootstrap Docs (http://getbootstrap.com)
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under the Creative Commons Attribution 3.0 Unported License. For
+ * details, see http://creativecommons.org/licenses/by/3.0/.
+ */
+
+
+/*
+ * Bootstrap Documentation
+ * Special styles for presenting Bootstrap's documentation and code examples.
+ *
+ * Table of contents:
+ *
+ * Scaffolding
+ * Main navigation
+ * Footer
+ * Social buttons
+ * Homepage
+ * Page headers
+ * Old docs callout
+ * Ads
+ * Side navigation
+ * Docs sections
+ * Callouts
+ * Grid styles
+ * Examples
+ * Code snippets (highlight)
+ * Responsive tests
+ * Glyphicons
+ * Customizer
+ * Miscellaneous
+ */
+
+
+/*
+ * Scaffolding
+ *
+ * Update the basics of our documents to prep for docs content.
+ */
+
+body {
+  position: relative; /* For scrollyspy */
+}
+
+/* Keep code small in tables on account of limited space */
+.table code {
+  font-size: 13px;
+  font-weight: normal;
+}
+
+/* Outline button for use within the docs */
+.btn-outline {
+  color: hsl(264, 34%, 36%);
+  background-color: transparent;
+  border-color: hsl(264, 34%, 36%);
+}
+.btn-outline:hover,
+.btn-outline:focus,
+.btn-outline:active {
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(264, 34%, 36%);
+  border-color: hsl(264, 34%, 36%);
+}
+
+/* Inverted outline button (white on dark) */
+.btn-outline-inverse {
+  color: hsl(0, 0%, 100%);
+  background-color: transparent;
+  border-color: hsl(263, 39%, 82%);
+}
+.btn-outline-inverse:hover,
+.btn-outline-inverse:focus,
+.btn-outline-inverse:active {
+  color: hsl(264, 34%, 36%);
+  text-shadow: none;
+  background-color: hsl(0, 0%, 100%);
+  border-color: hsl(0, 0%, 100%);
+}
+
+/* Bootstrap "B" icon */
+.bs-booticon {
+  display: block;
+  font-weight: 500;
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(264, 34%, 36%);
+  border-radius: 15%;
+  cursor: default;
+  text-align: center;
+}
+.bs-booticon-sm {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  line-height: 28px;
+}
+.bs-booticon-lg {
+  width: 144px;
+  height: 144px;
+  font-size: 108px;
+  line-height: 140px;
+}
+.bs-booticon-inverse {
+  color: hsl(264, 34%, 36%);
+  background-color: hsl(0, 0%, 100%);
+}
+.bs-booticon-outline {
+  background-color: transparent;
+  border: 1px solid hsl(263, 39%, 82%);
+}
+
+
+/*
+ * Main navigation
+ *
+ * Turn the `.navbar` at the top of the docs purple.
+ */
+
+.bs-docs-nav {
+  margin-bottom: 0;
+  background-color: hsl(0, 0%, 100%);
+  border-bottom: 0;
+}
+.bs-home-nav .bs-nav-b {
+  display: none;
+}
+.bs-docs-nav .navbar-brand,
+.bs-docs-nav .navbar-nav > li > a {
+  color: hsl(264, 34%, 36%);
+  font-weight: 500;
+}
+.bs-docs-nav .navbar-nav > li > a:hover,
+.bs-docs-nav .navbar-nav > .active > a,
+.bs-docs-nav .navbar-nav > .active > a:hover {
+  color: hsl(264, 34%, 30%);
+  background-color: hsl(0, 0%, 98%);
+}
+.bs-docs-nav .navbar-toggle .icon-bar {
+  background-color: hsl(264, 34%, 36%);
+}
+.bs-docs-nav .navbar-header .navbar-toggle {
+  border-color: hsl(0, 0%, 100%);
+}
+.bs-docs-nav .navbar-header .navbar-toggle:hover,
+.bs-docs-nav .navbar-header .navbar-toggle:focus {
+  background-color: hsl(0, 0%, 98%);
+  border-color: hsl(0, 0%, 98%);
+}
+
+
+/*
+ * Footer
+ *
+ * Separated section of content at the bottom of all pages, save the homepage.
+ */
+
+.bs-footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 100px;
+  color: hsl(0, 0%, 47%);
+  text-align: center;
+  border-top: 1px solid hsl(0, 0%, 90%);
+}
+.footer-links {
+  margin-top: 20px;
+  padding-left: 0;
+  color: hsl(0, 0%, 60%);
+}
+.footer-links li {
+  display: inline;
+  padding: 0 2px;
+}
+.footer-links li:first-child {
+  padding-left: 0;
+}
+
+@media (min-width: 768px) {
+  .bs-footer p {
+    margin-bottom: 0;
+  }
+}
+
+
+/*
+ * Social buttons
+ *
+ * Twitter and GitHub social action buttons (for homepage and footer).
+ */
+
+.bs-social {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.bs-social-buttons {
+  display: inline-block;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+}
+.bs-social-buttons li {
+  display: inline-block;
+  line-height: 1;
+  padding: 5px 8px;
+}
+.bs-social-buttons .twitter-follow-button {
+  width: 225px !important;
+}
+.bs-social-buttons .twitter-share-button {
+  width: 98px !important;
+}
+/* Style the GitHub buttons via CSS instead of inline attributes */
+.github-btn {
+  border: 0;
+  overflow: hidden;
+}
+
+
+/*
+ * Homepage
+ *
+ * Tweaks to the custom homepage and the masthead (main jumbotron).
+ */
+
+/* Share masthead with page headers */
+.bs-masthead,
+.bs-header {
+  position: relative;
+  padding: 30px 15px;
+  color: hsl(263, 39%, 82%);
+  text-align: center;
+  text-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.1);
+  background-color: hsl(263, 29%, 46%);
+  background-image: -webkit-linear-gradient(top, hsl(264, 34%, 36%) 0%, hsl(263, 29%, 46%) 100%);
+  background-image: linear-gradient(to bottom, hsl(264, 34%, 36%) 0%, hsl(263, 29%, 46%) 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='hsl(264, 34%, 36%)', endColorstr='hsl(263, 29%, 46%)', GradientType=0);
+}
+
+ /* Masthead (headings and download button) */
+.bs-masthead .bs-booticon {
+  margin: 0 auto 30px;
+}
+.bs-masthead h1 {
+  font-weight: 300;
+  line-height: 1;
+  color: hsl(0, 0%, 100%);
+}
+.bs-masthead .lead {
+  margin: 0 auto 30px;
+  font-size: 20px;
+  color: hsl(0, 0%, 100%);
+}
+.bs-masthead .btn {
+  width: 100%;
+  padding: 15px 30px;
+  font-size: 20px;
+}
+
+@media (min-width: 480px) {
+  .bs-masthead .btn {
+    width: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .bs-masthead {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+  .bs-masthead h1 {
+    font-size: 60px;
+  }
+  .bs-masthead .lead {
+    font-size: 24px;
+  }
+}
+
+@media (min-width: 992px) {
+  .bs-masthead .lead {
+    width: 80%;
+    font-size: 30px;
+  }
+}
+
+
+/*
+ * Page headers
+ *
+ * Jumbotron-esque headers at the top of every page that's not the homepage.
+ */
+
+/* Page headers */
+.bs-header {
+  margin-bottom: 40px;
+  font-size: 20px;
+}
+.bs-header h1 {
+  margin-top: 0;
+  color: hsl(0, 0%, 100%);
+}
+.bs-header p {
+  margin-bottom: 0;
+  font-weight: 300;
+  line-height: 1.4;
+}
+.bs-header .container {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .bs-header {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    font-size: 24px;
+    text-align: left;
+  }
+  .bs-header h1 {
+    font-size: 60px;
+    line-height: 1;
+  }
+}
+
+@media (min-width: 992px) {
+  .bs-header h1,
+  .bs-header p {
+    margin-right: 380px;
+  }
+}
+
+
+/*
+ * Carbon ads
+ *
+ * Single display ad that shows on all pages (except homepage) in page headers.
+ * The hella `!important` is required for any pre-set property.
+ */
+
+.carbonad {
+  width: auto !important;
+  margin: 30px -30px -31px !important;
+  padding: 20px !important;
+  overflow: hidden; /* clearfix */
+  height: auto !important;
+  font-size: 13px !important;
+  line-height: 16px !important;
+  text-align: left;
+  background: transparent !important;
+  border: solid hsl(263, 32%, 56%) !important;
+  border-width: 1px 0 !important;
+}
+.carbonad-img {
+  margin: 0 !important;
+}
+.carbonad-text,
+.carbonad-tag {
+  float: none !important;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  margin-left: 145px !important;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+.carbonad-text {
+  padding-top: 0 !important;
+}
+.carbonad-tag {
+  color: inherit !important;
+  text-align: left !important;
+}
+.carbonad-text a,
+.carbonad-tag a {
+  color: hsl(0, 0%, 100%) !important;
+}
+.carbonad #azcarbon > img {
+  display: none; /* hide what I assume are tracking images */
+}
+
+@media (min-width: 480px) {
+  .carbonad {
+    width: 330px !important;
+    margin: 20px auto !important;
+    border-radius: 4px;
+    border-width: 1px !important;
+  }
+  .bs-masthead .carbonad {
+    margin: 50px auto 0 !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .carbonad {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .carbonad {
+    position: absolute;
+    top: 0;
+    right: 15px; /* 15px instead of 0 since box-sizing */
+    margin: 0 !important;
+    padding: 15px !important;
+    width: 330px !important;
+  }
+  .bs-masthead .carbonad {
+    position: static;
+  }
+}
+
+
+/*
+ * Homepage featurettes
+ *
+ * Reasons to use Bootstrap, entries from the Expo, and more.
+ */
+
+.bs-featurette {
+  padding-top:    40px;
+  padding-bottom: 40px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: hsl(0, 0%, 33%);
+  text-align: center;
+  background-color: hsl(0, 0%, 100%);
+  border-bottom: 1px solid hsl(0, 0%, 90%);
+}
+.bs-featurette + .bs-footer {
+  margin-top: 0;
+  border-top: 0;
+}
+
+.bs-featurette-title {
+  font-size: 30px;
+  font-weight: normal;
+  color: hsl(0, 0%, 20%);
+  margin-bottom: 5px;
+}
+.half-rule {
+  width: 100px;
+  margin: 40px auto;
+}
+.bs-featurette h3 {
+  font-weight: normal;
+  color: hsl(0, 0%, 20%);
+  margin-bottom: 5px;
+}
+.bs-featurette-img {
+  display: block;
+  margin-bottom: 20px;
+  color: hsl(0, 0%, 20%);
+}
+.bs-featurette-img:hover {
+  text-decoration: none;
+  color: hsl(208, 56%, 53%);
+}
+.bs-featurette-img img {
+  display: block;
+  margin-bottom: 15px;
+}
+
+/* Featured sites */
+.bs-featured-sites {
+  margin-left: -1px;
+  margin-right: -1px;
+}
+.bs-featured-sites .col-sm-3 {
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+@media (min-width: 480px) {
+  .bs-featurette .img-responsive {
+    margin-top: 30px;
+  }
+}
+@media (min-width: 768px) {
+  .bs-featurette {
+    padding-top:    100px;
+    padding-bottom: 100px;
+  }
+  .bs-featurette-title {
+    font-size: 40px;
+  }
+  .bs-featurette .lead {
+    margin-left:  auto;
+    margin-right: auto;
+    max-width: 80%;
+  }
+  .bs-featured-sites .col-sm-3:first-child img {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+  .bs-featured-sites .col-sm-3:last-child img {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .bs-featurette .img-responsive {
+    margin-top: 0;
+  }
+}
+
+
+/*
+ * Side navigation
+ *
+ * Scrollspy and affixed enhanced navigation to highlight sections and secondary
+ * sections of docs content.
+ */
+
+/* By default it's not affixed in mobile views, so undo that */
+.bs-sidebar.affix {
+  position: static;
+}
+@media (min-width: 768px) {
+  .bs-sidebar {
+    padding-left: 20px;
+  }
+}
+
+/* First level of nav */
+.bs-sidenav {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* All levels of nav */
+.bs-sidebar .nav > li > a {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: hsl(0, 0%, 60%);
+  padding: 4px 20px;
+}
+.bs-sidebar .nav > li > a:hover,
+.bs-sidebar .nav > li > a:focus {
+  padding-left: 19px;
+  color: hsl(264, 34%, 36%);
+  text-decoration: none;
+  background-color: transparent;
+  border-left: 1px solid hsl(264, 34%, 36%);
+}
+.bs-sidebar .nav > .active > a,
+.bs-sidebar .nav > .active:hover > a,
+.bs-sidebar .nav > .active:focus > a {
+  padding-left: 18px;
+  font-weight: bold;
+  color: hsl(264, 34%, 36%);
+  background-color: transparent;
+  border-left: 2px solid hsl(264, 34%, 36%);
+}
+
+/* Nav: second level (shown on .active) */
+.bs-sidebar .nav .nav {
+  display: none; /* Hide by default, but at >768px, show it */
+  padding-bottom: 10px;
+}
+.bs-sidebar .nav .nav > li > a {
+  padding-top:    2px;
+  padding-bottom: 2px;
+  padding-left: 30px;
+  font-size: 12px;
+  font-weight: normal;
+}
+.bs-sidebar .nav .nav > li > a:hover,
+.bs-sidebar .nav .nav > li > a:focus {
+  padding-left: 29px;
+}
+.bs-sidebar .nav .nav > .active > a,
+.bs-sidebar .nav .nav > .active:hover > a,
+.bs-sidebar .nav .nav > .active:focus > a {
+  font-weight: 500;
+  padding-left: 28px;
+}
+
+/* Show and affix the side nav when space allows it */
+@media (min-width: 992px) {
+  .bs-sidebar .nav > .active > ul {
+    display: block;
+  }
+  /* Widen the fixed sidebar */
+  .bs-sidebar.affix,
+  .bs-sidebar.affix-bottom {
+    width: 213px;
+  }
+  .bs-sidebar.affix {
+    position: fixed; /* Undo the static from mobile first approach */
+    top: 20px;
+  }
+  .bs-sidebar.affix-bottom {
+    position: absolute; /* Undo the static from mobile first approach */
+  }
+  .bs-sidebar.affix-bottom .bs-sidenav,
+  .bs-sidebar.affix .bs-sidenav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 1200px) {
+  /* Widen the fixed sidebar again */
+  .bs-sidebar.affix-bottom,
+  .bs-sidebar.affix {
+    width: 263px;
+  }
+}
+
+
+/*
+ * Docs sections
+ *
+ * Content blocks for each component or feature.
+ */
+
+/* Space things out */
+.bs-docs-section {
+  margin-bottom: 60px;
+}
+.bs-docs-section:last-child {
+  margin-bottom: 0;
+}
+
+h1[id] {
+  margin-top: 0;
+  padding-top: 20px;
+}
+
+
+/*
+ * Callouts
+ *
+ * Not quite alerts, but custom and helpful notes for folks reading the docs.
+ * Requires a base and modifier class.
+ */
+
+/* Common styles for all types */
+.bs-callout {
+  margin: 20px 0;
+  padding: 20px;
+  border-left: 3px solid hsl(0, 0%, 93%);
+}
+.bs-callout h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.bs-callout p:last-child {
+  margin-bottom: 0;
+}
+.bs-callout code {
+  background-color: hsl(0, 0%, 100%);
+  border-radius: 3px;
+}
+
+/* Variations */
+.bs-callout-danger {
+  background-color: hsl(0, 60%, 98%);
+  border-color: hsl(2, 64%, 58%);
+}
+.bs-callout-danger h4 {
+  color: hsl(2, 64%, 58%);
+}
+.bs-callout-warning {
+  background-color: hsl(36, 63%, 97%);
+  border-color: hsl(35, 84%, 62%);
+}
+.bs-callout-warning h4 {
+  color: hsl(35, 84%, 62%);
+}
+.bs-callout-info {
+  background-color: hsl(200, 37%, 97%);
+  border-color: hsl(194, 66%, 61%);
+}
+.bs-callout-info h4 {
+  color: hsl(194, 66%, 61%);
+}
+
+
+/*
+ * Color swatches
+ *
+ * Color swatches and associated values for our grayscale and brand colors.
+ */
+
+.color-swatches {
+  margin: 0 -5px;
+  overflow: hidden; /* clearfix */
+}
+.color-swatch {
+  float: left;
+  width:  60px;
+  height: 60px;
+  margin: 0 5px;
+  border-radius: 3px;
+}
+
+@media (min-width: 768px) {
+  .color-swatch {
+    width:  100px;
+    height: 100px;
+  }
+}
+
+/* Framework colors */
+.color-swatches .gray-darker   { background-color: hsl(0, 0%, 13%); }
+.color-swatches .gray-dark     { background-color: hsl(0, 0%, 20%); }
+.color-swatches .gray          { background-color: hsl(0, 0%, 33%); }
+.color-swatches .gray-light    { background-color: hsl(0, 0%, 60%); }
+.color-swatches .gray-lighter  { background-color: hsl(0, 0%, 93%); }
+.color-swatches .brand-primary { background-color: hsl(208, 56%, 53%); }
+.color-swatches .brand-success { background-color: hsl(120, 39%, 54%); }
+.color-swatches .brand-warning { background-color: hsl(35, 84%, 62%); }
+.color-swatches .brand-danger  { background-color: hsl(2, 64%, 58%); }
+.color-swatches .brand-info    { background-color: hsl(194, 66%, 61%); }
+
+/* Docs colors */
+.color-swatches .bs-purple          { background-color: hsl(264, 34%, 36%); }
+.color-swatches .bs-purple-light    { background-color: hsl(264, 19%, 79%); }
+.color-swatches .bs-purple-lighter  { background-color: hsl(267, 18%, 90%); }
+.color-swatches .bs-gray            { background-color: hsl(0, 0%, 98%); }
+
+
+/*
+ * Team members
+ *
+ * Avatars, names, and usernames for core team.
+ */
+
+.bs-team .team-member {
+  color: hsl(0, 0%, 33%);
+  line-height: 32px;
+}
+.bs-team .team-member:hover {
+  color: hsl(0, 0%, 20%);
+  text-decoration: none;
+}
+.bs-team .github-btn {
+  float: right;
+  margin-top: 6px;
+  width: 180px;
+  height: 20px;
+}
+.bs-team img {
+  float: left;
+  width: 32px;
+  margin-right: 10px;
+  border-radius: 4px;
+}
+
+
+/*
+ * Grid examples
+ *
+ * Highlight the grid columns within the docs so folks can see their padding,
+ * alignment, sizing, etc.
+ */
+
+.show-grid {
+  margin-bottom: 15px;
+}
+.show-grid [class^="col-"] {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: hsl(0, 0%, 93%);
+  background-color: hsla(264, 34%, 36%, 0.15);
+  border: 1px solid hsl(0, 0%, 87%);
+  border: 1px solid hsla(264, 34%, 36%, 0.2);
+}
+
+
+/*
+ * Examples
+ *
+ * Isolated sections of example content for each component or feature. Usually
+ * followed by a code snippet.
+ */
+
+.bs-example {
+  position: relative;
+  padding: 45px 15px 15px;
+  margin: 0 -15px 15px;
+  background-color: hsl(0, 0%, 98%);
+  box-shadow: inset 0 3px 6px hsla(0, 0%, 0%, 0.05);
+  border-color: hsl(0, 0%, 90%) hsl(0, 0%, 93%) hsl(0, 0%, 93%);
+  border-style: solid;
+  border-width: 1px 0;
+}
+/* Echo out a label for the example */
+.bs-example:after {
+  content: "Example";
+  position: absolute;
+  top:  15px;
+  left: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  color: hsl(0, 0%, 73%);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Tweak display of the code snippets when following an example */
+.bs-example + .highlight {
+  margin: -15px -15px 15px;
+  border-radius: 0;
+  border-width: 0 0 1px;
+}
+
+/* Make the examples and snippets not full-width */
+@media (min-width: 768px) {
+  .bs-example {
+    margin-left: 0;
+    margin-right: 0;
+    background-color: hsl(0, 0%, 100%);
+    border-width: 1px;
+    border-color: hsl(0, 0%, 87%);
+    border-radius: 4px 4px 0 0;
+    box-shadow: none;
+  }
+  .bs-example + .highlight {
+    margin-top: -16px;
+    margin-left: 0;
+    margin-right: 0;
+    border-width: 1px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+}
+
+/* Undo width of container */
+.bs-example .container {
+  width: auto;
+}
+
+/* Tweak content of examples for optimum awesome */
+.bs-example > p:last-child,
+.bs-example > ul:last-child,
+.bs-example > ol:last-child,
+.bs-example > blockquote:last-child,
+.bs-example > .form-control:last-child,
+.bs-example > .table:last-child,
+.bs-example > .navbar:last-child,
+.bs-example > .jumbotron:last-child,
+.bs-example > .alert:last-child,
+.bs-example > .panel:last-child,
+.bs-example > .list-group:last-child,
+.bs-example > .well:last-child,
+.bs-example > .progress:last-child,
+.bs-example > .table-responsive:last-child > .table {
+  margin-bottom: 0;
+}
+.bs-example > p > .close {
+  float: none;
+}
+
+/* Typography */
+.bs-example-type .table .type-info {
+  color: hsl(0, 0%, 60%);
+  vertical-align: middle;
+}
+.bs-example-type .table td {
+  padding: 15px 0;
+  border-color: hsl(0, 0%, 93%);
+}
+.bs-example-type .table tr:first-child td {
+  border-top: 0;
+}
+.bs-example-type h1,
+.bs-example-type h2,
+.bs-example-type h3,
+.bs-example-type h4,
+.bs-example-type h5,
+.bs-example-type h6 {
+  margin: 0;
+}
+
+/* Contextual background colors */
+.bs-example-bg-classes p {
+  padding: 15px;
+}
+
+/* Images */
+.bs-example > .img-circle,
+.bs-example > .img-rounded,
+.bs-example > .img-thumbnail {
+  margin: 5px;
+}
+
+/* Tables */
+.bs-example > .table-responsive > .table {
+  background-color: hsl(0, 0%, 100%);
+}
+
+/* Buttons */
+.bs-example > .btn,
+.bs-example > .btn-group {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.bs-example > .btn-toolbar + .btn-toolbar {
+  margin-top: 10px;
+}
+
+/* Forms */
+.bs-example-control-sizing select,
+.bs-example-control-sizing input[type="text"] + input[type="text"] {
+  margin-top: 10px;
+}
+.bs-example-form .input-group {
+  margin-bottom: 10px;
+}
+.bs-example > textarea.form-control {
+  resize: vertical;
+}
+
+/* List groups */
+.bs-example > .list-group {
+  max-width: 400px;
+}
+
+/* Navbars */
+.bs-example .navbar:last-child {
+  margin-bottom: 0;
+}
+.bs-navbar-top-example,
+.bs-navbar-bottom-example {
+  z-index: 1;
+  padding: 0;
+  overflow: hidden; /* cut the drop shadows off */
+}
+.bs-navbar-top-example .navbar-header,
+.bs-navbar-bottom-example .navbar-header {
+  margin-left: 0;
+}
+.bs-navbar-top-example .navbar-fixed-top,
+.bs-navbar-bottom-example .navbar-fixed-bottom {
+  position: relative;
+  margin-left: 0;
+  margin-right: 0;
+}
+.bs-navbar-top-example {
+  padding-bottom: 45px;
+}
+.bs-navbar-top-example:after {
+  top: auto;
+  bottom: 15px;
+}
+.bs-navbar-top-example .navbar-fixed-top {
+  top: -1px;
+}
+.bs-navbar-bottom-example {
+  padding-top: 45px;
+}
+.bs-navbar-bottom-example .navbar-fixed-bottom {
+  bottom: -1px;
+}
+.bs-navbar-bottom-example .navbar {
+  margin-bottom: 0;
+}
+@media (min-width: 768px) {
+  .bs-navbar-top-example .navbar-fixed-top,
+  .bs-navbar-bottom-example .navbar-fixed-bottom {
+    position: absolute;
+  }
+  .bs-navbar-top-example {
+    border-radius: 0 0 4px 4px;
+  }
+  .bs-navbar-bottom-example {
+    border-radius: 4px 4px 0 0;
+  }
+}
+
+/* Pagination */
+.bs-example .pagination {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* Pager */
+.bs-example > .pager {
+  margin-top: 0;
+}
+
+/* Example modals */
+.bs-example-modal {
+  background-color: hsl(0, 0%, 96%);
+}
+.bs-example-modal .modal {
+  position: relative;
+  top: auto;
+  right: auto;
+  left: auto;
+  bottom: auto;
+  z-index: 1;
+  display: block;
+}
+.bs-example-modal .modal-dialog {
+  left: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Example dropdowns */
+.bs-example > .dropdown > .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Example tabbable tabs */
+.bs-example-tabs .nav-tabs {
+  margin-bottom: 15px;
+}
+
+/* Tooltips */
+.bs-example-tooltips {
+  text-align: center;
+}
+.bs-example-tooltips > .btn {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Popovers */
+.bs-example-popover {
+  padding-bottom: 24px;
+  background-color: hsl(0, 0%, 98%);
+}
+.bs-example-popover .popover {
+  position: relative;
+  display: block;
+  float: left;
+  width: 260px;
+  margin: 20px;
+}
+
+/* Scrollspy demo on fixed height div */
+.scrollspy-example {
+  position: relative;
+  height: 200px;
+  margin-top: 10px;
+  overflow: auto;
+}
+
+
+/*
+ * Code snippets
+ *
+ * Generated via Pygments and Jekyll, these are snippets of HTML, CSS, and JS.
+ */
+
+.highlight {
+  padding: 9px 14px;
+  margin-bottom: 14px;
+  background-color: hsl(240, 14%, 97%);
+  border: 1px solid hsl(240, 13%, 90%);
+  border-radius: 4px;
+}
+.highlight pre {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: transparent;
+  border: 0;
+  white-space: nowrap;
+}
+.highlight pre code {
+  font-size: inherit;
+  color: hsl(0, 0%, 20%); /* Effectively the base text color */
+}
+.highlight pre .lineno {
+  display: inline-block;
+  width: 22px;
+  padding-right: 5px;
+  margin-right: 10px;
+  text-align: right;
+  color: hsl(240, 6%, 76%);
+}
+
+
+/*
+ * Responsive tests
+ *
+ * Generate a set of tests to show the responsive utilities in action.
+ */
+
+/* Responsive (scrollable) doc tables */
+.table-responsive .highlight pre {
+  white-space: normal;
+}
+
+/* Utility classes table  */
+.bs-table th small,
+.responsive-utilities th small {
+  display: block;
+  font-weight: normal;
+  color: hsl(0, 0%, 60%);
+}
+.responsive-utilities tbody th {
+  font-weight: normal;
+}
+.responsive-utilities td {
+  text-align: center;
+}
+.responsive-utilities td.is-visible {
+  color: hsl(121, 32%, 40%);
+  background-color: hsl(102, 44%, 89%) !important;
+}
+.responsive-utilities td.is-hidden {
+  color: hsl(0, 0%, 80%);
+  background-color: hsl(0, 0%, 98%) !important;
+}
+
+/* Responsive tests */
+.responsive-utilities-test {
+  margin-top: 5px;
+}
+.responsive-utilities-test .col-xs-6 {
+  margin-bottom: 10px;
+}
+.responsive-utilities-test span {
+  display: block;
+  padding: 15px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.1;
+  text-align: center;
+  border-radius: 4px;
+}
+.visible-on .col-xs-6 .hidden-xs,
+.visible-on .col-xs-6 .hidden-sm,
+.visible-on .col-xs-6 .hidden-md,
+.visible-on .col-xs-6 .hidden-lg,
+.hidden-on .col-xs-6 .hidden-xs,
+.hidden-on .col-xs-6 .hidden-sm,
+.hidden-on .col-xs-6 .hidden-md,
+.hidden-on .col-xs-6 .hidden-lg {
+  color: hsl(0, 0%, 60%);
+  border: 1px solid hsl(0, 0%, 87%);
+}
+.visible-on .col-xs-6 .visible-xs,
+.visible-on .col-xs-6 .visible-sm,
+.visible-on .col-xs-6 .visible-md,
+.visible-on .col-xs-6 .visible-lg,
+.hidden-on .col-xs-6 .visible-xs,
+.hidden-on .col-xs-6 .visible-sm,
+.hidden-on .col-xs-6 .visible-md,
+.hidden-on .col-xs-6 .visible-lg {
+  color: hsl(121, 32%, 40%);
+  background-color: hsl(102, 44%, 89%);
+  border: 1px solid hsl(93, 44%, 85%);
+}
+
+
+/*
+ * Glyphicons
+ *
+ * Special styles for displaying the icons and their classes in the docs.
+ */
+
+.bs-glyphicons {
+  margin: 0 -19px 20px -16px;
+  overflow: hidden;
+}
+.bs-glyphicons-list {
+  padding-left: 0;
+  list-style: none;
+}
+.bs-glyphicons li {
+  float: left;
+  width: 25%;
+  height: 115px;
+  padding: 10px;
+  font-size: 10px;
+  line-height: 1.4;
+  text-align: center;
+  border: 1px solid hsl(0, 0%, 100%);
+  background-color: hsl(0, 0%, 98%);
+}
+.bs-glyphicons .glyphicon {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+.bs-glyphicons .glyphicon-class {
+  display: block;
+  text-align: center;
+  word-wrap: break-word; /* Help out IE10+ with class names */
+}
+.bs-glyphicons li:hover {
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(264, 34%, 36%);
+}
+
+@media (min-width: 768px) {
+  .bs-glyphicons {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .bs-glyphicons li {
+    width: 12.5%;
+    font-size: 12px;
+  }
+}
+
+
+/*
+ * Customizer
+ *
+ * Since this is so form control heavy, we have quite a few styles to customize
+ * the display of inputs, headings, and more. Also included are all the download
+ * buttons and actions.
+ */
+
+.bs-customizer .toggle {
+  float: right;
+  margin-top: 25px;
+}
+
+/* Headings and form contrls */
+.bs-customizer label {
+  margin-top: 10px;
+  font-weight: 500;
+  color: hsl(0, 0%, 33%);
+}
+.bs-customizer h2 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  padding-top: 30px;
+}
+.bs-customizer h3 {
+  margin-bottom: 0;
+}
+.bs-customizer h4 {
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+.bs-customizer .bs-callout h4 {
+  margin-top: 0; /* lame, but due to specificity we have to duplicate */
+  margin-bottom: 5px;
+}
+.bs-customizer input[type="text"] {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  background-color: hsl(0, 0%, 98%);
+}
+.bs-customizer .help-block {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+/* For the variables, use regular weight */
+#less-section label {
+  font-weight: normal;
+}
+
+.bs-customizer-input {
+  float: left;
+  width: 33.333333%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Downloads */
+.bs-customize-download .btn-outline {
+  padding: 20px;
+}
+
+/* Error handling */
+.bs-customizer-alert {
+  position: fixed;
+  top: 51px;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  padding: 15px 0;
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(2, 64%, 58%);
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.25);
+  border-bottom: 1px solid hsl(1, 48%, 49%);
+}
+.bs-customizer-alert .close {
+  margin-top: -4px;
+  font-size: 24px;
+}
+.bs-customizer-alert p {
+  margin-bottom: 0;
+}
+.bs-customizer-alert .glyphicon {
+  margin-right: 5px;
+}
+.bs-customizer-alert pre {
+  margin: 10px 0 0;
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(1, 49%, 44%);
+  border-color: hsl(1, 49%, 40%);
+  box-shadow: inset 0 2px 4px hsla(0, 0%, 0%, 0.05), 0 1px 0 hsla(0, 0%, 100%, 0.1);
+}
+
+
+/*
+ * Brand guidelines
+ *
+ * Extra styles for displaying wordmarks, logos, etc.
+ */
+
+/* Logo series wrapper */
+.bs-brand-logos {
+  display: table;
+  width: 100%;
+  margin-bottom: 15px;
+  overflow: hidden;
+  color: hsl(264, 34%, 36%);
+  background-color: hsl(0, 0%, 98%);
+  border-radius: 4px;
+}
+
+/* Individual items */
+.bs-brand-item {
+  padding: 60px 0;
+  text-align: center;
+}
+.bs-brand-item + .bs-brand-item {
+  border-top: 1px solid hsl(0, 0%, 100%);
+}
+.bs-brand-logos .inverse {
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(264, 34%, 36%);
+}
+
+/* Heading content within */
+.bs-brand-item h1,
+.bs-brand-item h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.bs-brand-item .bs-booticon {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Make the icons stand out on what is/isn't okay */
+.bs-brand-item .glyphicon {
+  width: 30px;
+  height: 30px;
+  margin: 10px auto -10px;
+  line-height: 30px;
+  color: hsl(0, 0%, 100%);
+  border-radius: 50%;
+}
+.bs-brand-item .glyphicon-ok { background-color: hsl(120, 39%, 54%); }
+.bs-brand-item .glyphicon-remove { background-color: hsl(2, 64%, 58%); }
+
+@media (min-width: 768px) {
+  .bs-brand-item {
+    display: table-cell;
+    width: 1%;
+  }
+  .bs-brand-item + .bs-brand-item {
+    border-top: 0;
+    border-left: 1px solid hsl(0, 0%, 100%);
+  }
+  .bs-brand-item h1 {
+    font-size: 60px;
+  }
+}
+
+
+/*
+ * Miscellaneous
+ *
+ * Odds and ends for optimum docs display.
+ */
+
+/* Examples gallery: space out content better */
+.bs-examples .thumbnail {
+  margin-bottom: 10px;
+}
+.bs-examples h4 {
+  margin-bottom: 5px;
+}
+.bs-examples p {
+  margin-bottom: 20px;
+}
+
+/* Pseudo :focus state for showing how it looks in the docs */
+#focusedInput {
+  border-color: hsl(0, 0%, 80%); /* Restate unfocused value to make CSSLint happy that there's a pre-CSS3 fallback*/
+  border-color: hsla(206, 80%, 62%, 0.8);
+  outline: 0;
+  outline: thin dotted \9; /* IE6-9 */
+  -moz-box-shadow: 0 0 8px hsla(206, 80%, 62%, 0.6);
+       box-shadow: 0 0 8px hsla(206, 80%, 62%, 0.6);
+}

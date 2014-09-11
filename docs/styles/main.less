@@ -1,0 +1,311 @@
+
+@import (reference) "../bower_components/bootstrap/less/bootstrap";
+// @import "angular-motion/main";
+// @import "bootstrap-additions/bootstrap-additions";
+@import "docs/docs";
+// @import "dev/animations";
+
+
+@brand-primary: hsl(1, 45%, 50%); // Bootstrap 3.0-RC1
+// @brand-primary: hsl(264, 34%, 36%); // Bootstrap 3.0
+// @brand-primary: hsl(220, 84%, 53%); // iOS7-blue
+
+// @brand-primary: #E67E22; // CARROT
+// @brand-primary: #ECF0F1; // CLOUDS
+
+// @brand-primary: #1ABC9C; // TURQUOISE
+
+// @brand-primary: #16A085; // GREEN SEA
+// @brand-primary: #2ECC71; // EMERALD
+// @brand-primary: #27AE60; // NEPHRITIS
+// @brand-primary: #3498DB; // PETER RIVER
+// @brand-primary: #2980B9; // BELIZE HOLE
+// @brand-primary: #9B59B6; // AMETHYST
+// @brand-primary: #8E44AD; // WISTERIA
+
+
+// @brand-primary: #34495E; // WET ASPHALT
+// @brand-primary: #2C3E50; // MIDNIGHT BLUE
+// @brand-primary: #95A5A6; // CONCRETE
+// @brand-primary: #7F8C8D; // ASBESTOS
+
+// @brand-primary: #E74C3C; // ALIZARIN
+// @brand-primary: #C0392B; // POMEGRANATE
+@docs-color: @brand-primary;
+
+// .am-fade {
+
+//   animation-duration: 3s;
+
+// }
+//
+//
+
+// FORM FIELD FEEDBACK STATES
+// --------------------------
+
+// AngularJS invalid states
+// @from forms.less:367
+input.ng-dirty.ng-invalid,
+textarea.ng-dirty.ng-invalid,
+select.ng-dirty.ng-invalid {
+  color: #b94a48;
+  border-color: #ee5f5b;
+  &:focus {
+    border-color: darken(#ee5f5b, 10%);
+    .box-shadow(0 0 6px lighten(#ee5f5b, 20%));
+  }
+}
+
+input:focus.ng-pristine.ng-invalid,
+textarea:focus.ng-pristine.ng-invalid,
+select:focus.ng-pristine.ng-invalid {
+  color: @gray;
+  border: 1px solid @input-border;
+  .box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+  .transition(~"border linear .2s, box-shadow linear .2s");
+  &:focus {
+    border-color: rgba(82,168,236,.8);
+    .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6)");
+  }
+}
+
+[tabindex="-1"] {
+  outline: none;
+}
+
+a[ng-click] {
+  cursor: pointer;
+}
+
+
+// Drop modal scroll support
+body {
+  // &.modal-open {
+  //   overflow-y: hidden;
+  //   padding-right: 15px;
+  //   .navbar-fixed-top {
+  //     padding-right: 15px;
+  //   }
+  // }
+  .modal {
+    overflow-y: hidden;
+  }
+  &.modal-open {
+    overflow-y: visible !important;
+  }
+}
+
+.lt-ie9 {
+  .bs-sidebar {
+    display: none !important;
+  }
+}
+
+.btn[bs-select] {
+  outline: none;
+}
+
+.datepicker.dropdown-menu {
+  width: 250px;
+  height: 270px;
+  button {
+    outline: none;
+    border: 0px;
+  }
+  tbody {
+    height: 180px;
+  }
+  tbody button {
+    padding: 6px;
+  }
+  &.datepicker-mode-1, &.datepicker-mode-2 {
+    tbody button {
+      height: 65px;
+    }
+  }
+}
+
+.timepicker.dropdown-menu {
+  padding: 0 4px;
+  button {
+    outline: none;
+    border: 0px;
+  }
+  tbody button {
+    padding: 6px;
+  }
+}
+
+.select.dropdown-menu.select-multiple {
+  li {
+    position: relative;
+    > i {
+      color: white;
+      display: none;
+      position: absolute;
+      top:5px;
+      right:10px;
+    }
+    &.active {
+      > i {
+        display: block;
+      }
+    }
+  }
+}
+
+body {
+  position: relative; /* For scrollyspy */
+  padding-top: @navbar-height; /* Account for fixed navbar */
+}
+
+/* Tweak display of the code snippets when following an example */
+.bs-example-scope {
+  .small;
+  + .bs-example {
+    margin: -15px -15px 15px;
+    + .highlight > pre {
+      border-radius: 0 0 4px 4px;
+    }
+  }
+}
+
+.bs-docs-home, .bs-header, .bs-masthead  {
+  // background: #f7f7f7 ;
+  // background-size: cover;
+  // background-position: 50% 30%;
+}
+
+.aside.bs-docs-aside {
+  .aside-header {
+    background: @brand-primary;
+  }
+  .nav {
+    margin: 0px;
+  }
+}
+
+.bs-docs-social {
+  max-height: 200px;
+  ul {
+    list-style: none;
+    padding: 1em 0 0 0;
+    li {
+      height: 30px;
+      @media (max-width: @screen-sm-max) {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+/*
+ * Topography, yo!
+ *
+ * Apply the map background via base64 and relevant colors where we need 'em.
+ */
+
+.bs-docs-home,
+.bs-header {
+  color: white;
+  background: @brand-primary url("./../images/triangular-red.png");
+  padding-bottom: 20px;
+}
+
+/* Echo out a label for the example */
+// .bs-exemple-source, .highlight {
+  pre > code {
+    background: transparent;
+  }
+// }
+.bs-example + .highlight {
+    position: relative;
+    code {
+      padding: 2.5em 0.5em 1em;
+    }
+    &:after {
+      content: "Source";
+      position: absolute;
+      top:  15px;
+      left: 15px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #bbb;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+}
+
+.edit-plunkr, a[ng-click] {
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.twitter-follow-button {
+  position:relative;
+  top: 5px;
+  margin-left: 10px;
+}
+
+.tab-pane.am-fade {
+  animation-duration: .3s;
+  animation-timing-function: ease;
+  animation-fill-mode: backwards;
+  opacity: 1;
+
+  &.active-remove {
+    display: none !important;
+  }
+  &.active-add {
+    animation-name: fadeIn;
+  }
+}
+
+.panel-collapse.am-collapse {
+  animation-duration: .3s;
+  animation-timing-function: ease;
+  animation-fill-mode: backwards;
+  overflow: hidden;
+  &.in-remove {
+    animation-name: collapse;
+    display: block;
+  }
+  &.in-add {
+    animation-name: expand;
+  }
+}
+
+.panel-collapse.am-collapse2 {
+  transition: .3s ease max-height;
+  max-height: 100px;
+  overflow: hidden;
+  &.in-remove {
+    max-height: 100px;
+    display: block;
+  }
+  &.in-add {
+    max-height: 0px;
+  }
+}
+
+@keyframes expand {
+  from {
+    max-height: 0px;
+  }
+  to {
+    max-height: 100px;
+  }
+}
+
+@keyframes collapse {
+  from {
+    max-height: 100px;
+  }
+  to {
+    max-height: 0px;
+  }
+}
