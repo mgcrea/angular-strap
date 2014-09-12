@@ -77,7 +77,9 @@ angular.module('mgcrea.ngStrap.collapse', [])
           // modelValue -> $formatters -> viewValue
           ngModelCtrl.$formatters.push(function(modelValue) {
             // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
-            bsCollapseCtrl.$setActive(modelValue * 1);
+            if (bsCollapseCtrl.$targets.$active !== modelValue * 1) {
+              bsCollapseCtrl.$setActive(modelValue * 1);
+            }
             return modelValue;
           });
 
