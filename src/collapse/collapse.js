@@ -7,7 +7,8 @@ angular.module('mgcrea.ngStrap.collapse', [])
     var defaults = this.defaults = {
       animation: 'am-collapse',
       disallowToggle: false,
-      activeClass: 'in'
+      activeClass: 'in',
+      startCollapsed: false
     };
 
     var controller = this.controller = function($scope, $element, $attrs) {
@@ -15,7 +16,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
       // Attributes options
       self.$options = angular.copy(defaults);
-      angular.forEach(['animation', 'disallowToggle', 'activeClass'], function(key) {
+      angular.forEach(['animation', 'disallowToggle', 'activeClass', 'startCollapsed'], function (key) {
         if(angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
@@ -31,7 +32,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
         self.$targets.push(element);
       };
 
-      self.$targets.$active = 0;
+      self.$targets.$active = !self.$options.startCollapsed ? 0 : -1;
       self.$setActive = $scope.$setActive = function(value) {
         if(!self.$options.disallowToggle) {
           self.$targets.$active = self.$targets.$active === value ? -1 : value;
