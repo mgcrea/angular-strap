@@ -270,6 +270,26 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         // Set expected iOS format
         if(isNative && options.useNative) options.dateFormat = 'yyyy-MM-dd';
 
+          var setValidity = function(viewValue) {
+              if(!viewValue) {
+                  controller.$setValidity('date', true);
+                  return;
+              }
+              var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
+              if(!parsedDate || isNaN(parsedDate.getTime())) {
+                  controller.$setValidity('date', false);
+              } else {
+                  var isMinValid = isNaN(datepicker.$options.minDate) || parsedDate.getTime() >= datepicker.$options.minDate;
+                  var isMaxValid = isNaN(datepicker.$options.maxDate) || parsedDate.getTime() <= datepicker.$options.maxDate;
+                  var isValid = isMinValid && isMaxValid;
+                  controller.$setValidity('date', isValid);
+                  controller.$setValidity('min', isMinValid);
+                  controller.$setValidity('max', isMaxValid);
+                  // Only update the model when we have a valid date
+                  if(isValid) controller.$dateValue = parsedDate;
+              }
+          };
+
         // Observe attributes for changes
         angular.forEach(['minDate', 'maxDate'], function(key) {
           // console.warn('attr.$observe(%s)', key, attr[key]);
@@ -289,6 +309,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             }
             // Build only if dirty
             !isNaN(datepicker.$options[key]) && datepicker.$build(false);
+
+            setValidity(controller.$dateValue);
           });
         });
 
@@ -321,24 +343,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
           // Null values should correctly reset the model value & validity
-          if(!viewValue) {
-            controller.$setValidity('date', true);
-            return;
-          }
-          var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
-          if(!parsedDate || isNaN(parsedDate.getTime())) {
-            controller.$setValidity('date', false);
-            return;
-          } else {
-            var isMinValid = isNaN(datepicker.$options.minDate) || parsedDate.getTime() >= datepicker.$options.minDate;
-            var isMaxValid = isNaN(datepicker.$options.maxDate) || parsedDate.getTime() <= datepicker.$options.maxDate;
-            var isValid = isMinValid && isMaxValid;
-            controller.$setValidity('date', isValid);
-            controller.$setValidity('min', isMinValid);
-            controller.$setValidity('max', isMaxValid);
-            // Only update the model when we have a valid date
-            if(isValid) controller.$dateValue = parsedDate;
-          }
+            setValidity(viewValue);
+
           if(options.dateType === 'string') {
             return dateFilter(parsedDate, options.modelDateFormat || options.dateFormat);
           } else if(options.dateType === 'number') {
