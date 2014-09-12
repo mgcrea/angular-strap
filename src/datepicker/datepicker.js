@@ -346,7 +346,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             setValidity(viewValue);
 
           if(options.dateType === 'string') {
-            return dateFilter(parsedDate, options.modelDateFormat || options.dateFormat);
+            return dateFilter(dateParser.parse(viewValue, controller.$dateValue), options.modelDateFormat || options.dateFormat);
           } else if(options.dateType === 'number') {
             return controller.$dateValue.getTime();
           } else if(options.dateType === 'iso') {
