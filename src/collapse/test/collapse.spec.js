@@ -48,6 +48,9 @@ describe('tab', function () {
     },
     'options-disallowToggle': {
       element: '<div data-disallow-toggle="true" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
+    },
+    'options-startCollapsed': {
+      element: '<div data-start-collapsed="true" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     }
   };
 
@@ -142,6 +145,19 @@ describe('tab', function () {
         expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
         sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
         expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+      });
+
+    });
+
+    describe('startCollapsed', function () {
+
+      it('should support startCollapsed flag', function() {
+        var elm = compileDirective('options-startCollapsed');
+        expect(sandboxEl.find('[bs-collapse-target]').hasClass('in')).toBeFalsy();
+        sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
+        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+        sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
+        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
       });
 
     });
