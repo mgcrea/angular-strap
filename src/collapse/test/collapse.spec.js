@@ -94,7 +94,8 @@ describe('tab', function () {
   describe('data-binding', function() {
 
     it('should correctly apply model changes to the view', function() {
-      var elm = compileDirective('binding-ngModel');
+      var elm = compileDirective('binding-ngModel', { panel: { active: 1 } });
+      expect(scope.panel.active).toBe(1);
       expect(sandboxEl.find('[bs-collapse-target].in').parent('.panel-default').index()).toBe(scope.panel.active);
       scope.panel.active = 0;
       scope.$digest();
@@ -102,7 +103,8 @@ describe('tab', function () {
     });
 
     it('should correctly apply view changes to the model', function() {
-      var elm = compileDirective('binding-ngModel');
+      var elm = compileDirective('binding-ngModel', { panel: { active: 1 } });
+      expect(scope.panel.active).toBe(1);
       sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
       expect(scope.panel.active).toBe(0);
     });
