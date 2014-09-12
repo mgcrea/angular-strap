@@ -40,10 +40,6 @@ describe('tab', function () {
       scope: {panel: {active: 1}},
       element: '<div class="panel-group" ng-model="panel.active" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     },
-    'binding-ngModel-zero': {
-      scope: {panel: {active: 0}},
-      element: '<div class="panel-group" ng-model="panel.active" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
-    },
     'options-animation': {
       element: '<div data-animation="am-flip-x" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     },
@@ -112,7 +108,7 @@ describe('tab', function () {
     });
 
     it('should correctly apply model when initial binding value equals default view value', function() {
-      var elm = compileDirective('binding-ngModel-zero');
+      var elm = compileDirective('binding-ngModel', { panel: { active: 0 } });
       expect(scope.panel.active).toBe(0);
     });
 
