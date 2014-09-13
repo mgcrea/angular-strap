@@ -1,6 +1,6 @@
 'use strict';
 
-describe('tab', function () {
+describe('collapse', function () {
 
   var $compile, $templateCache, $animate, scope, sandboxEl;
 
@@ -56,7 +56,7 @@ describe('tab', function () {
 
   function compileDirective(template, locals) {
     template = templates[template];
-    angular.extend(scope, template.scope || templates['default'].scope, locals);
+    angular.extend(scope, angular.copy(template.scope || templates['default'].scope), locals);
     var element = $(template.element).appendTo(sandboxEl);
     element = $compile(element)(scope);
     scope.$digest();
@@ -94,7 +94,7 @@ describe('tab', function () {
   describe('data-binding', function() {
 
     it('should correctly apply model changes to the view', function() {
-      var elm = compileDirective('binding-ngModel', { panel: { active: 1 } });
+      var elm = compileDirective('binding-ngModel');
       expect(scope.panel.active).toBe(1);
       expect(sandboxEl.find('[bs-collapse-target].in').parent('.panel-default').index()).toBe(scope.panel.active);
       scope.panel.active = 0;
@@ -103,7 +103,7 @@ describe('tab', function () {
     });
 
     it('should correctly apply view changes to the model', function() {
-      var elm = compileDirective('binding-ngModel', { panel: { active: 1 } });
+      var elm = compileDirective('binding-ngModel');
       expect(scope.panel.active).toBe(1);
       sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
       expect(scope.panel.active).toBe(0);
