@@ -49,6 +49,9 @@ describe('tooltip', function() {
     'options-delay': {
       element: '<a data-delay="15" bs-tooltip="tooltip">hover me</a>'
     },
+    'options-delay-multiple': {
+      element: '<a data-delay="15,30" bs-tooltip="tooltip">hover me</a>'
+    },
     'options-keyboard': {
       scope: {tooltip: {title: 'Hello Tooltip!', keyboard: true}},
       element: '<a data-keyboard="true" bs-tooltip="tooltip">hover me</a>'
@@ -277,6 +280,18 @@ describe('tooltip', function() {
 
       it('should support delay', function(done) {
         var elm = compileDirective('options-delay');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        $animate.triggerCallbacks();
+
+        expect(sandboxEl.children('.tooltip').length).toBe(0);
+        setTimeout(function() {
+          expect(sandboxEl.children('.tooltip').length).toBe(1);
+          done();
+        }, 20);
+      });
+
+      it('should support multiple delay', function(done) {
+        var elm = compileDirective('options-delay-multiple');
         angular.element(elm[0]).triggerHandler('mouseenter');
         $animate.triggerCallbacks();
 
