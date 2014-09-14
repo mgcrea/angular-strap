@@ -30,6 +30,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         var scope = $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
 
         $dropdown = $tooltip(element, options);
+        var parentEl = element.parent();
 
         // Protected methods
 
@@ -63,12 +64,14 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
             options.keyboard && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
             bodyEl.on('click', onBodyClick);
           });
+          parentEl.hasClass('dropdown') && parentEl.addClass('open');
         };
 
         var hide = $dropdown.hide;
         $dropdown.hide = function() {
           options.keyboard && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
           bodyEl.off('click', onBodyClick);
+          parentEl.hasClass('dropdown') && parentEl.removeClass('open');
           hide();
         };
 
@@ -89,7 +92,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
   })
 
-  .directive('bsDropdown', function($window, $location, $sce, $dropdown) {
+  .directive('bsDropdown', function($window, $sce, $dropdown) {
 
     return {
       restrict: 'EAC',
@@ -107,12 +110,19 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           scope.content = newValue;
         }, true);
 
+        // Visibility binding support
+        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
+          if(!dropdown || !angular.isDefined(newValue)) return;
+          if(angular.isString(newValue)) newValue = !!newValue.match(',?(dropdown),?');
+          newValue === true ? dropdown.show() : dropdown.hide();
+        });
+
         // Initialize dropdown
         var dropdown = $dropdown(element, options);
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          dropdown.destroy();
+          if (dropdown) dropdown.destroy();
           options = null;
           dropdown = null;
         });

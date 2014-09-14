@@ -1,0 +1,36 @@
+/*
+ * Popovers corner placement
+ *
+ * Inherit exotic positionning from basic ones & fix arrow placement
+ */
+
+.popover {
+  &.top-left {
+    .popover.top;
+    .arrow {
+      .popover.top .arrow;
+      left: 10%;
+    }
+  }
+  &.top-right {
+    .popover.top;
+    .arrow {
+      .popover.top .arrow;
+      left: 90%;
+    }
+  }
+  &.bottom-left {
+    .popover.bottom;
+    .arrow {
+      .popover.bottom .arrow;
+      left: 10%;
+    }
+  }
+  &.bottom-right {
+    .popover.bottom;
+    .arrow {
+      .popover.bottom .arrow;
+      left: 90%;
+    }
+  }
+}

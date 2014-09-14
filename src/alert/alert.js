@@ -11,6 +11,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
     var defaults = this.defaults = {
       animation: 'am-fade',
       prefixClass: 'alert',
+      prefixEvent: 'alert',
       placement: null,
       template: 'alert/alert.tpl.html',
       container: false,
@@ -62,7 +63,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
   })
 
-  .directive('bsAlert', function($window, $location, $sce, $alert) {
+  .directive('bsAlert', function($window, $sce, $alert) {
 
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
@@ -101,7 +102,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          alert.destroy();
+          if (alert) alert.destroy();
           options = null;
           alert = null;
         });

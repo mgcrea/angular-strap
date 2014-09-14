@@ -176,7 +176,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
         }
 
         function getScrollTop() {
-          return targetEl[0] === $window ? $window.pageYOffset : targetEl[0] === $window;
+          return targetEl[0] === $window ? $window.pageYOffset : targetEl[0].scrollTop;
         }
 
         function getScrollHeight() {
@@ -208,6 +208,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
         var affix = $affix(element, options);
         scope.$on('$destroy', function() {
+          affix && affix.destroy();
           options = null;
           affix = null;
         });

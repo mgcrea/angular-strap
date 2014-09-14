@@ -1,0 +1,64 @@
+/*
+ * Homepage
+ *
+ * Tweaks to the custom homepage and the masthead (main jumbotron).
+ */
+
+ /* Masthead (headings and download button) */
+ .bs-masthead {
+  position: relative;
+  padding: 30px 15px;
+  text-align: center;
+  text-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.15);
+}
+.bs-masthead h1 {
+  font-size: 50px;
+  line-height: 1;
+  color: hsl(0, 0%, 100%);
+}
+.bs-masthead .btn-outline-inverse {
+  margin: 10px;
+}
+
+/* Links to project-level content like the repo, Expo, etc */
+.bs-masthead-links {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  padding: 0 15px;
+  list-style: none;
+  text-align: center;
+}
+.bs-masthead-links li {
+  display: inline;
+}
+.bs-masthead-links li + li {
+  margin-left: 20px;
+}
+.bs-masthead-links a {
+  color: hsl(0, 0%, 100%);
+}
+
+@media (min-width: 768px) {
+  .bs-masthead {
+    text-align: left;
+    padding-top:    140px;
+    padding-bottom: 140px;
+  }
+  .bs-masthead h1 {
+    font-size: 100px;
+  }
+  .bs-masthead .lead {
+    margin-right: 25%;
+    font-size: 30px;
+  }
+  .bs-masthead .btn-outline-inverse {
+    width: auto;
+    margin: 20px 5px 20px 0;
+    padding: 18px 24px;
+    font-size: 21px;
+  }
+  .bs-masthead-links {
+    padding: 0;
+    text-align: left;
+  }
+}

@@ -7,11 +7,18 @@ before_script:
   - export PHANTOMJS_BIN=/usr/local/phantomjs/bin/phantomjs
   - sh -e /etc/init.d/xvfb start
   - sleep 3 # give xvfb some time to start
-  - npm install -gq bower # coveralls
+  - npm install -gq bower codeclimate-test-reporter # coveralls
   - bower install --dev --config.interactive=0
   - gulp --version
   - bower --version
   - date --rfc-2822
 
 script:
-  - gulp jshint karma:unit
+  - gulp jshint karma:travis
+
+after_script:
+  - cat test/coverage/*/lcov.info | codeclimate
+
+addons:
+  code_climate:
+    repo_token: b5ed978a0e88f95b003a668583ae70815e18cd71019d526023b5e9c7703ec076

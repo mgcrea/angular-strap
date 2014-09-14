@@ -118,7 +118,12 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         $modal.show = function() {
 
           scope.$emit(options.prefixEvent + '.show.before', $modal);
-          var parent = options.container ? findElement(options.container) : null;
+          var parent;
+          if(angular.isElement(options.container)) {
+            parent = options.container;
+          } else {
+            parent = options.container ? findElement(options.container) : null;
+          }
           var after = options.container ? null : options.element;
 
           // Fetch a cloned element linked from template
@@ -136,11 +141,13 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           }
 
           if(options.backdrop) {
-            $animate.enter(backdropElement, bodyElement, null, function() {});
+            $animate.enter(backdropElement, bodyElement, null);
           }
-          $animate.enter(modalElement, parent, after, function() {
-            scope.$emit(options.prefixEvent + '.show', $modal);
-          });
+          // Support v1.3+ $animate
+          // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
+          var promise = $animate.enter(modalElement, parent, after, enterAnimateCallback);
+          if(promise && promise.then) promise.then(enterAnimateCallback);
+
           scope.$isShown = true;
           scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
           // Focus once the enter-animation has started
@@ -165,18 +172,20 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           }
         };
 
+        function enterAnimateCallback() {
+          scope.$emit(options.prefixEvent + '.show', $modal);
+        }
+
         $modal.hide = function() {
 
           scope.$emit(options.prefixEvent + '.hide.before', $modal);
-          $animate.leave(modalElement, function() {
-            scope.$emit(options.prefixEvent + '.hide', $modal);
-            bodyElement.removeClass(options.prefixClass + '-open');
-            if(options.animation) {
-              bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
-            }
-          });
+          var promise = $animate.leave(modalElement, leaveAnimateCallback);
+          // Support v1.3+ $animate
+          // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
+          if(promise && promise.then) promise.then(leaveAnimateCallback);
+
           if(options.backdrop) {
-            $animate.leave(backdropElement, function() {});
+            $animate.leave(backdropElement);
           }
           scope.$isShown = false;
           scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
@@ -190,6 +199,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             modalElement.off('keyup', $modal.$onKeyUp);
           }
         };
+
+        function leaveAnimateCallback() {
+          scope.$emit(options.prefixEvent + '.hide', $modal);
+          bodyElement.removeClass(options.prefixClass + '-open');
+          if(options.animation) {
+            bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
+          }
+        }
 
         $modal.toggle = function() {
 
@@ -205,7 +222,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $modal.$onKeyUp = function(evt) {
 
-          evt.which === 27 && $modal.hide();
+          if (evt.which === 27 && scope.$isShown) {
+            $modal.hide();
+            evt.stopPropagation();
+          }
 
         };
 
@@ -243,7 +263,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
   })
 
-  .directive('bsModal', function($window, $location, $sce, $modal) {
+  .directive('bsModal', function($window, $sce, $modal) {
 
     return {
       restrict: 'EAC',
@@ -280,7 +300,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          modal.destroy();
+          if (modal) modal.destroy();
           options = null;
           modal = null;
         });

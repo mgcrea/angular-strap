@@ -1,0 +1,29 @@
+/*
+ * Alerts placement
+ *
+ */
+
+.alert {
+  &.top, &.top-right, &.top-left {
+    position: fixed;
+    top: @navbar-height;
+    z-index: @zindex-modal;
+    margin: 20px;
+  }
+  &.top {
+    right: 0px;
+    left: 0px;
+  }
+  &.top-right {
+    right: 0px;
+    .close {
+      padding-left: 10px;
+    }
+  }
+  &.top-left {
+    left: 0px;
+    .close {
+      padding-right: 10px;
+    }
+  }
+}

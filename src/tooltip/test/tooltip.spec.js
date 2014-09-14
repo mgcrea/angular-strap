@@ -49,6 +49,10 @@ describe('tooltip', function() {
     'options-delay': {
       element: '<a data-delay="15" bs-tooltip="tooltip">hover me</a>'
     },
+    'options-keyboard': {
+      scope: {tooltip: {title: 'Hello Tooltip!', keyboard: true}},
+      element: '<a data-keyboard="true" bs-tooltip="tooltip">hover me</a>'
+    },
     'options-animation': {
       element: '<a data-animation="am-flip-x" bs-tooltip="tooltip">hover me</a>'
     },
@@ -274,13 +278,49 @@ describe('tooltip', function() {
       it('should support delay', function(done) {
         var elm = compileDirective('options-delay');
         angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+        $animate.triggerCallbacks();
 
         expect(sandboxEl.children('.tooltip').length).toBe(0);
         setTimeout(function() {
           expect(sandboxEl.children('.tooltip').length).toBe(1);
           done();
         }, 20);
+      });
+
+    });
+
+    describe('keyboard', function() {
+
+      it('should dismiss and stopPropagation if ESC is pressed when trigger !== "focus"', function() {
+        var myTooltip = $tooltip(sandboxEl, angular.extend({trigger: 'click'}, templates['options-keyboard'].scope.tooltip));
+        scope.$digest();
+        expect(bodyEl.children('.tooltip').length).toBe(0);
+        myTooltip.show();
+        expect(bodyEl.children('.tooltip').length).toBe(1);
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        spyOn(evt, 'stopPropagation');
+        myTooltip.$onKeyUp(evt);
+        expect(bodyEl.children('.tooltip').length).toBe(0);
+        expect(evt.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should NOT stopPropagation if ESC is pressed while tooltip is hidden', function() {
+        var myTooltip = $tooltip(sandboxEl, angular.extend({trigger: 'click'}, templates['options-keyboard'].scope.tooltip));
+        scope.$digest();
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        spyOn(evt, 'stopPropagation');
+        myTooltip.$onKeyUp(evt);
+        expect(evt.stopPropagation).not.toHaveBeenCalled();
+      });
+
+      it('should blur and stopPropagation if ESC is pressed when trigger === "focus"', function() {
+        var myTooltip = $tooltip(sandboxEl, angular.extend({trigger: 'focus'}, templates['options-keyboard'].scope.tooltip));
+        spyOn(sandboxEl[0], 'blur');
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        spyOn(evt, 'stopPropagation');
+        myTooltip.$onFocusKeyUp(evt);
+        expect(sandboxEl[0].blur).toHaveBeenCalled();
+        expect(evt.stopPropagation).toHaveBeenCalled();
       });
 
     });
@@ -376,6 +416,18 @@ describe('tooltip', function() {
         // expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);
       });
 
+    });
+
+    describe('container', function() {
+      it('accepts element object', function() {
+        var testElm = angular.element('<div></div>');
+        sandboxEl.append(testElm);
+        var myTooltip = $tooltip(sandboxEl, angular.extend({}, templates['default'].scope.tooltip, {container: testElm}));
+        scope.$digest();
+        myTooltip.show();
+        $animate.triggerCallbacks();
+        expect(angular.element(testElm.children()[0]).hasClass('tooltip')).toBeTruthy();
+      });
     });
 
   });

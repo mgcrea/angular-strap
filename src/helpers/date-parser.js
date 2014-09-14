@@ -6,6 +6,9 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
 
   var proto = Date.prototype;
 
+  function noop() {
+  }
+
   function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
@@ -15,7 +18,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
     strict: false
   };
 
-  this.$get = function($locale) {
+  this.$get = function($locale, dateFilter) {
 
     var DateParserFactory = function(config) {
 
@@ -57,16 +60,18 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         'H'     : proto.setHours,
         'hh'    : proto.setHours,
         'h'     : proto.setHours,
+        'EEEE'  : noop,
+        'EEE'   : noop,
         'dd'    : proto.setDate,
         'd'     : proto.setDate,
-        'a'     : function(value) { var hours = this.getHours(); return this.setHours(value.match(/pm/i) ? hours + 12 : hours); },
+        'a'     : function(value) { var hours = this.getHours() % 12; return this.setHours(value.match(/pm/i) ? hours + 12 : hours); },
         'MMMM'  : function(value) { return this.setMonth($locale.DATETIME_FORMATS.MONTH.indexOf(value)); },
         'MMM'   : function(value) { return this.setMonth($locale.DATETIME_FORMATS.SHORTMONTH.indexOf(value)); },
         'MM'    : function(value) { return this.setMonth(1 * value - 1); },
         'M'     : function(value) { return this.setMonth(1 * value - 1); },
         'yyyy'  : proto.setFullYear,
         'yy'    : function(value) { return this.setFullYear(2000 + 1 * value); },
-        'y'    : proto.setFullYear
+        'y'     : proto.setFullYear
       };
 
       var regex, setMap;
@@ -83,9 +88,9 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
       };
 
       $dateParser.parse = function(value, baseDate, format) {
+        if(angular.isDate(value)) value = dateFilter(value, format || $dateParser.$format);
         var formatRegex = format ? regExpForFormat(format) : regex;
-        var formatSetMap = format ? setMapForFormat(format): setMap;
-        if(angular.isDate(value)) return value;
+        var formatSetMap = format ? setMapForFormat(format) : setMap;
         var matches = formatRegex.exec(value);
         if(!matches) return false;
         var date = baseDate || new Date(0, 0, 1);
@@ -106,12 +111,16 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
           if(format.split(keys[i]).length > 1) {
             var index = clonedFormat.search(keys[i]);
             format = format.split(keys[i]).join('');
-            if(setFnMap[keys[i]]) map[index] = setFnMap[keys[i]];
+            if(setFnMap[keys[i]]) {
+              map[index] = setFnMap[keys[i]];
+            }
           }
         }
         // Sort result map
         angular.forEach(map, function(v) {
-          sortedMap.push(v);
+          // conditional required since angular.forEach broke around v1.2.21
+          // related pr: https://github.com/angular/angular.js/pull/8525
+          if(v) sortedMap.push(v);
         });
         return sortedMap;
       }

@@ -31,6 +31,9 @@ describe('typeahead', function () {
       scope: {selectedState: 'Alaska', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
       element: '<input type="text" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
     },
+    'watch-options': {
+      element: '<input type="text" ng-model="selectedState" ng-options="state for state in states" data-watch-options="1" bs-typeahead>'
+    },
     'single-match': {
       scope: {selectedCode: '', codes: ['000000', '000001']},
       element: '<input type="text" ng-model="selecteCode" ng-options="code for code in codes" bs-typeahead>'
@@ -173,6 +176,17 @@ describe('typeahead', function () {
 
   });
 
+  describe('ngOptions', function () {
+
+    it('should correctly watch for changes', function() {
+      var elm = compileDirective('watch-options');
+      scope.states.shift();
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.states[0]);
+    });
+
+  });
 
   describe('options', function () {
 

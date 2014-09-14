@@ -1,0 +1,92 @@
+
+// Main navigation
+//
+// Turn the `.navbar` at the top of the docs purple.
+// @primary-color hsl(263, 29%, 46%);
+// @version 3.1.0
+//
+
+.bs-docs-nav {
+  border-color: darken(@docs-color, 6%);
+  background-color: @docs-color;
+  box-shadow: 0 1px 0 rgba(255,255,255,.1);
+  text-shadow: 0 -1px 0 rgba(0,0,0,.15);
+}
+.bs-docs-nav .navbar-collapse {
+  border-color: darken(@docs-color, 6%);
+}
+.bs-docs-nav .navbar-brand {
+  color: #fff;
+}
+.bs-docs-nav .navbar-nav > li > a {
+  .transition(color .15s linear);
+  color: spin(desaturate(lighten(@docs-color, 46%), 5%), 1);
+}
+.bs-docs-nav .navbar-nav > li > a:hover {
+  color: #fff;
+}
+.bs-docs-nav .navbar-nav > .active > a,
+.bs-docs-nav .navbar-nav > .active > a:hover {
+  background-color: darken(@docs-color, 6%);
+  color: #fff;
+}
+.bs-docs-nav .navbar-toggle {
+  border-color: @docs-color;
+}
+.bs-docs-nav .navbar-toggle:hover {
+  border-color: darken(@docs-color, 6%);
+  background-color: darken(@docs-color, 6%);
+}
+
+
+.navbar-toggle {
+  @media (max-width: @screen-sm-max) {
+    margin-left: 15px;
+    display: block !important;
+    float: left;
+  }
+}
+
+// Main navigation
+//
+// Turn the `.navbar` at the top of the docs purple.
+// @primary-color hsl(263, 29%, 46%);
+// @version 3.1.0
+//
+
+// .bs-docs-nav {
+//   margin-bottom: 0;
+//   border-bottom: 0;
+//   background-color: #fff;
+// }
+// .bs-home-nav .bs-nav-b {
+//   display: none;
+// }
+// .bs-docs-nav .navbar-brand,
+// .bs-docs-nav .navbar-nav > li > a {
+//   // color: hsl(264, 34%, 36%);
+//   color: spin(saturate(lighten(@docs-color, 10%), 5%), 1);
+//   font-weight: 500;
+// }
+// .bs-docs-nav .navbar-nav > li > a:hover,
+// .bs-docs-nav .navbar-nav > .active > a,
+// .bs-docs-nav .navbar-nav > .active > a:hover {
+//   background-color: @white-bg-color;
+//   // color: hsl(264, 34%, 30%);
+//   color: spin(saturate(lighten(@docs-color, 16%), 5%), 1);
+// }
+// .bs-docs-nav .navbar-toggle .icon-bar {
+//   // background-color: hsl(264, 34%, 36%);
+//   background-color: spin(saturate(lighten(@docs-color, 10%), 5%), 1);
+// }
+// .bs-docs-nav .navbar-header .navbar-toggle {
+//   border-color: #fff;
+// }
+// .bs-docs-nav .navbar-header .navbar-toggle:hover,
+// .bs-docs-nav .navbar-header .navbar-toggle:focus {
+//   border-color: @white-bg-color;
+//   background-color: @white-bg-color;
+// }
+
+
+

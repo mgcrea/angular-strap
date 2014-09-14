@@ -206,6 +206,31 @@ describe('modal', function() {
 
     });
 
+    describe('keyboard', function() {
+
+      it('should dismiss and stopPropagation if ESC is pressed', function() {
+        var myModal = $modal(templates['default'].scope.modal);
+        scope.$digest();
+        expect(bodyEl.children('.modal').length).toBe(1);
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        spyOn(evt, 'stopPropagation');
+        myModal.$onKeyUp(evt);
+        expect(bodyEl.children('.modal').length).toBe(0);
+        expect(evt.stopPropagation).toHaveBeenCalled();
+      });
+
+      it('should NOT stopPropagation if ESC is pressed while modal is hidden', function() {
+        var myModal = $modal(templates['default'].scope.modal);
+        scope.$digest();
+        myModal.hide();
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        spyOn(evt, 'stopPropagation');
+        myModal.$onKeyUp(evt);
+        expect(evt.stopPropagation).not.toHaveBeenCalled();
+      });
+
+    });
+
     describe('placement', function() {
 
       it('should default to `top` placement', function() {
@@ -272,6 +297,16 @@ describe('modal', function() {
         expect(scope.modal.counter).toBe(2);
       });
 
+    });
+
+    describe('container', function() {
+      it('accepts element object', function() {
+      	var testElm = angular.element('<div></div>');
+      	sandboxEl.append(testElm);
+        var myModal = $modal(angular.extend({}, templates['default'].scope.modal, {container: testElm}));
+        scope.$digest();
+        expect(angular.element(testElm.children()[0]).hasClass('modal')).toBeTruthy();
+      });
     });
 
   });

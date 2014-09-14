@@ -26,6 +26,9 @@ describe('dropdown', function () {
       scope: {dropdown: [{text: 'Another action', href: '#foo'}, {text: 'External link', href: '/auth/facebook', target: '_self'}, {text: 'Something else here', click: '$alert(\'working ngClick!\')'}, {divider: true}, {text: 'Separated link', href: '#separatedLink'}]},
       element: '<a bs-dropdown="dropdown">click me</a>'
     },
+    'in-navbar': {
+      element: '<div class="collapse navbar-collapse"><ul class="nav navbar-nav"><li class="dropdown"><a bs-dropdown="dropdown">click me</a></li></ul>'
+    },
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><a bs-dropdown="dropdown">{{i}}</a></li></ul>'
     },
@@ -100,6 +103,16 @@ describe('dropdown', function () {
       expect(sandboxEl.find('.dropdown-menu a:eq(0)').text()).toBe(scope.dropdown[0].text);
     });
 
+  });
+
+  describe('in navbar', function() {
+    it('should add class .open to the parent <li> when dropdown is open', function() {
+      var elm = compileDirective('in-navbar');
+      angular.element(elm.find('a')).triggerHandler('click');
+      expect(sandboxEl.find('.dropdown').hasClass('open')).toBeTruthy();
+      angular.element(elm.find('a')).triggerHandler('click');
+      expect(sandboxEl.find('.dropdown').hasClass('open')).toBeFalsy();
+    });
   });
 
 

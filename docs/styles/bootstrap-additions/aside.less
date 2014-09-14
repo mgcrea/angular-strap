@@ -1,0 +1,53 @@
+.aside {
+  z-index: @zindex-modal - 1;
+  &:focus {
+    outline: none;
+  }
+  // background: rgba(0, 0, 0, .25);
+  background: white;
+  position: fixed;
+  overflow: auto;
+  min-width: 320px;
+  @media (max-width: @screen-sm-max) {
+    min-width: 240px;
+  }
+  top: 0;
+  bottom: 0;
+  &.left {
+    left: 0;
+    right: auto;
+  }
+  &.right {
+    left: auto;
+    right: 0;
+  }
+  .aside-dialog {
+    .aside-header {
+      .modal-header;
+      padding: 6px 15px;
+      background: @brand-primary;
+      color: white;
+      .close {
+        color: white;
+        font-size: 25px;
+        opacity: .8;
+        padding: 4px 8px;
+        margin-right: -8px;
+      }
+    }
+    .aside-body {
+      .modal-body;
+    }
+    .aside-footer {
+      .modal-footer;
+    }
+  }
+}
+
+.aside-backdrop {
+  .modal-backdrop;
+  &.animation-fade {
+    background: rgba(0, 0, 0, .5);
+    opacity: 1;
+  }
+}
