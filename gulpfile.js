@@ -435,6 +435,8 @@ gulp.task('karma:travis', ['templates:test'], function() {
 gulp.task('copy:pages', function() {
   gulp.src(['favicon.ico', docs.images], {cwd: docs.cwd, base: docs.cwd})
     .pipe(gulp.dest(docs.dist));
+  gulp.src('**/*.js', {cwd: src.dist, base: src.dist})
+    .pipe(gulp.dest(path.join(docs.dist, src.dist)));
 });
 
 

@@ -1,4 +1,10 @@
-// Support center placement
+
+// Fade & Slide
+//
+
+@fade-and-slide-duration: .3s;
+@fade-and-slide-timing-function: ease-in-out;
+
 .modal {
   &.center {
     .modal-dialog {
@@ -10,5 +16,51 @@
       width: 50%;
       transform: translateX(-50%) translateY(-50%);
     }
+  }
+}
+.modal-backdrop{
+  // display: none !important;
+}
+.modal {
+
+  animation: noop !important;
+
+  &.am-fade-and-slide-top {
+
+    .modal-dialog {
+      animation-duration: @fade-and-slide-duration;
+      animation-timing-function: @fade-and-slide-timing-function;
+      animation-fill-mode: backwards;
+      animation-name: fadeAndSlideFromTop;
+    }
+
+    &.ng-enter {
+      .modal-dialog {
+        visibility: hidden;
+        animation-name: fadeAndSlideFromTop;
+      }
+    }
+    &.ng-enter-active {
+      .modal-dialog {
+        visibility: visible;
+      }
+    }
+    &.ng-leave {
+      //@todo
+      .modal-dialog {
+        animation-name: fadeAndSlideToTop;
+      }
+    }
+
+  }
+
+}
+
+@keyframes noop {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
   }
 }
