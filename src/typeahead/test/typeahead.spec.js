@@ -45,6 +45,10 @@ describe('typeahead', function () {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '<i class="fa fa-gear"></i> Gear'}, {value: 'Globe', label: '<i class="fa fa-globe"></i> Globe'}, {value: 'Heart', label: '<i class="fa fa-heart"></i> Heart'}, {value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}]},
       element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon as icon.label for icon in icons" bs-typeahead>'
     },
+    'markup-objectValue-custom': {
+      scope: {selectedIcon: {}, icons: [{val: 'gear', fr_FR: '<i class="fa fa-gear"></i> Gear'}, {val: 'globe', fr_FR: '<i class="fa fa-globe"></i> Globe'}, {val: 'heart', fr_FR: '<i class="fa fa-heart"></i> Heart'}, {val: 'camera', fr_FR: '<i class="fa fa-camera"></i> Camera'}]},
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon as icon[\'fr_FR\'] for icon in icons" bs-typeahead>'
+    },
     'options-animation': {
       element: '<input type="text" data-animation="am-flip-x" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
     },
@@ -172,6 +176,18 @@ describe('typeahead', function () {
       angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
       expect(scope.selectedIcon).toBe(scope.icons[0]);
       expect(elm.val()).toBe(jQuery('div').html(scope.icons[0].label).text().trim());
+    });
+
+    it('should support custom objectValue markup', function() {
+      var elm = compileDirective('markup-objectValue-custom');
+      scope.selectedIcon = scope.icons[1];
+      scope.$digest();
+      expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[1].fr_FR).text().trim());
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[0].fr_FR);
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      expect(scope.selectedIcon).toBe(scope.icons[0]);
+      expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[0].fr_FR).text().trim());
     });
 
   });
