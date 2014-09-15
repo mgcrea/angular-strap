@@ -378,6 +378,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           var parsedTime = angular.isDate(viewValue) ? viewValue : dateParser.parse(viewValue, controller.$dateValue);
           if(!parsedTime || isNaN(parsedTime.getTime())) {
             controller.$setValidity('date', false);
+            return;
           } else {
               var isMinValid = isNaN(options.minTime) || parsedTime.getTime() >= options.minTime;
               var isMaxValid = isNaN(options.maxTime) || parsedTime.getTime() <= options.maxTime;
