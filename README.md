@@ -51,7 +51,7 @@ Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, [download
 AngularStrap is tested with `karma` against the latest stable release of AngularJS.
 
 >
-	$ npm install --dev
+	$ npm install
 	$ gulp test
 
 You can build the latest version using `gulp`.
