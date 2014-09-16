@@ -2,7 +2,7 @@
 
 describe('popover', function () {
 
-  var $compile, $templateCache, scope, sandboxEl;
+  var $compile, $templateCache, scope, sandboxEl, $window, $timeout;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.popover'));
@@ -10,11 +10,13 @@ describe('popover', function () {
     return angular.element(this[0]).triggerHandler(evt);
   };
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$window_, _$timeout_) {
     scope = _$rootScope_;
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo('body');
+	$window = _$window_;
+	$timeout = _$timeout_;
   }));
 
   afterEach(function() {
@@ -55,6 +57,10 @@ describe('popover', function () {
     'options-template': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a data-template="custom" bs-popover="popover">click me</a>'
+    },
+    'options-autoClose': {
+      scope: {popover: {title: 'Title', content: '<div class="message">Hello Popover<br>This is a multiline message!</div>'}},
+      element: '<a class="btn" data-auto-close="true" bs-popover="popover"></a>'
     },
     'bsShow-attr': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
@@ -265,6 +271,29 @@ describe('popover', function () {
       });
 
     });
+
+    describe('autoClose', function() {
+      it('should close when clicking outside popover', function() {
+        var elm = compileDirective('options-autoClose');
+        expect(sandboxEl.children().length).toBe(1);
+		angular.element(elm[0]).triggerHandler('click');
+		$timeout.flush();
+        expect(sandboxEl.children().length).toBe(2);
+        angular.element($window.document).triggerHandler('click');
+        expect(sandboxEl.children().length).toBe(1);
+      });
+
+      it('should not close when clicking inside popover', function() {
+        var elm = compileDirective('options-autoClose');
+        expect(sandboxEl.children().length).toBe(1);
+		angular.element(elm[0]).triggerHandler('click');
+		$timeout.flush();
+        expect(sandboxEl.children().length).toBe(2);
+		angular.element(sandboxEl.find('.popover')[0]).triggerHandler('click');
+        expect(sandboxEl.children().length).toBe(2);
+      });
+    });
+
 
   });
 
