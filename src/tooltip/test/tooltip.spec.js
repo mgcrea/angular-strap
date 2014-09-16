@@ -3,14 +3,14 @@
 describe('tooltip', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $compile, $templateCache, $$rAF, $animate, $tooltip, scope;
+  var $compile, $templateCache, $$rAF, $animate, $tooltip, scope, $window, $timeout;
 
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.tooltip'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$$rAF_, _$animate_, _$tooltip_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$$rAF_, _$animate_, _$tooltip_, _$window_, _$timeout_) {
     scope = _$rootScope_.$new();
     $$rAF = _$$rAF_;
     $animate = _$animate_;
@@ -19,6 +19,8 @@ describe('tooltip', function() {
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
     $tooltip = _$tooltip_;
+	$window = _$window_;
+	$timeout = _$timeout_;
   }));
 
   afterEach(function() {
@@ -79,6 +81,10 @@ describe('tooltip', function() {
     'options-contentTemplate': {
       scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{tooltip.title}}" data-content-template="custom" bs-tooltip>hover me</a>'
+    },
+    'options-autoClose': {
+      scope: {tooltip: {title: 'Hello Tooltip<br>This is a multiline message!'}},
+      element: '<a data-auto-close="true" bs-tooltip="tooltip">hover me</a>'
     },
     'bsShow-attr': {
       scope: {tooltip: {title: 'Hello Tooltip!'}},
@@ -593,6 +599,16 @@ describe('tooltip', function() {
       });
     });
 
+    describe('autoClose', function() {
+      it('should close when clicking outside tooltip', function() {
+        var elm = compileDirective('options-autoClose');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+		$timeout.flush();
+        angular.element($window.document).triggerHandler('click');
+		expect(elm.children('.tooltip').length).toBe(0);
+      });
+    });
+	
   });
 
 });
