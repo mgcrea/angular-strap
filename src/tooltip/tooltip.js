@@ -20,14 +20,16 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       show: false,
       title: '',
       type: '',
-      delay: 0
+      delay: 0,
+	  autoClose: false
     };
 
-    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, dimensions, $$rAF) {
+    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, dimensions, $$rAF, $timeout) {
 
       var trim = String.prototype.trim;
       var isTouch = 'createTouch' in $window.document;
       var htmlReplaceRegExp = /ng-bind="/ig;
+      var $body = angular.element($window.document);
 
       function TooltipFactory(element, config) {
 
@@ -141,7 +143,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
               options.trigger === 'focus' ? element[0].focus() : $tooltip.show();
             });
           }
-
         };
 
         $tooltip.destroy = function() {
@@ -159,6 +160,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             }
           }
 
+		  if(options.autoClose && $tooltip.$isShown && tipElement !== null) {
+			$body.off('click');
+			tipElement.off('click');
+		  }
+		  
           // Remove element
           if(tipElement) {
             tipElement.remove();
@@ -232,6 +238,20 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
               element.on('keyup', $tooltip.$onFocusKeyUp);
             }
           }
+		  
+		  if(options.autoClose) {
+			$timeout(function() {
+				// Stop propagation when clicking inside tooltip
+				tipElement.on('click', function(event) {
+					event.stopPropagation();
+				});
+				
+				// Hide when clicking outside tooltip
+				$body.on('click', function() {
+					$tooltip.hide();
+				});
+			}, 0);
+		  }
 
         };
 
@@ -271,6 +291,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.keyboard && tipElement !== null) {
             tipElement.off('keyup', $tooltip.$onKeyUp);
           }
+		  
+		  if(options.autoClose && tipElement !== null) {
+			$body.off('click');
+			tipElement.off('click');
+		  }
 
         };
 
@@ -436,7 +461,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'target', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'type', 'customClass'], function(key) {
+        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'target', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'type', 'customClass', 'autoClose'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
