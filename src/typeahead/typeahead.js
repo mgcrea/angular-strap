@@ -1,5 +1,48 @@
 'use strict';
+angular.module('mgcrea.ngStrap.typeaheadEvents', []).factory('typeaheadEvents',
+		[ function() {
+			
+			
+			return {
+				$onMouseDown : function(evt) {
+			          // Prevent blur on mousedown
+			          evt.preventDefault();
+			          evt.stopPropagation();
+			        },
+				select : function(index,controller,scope,parentScope) {
+					debugger;
+			          var value = scope.$matches[index].value;
+			          controller.$setViewValue(value);
+			          controller.$render();
+			          scope.$resetMatches();
+			          if(parentScope) parentScope.$digest();
+			          // Emit event
+			          scope.$emit(options.prefixEvent + '.select', value, index);
+			        },
+				$onKeyDown : function(evt,$typeahead,scope) {					
+			          if(!/(38|40|13)/.test(evt.keyCode)) return;
 
+			          // Let ngSubmit pass if the typeahead tip is hidden
+			          if($typeahead.$isVisible()) {
+			            evt.preventDefault();
+			            evt.stopPropagation();
+			          }
+
+			          // Select with enter
+			          if(evt.keyCode === 13 && scope.$matches.length) {
+			            $typeahead.select(scope.$activeIndex);
+			          }
+
+			          // Navigate with keyboard
+			          else if(evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--;
+			          else if(evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
+			          else if(angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
+			          scope.$digest();
+			         
+			        }
+
+			}
+		}])
 angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
 
   .provider('$typeahead', function() {
@@ -20,7 +63,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       limit: 6
     };
 
-    this.$get = function($window, $rootScope, $tooltip) {
+    this.$get = function($window, $rootScope, $tooltip, typeaheadEvents) {
 
       var bodyEl = angular.element($window.document.body);
 
@@ -71,13 +114,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.select = function(index) {
-          var value = scope.$matches[index].value;
-          controller.$setViewValue(value);
-          controller.$render();
-          scope.$resetMatches();
-          if(parentScope) parentScope.$digest();
-          // Emit event
-          scope.$emit(options.prefixEvent + '.select', value, index);
+        	typeaheadEvents.select(index,controller,scope,parentScope);
         };
 
         // Protected methods
@@ -101,30 +138,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.$onMouseDown = function(evt) {
-          // Prevent blur on mousedown
-          evt.preventDefault();
-          evt.stopPropagation();
+        	typeaheadEvents.$onMouseDown(evt);
         };
 
         $typeahead.$onKeyDown = function(evt) {
-          if(!/(38|40|13)/.test(evt.keyCode)) return;
-
-          // Let ngSubmit pass if the typeahead tip is hidden
-          if($typeahead.$isVisible()) {
-            evt.preventDefault();
-            evt.stopPropagation();
-          }
-
-          // Select with enter
-          if(evt.keyCode === 13 && scope.$matches.length) {
-            $typeahead.select(scope.$activeIndex);
-          }
-
-          // Navigate with keyboard
-          else if(evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--;
-          else if(evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
-          else if(angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
-          scope.$digest();
+        	typeaheadEvents.$onKeyDown(evt,$typeahead,scope);        	
         };
 
         // Overrides
