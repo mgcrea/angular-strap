@@ -352,7 +352,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             } else if(angular.isString(newValue) && newValue.match(/^".+"$/)) {
               timepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
             } else {
-              timepicker.$options[key] = dateParser.parse(newValue, new Date(1970, 0, 1, 0));
+              timepicker.$options[key] = +dateParser.parse(newValue, new Date(1970, 0, 1, 0));
             }
             !isNaN(timepicker.$options[key]) && timepicker.$build();
           });
@@ -376,10 +376,17 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           if(!parsedTime || isNaN(parsedTime.getTime())) {
             controller.$setValidity('date', false);
           } else {
-            var isValid = parsedTime.getTime() >= options.minTime && parsedTime.getTime() <= options.maxTime;
-            controller.$setValidity('date', isValid);
-            // Only update the model when we have a valid date
-            if(isValid) controller.$dateValue = parsedTime;
+              var isMinValid = isNaN(options.minTime) || parsedTime.getTime() >= options.minTime;
+              var isMaxValid = isNaN(options.maxTime) || parsedTime.getTime() <= options.maxTime;
+              var isValid = isMinValid && isMaxValid;
+              controller.$setValidity('date', isValid);
+              controller.$setValidity('min', isMinValid);
+              controller.$setValidity('max', isMaxValid);
+              // Only update the model when we have a valid date
+              if(!isValid) {
+                  return;
+              }
+              controller.$dateValue = parsedTime;
           }
           if(options.timeType === 'string') {
             return dateFilter(parsedTime, options.modelTimeFormat || options.timeFormat);

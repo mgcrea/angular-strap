@@ -93,9 +93,9 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         var formatSetMap = format ? setMapForFormat(format) : setMap;
         var matches = formatRegex.exec(value);
         if(!matches) return false;
-        var date = baseDate || new Date(0, 0, 1);
+        var date = baseDate && !isNaN(baseDate.getTime()) ? baseDate : new Date(1970, 0, 1, 0);
         for(var i = 0; i < matches.length - 1; i++) {
-          formatSetMap[i] && formatSetMap[i].call(date, matches[i+1]);
+            formatSetMap[i] && formatSetMap[i].call(date, matches[i+1]);
         }
         return date;
       };

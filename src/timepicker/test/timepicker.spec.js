@@ -440,6 +440,18 @@ describe('timepicker', function() {
         // expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + (todayHour - 1) + ')').is(':disabled')).toBeTruthy();
       });
 
+      it('should validate using minTime', function() {
+        var elm = compileDirective('options-minTime');
+
+        elm.val('10:00 AM'); // valid
+        angular.element(elm[0]).triggerHandler('change');
+        expect(elm.hasClass('ng-valid-min')).toBeTruthy();
+
+        elm.val('8:00 AM'); // invalid
+        angular.element(elm[0]).triggerHandler('change');
+        expect(elm.hasClass('ng-invalid-min')).toBeTruthy();
+      });
+
     });
 
     describe('maxTime', function() {
@@ -459,6 +471,19 @@ describe('timepicker', function() {
         var todayHour = today.getHours();
         // @TODO fixme
         // expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + (todayHour + 1) + ')').is(':disabled')).toBeTruthy();
+      });
+
+
+      it('should validate using maxTime', function() {
+        var elm = compileDirective('options-maxTime');
+
+        elm.val('8:00 PM'); // valid
+        angular.element(elm[0]).triggerHandler('change');
+        expect(elm.hasClass('ng-valid-max')).toBeTruthy();
+
+        elm.val('11:00 PM'); // invalid
+        angular.element(elm[0]).triggerHandler('change');
+        expect(elm.hasClass('ng-invalid-max')).toBeTruthy();
       });
 
     });
