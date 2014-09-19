@@ -88,7 +88,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           controller.$render();
           scope.$resetMatches();
           if($typeahead.$scope.$isShown) $typeahead.hide();
-          if(parentScope) parentScope.$digest();
+          if(parentScope) parentScope.$apply();
           // Emit event
           scope.$emit(options.prefixEvent + '.select', value, index);
         };
@@ -270,6 +270,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         controller.$render = function () {
           if(controller.$viewValue){
             element.val(controller.$viewValue.replace(/<(?:.|\n)*?>/gm, '').trim());
+          } else {
+            element.val('');
           }
         };
 
