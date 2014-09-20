@@ -9,8 +9,7 @@ angular.module('mgcrea.ngStrap.typeaheadEvents', []).factory('typeaheadEvents',
 			          evt.preventDefault();
 			          evt.stopPropagation();
 			        },
-				select : function(index,controller,scope,parentScope) {
-					debugger;
+				select : function(index,controller,scope,parentScope,options) {					
 			          var value = scope.$matches[index].value;
 			          controller.$setViewValue(value);
 			          controller.$render();
@@ -41,9 +40,9 @@ angular.module('mgcrea.ngStrap.typeaheadEvents', []).factory('typeaheadEvents',
 			         
 			        }
 
-			}
-		}])
-angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
+			};
+		}]);
+angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.typeaheadEvents','mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
 
   .provider('$typeahead', function() {
 
@@ -114,7 +113,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.select = function(index) {
-        	typeaheadEvents.select(index,controller,scope,parentScope);
+        	typeaheadEvents.select(index,controller,scope,parentScope,options);
         };
 
         // Protected methods
