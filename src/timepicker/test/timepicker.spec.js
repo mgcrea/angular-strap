@@ -188,6 +188,17 @@ describe('timepicker', function() {
       expect(angular.isDate(scope.selectedUndefined)).toBeTruthy();
     });
 
+    it('should ignore switch meridians with undefined time values', function() {
+      var elm = compileDirective('value-undefined');
+      expect(elm.val()).toBe('');
+      angular.element(elm[0]).triggerHandler('focus');
+      var amButton = angular.element(sandboxEl.find('.dropdown-menu tbody td:eq(4) button:eq(0)')[0]);
+      spyOn(scope.$$childHead, '$switchMeridian');
+      amButton.triggerHandler('click');
+      // expect not to throw exception
+      expect(scope.$$childHead.$switchMeridian).toHaveBeenCalled();
+    });
+
     it('should correctly support invalid values', function() {
       var elm = compileDirective('default');
       elm.val('invalid');
