@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.0 - 2014-09-05
+ * @version v2.1.0 - 2014-09-21
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -71,7 +71,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         'EEE'   : noop,
         'dd'    : proto.setDate,
         'd'     : proto.setDate,
-        'a'     : function(value) { var hours = this.getHours(); return this.setHours(value.match(/pm/i) ? hours + 12 : hours); },
+        'a'     : function(value) { var hours = this.getHours() % 12; return this.setHours(value.match(/pm/i) ? hours + 12 : hours); },
         'MMMM'  : function(value) { return this.setMonth($locale.DATETIME_FORMATS.MONTH.indexOf(value)); },
         'MMM'   : function(value) { return this.setMonth($locale.DATETIME_FORMATS.SHORTMONTH.indexOf(value)); },
         'MM'    : function(value) { return this.setMonth(1 * value - 1); },
@@ -161,5 +161,61 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
     return DateParserFactory;
 
   }];
+
+}])
+
+
+// This service incorporates all the date-related functionality.
+// The service uses angular-strap's $dateParser to parse dates and angular's
+// dateFilter to format dates by default. We use a separate service to wrap this
+// functionality to allow the use of other implementations for date parsing and
+// formatting, e.g. moment
+
+.service('$dateUtil', ["$locale", "dateFilter", "$dateParser", function($locale, dateFilter, $dateParser) {
+
+  // The unused `lang` arguments are on purpose. The default implementation does not
+  // use them, but custom implementations may, so we put them here to make this clear.
+
+  this.getDefaultLocale = function() {
+    return $locale.id;
+  };
+
+  // Format is either a data format name, e.g. "shortTime" or "fullDate", or a date format
+  // Return either the corresponding date format or the given date format.
+  this.getDatetimeFormat = function(format, lang) {
+    return $locale.DATETIME_FORMATS[format] || format;
+  };
+
+  this.weekdaysShort = function(lang) {
+    return $locale.DATETIME_FORMATS.SHORTDAY;
+  };
+
+  function splitTimeFormat(format) {
+    return /(h+)([:\.])?(m+)[ ]?(a?)/i.exec(format).slice(1);
+  }
+
+  this.hoursFormat = function(timeFormat) {
+    return splitTimeFormat(timeFormat)[0];
+  };
+
+  this.minutesFormat = function(timeFormat) {
+    return splitTimeFormat(timeFormat)[2];
+  };
+
+  this.timeSeparator = function(timeFormat) {
+    return splitTimeFormat(timeFormat)[1];
+  };
+
+  this.showAM = function(timeFormat) {
+    return !!splitTimeFormat(timeFormat)[3];
+  };
+
+  this.formatDate = function(date, format, lang){
+    return dateFilter(date, format);
+  };
+
+  this.getDateParser = function(opts) {
+    return $dateParser(opts);
+  };
 
 }]);
