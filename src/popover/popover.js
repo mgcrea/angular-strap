@@ -18,7 +18,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
       title: '',
       content: '',
       delay: 0,
-	  autoClose: false
+      autoClose: false
     };
 
     this.$get = function($tooltip) {
