@@ -47,7 +47,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
             locals[valueName] = match;
             label = displayFn(scope, locals);
             value = valueFn(scope, locals) || index;
-            return {label: label, value: value};
+            return {label: label, value: value, index: index};
           });
         }
 
