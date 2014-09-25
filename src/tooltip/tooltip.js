@@ -165,7 +165,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             $body.off('click');
             tipElement.off('click');
           }
-		  
+
           // Remove element
           if(tipElement) {
             tipElement.remove();
@@ -239,8 +239,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
               element.on('keyup', $tooltip.$onFocusKeyUp);
             }
           }
-		  
-		      if(options.autoClose) {
+
+          if(options.autoClose) {
             $timeout(function() {
               // Stop propagation when clicking inside tooltip
               tipElement.on('click', function(event) {
@@ -292,7 +292,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.keyboard && tipElement !== null) {
             tipElement.off('keyup', $tooltip.$onKeyUp);
           }
-		  
+
           if(options.autoClose && tipElement !== null) {
             $body.off('click');
             tipElement.off('click');

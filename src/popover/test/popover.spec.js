@@ -15,8 +15,8 @@ describe('popover', function () {
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo('body');
-	$window = _$window_;
-	$timeout = _$timeout_;
+    $window = _$window_;
+    $timeout = _$timeout_;
   }));
 
   afterEach(function() {
@@ -276,8 +276,8 @@ describe('popover', function () {
       it('should close when clicking outside popover', function() {
         var elm = compileDirective('options-autoClose');
         expect(sandboxEl.children().length).toBe(1);
-		angular.element(elm[0]).triggerHandler('click');
-		$timeout.flush();
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
         expect(sandboxEl.children().length).toBe(2);
         angular.element($window.document).triggerHandler('click');
         expect(sandboxEl.children().length).toBe(1);
@@ -286,10 +286,10 @@ describe('popover', function () {
       it('should not close when clicking inside popover', function() {
         var elm = compileDirective('options-autoClose');
         expect(sandboxEl.children().length).toBe(1);
-		angular.element(elm[0]).triggerHandler('click');
-		$timeout.flush();
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
         expect(sandboxEl.children().length).toBe(2);
-		angular.element(sandboxEl.find('.popover')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.popover')[0]).triggerHandler('click');
         expect(sandboxEl.children().length).toBe(2);
       });
     });
