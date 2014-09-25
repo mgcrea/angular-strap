@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.0 - 2014-09-05
+ * @version v2.1.0 - 2014-09-21
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -18,6 +18,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
     var defaults = this.defaults = {
       animation: 'am-fade',
       prefixClass: 'alert',
+      prefixEvent: 'alert',
       placement: null,
       template: 'alert/alert.tpl.html',
       container: false,
