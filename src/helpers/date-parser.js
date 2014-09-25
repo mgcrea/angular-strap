@@ -95,7 +95,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         if(!matches) return false;
         var date = baseDate && !isNaN(baseDate.getTime()) ? baseDate : new Date(1970, 0, 1, 0);
         for(var i = 0; i < matches.length - 1; i++) {
-            formatSetMap[i] && formatSetMap[i].call(date, matches[i+1]);
+          formatSetMap[i] && formatSetMap[i].call(date, matches[i+1]);
         }
         return date;
       };
