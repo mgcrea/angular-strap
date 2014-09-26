@@ -32,9 +32,6 @@ describe('timepicker', function() {
       scope: {selectedTime: new Date()},
       element: '<input type="text" ng-model="selectedTime" bs-timepicker>'
     },
-    'value-undefined': {
-      element: '<input type="text" ng-model="selectedUndefined" bs-timepicker>'
-    },
     'value-past': {
       scope: {selectedTime: new Date(1970, 0, 1, 10, 30)},
       element: '<input type="text" ng-model="selectedTime" bs-timepicker>'
@@ -107,7 +104,7 @@ describe('timepicker', function() {
 
   function compileDirective(template, locals) {
     template = templates[template];
-    angular.extend(scope, template.scope || templates['default'].scope, locals);
+    angular.extend(scope, angular.copy(template.scope || templates['default'].scope), locals);
     var element = $(template.element).appendTo(sandboxEl);
     element = $compile(element)(scope);
     scope.$digest();
@@ -178,14 +175,25 @@ describe('timepicker', function() {
       expect(scope.selectedTime.getHours()).toBe(12);
     });
 
-    it('should correctly support undefined values', function() {
-      var elm = compileDirective('value-undefined');
-      expect(elm.val()).toBe('');
+
+    it('should correctly support null values', function() {
+      var elm = compileDirective('default', {selectedTime: null});
       angular.element(elm[0]).triggerHandler('focus');
+      expect(elm.val()).toBe('');
+      expect(sandboxEl.find('.dropdown-menu tbody tr').length).toBe($timepicker.defaults.length);
+      expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 4);
+      elm.val('0');
+      angular.element(elm[0]).triggerHandler('change');
+    });
+
+    it('should correctly support undefined values', function() {
+      var elm = compileDirective('default', {selectedTime: undefined});
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(elm.val()).toBe('');
       expect(sandboxEl.find('.dropdown-menu tbody tr').length).toBe($timepicker.defaults.length);
       expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 4);
       angular.element(sandboxEl.find('.dropdown-menu tbody button:eq(0)')[0]).triggerHandler('click');
-      expect(angular.isDate(scope.selectedUndefined)).toBeTruthy();
+      expect(angular.isDate(scope.selectedTime)).toBeTruthy();
     });
 
     it('should ignore switch meridians with undefined time values', function() {
