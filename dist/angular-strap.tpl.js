@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.0 - 2014-09-05
+ * @version v2.1.1 - 2014-09-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -8,17 +8,17 @@
 (function(window, document, undefined) {
 'use strict';
 
-// Source: alert.tpl.js
-angular.module('mgcrea.ngStrap.alert').run(['$templateCache', function($templateCache) {
-
-  $templateCache.put('alert/alert.tpl.html', '<div class="alert" tabindex="-1" ng-class="[type ? \'alert-\' + type : null]"><button type="button" class="close" ng-if="dismissable" ng-click="$hide()">&times;</button> <strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span></div>');
-
-}]);
-
 // Source: aside.tpl.js
 angular.module('mgcrea.ngStrap.aside').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('aside/aside.tpl.html', '<div class="aside" tabindex="-1" role="dialog"><div class="aside-dialog"><div class="aside-content"><div class="aside-header" ng-show="title"><button type="button" class="close" ng-click="$hide()">&times;</button><h4 class="aside-title" ng-bind="title"></h4></div><div class="aside-body" ng-bind="content"></div><div class="aside-footer"><button type="button" class="btn btn-default" ng-click="$hide()">Close</button></div></div></div></div>');
+
+}]);
+
+// Source: alert.tpl.js
+angular.module('mgcrea.ngStrap.alert').run(['$templateCache', function($templateCache) {
+
+  $templateCache.put('alert/alert.tpl.html', '<div class="alert" ng-class="[type ? \'alert-\' + type : null]"><button type="button" class="close" ng-if="dismissable" ng-click="$hide()">&times;</button> <strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span></div>');
 
 }]);
 
@@ -71,17 +71,17 @@ angular.module('mgcrea.ngStrap.timepicker').run(['$templateCache', function($tem
 
 }]);
 
-// Source: typeahead.tpl.js
-angular.module('mgcrea.ngStrap.typeahead').run(['$templateCache', function($templateCache) {
-
-  $templateCache.put('typeahead/typeahead.tpl.html', '<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="select"><li role="presentation" ng-repeat="match in $matches" ng-class="{active: $index == $activeIndex}"><a role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind="match.label"></a></li></ul>');
-
-}]);
-
 // Source: tooltip.tpl.js
 angular.module('mgcrea.ngStrap.tooltip').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('tooltip/tooltip.tpl.html', '<div class="tooltip in" ng-show="title"><div class="tooltip-arrow"></div><div class="tooltip-inner" ng-bind="title"></div></div>');
+
+}]);
+
+// Source: typeahead.tpl.js
+angular.module('mgcrea.ngStrap.typeahead').run(['$templateCache', function($templateCache) {
+
+  $templateCache.put('typeahead/typeahead.tpl.html', '<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="select"><li role="presentation" ng-repeat="match in $matches" ng-class="{active: $index == $activeIndex}"><a role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind="match.label"></a></li></ul>');
 
 }]);
 

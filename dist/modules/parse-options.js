@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.0 - 2014-09-05
+ * @version v2.1.1 - 2014-09-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -54,7 +54,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
             locals[valueName] = match;
             label = displayFn(scope, locals);
             value = valueFn(scope, locals) || index;
-            return {label: label, value: value};
+            return {label: label, value: value, index: index};
           });
         }
 

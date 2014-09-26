@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.0 - 2014-09-05
+ * @version v2.1.1 - 2014-09-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -14,7 +14,8 @@ angular.module('mgcrea.ngStrap.collapse', [])
     var defaults = this.defaults = {
       animation: 'am-collapse',
       disallowToggle: false,
-      activeClass: 'in'
+      activeClass: 'in',
+      startCollapsed: false
     };
 
     var controller = this.controller = function($scope, $element, $attrs) {
@@ -22,7 +23,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
       // Attributes options
       self.$options = angular.copy(defaults);
-      angular.forEach(['animation', 'disallowToggle', 'activeClass'], function(key) {
+      angular.forEach(['animation', 'disallowToggle', 'activeClass', 'startCollapsed'], function (key) {
         if(angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
@@ -38,7 +39,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
         self.$targets.push(element);
       };
 
-      self.$targets.$active = 0;
+      self.$targets.$active = !self.$options.startCollapsed ? 0 : -1;
       self.$setActive = $scope.$setActive = function(value) {
         if(!self.$options.disallowToggle) {
           self.$targets.$active = self.$targets.$active === value ? -1 : value;
@@ -83,7 +84,9 @@ angular.module('mgcrea.ngStrap.collapse', [])
           // modelValue -> $formatters -> viewValue
           ngModelCtrl.$formatters.push(function(modelValue) {
             // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
-            bsCollapseCtrl.$setActive(modelValue * 1);
+            if (bsCollapseCtrl.$targets.$active !== modelValue * 1) {
+              bsCollapseCtrl.$setActive(modelValue * 1);
+            }
             return modelValue;
           });
 
