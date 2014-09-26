@@ -197,7 +197,7 @@ describe('timepicker', function() {
     });
 
     it('should ignore switch meridians with undefined time values', function() {
-      var elm = compileDirective('value-undefined');
+      var elm = compileDirective('default', {selectedTime: undefined});
       expect(elm.val()).toBe('');
       angular.element(elm[0]).triggerHandler('focus');
       var amButton = angular.element(sandboxEl.find('.dropdown-menu tbody td:eq(4) button:eq(0)')[0]);
