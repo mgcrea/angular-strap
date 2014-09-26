@@ -47,6 +47,7 @@
     "highlightjs": "^8.0.0",
     "jquery": "^2.1.1",
     "font-awesome": "^4.1.0",
-    "fastclick": "^1.0.3"
+    "fastclick": "^1.0.3",
+    "bootstrap-additions": "~0.2.3"
   }
 }
