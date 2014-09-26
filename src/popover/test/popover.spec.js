@@ -62,6 +62,10 @@ describe('popover', function () {
       scope: {popover: {title: 'Title', content: '<div class="message">Hello Popover<br>This is a multiline message!</div>'}},
       element: '<a class="btn" data-auto-close="true" bs-popover="popover"></a>'
     },
+    'options-autoClose-with-template': {
+      scope: {popover: {title: 'Title', counter: 0, content: 'Hello'}},
+      element: '<a class="btn" data-auto-close="true" data-template="custom" bs-popover="popover"></a>'
+    },
     'bsShow-attr': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
       element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover bs-show="true"></a>'
@@ -292,6 +296,40 @@ describe('popover', function () {
         angular.element(sandboxEl.find('.popover')[0]).triggerHandler('click');
         expect(sandboxEl.children().length).toBe(2);
       });
+
+      it('should not close when clicking link inside popover content', function() {
+        $templateCache.put('custom', '<div class="popover"><div class="popover-content"><a class="btn" ng-click="popover.counter=popover.counter+1">click me</a></div></div>');
+        var elm = compileDirective('options-autoClose-with-template');
+        expect(sandboxEl.children().length).toBe(1);
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
+        // sandboxEl.children().length === 2 indicates popover is in DOM/visible
+        expect(sandboxEl.children().length).toBe(2);
+        angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click');
+        expect(scope.popover.counter).toBe(2);
+        expect(sandboxEl.children().length).toBe(2);
+        angular.element($window.document).triggerHandler('click');
+        expect(sandboxEl.children().length).toBe(1);
+      });
+
+      it('should not close when clicking form controls inside popover content', function() {
+        $templateCache.put('custom', '<div class="popover"><div class="popover-content"><form><input type="text" class="form-control" /><button class="btn">Click Me!</button></form></div></div>');
+        var elm = compileDirective('options-autoClose-with-template');
+        expect(sandboxEl.children().length).toBe(1);
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
+        // sandboxEl.children().length === 2 indicates popover is in DOM/visible
+        expect(sandboxEl.children().length).toBe(2);
+        angular.element(sandboxEl.find('.popover-content > .form-control')[0]).triggerHandler('click');
+        expect(sandboxEl.children().length).toBe(2);
+        angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click');
+        expect(sandboxEl.children().length).toBe(2);
+        angular.element($window.document).triggerHandler('click');
+        expect(sandboxEl.children().length).toBe(1);
+      });
+
+
     });
 
 
