@@ -13,6 +13,14 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
 
+  function indexOfCaseInsensitive(array, value) {
+    var len = array.length, str=value.toString().toLowerCase();
+    for (var i=0; i<len; i++) {
+      if (array[i].toLowerCase() === str) { return i; }
+    }
+    return -1; // Return -1 per the "Array.indexOf()" method.    
+  }
+
   var defaults = this.defaults = {
     format: 'shortDate',
     strict: false
@@ -65,8 +73,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         'dd'    : proto.setDate,
         'd'     : proto.setDate,
         'a'     : function(value) { var hours = this.getHours() % 12; return this.setHours(value.match(/pm/i) ? hours + 12 : hours); },
-        'MMMM'  : function(value) { return this.setMonth($locale.DATETIME_FORMATS.MONTH.indexOf(value)); },
-        'MMM'   : function(value) { return this.setMonth($locale.DATETIME_FORMATS.SHORTMONTH.indexOf(value)); },
+        'MMMM'  : function(value) { return this.setMonth(indexOfCaseInsensitive($locale.DATETIME_FORMATS.MONTH, value)); },
+        'MMM'   : function(value) { return this.setMonth(indexOfCaseInsensitive($locale.DATETIME_FORMATS.SHORTMONTH, value)); },
         'MM'    : function(value) { return this.setMonth(1 * value - 1); },
         'M'     : function(value) { return this.setMonth(1 * value - 1); },
         'yyyy'  : proto.setFullYear,
