@@ -354,7 +354,9 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
               timepicker.$options[key] = new Date().setFullYear(1970, 0, 1);
             } else if(angular.isString(newValue) && newValue.match(/^".+"$/)) {
               timepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
-            } else {
+            } else if(newValue === '') {
+              timepicker.$options[key] = key === 'minTime' ? -Infinity : +Infinity;
+            } else { 
               timepicker.$options[key] = +dateParser.parse(newValue, new Date(1970, 0, 1, 0));
             }
             !isNaN(timepicker.$options[key]) && timepicker.$build();
