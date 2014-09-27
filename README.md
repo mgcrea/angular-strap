@@ -17,6 +17,13 @@ While it worked pretty well, it required a big JavaScript payload: both jQuery &
 
 + Check the [documentation](http://mgcrea.github.io/angular-strap) and [changelog](https://github.com/mgcrea/angular-strap/releases).
 
+## Communication
+
+- If you **need help**, use [Stack Overflow](http://stackoverflow.com/questions/tagged/angular-strap). (Tag 'angular-strap')
+- If you'd like to **ask a general question**, use [Stack Overflow](http://stackoverflow.com/questions/tagged/angular-strap).
+- If you **found a bug**, open an issue.
+- If you **have a feature request**, open an issue.
+- If you **want to contribute**, submit a pull request.
 
 ## Quick start
 
