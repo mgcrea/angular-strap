@@ -7,9 +7,7 @@ AngularStrap is a set of native directives that enables seamless integration of 
 - The only required dependency is [Bootstrap CSS Styles](https://github.com/twbs/bootstrap/blob/master/dist/css/bootstrap.css)!
 
 >
-AngularStrap was initially written to provide AngularJS wrapping directives for Bootstrap. It used to leverage the JavaScript code written by Bootstrap's contributors to minimize work, retro-compatibility issues & time to market.
->
-While it worked pretty well, it required a big JavaScript payload: both jQuery & Bootstrap libraries. When the 1.2 release of AngularJS showed up with the ngAnimate module, greatly simplifying DOM manipulation, we knew it was time for a rewrite!
+With no external dependency except the Bootstrap CSS styles, AngularStrap is lighter and faster than ever as it does leverage the power of ngAnimate from AngularJS 1.2+!
 
 - If you don't want to use `ngAnimate`, you will have to include a tiny [ngAnimate mock](https://github.com/mgcrea/angular-strap/wiki/ngAnimate-mock).
 
