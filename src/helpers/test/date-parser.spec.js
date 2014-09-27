@@ -2,16 +2,17 @@
 
 describe('dateParser', function () {
 
-  var $compile, scope, $dateParser, parser;
+  var $compile, scope, $dateParser, parser, $locale;
 
   var lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non velit nulla. Suspendisse sit amet tempus diam. Sed at ultricies neque. Suspendisse id felis a sem placerat ornare. Donec auctor, purus at molestie tempor, arcu enim molestie lacus, ac imperdiet massa urna eu massa. Praesent velit tellus, scelerisque a fermentum ut, ornare in diam. Phasellus egestas molestie feugiat. Vivamus sit amet viverra metus.';
 
   beforeEach(module('mgcrea.ngStrap.helpers.dateParser'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$dateParser_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$dateParser_, _$locale_) {
     scope = _$rootScope_;
     $compile = _$compile_;
     $dateParser = _$dateParser_;
+    $locale = _$locale_;
   }));
 
   function generateTestCases(tests) {
@@ -94,6 +95,32 @@ describe('dateParser', function () {
           {val:'13', expect:false, reason:'invalid date'}
         ]);
       });
+    });
+
+    describe('date format is "MMM" (month initials)', function() {
+      beforeEach(function() {
+        $locale.id = 'en-US';
+        parser = $dateParser({format: 'MMM'});
+      });
+      generateTestCases([
+        {val:'Feb', expect:true, reason:'standard month initials'},
+        {val:'FEB', expect:true, reason:'upper case month initials'},
+        {val:'feb', expect:true, reason:'lower case month initials'},
+        {val:'Fab', expect:false, reason:'invalid month initials'},
+      ]);
+    });
+
+    describe('date format is "MMMM" (month name)', function() {
+      beforeEach(function() {
+        $locale.id = 'en-US';
+        parser = $dateParser({format: 'MMMM'});
+      });
+      generateTestCases([
+        {val:'February', expect:true, reason:'standard month name'},
+        {val:'FEBRUARY', expect:true, reason:'upper case month name'},
+        {val:'february', expect:true, reason:'lower case month name'},
+        {val:'Fabulous', expect:false, reason:'invalid month name'},
+      ]);
     });
 
     describe('date format is "d" (single digit date)', function() {
@@ -269,6 +296,32 @@ describe('dateParser', function () {
           {val:'10/10/1814', expect: new Date(1814,9,10), reason:'4 digit year ambiguous day/month with different century'},
         ]);
     });
+
+    describe('date format is "MMM" (month initials)', function() {
+      beforeEach(function() {
+        $locale.id = 'en-US';
+        parser = $dateParser({format: 'MMM'});
+      });
+      generateTestCasesForParsing([
+        {val:'Feb', expect:new Date(1970,1,1), reason:'standard month initials'},
+        {val:'FEB', expect:new Date(1970,1,1), reason:'upper case month initials'},
+        {val:'feb', expect:new Date(1970,1,1), reason:'lower case month initials'},
+        {val:'Fab', expect:false, reason:'invalid month initials'},
+      ]);
+    });    
+
+    describe('date format is "MMMM" (month name)', function() {
+      beforeEach(function() {
+        $locale.id = 'en-US';
+        parser = $dateParser({format: 'MMMM'});
+      });
+      generateTestCasesForParsing([
+        {val:'February', expect:new Date(1970,1,1), reason:'standard month name'},
+        {val:'FEBRUARY', expect:new Date(1970,1,1), reason:'upper case month name'},
+        {val:'february', expect:new Date(1970,1,1), reason:'lower case month name'},
+        {val:'Fabulous', expect:false, reason:'invalid month name'},
+      ]);
+    }); 
 
   });
 });
