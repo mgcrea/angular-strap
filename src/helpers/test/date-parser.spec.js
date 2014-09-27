@@ -22,6 +22,14 @@ describe('dateParser', function () {
     });
   }
 
+  function generateTestCasesForParsing(tests) {
+    tests.forEach(function(test) {
+      it('should return parse(' + test.val + ')=' + test.expect + ' (' + test.reason + ')', function() {
+        expect(parser.parse(test.val)).toEqual(test.expect);
+      });
+    });
+  }
+
   // Tests
   describe('isValid', function () {
     describe('date format is "y" (single digit year -- extremely permissive)', function() {
@@ -246,5 +254,21 @@ describe('dateParser', function () {
         ]);
       });
     });
+  });
+
+  describe('parse', function () {
+
+    describe('date format "dd/MM/yyyy"', function() {
+        beforeEach(function() {
+          parser = $dateParser({ format: 'dd/MM/yyyy' });
+        });
+        generateTestCasesForParsing([
+          {val:'01/01/2014', expect: new Date(2014,0,1), reason:'4 digit year with leading digits'},
+          {val:'20/10/2014', expect: new Date(2014,9,20), reason:'4 digit year unambiguous day/month'},
+          {val:'10/10/2014', expect: new Date(2014,9,10), reason:'4 digit year ambiguous day/month'},
+          {val:'10/10/1814', expect: new Date(1814,9,10), reason:'4 digit year ambiguous day/month with different century'},
+        ]);
+    });
+
   });
 });
