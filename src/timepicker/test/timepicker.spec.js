@@ -459,6 +459,15 @@ describe('timepicker', function() {
         // expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + (todayHour - 1) + ')').is(':disabled')).toBeTruthy();
       });
 
+      it('should consider empty minTime as no minTime defined', function() {
+        var elm = compileDirective('options-minTime');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeTruthy();
+        scope.minTime = '';
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeFalsy();
+      });
+
       it('should validate using minTime', function() {
         var elm = compileDirective('options-minTime');
 
@@ -492,6 +501,16 @@ describe('timepicker', function() {
         // expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + (todayHour + 1) + ')').is(':disabled')).toBeTruthy();
       });
 
+      it('should consider empty maxTime as no maxTime defined', function() {
+        var elm = compileDirective('options-maxTime');
+        angular.element(elm[0]).triggerHandler('focus');
+        scope.maxTime = '10:30 AM';
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeTruthy();
+        scope.maxTime = '';
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeFalsy();
+      });
 
       it('should validate using maxTime', function() {
         var elm = compileDirective('options-maxTime');
