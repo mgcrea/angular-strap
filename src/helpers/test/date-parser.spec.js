@@ -297,6 +297,56 @@ describe('dateParser', function () {
         ]);
     });
 
+    describe('date format "dd/MM/yyyy" with base values', function() {
+
+      var tests = [
+        { val: '01/09/1998', baseVal: new Date(1998,7,31), expect: new Date(1998,8,1) },
+        { val: '01/09/2014', baseVal: new Date(2014,7,31), expect: new Date(2014,8,1) },
+        { val: '01/02/2014', baseVal: new Date(2014,0,31), expect: new Date(2014,1,1) },
+        { val: '31/08/2014', baseVal: new Date(2014,1,25), expect: new Date(2014,7,31) },
+        { val: '45/20/2014', baseVal: new Date(2014,1,25), expect: false },
+        { val: '2014/08/31', baseVal: new Date(2014,1,25), expect: false },
+        { val: '2014', baseVal: new Date(2014,1,25), expect: false },
+        { val: 'Jan', baseVal: new Date(2014,1,25), expect: false },
+      ];
+
+      beforeEach(function() {
+        parser = $dateParser({ format: 'dd/MM/yyyy' });
+      });
+
+      tests.forEach(function(test) {
+        it('should parse value (' + test.val + ') with base value (' + test.baseVal + ')', function() {
+          expect(parser.parse(test.val, test.baseVal)).toEqual(test.expect);
+        });
+      });
+
+    });
+
+    describe('date format "yyyy/MM/dd" with base values', function() {
+
+      var tests = [
+        { val: '1998/09/01', baseVal: new Date(1998,7,31), expect: new Date(1998,8,1) },
+        { val: '2014/09/01', baseVal: new Date(2014,7,31), expect: new Date(2014,8,1) },
+        { val: '2014/02/01', baseVal: new Date(2014,0,31), expect: new Date(2014,1,1) },
+        { val: '2014/08/31', baseVal: new Date(2014,1,25), expect: new Date(2014,7,31) },
+        { val: '2014/20/45', baseVal: new Date(2014,1,25), expect: false },
+        { val: '31/08/2014', baseVal: new Date(2014,1,25), expect: false },
+        { val: '2014', baseVal: new Date(2014,1,25), expect: false },
+        { val: 'Jan', baseVal: new Date(2014,1,25), expect: false },
+      ];
+
+      beforeEach(function() {
+        parser = $dateParser({ format: 'yyyy/MM/dd' });
+      });
+
+      tests.forEach(function(test) {
+        it('should parse value (' + test.val + ') with base value (' + test.baseVal + ')', function() {
+          expect(parser.parse(test.val, test.baseVal)).toEqual(test.expect);
+        });
+      });
+
+    });
+
     describe('date format is "MMM" (month initials)', function() {
       beforeEach(function() {
         $locale.id = 'en-US';
@@ -308,7 +358,7 @@ describe('dateParser', function () {
         {val:'feb', expect:new Date(1970,1,1), reason:'lower case month initials'},
         {val:'Fab', expect:false, reason:'invalid month initials'},
       ]);
-    });    
+    });
 
     describe('date format is "MMMM" (month name)', function() {
       beforeEach(function() {
@@ -321,7 +371,7 @@ describe('dateParser', function () {
         {val:'february', expect:new Date(1970,1,1), reason:'lower case month name'},
         {val:'Fabulous', expect:false, reason:'invalid month name'},
       ]);
-    }); 
+    });
 
   });
 });
