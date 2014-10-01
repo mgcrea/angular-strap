@@ -99,6 +99,14 @@ describe('timepicker', function() {
     'options-modelTimeFormat': {
       scope: {selectedTime: '12:20:00'},
       element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-model-time-format="HH:mm:ss" data-time-format="HH:mm" bs-timepicker>'
+    },
+    'bsShow-attr': {
+      scope: {selectedTime: new Date()},
+      element: '<input type="text" ng-model="selectedTime" bs-timepicker bs-show="true">'
+    },
+    'bsShow-binding': {
+      scope: {isVisible: false, selectedTime: new Date()},
+      element: '<input type="text" ng-model="selectedTime" bs-timepicker bs-show="isVisible">'
     }
   };
 
@@ -244,6 +252,37 @@ describe('timepicker', function() {
     //   angular.element(elm[0]).triggerHandler('focus');
     // });
 
+  });
+
+  describe('bsShow attribute', function() {
+    it('should support setting to a boolean value', function() {
+      var elm = compileDirective('bsShow-attr');
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+    });
+
+    it('should support binding', function() {
+      var elm = compileDirective('bsShow-binding');
+      expect(scope.isVisible).toBeFalsy();
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+      scope.isVisible = true;
+      scope.$digest();
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+      scope.isVisible = false;
+      scope.$digest();
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+    });
+
+    it('should support initial value false', function() {
+      var elm = compileDirective('bsShow-binding');
+      expect(scope.isVisible).toBeFalsy();
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+    });
+
+    it('should support initial value true', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: true});
+      expect(scope.isVisible).toBeTruthy();
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+    });
   });
 
   // describe('using service', function() {

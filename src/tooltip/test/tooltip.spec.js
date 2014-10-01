@@ -79,6 +79,14 @@ describe('tooltip', function() {
     'options-contentTemplate': {
       scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{tooltip.title}}" data-content-template="custom" bs-tooltip>hover me</a>'
+    },
+    'bsShow-attr': {
+      scope: {tooltip: {title: 'Hello Tooltip!'}},
+      element: '<a title="{{tooltip.title}}" bs-tooltip bs-show="true">hover me</a>'
+    },
+    'bsShow-binding': {
+      scope: {isVisible: false, tooltip: {title: 'Hello Tooltip!'}},
+      element: '<a title="{{tooltip.title}}" bs-tooltip bs-show="isVisible">hover me</a>'
     }
   };
 
@@ -142,6 +150,37 @@ describe('tooltip', function() {
       expect(sandboxEl.children('.tooltip').length).toBe(1);
     });
 
+  });
+
+  describe('bsShow attribute', function() {
+    it('should support setting to a boolean value', function() {
+      var elm = compileDirective('bsShow-attr');
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+    });
+
+    it('should support binding', function() {
+      var elm = compileDirective('bsShow-binding');
+      expect(scope.isVisible).toBeFalsy();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      scope.isVisible = true;
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      scope.isVisible = false;
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+    });
+
+    it('should support initial value false', function() {
+      var elm = compileDirective('bsShow-binding');
+      expect(scope.isVisible).toBeFalsy();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+    });
+
+    it('should support initial value true', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: true});
+      expect(scope.isVisible).toBeTruthy();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+    });
   });
 
   describe('using service', function() {
