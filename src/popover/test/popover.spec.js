@@ -146,6 +146,25 @@ describe('popover', function () {
       expect(scope.isVisible).toBeTruthy();
       expect(sandboxEl.children().length).toBe(2);
     });
+
+    it('should support undefined value', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: undefined});
+      expect(sandboxEl.children().length).toBe(1);
+    });
+
+    it('should support string value', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: 'a string value'});
+      expect(sandboxEl.children().length).toBe(1);
+      scope.isVisible = 'TRUE';
+      scope.$digest();
+      expect(sandboxEl.children().length).toBe(2);
+      scope.isVisible = 'dropdown';
+      scope.$digest();
+      expect(sandboxEl.children().length).toBe(1);
+      scope.isVisible = 'datepicker,popover';
+      scope.$digest();
+      expect(sandboxEl.children().length).toBe(2);
+    });
   });
 
   describe('options', function () {
