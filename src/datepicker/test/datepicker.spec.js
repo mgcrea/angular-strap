@@ -692,6 +692,12 @@ describe('datepicker', function() {
         expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(new Date(scope.startDate), 'MMMM yyyy'));
       });
 
+      it('should support a dynamic startDate from date object', function() {
+        var elm = compileDirective('options-startDate', {startDate: new Date(2014, 2, 2)});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(scope.startDate, 'MMMM yyyy'));
+      });
+
     });
 
     describe('useNative', function() {
