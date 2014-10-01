@@ -55,6 +55,14 @@ describe('popover', function () {
     'options-template': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a data-template="custom" bs-popover="popover">click me</a>'
+    },
+    'bsShow-attr': {
+      scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
+      element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover bs-show="true"></a>'
+    },
+    'bsShow-binding': {
+      scope: {isVisible: false, popover: {title: 'Title', content: 'Hello Popover!'}},
+      element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover bs-show="isVisible"></a>'
     }
   };
 
@@ -109,6 +117,36 @@ describe('popover', function () {
 
   });
 
+  describe('bsShow attribute', function() {
+    it('should support setting to a boolean value', function() {
+      var elm = compileDirective('bsShow-attr');
+      expect(sandboxEl.children().length).toBe(2);
+    });
+
+    it('should support binding', function() {
+      var elm = compileDirective('bsShow-binding');
+      expect(scope.isVisible).toBeFalsy();
+      expect(sandboxEl.children().length).toBe(1);
+      scope.isVisible = true;
+      scope.$digest();
+      expect(sandboxEl.children().length).toBe(2);
+      scope.isVisible = false;
+      scope.$digest();
+      expect(sandboxEl.children().length).toBe(1);
+    });
+
+    it('should support initial value false', function() {
+      var elm = compileDirective('bsShow-binding');
+      expect(scope.isVisible).toBeFalsy();
+      expect(sandboxEl.children().length).toBe(1);
+    });
+
+    it('should support initial value true', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: true});
+      expect(scope.isVisible).toBeTruthy();
+      expect(sandboxEl.children().length).toBe(2);
+    });
+  });
 
   describe('options', function () {
 
