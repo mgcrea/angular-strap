@@ -114,7 +114,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         // Visibility binding support
         attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
           if(!dropdown || !angular.isDefined(newValue)) return;
-          if(angular.isString(newValue)) newValue = !!newValue.match(',?(dropdown),?');
+          if(angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
           newValue === true ? dropdown.show() : dropdown.hide();
         });
 

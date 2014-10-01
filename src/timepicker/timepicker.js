@@ -335,7 +335,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         // Visibility binding support
         attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
           if(!timepicker || !angular.isDefined(newValue)) return;
-          if(angular.isString(newValue)) newValue = !!newValue.match(',?(timepicker),?');
+          if(angular.isString(newValue)) newValue = !!newValue.match(/true|,?(timepicker),?/i);
           newValue === true ? timepicker.show() : timepicker.hide();
         });
 

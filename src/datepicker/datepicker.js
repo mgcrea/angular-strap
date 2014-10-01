@@ -261,7 +261,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         // Visibility binding support
         attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
           if(!datepicker || !angular.isDefined(newValue)) return;
-          if(angular.isString(newValue)) newValue = !!newValue.match(',?(datepicker),?');
+          if(angular.isString(newValue)) newValue = !!newValue.match(/true|,?(datepicker),?/i);
           newValue === true ? datepicker.show() : datepicker.hide();
         });
 
