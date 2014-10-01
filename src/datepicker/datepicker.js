@@ -423,6 +423,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         var weekDaysLabels = weekDaysMin.slice(options.startWeek).concat(weekDaysMin.slice(0, options.startWeek));
         var weekDaysLabelsHtml = $sce.trustAsHtml('<th class="dow text-center">' + weekDaysLabels.join('</th><th class="dow text-center">') + '</th>');
 
+        // if startDate is defined, take out all quote characters,
+        // in case we are getting a JSON serialized date string.
+        // This happens when the property is binded to a date object value.
+        if (options.startDate) options.startDate = options.startDate.replace(/"/g, '');
+
         var startDate = picker.$date || (options.startDate ? new Date(options.startDate) : new Date());
         var viewDate = {year: startDate.getFullYear(), month: startDate.getMonth(), date: startDate.getDate()};
         var timezoneOffset = startDate.getTimezoneOffset() * 6e4;
