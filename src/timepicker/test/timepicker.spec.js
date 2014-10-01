@@ -283,6 +283,25 @@ describe('timepicker', function() {
       expect(scope.isVisible).toBeTruthy();
       expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
     });
+
+    it('should support undefined value', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: undefined});
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+    });
+
+    it('should support string value', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: 'a string value'});
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+      scope.isVisible = 'TRUE';
+      scope.$digest();
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+      scope.isVisible = 'dropdown';
+      scope.$digest();
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+      scope.isVisible = 'timepicker,tooltip';
+      scope.$digest();
+      expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+    });
   });
 
   // describe('using service', function() {
