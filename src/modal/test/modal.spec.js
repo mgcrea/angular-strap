@@ -153,6 +153,67 @@ describe('modal', function() {
 
   });
 
+  describe('using scope helpers', function() {
+
+    var elm, elmScope;
+    beforeEach(function() {
+      elm = compileDirective('default');
+      elmScope = angular.element(elm).scope().$$childTail;
+      scope.$digest();
+    });
+
+    it('should correctly open on next digest', function() {
+      expect(sandboxEl.children('.modal').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+      elmScope.$show();
+      $animate.triggerCallbacks();
+      scope.$digest();
+      expect(sandboxEl.children('.modal').length).toBe(1);
+      expect(elmScope.$isShown).toBeTruthy();
+      elmScope.$hide();
+      $animate.triggerCallbacks();
+      scope.$digest();
+      expect(sandboxEl.children('.modal').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+      elmScope.$toggle();
+      $animate.triggerCallbacks();
+      scope.$digest();
+      expect(sandboxEl.children('.modal').length).toBe(1);
+      expect(elmScope.$isShown).toBeTruthy();
+      elmScope.$toggle();
+      $animate.triggerCallbacks();
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+    });
+
+    it('should do nothing when hiding an already hidden popup', function() {
+      expect(sandboxEl.children('.modal').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+      elmScope.$hide();
+      $animate.triggerCallbacks();
+      scope.$digest();
+      expect(sandboxEl.children('.modal').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+    });
+
+    it('should do nothing when showing an already visible popup', function() {
+      expect(sandboxEl.children('.modal').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+      elmScope.$show();
+      $animate.triggerCallbacks();
+      scope.$digest();
+      expect(sandboxEl.children('.modal').length).toBe(1);
+      expect(elmScope.$isShown).toBeTruthy();
+      elmScope.$show();
+      $animate.triggerCallbacks();
+      scope.$digest();
+      expect(sandboxEl.children('.modal').length).toBe(1);
+      expect(elmScope.$isShown).toBeTruthy();
+    });
+
+  });
+
   describe('show / hide events', function() {
 
     it('should dispatch show and show.before events', function() {
