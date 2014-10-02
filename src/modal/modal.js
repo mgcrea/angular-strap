@@ -116,6 +116,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         $modal.show = function() {
+          if(scope.$isShown) return;
 
           if(scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
             return;
@@ -179,6 +180,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         }
 
         $modal.hide = function() {
+          if(!scope.$isShown) return;
 
           if(scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
             return;
