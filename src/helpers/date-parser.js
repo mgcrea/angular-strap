@@ -145,6 +145,43 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         return date.toDate();
       };
 
+      $dateParser.getDateForAttribute = function(key, value) {
+        var date;
+
+        if(value === 'today') {
+          var today = new Date();
+          date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), 0, 0, 0, (key === 'minDate' ? 0 : -1));
+        } else if(angular.isString(value) && value.match(/^".+"$/)) { // Support {{ dateObj }}
+          date = new Date(value.substr(1, value.length - 2));
+        } else if(isNumeric(value)) {
+          date = new Date(parseInt(value, 10));
+        } else if (angular.isString(value) && 0 === value.length) { // Reset date
+          date = key === 'minDate' ? -Infinity : +Infinity;
+        } else {
+          date = new Date(value);
+        }
+
+        return date;
+      };
+
+      $dateParser.getTimeForAttribute = function(key, value) {
+        var time;
+
+        if(value === 'now') {
+          time = new Date().setFullYear(1970, 0, 1);
+        } else if(angular.isString(value) && value.match(/^".+"$/)) {
+          time = new Date(value.substr(1, value.length - 2));
+        } else if(isNumeric(value)) {
+          time = new Date(parseInt(value, 10));
+        } else if (angular.isString(value) && 0 === value.length) { // Reset time
+          time = key === 'minTime' ? -Infinity : +Infinity;
+        } else { 
+          time = $dateParser.parse(value, new Date(1970, 0, 1, 0));
+        }
+
+        return time;
+      };
+
       // Private functions
 
       function setMapForFormat(format) {
