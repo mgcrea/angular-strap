@@ -448,7 +448,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               if(firstDateOffset !== firstDayOfMonthOffset) firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60e3);
               var days = [], day;
               for(var i = 0; i < 42; i++) { // < 7 * 6
-                day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
+                day = new Date(Date.UTC(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i));
                 days.push({date: day, isToday: day.toDateString() === today, label: dateFilter(day, this.format), selected: picker.$date && this.isSelected(day), muted: day.getMonth() !== viewDate.month, disabled: this.isDisabled(day)});
               }
               scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
