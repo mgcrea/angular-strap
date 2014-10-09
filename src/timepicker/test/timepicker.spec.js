@@ -517,6 +517,24 @@ describe('timepicker', function() {
         // expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + (todayHour - 1) + ')').is(':disabled')).toBeTruthy();
       });
 
+      it('should support date object as minTime', function() {
+        var elm = compileDirective('options-minTime', { minTime: new Date(1970, 0, 1, 9, 30)});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeTruthy();
+        scope.minTime = new Date(1970, 0, 1, 8, 30);
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeFalsy();
+      });
+
+      it('should ignore date part of date object as minTime', function() {
+        var elm = compileDirective('options-minTime', { minTime: new Date(1987, 6, 13, 9, 30)});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeTruthy();
+        scope.minTime = new Date(1987, 6, 13, 8, 30);
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(8)').is(':disabled')).toBeFalsy();
+      });
+
       it('should consider empty minTime as no minTime defined', function() {
         var elm = compileDirective('options-minTime');
         angular.element(elm[0]).triggerHandler('focus');
@@ -557,6 +575,24 @@ describe('timepicker', function() {
         var todayHour = today.getHours();
         // @TODO fixme
         // expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + (todayHour + 1) + ')').is(':disabled')).toBeTruthy();
+      });
+
+      it('should support date object as maxTime', function() {
+        var elm = compileDirective('options-maxTime', { maxTime: new Date(1970, 0, 1, 22, 30)});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeFalsy();
+        scope.maxTime = new Date(1970, 0, 1, 10, 30);
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeTruthy();
+      });
+
+      it('should ignore date part of date object as maxTime', function() {
+        var elm = compileDirective('options-maxTime', { maxTime: new Date(1927, 6, 13, 22, 30)});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeFalsy();
+        scope.maxTime = new Date(1927, 6, 13, 10, 30);
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeTruthy();
       });
 
       it('should consider empty maxTime as no maxTime defined', function() {
