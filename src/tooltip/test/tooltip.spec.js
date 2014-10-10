@@ -87,6 +87,17 @@ describe('tooltip', function() {
     'bsShow-binding': {
       scope: {isVisible: false, tooltip: {title: 'Hello Tooltip!'}},
       element: '<a title="{{tooltip.title}}" bs-tooltip bs-show="isVisible">hover me</a>'
+    },
+    'bsTooltip-string': {
+      element: '<a bs-tooltip="tooltip.title">hover me</a>'
+    },
+    'bsTooltip-ngRepeat-string': {
+      scope: {items: [{name: 'foo', tooltip: 'Hello Tooltip!'}]},
+      element: '<ul><li ng-repeat="item in items"><a bs-tooltip="item.tooltip">{{item.name}}</a></li></ul>'
+    },
+    'bsTooltip-noValue': {
+      scope: {title: 'Inherited Title'},
+      element: '<a bs-tooltip>hover me</a>'
     }
   };
 
@@ -200,6 +211,31 @@ describe('tooltip', function() {
       scope.$digest();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
     });
+  });
+
+  describe('bsTooltip attribute', function() {
+
+    it('should support string value', function() {
+      var elm = compileDirective('bsTooltip-string');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.tooltip.title);
+    });
+
+    it('should support string value from within ngRepeat markup', function() {
+      var elm = compileDirective('bsTooltip-ngRepeat-string');
+      angular.element(elm.find('[bs-tooltip]')).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.items[0].tooltip);
+    });
+
+    it('should overwrite inherited title when no value specified', function() {
+      var elm = compileDirective('bsTooltip-noValue');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.find('.tooltip-inner').html()).toBe('');
+    });
+
   });
 
   describe('using service', function() {
