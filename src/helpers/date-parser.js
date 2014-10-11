@@ -170,9 +170,9 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         if(value === 'now') {
           time = new Date().setFullYear(1970, 0, 1);
         } else if(angular.isString(value) && value.match(/^".+"$/)) {
-          time = new Date(value.substr(1, value.length - 2));
+          time = new Date(value.substr(1, value.length - 2)).setFullYear(1970, 0, 1);
         } else if(isNumeric(value)) {
-          time = new Date(parseInt(value, 10));
+          time = new Date(parseInt(value, 10)).setFullYear(1970, 0, 1);
         } else if (angular.isString(value) && 0 === value.length) { // Reset time
           time = key === 'minTime' ? -Infinity : +Infinity;
         } else { 
