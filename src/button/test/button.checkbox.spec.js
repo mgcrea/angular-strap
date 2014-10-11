@@ -47,6 +47,10 @@ describe('bs-checkbox', function () {
     'checkbox-group': {
       element: '<div class="btn-group" ng-model="checkbox.value" bs-checkbox-group><label class="btn"><input type="checkbox" value="left">Left</label><label class="btn"><input type="checkbox" value="right">Right</label></div>'
     },
+    'checkbox-group-with-repeat': {
+        scope: {items: [{key:"left",value:"Left"},{key:"right",value:"Right"}]},
+        element: '<div class="btn-group" ng-model="checkbox.value" bs-checkbox-group><label class="btn" ng-repeat="item in items"><input type="checkbox" value="{{item.key}}">{{item.value}}</label></div>'
+    },
   };
 
   function compileDirective(template, locals) {
@@ -215,6 +219,12 @@ describe('bs-checkbox', function () {
 
     it('correctly link children directives', function () {
       var element = compileDirective('checkbox-group', {checkbox: {value: {left: false, right: true}}});
+      var secondChild = element.find('input').eq(1);
+      expect(secondChild.parent('label')).toHaveClass('active');
+    });
+
+    it('not fail with ng repeated elements', function () {
+      var element = compileDirective('checkbox-group-with-repeat', {checkbox: {value: {left: false, right: true}}});
       var secondChild = element.find('input').eq(1);
       expect(secondChild.parent('label')).toHaveClass('active');
     });

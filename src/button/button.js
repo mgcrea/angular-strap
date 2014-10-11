@@ -15,7 +15,7 @@ angular.module('mgcrea.ngStrap.button', [])
 
   })
 
-  .directive('bsCheckboxGroup', function() {
+  .directive('bsCheckboxGroup', function($interpolate) {
 
     return {
       restrict: 'A',
@@ -27,7 +27,13 @@ angular.module('mgcrea.ngStrap.button', [])
         angular.forEach(children, function(child) {
           var childEl = angular.element(child);
           childEl.attr('bs-checkbox', '');
-          childEl.attr('ng-model', attr.ngModel + '.' + childEl.attr('value'));
+          var value = childEl.attr('value');
+          var parsedValue = $interpolate(value);
+          if (typeof parsedValue !== "undefined" && typeof parsedValue.parts !== "undefined" && typeof parsedValue.parts[0] === "function") {
+              childEl.attr('ng-model', attr.ngModel + '[' + parsedValue.parts[0].exp + ']');
+          } else {
+        	  childEl.attr('ng-model', attr.ngModel + '.' + value);
+          }
         });
       }
 
