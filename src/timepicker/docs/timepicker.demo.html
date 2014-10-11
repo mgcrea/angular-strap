@@ -42,6 +42,16 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
       </div>
       <hr>
 
+      <!-- Time picker with arrows example -->
+      <div class="form-group">
+        <label class="control-label"><i class="fa fa-clock-o"></i> Time picker with arrows</label><br>
+        <div class="form-group">
+        <input type="text" class="form-control" size="8" ng-model="time" name="time" bs-timepicker
+            data-time-format="HH:mm" data-length="1" data-minute-step="1" data-arrow-behavior="picker">
+        </div>
+      </div>
+      <hr>
+
       <!-- Datetime example -->
       <div class="form-group">
         <label class="control-label"><i class="fa fa-calendar"></i> Datetime picker</label><br>
@@ -227,6 +237,14 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           <td>'glyphicon glyphicon-chevron-down'</td>
           <td>
             <p>CSS class for 'down' icon.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>arrowBehavior</td>
+          <td>string</td>
+          <td>'pager'</td>
+          <td>
+            <p>Sets the behavior of the arrow buttons in the picker. 'pager' to move the displayed hour/minute options, 'picker' to change the current time hours/minutes value.</p>
           </td>
         </tr>
       </tbody>
