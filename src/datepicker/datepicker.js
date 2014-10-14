@@ -279,6 +279,22 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             datepicker.$options[key] = dateParser.getDateForAttribute(key, newValue);
             // Build only if dirty
             !isNaN(datepicker.$options[key]) && datepicker.$build(false);
+
+              // set validity
+              if (!controller.$dateValue) {
+                  controller.$setValidity('date', true);
+                  return;
+              }
+              if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) {
+                  controller.$setValidity('date', false);
+              } else {
+                  var isMinValid = isNaN(datepicker.$options.minDate) || controller.$dateValue.getTime() >= datepicker.$options.minDate;
+                  var isMaxValid = isNaN(datepicker.$options.maxDate) || controller.$dateValue.getTime() <= datepicker.$options.maxDate;
+                  var isValid = isMinValid && isMaxValid;
+                  controller.$setValidity('date', isValid);
+                  controller.$setValidity('min', isMinValid);
+                  controller.$setValidity('max', isMaxValid);
+              }
           });
         });
 
