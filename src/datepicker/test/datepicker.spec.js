@@ -603,6 +603,17 @@ describe('datepicker', function() {
         expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
       });
 
+      it('should trigger validation when minDate changes', function() {
+        var elm = compileDirective('options-minDate-date');
+        expect(elm.hasClass('ng-valid')).toBe(true);
+        scope.minDate = new Date(1986, 1, 25);
+        scope.$digest();
+        expect(elm.hasClass('ng-valid')).toBe(false);
+        scope.minDate = new Date(1986, 1, 18);
+        scope.$digest();
+        expect(elm.hasClass('ng-valid')).toBe(true);
+      });
+
       it('should reset minDate to -Infinity when set empty string', function() {
         var elm = compileDirective('options-minDate');
         angular.element(elm[0]).triggerHandler('focus');
@@ -651,6 +662,17 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
         expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
+      });
+
+      it('should trigger validation when maxDate changes', function() {
+        var elm = compileDirective('options-maxDate-date');
+        expect(elm.hasClass('ng-valid')).toBe(true);
+        scope.maxDate = new Date(1986, 1, 20);
+        scope.$digest();
+        expect(elm.hasClass('ng-valid')).toBe(false);
+        scope.maxDate = new Date(1986, 1, 26);
+        scope.$digest();
+        expect(elm.hasClass('ng-valid')).toBe(true);
       });
 
       it('should reset maxDate to +Infinity when set empty string', function() {
