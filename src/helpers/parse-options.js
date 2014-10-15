@@ -51,6 +51,12 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
           });
         }
 
+        $parseOptions.calcViewValue = function(modelValue){
+          var scope = {};
+          scope[valueName] = modelValue;
+          return displayFn(scope);
+        };
+
         $parseOptions.init();
         return $parseOptions;
 

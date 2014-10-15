@@ -20,7 +20,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       limit: 6
     };
 
-    this.$get = function($window, $rootScope, $tooltip) {
+    this.$get = function($window, $rootScope, $tooltip, $parseOptions, $parse) {
 
       var bodyEl = angular.element($window.document.body);
 
@@ -30,10 +30,24 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Common vars
         var options = angular.extend({}, defaults, config);
+        var parsedOptions = $parseOptions(config.ngOptions);
 
         $typeahead = $tooltip(element, options);
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
+
+        // // Watch options on demand
+        // if(options.watchOptions) {
+        //   // Watch ngOptions values before filtering for changes, drop function calls
+        //   var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '').trim();
+        //   scope.$watch(watchedOptions, function (newValue, oldValue) {
+        //     // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
+        //     parsedOptions.valuesFn(scope, controller).then(function (values) {
+        //       $typeahead.update(values);
+        //       controller.$render();
+        //     });
+        //   }, true);
+        // }
 
         scope.$resetMatches = function(){
           scope.$matches = [];
@@ -53,10 +67,6 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           });
         };
 
-        scope.$isVisible = function() {
-          return $typeahead.$isVisible();
-        };
-
         // Public methods
 
         $typeahead.update = function(matches) {
@@ -70,25 +80,77 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           scope.$activeIndex = index;
         };
 
+        var _isSelectingIndex = null;
         $typeahead.select = function(index) {
-          var value = scope.$matches[index].value;
+          _isSelectingIndex = index;
+          var value = scope.$matches[index].label;
           controller.$setViewValue(value);
           controller.$render();
           scope.$resetMatches();
-          if(parentScope) parentScope.$digest();
+          if($typeahead.$scope.$isShown) $typeahead.hide();
+          if(parentScope) parentScope.$apply();
           // Emit event
           scope.$emit(options.prefixEvent + '.select', value, index);
         };
 
-        // Protected methods
+        // parser manages typeahead matches and selectionMode
+        controller.$parsers.unshift(function (inputValue) {
 
-        $typeahead.$isVisible = function() {
-          if(!options.minLength || !controller) {
-            return !!scope.$matches.length;
+          if(_isSelectingIndex !== null && $typeahead.$scope.$matches.length > _isSelectingIndex){
+            var value = $typeahead.$scope.$matches[_isSelectingIndex];
+            value = options.selectMode ? value.value : value.label;
+            _isSelectingIndex = null;
+            controller.$setValidity('select', true);
+            return value;
+          } else {
+
+            if(inputValue.length >= options.minLength){
+              parsedOptions.valuesFn(scope, controller)
+                .then(function(values) {
+                  if(!values.length){
+                    if(options.selectMode && inputValue.length > 0) {
+                      controller.$setViewValue(controller.$viewValue.substring(0, controller.$viewValue.length - 1));
+                      controller.$render();
+                      return;
+                    }
+                    $typeahead.hide();
+                  }
+                  $typeahead.update(values);
+                  if(!$typeahead.$scope.$isShown) $typeahead.show();
+                });
+            } else {
+              $typeahead.hide();
+              scope.$resetMatches();
+            }
+            return !options.selectMode ? inputValue : undefined;
           }
-          // minLength support
-          return scope.$matches.length && angular.isString(controller.$viewValue) && controller.$viewValue.length >= options.minLength;
-        };
+        });
+
+        if(options.formatter){
+          var formatter = $parse(options.formatter)(scope);
+          if(angular.isFunction(formatter)){
+            controller.$formatters.unshift(function(value){
+              return formatter(value);
+            });
+          } else if(angular.isString(formatter)){
+            controller.$formatters.unshift(function(value){
+              return value[formatter];
+            });
+          }
+        } else {
+          controller.$formatters.unshift(function(value){
+            var viewValue = parsedOptions.calcViewValue(value);
+            if(viewValue){
+              parsedOptions.valuesFn(scope, {$viewValue:viewValue}).then(function(values){
+                $typeahead.update(values);
+              });
+            }
+            return viewValue;
+          });
+        }
+
+
+        // Protected methods
 
         $typeahead.$getIndex = function(value) {
           var l = scope.$matches.length, i = l;
@@ -110,7 +172,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if(!/(38|40|13)/.test(evt.keyCode)) return;
 
           // Let ngSubmit pass if the typeahead tip is hidden
-          if($typeahead.$isVisible()) {
+          if($typeahead.$scope.$isShown) {
             evt.preventDefault();
             evt.stopPropagation();
           }
@@ -129,9 +191,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Overrides
 
-        var show = $typeahead.show;
+        var _show = $typeahead.show;
         $typeahead.show = function() {
-          show();
+          if(!scope.$matches.length) return;
+          _show();
           setTimeout(function() {
             $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
             if(options.keyboard) {
@@ -140,13 +203,13 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           });
         };
 
-        var hide = $typeahead.hide;
+        var _hide = $typeahead.hide;
         $typeahead.hide = function() {
-          $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
+          $typeahead.$element && $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
           if(options.keyboard) {
             element.off('keydown', $typeahead.$onKeyDown);
           }
-          hide();
+          _hide();
         };
 
         return $typeahead;
@@ -160,7 +223,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
   })
 
-  .directive('bsTypeahead', function($window, $parse, $q, $typeahead, $parseOptions) {
+  .directive('bsTypeahead', function($window, $q, $typeahead) {
 
     var defaults = $typeahead.defaults;
 
@@ -171,7 +234,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode'], function(key) {
+        angular.forEach(['ngOptions', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'formatter'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -179,57 +242,37 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var filter = options.filter || defaults.filter;
         var limit = options.limit || defaults.limit;
         var ngOptions = attr.ngOptions;
-        if(filter) ngOptions += ' | ' + filter + ':$viewValue';
-        if(limit) ngOptions += ' | limitTo:' + limit;
-        var parsedOptions = $parseOptions(ngOptions);
+        if(filter) options.ngOptions += ' | ' + filter + ':$viewValue';
+        if(limit) options.ngOptions += ' | limitTo:' + limit;
 
         // Initialize typeahead
         var typeahead = $typeahead(element, controller, options);
 
-        // Watch options on demand
-        if(options.watchOptions) {
-          // Watch ngOptions values before filtering for changes, drop function calls
-          var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '').trim();
-          scope.$watch(watchedOptions, function (newValue, oldValue) {
-            // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
-            parsedOptions.valuesFn(scope, controller).then(function (values) {
-              typeahead.update(values);
-              controller.$render();
-            });
-          }, true);
-        }
+        // // Watch options on demand
+        // if(options.watchOptions) {
+        //   // Watch ngOptions values before filtering for changes, drop function calls
+        //   var watchedOptions = typeahead.parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '').trim();
+        //   scope.$watch(watchedOptions, function (newValue, oldValue) {
+        //     // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
+        //     typeahead.parsedOptions.valuesFn(scope, controller).then(function (values) {
+        //       typeahead.update(values);
+        //       controller.$render();
+        //     });
+        //   }, true);
+        // }
 
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
-          // console.warn('$watch', element.attr('ng-model'), newValue);
           scope.$modelValue = newValue; // Publish modelValue on scope for custom templates
-          parsedOptions.valuesFn(scope, controller)
-          .then(function(values) {
-            // Prevent input with no future prospect if selectMode is truthy
-            // @TODO test selectMode
-            if(options.selectMode && !values.length && newValue.length > 0) {
-              controller.$setViewValue(controller.$viewValue.substring(0, controller.$viewValue.length - 1));
-              return;
-            }
-            if(values.length > limit) values = values.slice(0, limit);
-            var isVisible = typeahead.$isVisible();
-            isVisible && typeahead.update(values);
-            // Do not re-queue an update if a correct value has been selected
-            if(values.length === 1 && values[0].value === newValue) return;
-            !isVisible && typeahead.update(values);
-            // Queue a new rendering that will leverage collection loading
-            controller.$render();
-          });
         });
 
         // Model rendering in view
         controller.$render = function () {
-          // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
-          if(controller.$isEmpty(controller.$viewValue)) return element.val('');
-          var index = typeahead.$getIndex(controller.$modelValue);
-          var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
-          selected = angular.isObject(selected) ? selected.label : selected;
-          element.val(selected ? selected.replace(/<(?:.|\n)*?>/gm, '').trim() : '');
+          if(controller.$viewValue){
+            element.val(controller.$viewValue.replace(/<(?:.|\n)*?>/gm, '').trim());
+          } else {
+            element.val('');
+          }
         };
 
         // Garbage collection
