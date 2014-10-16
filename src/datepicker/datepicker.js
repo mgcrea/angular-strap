@@ -300,7 +300,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             disabledRanges = normalizeDateRanges(disabledRanges);
             previousValue = normalizeDateRanges(previousValue);
 
-            if (disabledRanges !== previousValue) {
+            if (disabledRanges) {
               datepicker.updateDisabledDates(disabledRanges);
             }
           });
@@ -466,12 +466,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               // Disabled because of disabled date range.
               if (options.disabledDateRanges) {
                 for (var i = 0; i < options.disabledDateRanges.length; i++) {
-                  if (time >= options.disabledDateRanges[i].start) {
-                    if (time <= options.disabledDateRanges[i].end) return true;
-
-                    // The disabledDateRanges is expected to be sorted, so if time >= start,
-                    // we know it's not disabled.
-                    return false;
+                  if (time >= options.disabledDateRanges[i].start && time <= options.disabledDateRanges[i].end) {
+                    return true;
                   }
                 }
               }
