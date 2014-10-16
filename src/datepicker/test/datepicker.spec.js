@@ -139,6 +139,18 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date(2014, 6, 27), daysOfWeekDisabled: '0246'},
       element: '<input type="text" ng-model="selectedDate" data-days-of-week-disabled="{{daysOfWeekDisabled}}" bs-datepicker>'
     },
+    'options-disabledDates': {
+      scope: {selectedDate: new Date(2014, 6, 27)},
+      element: '<input type="text" ng-model="selectedDate" data-disabled-dates="disabledDates" bs-datepicker>'
+    },
+    'options-disabledDates-minmax': {
+      scope: {selectedDate: new Date(2014, 6, 27), minDate: new Date(2014, 6, 21), maxDate: new Date(2014, 6, 25)},
+      element: '<input type="text" ng-model="selectedDate" data-disabled-dates="disabledDates" data-min-date="{{minDate}}" data-max-date="{{maxDate}}" bs-datepicker>'
+    },
+    'options-disabledDates-daysOfWeek': {
+      scope: {selectedDate: new Date(2014, 6, 27), daysOfWeekDisabled: '0'},
+      element: '<input type="text" ng-model="selectedDate" data-disabled-dates="disabledDates" data-days-of-week-disabled="{{daysOfWeekDisabled}}" bs-datepicker>'
+    },
     'bsShow-attr': {
       scope: {selectedDate: new Date()},
       element: '<input type="text" ng-model="selectedDate" bs-datepicker bs-show="true">'
@@ -784,5 +796,111 @@ describe('datepicker', function() {
       });
 
     });
+
+  describe('disabledDates', function() {
+
+    it('should not disable any dates by default', function() {
+      var disabledScopeProperty = {
+        disabledDates: []
+      };
+      var elem = compileDirective('options-disabledDates', disabledScopeProperty);
+      angular.element(elem[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+    });
+
+    it('should disable a single date range', function() {
+      var disabledScopeProperty = {
+        disabledDates: [
+          { start: new Date(2014, 6, 22), end: new Date(2014, 6, 25)}
+        ]
+      };
+      var elem = compileDirective('options-disabledDates', disabledScopeProperty);
+      angular.element(elem[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+    });
+
+    it('should disable multiple sorted date ranges', function() {
+      var disabledScopeProperty = {
+        disabledDates: [
+          { start: new Date(2014, 6, 21), end: new Date(2014, 6, 22) },
+          { start: new Date(2014, 6, 24), end: new Date(2014, 6, 24) }
+        ]
+      };
+      var elem = compileDirective('options-disabledDates', disabledScopeProperty);
+      angular.element(elem[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+    });
+
+    it('should disable multiple sorted date ranges out of order', function() {
+      var disabledScopeProperty = {
+        disabledDates: [
+          { start: new Date(2014, 6, 24), end: new Date(2014, 6, 24) },
+          { start: new Date(2014, 6, 21), end: new Date(2014, 6, 22) }
+        ]
+      };
+      var elem = compileDirective('options-disabledDates', disabledScopeProperty);
+      angular.element(elem[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+    });
+
+    it('should work combined with minDate/maxDate', function() {
+      var disabledScopeProperty = {
+        disabledDates: [
+          { start: new Date(2014, 6, 23), end: new Date(2014, 6, 24) }
+        ]
+      };
+      var elem = compileDirective('options-disabledDates-minmax', disabledScopeProperty);
+      angular.element(elem[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeTruthy();
+    });
+
+    it('should work combined with daysOfWeekDisabled', function() {
+      var disabledScopeProperty = {
+        disabledDates: [
+          { start: new Date(2014, 6, 22), end: new Date(2014, 6, 22) }
+        ]
+      };
+      var elem = compileDirective('options-disabledDates-daysOfWeek', disabledScopeProperty);
+      angular.element(elem[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeTruthy(); // July 25, 2014 is a Sunday, disabled
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+    });
+
+  });
 
 });
