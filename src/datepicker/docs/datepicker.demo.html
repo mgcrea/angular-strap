@@ -243,6 +243,15 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
             <p>List of decimal days of the week values that are disabled and hence cannot be selected. For example, '06' disables Sunday and Saturday, '12345' disables Monday to Friday.</p>
           </td>
         </tr>
+        <tr>
+          <td>disabledDates</td>
+          <td>array of date ranges</td>
+          <td>[]</td>
+          <td>
+            <p>Array of date ranges to disable.</p>
+            <p>Example date range: <code>{ start: new Date(2010, 11, 24), end: new Date(2010, 11, 25) }</code></p>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
