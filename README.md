@@ -70,7 +70,7 @@ You can quickly hack around (the docs) with:
 
 ## Contributing
 
-Please submit all pull requests the against master branch. If your unit test contains JavaScript patches or features, you should include relevant unit tests. Thanks!
+Please submit all pull requests the against master branch. If your pull request contains JavaScript patches or features, you should include relevant unit tests. Thanks!
 
 
 
