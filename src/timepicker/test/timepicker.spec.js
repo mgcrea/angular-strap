@@ -2,14 +2,14 @@
 
 describe('timepicker', function() {
 
-  var $compile, $templateCache, $animate, $timepicker, dateFilter, scope, sandboxEl, today;
+  var $compile, $templateCache, $animate, $timepicker, dateFilter, scope, sandboxEl, today, $timeout;
 
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.timepicker'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timepicker_, _dateFilter_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timepicker_, _dateFilter_, _$timeout_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
@@ -18,6 +18,7 @@ describe('timepicker', function() {
     $timepicker = _$timepicker_;
     dateFilter = _dateFilter_;
     today = new Date();
+    $timeout = _$timeout_;
   }));
 
   afterEach(function() {
@@ -361,6 +362,7 @@ describe('timepicker', function() {
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
+        $timeout.flush();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
       });
 
