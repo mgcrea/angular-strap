@@ -283,6 +283,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         function leaveAnimateCallback() {
           scope.$emit(options.prefixEvent + '.hide', $tooltip);
+          var blur = blur || null;
           // Allow to blur the input when hidden, like when pressing enter key
           if(blur && options.trigger === 'focus') {
             return element[0].blur();
