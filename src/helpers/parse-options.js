@@ -39,6 +39,12 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
           });
         };
 
+        $parseOptions.displayValue = function(modelValue) {
+          var scope = {};
+          scope[valueName] = modelValue;
+          return displayFn(scope);
+        };
+
         // Private functions
 
         function parseValues(values, scope) {

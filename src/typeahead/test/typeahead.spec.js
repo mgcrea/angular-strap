@@ -184,7 +184,9 @@ describe('typeahead', function () {
       scope.$digest();
       expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[1].fr_FR).text().trim());
       angular.element(elm[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[0].fr_FR);
+      expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[1].fr_FR);
+      elm.val('')
+      angular.element(elm[0]).triggerHandler('change');
       angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
       expect(scope.selectedIcon).toBe(scope.icons[0]);
       expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[0].fr_FR).text().trim());
