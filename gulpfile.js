@@ -431,7 +431,7 @@ gulp.task('karma:travis~1.2.0', ['templates:test'], function() {
   karma.start({
     configFile: path.join(__dirname, 'test/~1.2.0/karma.conf.js'),
     browsers: ['PhantomJS'],
-    reporters: ['dots', 'coverage'],
+    reporters: ['dots'],
     singleRun: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
