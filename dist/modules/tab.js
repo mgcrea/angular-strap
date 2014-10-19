@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.1 - 2014-09-26
+ * @version v2.1.2 - 2014-10-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -37,6 +37,26 @@ angular.module('mgcrea.ngStrap.tab', [])
 
       self.$push = function(pane) {
         self.$panes.push(pane);
+      };
+
+      self.$remove = function(pane) {
+        var index = self.$panes.indexOf(pane);
+        var activeIndex = self.$panes.$active;
+
+        // remove pane from $panes array
+        self.$panes.splice(index, 1);
+
+        if (index < activeIndex) {
+          // we removed a pane before the active pane, so we need to 
+          // decrement the active pane index
+          activeIndex--;
+        }
+        else if (index === activeIndex && activeIndex === self.$panes.length) {
+          // we remove the active pane and it was the one at the end,
+          // so select the previous one
+          activeIndex--;
+        }
+        self.$setActive(activeIndex);
       };
 
       self.$panes.$active = 0;
@@ -121,6 +141,11 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         // Push pane to parent bsTabs controller
         bsTabsCtrl.$push(scope);
+
+        // remove pane from tab controller when pane is destroyed
+        scope.$on('$destroy', function() {
+          bsTabsCtrl.$remove(scope);
+        });
 
         function render() {
           var index = bsTabsCtrl.$panes.indexOf(scope);
