@@ -325,6 +325,14 @@ describe('typeahead', function () {
       expect(scope.$$childHead.$isVisible).not.toThrow();
     });
 
+    it('should should show options on focus when minLength is 0', function() {
+      var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
+      angular.element(elm[0]).triggerHandler('focus');
+      scope.$digest();
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
+      expect(scope.$$childHead.$isVisible()).toBeTruthy();
+    });
+
   });
 
 });
