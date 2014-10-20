@@ -20,19 +20,19 @@
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
     <!-- Button to trigger a default alert with a scope as an object {title:'', content:'', etc.} -->
-    <button type="button" class="btn btn-lg btn-primary" data-placement="top-right" data-container="body" data-duration="3" bs-alert="alert">Click to toggle alert
+    <button class="btn btn-lg btn-primary" data-placement="top-right" data-container="body" data-duration="3" bs-alert="alert">Click to toggle alert
       <br />
       <small>(using an object)</small>
     </button>
 
     <!-- You can also use data-attrs to assign scope variables -->
-    <button type="button" class="btn btn-lg btn-primary" title="{{alert.title}}" data-content="{{alert.content}}" data-type="success" data-container="#alerts-container" bs-alert>Click to toggle alert
+    <button class="btn btn-lg btn-primary" title="{{alert.title}}" data-content="{{alert.content}}" data-type="success" data-container="#alerts-container" bs-alert>Click to toggle alert
       <br />
       <small>(using data-attrs)</small>
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="am-fade-and-slide-top" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
+    <button class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="am-fade-and-slide-top" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
       <br />
       <small>(using data-template)</small>
     </button>
