@@ -192,6 +192,15 @@ describe('typeahead', function () {
       expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[0].fr_FR).text().trim());
     });
 
+    it('should support numeric values', function() {
+      var elm = compileDirective('default', { states: [1, 2, 3] });
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe('1');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      expect(scope.selectedState).toBe(scope.states[0]);
+      expect(elm.val()).toBe(jQuery('div').html(scope.states[0]).text().trim());
+    });
+
   });
 
   describe('ngOptions', function () {
