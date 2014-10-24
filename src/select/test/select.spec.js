@@ -191,7 +191,7 @@ describe('select', function () {
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
         expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
-        expect(sandboxEl.find('.dropdown-menu li > a > i').length).toBe(scope.selectedIcons.length);
+        expect(sandboxEl.find('.dropdown-menu li > i').length).toBe(scope.selectedIcons.length);
       });
 
       it('should select and deselect all items', function() {
