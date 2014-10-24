@@ -365,8 +365,8 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         function validateAgainstMinMaxTime(parsedTime) {
           if (!angular.isDate(parsedTime)) return;
-          var isMinValid = isNaN(options.minTime) || parsedTime.getTime() >= options.minTime;
-          var isMaxValid = isNaN(options.maxTime) || parsedTime.getTime() <= options.maxTime;
+          var isMinValid = isNaN(options.minTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) >= options.minTime;
+          var isMaxValid = isNaN(options.maxTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) <= options.maxTime;
           var isValid = isMinValid && isMaxValid;
           controller.$setValidity('date', isValid);
           controller.$setValidity('min', isMinValid);
