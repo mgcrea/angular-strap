@@ -574,6 +574,12 @@ describe('timepicker', function() {
         expect(elm.hasClass('ng-valid-min')).toBeTruthy();
       });
 
+      it('should ignore date part of ngModel when validating with minTime', function() {
+        var elm = compileDirective('options-minTime', { selectedTime: new Date(1957, 6, 13, 10, 30)});
+        angular.element(elm[0]).triggerHandler('change');
+        expect(elm.hasClass('ng-valid-min')).toBeTruthy();
+      });
+
     });
 
     describe('maxTime', function() {
@@ -649,6 +655,12 @@ describe('timepicker', function() {
 
         scope.maxTime = '11:00 PM'; // valid again
         scope.$digest();
+        expect(elm.hasClass('ng-valid-max')).toBeTruthy();
+      });
+
+      it('should ignore date part of ngModel when validating with maxTime', function() {
+        var elm = compileDirective('options-maxTime', { selectedTime: new Date(1987, 6, 13, 10, 30)});
+        angular.element(elm[0]).triggerHandler('change');
         expect(elm.hasClass('ng-valid-max')).toBeTruthy();
       });
 
