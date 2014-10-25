@@ -34,6 +34,7 @@ $ bower install angular-strap --save
 >
 ``` html
 <script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
 <script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
 ```
@@ -42,7 +43,7 @@ $ bower install angular-strap --save
 
 >
 ``` js
-angular.module('myApp', ['mgcrea.ngStrap']);
+angular.module('myApp', ['ngAnimate', 'mgcrea.ngStrap']);
 ```
 
 
