@@ -34,8 +34,8 @@
       <input type="text" class="form-control" data-placement="right" data-type="info" data-container="body" placeholder="Focus to toggle tooltip" data-trigger="focus" bs-tooltip="tooltip">
     </div>
     <div class="checkbox">
-      <label data-placement="bottom-left" data-type="info" data-animation="am-fade-and-scale" bs-tooltip="tooltip">
-        <input type="checkbox" ng-model="tooltip.checked"> Remember me
+      <label data-placement="bottom-left" data-type="info" data-animation="am-fade-and-scale" bs-tooltip="tooltip" bs-enabled="tooltip.checked">
+        <input type="checkbox" ng-model="tooltip.checked" > Check me to enable my tooltip
       </label>
     </div>
 
@@ -179,6 +179,41 @@
     </div>
   </div>
 
+  <h3>Helper attributes</h3>
+  <p>Helper attributes can be used together with the directive via data-attributes to support specific functionality. Helper attributes support data binding. To use helper attributes, append the helper attribute name to <code>data-</code>, as in <code>data-bs-show="true"</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>bsShow</td>
+          <td>boolean | string</td>
+          <td>false</td>
+          <td>
+            <p>shows or hides the tooltip. Supports boolean values or "true"/"false" string values.</p>
+            <p>You can also specify "tooltip" to show just the tooltip when using several angular-strap directives on the same element.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>bsEnabled</td>
+          <td>boolean | string</td>
+          <td>true</td>
+          <td>
+            <p>enables or disables the tooltip trigger. When the tooltip is disabled, calling show() will have no effect.</p>
+            <p>Supports boolean values or "true" "false" "1" "0" string values.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <h3>Scope methods</h3>
   <p>Methods available inside the directive scope to toggle visibility.</p>
 
@@ -191,4 +226,6 @@
   <h4>$toggle()</h4>
   <p>Toggles the tooltip.</p>
 
+  <h4>$setEnabled(isEnabled)</h4>
+  <p>Enables or disables the tooltip.</p>
 </div>
