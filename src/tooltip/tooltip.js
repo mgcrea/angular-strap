@@ -21,7 +21,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       title: '',
       type: '',
       delay: 0,
-      autoClose: false
+      autoClose: false,
+      bsEnabled: true
     };
 
     this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, dimensions, $$rAF, $timeout) {
@@ -51,6 +52,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         }
 
         // Provide scope helpers
+        scope.$setEnabled = function(isEnabled) {
+          scope.$$postDigest(function() {
+            $tooltip.setEnabled(isEnabled);
+          });
+        };
         scope.$hide = function() {
           scope.$$postDigest(function() {
             $tooltip.hide();
@@ -195,6 +201,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         $tooltip.show = function() {
+          if (!options.bsEnabled) return;
 
           scope.$emit(options.prefixEvent + '.show.before', $tooltip);
           var parent = options.container ? tipContainer : null;
@@ -314,6 +321,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $tooltip.focus = function() {
           tipElement[0].focus();
+        };
+
+        $tooltip.setEnabled = function(isEnabled) {
+          options.bsEnabled = isEnabled;
         };
 
         // Protected methods
@@ -494,6 +505,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(!tooltip || !angular.isDefined(newValue)) return;
           if(angular.isString(newValue)) newValue = !!newValue.match(/true|,?(tooltip),?/i);
           newValue === true ? tooltip.show() : tooltip.hide();
+        });
+
+        // Enabled binding support
+        attr.bsEnabled && scope.$watch(attr.bsEnabled, function(newValue, oldValue) {
+          // console.warn('scope.$watch(%s)', attr.bsEnabled, newValue, oldValue);
+          if(!tooltip || !angular.isDefined(newValue)) return;
+          if(angular.isString(newValue)) newValue = !!newValue.match(/true|1|,?(tooltip),?/i);
+          newValue === false ? tooltip.setEnabled(false) : tooltip.setEnabled(true);
         });
 
         // Initialize popover

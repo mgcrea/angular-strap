@@ -88,6 +88,14 @@ describe('tooltip', function() {
       scope: {isVisible: false, tooltip: {title: 'Hello Tooltip!'}},
       element: '<a title="{{tooltip.title}}" bs-tooltip bs-show="isVisible">hover me</a>'
     },
+    'bsEnabled-attr': {
+      scope: {tooltip: {title: 'Hello Tooltip!'}},
+      element: '<a title="{{tooltip.title}}" bs-tooltip bs-enabled="false">hover me</a>'
+    },
+    'bsEnabled-attr-binding': {
+      scope: {tooltip: {title: 'Hello Tooltip!'}, isEnabled: true},
+      element: '<a title="{{tooltip.title}}" bs-tooltip bs-enabled="isEnabled">hover me</a>'
+    },
     'bsTooltip-string': {
       element: '<a bs-tooltip="tooltip.title">hover me</a>'
     },
@@ -211,6 +219,89 @@ describe('tooltip', function() {
       scope.$digest();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
     });
+  });
+
+  describe('bsEnabled attribute', function() {
+    it('should support setting to a boolean value', function() {
+      var elm = compileDirective('bsEnabled-attr');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+    });
+
+    it('should open on mouseenter when enabled', function() {
+      var elm = compileDirective('bsEnabled-attr-binding');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+    });
+
+    it('should close on mouseleave when enabled', function() {
+      var elm = compileDirective('bsEnabled-attr-binding');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+    });
+
+    it('should not open on mouseenter when disabled', function() {
+      var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: false });
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+    });
+
+    it('should close on mouseleave when disabled', function() {
+      var elm = compileDirective('bsEnabled-attr-binding');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      scope.isEnabled = false;
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+    });
+
+    it('should support undefined value', function() {
+      var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: undefined });
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+    });
+
+    it('should support string values', function() {
+      var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: "true" });
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      scope.isEnabled = "false";
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      scope.isEnabled = "1";
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      scope.isEnabled = "0";
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      scope.isEnabled = "tooltip";
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+    });
+
   });
 
   describe('bsTooltip attribute', function() {
