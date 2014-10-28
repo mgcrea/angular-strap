@@ -347,6 +347,63 @@ describe('datepicker', function() {
 
   });
 
+  describe('resource allocation', function() {
+    it('should not create additional scopes after first show', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('blur');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+
+      var scopeCount = countScopes(scope, 0);
+
+      for (var i = 0; i < 10; i++) {
+        angular.element(elm[0]).triggerHandler('focus');
+        $animate.triggerCallbacks();
+        angular.element(elm[0]).triggerHandler('blur');
+        $animate.triggerCallbacks();
+      }
+
+      expect(countScopes(scope, 0)).toBe(scopeCount);
+    });
+
+    it('should not create additional scopes when changing months', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(1);
+
+      var scopeCount = countScopes(scope, 0);
+
+      for (var i = 0; i < 10; i++) {
+        angular.element(sandboxEl.find('.dropdown-menu thead button:eq(2)')[0]).triggerHandler('click');
+        scope.$digest();
+      }
+
+      expect(countScopes(scope, 0)).toBe(scopeCount);
+    });
+
+    it('should destroy scopes when destroying directive scope', function() {
+      var scopeCount = countScopes(scope, 0);
+      var originalScope = scope;
+      scope = scope.$new();
+      var elm = compileDirective('default');
+
+      for (var i = 0; i < 10; i++) {
+        angular.element(elm[0]).triggerHandler('focus');
+        $animate.triggerCallbacks();
+        angular.element(elm[0]).triggerHandler('blur');
+        $animate.triggerCallbacks();
+      }
+
+      scope.$destroy();
+      scope = originalScope;
+      expect(countScopes(scope, 0)).toBe(scopeCount);
+    });
+  });
+
   describe('bsShow attribute', function() {
     it('should support setting to a boolean value', function() {
       var elm = compileDirective('bsShow-attr');
