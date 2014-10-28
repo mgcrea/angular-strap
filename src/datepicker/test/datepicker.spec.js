@@ -3,20 +3,24 @@
 describe('datepicker', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $compile, $templateCache, dateFilter, $datepicker, scope, today;
+  var $compile, $templateCache, $animate, dateFilter, $datepicker, scope, today, $timeout;
 
+  beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.datepicker'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _dateFilter_, _$datepicker_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _dateFilter_, _$datepicker_, _$timeout_) {
     scope = _$rootScope_.$new();
     $compile = _$compile_;
     $templateCache = _$templateCache_;
+    $animate = _$animate_;
     dateFilter = _dateFilter_;
     today = new Date();
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
     $datepicker = _$datepicker_;
+    $timeout = _$timeout_;
   }));
 
   afterEach(function() {
@@ -450,6 +454,7 @@ describe('datepicker', function() {
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
+        $timeout.flush();
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
       });
 
