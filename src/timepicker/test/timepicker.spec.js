@@ -101,6 +101,10 @@ describe('timepicker', function() {
       scope: {selectedTime: '12:20:00'},
       element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-model-time-format="HH:mm:ss" data-time-format="HH:mm" bs-timepicker>'
     },
+    'options-arrowBehavior': {
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30), arrowBehavior: 'pager'},
+      element: '<input type="text" ng-model="selectedTime" length="5" data-arrow-behavior="{{ arrowBehavior }}" bs-timepicker>'
+    },
     'bsShow-attr': {
       scope: {selectedTime: new Date()},
       element: '<input type="text" ng-model="selectedTime" bs-timepicker bs-show="true">'
@@ -676,27 +680,56 @@ describe('timepicker', function() {
 
     });
 
-  });
+    describe('modelTimeFormat', function() {
 
-  describe('modelTimeFormat', function() {
+      it('should support a custom modelTimeFormat', function() {
+        var elm = compileDirective('options-modelTimeFormat');
 
-    it('should support a custom modelTimeFormat', function() {
-      var elm = compileDirective('options-modelTimeFormat');
+        // Should have the predefined value
+        expect(elm.val()).toBe('12:20');
 
-      // Should have the predefined value
-      expect(elm.val()).toBe('12:20');
+        // Should correctly set the model value if set via the datepicker
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(13)')).triggerHandler('click');
+        expect(elm.val()).toBe('13:20');
+        expect(scope.selectedTime).toBe('13:20:00');
 
-      // Should correctly set the model value if set via the datepicker
-      angular.element(elm[0]).triggerHandler('focus');
-      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(13)')).triggerHandler('click');
-      expect(elm.val()).toBe('13:20');
-      expect(scope.selectedTime).toBe('13:20:00');
+        // Should correctly set the model if the date is manually typed into the input
+        elm.val('10:00');
+        angular.element(elm[0]).triggerHandler('change');
+        scope.$digest();
+        expect(scope.selectedTime).toBe('10:00:00');
 
-      // Should correctly set the model if the date is manually typed into the input
-      elm.val('10:00');
-      angular.element(elm[0]).triggerHandler('change');
-      scope.$digest();
-      expect(scope.selectedTime).toBe('10:00:00');
+      });
+
+    });
+
+    describe('arrowBehavior', function() {
+
+      it('should scroll values shown when set to pager', function() {
+        var elm = compileDirective('options-arrowBehavior');
+
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
+
+        sandboxEl.find('.dropdown-menu thead button:eq(0)').triggerHandler('click');
+
+        // picker should scroll 5 hours (data-length)
+        var newMiddleHour = new Date(scope.selectedTime.getTime() - (5 * 60 * 60 * 1000));
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0)').text()).toBe(dateFilter(newMiddleHour, 'h'));
+      });
+
+      it('should change ngModel value when set to picker', function() {
+        var elm = compileDirective('options-arrowBehavior', { arrowBehavior: 'picker' });
+
+        // we are going to increment time by 1 hour
+        var testTime = new Date(scope.selectedTime.getTime() + (1 * 60 * 60 * 1000));
+
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
+        sandboxEl.find('.dropdown-menu thead button:eq(0)').triggerHandler('click');
+        expect(scope.selectedTime).toEqual(testTime);
+      });
 
     });
 

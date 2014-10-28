@@ -168,7 +168,6 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             newDate.setMinutes(minutes - (parseInt(options.minuteStep, 10) * value));
           }
           $timepicker.select(newDate, index, true);
-          parentScope.$digest();
         };
 
         $timepicker.$moveIndex = function(value, index) {
