@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.0 - 2014-09-05
+ * @version v2.1.2 - 2014-10-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -73,6 +73,11 @@ angular.module('mgcrea.ngStrap.button', [])
           controller.$parsers.push(function(viewValue) {
             // console.warn('$parser', element.attr('ng-model'), 'viewValue', viewValue);
             return viewValue ? trueValue : falseValue;
+          });
+          // modelValue -> $formatters -> viewValue
+          controller.$formatters.push(function(modelValue) {
+             // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
+             return angular.equals(modelValue, trueValue);
           });
           // Fix rendering for exotic values
           scope.$watch(attr.ngModel, function(newValue, oldValue) {

@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Bootstrap",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "keywords": [
     "angular",
     "bootstrap"
@@ -24,8 +24,8 @@
     }
   ],
   "main": [
-    "dist/angular-strap.min.js",
-    "dist/angular-strap.tpl.min.js"
+    "dist/angular-strap.js",
+    "dist/angular-strap.tpl.js"
   ],
   "ignore": [
     "docs",
@@ -47,6 +47,7 @@
     "highlightjs": "^8.0.0",
     "jquery": "^2.1.1",
     "font-awesome": "^4.1.0",
-    "fastclick": "^1.0.3"
+    "fastclick": "^1.0.3",
+    "bootstrap-additions": "~0.2.3"
   }
 }

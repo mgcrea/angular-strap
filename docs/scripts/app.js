@@ -8,7 +8,7 @@ angular.module('mgcrea.ngStrapDocs', [
   'ngAnimate'
 ])
 
-.constant('version', 'v2.1.0')
+.constant('version', 'v2.1.2')
 
 .config(function($plunkrProvider, version) {
 

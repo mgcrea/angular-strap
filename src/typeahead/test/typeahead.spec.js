@@ -45,6 +45,10 @@ describe('typeahead', function () {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '<i class="fa fa-gear"></i> Gear'}, {value: 'Globe', label: '<i class="fa fa-globe"></i> Globe'}, {value: 'Heart', label: '<i class="fa fa-heart"></i> Heart'}, {value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}]},
       element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon as icon.label for icon in icons" bs-typeahead>'
     },
+    'markup-objectValue-custom': {
+      scope: {selectedIcon: {}, icons: [{val: 'gear', fr_FR: '<i class="fa fa-gear"></i> Gear'}, {val: 'globe', fr_FR: '<i class="fa fa-globe"></i> Globe'}, {val: 'heart', fr_FR: '<i class="fa fa-heart"></i> Heart'}, {val: 'camera', fr_FR: '<i class="fa fa-camera"></i> Camera'}]},
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon as icon[\'fr_FR\'] for icon in icons" bs-typeahead>'
+    },
     'options-animation': {
       element: '<input type="text" data-animation="am-flip-x" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
     },
@@ -174,6 +178,29 @@ describe('typeahead', function () {
       expect(elm.val()).toBe(jQuery('div').html(scope.icons[0].label).text().trim());
     });
 
+    it('should support custom objectValue markup', function() {
+      var elm = compileDirective('markup-objectValue-custom');
+      scope.selectedIcon = scope.icons[1];
+      scope.$digest();
+      expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[1].fr_FR).text().trim());
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[1].fr_FR);
+      elm.val('')
+      angular.element(elm[0]).triggerHandler('change');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      expect(scope.selectedIcon).toBe(scope.icons[0]);
+      expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[0].fr_FR).text().trim());
+    });
+
+    it('should support numeric values', function() {
+      var elm = compileDirective('default', { states: [1, 2, 3] });
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe('1');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      expect(scope.selectedState).toBe(scope.states[0]);
+      expect(elm.val()).toBe(jQuery('div').html(scope.states[0]).text().trim());
+    });
+
   });
 
   describe('ngOptions', function () {
@@ -296,6 +323,14 @@ describe('typeahead', function () {
       var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
       scope.$digest();
       expect(scope.$$childHead.$isVisible).not.toThrow();
+    });
+
+    it('should should show options on focus when minLength is 0', function() {
+      var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
+      angular.element(elm[0]).triggerHandler('focus');
+      scope.$digest();
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
+      expect(scope.$$childHead.$isVisible()).toBeTruthy();
     });
 
   });

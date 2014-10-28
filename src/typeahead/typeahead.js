@@ -72,6 +72,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         $typeahead.select = function(index) {
           var value = scope.$matches[index].value;
+          // console.log('$setViewValue', value);
           controller.$setViewValue(value);
           controller.$render();
           scope.$resetMatches();
@@ -222,6 +223,13 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           });
         });
 
+        // modelValue -> $formatters -> viewValue
+        controller.$formatters.push(function(modelValue) {
+          // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
+          var displayValue = parsedOptions.displayValue(modelValue);
+          return displayValue === undefined ? '' : displayValue;
+        });
+
         // Model rendering in view
         controller.$render = function () {
           // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
@@ -229,7 +237,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? selected.label : selected;
-          element.val(selected.replace(/<(?:.|\n)*?>/gm, '').trim());
+          element.val(selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '').trim() : '');
         };
 
         // Garbage collection

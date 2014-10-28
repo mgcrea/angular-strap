@@ -4,12 +4,7 @@
 
 AngularStrap is a set of native directives that enables seamless integration of [Bootstrap 3.0+](https://github.com/twbs/bootstrap) into your [AngularJS 1.2+](https://github.com/angular/angular.js) app.
 
-- The only required dependency is [Bootstrap CSS Styles](https://github.com/twbs/bootstrap/blob/master/dist/css/bootstrap.css)!
-
->
-AngularStrap was initially written to provide AngularJS wrapping directives for Bootstrap. It used to leverage the JavaScript code written by Bootstrap's contributors to minimize work, retro-compatibility issues & time to market.
->
-While it worked pretty well, it required a big JavaScript payload: both jQuery & Bootstrap libraries. When the 1.2 release of AngularJS showed up with the ngAnimate module, greatly simplifying DOM manipulation, we knew it was time for a rewrite!
+- With no external dependency except the [Bootstrap CSS Styles](https://github.com/twbs/bootstrap/blob/master/dist/css/bootstrap.css), AngularStrap is lighter and faster than ever as it does leverage the power of ngAnimate from AngularJS 1.2+!
 
 - If you don't want to use `ngAnimate`, you will have to include a tiny [ngAnimate mock](https://github.com/mgcrea/angular-strap/wiki/ngAnimate-mock).
 
@@ -17,6 +12,13 @@ While it worked pretty well, it required a big JavaScript payload: both jQuery &
 
 + Check the [documentation](http://mgcrea.github.io/angular-strap) and [changelog](https://github.com/mgcrea/angular-strap/releases).
 
+## Communication
+
+- If you **need help**, use [Stack Overflow](http://stackoverflow.com/questions/tagged/angular-strap). (Tag 'angular-strap')
+- If you'd like to **ask a general question**, use [Stack Overflow](http://stackoverflow.com/questions/tagged/angular-strap).
+- If you **found a bug**, open an issue.
+- If you **have a feature request**, open an issue.
+- If you **want to contribute**, submit a pull request.
 
 ## Quick start
 
@@ -51,7 +53,7 @@ Clone the repo, `git clone git://github.com/mgcrea/angular-strap.git`, [download
 AngularStrap is tested with `karma` against the latest stable release of AngularJS.
 
 >
-	$ npm install --dev
+	$ npm install
 	$ gulp test
 
 You can build the latest version using `gulp`.
@@ -68,7 +70,7 @@ You can quickly hack around (the docs) with:
 
 ## Contributing
 
-Please submit all pull requests the against master branch. If your unit test contains JavaScript patches or features, you should include relevant unit tests. Thanks!
+Please submit all pull requests the against master branch. If your pull request contains JavaScript patches or features, you should include relevant unit tests. Thanks!
 
 
 

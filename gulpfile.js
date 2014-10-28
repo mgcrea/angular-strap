@@ -426,15 +426,26 @@ gulp.task('karma:travis', ['templates:test'], function() {
     //     process.exit(code);
     //   });
   });
-
 });
-
+gulp.task('karma:travis~1.2.0', ['templates:test'], function() {
+  karma.start({
+    configFile: path.join(__dirname, 'test/~1.2.0/karma.conf.js'),
+    browsers: ['PhantomJS'],
+    reporters: ['dots'],
+    singleRun: true
+  }, function(code) {
+    gutil.log('Karma has exited with ' + code);
+    process.exit(code);
+  });
+});
 
 // COPY
 //
 gulp.task('copy:pages', function() {
   gulp.src(['favicon.ico', docs.images], {cwd: docs.cwd, base: docs.cwd})
     .pipe(gulp.dest(docs.dist));
+  gulp.src('**/*.js', {cwd: src.dist, base: src.dist})
+    .pipe(gulp.dest(path.join(docs.dist, src.dist)));
 });
 
 

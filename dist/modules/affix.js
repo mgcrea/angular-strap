@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.0 - 2014-09-05
+ * @version v2.1.2 - 2014-10-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -129,7 +129,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
         $affix.$debouncedOnResize = debounce($affix.$onResize, 50);
 
         $affix.$parseOffsets = function() {
-
+          var initialPosition = element.css('position');
           // Reset position to calculate correct offsetTop
           element.css('position', (options.offsetParent) ? '' : 'relative');
 
@@ -161,6 +161,8 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
             }
           }
 
+          // Bring back the element's position after calculations
+          element.css('position', initialPosition);
         };
 
         // Private methods

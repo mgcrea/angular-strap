@@ -4,13 +4,56 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
 
 .provider('$dateParser', function($localeProvider) {
 
-  var proto = Date.prototype;
+  // define a custom ParseDate object to use instead of native Date 
+  // to avoid date values wrapping when setting date component values
+  function ParseDate() {
+    this.year = 1970;
+    this.month = 0;
+    this.day = 1;
+    this.hours = 0;
+    this.minutes = 0;
+    this.seconds = 0;
+    this.milliseconds = 0;
+  }
+
+  ParseDate.prototype.setMilliseconds = function(value) { this.milliseconds = value; };
+  ParseDate.prototype.setSeconds = function(value) { this.seconds = value; };
+  ParseDate.prototype.setMinutes = function(value) { this.minutes = value; };
+  ParseDate.prototype.setHours = function(value) { this.hours = value; };
+  ParseDate.prototype.getHours = function() { return this.hours; };
+  ParseDate.prototype.setDate = function(value) { this.day = value; };
+  ParseDate.prototype.setMonth = function(value) { this.month = value; };
+  ParseDate.prototype.setFullYear = function(value) { this.year = value; };
+  ParseDate.prototype.fromDate = function(value) {
+    this.year = value.getFullYear();
+    this.month = value.getMonth();
+    this.day = value.getDate();
+    this.hours = value.getHours();
+    this.minutes = value.getMinutes();
+    this.seconds = value.getSeconds();
+    this.milliseconds = value.getMilliseconds();
+    return this;
+  };
+
+  ParseDate.prototype.toDate = function() {
+    return new Date(this.year, this.month, this.day, this.hours, this.minutes, this.seconds, this.milliseconds);
+  };
+
+  var proto = ParseDate.prototype;
 
   function noop() {
   }
 
   function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
+  function indexOfCaseInsensitive(array, value) {
+    var len = array.length, str=value.toString().toLowerCase();
+    for (var i=0; i<len; i++) {
+      if (array[i].toLowerCase() === str) { return i; }
+    }
+    return -1; // Return -1 per the "Array.indexOf()" method.    
   }
 
   var defaults = this.defaults = {
@@ -65,8 +108,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         'dd'    : proto.setDate,
         'd'     : proto.setDate,
         'a'     : function(value) { var hours = this.getHours() % 12; return this.setHours(value.match(/pm/i) ? hours + 12 : hours); },
-        'MMMM'  : function(value) { return this.setMonth($locale.DATETIME_FORMATS.MONTH.indexOf(value)); },
-        'MMM'   : function(value) { return this.setMonth($locale.DATETIME_FORMATS.SHORTMONTH.indexOf(value)); },
+        'MMMM'  : function(value) { return this.setMonth(indexOfCaseInsensitive($locale.DATETIME_FORMATS.MONTH, value)); },
+        'MMM'   : function(value) { return this.setMonth(indexOfCaseInsensitive($locale.DATETIME_FORMATS.SHORTMONTH, value)); },
         'MM'    : function(value) { return this.setMonth(1 * value - 1); },
         'M'     : function(value) { return this.setMonth(1 * value - 1); },
         'yyyy'  : proto.setFullYear,
@@ -93,11 +136,50 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         var formatSetMap = format ? setMapForFormat(format) : setMap;
         var matches = formatRegex.exec(value);
         if(!matches) return false;
-        var date = baseDate || new Date(0, 0, 1);
+        // use custom ParseDate object to set parsed values
+        var date = baseDate && !isNaN(baseDate.getTime()) ? new ParseDate().fromDate(baseDate) : new ParseDate().fromDate(new Date(1970, 0, 1, 0));
         for(var i = 0; i < matches.length - 1; i++) {
           formatSetMap[i] && formatSetMap[i].call(date, matches[i+1]);
         }
+        // convert back to native Date object
+        return date.toDate();
+      };
+
+      $dateParser.getDateForAttribute = function(key, value) {
+        var date;
+
+        if(value === 'today') {
+          var today = new Date();
+          date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), 0, 0, 0, (key === 'minDate' ? 0 : -1));
+        } else if(angular.isString(value) && value.match(/^".+"$/)) { // Support {{ dateObj }}
+          date = new Date(value.substr(1, value.length - 2));
+        } else if(isNumeric(value)) {
+          date = new Date(parseInt(value, 10));
+        } else if (angular.isString(value) && 0 === value.length) { // Reset date
+          date = key === 'minDate' ? -Infinity : +Infinity;
+        } else {
+          date = new Date(value);
+        }
+
         return date;
+      };
+
+      $dateParser.getTimeForAttribute = function(key, value) {
+        var time;
+
+        if(value === 'now') {
+          time = new Date().setFullYear(1970, 0, 1);
+        } else if(angular.isString(value) && value.match(/^".+"$/)) {
+          time = new Date(value.substr(1, value.length - 2)).setFullYear(1970, 0, 1);
+        } else if(isNumeric(value)) {
+          time = new Date(parseInt(value, 10)).setFullYear(1970, 0, 1);
+        } else if (angular.isString(value) && 0 === value.length) { // Reset time
+          time = key === 'minTime' ? -Infinity : +Infinity;
+        } else { 
+          time = $dateParser.parse(value, new Date(1970, 0, 1, 0));
+        }
+
+        return time;
       };
 
       // Private functions

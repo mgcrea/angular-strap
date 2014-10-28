@@ -1,0 +1,75 @@
+@import (reference) "../../bower_components/angular-motion/src/fade-and-slide/fade-and-slide.less";
+@import (reference) "../../bower_components/angular-motion/src/fade-and-scale/fade-and-scale.less";
+
+.modal.disabled {
+
+  animation: noop !important;
+
+  &.am-fade-and-slide-top {
+
+    .modal-dialog {
+      animation-duration: @fade-and-slide-duration;
+      animation-timing-function: @fade-and-slide-timing-function;
+      animation-fill-mode: backwards;
+      animation-name: fadeAndSlideFromTop;
+    }
+
+    &.ng-enter {
+      .modal-dialog {
+        visibility: hidden;
+        animation-name: fadeAndSlideFromTop;
+      }
+    }
+    &.ng-enter-active, &.ng-leave-active {
+      .modal-dialog {
+        visibility: visible;
+      }
+    }
+    &.ng-leave {
+      //@todo
+      .modal-dialog {
+        animation-name: fadeAndSlideToTop;
+      }
+    }
+
+  }
+
+  &.am-fade-and-scale {
+
+    .modal-dialog {
+      animation-duration: @fade-and-scale-duration;
+      animation-timing-function: @fade-and-scale-timing-function;
+      animation-fill-mode: backwards;
+      animation-name: fadeAndScaleIn;
+    }
+
+    &.ng-enter {
+      .modal-dialog {
+        visibility: hidden;
+        animation-name: fadeAndScaleIn;
+      }
+    }
+    &.ng-enter-active, &.ng-leave-active {
+      .modal-dialog {
+        visibility: visible;
+      }
+    }
+    &.ng-leave {
+      //@todo
+      .modal-dialog {
+        animation-name: fadeAndScaleOut;
+      }
+    }
+
+  }
+
+}
+
+@keyframes noop {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+  }
+}

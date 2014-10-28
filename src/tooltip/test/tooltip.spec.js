@@ -49,6 +49,9 @@ describe('tooltip', function() {
     'options-delay': {
       element: '<a data-delay="15" bs-tooltip="tooltip">hover me</a>'
     },
+    'options-delay-multiple': {
+      element: '<a data-delay="15,30" bs-tooltip="tooltip">hover me</a>'
+    },
     'options-keyboard': {
       scope: {tooltip: {title: 'Hello Tooltip!', keyboard: true}},
       element: '<a data-keyboard="true" bs-tooltip="tooltip">hover me</a>'
@@ -76,6 +79,25 @@ describe('tooltip', function() {
     'options-contentTemplate': {
       scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{tooltip.title}}" data-content-template="custom" bs-tooltip>hover me</a>'
+    },
+    'bsShow-attr': {
+      scope: {tooltip: {title: 'Hello Tooltip!'}},
+      element: '<a title="{{tooltip.title}}" bs-tooltip bs-show="true">hover me</a>'
+    },
+    'bsShow-binding': {
+      scope: {isVisible: false, tooltip: {title: 'Hello Tooltip!'}},
+      element: '<a title="{{tooltip.title}}" bs-tooltip bs-show="isVisible">hover me</a>'
+    },
+    'bsTooltip-string': {
+      element: '<a bs-tooltip="tooltip.title">hover me</a>'
+    },
+    'bsTooltip-ngRepeat-string': {
+      scope: {items: [{name: 'foo', tooltip: 'Hello Tooltip!'}]},
+      element: '<ul><li ng-repeat="item in items"><a bs-tooltip="item.tooltip">{{item.name}}</a></li></ul>'
+    },
+    'bsTooltip-noValue': {
+      scope: {title: 'Inherited Title'},
+      element: '<a bs-tooltip>hover me</a>'
     }
   };
 
@@ -141,6 +163,81 @@ describe('tooltip', function() {
 
   });
 
+  describe('bsShow attribute', function() {
+    it('should support setting to a boolean value', function() {
+      var elm = compileDirective('bsShow-attr');
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+    });
+
+    it('should support binding', function() {
+      var elm = compileDirective('bsShow-binding');
+      expect(scope.isVisible).toBeFalsy();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      scope.isVisible = true;
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      scope.isVisible = false;
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+    });
+
+    it('should support initial value false', function() {
+      var elm = compileDirective('bsShow-binding');
+      expect(scope.isVisible).toBeFalsy();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+    });
+
+    it('should support initial value true', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: true});
+      expect(scope.isVisible).toBeTruthy();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+    });
+
+    it('should support undefined value', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: undefined});
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+    });
+
+    it('should support string value', function() {
+      var elm = compileDirective('bsShow-binding', {isVisible: 'a string value'});
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      scope.isVisible = 'TRUE';
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      scope.isVisible = 'dropdown';
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      scope.isVisible = 'datepicker,tooltip';
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+    });
+  });
+
+  describe('bsTooltip attribute', function() {
+
+    it('should support string value', function() {
+      var elm = compileDirective('bsTooltip-string');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.tooltip.title);
+    });
+
+    it('should support string value from within ngRepeat markup', function() {
+      var elm = compileDirective('bsTooltip-ngRepeat-string');
+      angular.element(elm.find('[bs-tooltip]')).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.items[0].tooltip);
+    });
+
+    it('should overwrite inherited title when no value specified', function() {
+      var elm = compileDirective('bsTooltip-noValue');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.find('.tooltip-inner').html()).toBe('');
+    });
+
+  });
+
   describe('using service', function() {
 
     it('should correctly open on next digest', function() {
@@ -194,6 +291,60 @@ describe('tooltip', function() {
       expect(bodyEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('click');
       expect(bodyEl.children('.tooltip').length).toBe(1);
+    });
+
+  });
+
+  describe('using scope helpers', function() {
+
+    var elm, elmScope;
+    beforeEach(function() {
+      elm = compileDirective('default');
+      elmScope = angular.element(elm).scope().$$childTail;
+      scope.$digest();
+    });
+
+    it('should correctly open on next digest', function() {
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+      elmScope.$show();
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      expect(elmScope.$isShown).toBeTruthy();
+      elmScope.$hide();
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+      elmScope.$toggle();
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      expect(elmScope.$isShown).toBeTruthy();
+      elmScope.$toggle();
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+    });
+
+    it('should do nothing when hiding an already hidden popup', function() {
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+      elmScope.$hide();
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+    });
+
+    it('should do nothing when showing an already visible popup', function() {
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      expect(elmScope.$isShown).toBeFalsy();
+      elmScope.$show();
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      expect(elmScope.$isShown).toBeTruthy();
+      elmScope.$show();
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      expect(elmScope.$isShown).toBeTruthy();
     });
 
   });
@@ -277,6 +428,18 @@ describe('tooltip', function() {
 
       it('should support delay', function(done) {
         var elm = compileDirective('options-delay');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        $animate.triggerCallbacks();
+
+        expect(sandboxEl.children('.tooltip').length).toBe(0);
+        setTimeout(function() {
+          expect(sandboxEl.children('.tooltip').length).toBe(1);
+          done();
+        }, 20);
+      });
+
+      it('should support multiple delay', function(done) {
+        var elm = compileDirective('options-delay-multiple');
         angular.element(elm[0]).triggerHandler('mouseenter');
         $animate.triggerCallbacks();
 
