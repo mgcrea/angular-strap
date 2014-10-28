@@ -2,16 +2,19 @@
 
 describe('dropdown', function () {
 
-  var $compile, $templateCache, scope, sandboxEl;
+  var $compile, $templateCache, scope, sandboxEl, $animate;
 
+  beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.dropdown'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
+    $animate = _$animate_;
   }));
 
   afterEach(function() {
@@ -111,6 +114,47 @@ describe('dropdown', function () {
       expect(sandboxEl.find('.dropdown-menu a:eq(0)').text()).toBe(scope.dropdown[0].text);
     });
 
+  });
+
+  describe('resource allocation', function() {
+    it('should not create additional scopes after first show', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('click');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.dropdown-menu').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('click');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
+
+      var scopeCount = countScopes(scope, 0);
+
+      for (var i = 0; i < 10; i++) {
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+      }
+
+      expect(countScopes(scope, 0)).toBe(scopeCount);
+    });
+
+    it('should destroy scopes when destroying directive scope', function() {
+      var scopeCount = countScopes(scope, 0);
+      var originalScope = scope;
+      scope = scope.$new();
+      var elm = compileDirective('default');
+
+      for (var i = 0; i < 10; i++) {
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+      }
+
+      scope.$destroy();
+      scope = originalScope;
+      expect(countScopes(scope, 0)).toBe(scopeCount);
+    });
   });
 
   describe('bsShow attribute', function() {
