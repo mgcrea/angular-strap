@@ -171,6 +171,48 @@ describe('tooltip', function() {
 
   });
 
+  describe('resource allocation', function() {
+    it('should not create additional scopes after first show', function() {
+      var elm = compileDirective('default');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      $animate.triggerCallbacks();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+
+      var scopeCount = countScopes(scope, 0);
+
+      for (var i = 0; i < 10; i++) {
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        $animate.triggerCallbacks();
+        angular.element(elm[0]).triggerHandler('mouseleave');
+        $animate.triggerCallbacks();
+      }
+
+      expect(countScopes(scope, 0)).toBe(scopeCount);
+    });
+
+    it('should destroy scopes when destroying directive scope', function() {
+      var scopeCount = countScopes(scope, 0);
+      var originalScope = scope;
+      scope = scope.$new();
+      var elm = compileDirective('default');
+
+      for (var i = 0; i < 10; i++) {
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        $animate.triggerCallbacks();
+        angular.element(elm[0]).triggerHandler('mouseleave');
+        $animate.triggerCallbacks();
+      }
+
+      scope.$destroy();
+      scope = originalScope;
+      expect(countScopes(scope, 0)).toBe(scopeCount);
+    });
+  });
+
   describe('bsShow attribute', function() {
     it('should support setting to a boolean value', function() {
       var elm = compileDirective('bsShow-attr');
