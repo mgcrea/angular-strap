@@ -16,7 +16,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
       delay: 0
     };
 
-    this.$get = function($window, $rootScope, $tooltip, $timeout) {
+    this.$get = function($window, $rootScope, $tooltip) {
 
       var bodyEl = angular.element($window.document.body);
       var matchesSelector = Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector;
@@ -60,10 +60,8 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         var show = $dropdown.show;
         $dropdown.show = function() {
           show();
-          $timeout(function() {
-            options.keyboard && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
-            bodyEl.on('click', onBodyClick);
-          });
+          options.keyboard && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+          bodyEl.on('click', onBodyClick);
           parentEl.hasClass('dropdown') && parentEl.addClass('open');
         };
 

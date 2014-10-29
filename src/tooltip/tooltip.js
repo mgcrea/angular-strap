@@ -243,17 +243,20 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           }
 
           if(options.autoClose) {
-            $timeout(function() {
-              // Stop propagation when clicking inside tooltip
-              tipElement.on('click', function(event) {
-                event.stopPropagation();
-              });
+            // Stop propagation when clicking inside tooltip
+            tipElement.on('click', function(event) {
+              event.stopPropagation();
+            });
 
-              // Hide when clicking outside tooltip
+            // Hide when clicking outside tooltip
+            // use $timeout to setup this event, otherwise the 
+            // click on the element to show the popover will bubble 
+            // to the body and cause the popover to immediatly hide
+            $timeout(function() {
               $body.on('click', function() {
                 $tooltip.hide();
               });
-            }, 0);
+            }, 0, false);
           }
 
         };
