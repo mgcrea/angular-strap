@@ -908,4 +908,104 @@ describe('datepicker', function() {
 
   });
 
+  describe('datepickerViews', function () {
+    var picker;
+
+    beforeEach(inject(function () {
+      picker = {
+        select: function (date, keep) {},
+        $options: {
+          startWeek: 0,
+          daysOfWeekDisabled: ''
+        },
+        $date: null
+      };
+
+      spyOn(picker, 'select');
+    }));
+
+    it('should change the day when navigating with the keyboard in the day view', inject(function (_datepickerViews_) {
+      var datepickerViews = _datepickerViews_(picker);
+
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[0].onKeyDown({ keyCode: 37 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 0, 5), true)
+
+      picker.select.reset();
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[0].onKeyDown({ keyCode: 38 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 11, 30), true)
+
+      picker.select.reset();
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[0].onKeyDown({ keyCode: 39 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 0, 7), true)
+
+      picker.select.reset();
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[0].onKeyDown({ keyCode: 40 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 0, 13), true)
+
+      picker.select.reset();
+      picker.$date = null;
+      datepickerViews.views[0].onKeyDown({ keyCode: 40 });
+      expect(picker.select).not.toHaveBeenCalled();
+    }));
+
+    it('should change the month when navigating with the keyboard in the month view', inject(function (_datepickerViews_) {
+      var datepickerViews = _datepickerViews_(picker);
+
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[1].onKeyDown({ keyCode: 37 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 11, 6), true)
+
+      picker.select.reset();
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[1].onKeyDown({ keyCode: 38 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 8, 6), true)
+
+      picker.select.reset();
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[1].onKeyDown({ keyCode: 39 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 1, 6), true)
+
+      picker.select.reset();
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[1].onKeyDown({ keyCode: 40 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 4, 6), true)
+
+      picker.select.reset();
+      picker.$date = null;
+      datepickerViews.views[1].onKeyDown({ keyCode: 40 });
+      expect(picker.select).not.toHaveBeenCalled();
+    }));
+
+    it('should change the year when navigating with the keyboard in the year view', inject(function (_datepickerViews_) {
+      var datepickerViews = _datepickerViews_(picker);
+
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[2].onKeyDown({ keyCode: 37 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 0, 6), true)
+
+      picker.select.reset();
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[2].onKeyDown({ keyCode: 38 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2010, 0, 6), true)
+
+      picker.select.reset();
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[2].onKeyDown({ keyCode: 39 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2015, 0, 6), true)
+
+      picker.select.reset();
+      picker.$date = new Date(2014, 0, 6);
+      datepickerViews.views[2].onKeyDown({ keyCode: 40 });
+      expect(picker.select).toHaveBeenCalledWith(new Date(2018, 0, 6), true)
+
+      picker.select.reset();
+      picker.$date = null;
+      datepickerViews.views[2].onKeyDown({ keyCode: 40 });
+      expect(picker.select).not.toHaveBeenCalled();
+    }));
+  });
 });
