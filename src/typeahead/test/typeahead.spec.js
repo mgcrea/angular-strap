@@ -38,6 +38,10 @@ describe('typeahead', function () {
       scope: {selectedCode: '', codes: ['000000', '000001']},
       element: '<input type="text" ng-model="selecteCode" ng-options="code for code in codes" bs-typeahead>'
     },
+    'comparator': {
+      scope: {selectedCode: '', codes: ['001000', '002001']},
+      element: '<input type="text" ng-model="selecteCode" ng-options="code for code in codes" bs-typeahead comparator="{{ comparator }}">'
+    },
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><input type="text" ng-model="selectedState" ng-options="state for state in states" bs-typeahead></li></ul>'
     },
@@ -153,6 +157,29 @@ describe('typeahead', function () {
       expect(elm.val()).toBe(scope.codes[0].substr(0, 6));
       angular.element(elm[0]).triggerHandler('change');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(1); // 000000
+    });
+
+    it('should not use a comparator if one is not set', function () {
+      scope.comparator = '';
+
+      var elm = compileDirective('comparator');
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val(scope.codes[0].substr(0, 3)); // 001
+      expect(elm.val()).toBe(scope.codes[0].substr(0, 3));
+      angular.element(elm[0]).triggerHandler('change');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(2); // 001000, 002001
+    });
+
+    it('should use the comparator if it is set', function () {
+      scope.startsWith = function (actual, expected) { return actual.indexOf(expected) === 0; };
+      scope.comparator = 'startsWith';
+
+      var elm = compileDirective('comparator');
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val(scope.codes[0].substr(0, 3)); // 001
+      expect(elm.val()).toBe(scope.codes[0].substr(0, 3));
+      angular.element(elm[0]).triggerHandler('change');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(1); // Our comparator should only match the beginning - 001000
     });
 
     // @TODO
