@@ -475,6 +475,9 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return false;
             },
             onKeyDown: function(evt) {
+              if (!picker.$date) {
+                return;
+              }
               var actualTime = picker.$date.getTime();
               var newDate;
 
@@ -519,6 +522,9 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return lastDate < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
+              if (!picker.$date) {
+                return;
+              }
               var actualMonth = picker.$date.getMonth();
               var newDate = new Date(picker.$date);
 
@@ -563,6 +569,9 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return lastDate < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
+              if (!picker.$date) {
+                return;
+              }
               var actualYear = picker.$date.getFullYear(),
                   newDate = new Date(picker.$date);
 
