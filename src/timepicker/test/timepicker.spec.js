@@ -171,6 +171,10 @@ describe('timepicker', function() {
       expect(scope.selectedTime.toISOString().substr(0, 10)).toBe('1970-01-01');
       angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(12)')).triggerHandler('click');
       expect(scope.selectedTime.toISOString().substr(0, 10)).toBe('1970-01-01');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(11)')).triggerHandler('click');
+      expect(elm.val()).toBe('11:30 AM');
+      expect(scope.selectedTime).toEqual(new Date(1970, 0, 1, 11, 30));
+      expect(scope.selectedTime.toISOString().substr(0, 10)).toBe('1970-01-01');
     });
 
     it('should correctly parse input time', function() {
