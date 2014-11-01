@@ -404,7 +404,8 @@ gulp.task('karma:server', ['templates:test'], function() {
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
     reporters: ['progress'],
-    autoWatch: true
+    autoWatch: true,
+    singleRun: false
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);
