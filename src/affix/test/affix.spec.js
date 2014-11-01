@@ -118,26 +118,26 @@ describe('affix', function () {
     var $affix;
     beforeEach(function(){
       angular.module('test.mgcrea.ngStrap.affix', []).config(function($provide){
-        $affix = jasmine.createSpy('$affix')
-        $provide.value('$affix', $affix)
+        $affix = jasmine.createSpy('$affix');
+        $provide.value('$affix', $affix);
       });
-      
+
     });
     beforeEach(module('ngSanitize'));
     beforeEach(module('mgcrea.ngStrap.affix'));
     beforeEach(module('test.mgcrea.ngStrap.affix'));
-    
+
     beforeEach(inject(sandboxSetup));
 
     it('should call destory on the affix instance to remove event listeners and cleanup', function(){
-      var affixInstance = jasmine.createSpyObj('$affixInstance', ['destroy'])
-      $affix.andReturn(affixInstance);
-      
+      var affixInstance = jasmine.createSpyObj('$affixInstance', ['destroy']);
+      $affix.and.returnValue(affixInstance);
+
       var elm = compileDirective('default');
       expect($affix).toHaveBeenCalled();
       scope.$destroy();
       expect(affixInstance.destroy).toHaveBeenCalled();
-      
+
     });
 
   });

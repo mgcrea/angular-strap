@@ -23,6 +23,7 @@
   "eqnull": false,
   "expr": true,
   "globals": {
+    "jasmine": false,
     "after": false,
     "afterEach": false,
     "angular": false,

@@ -335,7 +335,7 @@ describe('datepicker', function() {
     it('should support ngChange markup', function() {
       var elm = compileDirective('markup-ngChange');
       angular.element(elm[0]).triggerHandler('focus');
-      var spy = spyOn(scope, 'onChange').andCallThrough();
+      var spy = spyOn(scope, 'onChange').and.callThrough();
       angular.element(sandboxEl.find('.dropdown-menu tbody .btn:eq(1)')[0]).triggerHandler('click');
       expect(spy).toHaveBeenCalled();
     });
@@ -929,24 +929,24 @@ describe('datepicker', function() {
 
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[0].onKeyDown({ keyCode: 37 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 0, 5), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 0, 5), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[0].onKeyDown({ keyCode: 38 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 11, 30), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 11, 30), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[0].onKeyDown({ keyCode: 39 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 0, 7), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 0, 7), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[0].onKeyDown({ keyCode: 40 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 0, 13), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 0, 13), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = null;
       datepickerViews.views[0].onKeyDown({ keyCode: 40 });
       expect(picker.select).not.toHaveBeenCalled();
@@ -957,24 +957,24 @@ describe('datepicker', function() {
 
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[1].onKeyDown({ keyCode: 37 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 11, 6), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 11, 6), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[1].onKeyDown({ keyCode: 38 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 8, 6), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 8, 6), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[1].onKeyDown({ keyCode: 39 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 1, 6), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 1, 6), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[1].onKeyDown({ keyCode: 40 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 4, 6), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2014, 4, 6), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = null;
       datepickerViews.views[1].onKeyDown({ keyCode: 40 });
       expect(picker.select).not.toHaveBeenCalled();
@@ -985,24 +985,24 @@ describe('datepicker', function() {
 
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[2].onKeyDown({ keyCode: 37 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 0, 6), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2013, 0, 6), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[2].onKeyDown({ keyCode: 38 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2010, 0, 6), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2010, 0, 6), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[2].onKeyDown({ keyCode: 39 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2015, 0, 6), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2015, 0, 6), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = new Date(2014, 0, 6);
       datepickerViews.views[2].onKeyDown({ keyCode: 40 });
-      expect(picker.select).toHaveBeenCalledWith(new Date(2018, 0, 6), true)
+      expect(picker.select).toHaveBeenCalledWith(new Date(2018, 0, 6), true);
 
-      picker.select.reset();
+      picker.select.calls.reset();
       picker.$date = null;
       datepickerViews.views[2].onKeyDown({ keyCode: 40 });
       expect(picker.select).not.toHaveBeenCalled();

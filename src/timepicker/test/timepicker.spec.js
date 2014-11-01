@@ -251,7 +251,7 @@ describe('timepicker', function() {
     it('should support ngChange markup', function() {
       var elm = compileDirective('markup-ngChange');
       angular.element(elm[0]).triggerHandler('focus');
-      var spy = spyOn(scope, 'onChange').andCallThrough();
+      var spy = spyOn(scope, 'onChange').and.callThrough();
       angular.element(sandboxEl.find('.dropdown-menu tbody .btn:eq(1)')[0]).triggerHandler('click');
       expect(spy).toHaveBeenCalled();
     });

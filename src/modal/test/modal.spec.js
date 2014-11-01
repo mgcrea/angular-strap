@@ -218,7 +218,7 @@ describe('modal', function() {
 
     it('should dispatch show and show.before events', function() {
       var myModal = $modal(templates['default'].scope.modal);
-      var emit = spyOn(myModal.$scope, '$emit').andCallThrough();
+      var emit = spyOn(myModal.$scope, '$emit').and.callThrough();
       scope.$digest();
 
       expect(emit).toHaveBeenCalledWith('modal.show.before', myModal);
@@ -231,7 +231,7 @@ describe('modal', function() {
     it('should dispatch hide and hide.before events', function() {
       var myModal = $modal(templates['default'].scope.modal);
       scope.$digest();
-      var emit = spyOn(myModal.$scope, '$emit').andCallThrough();
+      var emit = spyOn(myModal.$scope, '$emit').and.callThrough();
       myModal.hide();
 
       expect(emit).toHaveBeenCalledWith('modal.hide.before', myModal);
@@ -243,7 +243,7 @@ describe('modal', function() {
 
     it('should namespace show/hide events using the prefixEvent', function() {
       var myModal = $modal(angular.extend({prefixEvent: 'alert'}, templates['default'].scope.modal));
-      var emit = spyOn(myModal.$scope, '$emit').andCallThrough();
+      var emit = spyOn(myModal.$scope, '$emit').and.callThrough();
       scope.$digest();
       myModal.hide();
       $animate.triggerCallbacks();
@@ -262,7 +262,7 @@ describe('modal', function() {
         throw new Error('modal should not be shown');
       });
       var myModal = $modal(templates['default'].scope.modal);
-      scope.$digest();  
+      scope.$digest();
       $animate.triggerCallbacks();
     });
 
@@ -274,7 +274,7 @@ describe('modal', function() {
         throw new Error('modal should not be hidden');
       });
       var myModal = $modal(templates['default'].scope.modal);
-      scope.$digest();  
+      scope.$digest();
       myModal.hide();
       $animate.triggerCallbacks();
     });

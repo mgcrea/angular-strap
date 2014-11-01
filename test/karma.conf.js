@@ -22,9 +22,7 @@ module.exports = function(config) {
       'bower_components/jquery/dist/jquery.js',
       'src/{,*/}*.js',
       'test/.tmp/templates/{,*/}*.js',
-      'test/effroi.js',
       'test/helpers.js',
-      'test/async.js',
       // 'test/mock/**/*.js',
       // 'test/spec/**/*.js',
       'src/{,*/}/test/*.spec.js'
@@ -60,7 +58,7 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false,
+    singleRun: true,
 
     preprocessors: {
       'src/{,*/}*.js': 'coverage'
@@ -69,6 +67,7 @@ module.exports = function(config) {
     plugins: [
       'karma-jasmine',
       'karma-phantomjs-launcher',
+      'karma-chrome-launcher',
       'karma-coverage'
     ],
 
