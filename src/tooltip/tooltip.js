@@ -92,7 +92,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         }
 
         // Fetch, compile then initialize tooltip
-        var tipLinker, tipElement, tipTemplate, tipContainer;
+        var tipLinker, tipElement, tipTemplate, tipContainer, tipScope;
         $tooltip.$promise.then(function(template) {
           if(angular.isObject(template)) template = template.data;
           if(options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
@@ -173,13 +173,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           }
 
           // Remove element
-          if(tipElement) {
-            tipElement.remove();
-            tipElement = null;
-          }
-
-          // Cancel pending callbacks
-          clearTimeout(timeout);
+          destroyTipElement();
 
           // Destroy scope
           scope.$destroy();
@@ -208,9 +202,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           var after = options.container ? null : element;
 
           // Hide any existing tipElement
-          if(tipElement) tipElement.remove();
+          if(tipElement) destroyTipElement();
           // Fetch a cloned element linked from template
-          tipElement = $tooltip.$element = tipLinker(scope, function(clonedElement, scope) {});
+          tipScope = $tooltip.$scope.$new();
+          tipElement = $tooltip.$element = tipLinker(tipScope, function(clonedElement, scope) {});
 
           // Set the initial positioning.  Make the tooltip invisible
           // so IE doesn't try to focus on it off screen.
@@ -234,7 +229,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             $tooltip.$applyPlacement();
 
             // Once placed, make the tooltip visible
-            tipElement.css({visibility: 'visible'});
+            if(tipElement) tipElement.css({visibility: 'visible'});
           }); // var a = bodyEl.offsetWidth + 1; ?
 
           // Bind events
@@ -317,6 +312,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(_blur && options.trigger === 'focus') {
             return element[0].blur();
           }
+
+          // clean up child scopes
+          destroyTipElement();
         }
 
         $tooltip.toggle = function() {
@@ -439,6 +437,21 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           }
 
           return offset;
+        }
+
+        function destroyTipElement() {
+          // Cancel pending callbacks
+          clearTimeout(timeout);
+
+          if (tipScope) {
+            tipScope.$destroy();
+            tipScope = null;
+          }
+
+          if (tipElement) {
+            tipElement.remove();
+            tipElement = $tooltip.$element = null;
+          }
         }
 
         return $tooltip;
