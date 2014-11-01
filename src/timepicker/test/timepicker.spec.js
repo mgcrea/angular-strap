@@ -493,7 +493,7 @@ describe('timepicker', function() {
       it('should support keyboard navigation', function() {
         var elm = compileDirective('default');
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
-        elm[0].focus();
+        angular.element(elm[0]).triggerHandler('focus');
         $animate.triggerCallbacks();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
         // dump(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text());
