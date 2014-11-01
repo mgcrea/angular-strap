@@ -5,6 +5,7 @@ node_js:
 before_script:
   - export DISPLAY=:99.0
   - export PHANTOMJS_BIN=/usr/local/phantomjs/bin/phantomjs
+  - export CHROME_BIN=chromium-browser
   - sh -e /etc/init.d/xvfb start
   - sleep 3 # give xvfb some time to start
   - npm install -gq bower codeclimate-test-reporter # coveralls
