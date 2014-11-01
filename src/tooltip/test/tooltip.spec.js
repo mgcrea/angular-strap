@@ -342,6 +342,18 @@ describe('tooltip', function() {
       expect(bodyEl.children('.tooltip').length).toBe(0);
     });
 
+    it('should open if option show is true', function() {
+      var options = angular.extend({ show: true }, templates['default'].scope.tooltip);
+      var myTooltip = $tooltip(sandboxEl, options);
+      scope.$digest();
+      $animate.triggerCallbacks();
+      expect(bodyEl.children('.tooltip').length).toBe(1);
+      myTooltip.hide();
+      scope.$digest();
+      $animate.triggerCallbacks();
+      expect(bodyEl.children('.tooltip').length).toBe(0);
+    });
+
     it('should do nothing when hiding an already hidden popup', function() {
       var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
       scope.$digest();
