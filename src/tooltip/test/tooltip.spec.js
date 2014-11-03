@@ -62,11 +62,56 @@ describe('tooltip', function() {
     'options-animation': {
       element: '<a data-animation="am-flip-x" bs-tooltip="tooltip">hover me</a>'
     },
-    'options-placement': {
+    'options-placement-top': {
+      element: '<a data-placement="top" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-right': {
+      element: '<a data-placement="right" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-bottom': {
       element: '<a data-placement="bottom" bs-tooltip="tooltip">hover me</a>'
     },
-    'options-placement-exotic': {
+    'options-placement-left': {
+      element: '<a data-placement="left" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-exotic-top-left': {
+      element: '<a data-placement="top-left" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-exotic-top-right': {
+      element: '<a data-placement="top-right" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-exotic-bottom-left': {
+      element: '<a data-placement="bottom-left" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-exotic-bottom-right': {
       element: '<a data-placement="bottom-right" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-auto': {
+      element: '<a data-placement="auto" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-auto-top': {
+      element: '<a data-placement="auto-top" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-auto-right': {
+      element: '<a data-placement="auto-right" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-auto-bottom': {
+      element: '<a data-placement="auto-bottom" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-auto-left': {
+      element: '<a data-placement="auto-left" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-auto-exotic-top-left': {
+      element: '<a data-placement="auto-top-left" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-auto-exotic-top-right': {
+      element: '<a data-placement="auto-top-right" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-auto-exotic-bottom-left': {
+      element: '<a data-placement="auto-bottom-left" bs-tooltip="tooltip">hover me</a>'
+    },
+    'options-placement-auto-exotic-bottom-right': {
+      element: '<a data-placement="auto-bottom-right" bs-tooltip="tooltip">hover me</a>'
     },
     'options-trigger': {
       element: '<a data-trigger="click" bs-tooltip="tooltip">click me</a>'
@@ -636,25 +681,49 @@ describe('tooltip', function() {
     });
 
     describe('placement', function() {
-
       it('should default to `top` placement', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('mouseenter');
+        $$rAF.flush();
         expect(sandboxEl.children('.tooltip').hasClass('top')).toBeTruthy();
       });
 
       it('should support placement', function() {
-        var elm = compileDirective('options-placement');
+        var elm = compileDirective('options-placement-bottom');
         angular.element(elm[0]).triggerHandler('mouseenter');
+        $$rAF.flush();
         expect(sandboxEl.children('.tooltip').hasClass('bottom')).toBeTruthy();
       });
 
       it('should support exotic-placement', function() {
-        var elm = compileDirective('options-placement-exotic');
+        var elm = compileDirective('options-placement-exotic-bottom-right');
         angular.element(elm[0]).triggerHandler('mouseenter');
+        $$rAF.flush();
         expect(sandboxEl.children('.tooltip').hasClass('bottom-right')).toBeTruthy();
       });
 
+      describe('auto placement', function () {
+        it('should remove `auto` from placements when auto positioning', function () {
+          var elm = compileDirective('options-placement-auto-top');
+          angular.element(elm[0]).triggerHandler('mouseenter');
+          $$rAF.flush();
+          expect(sandboxEl.children('.tooltip').hasClass('top')).toBeTruthy();
+        })
+
+        it('should remove `auto` from exotic placements when auto positioning', function () {
+          var elm = compileDirective('options-placement-auto-exotic-top-left');
+          angular.element(elm[0]).triggerHandler('mouseenter');
+          $$rAF.flush();
+          expect(sandboxEl.children('.tooltip').hasClass('top-left')).toBeTruthy();
+        })
+
+        it('should default to `top` when `auto` placement is set without a preference', function () {
+          var elm = compileDirective('options-placement-auto');
+          angular.element(elm[0]).triggerHandler('mouseenter');
+          $$rAF.flush();
+          expect(sandboxEl.children('.tooltip').hasClass('top')).toBeTruthy();
+        });
+      });
     });
 
     describe('trigger', function() {
@@ -759,4 +828,289 @@ describe('tooltip', function() {
 
   });
 
+  describe('standard placements', function() {
+    var dimensions;
+
+    beforeEach(inject (function (_dimensions_) {
+      dimensions = _dimensions_;
+
+      // Spy on the dimensions object so we can control the placement
+      // and ensure things are calcing as we expect
+      spyOn(dimensions, 'position').and.callFake(function () {
+        return { top: 10, left: 10, height: 20, width: 100 };
+      });
+    }));
+
+    it('should be placed off screen till its been positioned', function () {
+      var elm = compileDirective('options-placement-top');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      var tip = sandboxEl.children('.tooltip');
+      expect(tip[0].style.top).toBe('-9999px');
+      expect(tip[0].style.left).toBe('-9999px');
+    });
+
+    it('should position the tooltip above the target when placement is `top`', function () {
+      var elm = compileDirective('options-placement-top');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('-10px')
+      expect(tipElement[0].style.left).toBe('35px')
+    });
+
+    it('should position the tooltip to the right of the target when placement is `right`', function () {
+      var elm = compileDirective('options-placement-right');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('10px')
+      expect(tipElement[0].style.left).toBe('110px')
+    });
+
+    it('should position the tooltip below the target when placement is `bottom`', function () {
+      var elm = compileDirective('options-placement-bottom');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('30px')
+      expect(tipElement[0].style.left).toBe('35px')
+    });
+
+    it('should position the tooltip to the left of the target when placement is `left`', function () {
+      var elm = compileDirective('options-placement-left');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('10px')
+      expect(tipElement[0].style.left).toBe('-40px')
+    });
+
+    it('should position the tooltip to the top-left of the target when placement is `top-left`', function () {
+      var elm = compileDirective('options-placement-exotic-top-left');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('-10px')
+      expect(tipElement[0].style.left).toBe('10px')
+    });
+
+    it('should position the tooltip to the top-right of the target when placement is `top-right`', function () {
+      var elm = compileDirective('options-placement-exotic-top-right');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('-10px')
+      expect(tipElement[0].style.left).toBe('60px')
+    });
+
+    it('should position the tooltip to the bottom-left of the target when placement is `bottom-left`', function () {
+      var elm = compileDirective('options-placement-exotic-bottom-left');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('30px')
+      expect(tipElement[0].style.left).toBe('10px')
+    });
+
+    it('should position the tooltip to the bottom-right of the target when placement is `bottom-right`', function () {
+      var elm = compileDirective('options-placement-exotic-bottom-right');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('30px')
+      expect(tipElement[0].style.left).toBe('60px')
+    });
+  });
+
+  describe('auto placements', function() {
+    var dimensions,
+        $window
+
+    beforeEach(inject (function (_dimensions_, _$window_) {
+      dimensions = _dimensions_;
+      $window = _$window_;
+    }));
+
+    it('should position the tooltip below the target when initial placement results in positioning off screen', function () {
+      var elm = compileDirective('options-placement-auto-top');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(dimensions, 'position').and.callFake(function () {
+        return { top: 10, left: 10, height: 20, width: 100 };
+      });
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      var tipElement = sandboxEl.children('.tooltip');
+      $window.innerHeight = $window.innerWidth = 200;
+      spyOn(tipElement[0], 'getBoundingClientRect').and.callFake(function () {
+        return { top: -10 };
+      });
+
+      $$rAF.flush();
+      expect(tipElement[0].style.top).toBe('30px')
+      expect(tipElement[0].style.left).toBe('35px')
+    });
+
+    it('should position the tooltip above the target when initial placement results in positioning off screen', function () {
+      var elm = compileDirective('options-placement-auto-bottom');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(dimensions, 'position').and.callFake(function () {
+        return { top: 181, left: 10, height: 20, width: 100 };
+      });
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      // Fake the window size and positioning
+      var tipElement = sandboxEl.children('.tooltip');
+      $window.innerHeight = $window.innerWidth = 200;
+      spyOn(tipElement[0], 'getBoundingClientRect').and.callFake(function () {
+        return { bottom: 201 };
+      });
+
+      $$rAF.flush();
+      expect(tipElement[0].style.top).toBe('161px')
+      expect(tipElement[0].style.left).toBe('35px')
+    });
+
+    it('should position the tooltip to the right of the target when initial placement results in positioning off screen', function () {
+      var elm = compileDirective('options-placement-auto-left');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(dimensions, 'position').and.callFake(function () {
+        return { top: 10, left: 10, height: 20, width: 100 };
+      });
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      // Fake the window size and positioning
+      var tipElement = sandboxEl.children('.tooltip');
+      $window.innerHeight = $window.innerWidth = 200;
+      spyOn(tipElement[0], 'getBoundingClientRect').and.callFake(function () {
+        return { left: -40 };
+      });
+
+      $$rAF.flush();
+      expect(tipElement[0].style.top).toBe('10px')
+      expect(tipElement[0].style.left).toBe('110px')
+    });
+
+    it('should position the tooltip to the left of the target when initial placement results in positioning off screen', function () {
+      var elm = compileDirective('options-placement-auto-right');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(dimensions, 'position').and.callFake(function () {
+        return { top: 10, left: 100, height: 20, width: 100 };
+      });
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      // Fake the window size and positioning
+      var tipElement = sandboxEl.children('.tooltip');
+      $window.innerHeight = $window.innerWidth = 200;
+      spyOn(tipElement[0], 'getBoundingClientRect').and.callFake(function () {
+        return { right: 210 };
+      });
+
+      $$rAF.flush();
+      expect(tipElement[0].style.top).toBe('10px')
+      expect(tipElement[0].style.left).toBe('50px')
+    });
+
+    it('should position the tooltip to the specified placement of the target when all placements result in positioning off screen', function () {
+      var elm = compileDirective('options-placement-auto-top');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(dimensions, 'position').and.callFake(function () {
+        return { top: 10, left: 10, height: 20, width: 100 };
+      });
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 50;
+        if (prop === 'offsetHeight') return 20;
+      });
+
+      // Fake the window size and positioning
+      var tipElement = sandboxEl.children('.tooltip');
+      $window.innerHeight = $window.innerWidth = 20;
+      var calls = 0;
+      spyOn(tipElement[0], 'getBoundingClientRect').and.callFake(function () {
+        calls++
+        if (calls === 1) {
+          return { top: -10 };
+        } else {
+          return { top: 30 };
+        }
+      });
+
+      $$rAF.flush();
+      expect(tipElement[0].style.top).toBe('-10px')
+      expect(tipElement[0].style.left).toBe('35px')
+    });
+  });
 });

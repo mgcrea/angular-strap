@@ -196,22 +196,29 @@ describe('popover', function () {
     });
 
     describe('placement', function () {
+      var $$rAF;
+      beforeEach(inject(function (_$$rAF_) {
+        $$rAF = _$$rAF_
+      }));
 
       it('should default to `right` placement', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('click');
+        $$rAF.flush();
         expect(sandboxEl.children('.popover').hasClass('right')).toBeTruthy();
       });
 
       it('should support placement', function() {
         var elm = compileDirective('options-placement');
         angular.element(elm[0]).triggerHandler('click');
+        $$rAF.flush();
         expect(sandboxEl.children('.popover').hasClass('bottom')).toBeTruthy();
       });
 
       it('should support exotic-placement', function() {
         var elm = compileDirective('options-placement-exotic');
         angular.element(elm[0]).triggerHandler('click');
+        $$rAF.flush();
         expect(sandboxEl.children('.popover').hasClass('bottom-right')).toBeTruthy();
       });
 

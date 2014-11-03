@@ -196,7 +196,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           // Set the initial positioning.  Make the tooltip invisible
           // so IE doesn't try to focus on it off screen.
-          tipElement.css({top: '-9999px', left: '-9999px', display: 'block', visibility: 'hidden'}).addClass(options.placement);
+          tipElement.css({top: '-9999px', left: '-9999px', display: 'block', visibility: 'hidden'});
 
           // Options: animation
           if(options.animation) tipElement.addClass(options.animation);
@@ -310,18 +310,68 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // Get the position of the tooltip element.
           var elementPosition = getPosition();
 
+          // Determine if we're doing an auto or normal placement
+          var placement = options.placement,
+              isAutoPlacement = placement.indexOf('auto') === 0;
+
+          if (isAutoPlacement) {
+            var split = placement.split('-');
+            if (split[1]) {
+              // if there's a desired position, use that
+              placement = split.splice(1).join('-');
+            } else {
+              placement = defaults.placement;
+            }
+          }
+
+          // Apply the class now that we've stripped off 'auto'
+          tipElement.addClass(placement);
+
           // Get the height and width of the tooltip so we can center it.
           var tipWidth = tipElement.prop('offsetWidth'),
               tipHeight = tipElement.prop('offsetHeight');
 
           // Get the tooltip's top and left coordinates to center it with this directive.
-          var tipPosition = getCalculatedOffset(options.placement, elementPosition, tipWidth, tipHeight);
+          var tipPosition = getCalculatedOffset(placement, elementPosition, tipWidth, tipHeight);
+          applyPlacementCss(tipPosition.top, tipPosition.left);
 
-          // Now set the calculated positioning.
-          tipPosition.top += 'px';
-          tipPosition.left += 'px';
-          tipElement.css(tipPosition);
+          // If we're auto placing, we need to check the positioning
+          if (isAutoPlacement) {
+            var windowHeight = $window.innerHeight,
+                windowWidth = $window.innerWidth,
+                boundingRect,
+                originalPlacement,
+                attempts = 0;
 
+            while (isAutoPlacement) {
+              attempts++;
+              originalPlacement = placement;
+              boundingRect = tipElement[0].getBoundingClientRect();
+
+              if (boundingRect.top < 0) {
+                placement = placement.replace('top', 'bottom');
+              }
+              if (boundingRect.right > windowWidth) {
+                placement = placement.replace('right', 'left');
+              }
+              if (boundingRect.bottom > windowHeight) {
+                placement = placement.replace('bottom', 'top');
+              }
+              if (boundingRect.left < 0) {
+                placement = placement.replace('left', 'right');
+              }
+
+              // if the placement is the same or this is the 3rd attempt to get it right, exit out
+              // to avoid unneeded processing
+              if (originalPlacement === placement || attempts === 3) {
+                break;
+              }
+
+              tipElement.removeClass(originalPlacement).addClass(placement);
+              tipPosition = getCalculatedOffset(placement, elementPosition, tipWidth, tipHeight);
+              applyPlacementCss(tipPosition.top, tipPosition.left);
+            }
+          }
         };
 
         $tooltip.$onKeyUp = function(evt) {
@@ -481,6 +531,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           }
 
           return offset;
+        }
+
+        function applyPlacementCss(top, left) {
+          tipElement.css({ top: top + 'px', left: left + 'px' });
         }
 
         function destroyTipElement() {

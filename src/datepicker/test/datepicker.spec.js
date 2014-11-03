@@ -652,22 +652,29 @@ describe('datepicker', function() {
     });
 
     describe('placement', function() {
+      var $$rAF;
+      beforeEach(inject(function (_$$rAF_) {
+        $$rAF = _$$rAF_
+      }));
 
       it('should default to `bottom-left` placement', function() {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('focus');
+        $$rAF.flush();
         expect(sandboxEl.children('.dropdown-menu').hasClass('bottom-left')).toBeTruthy();
       });
 
       it('should support placement', function() {
         var elm = compileDirective('options-placement');
         angular.element(elm[0]).triggerHandler('focus');
+        $$rAF.flush();
         expect(sandboxEl.children('.dropdown-menu').hasClass('bottom')).toBeTruthy();
       });
 
       it('should support exotic-placement', function() {
         var elm = compileDirective('options-placement-exotic');
         angular.element(elm[0]).triggerHandler('focus');
+        $$rAF.flush();
         expect(sandboxEl.children('.dropdown-menu').hasClass('bottom-right')).toBeTruthy();
       });
 

@@ -72,8 +72,17 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
   <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
   <div class="callout callout-info">
     <h4>This module supports exotic placement options!</h4>
-    <p>You can position your select in corners (such as <code>bottom-left</code>) or any other combination two.</p>
+    <p>You can position your datepicker in corners (such as <code>bottom-left</code>) or any other combination two.</p>
     <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for these docs.</p>
+  </div>
+  <div class="callout callout-info">
+    <h4>This module supports auto placement options!</h4>
+    <p>
+      You can let the datepicker determine its placement using <code>auto</code>.  If the datepicker appears outside the viewport, it will try to reposition itself.
+    </p>
+    <p>
+      You may also specify a default placement by appending any of the supported placements (such as <code>auto-bottom-left</code>) and let the datepicker determine its placement if needed.
+    </p>
   </div>
   <div class="table-responsive">
     <table class="table table-bordered table-striped">
@@ -96,13 +105,13 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>placement</td>
           <td>string</td>
           <td>'bottom-left'</td>
-          <td>how to position the typeahead - top | bottom | left | right, or any combination like bottom-left.</td>
+          <td>how to position the datepicker - top | bottom | left | right | auto, or any combination like bottom-left or auto-bottom-left.</td>
         </tr>
         <tr>
           <td>trigger</td>
           <td>string</td>
           <td>'focus'</td>
-          <td>how typeahead is triggered - click | hover | focus | manual</td>
+          <td>how datepicker is triggered - click | hover | focus | manual</td>
         </tr>
         <tr>
           <td>html</td>
@@ -115,7 +124,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>number | object</td>
           <td>0</td>
           <td>
-            <p>delay showing and hiding the typeahead (ms) - does not apply to manual trigger type</p>
+            <p>delay showing and hiding the datepicker (ms) - does not apply to manual trigger type</p>
             <p>If a number is supplied, delay is applied to both hide/show</p>
             <p>Object structure is:
               <code>delay: { show: 500, hide: 100 }</code>
@@ -127,14 +136,14 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>string | false</td>
           <td>false</td>
           <td>
-            <p>Appends the typeahead to a specific element. Example:
-              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the typeahead in the flow of the document near the triggering element -&nbsp;which will prevent the typeahead from floating away from the triggering element during a window resize.</p>
+            <p>Appends the datepicker to a specific element. Example:
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the datepicker in the flow of the document near the triggering element -&nbsp;which will prevent the datepicker from floating away from the triggering element during a window resize.</p>
           </td>
         </tr>
         <tr>
           <td>template</td>
           <td>path | id</td>
-          <td>'$typeahead'</td>
+          <td>'$datepicker'</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
           </td>
