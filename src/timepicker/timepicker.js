@@ -417,14 +417,18 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           // Setup default value?
           // if(isNaN(date.getTime())) date = new Date(new Date().setMinutes(0) + 36e5);
           controller.$dateValue = date;
-          return controller.$dateValue;
+          return getTimeFormattedString();
         });
 
         // viewValue -> element
         controller.$render = function() {
           // console.warn('$render("%s"): viewValue=%o', element.attr('ng-model'), controller.$viewValue);
-          element.val(!controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : dateFilter(controller.$dateValue, options.timeFormat));
+          element.val(getTimeFormattedString());
         };
+
+        function getTimeFormattedString() {
+          return !controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : dateFilter(controller.$dateValue, options.timeFormat);
+        }
 
         // Garbage collection
         scope.$on('$destroy', function() {
