@@ -75,15 +75,6 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
     <p>You can position your datepicker in corners (such as <code>bottom-left</code>) or any other combination two.</p>
     <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for these docs.</p>
   </div>
-  <div class="callout callout-info">
-    <h4>This module supports auto placement options!</h4>
-    <p>
-      You can let the datepicker determine its placement using <code>auto</code>.  If the datepicker appears outside the viewport, it will try to reposition itself.
-    </p>
-    <p>
-      You may also specify a default placement by appending any of the supported placements (such as <code>auto-bottom-left</code>) and let the datepicker determine its placement if needed.
-    </p>
-  </div>
   <div class="table-responsive">
     <table class="table table-bordered table-striped">
       <thead>
@@ -105,7 +96,10 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>placement</td>
           <td>string</td>
           <td>'bottom-left'</td>
-          <td>how to position the datepicker - top | bottom | left | right | auto, or any combination like bottom-left or auto-bottom-left.</td>
+          <td>
+            how to position the datepicker - top | bottom | left | right | auto, or any combination like bottom-left or auto bottom-left.<br>
+            When "auto" is specified, it will dynamically reorient the datepicker. For example, if placement is "auto left", the datepicker will display to the left when possible, otherwise it will display right.
+          </td>
         </tr>
         <tr>
           <td>trigger</td>
