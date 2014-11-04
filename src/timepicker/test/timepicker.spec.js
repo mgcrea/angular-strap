@@ -44,6 +44,10 @@ describe('timepicker', function() {
       scope: {selectedDate: new Date(1970, 0, 1, 10, 30), onChange: function() {}},
       element: '<input type="text" ng-model="selectedTime" ng-change="onChange()" bs-timepicker>'
     },
+    'markup-ngRequired': {
+      scope: {selectedTime: new Date(2012, 5, 15, 9, 30)},
+      element: '<input type="text" ng-model="selectedTime" ng-required="true" bs-timepicker>'
+    },
     'options-animation': {
       element: '<div class="btn" data-animation="am-flip-x" ng-model="timepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-timepicker></div>'
     },
@@ -254,6 +258,20 @@ describe('timepicker', function() {
       var spy = spyOn(scope, 'onChange').and.callThrough();
       angular.element(sandboxEl.find('.dropdown-menu tbody .btn:eq(1)')[0]).triggerHandler('click');
       expect(spy).toHaveBeenCalled();
+    });
+
+    it('should support ngRequired markup', function() {
+      var elm = compileDirective('markup-ngRequired');
+
+      expect(elm.val()).toBe('9:30 AM');
+      expect(scope.selectedTime).toBeDefined();
+      expect(scope.selectedTime).toEqual(new Date(2012, 5, 15, 9, 30));
+
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+
     });
 
     // iit('should only build the timepicker once', function() {
