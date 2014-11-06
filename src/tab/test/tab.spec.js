@@ -47,6 +47,20 @@ describe('tab', function () {
       ]},
       element: '<div ng-model="tab.active" bs-tabs><div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
     },
+    'binding-bsActivePane': {
+      scope: {tab: {active: 1}},
+      element: '<div bs-active-pane="tab.active" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+    },
+    'template-bsActivePane-ngRepeat': {
+      scope: {
+        tab: {active: 1},
+        tabs: [
+          {title:'Home', content: 'Raw denim you probably haven\'t heard of...'},
+          {title:'Profile', content: 'Food truck fixie locavore...'},
+          {title:'About', content: 'Etsy mixtape wayfarers...'}
+      ]},
+      element: '<div bs-active-pane="tab.active" bs-tabs><div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
+    },
     'options-animation': {
       element: '<div data-animation="am-flip-x" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
     },
@@ -140,65 +154,76 @@ describe('tab', function () {
 
   describe('data-binding', function() {
 
-    it('should correctly apply model changes to the view', function() {
-      var elm = compileDirective('binding-ngModel');
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(scope.tab.active);
-      expect(sandboxEl.find('.tab-content > .tab-pane.active').index()).toBe(scope.tab.active);
-      scope.tab.active = 0;
-      scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(scope.tab.active);
-      expect(sandboxEl.find('.tab-content > .tab-pane.active').index()).toBe(scope.tab.active);
+    function executeDataBindingTests(bindingAttribute) {
+
+      it('should correctly apply model changes to the view', function() {
+        var elm = compileDirective('binding-' + bindingAttribute);
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(scope.tab.active);
+        expect(sandboxEl.find('.tab-content > .tab-pane.active').index()).toBe(scope.tab.active);
+        scope.tab.active = 0;
+        scope.$digest();
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(scope.tab.active);
+        expect(sandboxEl.find('.tab-content > .tab-pane.active').index()).toBe(scope.tab.active);
+      });
+
+      it('should correctly apply view changes to the model', function() {
+        var elm = compileDirective('binding-' + bindingAttribute);
+        sandboxEl.find('.nav-tabs > li:eq(0) > a').triggerHandler('click');
+        expect(scope.tab.active).toBe(0);
+      });
+
+      it('should keep active pane when adding a new pane after', function() {
+        var elm = compileDirective('template-' + bindingAttribute + '-ngRepeat');
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+        scope.tabs.push({title:'New Tab', content: 'New tab content...'});
+        scope.$digest();
+        expect(sandboxEl.find('.nav-tabs > li').length).toBe(4);
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+      });
+
+      it('should keep active pane when removing another pane before', function() {
+        var elm = compileDirective('template-' + bindingAttribute + '-ngRepeat');
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+        scope.tabs.shift();
+        scope.$digest();
+        expect(sandboxEl.find('.nav-tabs > li').length).toBe(2);
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(0);
+      });
+
+      it('should keep active pane when removing another pane after', function() {
+        var elm = compileDirective('template-' + bindingAttribute + '-ngRepeat');
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+        scope.tabs.pop();
+        scope.$digest();
+        expect(sandboxEl.find('.nav-tabs > li').length).toBe(2);
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+      });
+
+      it('should keep active pane index when removing selected pane', function() {
+        var elm = compileDirective('template-' + bindingAttribute + '-ngRepeat');
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+        scope.tabs.splice(1, 1);
+        scope.$digest();
+        expect(sandboxEl.find('.nav-tabs > li').length).toBe(2);
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+      });
+
+      it('should select previous pane when removed selected pane is last', function() {
+        var elm = compileDirective('template-' + bindingAttribute + '-ngRepeat', {tab: {active: 2}});
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(2);
+        scope.tabs.pop();
+        scope.$digest();
+        expect(sandboxEl.find('.nav-tabs > li').length).toBe(2);
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+      });
+    }
+
+    describe('ngModel [DEPRECATED]', function() {
+      executeDataBindingTests('ngModel');
     });
 
-    it('should correctly apply view changes to the model', function() {
-      var elm = compileDirective('binding-ngModel');
-      sandboxEl.find('.nav-tabs > li:eq(0) > a').triggerHandler('click');
-      expect(scope.tab.active).toBe(0);
-    });
-
-    it('should keep active pane when adding a new pane after', function() {
-      var elm = compileDirective('template-ngModel-ngRepeat');
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
-      scope.tabs.push({title:'New Tab', content: 'New tab content...'});
-      scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li').length).toBe(4);
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
-    });
-
-    it('should keep active pane when removing another pane before', function() {
-      var elm = compileDirective('template-ngModel-ngRepeat');
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
-      scope.tabs.shift();
-      scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li').length).toBe(2);
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(0);
-    });
-
-    it('should keep active pane when removing another pane after', function() {
-      var elm = compileDirective('template-ngModel-ngRepeat');
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
-      scope.tabs.pop();
-      scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li').length).toBe(2);
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
-    });
-
-    it('should keep active pane index when removing selected pane', function() {
-      var elm = compileDirective('template-ngModel-ngRepeat');
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
-      scope.tabs.splice(1, 1);
-      scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li').length).toBe(2);
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
-    });
-
-    it('should select previous pane when removed selected pane is last', function() {
-      var elm = compileDirective('template-ngModel-ngRepeat', {tab: {active: 2}});
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(2);
-      scope.tabs.pop();
-      scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li').length).toBe(2);
-      expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+    describe('bsActivePane', function() {
+      executeDataBindingTests('bsActivePane');
     });
 
   });
