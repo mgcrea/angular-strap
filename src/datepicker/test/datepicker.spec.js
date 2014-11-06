@@ -46,6 +46,10 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date(1986, 1, 22), onChange: function() {}},
       element: '<input type="text" ng-model="selectedDate" ng-change="onChange()" bs-datepicker>'
     },
+    'markup-ngRequired': {
+      scope: {selectedDate: new Date(2010, 1, 22)},
+      element: '<input type="text" ng-model="selectedDate" ng-required="true" bs-datepicker>'
+    },
     'options-animation': {
       element: '<div class="btn" data-animation="am-flip-x" ng-model="datepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-datepicker></div>'
     },
@@ -338,6 +342,19 @@ describe('datepicker', function() {
       var spy = spyOn(scope, 'onChange').and.callThrough();
       angular.element(sandboxEl.find('.dropdown-menu tbody .btn:eq(1)')[0]).triggerHandler('click');
       expect(spy).toHaveBeenCalled();
+    });
+
+    it('should support ngRequired markup', function() {
+      var elm = compileDirective('markup-ngRequired');
+      var testDate = new Date(2010, 1, 22);
+
+      expect(elm.val()).not.toBe('');
+      expect(scope.selectedDate).toBeDefined();
+      expect(scope.selectedDate).toEqual(testDate);
+
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(testDate.getDate());
+      expect(elm.val()).toBe((testDate.getMonth() + 1) + '/' + testDate.getDate() + '/' + (testDate.getFullYear() + '').substr(2));
     });
 
     // iit('should only build the datepicker once', function() {
