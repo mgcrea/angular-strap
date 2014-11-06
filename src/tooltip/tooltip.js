@@ -306,22 +306,28 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         $tooltip.$applyPlacement = function() {
           if(!tipElement) return;
+          
+          // Determine if we're doing an auto or normal placement
+          var placement = options.placement,
+              autoToken = /\s?auto?\s?/i,
+              autoPlace  = autoToken.test(placement);
+          
+          if (autoPlace) {
+            placement = placement.replace(autoToken, '') || defaults.placement;
+          }
+          
+          // Need to add the position class before we get
+          // the offsets
+          tipElement.addClass(options.placement);
 
           // Get the position of the target element
           // and the height and width of the tooltip so we can center it.
           var elementPosition = getPosition(),
               tipWidth = tipElement.prop('offsetWidth'),
               tipHeight = tipElement.prop('offsetHeight');
-            
-          // Determine if we're doing an auto or normal placement
-          var placement = options.placement,
-              autoToken = /\s?auto?\s?/i,
-              autoPlace  = autoToken.test(placement);
 
           // If we're auto placing, we need to check the positioning
           if (autoPlace) {
-            placement = placement.replace(autoToken, '') || defaults.placement;
-            
             var originalPlacement = placement;
             var container = options.container ? angular.element(document.querySelector(options.container)) : element.parent();
             var containerPosition = getPosition(container);
@@ -346,12 +352,13 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
               
               placement = originalPlacement === 'left' ? 'right' : placement.replace('right', 'left');
             }
+            
+            tipElement.removeClass(originalPlacement).addClass(placement);
           }
-              
+          
           // Get the tooltip's top and left coordinates to center it with this directive.
           var tipPosition = getCalculatedOffset(placement, elementPosition, tipWidth, tipHeight);
           applyPlacementCss(tipPosition.top, tipPosition.left);
-          tipElement.addClass(placement);
         };
 
         $tooltip.$onKeyUp = function(evt) {
