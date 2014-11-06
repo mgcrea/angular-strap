@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.2 - 2014-10-19
+ * @version v2.1.3 - 2014-11-06
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -30,6 +30,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
         // Initial private vars
         var reset = 'affix affix-top affix-bottom',
+            setWidth = false,
             initialAffixTop = 0,
             initialOffsetTop = 0,
             offsetTop = 0,
@@ -54,6 +55,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
           $affix.$parseOffsets();
           initialOffsetTop = dimensions.offset(element[0]).top + initialAffixTop;
+          setWidth = !element[0].style.width;
 
           // Bind events
           targetEl.on('scroll', $affix.checkPosition);
@@ -102,6 +104,9 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
           if(affix === 'top') {
             unpin = null;
             element.css('position', (options.offsetParent) ? '' : 'relative');
+            if(setWidth) {
+              element.css('width', '');
+            }
             element.css('top', '');
           } else if(affix === 'bottom') {
             if (options.offsetUnpin) {
@@ -112,10 +117,16 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
               // Hopefully the browser scrolls pixel by pixel.
               unpin = position.top - scrollTop;
             }
+            if(setWidth) {
+              element.css('width', '');
+            }
             element.css('position', (options.offsetParent) ? '' : 'relative');
             element.css('top', (options.offsetParent) ? '' : ((bodyEl[0].offsetHeight - offsetBottom - elementHeight - initialOffsetTop) + 'px'));
           } else { // affix === 'middle'
             unpin = null;
+            if(setWidth) {
+              element.css('width', element[0].offsetWidth + 'px');
+            }
             element.css('position', 'fixed');
             element.css('top', initialAffixTop + 'px');
           }
