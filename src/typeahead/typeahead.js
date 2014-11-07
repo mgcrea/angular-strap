@@ -21,7 +21,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       comparator: ''
     };
 
-    this.$get = function($window, $rootScope, $tooltip) {
+    this.$get = function($window, $rootScope, $tooltip, $timeout) {
 
       var bodyEl = angular.element($window.document.body);
 
@@ -134,10 +134,14 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var show = $typeahead.show;
         $typeahead.show = function() {
           show();
-          $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
-          if(options.keyboard) {
-            element.on('keydown', $typeahead.$onKeyDown);
-          }
+          // use timeout to hookup the events to prevent 
+          // event bubbling from being processed imediately. 
+          $timeout(function() {
+            $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
+            if(options.keyboard) {
+              element.on('keydown', $typeahead.$onKeyDown);
+            }
+          }, 0, false);
         };
 
         var hide = $typeahead.hide;

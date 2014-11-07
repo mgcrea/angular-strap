@@ -210,10 +210,14 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         var _show = $datepicker.show;
         $datepicker.show = function() {
           _show();
-          $datepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $datepicker.$onMouseDown);
-          if(options.keyboard) {
-            element.on('keydown', $datepicker.$onKeyDown);
-          }
+          // use timeout to hookup the events to prevent 
+          // event bubbling from being processed imediately. 
+          $timeout(function() {
+            $datepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $datepicker.$onMouseDown);
+            if(options.keyboard) {
+              element.on('keydown', $datepicker.$onKeyDown);
+            }
+          }, 0, false);
         };
 
         var _hide = $datepicker.hide;
