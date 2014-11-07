@@ -12,6 +12,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       container: false,
       target: false,
       placement: 'top',
+      placementClassPrefix: '',
       template: 'tooltip/tooltip.tpl.html',
       contentTemplate: false,
       trigger: 'hover focus',
@@ -197,9 +198,15 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // Fetch a cloned element linked from template
           tipElement = $tooltip.$element = tipLinker(scope, function(clonedElement, scope) {});
 
+          var placementClass = options.placement;
+          // Prefix the placement to be used as a CSS class if necessary
+          if (options.placementClassPrefix) {
+            placementClass = options.placementClassPrefix + '-' + placementClass;
+          }
+
           // Set the initial positioning.  Make the tooltip invisible
           // so IE doesn't try to focus on it off screen.
-          tipElement.css({top: '-9999px', left: '-9999px', display: 'block', visibility: 'hidden'}).addClass(options.placement);
+          tipElement.css({top: '-9999px', left: '-9999px', display: 'block', visibility: 'hidden'}).addClass(placementClass);
 
           // Options: animation
           if(options.animation) tipElement.addClass(options.animation);
