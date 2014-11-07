@@ -14,13 +14,13 @@
 $scope.tabs.activeTab = {{ tabs.activeTab }};
   </pre>
   <div class="bs-example" append-source>
-    <!-- ngModel is optional -->
-    <div ng-model="tabs.activeTab" bs-tabs>
+    <!-- bsActivePane is optional -->
+    <div bs-active-pane="tabs.activeTab" bs-tabs>
       <div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>
     </div>
   </div>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
-    <!-- control a tab with ngModel -->
+    <!-- control a tab with bsActivePane binding -->
     <div class="btn-group" ng-model="tabs.activeTab" bs-radio-group>
       <label class="btn btn-default" ng-repeat="tab in tabs">
         <input type="radio" class="btn btn-default" value="{{ $index }}">Tab n°{{ $index + 1 }}
@@ -31,6 +31,12 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
 
   <h2 id="tabs-usage">Usage</h2>
   <p>Append a <code>bs-tabs</code> attribute to any element and several children <code>bs-pane</code> attributes to children elements to enable the directive.</p>
+
+  <div class="callout callout-warning">
+    <h4>ngModel binding</h4>
+    <p>Using <code>ngModel</code> to bind to the active tab pane index is deprecated and may be removed in future versions, due to issues with validation when using the Tabs directive inside a <code>form</code> element.</p>
+    <p>Please use the helper attribute <code>bsActivePane</code> instead.</p>
+  </div>
 
   <div class="callout callout-info">
     <h4>Custom animations</h4>
@@ -116,6 +122,30 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
         </code>
       </pre>
     </div>
+  </div>
+
+  <h3>Helper attributes</h3>
+  <p>Helper attributes can be used together with the directive via data-attributes to support specific functionality. Helper attributes support data binding. To use helper attributes, append the helper attribute name to <code>data-</code>, as in <code>data-bs-active-pane="tabs.activeTab"</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>bsActivePane</td>
+          <td>number</td>
+          <td>
+            <p>Binds to the active tab pane index (zero based).</p>
+            <p>You can use it to set the active tab pane from code or to get the currently active tab pane.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
 </div>
