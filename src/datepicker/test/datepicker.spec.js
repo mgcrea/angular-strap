@@ -326,7 +326,7 @@ describe('datepicker', function() {
       var elm = compileDirective('default');
       elm.val('');
       angular.element(elm[0]).triggerHandler('change');
-      expect(scope.selectedDate).toBeUndefined();
+      expect(scope.selectedDate).toBeNull();
     });
 
     it('should support ngRepeat markup', function() {
@@ -355,6 +355,44 @@ describe('datepicker', function() {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(testDate.getDate());
       expect(elm.val()).toBe((testDate.getMonth() + 1) + '/' + testDate.getDate() + '/' + (testDate.getFullYear() + '').substr(2));
+    });
+
+    it('should consider empty value valid-date with ngRequired markup', function() {
+      var elm = compileDirective('markup-ngRequired');
+
+      // we don't check ng-valid-parse because AngularJs 1.2
+      // doesn't use that class
+
+      expect(elm.hasClass('ng-valid')).toBe(true);
+      expect(elm.hasClass('ng-valid-required')).toBe(true);
+
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('');
+      angular.element(elm[0]).triggerHandler('change');
+
+      // if input is empty, consider valid-date and let
+      // ngRequired invalidate the value
+      expect(elm.hasClass('ng-valid-date')).toBe(true);
+      expect(elm.hasClass('ng-invalid')).toBe(true);
+      expect(elm.hasClass('ng-invalid-required')).toBe(true);
+    });
+
+    it('should consider empty value valid-parse without ngRequired markup', function() {
+      var elm = compileDirective('default');
+
+      // we don't check ng-valid-parse because AngularJs 1.2
+      // doesn't use that class
+
+      expect(elm.hasClass('ng-valid')).toBe(true);
+
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('');
+      angular.element(elm[0]).triggerHandler('change');
+
+      // if input is empty, consider valid-date and let
+      // other validators run
+      expect(elm.hasClass('ng-valid-date')).toBe(true);
+      expect(elm.hasClass('ng-valid')).toBe(true);
     });
 
     // iit('should only build the datepicker once', function() {
