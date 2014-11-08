@@ -242,7 +242,7 @@ describe('timepicker', function() {
       var elm = compileDirective('default');
       elm.val('');
       angular.element(elm[0]).triggerHandler('change');
-      expect(scope.selectedTime).toBeUndefined();
+      expect(scope.selectedTime).toBeNull();
     });
 
     it('should support ngRepeat markup', function() {
@@ -273,6 +273,46 @@ describe('timepicker', function() {
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
 
     });
+
+    it('should consider empty value valid-date with ngRequired markup', function() {
+      var elm = compileDirective('markup-ngRequired');
+
+      // we don't check ng-valid-parse because AngularJs 1.2
+      // doesn't use that class
+
+      expect(elm.hasClass('ng-valid')).toBe(true);
+      expect(elm.hasClass('ng-valid-required')).toBe(true);
+
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('');
+      angular.element(elm[0]).triggerHandler('change');
+
+      // if input is empty, consider valid-date and let
+      // ngRequired invalidate the value
+      expect(elm.hasClass('ng-valid-date')).toBe(true);
+      expect(elm.hasClass('ng-invalid')).toBe(true);
+      expect(elm.hasClass('ng-invalid-required')).toBe(true);
+    });
+
+    it('should consider empty value valid-parse without ngRequired markup', function() {
+      var elm = compileDirective('default');
+
+      // we don't check ng-valid-parse because AngularJs 1.2
+      // doesn't use that class
+
+      expect(elm.hasClass('ng-valid')).toBe(true);
+
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('');
+      angular.element(elm[0]).triggerHandler('change');
+
+      // if input is empty, consider valid-date and let
+      // other validators run
+      expect(elm.hasClass('ng-valid-date')).toBe(true);
+      expect(elm.hasClass('ng-valid')).toBe(true);
+    });
+
+
 
     // iit('should only build the timepicker once', function() {
     //   var elm = compileDirective('value-past');
