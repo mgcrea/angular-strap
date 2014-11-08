@@ -85,6 +85,10 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date(1986, 1, 4)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-M-d" data-strict-format="1" bs-datepicker>'
     },
+    'options-named-dateFormat': {
+      scope: {selectedDate: new Date(1986, 1, 22)},
+      element: '<input type="text" ng-model="selectedDate" data-date-format="mediumDate" bs-datepicker>'
+    },
     'options-minDate': {
       scope: {selectedDate: new Date(1986, 1, 22), minDate: '02/20/86'},
       element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
@@ -138,6 +142,10 @@ describe('datepicker', function() {
     'options-modelDateFormat': {
       scope: {selectedDate: '2014-12-01' },
       element: '<input type="text" ng-model="selectedDate" data-date-format="dd/MM/yyyy" data-model-date-format="yyyy-MM-dd" data-date-type="string" bs-datepicker>'
+    },
+    'options-modelDateFormat-longDate': {
+      scope: {selectedDate: 'December 1, 2014' },
+      element: '<input type="text" ng-model="selectedDate" data-date-format="shortDate" data-model-date-format="longDate" data-date-type="string" bs-datepicker>'
     },
     'options-daysOfWeekDisabled': {
       scope: {selectedDate: new Date(2014, 6, 27)},
@@ -709,6 +717,14 @@ describe('datepicker', function() {
         expect(elm.val()).toBe('Monday February 24, 1986');
       });
 
+      it('should support a custom named dateFormat', function() {
+        var elm = compileDirective('options-named-dateFormat');
+        expect(elm.val()).toBe('Feb 22, 1986');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+        expect(elm.val()).toBe('Feb 24, 1986');
+      });
+
     });
 
     describe('strictFormat', function () {
@@ -910,6 +926,26 @@ describe('datepicker', function() {
       angular.element(elm[0]).triggerHandler('change');
       scope.$digest();
       expect(scope.selectedDate).toBe('2014-11-20');
+    });
+
+
+    it('should support longDate modelDateFormat', function() {
+      var elm = compileDirective('options-modelDateFormat-longDate');
+
+      // Should have the predefined value
+      expect(elm.val()).toBe('12/1/14');
+
+      // Should correctly set the model value if set via the datepicker
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+      expect(elm.val()).toBe('12/24/14');
+      expect(scope.selectedDate).toBe('December 24, 2014');
+
+      // Should correctly set the model if the date is manually typed into the input
+      elm.val('11/20/14');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(scope.selectedDate).toBe('November 20, 2014');
     });
 
   });
