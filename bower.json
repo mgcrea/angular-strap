@@ -39,7 +39,7 @@
     "angular-animate": "^1.2.21",
     "angular-i18n": "^1.2.21",
     "angular-mocks": "^1.2.21",
-    "angular-motion": "^0.3.3"
+    "angular-motion": "^0.3.3",
     "angular-route": "^1.2.21",
     "angular-sanitize": "^1.2.21",
     "angular-scenario": "^1.2.21",
