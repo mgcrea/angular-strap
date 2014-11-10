@@ -127,16 +127,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           }
 
           // Options: trigger
-          var triggers = options.trigger.split(' ');
-          angular.forEach(triggers, function(trigger) {
-            if(trigger === 'click') {
-              element.on('click', $tooltip.toggle);
-            } else if(trigger !== 'manual') {
-              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
-            }
-          });
+          bindTriggerEvents();
 
           // Options: target
           if(options.target) {
@@ -155,22 +146,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         $tooltip.destroy = function() {
 
           // Unbind events
-          var triggers = options.trigger.split(' ');
-          for (var i = triggers.length; i--;) {
-            var trigger = triggers[i];
-            if(trigger === 'click') {
-              element.off('click', $tooltip.toggle);
-            } else if(trigger !== 'manual') {
-              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              nodeName === 'button' && trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
-            }
-          }
-
-          if(options.autoClose && $tooltip.$isShown && tipElement !== null) {
-            $body.off('click');
-            tipElement.off('click');
-          }
+          unbindTriggerEvents();
 
           // Remove element
           destroyTipElement();
@@ -236,26 +212,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.keyboard) {
             if(options.trigger !== 'focus') {
               $tooltip.focus();
-              tipElement.on('keyup', $tooltip.$onKeyUp);
-            } else {
-              element.on('keyup', $tooltip.$onFocusKeyUp);
             }
+            bindKeyboardEvents();
           }
 
           if(options.autoClose) {
-            // use timeout to hookup the events to prevent 
-            // event bubbling from being processed imediately. 
-            $timeout(function() {
-              // Stop propagation when clicking inside tooltip
-              tipElement.on('click', function(event) {
-                event.stopPropagation();
-              });
-
-              // Hide when clicking outside tooltip
-              $body.on('click', function() {
-                $tooltip.hide();
-              });
-            }, 0, false);
+            bindAutoCloseEvents();
           }
 
         };
@@ -298,14 +260,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           // Unbind events
           if(options.keyboard && tipElement !== null) {
-            tipElement.off('keyup', $tooltip.$onKeyUp);
+            unbindKeyboardEvents();
           }
 
           if(options.autoClose && tipElement !== null) {
-            $body.off('click');
-            tipElement.off('click');
+            unbindAutoCloseEvents();
           }
-
         };
 
         function leaveAnimateCallback() {
@@ -373,6 +333,77 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // Some browsers do not auto-focus buttons (eg. Safari)
           $tooltip.$isShown ? element[0].blur() : element[0].focus();
         };
+
+        // bind/unbind events
+        function bindTriggerEvents() {
+          var triggers = options.trigger.split(' ');
+          angular.forEach(triggers, function(trigger) {
+            if(trigger === 'click') {
+              element.on('click', $tooltip.toggle);
+            } else if(trigger !== 'manual') {
+              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
+              nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            }
+          });
+        }
+
+        function unbindTriggerEvents() {
+          var triggers = options.trigger.split(' ');
+          for (var i = triggers.length; i--;) {
+            var trigger = triggers[i];
+            if(trigger === 'click') {
+              element.off('click', $tooltip.toggle);
+            } else if(trigger !== 'manual') {
+              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
+              nodeName === 'button' && trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            }
+          }
+        }
+
+        function bindKeyboardEvents() {
+          if(options.trigger !== 'focus') {
+            tipElement.on('keyup', $tooltip.$onKeyUp);
+          } else {
+            element.on('keyup', $tooltip.$onFocusKeyUp);
+          }
+        }
+
+        function unbindKeyboardEvents() {
+          if(options.trigger !== 'focus') {
+            tipElement.off('keyup', $tooltip.$onKeyUp);
+          } else {
+            element.off('keyup', $tooltip.$onFocusKeyUp);
+          }
+        }
+
+        var _autoCloseEventsBinded = false;
+        function bindAutoCloseEvents() {
+          // use timeout to hookup the events to prevent 
+          // event bubbling from being processed imediately. 
+          $timeout(function() {
+            // Stop propagation when clicking inside tooltip
+            tipElement.on('click', stopEventPropagation);
+
+            // Hide when clicking outside tooltip
+            $body.on('click', $tooltip.hide);
+
+            _autoCloseEventsBinded = true;
+          }, 0, false);
+        }
+
+        function unbindAutoCloseEvents() {
+          if (_autoCloseEventsBinded) {            
+            tipElement.off('click', stopEventPropagation);
+            $body.off('click', $tooltip.hide);
+            _autoCloseEventsBinded = false;
+          }
+        }
+
+        function stopEventPropagation(event) {
+          event.stopPropagation();
+        }
 
         // Private methods
 
@@ -445,12 +476,22 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // Cancel pending callbacks
           clearTimeout(timeout);
 
-          if (tipScope) {
+          if($tooltip.$isShown && tipElement !== null) {
+            if(options.autoClose) {
+              unbindAutoCloseEvents();
+            }
+
+            if(options.keyboard) {
+              unbindKeyboardEvents();
+            }
+          }
+
+          if(tipScope) {
             tipScope.$destroy();
             tipScope = null;
           }
 
-          if (tipElement) {
+          if(tipElement) {
             tipElement.remove();
             tipElement = $tooltip.$element = null;
           }
