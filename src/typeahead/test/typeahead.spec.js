@@ -2,17 +2,18 @@
 
 describe('typeahead', function () {
 
-  var $compile, $templateCache, $typeahead, scope, sandboxEl;
+  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.typeahead'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $typeahead = _$typeahead_;
+    $q = _$q_;
   }));
 
   afterEach(function() {
@@ -52,6 +53,10 @@ describe('typeahead', function () {
     'markup-objectValue-custom': {
       scope: {selectedIcon: {}, icons: [{val: 'gear', fr_FR: '<i class="fa fa-gear"></i> Gear'}, {val: 'globe', fr_FR: '<i class="fa fa-globe"></i> Globe'}, {val: 'heart', fr_FR: '<i class="fa fa-heart"></i> Heart'}, {val: 'camera', fr_FR: '<i class="fa fa-camera"></i> Camera'}]},
       element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon as icon[\'fr_FR\'] for icon in icons" bs-typeahead>'
+    },
+    'markup-renew-items': {
+      scope: {selectedIcon: {}, icons: function(){return [{alt: 'Gear'}, {alt: 'Globe'}, {alt: 'Heart'}, {alt: 'Camera'}];}},
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" ng-options="icon as icon.alt for icon in icons()" bs-typeahead>'
     },
     'options-animation': {
       element: '<input type="text" data-animation="am-flip-x" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
@@ -212,11 +217,31 @@ describe('typeahead', function () {
       expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[1].fr_FR).text().trim());
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[1].fr_FR);
-      elm.val('')
+      elm.val('');
       angular.element(elm[0]).triggerHandler('change');
       angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
       expect(scope.selectedIcon).toBe(scope.icons[0]);
       expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[0].fr_FR).text().trim());
+    });
+
+    it('should support custom label with renewed source', function() {
+      var elem = compileDirective('markup-renew-items');
+      var target = scope.icons()[0];
+
+      elem.val('');
+      angular.element(elem[0]).triggerHandler('focus');
+      scope.$digest();
+      expect(sandboxEl.find('.dropdown-menu li a').length).toBe(4);
+
+      elem.val(target.alt);
+      angular.element(elem[0]).triggerHandler('change');
+      scope.$digest();
+      expect(elem.val()).toBe(target.alt);
+
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      scope.$digest();
+
+      expect(elem.val()).toBe(target.alt);
     });
 
     it('should support numeric values', function() {
