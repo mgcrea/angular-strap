@@ -1,20 +1,22 @@
+/* global countScopes */
 'use strict';
 
 describe('dropdown', function () {
 
-  var $compile, $templateCache, scope, sandboxEl, $animate;
+  var $compile, $templateCache, scope, sandboxEl, $animate, $timeout;
 
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.dropdown'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timeout_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $animate = _$animate_;
+    $timeout = _$timeout_;
   }));
 
   afterEach(function() {
@@ -154,6 +156,16 @@ describe('dropdown', function () {
       scope.$destroy();
       scope = originalScope;
       expect(countScopes(scope, 0)).toBe(scopeCount);
+    });
+
+    it('should remove body click handlers when the directive scope is destroyed', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('click');
+      $timeout.flush();
+      expect(sandboxEl.children('.dropdown-menu').length).toBe(1);
+      scope.$destroy();
+      expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
+      expect(function() { $('body').triggerHandler('click'); }).not.toThrow();
     });
   });
 
