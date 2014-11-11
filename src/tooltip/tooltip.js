@@ -198,8 +198,19 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if (!options.bsEnabled) return;
 
           scope.$emit(options.prefixEvent + '.show.before', $tooltip);
-          var parent = options.container ? tipContainer : null;
-          var after = options.container ? null : element;
+          var parent, after;
+          if (options.container) {
+            parent = tipContainer;
+            if (tipContainer[0].lastChild) {
+              after = angular.element(tipContainer[0].lastChild);
+            } else {
+              after = null;
+            }
+          } else {
+            parent = null;
+            after = element;
+          }
+
 
           // Hide any existing tipElement
           if(tipElement) destroyTipElement();
@@ -243,8 +254,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           }
 
           if(options.autoClose) {
-            // use timeout to hookup the events to prevent 
-            // event bubbling from being processed imediately. 
+            // use timeout to hookup the events to prevent
+            // event bubbling from being processed imediately.
             $timeout(function() {
               // Stop propagation when clicking inside tooltip
               tipElement.on('click', function(event) {
