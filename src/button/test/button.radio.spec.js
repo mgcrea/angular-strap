@@ -49,6 +49,13 @@ describe('bs-radio', function () {
                '  <label class="btn"><input type="radio" ng-model="radio.value" value="{{ falseValue }}" bs-radio>No</label>' +
                '</div>'
     },
+    'radio-ng-value': {
+      scope: {trueValue: 'yes', falseValue: 'no'},
+      element: '<div class="btn-group">' +
+               '  <label class="btn"><input type="radio" ng-model="radio.value" ng-value="trueValue" bs-radio>Yes</label>' +
+               '  <label class="btn"><input type="radio" ng-model="radio.value" ng-value="falseValue" bs-radio>No</label>' +
+               '</div>'
+    },
     'radio-button-markup': {
       element: '<div class="btn-group">' +
                '  <button type="button" class="btn" ng-model="radio.value" value="left" bs-radio>Left</button>' +
@@ -148,6 +155,50 @@ describe('bs-radio', function () {
       // expect(firstChild.children('input').is(':checked')).toBeTruthy();
       expect(secondChild).not.toHaveClass('active');
       // expect(secondChild.children('input').is(':checked')).toBeFalsy();
+
+      // Change true value
+      scope.trueValue = 'completely different';
+      scope.$digest();
+      $$rAF.flush();
+
+      expect(firstChild).not.toHaveClass('active');
+      expect(secondChild).not.toHaveClass('active');
+
+      // Match radio value to new true value
+      scope.radio.value = scope.trueValue;
+      scope.$digest();
+      $$rAF.flush();
+
+      expect(firstChild).toHaveClass('active');
+      expect(secondChild).not.toHaveClass('active');
+    });
+
+    it('with ng-value interpolated values', function () {
+      var element = compileDirective('radio-ng-value', {radio: {value: 'no'}});
+      var firstChild = element.children().eq(0), secondChild = element.children().eq(1);
+      expect(firstChild).not.toHaveClass('active');
+      expect(secondChild).toHaveClass('active');
+      scope.radio.value = 'yes';
+      scope.$digest();
+      $$rAF.flush();
+      expect(firstChild).toHaveClass('active');
+      expect(secondChild).not.toHaveClass('active');
+
+      // Change true value
+      scope.trueValue = 'completely different';
+      scope.$digest();
+      $$rAF.flush();
+
+      expect(firstChild).not.toHaveClass('active');
+      expect(secondChild).not.toHaveClass('active');
+
+      // Match radio value to new true value
+      scope.radio.value = scope.trueValue;
+      scope.$digest();
+      $$rAF.flush();
+
+      expect(firstChild).toHaveClass('active');
+      expect(secondChild).not.toHaveClass('active');
     });
 
     // @info dropped direct support in 1.2+
