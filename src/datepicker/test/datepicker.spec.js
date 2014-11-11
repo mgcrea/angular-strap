@@ -232,6 +232,34 @@ describe('datepicker', function() {
       expect(elm.val()).toBe('2/22/86');
     });
 
+    it('should correctly change view month when selecting next month button', function() {
+      var elm = compileDirective('default');
+      // set date to last day of January
+      scope.selectedDate = new Date(2014, 0, 31);
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('focus');
+
+      for (var nextMonth = 1; nextMonth < 12; nextMonth++) {
+        // should show next month view when selecting next month button
+        angular.element(sandboxEl.find('.dropdown-menu thead button:eq(2)')[0]).triggerHandler('click');
+        expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(new Date(2014, nextMonth, 1), 'MMMM yyyy'));
+      }
+    });
+
+    it('should correctly change view month when selecting previous month button', function() {
+      var elm = compileDirective('default');
+      // set date to last day of December
+      scope.selectedDate = new Date(2014, 11, 31);
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('focus');
+
+      for (var previousMonth = 10; previousMonth > -1; previousMonth--) {
+        // should show previous month view when selecting previous month button
+        angular.element(sandboxEl.find('.dropdown-menu thead button:eq(0)')[0]).triggerHandler('click');
+        expect(sandboxEl.find('.dropdown-menu thead button:eq(1)').text()).toBe(dateFilter(new Date(2014, previousMonth, 1), 'MMMM yyyy'));
+      }
+    });
+
     it('should correctly navigate to upper month view', function() {
       var elm = compileDirective('default');
       var date = today.getDate(), month = today.getMonth();
