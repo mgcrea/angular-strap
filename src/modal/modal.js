@@ -121,13 +121,20 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
             return;
           }
-          var parent;
+          var parent, after;
           if(angular.isElement(options.container)) {
             parent = options.container;
+            after = options.container[0].lastChild;
           } else {
-            parent = options.container ? findElement(options.container) : null;
+            if (options.container) {
+              parent = findElement(options.container);
+              after = parent.lastChild;
+            } else {
+              parent = null;
+              after = options.element;
+            }
           }
-          var after = options.container ? null : options.element;
+
 
           // Fetch a cloned element linked from template
           modalElement = $modal.$element = modalLinker(scope, function(clonedElement, scope) {});
