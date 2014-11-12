@@ -49,6 +49,10 @@ describe('select', function () {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
+    'options-multiple-required': {
+      scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" required bs-select></button>'
+    },
     'options-maxLength': {
       scope: {selectedIcons: ['Globe', 'Heart', 'Camera'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" data-max-length="2" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
@@ -198,14 +202,21 @@ describe('select', function () {
         var elm = compileDirective('options-multiple-all-none-buttons');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li > div > button').length).toBe(2);
-        
+
         expect(angular.element(sandboxEl.find('.dropdown-menu li > div > button')[0]).triggerHandler('click'));
         expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(4);
-        
+
         expect(angular.element(sandboxEl.find('.dropdown-menu li > div > button')[1]).triggerHandler('click'));
         expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(0);
       });
 
+      it('should set ng-invalid-required class after deselecting all items', function() {
+        var elm = compileDirective('options-multiple-required');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(elm.hasClass('ng-invalid-required')).toBe(false);
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        expect(elm.hasClass('ng-invalid-required')).toBe(true);
+      });
     });
 
     describe('maxLength', function () {
