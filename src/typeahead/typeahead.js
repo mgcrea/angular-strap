@@ -146,7 +146,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         var hide = $typeahead.hide;
         $typeahead.hide = function() {
-          $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
+          $typeahead.$element && $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
           if(options.keyboard) {
             element.off('keydown', $typeahead.$onKeyDown);
           }
