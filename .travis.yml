@@ -2,6 +2,11 @@ language: node_js
 node_js:
   - "0.10"
 
+env:
+  global:
+    - SAUCE_USERNAME=mgcrea
+    - SAUCE_ACCESS_KEY=ad4bb656-dfad-4a10-8c10-0a0d8b5a1ead
+
 before_script:
   - export DISPLAY=:99.0
   - export PHANTOMJS_BIN=/usr/local/phantomjs/bin/phantomjs
