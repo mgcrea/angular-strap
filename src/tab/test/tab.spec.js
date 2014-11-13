@@ -96,6 +96,11 @@ describe('tab', function () {
       expect(sandboxEl.find('.tab-content > .tab-pane:eq(0)').text()).toBe('content-1');
     });
 
+    it('should have track by $index on the nav repeater', function() {
+      var elm = compileDirective('default');
+      expect(sandboxEl.find('.nav-tabs > li').first().attr('ng-repeat')).toContain('track by $index');
+    });
+
     it('should navigate between panes on click', function() {
       var elm = compileDirective('default');
       expect(sandboxEl.find('.nav-tabs > li.active').text()).toBe('title-1');
@@ -118,6 +123,11 @@ describe('tab', function () {
       expect(sandboxEl.find('.nav-tabs > li:eq(0)').text()).toBe(scope.tabs[0].title);
       expect(sandboxEl.find('.tab-content > .tab-pane').length).toBe(scope.tabs.length);
       expect(sandboxEl.find('.tab-content > .tab-pane:eq(0)').text()).toBe(scope.tabs[0].content);
+    });
+
+    it('should have track by $index on the nav repeater', function() {
+      var elm = compileDirective('default');
+      expect(sandboxEl.find('.nav-tabs > li').first().attr('ng-repeat')).toContain('track by $index');
     });
 
     it('should navigate between panes on click', function() {
