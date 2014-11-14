@@ -184,6 +184,23 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         return time;
       };
 
+      /* Handle switch to/from daylight saving.
+      * Hours may be non-zero on daylight saving cut-over:
+      * > 12 when midnight changeover, but then cannot generate
+      * midnight datetime, so jump to 1AM, otherwise reset.
+      * @param  date  (Date) the date to check
+      * @return  (Date) the corrected date
+      *
+      * __ copied from jquery ui datepicker __
+      */
+      $dateParser.daylightSavingAdjust = function(date) {
+        if (!date) {
+          return null;
+        }
+        date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
+        return date;
+      };
+
       // Private functions
 
       function setMapForFormat(format) {
