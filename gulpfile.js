@@ -381,6 +381,7 @@ gulp.task('views:pages', function() {
 //
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
+var testTimezone = '';
 gulp.task('jshint', function() {
   gulp.src(src.scripts, {cwd: src.cwd})
     .pipe(changed(src.scripts))
@@ -389,6 +390,13 @@ gulp.task('jshint', function() {
 });
 var karma = require('karma').server;
 gulp.task('karma:unit', ['templates:test'], function() {
+  // if testTimezone has value, set the environment timezone
+  // before starting karma, so PhantomJS picks up the
+  // timezone setting
+  if (testTimezone) {
+    console.log('Setting timezone to => [' + testTimezone + ']');
+    process.env.TZ = testTimezone;
+  }
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -456,6 +464,14 @@ var runSequence = require('run-sequence');
 gulp.task('default', ['dist']);
 gulp.task('build', ['dist']);
 gulp.task('test', function() {
+  runSequence('clean:test', 'templates:test', ['jshint', 'karma:unit']);
+});
+gulp.task('test:timezone', function() {
+  // parse command line argument for optional timezone
+  // invoke like this:
+  //     gulp test:timezone --Europe/Paris
+  var timezone = process.argv[3] || '';
+  testTimezone = timezone.replace(/-/g, '');
   runSequence('clean:test', 'templates:test', ['jshint', 'karma:unit']);
 });
 gulp.task('test:server', function() {

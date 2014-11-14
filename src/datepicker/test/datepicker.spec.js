@@ -436,6 +436,49 @@ describe('datepicker', function() {
     //   angular.element(elm[0]).triggerHandler('focus');
     // });
 
+    describe('for each month of the year', function() {
+      var elm;
+      var firstDay, previousDay;
+      var monthToCheck = 0;
+
+      beforeEach(function() {
+        jasmine.addMatchers({
+          toBeNextDayOrFirstDay: function(util, customEqualityTesters) {
+            return {
+              compare: function(actual, expected) {
+                var result = {};
+                var previousDay = expected;
+                result.pass = actual === (previousDay + 1) || actual === 1;
+                result.message = "Expected " + actual + " to be either " + (previousDay + 1) + " or 1";
+                return result;
+              }
+            };
+          }
+        });
+
+        elm = compileDirective('default', { selectedDate: new Date(2012, monthToCheck, 1) });
+        angular.element(elm[0]).triggerHandler('focus');
+        firstDay = sandboxEl.find('.dropdown-menu tbody .btn:eq(0)').text() * 1;
+        previousDay = firstDay - 1;
+      });
+
+      afterEach(function() {
+        monthToCheck++;
+      });
+
+      for (var month = 0; month < 12; month++) {
+        it('should correctly order month days in inner content', function() {
+          // 6 rows (weeks) * 7 columns (days)
+          for(var index = 0; index < 7 * 6; index++) {
+            var indexDay = sandboxEl.find('.dropdown-menu tbody td .btn:eq(' + index + ')').text() * 1;
+            expect(indexDay).toBeNextDayOrFirstDay(previousDay);
+            previousDay = indexDay;
+          }
+        });
+      }
+
+    });
+
   });
 
   describe('resource allocation', function() {
