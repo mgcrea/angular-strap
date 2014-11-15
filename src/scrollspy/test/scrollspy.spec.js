@@ -64,6 +64,13 @@ describe('affix', function () {
       expect(1).toBe(1);
     });
 
+    it('should not throw when clicking on scroll element', function() {
+      // IE 9 throws an error if we use 'this' instead of '$scrollspy'
+      // in the scroll element click handler
+      var elm = compileDirective('default');
+      expect(function() { angular.element(window).triggerHandler('click'); }).not.toThrow();
+    });
+
   });
 
 });
