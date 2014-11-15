@@ -93,6 +93,11 @@ module.exports = function(config) {
     // - IE (only Windows)
     browsers: ['Chrome'],
 
+    // Timeouts for SauceLabs
+    browserDisconnectTimeout: 10000, // default 2000
+    browserDisconnectTolerance: 2, // default 0
+    browserNoActivityTimeout: 30 * 1000, //default 10000
+
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
     singleRun: true,
