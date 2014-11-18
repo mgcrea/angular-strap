@@ -1135,7 +1135,8 @@ describe('datepicker', function() {
         select: function (date, keep) {},
         $options: {
           startWeek: 0,
-          daysOfWeekDisabled: ''
+          daysOfWeekDisabled: '',
+          dateFormat: 'shortDate'
         },
         $date: null
       };
