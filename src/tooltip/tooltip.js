@@ -31,6 +31,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       var isTouch = 'createTouch' in $window.document;
       var htmlReplaceRegExp = /ng-bind="/ig;
       var $body = angular.element($window.document);
+      var templates = {};
 
       function TooltipFactory(element, config) {
 
@@ -519,7 +520,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       }
 
       function fetchTemplate(template) {
-        return $q.when($templateCache.get(template) || $http.get(template))
+        if( templates[template] === undefined )
+          templates[template] = $q.when($templateCache.get(template) || $http.get(template));
+
+        return templates[template]
         .then(function(res) {
           if(angular.isObject(res)) {
             $templateCache.put(template, res.data);
