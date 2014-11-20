@@ -8,7 +8,6 @@ describe('tooltip', function() {
 
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
-  beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.tooltip'));
 
   beforeEach(inject(function($injector) {
@@ -20,9 +19,9 @@ describe('tooltip', function() {
     $httpBackend = $injector.get('$httpBackend');
     $tooltip = $injector.get('$tooltip');
 
-    scope = $rootScope.$new();
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
+    scope = $rootScope.$new();
   }));
 
   afterEach(function() {
@@ -73,8 +72,7 @@ describe('tooltip', function() {
       element: '<a data-trigger="click" bs-tooltip="tooltip">click me</a>'
     },
     'options-html': {
-      scope: {tooltip: {title: 'Hello Tooltip<br>This is a multiline message!'}},
-      element: '<a data-html="1" bs-tooltip="tooltip">hover me</a>'
+      element: '<a data-html="1" title="Hello Tooltip<br>This is a multiline message!" bs-tooltip>hover me</a>'
     },
     'options-template': {
       scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},
@@ -677,7 +675,7 @@ describe('tooltip', function() {
       it('should correctly compile inner content', function() {
         var elm = compileDirective('options-html');
         angular.element(elm[0]).triggerHandler('mouseenter');
-        expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.tooltip.title);
+        expect(sandboxEl.find('.tooltip-inner').html()).toBe('Hello Tooltip<br>This is a multiline message!');
       });
 
     });
@@ -694,6 +692,15 @@ describe('tooltip', function() {
       it('should request custom template via $http', function() {
         $httpBackend.expectGET('custom').respond(200, '<div class="tooltip"><div class="tooltip-inner">foo: {{title}}</div></div>');
         var elm = compileDirective('options-template');
+        $httpBackend.flush();
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);
+      });
+
+      it('should request custom template via $http only once', function() {
+        $httpBackend.expectGET('custom').respond(200, '<div class="tooltip"><div class="tooltip-inner">foo: {{title}}</div></div>');
+        var elm = compileDirective('options-template');
+        var elmBis = compileDirective('options-template');
         $httpBackend.flush();
         angular.element(elm[0]).triggerHandler('mouseenter');
         expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);

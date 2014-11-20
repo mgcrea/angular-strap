@@ -25,7 +25,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       bsEnabled: true
     };
 
-    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, dimensions, $$rAF, $timeout) {
+    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $sce, dimensions, $$rAF, $timeout) {
 
       var trim = String.prototype.trim;
       var isTouch = 'createTouch' in $window.document;
@@ -48,7 +48,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Support scope as string options
         if(options.title) {
-          $tooltip.$scope.title = options.title;
+          scope.title = $sce.trustAsHtml(options.title);
         }
 
         // Provide scope helpers
@@ -211,7 +211,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(promise && promise.then) promise.then(enterAnimateCallback);
 
           $tooltip.$isShown = scope.$isShown = true;
-          scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
+          safeDigest(scope);
           $$rAF(function () {
             $tooltip.$applyPlacement();
 
@@ -267,7 +267,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(promise && promise.then) promise.then(leaveAnimateCallback);
 
           $tooltip.$isShown = scope.$isShown = false;
-          scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
+          safeDigest(scope);
 
           // Unbind events
           if(options.keyboard && tipElement !== null) {
@@ -514,12 +514,18 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
       // Helper functions
 
+      function safeDigest(scope) {
+        scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
+      }
+
       function findElement(query, element) {
         return angular.element((element || document).querySelectorAll(query));
       }
 
+      var fetchPromises = {};
       function fetchTemplate(template) {
-        return $q.when($templateCache.get(template) || $http.get(template))
+        if(fetchPromises[template]) return fetchPromises[template];
+        fetchPromises[template] = $q.when($templateCache.get(template) || $http.get(template))
         .then(function(res) {
           if(angular.isObject(res)) {
             $templateCache.put(template, res.data);
@@ -527,6 +533,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           }
           return res;
         });
+        return fetchPromises[template];
       }
 
       return TooltipFactory;

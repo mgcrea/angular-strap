@@ -3,21 +3,24 @@
 describe('modal', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $compile, $templateCache, $modal, $animate, $rootScope, scope;
+  var $rootScope, $compile, $templateCache, $$rAF, $animate, $httpBackend, $modal, scope;
 
-  beforeEach(module('ngSanitize'));
+  beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('mgcrea.ngStrap.modal'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$modal_, _$animate_) {
-    $rootScope = _$rootScope_;
-    scope = _$rootScope_.$new();
+  beforeEach(inject(function($injector) {
+    $rootScope = $injector.get('$rootScope');
+    $compile = $injector.get('$compile');
+    $templateCache = $injector.get('$templateCache');
+    $$rAF = $injector.get('$$rAF');
+    $animate = $injector.get('$animate');
+    $httpBackend = $injector.get('$httpBackend');
+    $modal = $injector.get('$modal');
+
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
-    $compile = _$compile_;
-    $templateCache = _$templateCache_;
-    $modal = _$modal_;
-    $animate = _$animate_;
+    scope = $rootScope.$new();
   }));
 
   afterEach(function() {
@@ -254,7 +257,7 @@ describe('modal', function() {
       expect(emit).toHaveBeenCalledWith('alert.hide', myModal);
     });
 
-    it("should can cancel show on show.before event", function() {
+    it('should can cancel show on show.before event', function() {
       $rootScope.$on('modal.show.before', function(e) {
         e.preventDefault();
       });
@@ -266,7 +269,7 @@ describe('modal', function() {
       $animate.triggerCallbacks();
     });
 
-    it("should can cancel hide on hide.before event", function() {
+    it('should can cancel hide on hide.before event', function() {
       $rootScope.$on('modal.hide.before', function(e) {
         e.preventDefault();
       });
@@ -355,6 +358,23 @@ describe('modal', function() {
       it('should support custom template', function() {
         $templateCache.put('custom', '<div class="modal"><div class="modal-inner">foo: {{title}}</div></div>');
         var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-inner').text()).toBe('foo: ' + scope.modal.title);
+      });
+
+      it('should request custom template via $http', function() {
+        $httpBackend.expectGET('custom').respond(200,  '<div class="modal"><div class="modal-inner">foo: {{title}}</div></div>');
+        var elm = compileDirective('options-template');
+        $httpBackend.flush();
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-inner').text()).toBe('foo: ' + scope.modal.title);
+      });
+
+      it('should request custom template via $http only once', function() {
+        $httpBackend.expectGET('custom').respond(200,  '<div class="modal"><div class="modal-inner">foo: {{title}}</div></div>');
+        var elm = compileDirective('options-template');
+        var elmBis = compileDirective('options-template');
+        $httpBackend.flush();
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.find('.modal-inner').text()).toBe('foo: ' + scope.modal.title);
       });
