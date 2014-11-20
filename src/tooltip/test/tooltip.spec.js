@@ -1,9 +1,9 @@
 'use strict';
 
-ddescribe('tooltip', function() {
+describe('tooltip', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $rootScope, $compile, $templateCache, $$rAF, $animate, $tooltip, scope;
+  var $rootScope, $compile, $templateCache, $$rAF, $animate, $httpBackend, $tooltip, scope;
 
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
@@ -16,6 +16,7 @@ ddescribe('tooltip', function() {
     $templateCache = $injector.get('$templateCache');
     $$rAF = $injector.get('$$rAF');
     $animate = $injector.get('$animate');
+    $httpBackend = $injector.get('$httpBackend');
     $tooltip = $injector.get('$tooltip');
 
     scope = $rootScope.$new();
@@ -320,27 +321,27 @@ ddescribe('tooltip', function() {
     });
 
     it('should support string values', function() {
-      var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: "true" });
+      var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: 'true' });
       angular.element(elm[0]).triggerHandler('mouseenter');
       $animate.triggerCallbacks();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
       angular.element(elm[0]).triggerHandler('mouseleave');
-      scope.isEnabled = "false";
+      scope.isEnabled = 'false';
       scope.$digest();
       angular.element(elm[0]).triggerHandler('mouseenter');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseleave');
-      scope.isEnabled = "1";
+      scope.isEnabled = '1';
       scope.$digest();
       angular.element(elm[0]).triggerHandler('mouseenter');
       expect(sandboxEl.children('.tooltip').length).toBe(1);
       angular.element(elm[0]).triggerHandler('mouseleave');
-      scope.isEnabled = "0";
+      scope.isEnabled = '0';
       scope.$digest();
       angular.element(elm[0]).triggerHandler('mouseenter');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseleave');
-      scope.isEnabled = "tooltip";
+      scope.isEnabled = 'tooltip';
       scope.$digest();
       angular.element(elm[0]).triggerHandler('mouseenter');
       expect(sandboxEl.children('.tooltip').length).toBe(1);
@@ -685,6 +686,14 @@ ddescribe('tooltip', function() {
       it('should support custom template', function() {
         $templateCache.put('custom', '<div class="tooltip"><div class="tooltip-inner">foo: {{title}}</div></div>');
         var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);
+      });
+
+      it('should request custom template via $http', function() {
+        $httpBackend.expectGET('custom').respond(200, '<div class="tooltip"><div class="tooltip-inner">foo: {{title}}</div></div>');
+        var elm = compileDirective('options-template');
+        $httpBackend.flush();
         angular.element(elm[0]).triggerHandler('mouseenter');
         expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);
       });
