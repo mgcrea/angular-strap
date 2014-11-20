@@ -27,6 +27,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
       var htmlReplaceRegExp = /ng-bind="/ig;
+      var templates = {};
 
       function ModalFactory(config) {
 
@@ -259,7 +260,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       }
 
       function fetchTemplate(template) {
-        return $q.when($templateCache.get(template) || $http.get(template))
+        if( templates[template] === undefined )
+          templates[template] = $q.when($templateCache.get(template) || $http.get(template));
+
+        return templates[template]
         .then(function(res) {
           if(angular.isObject(res)) {
             $templateCache.put(template, res.data);
