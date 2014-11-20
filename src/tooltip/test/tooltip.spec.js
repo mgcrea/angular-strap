@@ -1,4 +1,5 @@
 'use strict';
+/* global countScopes */
 
 describe('tooltip', function() {
 
@@ -752,18 +753,3 @@ describe('tooltip', function() {
   });
 
 });
-
-
-// https://github.com/angular-ui/bootstrap/blob/master/src/tooltip/test/tooltip.spec.js
-// iit('test-cache', function() {
-//   var elm = compileDirective('default');
-//   var tooltipScope = scope.$$childTail;
-//   console.warn(scope.$id);
-//   scope.$destroy();
-//   console.warn(tooltipScope.$id);
-//   angular.forEach(angular.element.cache, function(item) {
-//     if (item.data && item.data.$scope === tooltipScope) {
-//       console.warn('in');
-//     }
-//   });
-// })
