@@ -1,24 +1,26 @@
 'use strict';
 
-describe('tooltip', function() {
+ddescribe('tooltip', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $compile, $templateCache, $$rAF, $animate, $tooltip, scope;
+  var $rootScope, $compile, $templateCache, $$rAF, $animate, $tooltip, scope;
 
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.tooltip'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$$rAF_, _$animate_, _$tooltip_) {
-    scope = _$rootScope_.$new();
-    $$rAF = _$$rAF_;
-    $animate = _$animate_;
-    $compile = _$compile_;
-    $templateCache = _$templateCache_;
+  beforeEach(inject(function($injector) {
+    $rootScope = $injector.get('$rootScope');
+    $compile = $injector.get('$compile');
+    $templateCache = $injector.get('$templateCache');
+    $$rAF = $injector.get('$$rAF');
+    $animate = $injector.get('$animate');
+    $tooltip = $injector.get('$tooltip');
+
+    scope = $rootScope.$new();
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
-    $tooltip = _$tooltip_;
   }));
 
   afterEach(function() {
