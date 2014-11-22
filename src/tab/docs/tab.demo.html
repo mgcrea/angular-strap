@@ -38,11 +38,14 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
     <p>Please use the helper attribute <code>bsActivePane</code> instead.</p>
   </div>
 
-  <div class="callout callout-info">
+  <div class="callout callout-info row">
     <h4>Custom animations</h4>
-    <p>Pane animation is done with the <code>active</code> class and requires custom CSS.</p>
-    <pre class="bs-exemple-code">
-      <code class="css" highlight-block>
+    <p>Pane animation is done with the <code>active</code> class and requires custom CSS. You can change the default <code>am-fade</code> animation class by including the <code>animation</code> option.</p>
+    <p>Here is a sample definition for the default <code>am-fade</code> animation class:</p>
+    <div class="col-md-5">
+      <p>SASS:</p>
+      <pre class="bs-exemple-code">
+        <code class="css" highlight-block>
 .tab-pane.am-fade {
   animation-duration: .3s;
   animation-timing-function: ease;
@@ -56,8 +59,30 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
     animation-name: fadeIn;
   }
 }
-      </code>
-    </pre>
+        </code>
+      </pre>
+    </div>
+    <div class="col-md-5 col-md-offset-1">
+      <p>CSS:</p>
+      <pre class="bs-exemple-code">
+        <code class="css" highlight-block>
+.tab-pane.am-fade {
+  animation-duration: .3s;
+  animation-timing-function: ease;
+  animation-fill-mode: backwards;
+  opacity: 1;
+}
+
+.tab-pane.am-fade.active-remove {
+  display: none !important;
+}
+
+.tab-pane.am-fade.active-add {
+  animation-name: fadeIn;
+}
+        </code>
+      </pre>
+    </div>
   </div>
 
   <h3>Options</h3>
@@ -78,7 +103,7 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
           <td>animation</td>
           <td>string</td>
           <td>am-fade</td>
-          <td>apply a CSS animation to the popover with <code>ngAnimate</code></td>
+          <td>apply a CSS animation to tab panes with <code>ngAnimate</code></td>
         </tr>
         <tr>
           <td>template</td>
