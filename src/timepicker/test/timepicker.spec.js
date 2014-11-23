@@ -549,14 +549,68 @@ describe('timepicker', function() {
     describe('keyboard', function() {
 
       it('should support keyboard navigation', function() {
-        var elm = compileDirective('default');
+        var elm = compileDirective('default', { selectedTime: new Date(2014, 10, 23, 8, 30) });
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         $animate.triggerCallbacks();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
-        // dump(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text());
-        //@TODO fixme
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('8');
+
+        // cursor up
         triggerKeyDown(elm, 38);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('7');
+        // cursor down
+        triggerKeyDown(elm, 40);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('8');
+
+        // cursor right -> select minutes
+        triggerKeyDown(elm, 39);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe('30');
+        // cursor up
+        triggerKeyDown(elm, 38);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe('25');
+        // cursor down
+        triggerKeyDown(elm, 40);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe('30');
+      });
+
+      function getSelection(element) {
+        return { start: element[0].selectionStart, end: element[0].selectionEnd};
+      }
+
+      it('should select date part when using keyboard navigation', function() {
+        var elm = compileDirective('default', { selectedTime: new Date(2014, 10, 23, 8, 30) });
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('focus');
+        $animate.triggerCallbacks();
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('8');
+
+        // cursor down -> select hours -> 9
+        triggerKeyDown(elm, 40);
+        var selection = getSelection(elm);
+        expect(selection.start).toBe(0);
+        expect(selection.end).toBe(1);
+        // cursor down -> select hours -> 10
+        triggerKeyDown(elm, 40);
+        selection = getSelection(elm);
+        expect(selection.start).toBe(0);
+        expect(selection.end).toBe(2);
+        // cursor up -> select hours -> 9
+        triggerKeyDown(elm, 38);
+        selection = getSelection(elm);
+        expect(selection.start).toBe(0);
+        expect(selection.end).toBe(1);
+
+        // cursor right -> select minutes
+        triggerKeyDown(elm, 39);
+        selection = getSelection(elm);
+        expect(selection.start).toBe(2);
+        expect(selection.end).toBe(4);
+        // cursor up -> select minutes
+        triggerKeyDown(elm, 38);
+        expect(selection.start).toBe(2);
+        expect(selection.end).toBe(4);
       });
 
     });
