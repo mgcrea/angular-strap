@@ -129,8 +129,8 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
         };
 
         $affix.$onResize = function() {
-          this.$parseOffsets();
-          this.checkPosition();
+          $affix.$parseOffsets();
+          $affix.checkPosition();
         };
         $affix.$debouncedOnResize = debounce($affix.$onResize, 50);
 
