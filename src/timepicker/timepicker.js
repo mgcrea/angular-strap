@@ -235,10 +235,14 @@ angular.module('mgcrea.ngStrap.timepicker', [
           if(selectedIndex === 0) {
             if(evt.keyCode === 38) newDate.setHours(hours - parseInt(options.hourStep, 10));
             else if(evt.keyCode === 40) newDate.setHours(hours + parseInt(options.hourStep, 10));
+            // re-calculate hours length because we have changed hours value
+            hoursLength = formatDate(newDate, hoursFormat).length;
             selectRange = [0, hoursLength];
           } else if(selectedIndex === 1) {
             if(evt.keyCode === 38) newDate.setMinutes(minutes - parseInt(options.minuteStep, 10));
             else if(evt.keyCode === 40) newDate.setMinutes(minutes + parseInt(options.minuteStep, 10));
+            // re-calculate minutes length because we have changes minutes value
+            minutesLength = formatDate(newDate, minutesFormat).length;
             selectRange = [hoursLength + 1, hoursLength + 1 + minutesLength];
           } else if(selectedIndex === 2) {
             if(!lateralMove) $timepicker.switchMeridian();
