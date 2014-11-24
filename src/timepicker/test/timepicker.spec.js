@@ -552,6 +552,10 @@ describe('timepicker', function() {
         var elm = compileDirective('default', { selectedTime: new Date(2014, 10, 23, 8, 30) });
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
+        // need to flush timeout to register keyboard events
+        // IMPORTANT: do it before $animate.triggerCallbacks, because
+        // on 1.3 that seems to do both and we get an error in 1.2
+        $timeout.flush();
         $animate.triggerCallbacks();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('8');
@@ -582,6 +586,10 @@ describe('timepicker', function() {
         var elm = compileDirective('default', { selectedTime: new Date(2014, 10, 23, 8, 30) });
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
+        // need to flush timeout to register keyboard events
+        // IMPORTANT: do it before $animate.triggerCallbacks, because
+        // on 1.3 that seems to do both and we get an error in 1.2
+        $timeout.flush();
         $animate.triggerCallbacks();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('8');
