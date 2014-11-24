@@ -55,6 +55,7 @@ AngularStrap is tested with `karma` against the latest stable release of Angular
 
 >
 	$ npm install
+	$ bower install
 	$ gulp test
 
 You can build the latest version using `gulp`.
