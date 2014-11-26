@@ -3,12 +3,11 @@
 angular.module('mgcrea.ngStrapDocs', [
   'mgcrea.ngStrap',
   'mgcrea.ngPlunkr',
-  // 'ngSanitize',
   'ngRoute',
   'ngAnimate'
 ])
 
-.constant('version', 'v2.1.3')
+.constant('version', 'v2.1.4')
 
 .config(function($plunkrProvider, version) {
 

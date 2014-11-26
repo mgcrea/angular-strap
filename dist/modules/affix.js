@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.3 - 2014-11-06
+ * @version v2.1.4 - 2014-11-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -53,33 +53,35 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
         $affix.init = function() {
 
-          $affix.$parseOffsets();
+          this.$parseOffsets();
           initialOffsetTop = dimensions.offset(element[0]).top + initialAffixTop;
           setWidth = !element[0].style.width;
 
           // Bind events
-          targetEl.on('scroll', $affix.checkPosition);
-          targetEl.on('click', $affix.checkPositionWithEventLoop);
-          windowEl.on('resize', $affix.$debouncedOnResize);
+          targetEl.on('scroll', this.checkPosition);
+          targetEl.on('click', this.checkPositionWithEventLoop);
+          windowEl.on('resize', this.$debouncedOnResize);
 
           // Both of these checkPosition() calls are necessary for the case where
           // the user hits refresh after scrolling to the bottom of the page.
-          $affix.checkPosition();
-          $affix.checkPositionWithEventLoop();
+          this.checkPosition();
+          this.checkPositionWithEventLoop();
 
         };
 
         $affix.destroy = function() {
 
           // Unbind events
-          targetEl.off('scroll', $affix.checkPosition);
-          targetEl.off('click', $affix.checkPositionWithEventLoop);
-          windowEl.off('resize', $affix.$debouncedOnResize);
+          targetEl.off('scroll', this.checkPosition);
+          targetEl.off('click', this.checkPositionWithEventLoop);
+          windowEl.off('resize', this.$debouncedOnResize);
 
         };
 
         $affix.checkPositionWithEventLoop = function() {
 
+          // IE 9 throws an error if we use 'this' instead of '$affix'
+          // in this setTimeout call
           setTimeout($affix.checkPosition, 1);
 
         };

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.3 - 2014-11-06
+ * @version v2.1.4 - 2014-11-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -33,7 +33,10 @@ angular.module('mgcrea.ngStrap.tab', [])
 
       self.$panes = $scope.$panes = [];
 
-      self.$viewChangeListeners = [];
+      // DEPRECATED: $viewChangeListeners, please use $activePaneChangeListeners
+      // Because we deprecated ngModel usage, we rename viewChangeListeners to 
+      // activePaneChangeListeners to make more sense.
+      self.$activePaneChangeListeners = self.$viewChangeListeners = [];
 
       self.$push = function(pane) {
         self.$panes.push(pane);
@@ -62,7 +65,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       self.$panes.$active = 0;
       self.$setActive = $scope.$setActive = function(value) {
         self.$panes.$active = value;
-        self.$viewChangeListeners.forEach(function(fn) {
+        self.$activePaneChangeListeners.forEach(function(fn) {
           fn();
         });
       };
@@ -78,7 +81,7 @@ angular.module('mgcrea.ngStrap.tab', [])
 
   })
 
-  .directive('bsTabs', ["$window", "$animate", "$tab", function($window, $animate, $tab) {
+  .directive('bsTabs', ["$window", "$animate", "$tab", "$parse", function($window, $animate, $tab, $parse) {
 
     var defaults = $tab.defaults;
 
@@ -95,10 +98,14 @@ angular.module('mgcrea.ngStrap.tab', [])
         var ngModelCtrl = controllers[0];
         var bsTabsCtrl = controllers[1];
 
+        // DEPRECATED: ngModel, please use bsActivePane
+        // 'ngModel' is deprecated bacause if interferes with form validation
+        // and status, so avoid using it here.
         if(ngModelCtrl) {
+          console.warn('Usage of ngModel is deprecated, please use bsActivePane instead!');
 
           // Update the modelValue following
-          bsTabsCtrl.$viewChangeListeners.push(function() {
+          bsTabsCtrl.$activePaneChangeListeners.push(function() {
             ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
           });
 
@@ -111,6 +118,21 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         }
 
+        if (attrs.bsActivePane) {
+          // adapted from angularjs ngModelController bindings
+          // https://github.com/angular/angular.js/blob/v1.3.1/src%2Fng%2Fdirective%2Finput.js#L1730
+          var parsedBsActivePane = $parse(attrs.bsActivePane);
+
+          // Update bsActivePane value with change
+          bsTabsCtrl.$activePaneChangeListeners.push(function() {
+            parsedBsActivePane.assign(scope, bsTabsCtrl.$panes.$active);
+          });
+
+          // watch bsActivePane for value changes
+          scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
+            bsTabsCtrl.$setActive(newValue * 1);
+          }, true);
+        }
       }
     };
 
@@ -153,7 +175,7 @@ angular.module('mgcrea.ngStrap.tab', [])
           $animate[index === active ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
         }
 
-        bsTabsCtrl.$viewChangeListeners.push(function() {
+        bsTabsCtrl.$activePaneChangeListeners.push(function() {
           render();
         });
         render();
