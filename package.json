@@ -13,6 +13,12 @@
     "email": "olivier@mg-crea.com",
     "url": "https://github.com/mgcrea"
   },
+  "contributors": [
+    {
+      "name": "Vitor Fernandes",
+      "url": "https://github.com/vmlf01"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/mgcrea/angular-strap.git"
