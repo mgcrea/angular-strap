@@ -294,6 +294,7 @@ describe('dateParser', function () {
           {val:'20/10/2014', expect: new Date(2014,9,20), reason:'4 digit year unambiguous day/month'},
           {val:'10/10/2014', expect: new Date(2014,9,10), reason:'4 digit year ambiguous day/month'},
           {val:'10/10/1814', expect: new Date(1814,9,10), reason:'4 digit year ambiguous day/month with different century'},
+          {val:'30/02/2014', expect: false, reason:'non-existing month day'},
         ]);
     });
 
@@ -308,6 +309,7 @@ describe('dateParser', function () {
         { val: '2014/08/31', baseVal: new Date(2014,1,25), expect: false },
         { val: '2014', baseVal: new Date(2014,1,25), expect: false },
         { val: 'Jan', baseVal: new Date(2014,1,25), expect: false },
+        { val: '31/09/2014', baseVal: new Date(2014,1,25), expect: false },
       ];
 
       beforeEach(function() {
@@ -333,6 +335,7 @@ describe('dateParser', function () {
         { val: '31/08/2014', baseVal: new Date(2014,1,25), expect: false },
         { val: '2014', baseVal: new Date(2014,1,25), expect: false },
         { val: 'Jan', baseVal: new Date(2014,1,25), expect: false },
+        { val: '2014/09/31', baseVal: new Date(2014,1,25), expect: false },
       ];
 
       beforeEach(function() {

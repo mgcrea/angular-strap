@@ -230,6 +230,26 @@ describe('datepicker', function() {
       expect(elm.val()).toBe((today.getMonth() + 1) + '/15/' + (today.getFullYear() + '').substr(2));
     });
 
+    it('should correctly set the model with manually typed value', function() {
+      var elm = compileDirective('default', { selectedDate: new Date(2014, 1, 10)});
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('11/30/14');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(scope.selectedDate).toEqual(new Date(2014, 10, 30));
+      expect(angular.element(elm[0]).hasClass('ng-valid')).toBeTruthy();
+    });
+
+    it('should invalidate input with non-existing manually typed value', function() {
+      var elm = compileDirective('default', { selectedDate: new Date(2014, 1, 10)});
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('02/31/14');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(scope.selectedDate).toBeUndefined();
+      expect(angular.element(elm[0]).hasClass('ng-invalid')).toBeTruthy();
+    });
+
     it('should correctly be cleared when model is cleared', function() {
       var elm = compileDirective('default');
       scope.selectedDate = null;
