@@ -83,6 +83,9 @@ describe('typeahead', function () {
     },
     'options-keyboard': {
       element: '<input type="text" ng-model="selectedState" ng-options="state for state in states" data-keyboard="true" bs-typeahead>'
+    },
+    'options-selectMode': {
+      element: '<input type="text" ng-model="selectedState" data-select-mode="{{selectMode}}" ng-options="state for state in states" bs-typeahead>'
     }
   };
 
@@ -452,6 +455,106 @@ describe('typeahead', function () {
         expect(scope.selectedState).toBe('North Carolina');
       });
 
+    });
+
+  });
+
+  describe('selectMode', function() {
+
+    it('should not restrict when selectMode value is empty', function() {
+      var elm = compileDirective('options-selectMode', {selectMode: ''});
+      elm.val('califon');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(elm.val()).toEqual('califon');
+      expect(angular.element(elm[0]).hasClass('ng-valid')).toBeTruthy();
+    });
+
+    it('should restrict user input when selectMode attribute is not empty', function() {
+      var elm = compileDirective('options-selectMode', {selectMode: '-'});
+      elm.val('califo');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(elm.val()).toEqual('califo');
+      expect(scope.selectedState).toBeUndefined();
+
+      elm.val('califon');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(elm.val()).toEqual('califo');
+
+      elm.val('california');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(elm.val()).toEqual('california');
+    });
+
+    it('should only update ngModel when user selects from options list', function() {
+      var elm = compileDirective('options-selectMode', {selectMode: '-', selectedState: undefined});
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('california');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(elm.val()).toEqual('california');
+      expect(scope.selectedState).toBeUndefined();
+
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      scope.$digest();
+      expect(elm.val()).toEqual('California');
+      expect(scope.selectedState).toEqual('California');
+    });
+
+    // Because we are setting ngModel to undefined,
+    //   - in Angular 1.3 the element will not have ng-valid class
+    //   - in Angular 1.2 the element will have ng-valid class
+    // this should be uniform for both versions, no???
+    it('should only set ng-valid class when user selects an option', function() {
+      var elm = compileDirective('options-selectMode', {selectMode: '-', selectedState: undefined});
+      expect(angular.element(elm[0]).hasClass('ng-valid')).toBeTruthy();
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('california');
+      angular.element(elm[0]).triggerHandler('change');
+      scope.$digest();
+      expect(angular.element(elm[0]).hasClass('ng-valid')).toBeFalsy();
+
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      scope.$digest();
+      expect(angular.element(elm[0]).hasClass('ng-valid')).toBeTruthy();
+    });
+
+    // NEXT 2 TESTS ARE ALTERNATIVES:
+    // if user types something in input, should we set ngModel to undefined
+    // until user makes a selection from dropdown options?
+    // or should we keep current ngModel value unchanged?
+    it('should change ngModel to undefined when typing invalid input', function() {
+      var elm = compileDirective('options-selectMode', {selectMode: '-'});
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('california');
+      angular.element(elm[0]).triggerHandler('change');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      expect(elm.val()).toEqual('California');
+      expect(scope.selectedState).toEqual('California');
+
+      elm.val('Californiax');
+      angular.element(elm[0]).triggerHandler('change');
+      expect(elm.val()).toEqual('California');
+      expect(scope.selectedState).toBeUndefined();
+    });
+
+    xit('should not change ngModel when typing invalid input', function() {
+      var elm = compileDirective('options-selectMode', {selectMode: '-'});
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('california');
+      angular.element(elm[0]).triggerHandler('change');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+      expect(elm.val()).toEqual('California');
+      expect(scope.selectedState).toEqual('California');
+
+      elm.val('Californiax');
+      angular.element(elm[0]).triggerHandler('change');
+      expect(elm.val()).toEqual('California');
+      expect(scope.selectedState).toBeUndefined();
+      expect(scope.selectedState).toEqual('California');
     });
 
   });
