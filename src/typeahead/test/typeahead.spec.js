@@ -2,18 +2,19 @@
 
 describe('typeahead', function () {
 
-  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q;
+  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q, $timeout;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.typeahead'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_, _$timeout_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $typeahead = _$typeahead_;
     $q = _$q_;
+    $timeout = _$timeout_;
   }));
 
   afterEach(function() {
@@ -79,6 +80,9 @@ describe('typeahead', function () {
     },
     'options-minLength': {
       element: '<input type="text" ng-model="selectedState" data-min-length="0" ng-options="state for state in states" bs-typeahead>'
+    },
+    'options-keyboard': {
+      element: '<input type="text" ng-model="selectedState" ng-options="state for state in states" data-keyboard="true" bs-typeahead>'
     }
   };
 
@@ -374,22 +378,80 @@ describe('typeahead', function () {
 
     });
 
-  });
+    describe('minLength', function() {
 
-  describe('minLength', function() {
+      it('should not throw when ngModel.$viewValue is undefined', function() {
+        var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
+        scope.$digest();
+        expect(scope.$$childHead.$isVisible).not.toThrow();
+      });
 
-    it('should not throw when ngModel.$viewValue is undefined', function() {
-      var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
-      scope.$digest();
-      expect(scope.$$childHead.$isVisible).not.toThrow();
+      it('should should show options on focus when minLength is 0', function() {
+        var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
+        angular.element(elm[0]).triggerHandler('focus');
+        scope.$digest();
+        expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
+        expect(scope.$$childHead.$isVisible()).toBeTruthy();
+      });
+
     });
 
-    it('should should show options on focus when minLength is 0', function() {
-      var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
-      angular.element(elm[0]).triggerHandler('focus');
-      scope.$digest();
-      expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
-      expect(scope.$$childHead.$isVisible()).toBeTruthy();
+    describe('keyboard', function() {
+
+      it('should select value when pressing ENTER', function() {
+        var elm = compileDirective('options-keyboard');
+        angular.element(elm[0]).triggerHandler('focus');
+        // flush timeout to register keyboard events
+        $timeout.flush();
+        elm.val('cal');
+        angular.element(elm[0]).triggerHandler('change');
+        expect(sandboxEl.find('.dropdown-menu li').length).toBe(1);
+        triggerKeyDown(elm, 13);
+        expect(scope.selectedState).toBe('California');
+      });
+
+      it('should not select a value when pressing ENTER if dropdown is hidden', function() {
+        var elm = compileDirective('default');
+        expect(elm.val()).toBe('');
+        expect(scope.selectedState).toBe('');
+        angular.element(elm[0]).triggerHandler('focus');
+        // flush timeout to register keyboard events
+        $timeout.flush();
+        triggerKeyDown(elm, 13);
+        expect(elm.val()).toBe('');
+        expect(scope.selectedState).toBe('');
+      });
+
+      it('should navigate to next value when pressing down key', function() {
+        var elm = compileDirective('options-keyboard');
+        angular.element(elm[0]).triggerHandler('focus');
+        // flush timeout to register keyboard events
+        $timeout.flush();
+        elm.val('ca');
+        angular.element(elm[0]).triggerHandler('change');
+        expect(sandboxEl.find('.dropdown-menu li').length).toBe(3);
+        // California, North Carolina, South Carolina
+        triggerKeyDown(elm, 40);
+        triggerKeyDown(elm, 13);
+        expect(scope.selectedState).toBe('North Carolina');
+      });
+
+      it('should navigate to previous value when pressing up key', function() {
+        var elm = compileDirective('options-keyboard');
+        angular.element(elm[0]).triggerHandler('focus');
+        // flush timeout to register keyboard events
+        $timeout.flush();
+        elm.val('ca');
+        angular.element(elm[0]).triggerHandler('change');
+        expect(sandboxEl.find('.dropdown-menu li').length).toBe(3);
+        // California, North Carolina, South Carolina
+        triggerKeyDown(elm, 40);
+        triggerKeyDown(elm, 40);
+        triggerKeyDown(elm, 38);
+        triggerKeyDown(elm, 13);
+        expect(scope.selectedState).toBe('North Carolina');
+      });
+
     });
 
   });
