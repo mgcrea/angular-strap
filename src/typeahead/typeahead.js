@@ -262,9 +262,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var typeahead = $typeahead(element, controller, options);
 
         typeahead.$scope.$select = function(item, index, evt) {
-          scope.$$postDigest(function() {
-            typeahead.setInput(item);
-          });
+          typeahead.setInput(item);
         };
 
         controller.$parsers.push(function (inputValue) {
