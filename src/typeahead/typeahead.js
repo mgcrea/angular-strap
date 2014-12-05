@@ -71,8 +71,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           return parsedOptions.valuesFn(scope, controller).then(function(matches){
             if(!matches.length){
               if(options.selectMode && _stringify(controller.$viewValue).length > 0){
-                  controller.$setViewValue(_lastViewValue);
-                  controller.$render();
+                controller.$setViewValue(_lastViewValue);
+                controller.$render();
               } else {
                 scope.$resetMatches();
               }
@@ -88,39 +88,38 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           });
         };
 
-
         $typeahead.setInput = function(inputValue){
 
-            if(typeof inputValue === 'object'){
-              // if argument is object then caller is the select callback and not the parser.
-              // set _selectingValue and call $setViewValue. No need to return value here.
-              _selectingValue = inputValue.value;
-              if(angular.version.minor > 2 && controller.$viewValue === inputValue.label){
-                controller.$validate();
-              } else {
-                controller.$setViewValue(inputValue.label);
-              }
+          if(typeof inputValue === 'object'){
+            // if argument is object then caller is the select callback and not the parser.
+            // set _selectingValue and call $setViewValue. No need to return value here.
+            _selectingValue = inputValue.value;
+            if(angular.version.minor > 2 && controller.$viewValue === inputValue.label){
+              controller.$validate();
+            } else {
+              controller.$setViewValue(inputValue.label);
+            }
+
+          } else {
+
+            if(_selectingValue !== null){
+              // viewValue set by selection.
+              scope.$modelValue = _selectingValue;
+              scope.$resetMatches();
+              controller.$render();
+
+              _selectingValue = null, _hasSelection = true, _lastViewValue = inputValue;
 
             } else {
 
-              if(_selectingValue !== null){
-                // viewValue set by selection.
-                scope.$modelValue = _selectingValue;
-                scope.$resetMatches();
-                controller.$render();
-
-                _selectingValue = null, _hasSelection = true, _lastViewValue = inputValue;
-
-              } else {
-
-                if(_stringify(inputValue).length >= options.minLength){
-                  $typeahead.updateMatches();
-                }
-                scope.$modelValue = !options.selectMode ? inputValue : undefined;
-                _hasSelection = false;
+              if(_stringify(inputValue).length >= options.minLength){
+                $typeahead.updateMatches();
               }
-              return scope.$modelValue;
+              scope.$modelValue = !options.selectMode ? inputValue : undefined;
+              _hasSelection = false;
             }
+            return scope.$modelValue;
+          }
         };
 
         $typeahead.setModel = function(value){
@@ -218,12 +217,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '').trim();
           scope.$watch(watchedOptions, function (newValue, oldValue) {
             if(newValue === oldValue) return;
-              $typeahead.updateMatches();
+            $typeahead.updateMatches();
           }, true);
         }
 
         return $typeahead;
-
       }
 
       TypeaheadFactory.defaults = defaults;
@@ -266,7 +264,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         controller.$parsers.push(function (inputValue) {
-            return typeahead.setInput(inputValue);
+          return typeahead.setInput(inputValue);
         });
 
         controller.$formatters.push(function(modelValue){
