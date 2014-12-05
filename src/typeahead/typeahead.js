@@ -115,6 +115,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
                 if(_stringify(inputValue).length >= options.minLength){
                   $typeahead.updateMatches();
+                } else {
+                  _lastViewValue = inputValue;
                 }
                 scope.$modelValue = !options.selectMode ? inputValue : undefined;
                 _hasSelection = false;
@@ -176,7 +178,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           else if(evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
           else if(angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
           if(angular.version.minor < 3){
-             scope.$apply()
+             scope.$apply();
            } else {
              scope.$digest();
            }
