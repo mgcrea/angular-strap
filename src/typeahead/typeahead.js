@@ -167,8 +167,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           }
 
           // Select with enter
-          if(evt.keyCode === 13 && scope.$matches.length) {
-            $typeahead.select(scope.$activeIndex);
+          if(evt.keyCode === 13 && scope.$matches.length && $typeahead.$isVisible()) {
+            $typeahead.setInput(scope.$matches[scope.$activeIndex]);
           }
 
           // Navigate with keyboard
@@ -260,9 +260,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var typeahead = $typeahead(element, controller, options);
 
         typeahead.$scope.$select = function(item, index, evt) {
-          scope.$$postDigest(function() {
             typeahead.setInput(item);
-          });
         };
 
         controller.$parsers.push(function (inputValue) {
