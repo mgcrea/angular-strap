@@ -175,7 +175,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           else if(evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--;
           else if(evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
           else if(angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
-          scope.$digest();
+          if(angular.version.minor < 3){
+             scope.$apply()
+           } else {
+             scope.$digest();
+           }
         };
 
         // Overrides
@@ -264,7 +268,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         controller.$parsers.push(function (inputValue) {
-            return typeahead.setInput(inputValue);
+            var modelValue = typeahead.setInput(inputValue);
+            if(angular.version.minor < 3){
+              controller.$setValidity('required', !controller.$isEmpty(modelValue));
+            }
+            return modelValue;
         });
 
         controller.$formatters.push(function(modelValue){
