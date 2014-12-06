@@ -36,6 +36,14 @@ describe('collapse', function () {
       ]},
       element: '<div class="panel-group" bs-collapse><div class="panel panel-default" ng-repeat="panel in panels"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div></div>'
     },
+    'template-ngRepeat-ngModel': {
+      scope: {panels: [
+        {title:'Collapsible Group Item #1', body: 'Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.'},
+        {title:'Collapsible Group Item #2', body: 'Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.'},
+        {title:'Collapsible Group Item #3', body: 'Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney\'s organic lomo retro fanny pack lo-fi farm-to-table readymade.'}
+      ], panel: {active: 1}},
+      element: '<div class="panel-group" ng-model="panel.active" bs-collapse><div class="panel panel-default" ng-repeat="panel in panels"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div></div>'
+    },
     'binding-ngModel': {
       scope: {panel: {active: 1}},
       element: '<div class="panel-group" ng-model="panel.active" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
@@ -87,6 +95,23 @@ describe('collapse', function () {
       sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
       expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
       expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeTruthy();
+    });
+
+    it('should reset collapse toogles/targets when ngRepeat source changes', function() {
+      var elm = compileDirective('template-ngRepeat-ngModel');
+      expect(scope.panels.length).toBe(3);
+      expect(scope.panel.active).toBe(1);
+
+      scope.panels = [
+        {title:'Collapsible Group Item #1', body: 'Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.'},
+        {title:'Collapsible Group Item #2', body: 'Food truck fixie locavore, accusamus mcsweeney\'s marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.'},
+        {title:'Collapsible Group Item #3', body: 'Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney\'s organic lomo retro fanny pack lo-fi farm-to-table readymade.'}
+      ];
+
+      scope.$digest();
+      sandboxEl.find('[bs-collapse-toggle]:eq(2)').triggerHandler('click');
+      expect(scope.panels.length).toBe(3);
+      expect(scope.panel.active).toBe(2);
     });
 
   });
