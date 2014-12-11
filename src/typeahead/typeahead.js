@@ -54,6 +54,12 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           });
         };
 
+        scope.$select = function(index, evt) {
+          scope.$$postDigest(function() {
+            $typeahead.select(index);
+          });
+        };
+
         scope.$isVisible = function() {
           return $typeahead.$isVisible();
         };
@@ -62,6 +68,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         $typeahead.activate = function(index) {
           scope.$activeIndex = index;
+        };
+
+        $typeahead.select = function(index, evt) {
+          $typeahead.setInput(scope.$matches[index]);
         };
 
         // updates matches managing invalid inputs in selectMode
@@ -92,7 +102,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.setInput = function(inputValue){
 
             if(typeof inputValue === 'object'){
-              // if argument is object then caller is the select callback and not the parser.
+              // if argument is a "match" object then caller is the select callback and not the parser.
               // set _selectingValue and call $setViewValue. No need to return value here.
               _selectingValue = inputValue.value;
               if(angular.version.minor > 2 && controller.$viewValue === inputValue.label){
@@ -264,10 +274,6 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Initialize typeahead
         var typeahead = $typeahead(element, controller, options);
-
-        typeahead.$scope.$select = function(item, index, evt) {
-            typeahead.setInput(item);
-        };
 
         controller.$parsers.push(function (inputValue) {
             var modelValue = typeahead.setInput(inputValue);
