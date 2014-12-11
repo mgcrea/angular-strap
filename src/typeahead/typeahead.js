@@ -49,15 +49,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         scope.$resetMatches();
 
         scope.$activate = function(index) {
-          scope.$$postDigest(function() {
             $typeahead.activate(index);
-          });
         };
 
         scope.$select = function(index, evt) {
-          scope.$$postDigest(function() {
             $typeahead.select(index);
-          });
         };
 
         scope.$isVisible = function() {
@@ -179,7 +175,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           }
 
           // Select with enter
-          if(evt.keyCode === 13 && scope.$matches.length && $typeahead.$isVisible()) {
+          if(evt.keyCode === 13 && $typeahead.$isVisible()) {
             $typeahead.setInput(scope.$matches[scope.$activeIndex]);
           }
 
