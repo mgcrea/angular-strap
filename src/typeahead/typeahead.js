@@ -224,8 +224,6 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             // Do not re-queue an update if a correct value has been selected
             if(values.length === 1 && values[0].value === newValue) return;
             !isVisible && typeahead.update(values);
-            // Queue a new rendering that will leverage collection loading
-            controller.$render();
           });
         });
 
