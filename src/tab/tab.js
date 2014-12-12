@@ -154,6 +154,10 @@ angular.module('mgcrea.ngStrap.tab', [])
           element.addClass(bsTabsCtrl.$options.animation);
         }
 
+        attrs.$observe('disabled', function(newValue, oldValue) {
+          scope.disabled = scope.$eval(newValue);
+        });
+
         // Push pane to parent bsTabs controller
         bsTabsCtrl.$push(scope);
 
