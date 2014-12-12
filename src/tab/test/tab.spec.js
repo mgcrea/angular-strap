@@ -75,6 +75,9 @@ describe('tab', function () {
     },
     'options-activeClass': {
       element: '<div data-active-class="in" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+    },
+    'pane-options-disabled': {
+      element: '<div bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane disabled="true">content-2</div></div>'
     }
   };
 
@@ -317,6 +320,18 @@ describe('tab', function () {
 
     });
 
+  });
+
+  describe('pane options', function() {
+
+    describe('disable', function () {
+
+      it('should disable pane', function() {
+        var elm = compileDirective('pane-options-disabled');
+        expect(sandboxEl.find('.nav-tabs > li:eq(1)').hasClass('disabled')).toBeTruthy();
+      });
+
+    });
 
   });
 
