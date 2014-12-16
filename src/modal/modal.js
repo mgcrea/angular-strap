@@ -125,9 +125,6 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         $modal.show = function() {
           if($modal.$isShown) return;
 
-          if(scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
-            return;
-          }
           var parent, after;
           if(angular.isElement(options.container)) {
             parent = options.container;
@@ -144,6 +141,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
           // Fetch a cloned element linked from template
           modalElement = $modal.$element = modalLinker(scope, function(clonedElement, scope) {});
+
+          if(scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
+            return;
+          }
 
           // Set the initial positioning.
           modalElement.css({display: 'block'}).addClass(options.placement);
