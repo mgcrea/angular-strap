@@ -179,6 +179,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
+        // Disable browser autocompletion
+        element.attr('autocomplete' ,'off');
+        
         // Build proper ngOptions
         var filter = options.filter || defaults.filter;
         var limit = options.limit || defaults.limit;
