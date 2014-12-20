@@ -49,6 +49,10 @@ describe('select', function () {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
+    'options-multiple-all-none-buttons-text': {
+      scope: {allText: 'select all', noneText: 'select none', selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="1" data-all-text="{{allText}}" data-none-text="{{noneText}}" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
     'options-multiple-required': {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" required bs-select></button>'
@@ -217,6 +221,23 @@ describe('select', function () {
         angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
         expect(elm.hasClass('ng-invalid-required')).toBe(true);
       });
+
+      it('should show default all/none button labels', function() {
+        var elm = compileDirective('options-multiple-all-none-buttons');
+        angular.element(elm[0]).triggerHandler('focus');
+
+        expect(sandboxEl.find('.dropdown-menu li > div > button:eq(0)').text()).toBe('All');
+        expect(sandboxEl.find('.dropdown-menu li > div > button:eq(1)').text()).toBe('None');
+      });
+
+      it('should support custom all/none button labels', function() {
+        var elm = compileDirective('options-multiple-all-none-buttons-text');
+        angular.element(elm[0]).triggerHandler('focus');
+
+        expect(sandboxEl.find('.dropdown-menu li > div > button:eq(0)').text()).toBe('select all');
+        expect(sandboxEl.find('.dropdown-menu li > div > button:eq(1)').text()).toBe('select none');
+      });
+
     });
 
     describe('maxLength', function () {

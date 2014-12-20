@@ -1,8 +1,8 @@
 <ul tabindex="-1" class="select dropdown-menu" ng-show="$isVisible()" role="select">
   <li ng-if="$showAllNoneButtons">
     <div class="btn-group" style="margin-bottom: 5px; margin-left: 5px">
-      <button class="btn btn-default btn-xs" ng-click="$selectAll()">All</button>
-      <button class="btn btn-default btn-xs" ng-click="$selectNone()">None</button>
+      <button class="btn btn-default btn-xs" ng-click="$selectAll()">{{$allText}}</button>
+      <button class="btn btn-default btn-xs" ng-click="$selectNone()">{{$noneText}}</button>
     </div>
   </li>
   <li role="presentation" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}">
