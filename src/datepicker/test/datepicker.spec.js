@@ -73,6 +73,18 @@ describe('datepicker', function() {
       scope: {selectedDate: '2014-04-11'},
       element: '<input type="text" ng-model="selectedDate" data-date-type="string" data-date-format="yyyy-MM-dd" bs-datepicker>'
     },
+    'options-typeNumberDateFormat': {
+      scope: {selectedDate: +new Date(1986, 2, 22)},
+      element: '<input type="text" ng-model="selectedDate" data-date-type="numbet" bs-datepicker>'
+    },
+    'options-typeUnixDateFormat': {
+      scope: {selectedDate: new Date(1986, 2, 22) / 1000},
+      element: '<input type="text" ng-model="selectedDate" data-date-type="unix" bs-datepicker>'
+    },
+    'options-typeIsoDateFormat': {
+      scope: {selectedDate: "2014-12-26T13:03:08.631Z"},
+      element: '<input type="text" ng-model="selectedDate" data-date-type="iso" bs-datepicker>'
+    },
     'options-dateFormat': {
       scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" bs-datepicker>'
@@ -765,6 +777,30 @@ describe('datepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
         expect(elm.val()).toBe('2014-04-16');
+      });
+
+      it('should support number type with a dateFormat', function() {
+        var elm = compileDirective('options-typeNumberDateFormat');
+        expect(elm.val()).toBe('3/22/86');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
+        expect(elm.val()).toBe('3/16/86');
+      });
+
+      it('should support unix type with a dateFormat', function() {
+        var elm = compileDirective('options-typeUnixDateFormat');
+        expect(elm.val()).toBe('3/22/86');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
+        expect(elm.val()).toBe('3/16/86');
+      });
+
+      it('should support iso type with a dateFormat', function() {
+        var elm = compileDirective('options-typeIsoDateFormat');
+        expect(elm.val()).toBe('12/26/14');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
+        expect(elm.val()).toBe('12/16/14');
       });
 
     });

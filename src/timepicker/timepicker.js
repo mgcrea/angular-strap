@@ -425,6 +425,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
             return formatDate(parsedTime, options.modelTimeFormat || options.timeFormat);
           } else if(options.timeType === 'number') {
             return controller.$dateValue.getTime();
+          } else if(options.timeType === 'unix') {
+            return controller.$dateValue.getTime() / 1000;
           } else if(options.timeType === 'iso') {
             return controller.$dateValue.toISOString();
           } else {
@@ -442,6 +444,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
             date = modelValue;
           } else if(options.timeType === 'string') {
             date = dateParser.parse(modelValue, null, options.modelTimeFormat);
+          } else if(options.timeType === 'unix') {
+            date = new Date(modelValue * 1000);
           } else {
             date = new Date(modelValue);
           }

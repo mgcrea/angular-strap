@@ -175,7 +175,8 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           <td>string</td>
           <td>'date'</td>
           <td>
-            <p>Expected model type of your time - date | number | iso | string</p>
+            <p>Expected model type of your time - date | number | unix | iso | string</p>
+            <p>If type is "number" then timepicker uses milliseconds to set date, if "unix" - seconds</p>
           </td>
         </tr>
         <tr>

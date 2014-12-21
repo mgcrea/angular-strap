@@ -359,6 +359,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
             return formatDate(parsedDate, options.modelDateFormat || options.dateFormat);
           } else if(options.dateType === 'number') {
             return controller.$dateValue.getTime();
+          } else if(options.dateType === 'unix') {
+            return controller.$dateValue.getTime() / 1000;
           } else if(options.dateType === 'iso') {
             return controller.$dateValue.toISOString();
           } else {
@@ -376,6 +378,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
             date = modelValue;
           } else if(options.dateType === 'string') {
             date = dateParser.parse(modelValue, null, options.modelDateFormat);
+          } else if(options.dateType === 'unix') {
+            date = new Date(modelValue * 1000);
           } else {
             date = new Date(modelValue);
           }
