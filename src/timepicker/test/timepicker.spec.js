@@ -696,7 +696,7 @@ describe('timepicker', function() {
         var elm = compileDirective('options-timeType-iso');
         var date = new Date(1970, 0, 1, 10, 30);
         expect(elm.val()).toBe(date.getHours() + ':' + date.getMinutes());
-        expect(scope.selectedTime).toBe("1970-01-01T08:30:00.000Z");
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 10, 30).toISOString());
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
         expect(elm.val()).toBe('09:30');
