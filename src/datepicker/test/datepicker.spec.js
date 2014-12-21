@@ -75,7 +75,7 @@ describe('datepicker', function() {
     },
     'options-typeNumberDateFormat': {
       scope: {selectedDate: +new Date(1986, 2, 22)},
-      element: '<input type="text" ng-model="selectedDate" data-date-type="numbet" bs-datepicker>'
+      element: '<input type="text" ng-model="selectedDate" data-date-type="number" bs-datepicker>'
     },
     'options-typeUnixDateFormat': {
       scope: {selectedDate: new Date(1986, 2, 22) / 1000},
