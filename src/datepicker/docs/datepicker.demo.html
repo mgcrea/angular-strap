@@ -163,7 +163,9 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>string</td>
           <td>'date'</td>
           <td>
-            <p>Expected model type of your date - date | number | iso | string</p>
+            <p>Expected model type of your date - date | number | unix | iso | string</p>
+
+            <p>If type is "number" then datepicker uses milliseconds to set date, if "unix" - seconds</p>
           </td>
         </tr>
         <tr>

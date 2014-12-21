@@ -79,6 +79,14 @@ describe('timepicker', function() {
       scope: {selectedTime: new Date(1970, 0, 1, 10, 30).getTime()},
       element: '<input type="text" ng-model="selectedTime" data-time-type="number" data-time-format="HH:mm" bs-timepicker>'
     },
+    'options-timeType-unix': {
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30) / 1000},
+      element: '<input type="text" ng-model="selectedTime" data-time-type="unix" data-time-format="HH:mm" bs-timepicker>'
+    },
+    'options-timeType-iso': {
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30).toISOString()},
+      element: '<input type="text" ng-model="selectedTime" data-time-type="iso" data-time-format="HH:mm" bs-timepicker>'
+    },
     'options-minTime': {
       scope: {selectedTime: new Date(1970, 0, 1, 10, 30), minTime: '09:30 AM'},
       element: '<input type="text" ng-model="selectedTime" data-min-time="{{minTime}}" bs-timepicker>'
@@ -672,6 +680,27 @@ describe('timepicker', function() {
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
         expect(elm.val()).toBe('09:30');
         expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30).getTime());
+      });
+
+      it('should support a unix timeType', function() {
+        var elm = compileDirective('options-timeType-unix');
+        expect(elm.val()).toBe('10:30');
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 10, 30).getTime() / 1000);
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
+        expect(elm.val()).toBe('09:30');
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30) / 1000);
+      });
+
+      it('should support a iso timeType', function() {
+        var elm = compileDirective('options-timeType-iso');
+        var date = new Date(1970, 0, 1, 10, 30);
+        expect(elm.val()).toBe(date.getHours() + ':' + date.getMinutes());
+        expect(scope.selectedTime).toBe("1970-01-01T08:30:00.000Z");
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
+        expect(elm.val()).toBe('09:30');
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30).toISOString());
       });
 
     });
