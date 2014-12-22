@@ -171,7 +171,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         $tooltip.show = function() {
-          if (!options.bsEnabled) return;
+          if (!options.bsEnabled || $tooltip.$isShown) return;
 
           scope.$emit(options.prefixEvent + '.show.before', $tooltip);
           var parent, after;
