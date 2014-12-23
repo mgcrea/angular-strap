@@ -21,13 +21,16 @@ angular.module('mgcrea.ngStrapDocs', [
 
 })
 
-.config(function($routeProvider, $locationProvider, $sceProvider) {
+.config(function($routeProvider, $compileProvider, $locationProvider, $sceProvider) {
 
   // configure html5 to get links working on jsfiddle
   $locationProvider.html5Mode(false);
 
   // disable strict context
   $sceProvider.enabled(false);
+
+  // Disable scope debug data
+  $compileProvider.debugInfoEnabled(false);
 
   // $routeProvider
     // .when('/', {
