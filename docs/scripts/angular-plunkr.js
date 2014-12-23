@@ -4,7 +4,7 @@ angular.module('mgcrea.ngPlunkr', ['mgcrea.ngStrap.helpers.debounce'])
 
 .run(function($templateCache, version) {
 
-  var ngVersion = '1.3.1';
+  var ngVersion = '1.3.8';
 
   var templateHtml = '' +
     '<!DOCTYPE html>\n' +
