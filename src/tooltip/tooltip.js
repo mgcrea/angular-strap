@@ -72,6 +72,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             $tooltip.toggle();
           });
         };
+        // Publish isShown as a protected var on scope
         $tooltip.$isShown = scope.$isShown = false;
 
         // Private vars
