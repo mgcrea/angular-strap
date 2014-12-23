@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.4 - 2014-11-26
+ * @version v2.1.5 - 2014-12-23
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -27,6 +27,8 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
       sort: true,
       caretHtml: '&nbsp;<span class="caret"></span>',
       placeholder: 'Choose among the following...',
+      allText: 'All',
+      noneText: 'None',
       maxLength: 3,
       maxLengthHtml: 'selected',
       iconCheckmark: 'glyphicon glyphicon-ok'
@@ -53,6 +55,8 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         scope.$isMultiple = options.multiple;
         scope.$showAllNoneButtons = options.allNoneButtons && options.multiple;
         scope.$iconCheckmark = options.iconCheckmark;
+        scope.$allText = options.allText;
+        scope.$noneText = options.noneText;
 
         scope.$activate = function(index) {
           scope.$$postDigest(function() {
@@ -245,7 +249,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Directive options
         var options = {scope: scope, placeholder: defaults.placeholder};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'placeholder', 'multiple', 'allNoneButtons', 'maxLength', 'maxLengthHtml'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'placeholder', 'multiple', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

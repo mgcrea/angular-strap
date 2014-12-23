@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.4 - 2014-11-26
+ * @version v2.1.5 - 2014-12-23
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -11,7 +11,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
 
 .provider('$dateParser', ["$localeProvider", function($localeProvider) {
 
-  // define a custom ParseDate object to use instead of native Date 
+  // define a custom ParseDate object to use instead of native Date
   // to avoid date values wrapping when setting date component values
   function ParseDate() {
     this.year = 1970;
@@ -60,7 +60,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
     for (var i=0; i<len; i++) {
       if (array[i].toLowerCase() === str) { return i; }
     }
-    return -1; // Return -1 per the "Array.indexOf()" method.    
+    return -1; // Return -1 per the "Array.indexOf()" method.
   }
 
   var defaults = this.defaults = {
@@ -151,7 +151,14 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
           formatSetMap[i] && formatSetMap[i].call(date, matches[i+1]);
         }
         // convert back to native Date object
-        return date.toDate();
+        var newDate = date.toDate();
+
+        // check new native Date object for day values overflow
+        if (parseInt(date.day, 10) !== newDate.getDate()) {
+          return false;
+        }
+
+        return newDate;
       };
 
       $dateParser.getDateForAttribute = function(key, value) {
@@ -184,7 +191,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
           time = new Date(parseInt(value, 10)).setFullYear(1970, 0, 1);
         } else if (angular.isString(value) && 0 === value.length) { // Reset time
           time = key === 'minTime' ? -Infinity : +Infinity;
-        } else { 
+        } else {
           time = $dateParser.parse(value, new Date(1970, 0, 1, 0));
         }
 
