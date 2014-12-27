@@ -198,6 +198,12 @@ describe('datepicker', function() {
     return jQuery(element[0]);
   }
 
+  function triggerKeyDown(elm, keyCode) {
+    var evt = $.Event('keydown');
+    evt.which = evt.keyCode = keyCode;
+    angular.element(elm[0]).triggerHandler(evt);
+  }
+
   // Tests
 
   describe('with default template', function() {
@@ -214,6 +220,16 @@ describe('datepicker', function() {
       expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
       angular.element(elm[0]).triggerHandler('focus');
       angular.element(elm[0]).triggerHandler('blur');
+      expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+    });
+
+    it('should close on ENTER keypress', function() {
+      var elm = compileDirective('default');
+      expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('focus');
+      // flush timeout to allow for keyboard events to hookup
+      $timeout.flush();
+      triggerKeyDown(elm, 13);
       expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
     });
 
