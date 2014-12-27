@@ -12,6 +12,10 @@ angular.module('mgcrea.ngStrapDocs')
 
   $scope.panels.activePanel = 1;
 
+  $scope.multiplePanels = {
+    activePanels: [0,1]
+  };
+
   $scope.pushPanel = function() {
     $scope.panels.push({title: 'Collapsible Group Item #4', body: 'Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid.'});
   };

@@ -42,6 +42,31 @@ $scope.panels.activePanel = {{ panels.activePanel }};
     <div class="btn btn-default" ng-click="pushPanel()">Add new panel</div>
   </div>
 
+  <h3>Multiple open panels sample</h3>
+  <p>By using the <code>allowMultiple</code> option, you can have multiple open panels at the same time. When using <code>allowMultiple</code> option, <code>ngModel</code> binds to an array with the open panel indexes.</p>
+  <pre class="bs-example-scope">$scope.multiplePanels.activePanels = {{ multiplePanels.activePanels }};
+  </pre>
+  <div class="bs-example" append-source>
+    <!-- ngModel is optional -->
+    <div class="panel-group" ng-model="multiplePanels.activePanels" data-allow-multiple="true" bs-collapse>
+      <div class="panel panel-default" ng-repeat="panel in panels">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a bs-collapse-toggle>
+              {{ panel.title }}
+            </a>
+          </h4>
+        </div>
+        <div class="panel-collapse" bs-collapse-target>
+          <div class="panel-body">
+            {{ panel.body }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <h2 id="collapses-usage">Usage</h2>
   <p>Append a <code>bs-collapse</code> attribute to any element and several <code>bs-collapse-toggle</code>,<code>bs-collapse-target</code> attributes to children elements to enable the directive.</p>
 
@@ -110,6 +135,14 @@ $scope.panels.activePanel = {{ panels.activePanel }};
           <td>false</td>
           <td>
             <p>Start with all elements collapsed</p>
+          </td>
+        </tr>
+        <tr>
+          <td>allowMultiple</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Allow multiple open panels</p>
           </td>
         </tr>
       </tbody>
