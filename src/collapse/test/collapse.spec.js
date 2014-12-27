@@ -59,7 +59,17 @@ describe('collapse', function () {
     },
     'options-startCollapsed': {
       element: '<div data-start-collapsed="true" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
-    }
+    },
+    'default-multiple': {
+      element: '<div class="panel-group" data-allow-multiple="true" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
+    },
+    'binding-ngModel-multiple': {
+      scope: {panel: {active: [1]}},
+      element: '<div class="panel-group" data-allow-multiple="true" ng-model="panel.active" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-3</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-3</div></div></div></div>'
+    },
+    'options-activeClass-multiple': {
+      element: '<div data-active-class="active" data-allow-multiple="true" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
+    },
   };
 
   function compileDirective(template, locals) {
@@ -193,6 +203,73 @@ describe('collapse', function () {
       });
 
     });
+
+    describe('allowMultiple', function() {
+
+      describe('with default template', function () {
+
+        it('should open each panel on click', function() {
+          var elm = compileDirective('default-multiple');
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
+          sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeTruthy();
+          sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
+        });
+
+      });
+
+      describe('data-binding', function() {
+
+        it('should correctly apply initial model values', function() {
+          var elm = compileDirective('binding-ngModel-multiple', { panel: { active: [1,2] } });
+          expect(scope.panel.active).toEqual([1,2]);
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeTruthy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(2)').hasClass('in')).toBeTruthy();
+        });
+
+        it('should correctly apply model changes to the view', function() {
+          var elm = compileDirective('binding-ngModel-multiple');
+          expect(scope.panel.active).toEqual([1]);
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeTruthy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(2)').hasClass('in')).toBeFalsy();
+          scope.panel.active = [0,2];
+          scope.$digest();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(2)').hasClass('in')).toBeTruthy();
+        });
+
+        it('should correctly apply view changes to the model', function() {
+          var elm = compileDirective('binding-ngModel-multiple');
+          expect(scope.panel.active).toEqual([1]);
+          sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
+          expect(scope.panel.active).toEqual([1,0]);
+        });
+
+      });
+
+      describe('activeClass', function () {
+
+        it('should support custom activeClass', function() {
+          var elm = compileDirective('options-activeClass-multiple');
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('active')).toBeTruthy();
+          sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('active')).toBeTruthy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('active')).toBeTruthy();
+        });
+
+      });
+
+    })
 
   });
 
