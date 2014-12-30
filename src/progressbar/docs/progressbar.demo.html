@@ -1,0 +1,76 @@
+<div class="bs-docs-section" ng-controller="ProgressbarDemoCtrl">
+
+  <div class="page-header">
+    <h1 id="progressbar">Progress Bar <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/progressbar/progressbar.js" target="_blank">progressbar.js</a>
+    </h1>
+    <code>mgcrea.ngStrap.progressbar</code>
+  </div>
+
+
+  <h2 id="progressbar-examples">Examples</h2>
+  <p>Add an animated progress bar.</p>
+
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="progressbar/docs/progressbar.demo.html" data-content-js-url="progressbar/docs/progressbar.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip></a></h3>
+  <div class="bs-example" append-source>
+    <bs-progressbar value="value">{{value}}%</bs-progressbar>
+  </div>
+
+  <h2 id="progressbar-usage">Usage</h2>
+  <p>Add a <code>bs-progressbar</code> element to create a progress bar</p>
+  <p>HTML within the <code>bs-progressbar</code> element will be transcluded.</p>
+
+
+  <h3>Options</h3>
+  <p>Options can be passed via data attributes, append the option name to <code>data-</code>, as in <code>data-route-attr=""</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>value</td>
+          <td>number</td>
+          <td>0</td>
+          <td>Current value of the progress bar. Should be between 0 and 100.</td>
+        </tr>
+        <tr>
+          <td>animate</td>
+          <td>boolean expression</td>
+          <td>true</td>
+          <td>Toggles whether the progress bar is animated.</td>
+        </tr>
+        <tr>
+          <td>type</td>
+          <td>string</td>
+          <td>null</td>
+          <td>Determines the type of the progress bar. Can be success, info, warning, danger, or null for the default type.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <h4>Default options</h4>
+    <p>You can override global defaults for the plugin with <code>$progressbar.defaults</code></p>
+    <div class="highlight">
+      <pre class="bs-exemple-code">
+        <code class="javascript" highlight-block>
+          angular.module('myApp')
+          .config(function($progressbar) {
+            angular.extend($progressbar.defaults, {
+              animate: false,
+              barType: 'warning'
+            });
+          })
+        </code>
+      </pre>
+    </div>
+  </div>
+
+</div>
+
