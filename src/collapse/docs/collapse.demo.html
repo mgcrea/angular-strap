@@ -72,24 +72,54 @@ $scope.panels.activePanel = {{ panels.activePanel }};
 
   <div class="callout callout-info">
     <h4>Custom animations</h4>
-    <p>Pane animation is done with the <code>active</code> class and requires custom CSS.</p>
-    <pre class="bs-exemple-code">
-      <code class="css" highlight-block>
-.collapse.am-collapse {
-  animation-duration: .3s;
-  animation-timing-function: ease;
-  animation-fill-mode: backwards;
-  overflow: hidden;
-  &.in-remove {
-    animation-name: collapse;
-    display: block;
-  }
-  &.in-add {
-    animation-name: expand;
-  }
+    <p>Pane animation is done with the class specified in the <code>activeClass</code> option (defaults to <code>in</code>) and requires custom CSS.</p>
+    <p>Bellow you can find a sample with the custom CSS used in these docs:</p>
+    <pre class="bs-exemple-code"><code class="css" highlight-block>
+.panel-collapse.am-collapse
+{
+  -webkit-animation-duration:.3s;
+  animation-duration:.3s;
+  -webkit-animation-timing-function:ease;
+  animation-timing-function:ease;
+  -webkit-animation-fill-mode:backwards;
+  animation-fill-mode:backwards;
+  overflow:hidden;
 }
-      </code>
-    </pre>
+
+.panel-collapse.am-collapse.in-remove
+{
+  -webkit-animation-name:collapse;
+  animation-name:collapse;
+  display:block;
+}
+
+.panel-collapse.am-collapse.in-add
+{
+  -webkit-animation-name:expand;
+  animation-name:expand;
+}
+
+
+@-webkit-keyframes expand {
+  from { max-height:0; }
+  to { max-height:100px; }
+}
+
+@keyframes expand {
+  from { max-height:0; }
+  to { max-height:100px; }
+}
+
+@-webkit-keyframes collapse {
+  from { max-height:100px; }
+  to { max-height:0; }
+}
+
+@keyframes collapse{
+  from { max-height:100px; }
+  to { max-height:0; }
+}
+      </code></pre>
   </div>
 
   <h3>Options</h3>
