@@ -36,6 +36,10 @@ describe('tooltip', function() {
       scope: {tooltip: {title: 'Hello Tooltip!'}},
       element: '<a title="{{tooltip.title}}" bs-tooltip>hover me</a>'
     },
+    'default-with-id': {
+      scope: {tooltip: {title: 'Hello Tooltip!'}},
+      element: '<a id="link1" title="{{tooltip.title}}" bs-tooltip>hover me</a>'
+    },
     'markup-button': {
       element: '<button type="button" bs-tooltip="tooltip">hover me</button>'
     },
@@ -485,6 +489,16 @@ describe('tooltip', function() {
       expect(bodyEl.children('.tooltip').length).toBe(1);
     });
 
+    it('should store config id value in instance', function() {
+      var myTooltip = $tooltip(sandboxEl, {scope:scope, trigger: 'manual', id: 'instance1'});
+      expect(myTooltip.$id).toBe('instance1');
+    });
+
+    it('should fallback to element id value when id is not provided in config', function() {
+      var myTooltip = $tooltip(sandboxEl, {scope:scope, trigger: 'manual'});
+      expect(myTooltip.$id).toBe('sandbox');
+    });
+
   });
 
   describe('using scope helpers', function() {
@@ -596,6 +610,19 @@ describe('tooltip', function() {
       $$rAF.flush();
       expect(bodyEl.children('.tooltip').css('visibility')).toBe('visible');
     }));
+
+    it('should call show.before event with tooltip element instance id', function() {
+      var elm = compileDirective('default-with-id');
+      var id = "";
+      scope.$on('tooltip.show.before', function(evt, tooltip) {
+        id = tooltip.$id;
+      });
+
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      scope.$digest();
+      expect(id).toBe('link1');
+    });
+
   });
 
   describe('options', function() {
@@ -706,13 +733,13 @@ describe('tooltip', function() {
         it('should remove `auto` from placements when auto positioning', function () {
           var elm = compileDirective('options-placement-auto-top');
           angular.element(elm[0]).triggerHandler('mouseenter');
-          
+
           // set the offset to 0 so we don't trigger changing the placement
           spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
             if (prop === 'offsetWidth') return 0;
             if (prop === 'offsetHeight') return 0;
           });
-          
+
           $$rAF.flush();
           expect(sandboxEl.children('.tooltip').hasClass('top')).toBeTruthy();
         })
@@ -720,13 +747,13 @@ describe('tooltip', function() {
         it('should remove `auto` from exotic placements when auto positioning', function () {
           var elm = compileDirective('options-placement-auto-exotic-top-left');
           angular.element(elm[0]).triggerHandler('mouseenter');
-          
+
           // set the offset to 0 so we don't trigger changing the placement
           spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
             if (prop === 'offsetWidth') return 0;
             if (prop === 'offsetHeight') return 0;
           });
-          
+
           $$rAF.flush();
           expect(sandboxEl.children('.tooltip').hasClass('top-left')).toBeTruthy();
         })
@@ -734,13 +761,13 @@ describe('tooltip', function() {
         it('should default to `top` when `auto` placement is set without a preference', function () {
           var elm = compileDirective('options-placement-auto');
           angular.element(elm[0]).triggerHandler('mouseenter');
-          
+
           // set the offset to 0 so we don't trigger changing the placement
           spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
             if (prop === 'offsetWidth') return 0;
             if (prop === 'offsetHeight') return 0;
           });
-          
+
           $$rAF.flush();
           expect(sandboxEl.children('.tooltip').hasClass('top')).toBeTruthy();
         });
@@ -1022,7 +1049,7 @@ describe('tooltip', function() {
       });
 
       $$rAF.flush();
-      
+
       var tipElement = sandboxEl.children('.tooltip');
       expect(tipElement[0].style.top).toBe('30px')
       expect(tipElement[0].style.left).toBe('35px')
@@ -1041,7 +1068,7 @@ describe('tooltip', function() {
       });
 
       $$rAF.flush();
-      
+
       var tipElement = sandboxEl.children('.tooltip');
       expect(tipElement[0].style.top).toBe('-10px')
       expect(tipElement[0].style.left).toBe('35px')
@@ -1058,9 +1085,9 @@ describe('tooltip', function() {
         if (prop === 'offsetWidth') return 50;
         if (prop === 'offsetHeight') return 20;
       });
-      
+
       $$rAF.flush();
-      
+
       var tipElement = sandboxEl.children('.tooltip');
       expect(tipElement[0].style.top).toBe('10px')
       expect(tipElement[0].style.left).toBe('110px')
@@ -1077,9 +1104,9 @@ describe('tooltip', function() {
         if (prop === 'offsetWidth') return 50;
         if (prop === 'offsetHeight') return 20;
       });
-      
+
       $$rAF.flush();
-      
+
       var tipElement = sandboxEl.children('.tooltip');
       expect(tipElement[0].style.top).toBe('10px')
       expect(tipElement[0].style.left).toBe('-40px')
