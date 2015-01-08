@@ -35,6 +35,10 @@ describe('modal', function() {
       scope: {modal: {title: 'Title', content: 'Hello Modal!'}},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" bs-modal>click me</a>'
     },
+    'default-with-id': {
+      scope: {modal: {title: 'Title', content: 'Hello Modal!'}},
+      element: '<a id="modal1" title="{{modal.title}}" data-content="{{modal.content}}" bs-modal>click me</a>'
+    },
     'markup-scope': {
       element: '<a bs-modal="modal">click me</a>'
     },
@@ -152,6 +156,16 @@ describe('modal', function() {
       expect(bodyEl.children('.modal').length).toBe(0);
       angular.element(elm[0]).triggerHandler('click');
       expect(bodyEl.children('.modal').length).toBe(1);
+    });
+
+    it('should store config id value in instance', function() {
+      var myModal = $modal({ title: 'Title', content: 'Hello Modal!', id: 'modal1' });
+      expect(myModal.$id).toBe('modal1');
+    });
+
+    it('should fallback to element id value when id is not provided in config', function() {
+      var myModal = $modal({ title: 'Title', content: 'Hello Modal!', element: sandboxEl });
+      expect(myModal.$id).toBe('sandbox');
     });
 
   });
@@ -281,6 +295,19 @@ describe('modal', function() {
       myModal.hide();
       $animate.triggerCallbacks();
     });
+
+    it('should call show.before event with modal element instance id', function() {
+      var elm = compileDirective('default-with-id');
+      var id = "";
+      scope.$on('modal.show.before', function(evt, modal) {
+        id = modal.$id;
+      });
+
+      angular.element(elm[0]).triggerHandler('click');
+      scope.$digest();
+      expect(id).toBe('modal1');
+    });
+
   });
 
   describe('options', function() {
