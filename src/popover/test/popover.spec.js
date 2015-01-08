@@ -2,21 +2,25 @@
 
 describe('popover', function () {
 
-  var $compile, $templateCache, scope, sandboxEl, $window, $timeout;
+  var $compile, $templateCache, scope, sandboxEl, $window, $timeout, $popover, $animate;
 
+  beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.popover'));
   jQuery.fn.triggerHandler = function(evt) {
     return angular.element(this[0]).triggerHandler(evt);
   };
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$window_, _$timeout_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$window_, _$timeout_, _$popover_, _$animate_) {
     scope = _$rootScope_;
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo('body');
     $window = _$window_;
     $timeout = _$timeout_;
+    $popover = _$popover_;
+    $animate = _$animate_;
   }));
 
   afterEach(function() {
@@ -30,6 +34,10 @@ describe('popover', function () {
     'default': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
       element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover></a>'
+    },
+    'default-with-id': {
+      scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
+      element: '<a id="popover1" class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover></a>'
     },
     'markup-scope': {
       element: '<a bs-popover="popover">click me</a>'
@@ -175,6 +183,50 @@ describe('popover', function () {
       scope.$digest();
       expect(sandboxEl.children().length).toBe(2);
     });
+  });
+
+  describe('show / hide events', function() {
+
+    it('should dispatch show and show.before events', function() {
+      var myPopover = $popover(sandboxEl, templates['default'].scope.popover);
+      var emit = spyOn(myPopover.$scope, '$emit');
+      scope.$digest();
+      myPopover.show();
+
+      expect(emit).toHaveBeenCalledWith('tooltip.show.before', myPopover);
+      // show only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('tooltip.show', myPopover);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('tooltip.show', myPopover);
+    });
+
+    it('should dispatch hide and hide.before events', function() {
+      var myPopover = $popover(sandboxEl, templates['default'].scope.popover);
+      scope.$digest();
+      myPopover.show();
+
+      var emit = spyOn(myPopover.$scope, '$emit');
+      myPopover.hide();
+
+      expect(emit).toHaveBeenCalledWith('tooltip.hide.before', myPopover);
+      // hide only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('tooltip.hide', myPopover);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('tooltip.hide', myPopover);
+    });
+
+    it('should call show.before event with popover element instance id', function() {
+      var elm = compileDirective('default-with-id');
+      var id = "";
+      scope.$on('tooltip.show.before', function(evt, popover) {
+        id = popover.$id;
+      });
+
+      angular.element(elm[0]).triggerHandler('click');
+      scope.$digest();
+      expect(id).toBe('popover1');
+    });
+
   });
 
   describe('options', function () {
