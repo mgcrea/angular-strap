@@ -27,6 +27,10 @@ describe('select', function () {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
+    'default-with-id': {
+      scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button id="select1" type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><button type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button></li></ul>'
     },
@@ -363,6 +367,38 @@ describe('select', function () {
 
     });
 
+  });
+
+  describe('select event', function() {
+
+    it('should dispatch .select event when item is selected', function() {
+      var elm = compileDirective('default');
+
+      var selected = null;
+      scope.$on('$select.select', function(evt, value, index, select) {
+        selected = index;
+      });
+
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+
+      expect(selected).toBe(1);
+    });
+
+    it('should call .select event with select element instance id', function() {
+      var elm = compileDirective('default-with-id');
+
+      var id = '';
+      scope.$on('$select.select', function(evt, value, index, select) {
+        id = select.$id;
+      });
+
+      //scope.$digest();
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+
+      expect(id).toBe('select1');
+    });
   });
 
 });
