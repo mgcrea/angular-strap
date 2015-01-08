@@ -3,20 +3,21 @@
 
 describe('dropdown', function () {
 
-  var $compile, $templateCache, scope, sandboxEl, $animate, $timeout;
+  var $compile, $templateCache, scope, sandboxEl, $animate, $timeout, $dropdown;
 
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.dropdown'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timeout_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timeout_, _$dropdown_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $animate = _$animate_;
     $timeout = _$timeout_;
+    $dropdown = _$dropdown_;
   }));
 
   afterEach(function() {
@@ -30,6 +31,10 @@ describe('dropdown', function () {
     'default': {
       scope: {dropdown: [{text: 'Another action', href: '#foo'}, {text: 'External link', href: '/auth/facebook', target: '_self'}, {text: 'Something else here', click: '$alert(\'working ngClick!\')'}, {divider: true}, {text: 'Separated link', href: '#separatedLink'}]},
       element: '<a bs-dropdown="dropdown">click me</a>'
+    },
+    'default-with-id': {
+      scope: {dropdown: [{text: 'Another action', href: '#foo'}, {text: 'External link', href: '/auth/facebook', target: '_self'}, {text: 'Something else here', click: '$alert(\'working ngClick!\')'}, {divider: true}, {text: 'Separated link', href: '#separatedLink'}]},
+      element: '<a id="dropdown1" bs-dropdown="dropdown">click me</a>'
     },
     'in-navbar': {
       element: '<div class="collapse navbar-collapse"><ul class="nav navbar-nav"><li class="dropdown"><a bs-dropdown="dropdown">click me</a></li></ul>'
@@ -229,6 +234,49 @@ describe('dropdown', function () {
     });
   });
 
+  describe('show / hide events', function() {
+
+    it('should dispatch show and show.before events', function() {
+      var myDropdown = $dropdown(sandboxEl, templates['default'].scope.dropdown);
+      var emit = spyOn(myDropdown.$scope, '$emit');
+      scope.$digest();
+      myDropdown.show();
+
+      expect(emit).toHaveBeenCalledWith('tooltip.show.before', myDropdown);
+      // show only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('tooltip.show', myDropdown);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('tooltip.show', myDropdown);
+    });
+
+    it('should dispatch hide and hide.before events', function() {
+      var myDropdown = $dropdown(sandboxEl, templates['default'].scope.dropdown);
+      scope.$digest();
+      myDropdown.show();
+
+      var emit = spyOn(myDropdown.$scope, '$emit');
+      myDropdown.hide();
+
+      expect(emit).toHaveBeenCalledWith('tooltip.hide.before', myDropdown);
+      // hide only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('tooltip.hide', myDropdown);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('tooltip.hide', myDropdown);
+    });
+
+    it('should call show.before event with dropdown element instance id', function() {
+      var elm = compileDirective('default-with-id');
+      var id = "";
+      scope.$on('tooltip.show.before', function(evt, dropdown) {
+        id = dropdown.$id;
+      });
+
+      angular.element(elm[0]).triggerHandler('click');
+      scope.$digest();
+      expect(id).toBe('dropdown1');
+    });
+
+  });
 
   describe('options', function () {
 
