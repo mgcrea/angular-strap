@@ -118,6 +118,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
             if(activeTarget === sortedElements[i].target) continue;
             if(scrollTop < sortedElements[i].offsetTop) continue;
             if(sortedElements[i + 1] && scrollTop > sortedElements[i + 1].offsetTop) continue;
+            if (sortedElements[i].source[0].parentNode === null) continue;
             return $scrollspy.$activateElement(sortedElements[i]);
           }
 
