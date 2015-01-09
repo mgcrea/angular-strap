@@ -108,8 +108,16 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
           viewportHeight = Math.max($window.innerHeight, docEl.prop('clientHeight'));
 
           // Activate first element if scroll is smaller
-          if(scrollTop < sortedElements[0].offsetTop && activeTarget !== sortedElements[0].target) {
-            return $scrollspy.$activateElement(sortedElements[0]);
+          var firstElementInDom;
+          var index = 0;
+          while(angular.isUndefined(firstElementInDom) && index < sortedElements.length){
+            if(sortedElements[index].source[0].parentNode !==null){
+              firstElementInDom = sortedElements[index];
+            }
+             index++;
+          }
+          if(firstElementInDom && scrollTop < firstElementInDom.offsetTop && activeTarget !== firstElementInDom.target) {
+              return $scrollspy.$activateElement(firstElementInDom);
           }
 
           // Activate proper element
