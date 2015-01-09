@@ -409,6 +409,156 @@ angular.module('mgcrea.ngStrap.datepicker', [
     };
 
   })
+  
+  .directive('mask', function($locale) {
+		/*
+     *	inspirated by https://github.com/AlphaGit/ng-pattern-restrict modified to autocomplete and fit with bsDatePicker dateFormat.
+		 *  Work with dateFormat pattern EXCEPTED for those that are not mask (one to one characters)
+		 * => Do not work with these pattern : 'y','MMMM', 'MMM', 'M', 'd', 'EEEE', 'EEE', 'H', 'h', 'm', 's','a','Z','w'
+		 * => work with these pattern : 'yy','yyyy', 'MM', 'dd', 'HH', 'hh', 'mm', 'ss', 'sss','ww'
+		 * => work with localizable formats with the same limits.
+		 */
+		return {
+			restrict: 'A',
+			require: "?ngModel",
+			link: function (scope, element, attr, controller) {
+					
+					//List of characters use by dateFormat.
+					var reservedCharacters =['y','M','m','d','E','H','h','s','w'];
+					
+					// Keep Caret Position (use to revert)
+					var caretPosition;
+										
+					//Init old value (use to revert)
+					var oldValue = element.val();
+					if (!oldValue){
+						oldValue = "";
+					}
+					
+					//Get the pattern given by data-date-format attribute
+					var pattern = attr.dateFormat;
+					//Resolve predefined localizable formats like : short/medium...
+					pattern = $locale.DATETIME_FORMATS[pattern] || pattern;
+					
+					//bind events
+					element.bind('input keyup click', eventHandler);
+					
+					//destroy
+					function destroy() {
+					    element.unbind('input', eventHandler);
+			            element.unbind('keyup', eventHandler);
+			            element.unbind('click', eventHandler);
+					};
+					scope.$on("$destroy", destroy);
+					
+					//Check the filled value against the pattern (char by char)
+					function isMatchPattern(value) {
+						if(value.length === 0){
+							return true;
+						}else if(value.length <= pattern.length){
+							var result = true;
+							for(var index = 0; index < value.length;index++){
+								if(reservedCharacters.indexOf(pattern[index])>=0 && !/\d/.test(value[index])){
+									return false;
+								}else if(reservedCharacters.indexOf(pattern[index])<0 && value[index] !== pattern[index]){
+									return false;
+								}
+							}
+							return true;
+						}
+						return false;
+					}
+					
+					function autoComplete(value) {
+						//if pattern contains more characters
+						if(value.length > 0 && value.length+1 <= pattern.length){
+							var newValue = value;
+							var index = value.length;
+							
+							if(reservedCharacters.indexOf(pattern[index])<0){
+								//add all unreserved characters
+								while(reservedCharacters.indexOf(pattern[index])<0){
+									newValue += pattern[index];
+									index++;
+								}
+								//commit value
+								scope.$apply(function() {							
+									controller.$setViewValue(newValue);
+								});
+								element.val(newValue);
+								return newValue;
+							}
+						}
+						return value;
+					}
+					
+					
+					//event handling
+					function eventHandler(e) {
+						var newValue = element.val();
+						//Test current value
+						if (newValue.length > oldValue.length){
+							if (isMatchPattern(newValue)) {
+								//Apply caret position
+								caretPosition = getCaretPosition();
+								//complete by static characters
+								oldValue = autoComplete(newValue);
+							} else {
+								//prevent default
+								e.preventDefault();
+								//revert model and element state
+								revert();
+							}
+						}else{
+							oldValue = newValue;
+						}
+					};
+
+					//revert to previous state
+					function revert() {
+						if (controller) {
+							scope.$apply(function() {							
+								controller.$setViewValue(oldValue);
+							});
+						}
+						element.val(oldValue);
+
+						if (angular.isDefined(caretPosition)){
+							setCaretPosition(caretPosition);
+						}
+					};
+
+					// logic from http://stackoverflow.com/a/9370239/147507
+					function getCaretPosition() {
+						var input = element[0]; // we need to go under jqlite
+
+						// IE support
+						if (document.selection) {
+							var range = document.selection.createRange();
+							range.moveStart('character', -element.val().length);
+							return range.text.length;
+						} else {
+							return input.selectionStart;
+						}
+					}
+
+					// logic from http://stackoverflow.com/q/5755826/147507
+					function setCaretPosition(position) {
+						var input = element[0]; // we need to go under jqlite
+						if (input.createTextRange) {
+					        var textRange = input.createTextRange();
+					        textRange.collapse(true);
+					        textRange.moveEnd('character', position);
+					        textRange.moveStart('character', position);
+					        textRange.select();	
+    					} else {
+							input.setSelectionRange(position, position);
+						}
+					}
+				}
+			}
+		}
+	)
 
   .provider('datepickerViews', function() {
 
