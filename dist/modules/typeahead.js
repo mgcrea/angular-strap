@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.5 - 2014-12-23
+ * @version v2.1.6 - 2015-01-11
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -86,7 +86,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           scope.$resetMatches();
           if(parentScope) parentScope.$digest();
           // Emit event
-          scope.$emit(options.prefixEvent + '.select', value, index);
+          scope.$emit(options.prefixEvent + '.select', value, index, $typeahead);
         };
 
         // Protected methods
@@ -182,7 +182,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'comparator'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'comparator', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

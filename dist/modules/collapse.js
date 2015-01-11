@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.5 - 2014-12-23
+ * @version v2.1.6 - 2015-01-11
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -15,7 +15,8 @@ angular.module('mgcrea.ngStrap.collapse', [])
       animation: 'am-collapse',
       disallowToggle: false,
       activeClass: 'in',
-      startCollapsed: false
+      startCollapsed: false,
+      allowMultiple: false
     };
 
     var controller = this.controller = function($scope, $element, $attrs) {
@@ -23,7 +24,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
       // Attributes options
       self.$options = angular.copy(defaults);
-      angular.forEach(['animation', 'disallowToggle', 'activeClass', 'startCollapsed'], function (key) {
+      angular.forEach(['animation', 'disallowToggle', 'activeClass', 'startCollapsed', 'allowMultiple'], function (key) {
         if(angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
@@ -46,35 +47,85 @@ angular.module('mgcrea.ngStrap.collapse', [])
       };
       self.$unregisterTarget = function(element) {
         var index = self.$targets.indexOf(element);
-        var activeIndex = self.$targets.$active;
 
         // remove element from $targets array
         self.$targets.splice(index, 1);
 
-        if (index < activeIndex) {
-          // we removed a target before the active target, so we need to
-          // decrement the active target index
-          activeIndex--;
+        if (self.$options.allowMultiple) {
+          // remove target index from $active array values
+          deactivateItem(element);
         }
-        else if (index === activeIndex && activeIndex === self.$targets.length) {
-          // we remove the active target and it was the one at the end,
-          // so select the previous one
-          activeIndex--;
-        }
-        self.$setActive(activeIndex);
-      };
 
-      self.$targets.$active = !self.$options.startCollapsed ? 0 : -1;
-      self.$setActive = $scope.$setActive = function(value) {
-        if(!self.$options.disallowToggle) {
-          self.$targets.$active = self.$targets.$active === value ? -1 : value;
-        } else {
-          self.$targets.$active = value;
-        }
+        // fix active item indexes
+        fixActiveItemIndexes(index);
+
         self.$viewChangeListeners.forEach(function(fn) {
           fn();
         });
       };
+
+      // use array to store all the currently open panels
+      self.$targets.$active = !self.$options.startCollapsed ? [0] : [];
+      self.$setActive = $scope.$setActive = function(value) {
+        if(angular.isArray(value)) {
+          self.$targets.$active = angular.copy(value);
+        }
+        else if(!self.$options.disallowToggle) {
+          // toogle element active status
+          isActive(value) ? deactivateItem(value) : activateItem(value);
+        } else {
+          activateItem(value);
+        }
+
+        self.$viewChangeListeners.forEach(function(fn) {
+          fn();
+        });
+      };
+
+      self.$activeIndexes = function() {
+        return self.$options.allowMultiple ? self.$targets.$active :
+          self.$targets.$active.length === 1 ? self.$targets.$active[0] : -1;
+      };
+
+      function fixActiveItemIndexes(index) {
+        // item with index was removed, so we
+        // need to adjust other items index values
+        var activeIndexes = self.$targets.$active;
+        for(var i = 0; i < activeIndexes.length; i++) {
+          if (index < activeIndexes[i]) {
+            activeIndexes[i] = activeIndexes[i] - 1;
+          }
+
+          // the last item is active, so we need to
+          // adjust its index
+          if (activeIndexes[i] === self.$targets.length) {
+            activeIndexes[i] = self.$targets.length - 1;
+          }
+        }
+      }
+
+      function isActive(value) {
+        var activeItems = self.$targets.$active;
+        return activeItems.indexOf(value) === -1 ? false : true;
+      }
+
+      function deactivateItem(value) {
+        var index = self.$targets.$active.indexOf(value);
+        if (index !== -1) {
+          self.$targets.$active.splice(index, 1);
+        }
+      }
+
+      function activateItem(value) {
+        if (!self.$options.allowMultiple) {
+          // remove current selected item
+          self.$targets.$active.splice(0, 1);
+        }
+
+        if (self.$targets.$active.indexOf(value) === -1) {
+          self.$targets.$active.push(value);
+        }
+      }
 
     };
 
@@ -103,14 +154,30 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
           // Update the modelValue following
           bsCollapseCtrl.$viewChangeListeners.push(function() {
-            ngModelCtrl.$setViewValue(bsCollapseCtrl.$targets.$active);
+            ngModelCtrl.$setViewValue(bsCollapseCtrl.$activeIndexes());
           });
 
           // modelValue -> $formatters -> viewValue
           ngModelCtrl.$formatters.push(function(modelValue) {
             // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
-            if (bsCollapseCtrl.$targets.$active !== modelValue * 1) {
-              bsCollapseCtrl.$setActive(modelValue * 1);
+            if (angular.isArray(modelValue)) {
+              // model value is an array, so just replace
+              // the active items directly
+              bsCollapseCtrl.$setActive(modelValue);
+            }
+            else {
+              var activeIndexes = bsCollapseCtrl.$activeIndexes();
+
+              if (angular.isArray(activeIndexes)) {
+                // we have an array of selected indexes
+                if (activeIndexes.indexOf(modelValue * 1) === -1) {
+                  // item with modelValue index is not active
+                  bsCollapseCtrl.$setActive(modelValue * 1);
+                }
+              }
+              else if (activeIndexes !== modelValue * 1) {
+                bsCollapseCtrl.$setActive(modelValue * 1);
+              }
             }
             return modelValue;
           });
@@ -181,8 +248,18 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
         function render() {
           var index = bsCollapseCtrl.$targets.indexOf(element);
-          var active = bsCollapseCtrl.$targets.$active;
-          $animate[index === active ? 'addClass' : 'removeClass'](element, bsCollapseCtrl.$options.activeClass);
+          var active = bsCollapseCtrl.$activeIndexes();
+          var action = 'removeClass';
+          if (angular.isArray(active)) {
+            if (active.indexOf(index) !== -1) {
+              action = 'addClass';
+            }
+          }
+          else if (index === active) {
+            action = 'addClass';
+          }
+
+          $animate[action](element, bsCollapseCtrl.$options.activeClass);
         }
 
         bsCollapseCtrl.$viewChangeListeners.push(function() {
