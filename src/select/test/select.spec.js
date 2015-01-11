@@ -87,6 +87,10 @@ describe('select', function () {
     },
     'options-template': {
       element: '<button type="button" class="btn" data-template="custom" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
+    'options-multiple-sort': {
+      scope: {sort: true, selectedIcons: [], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" data-sort="{{ sort }}" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
     }
   };
 
@@ -363,6 +367,37 @@ describe('select', function () {
         angular.element(elm[0]).triggerHandler('focus');
         expect(angular.element(sandboxEl.find('.dropdown-inner > .btn')[0]).triggerHandler('click'));
         expect(scope.dropdown.counter).toBe(2);
+      });
+
+    });
+
+    describe('sort', function () {
+
+      it('should sort selected items by index when sort it true', function() {
+        var elm = compileDirective('options-multiple-sort');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(3) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(2) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcons).toEqual([scope.icons[1].value, scope.icons[2].value, scope.icons[3].value]);
+      });
+
+      it('should sort selected items by selection order when sort it false', function() {
+        var elm = compileDirective('options-multiple-sort', { sort: false });
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(3) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(2) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcons).toEqual([scope.icons[3].value, scope.icons[1].value, scope.icons[2].value]);
+      });
+
+      it('should sort selected items by selection order when sort value is empty', function() {
+        var elm = compileDirective('options-multiple-sort', { sort: '' });
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(3) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(2) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcons).toEqual([scope.icons[3].value, scope.icons[1].value, scope.icons[2].value]);
       });
 
     });
