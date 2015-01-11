@@ -33,6 +33,10 @@ describe('timepicker', function() {
       scope: {selectedTime: new Date()},
       element: '<input type="text" ng-model="selectedTime" bs-timepicker>'
     },
+    'default-with-id': {
+      scope: {selectedTime: new Date()},
+      element: '<input id="timepicker1" type="text" ng-model="selectedTime" bs-timepicker>'
+    },
     'value-past': {
       scope: {selectedTime: new Date(1970, 0, 1, 10, 30)},
       element: '<input type="text" ng-model="selectedTime" bs-timepicker>'
@@ -180,7 +184,7 @@ describe('timepicker', function() {
       var elm = compileDirective('value-past');
       // Should have the predefined value
       expect(elm.val()).toBe('10:30 AM');
-      // Should correctly set the model value if set via the datepicker
+      // Should correctly set the model value if set via the timepicker
       angular.element(elm[0]).triggerHandler('focus');
       angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(12)')).triggerHandler('click');
       expect(elm.val()).toBe('12:30 PM');
@@ -451,6 +455,50 @@ describe('timepicker', function() {
   //   });
 
   // });
+
+  describe('show / hide events', function() {
+
+    it('should dispatch show and show.before events', function() {
+      var myTimepicker = $timepicker(sandboxEl, { $datevalue: new Date() }, { scope: scope, options: templates['default'].scope });
+      var emit = spyOn(myTimepicker.$scope, '$emit');
+      scope.$digest();
+      myTimepicker.show();
+
+      expect(emit).toHaveBeenCalledWith('tooltip.show.before', myTimepicker);
+      // show only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('tooltip.show', myTimepicker);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('tooltip.show', myTimepicker);
+    });
+
+    it('should dispatch hide and hide.before events', function() {
+      var myTimepicker = $timepicker(sandboxEl, { $datevalue: new Date() }, { scope: scope, options: templates['default'].scope });
+      scope.$digest();
+      myTimepicker.show();
+
+      var emit = spyOn(myTimepicker.$scope, '$emit');
+      myTimepicker.hide();
+
+      expect(emit).toHaveBeenCalledWith('tooltip.hide.before', myTimepicker);
+      // hide only fires AFTER the animation is complete
+      expect(emit).not.toHaveBeenCalledWith('tooltip.hide', myTimepicker);
+      $animate.triggerCallbacks();
+      expect(emit).toHaveBeenCalledWith('tooltip.hide', myTimepicker);
+    });
+
+    it('should call show.before event with popover element instance id', function() {
+      var elm = compileDirective('default-with-id');
+      var id = "";
+      scope.$on('tooltip.show.before', function(evt, timepicker) {
+        id = timepicker.$id;
+      });
+
+      angular.element(elm[0]).triggerHandler('focus');
+      scope.$digest();
+      expect(id).toBe('timepicker1');
+    });
+
+  });
 
   describe('options', function() {
 
@@ -889,7 +937,7 @@ describe('timepicker', function() {
         // Should have the predefined value
         expect(elm.val()).toBe('12:20');
 
-        // Should correctly set the model value if set via the datepicker
+        // Should correctly set the model value if set via the timepicker
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(13)')).triggerHandler('click');
         expect(elm.val()).toBe('13:20');

@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 angular.module('mgcrea.ngStrap.timepicker', [
   'mgcrea.ngStrap.helpers.dateParser',
@@ -301,8 +301,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
         var _show = $timepicker.show;
         $timepicker.show = function() {
           _show();
-          // use timeout to hookup the events to prevent 
-          // event bubbling from being processed imediately. 
+          // use timeout to hookup the events to prevent
+          // event bubbling from being processed imediately.
           $timeout(function() {
             $timepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
             if(options.keyboard) {
@@ -346,7 +346,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -407,7 +407,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
           // Null values should correctly reset the model value & validity
           if(!viewValue) {
             // BREAKING CHANGE:
-            // return null (not undefined) when input value is empty, so angularjs 1.3 
+            // return null (not undefined) when input value is empty, so angularjs 1.3
             // ngModelController can go ahead and run validators, like ngRequired
             controller.$setValidity('date', true);
             return null;
@@ -415,8 +415,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
           var parsedTime = angular.isDate(viewValue) ? viewValue : dateParser.parse(viewValue, controller.$dateValue);
           if(!parsedTime || isNaN(parsedTime.getTime())) {
             controller.$setValidity('date', false);
-            // return undefined, causes ngModelController to 
-            // invalidate model value 
+            // return undefined, causes ngModelController to
+            // invalidate model value
             return;
           } else {
             validateAgainstMinMaxTime(parsedTime);
