@@ -1,0 +1,9 @@
+<form name="popoverForm">
+	<p ng-bind-html-unsafe="popover.content"></p>
+	<br />
+	<pre>2 + 3 = <span ng-cloak>{{ 2 + 3 }}</span></pre>
+	<div class="form-actions">
+		<button type="button" class="btn" ng-click="hide()">Close</button>
+		<button class="btn btn-primary" ng-click="popover.saved=true;hide()">Save changes</button>
+	</div>
+</form>
