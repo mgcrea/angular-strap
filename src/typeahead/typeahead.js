@@ -18,7 +18,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       minLength: 1,
       filter: 'filter',
       limit: 6,
-      comparator: ''
+      comparator: '',
+      trimValue: true
     };
 
     this.$get = function($window, $rootScope, $tooltip, $timeout) {
@@ -175,7 +176,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'comparator', 'id'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'comparator', 'id', 'trimValue'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -183,7 +184,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var filter = options.filter || defaults.filter;
         var limit = options.limit || defaults.limit;
         var comparator = options.comparator || defaults.comparator;
-
+		var trimValue = options.trimValue ? options.trimValue === 'true' : defaults.trimValue;
+        
         var ngOptions = attr.ngOptions;
         if(filter) ngOptions += ' | ' + filter + ':$viewValue';
         if (comparator) ngOptions += ':' + comparator;
@@ -243,7 +245,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
-          element.val(selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '').trim() : '');
+		  
+		  var copy = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
+          element.val(trimValue === true ? copy.trim() : copy);
         };
 
         // Garbage collection
