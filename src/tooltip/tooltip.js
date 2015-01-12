@@ -373,7 +373,19 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           // Get the tooltip's top and left coordinates to center it with this directive.
           var tipPosition = getCalculatedOffset(placement, elementPosition, tipWidth, tipHeight);
+
+          //check to see if viewport adjustments are needed and apply the deltas
+          var delta = getViewportAdjustedDelta(placement, tipPosition, tipWidth, tipHeight);
+          if (delta.left) {
+            tipPosition.left += delta.left;
+          } else {
+            tipPosition.top += delta.top;
+          }
+
           applyPlacementCss(tipPosition.top, tipPosition.left);
+
+          //apply any deltas to the arrow
+          adjustArrowPlacement(placement, delta, tipWidth, tipHeight);
         };
 
         $tooltip.$onKeyUp = function(evt) {
@@ -481,14 +493,16 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             elRect = angular.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top });
           }
 
-          var elPos;
+          var elPos, scroll;
           if (options.container === 'body') {
             elPos = dimensions.offset(el);
+            scroll = { scroll: document.documentElement.scrollTop || document.body.scrollTop };
           } else {
             elPos = dimensions.position(el);
+            scroll = { scroll: el.scrollTop };
           }
 
-          return angular.extend({}, elRect, elPos);
+          return angular.extend({}, elRect, elPos, scroll);
         }
 
         function getCalculatedOffset(placement, position, actualWidth, actualHeight) {
@@ -550,6 +564,59 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         function applyPlacementCss(top, left) {
           tipElement.css({ top: top + 'px', left: left + 'px' });
+        }
+
+        //provides adjustment so the tooltip doesn't overflow the page
+        function getViewportAdjustedDelta(placement, position, actualWidth, actualHeight) {
+          var delta = { left: 0, top: 0 };
+
+          //if it's an exotic placement don't make any adjustments
+          if (isExoticPlacement(placement))
+            return delta;
+
+          var viewport = angular.element(document.querySelector('html'));
+          var viewportDimensions = getPosition(viewport);
+
+          if (/right|left/.test(placement)) {
+            var topEdgeOffset = position.top - viewportDimensions.scroll;
+            var bottomEdgeOffset = position.top + viewportDimensions.scroll + actualHeight;
+
+            if (topEdgeOffset < viewportDimensions.top) { // top overflow
+              delta.top = viewportDimensions.top - topEdgeOffset;
+            } else if (bottomEdgeOffset > viewportDimensions.top + viewportDimensions.height) { // bottom overflow
+              delta.top = viewportDimensions.top + viewportDimensions.height - bottomEdgeOffset;
+            }
+          } else {
+            var leftEdgeOffset = position.left;
+            var rightEdgeOffset = position.left + actualWidth;
+
+            if (leftEdgeOffset < viewportDimensions.left) { // left overflow
+              delta.left = viewportDimensions.left - leftEdgeOffset;
+            } else if (rightEdgeOffset > viewportDimensions.width) { // right overflow
+              delta.left = viewportDimensions.left + viewportDimensions.width - rightEdgeOffset;
+            }
+          }
+
+          return delta;
+        }
+
+        function adjustArrowPlacement(placement, delta, width, height) {
+          //the CSS will handle the placement for exotic placements
+          if (isExoticPlacement(placement))
+            return;
+
+          var isVertical = /top|bottom/.test(placement);
+          var arrowDelta = isVertical ? delta.left * 2 : delta.top * 2;
+          var dimension = isVertical ? width : height;
+          var arrow = tipElement.children('.tooltip-arrow');
+
+          arrow.css(isVertical ? 'left' : 'top', 50 * (1 - arrowDelta / dimension) + '%')
+            .css(isVertical ? 'top' : 'left', '');
+        }
+
+        function isExoticPlacement(placement) {
+          return placement === 'bottom-right' || placement === 'top-right' ||
+            placement === 'bottom-left' || placement === 'top-left';
         }
 
         function destroyTipElement() {
