@@ -7,6 +7,7 @@
         <owners>mgcrea</owners>
         <licenseUrl>https://raw.github.com/mgcrea/angular-strap/master/LICENSE.md</licenseUrl>
         <projectUrl>https://github.com/mgcrea/angular-strap</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/mgcrea/angular-strap/gh-pages/images/snippet-logo.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>AngularStrap - AngularJS directives for Bootstrap</description>
         <copyright>Copyright Olivier Louvignes 2014</copyright>
