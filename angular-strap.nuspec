@@ -14,7 +14,7 @@
         <tags>angular bootstrap</tags>
         <dependencies>
             <dependency id="bootstrap" version="[3.0.0, 4.0.0)" />
-            <dependency id="AngularJS.Core" version="[1.2.0, 1.3.0, 2.0.0)" />
+            <dependency id="AngularJS.Core" version="[1.2.0, 2.0.0)" />
         </dependencies>
     </metadata>
     <files>
