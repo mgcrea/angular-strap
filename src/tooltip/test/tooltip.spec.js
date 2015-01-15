@@ -1024,7 +1024,7 @@ describe('tooltip', function() {
       var tipElement = sandboxEl.children('.tooltip');
       expect(tipElement[0].style.top).toBe('30px')
       expect(tipElement[0].style.left).toBe('60px')
-    });
+    }); 
   });
 
   describe('auto placements', function() {
@@ -1110,6 +1110,124 @@ describe('tooltip', function() {
       var tipElement = sandboxEl.children('.tooltip');
       expect(tipElement[0].style.top).toBe('10px')
       expect(tipElement[0].style.left).toBe('-40px')
+    });
+  });
+
+  describe('viewport adjustments', function () {
+    var dimensions,
+        $window
+
+    beforeEach(inject(function (_dimensions_, _$window_) {
+      dimensions = _dimensions_;
+      $window = _$window_;
+    }));
+
+    it('should adjust the position of the tooltip to not overflow top of viewport', function () {
+      var elm = compileDirective('options-placement-right');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      
+      spyOn(dimensions, 'position').and.callFake(function (element) {
+        if (element.nodeName.toLowerCase() === "html") {
+          //The viewport adjustment is making use of the position function to determine the page bounds          
+          return { top: 0, right: 200, bottom: 200, left: 0, height: 200, width: 200, scroll: 0 };
+        } else {
+          return { top: -10, right: 80, bottom: 30, left: 40, height: 40, width: 40, scroll: 0 };          
+        }       
+      });
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 40;
+        if (prop === 'offsetHeight') return 40;
+      });
+      
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('0px');
+
+      var tipArrowElement = tipElement.children('.tooltip-arrow');
+      expect(tipArrowElement[0].style.top).toBe('25%');
+    });
+
+    it('should adjust the position of the tooltip to not overflow the bottom of the viewport', function () {
+      var elm = compileDirective('options-placement-right');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(dimensions, 'position').and.callFake(function (element) {
+        if (element.nodeName.toLowerCase() === "html") {
+          //The viewport adjustment is making use of the position function to determine the page bounds          
+          return { top: 0, right: 200, bottom: 200, left: 0, height: 200, width: 200, scroll: 0 };
+        } else {
+          return { top: 170, right: 40, bottom: 210, left: 80, height: 40, width: 40, scroll: 0 };
+        }
+      });
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 40;
+        if (prop === 'offsetHeight') return 40;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.top).toBe('160px');
+
+      var tipArrowElement = tipElement.children('.tooltip-arrow');
+      expect(tipArrowElement[0].style.top).toBe('75%');
+    });
+
+    it('should adjust the position of the tooltip to not overflow the left of the viewport', function () {
+      var elm = compileDirective('options-placement-bottom');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(dimensions, 'position').and.callFake(function (element) {
+        if (element.nodeName.toLowerCase() === "html") {
+          //The viewport adjustment is making use of the position function to determine the page bounds          
+          return { top: 0, right: 200, bottom: 200, left: 0, height: 200, width: 200, scroll: 0 };
+        } else {
+          return { top: 60, right: 30, bottom: 100, left: -10, height: 40, width: 40, scroll: 0 };
+        }
+      });
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 40;
+        if (prop === 'offsetHeight') return 40;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.left).toBe('0px');
+
+      var tipArrowElement = tipElement.children('.tooltip-arrow');
+      expect(tipArrowElement[0].style.left).toBe('25%');
+    });
+
+    it('should adjust the position of the tooltip to not overflow the right of the viewport', function () {
+      var elm = compileDirective('options-placement-bottom');
+      angular.element(elm[0]).triggerHandler('mouseenter');
+
+      spyOn(dimensions, 'position').and.callFake(function (element) {
+        if (element.nodeName.toLowerCase() === "html") {
+          //The viewport adjustment is making use of the position function to determine the page bounds          
+          return { top: 0, right: 200, bottom: 200, left: 0, height: 200, width: 200, scroll: 0 };
+        } else {
+          return { top: 60, right: 210, bottom: 100, left: 170, height: 40, width: 40, scroll: 0 };
+        }
+      });
+
+      spyOn(angular.element.prototype, 'prop').and.callFake(function (prop) {
+        if (prop === 'offsetWidth') return 40;
+        if (prop === 'offsetHeight') return 40;
+      });
+
+      $$rAF.flush();
+
+      var tipElement = sandboxEl.children('.tooltip');
+      expect(tipElement[0].style.left).toBe('160px');
+
+      var tipArrowElement = tipElement.children('.tooltip-arrow');
+      expect(tipArrowElement[0].style.left).toBe('75%');
     });
   });
 });
