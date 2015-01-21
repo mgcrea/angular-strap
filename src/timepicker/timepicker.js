@@ -21,6 +21,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
       useNative: true,
       timeType: 'date',
       timeFormat: 'shortTime',
+      timezone: null,
       modelTimeFormat: null,
       autoclose: false,
       minTime: -Infinity,
@@ -48,8 +49,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
         var scope = $timepicker.$scope;
 
         var lang = options.lang;
-        var formatDate = function(date, format) {
-          return $dateFormatter.formatDate(date, format, lang);
+        var formatDate = function(date, format, timezone) {
+          return $dateFormatter.formatDate(date, format, lang, timezone);
         };
 
         // View vars
@@ -346,7 +347,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'id'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -363,8 +364,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
         options = timepicker.$options;
 
         var lang = options.lang;
-        var formatDate = function(date, format) {
-          return $dateFormatter.formatDate(date, format, lang);
+        var formatDate = function(date, format, timezone) {
+          return $dateFormatter.formatDate(date, format, lang, timezone);
         };
 
         // Initialize parser
@@ -404,6 +405,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
         // viewValue -> $parsers -> modelValue
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
+          var date;
           // Null values should correctly reset the model value & validity
           if(!viewValue) {
             // BREAKING CHANGE:
@@ -421,16 +423,20 @@ angular.module('mgcrea.ngStrap.timepicker', [
           } else {
             validateAgainstMinMaxTime(parsedTime);
           }
+
           if(options.timeType === 'string') {
-            return formatDate(parsedTime, options.modelTimeFormat || options.timeFormat);
-          } else if(options.timeType === 'number') {
-            return controller.$dateValue.getTime();
+            date = dateParser.timezoneOffsetAdjust(parsedTime, options.timezone, true);
+            return formatDate(date, options.modelTimeFormat || options.timeFormat);
+          }
+          date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
+          if(options.timeType === 'number') {
+            return date.getTime();
           } else if(options.timeType === 'unix') {
-            return controller.$dateValue.getTime() / 1000;
+            return date.getTime() / 1000;
           } else if(options.timeType === 'iso') {
-            return controller.$dateValue.toISOString();
+            return date.toISOString();
           } else {
-            return new Date(controller.$dateValue);
+            return new Date(date);
           }
         });
 
@@ -451,7 +457,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
           }
           // Setup default value?
           // if(isNaN(date.getTime())) date = new Date(new Date().setMinutes(0) + 36e5);
-          controller.$dateValue = date;
+          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
           return getTimeFormattedString();
         });
 

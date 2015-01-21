@@ -130,10 +130,10 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         return regex.test(date);
       };
 
-      $dateParser.parse = function(value, baseDate, format) {
+      $dateParser.parse = function(value, baseDate, format, timezone) {
         // check for date format special names
         if(format) format = $locale.DATETIME_FORMATS[format] || format;
-        if(angular.isDate(value)) value = dateFilter(value, format || $dateParser.$format);
+        if(angular.isDate(value)) value = dateFilter(value, format || $dateParser.$format, timezone);
         var formatRegex = format ? regExpForFormat(format) : regex;
         var formatSetMap = format ? setMapForFormat(format) : setMap;
         var matches = formatRegex.exec(value);
@@ -205,6 +205,24 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
           return null;
         }
         date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
+        return date;
+      };
+
+      /* Correct the date for timezone offset.
+      * @param  date  (Date) the date to adjust
+      * @param  timezone  (string) the timezone to adjust for
+      * @param  undo  (boolean) to add or subtract timezone offset
+      * @return  (Date) the corrected date
+      */
+      $dateParser.timezoneOffsetAdjust = function(date, timezone, undo) {
+        if (!date) {
+          return null;
+        }
+        // Right now, only 'UTC' is supported.
+        if (timezone && timezone === 'UTC') {
+          date = new Date(date.getTime());
+          date.setMinutes(date.getMinutes() + (undo?-1:1)*date.getTimezoneOffset());
+        }
         return date;
       };
 

@@ -97,6 +97,9 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="EEEE MMMM d, yyyy" bs-datepicker>'
     },
+    'options-timezone-utc': {
+      element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" data-timezone="UTC" bs-datepicker>'
+    },
     'options-strictFormat': {
       scope: {selectedDate: new Date(1986, 1, 4)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-M-d" data-strict-format="1" bs-datepicker>'
@@ -894,6 +897,36 @@ describe('datepicker', function() {
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
         expect(elm.val()).toBe('Feb 24, 1986');
       });
+
+    });
+
+    describe('timezone', function () {
+      var elm, i = 0;
+      var dates = [
+        new Date(2014, 0, 1),
+        new Date(2015, 0, 1),
+        new Date(2014, 11, 31),
+        new Date(2015, 11, 31),
+        new Date(2014, 7, 1),
+        new Date(2015, 7, 1),
+        new Date(1985, 0, 11)
+      ];
+
+      beforeEach(function() {
+        elm = compileDirective('options-timezone-utc', {selectedDate: dates[i]});
+      });
+
+      afterEach(function() { i++ });
+
+      for (var t = 0; t < dates.length; t++) {
+        it('should select date in utc timezone', function () {
+          expect(elm.val()).toBe(dateFilter(dates[i], 'yyyy-MM-dd', 'UTC'));
+          expect(scope.selectedDate.toDateString()).toBe(dates[i].toDateString());
+          angular.element(elm[0]).triggerHandler('focus');
+          angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(15)')).triggerHandler('click');
+          expect(elm.val()).toBe(dateFilter(dates[i], 'yyyy-MM-\'15\'', 'UTC'));
+        });
+      }
 
     });
 
