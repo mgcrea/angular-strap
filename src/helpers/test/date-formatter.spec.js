@@ -68,9 +68,9 @@ describe('dateUtil', function () {
 
   describe('formatDate', function() {
     it('should call formatDate with only the date and format arguments', function() {
-      $dateFormatter.formatDate('date', 'format', 'lang');
+      $dateFormatter.formatDate('date', 'format', 'lang', 'timezone');
       expect(dateFilter.calls.count()).toBe(1);
-      expect(dateFilter.calls.argsFor(0)).toEqual([ 'date', 'format' ]);
+      expect(dateFilter.calls.argsFor(0)).toEqual([ 'date', 'format', 'timezone' ]);
     });
   });
 

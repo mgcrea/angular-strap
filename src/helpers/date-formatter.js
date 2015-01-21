@@ -47,8 +47,8 @@ angular.module('mgcrea.ngStrap.helpers.dateFormatter', [])
       return !!splitTimeFormat(timeFormat)[3];
     };
 
-    this.formatDate = function(date, format, lang){
-      return dateFilter(date, format);
+    this.formatDate = function(date, format, lang, timezone){
+      return dateFilter(date, format, timezone);
     };
 
   });

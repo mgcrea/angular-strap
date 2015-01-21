@@ -71,6 +71,9 @@ describe('timepicker', function() {
       scope: {selectedTime: new Date(1970, 0, 1, 10, 30)},
       element: '<input type="text" ng-model="selectedTime" data-time-format="HH:mm" bs-timepicker>'
     },
+    'options-timezone-utc': {
+      element: '<input type="text" ng-model="selectedTime" data-time-format="HH:mm" data-timezone="UTC" bs-timepicker>'
+    },
     'options-timeType-string': {
       scope: {selectedTime: '10:30'},
       element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-time-format="HH:mm" bs-timepicker>'
@@ -698,6 +701,33 @@ describe('timepicker', function() {
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
         expect(elm.val()).toBe('09:30');
       });
+
+    });
+
+    describe('timezone', function () {
+      var elm, i = 0;
+      var times = [
+        new Date(2014, 0, 1, 0, 0),
+        new Date(2015, 0, 1, 5, 0),
+        new Date(2014, 11, 31, 0, 0),
+        new Date(2015, 11, 31, 23, 0),
+        new Date(2014, 7, 1, 15, 30),
+        new Date(2015, 7, 1, 3, 15),
+        new Date(1985, 0, 11, 0, 0)
+      ];
+
+      beforeEach(function() {
+        elm = compileDirective('options-timezone-utc', {selectedTime: times[i]});
+      });
+
+      afterEach(function() { i++ });
+
+      for (var t = 0; t < times.length; t++) {
+        it('should render time in utc timezone', function () {
+          expect(elm.val()).toBe(dateFilter(times[i], 'HH:mm', 'UTC'));
+          expect(scope.selectedTime.toDateString()).toBe(times[i].toDateString());
+        });
+      }
 
     });
 
