@@ -476,9 +476,19 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           var el = $element[0];
 
           var elRect = el.getBoundingClientRect();
+          var rect = {};
+          
+          // IE8 has issues with angular.extend and using elRect directly.
+          // By coping the values of elRect into a new object, we can continue to use extend
+          for (var p in elRect) {
+            if (elRect.hasOwnProperty(p)) {
+              rect[p] = elRect[p];  
+            }
+          }
+          
           if (elRect.width === null) {
             // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
-            elRect = angular.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top });
+            rect = angular.extend({}, rect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top });
           }
 
           var elPos;
@@ -488,7 +498,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             elPos = dimensions.position(el);
           }
 
-          return angular.extend({}, elRect, elPos);
+          return angular.extend({}, rect, elPos);
         }
 
         function getCalculatedOffset(placement, position, actualWidth, actualHeight) {
