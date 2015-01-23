@@ -629,9 +629,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'target', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id'], function(key) {
+        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
+
+        // should not parse target attribute, only data-target
+        if(element.attr('data-target')) {
+          options.target = element.attr('data-target');
+        }
 
         // overwrite inherited title value when no value specified
         // fix for angular 1.3.1 531a8de72c439d8ddd064874bf364c00cedabb11
