@@ -59,6 +59,10 @@ describe('modal', function() {
       scope: {modal: {title: 'Title', content: 'Hello Modal<br>This is a multiline message!'}},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-html="1" bs-modal>click me</a>'
     },
+    'options-backdrop': {
+      scope: { backdrop: false },
+      element: '<a data-placement="center" bs-modal="modal" data-backdrop="{{ backdrop }}">click me</a>'
+    },
     'options-template': {
       scope: {modal: {title: 'Title', content: 'Hello Modal!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-template="custom" bs-modal>click me</a>'
@@ -440,6 +444,23 @@ describe('modal', function() {
         scope.$digest();
         expect(angular.element(testElm.children()[0]).hasClass('modal')).toBeTruthy();
       });
+    });
+
+    describe('backdrop', function() {
+      it('should show backdrop by default', function() {
+        var elm = compileDirective('default');
+        expect(bodyEl.find('.modal-backdrop').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(bodyEl.find('.modal-backdrop').length).toBe(1);
+      });
+
+      it('should not show backdrop if option value if falsy', function() {
+        var elm = compileDirective('options-backdrop');
+        expect(bodyEl.find('.modal-backdrop').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(bodyEl.find('.modal-backdrop').length).toBe(0);
+      });
+
     });
 
   });
