@@ -88,6 +88,12 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
           if(angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
           newValue === true ? popover.show() : popover.hide();
         });
+        
+        // Viewport support
+        attr.viewport && scope.$watch(attr.viewport, function (newValue) {
+          if(!popover || !angular.isDefined(newValue)) return;
+          popover.setViewport(newValue);
+        });
 
         // Initialize popover
         var popover = $popover(element, options);
