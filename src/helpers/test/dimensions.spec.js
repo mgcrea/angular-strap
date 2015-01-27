@@ -97,6 +97,21 @@ describe('dimensions', function () {
     });
 
   });
+  
+  describe('fn.setOffset', function () {
+
+    it('should correctly match jQuery output for every template', function () {
+      angular.forEach(templates, function(template, name) {
+        var element = compileDirective(name);
+        if(!element.is('.btn')) element = element.find('.btn:first');
+        var offset = dimensions.offset(element[0]);
+        var jQueryOffset = element.offset();
+        expect(offset.top).toBe(jQueryOffset.top);
+        expect(offset.left).toBe(jQueryOffset.left);
+      });
+    });
+
+  });
 
   describe('fn.position', function () {
 
