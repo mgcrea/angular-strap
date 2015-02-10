@@ -242,11 +242,11 @@ describe('dropdown', function () {
       scope.$digest();
       myDropdown.show();
 
-      expect(emit).toHaveBeenCalledWith('tooltip.show.before', myDropdown);
+      expect(emit).toHaveBeenCalledWith('dropdown.show.before', myDropdown);
       // show only fires AFTER the animation is complete
-      expect(emit).not.toHaveBeenCalledWith('tooltip.show', myDropdown);
+      expect(emit).not.toHaveBeenCalledWith('dropdown.show', myDropdown);
       $animate.triggerCallbacks();
-      expect(emit).toHaveBeenCalledWith('tooltip.show', myDropdown);
+      expect(emit).toHaveBeenCalledWith('dropdown.show', myDropdown);
     });
 
     it('should dispatch hide and hide.before events', function() {
@@ -257,17 +257,17 @@ describe('dropdown', function () {
       var emit = spyOn(myDropdown.$scope, '$emit');
       myDropdown.hide();
 
-      expect(emit).toHaveBeenCalledWith('tooltip.hide.before', myDropdown);
+      expect(emit).toHaveBeenCalledWith('dropdown.hide.before', myDropdown);
       // hide only fires AFTER the animation is complete
-      expect(emit).not.toHaveBeenCalledWith('tooltip.hide', myDropdown);
+      expect(emit).not.toHaveBeenCalledWith('dropdown.hide', myDropdown);
       $animate.triggerCallbacks();
-      expect(emit).toHaveBeenCalledWith('tooltip.hide', myDropdown);
+      expect(emit).toHaveBeenCalledWith('dropdown.hide', myDropdown);
     });
 
     it('should call show.before event with dropdown element instance id', function() {
       var elm = compileDirective('default-with-id');
-      var id = "";
-      scope.$on('tooltip.show.before', function(evt, dropdown) {
+      var id = '';
+      scope.$on('dropdown.show.before', function(evt, dropdown) {
         id = dropdown.$id;
       });
 
@@ -299,7 +299,7 @@ describe('dropdown', function () {
     describe('placement', function () {
       var $$rAF;
       beforeEach(inject(function (_$$rAF_) {
-        $$rAF = _$$rAF_
+        $$rAF = _$$rAF_;
       }));
 
       it('should default to `top` placement', function() {
