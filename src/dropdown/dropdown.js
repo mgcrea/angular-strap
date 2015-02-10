@@ -7,6 +7,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
     var defaults = this.defaults = {
       animation: 'am-fade',
       prefixClass: 'dropdown',
+      prefixEvent: 'dropdown',
       placement: 'bottom-left',
       template: 'dropdown/dropdown.tpl.html',
       trigger: 'click',
