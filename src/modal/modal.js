@@ -313,7 +313,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(angular.isDefined(attr[key])) options[key] = !falseValueRegExp.test(attr[key]);
         });
 
-        if(angular.isDefined(attr['backdrop'])) options['backdrop'] = falseValueRegExp.test(attr['backdrop']) ? false : attr['backdrop'];
+        if(angular.isDefined(attr.backdrop)) {
+          options.backdrop = falseValueRegExp.test(attr.backdrop) ? false : attr.backdrop;
+        }
 
         // Support scope as data-attrs
         angular.forEach(['title', 'content'], function(key) {
