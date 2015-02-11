@@ -121,6 +121,9 @@ describe('timepicker', function() {
       scope: {selectedTime: new Date(1970, 0, 1, 10, 30), arrowBehavior: 'pager'},
       element: '<input type="text" ng-model="selectedTime" length="5" data-arrow-behavior="{{ arrowBehavior }}" bs-timepicker>'
     },
+    'options-roundDisplay': {
+      element: '<input type="text" data-minute-step="15" ng-model="selectedTime" data-round-display="true" bs-timepicker>'
+    },
     'bsShow-attr': {
       scope: {selectedTime: new Date()},
       element: '<input type="text" ng-model="selectedTime" bs-timepicker bs-show="true">'
@@ -978,6 +981,19 @@ describe('timepicker', function() {
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
         sandboxEl.find('.dropdown-menu thead button:eq(0)').triggerHandler('click');
         expect(scope.selectedTime).toEqual(testTime);
+      });
+
+    });
+
+    describe('roundDisplay', function() {
+
+      it('should floor display minutes to nearest minuteStep interval when ngModel value is undefined', function() {
+        var elm = compileDirective('options-roundDisplay', { selectedTime: undefined });
+        var currentTime = new Date();
+        currentTime.setMinutes(currentTime.getMinutes() - currentTime.getMinutes() % 15);
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0)').text()).toBe(dateFilter(currentTime, 'h'));
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2)').text()).toBe(dateFilter(currentTime, 'mm'));
       });
 
     });

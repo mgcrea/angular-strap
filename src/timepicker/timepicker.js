@@ -28,6 +28,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
       length: 5,
       hourStep: 1,
       minuteStep: 5,
+      roundDisplay: false,
       iconUp: 'glyphicon glyphicon-chevron-up',
       iconDown: 'glyphicon glyphicon-chevron-down',
       arrowBehavior: 'pager'
@@ -52,10 +53,18 @@ angular.module('mgcrea.ngStrap.timepicker', [
           return $dateFormatter.formatDate(date, format, lang);
         };
 
+        function floorMinutes(time)
+        {
+          // coeff used to floor current time to nearest minuteStep interval
+          var coeff = 1000 * 60 * options.minuteStep;
+          return new Date(Math.floor(time.getTime() / coeff) * coeff);
+        }
+
         // View vars
 
         var selectedIndex = 0;
-        var startDate = controller.$dateValue || new Date();
+        var defaultDate = options.roundDisplay ? floorMinutes(new Date()) : new Date();
+        var startDate = controller.$dateValue || defaultDate;
         var viewDate = {hour: startDate.getHours(), meridian: startDate.getHours() < 12, minute: startDate.getMinutes(), second: startDate.getSeconds(), millisecond: startDate.getMilliseconds()};
 
         var format = $dateFormatter.getDatetimeFormat(options.timeFormat, lang);
@@ -348,6 +357,12 @@ angular.module('mgcrea.ngStrap.timepicker', [
         var options = {scope: scope, controller: controller};
         angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+
+        // use string regex match for boolean values
+        var falseValueRegExp = /^(false|0|)$/;
+        angular.forEach(['roundDisplay'], function(key) {
+          if(angular.isDefined(attr[key])) options[key] = !falseValueRegExp.test(attr[key]);
         });
 
         // Visibility binding support
