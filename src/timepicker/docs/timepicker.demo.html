@@ -236,6 +236,14 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           </td>
         </tr>
         <tr>
+          <td>roundDisplay</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether the picker should round the minute values displayed when no initial time is specified. The rounding is made by dividing time in minuteStep intervals and flooring the current time to the nearest.</p>
+          </td>
+        </tr>
+        <tr>
           <td>iconUp</td>
           <td>string</td>
           <td>'glyphicon glyphicon-chevron-up'</td>
