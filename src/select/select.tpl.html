@@ -6,7 +6,7 @@
     </div>
   </li>
   <li role="presentation" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}">
-    <a style="cursor: default;" role="menuitem" tabindex="-1" ng-click="$select($index, $event)">
+    <a href role="menuitem" tabindex="-1" ng-click="$select($index, $event)">
       <i class="{{$iconCheckmark}} pull-right" ng-if="$isMultiple && $isActive($index)"></i>
       <span ng-bind="match.label"></span>
     </a>
