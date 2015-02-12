@@ -12,7 +12,7 @@
 
   <div class="callout callout-warning">
     <h4>Plugin dependency</h4>
-    <p>Tooltip require the <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/dimensions.js" target="_blank">helpers.dimensions</a> module to be loaded.</p>
+    <p>Tooltip require the <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/position.js" target="_blank">helpers.position</a> module to be loaded.</p>
   </div>
 
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="tooltip/docs/tooltip.demo.html" data-content-js-url="tooltip/docs/tooltip.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
@@ -167,6 +167,16 @@
           <td>''</td>
           <td>
             The tooltip instance id for usage in event handlers.
+          </td>
+        </tr>
+        <tr>
+          <td>viewport</td>
+          <td>string | object</td>
+          <td>{ selector: 'body', padding: 0 }</td>
+          <td>
+            <p>
+              Keeps the tooltip within the bounds of this element. Example: viewport: '#viewport' or { "selector": "#viewport", "padding": 0 }
+            </p>
           </td>
         </tr>
       </tbody>

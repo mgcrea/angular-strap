@@ -1,17 +1,17 @@
 'use strict';
 
-describe('dimensions', function () {
+describe('position', function () {
 
-  var $compile, scope, dimensions;
+  var $compile, scope, $position;
 
   var lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non velit nulla. Suspendisse sit amet tempus diam. Sed at ultricies neque. Suspendisse id felis a sem placerat ornare. Donec auctor, purus at molestie tempor, arcu enim molestie lacus, ac imperdiet massa urna eu massa. Praesent velit tellus, scelerisque a fermentum ut, ornare in diam. Phasellus egestas molestie feugiat. Vivamus sit amet viverra metus.';
 
-  beforeEach(module('mgcrea.ngStrap.helpers.dimensions'));
+  beforeEach(module('mgcrea.ngStrap.helpers.position'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _dimensions_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$position_) {
     scope = _$rootScope_;
     $compile = _$compile_;
-    dimensions = _dimensions_;
+    $position = _$position_;
   }));
 
   afterEach(function() {
@@ -72,10 +72,10 @@ describe('dimensions', function () {
       angular.forEach(templates, function(template, name) {
         var element = compileDirective(name);
         if(!element.is('.btn')) element = element.find('.btn:first');
-        var top = dimensions.css(element[0], 'top');
+        var top = $position.css(element[0], 'top');
         var jQueryTop = element.css('top');
         expect(top).toBe(jQueryTop);
-        var left = dimensions.css(element[0], 'left');
+        var left = $position.css(element[0], 'left');
         var jQueryLeft = element.css('left');
         expect(left).toBe(jQueryLeft);
       });
@@ -89,7 +89,22 @@ describe('dimensions', function () {
       angular.forEach(templates, function(template, name) {
         var element = compileDirective(name);
         if(!element.is('.btn')) element = element.find('.btn:first');
-        var offset = dimensions.offset(element[0]);
+        var offset = $position.offset(element[0]);
+        var jQueryOffset = element.offset();
+        expect(offset.top).toBe(jQueryOffset.top);
+        expect(offset.left).toBe(jQueryOffset.left);
+      });
+    });
+
+  });
+
+  describe('fn.setOffset', function () {
+
+    it('should correctly match jQuery output for every template', function () {
+      angular.forEach(templates, function(template, name) {
+        var element = compileDirective(name);
+        if(!element.is('.btn')) element = element.find('.btn:first');
+        var offset = $position.offset(element[0]);
         var jQueryOffset = element.offset();
         expect(offset.top).toBe(jQueryOffset.top);
         expect(offset.left).toBe(jQueryOffset.left);
@@ -104,7 +119,7 @@ describe('dimensions', function () {
       angular.forEach(templates, function(template, name) {
         var element = compileDirective(name);
         if(!element.is('.btn')) element = element.find('.btn:first');
-        var position = dimensions.position(element[0]);
+        var position = $position.position(element[0]);
         var jQueryPosition = element.position();
         expect(position.top).toBe(jQueryPosition.top);
         expect(position.left).toBe(jQueryPosition.left);
@@ -119,10 +134,10 @@ describe('dimensions', function () {
       angular.forEach(templates, function(template, name) {
         var element = compileDirective(name);
         if(!element.is('.btn')) element = element;
-        var height = dimensions.height(element[0]);
+        var height = $position.height(element[0]);
         var jQueryHeight = element.height();
         expect(height).toBe(jQueryHeight);
-        var width = dimensions.width(element[0]);
+        var width = $position.width(element[0]);
         var jQueryWidth = element.width();
         expect(width).toBe(jQueryWidth);
       });

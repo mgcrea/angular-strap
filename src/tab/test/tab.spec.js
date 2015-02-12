@@ -175,7 +175,7 @@ describe('tab', function () {
       expect(sandboxEl.find('.tab-content > .tab-pane').length).toBe(scope.tabs.length);
       scope.tabs.push({title:'New Tab', content: 'New tab content...'});
       scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);      
+      expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);
       expect(sandboxEl.find('.tab-content > .tab-pane').length).toBe(scope.tabs.length);
     });
 
@@ -184,7 +184,7 @@ describe('tab', function () {
       expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);
       scope.tabs.pop();
       scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);      
+      expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);
     });
 
   });

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mgcrea.ngStrap.helpers.debounce'])
+angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.position', 'mgcrea.ngStrap.helpers.debounce'])
 
   .provider('$affix', function() {
 
@@ -8,7 +8,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
       offsetTop: 'auto'
     };
 
-    this.$get = function($window, debounce, dimensions) {
+    this.$get = function($window, $debounce, $position) {
 
       var bodyEl = angular.element($window.document.body);
       var windowEl = angular.element($window);
@@ -47,7 +47,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
         $affix.init = function() {
 
           this.$parseOffsets();
-          initialOffsetTop = dimensions.offset(element[0]).top + initialAffixTop;
+          initialOffsetTop = $position.offset(element[0]).top + initialAffixTop;
           setWidth = !element[0].style.width;
 
           // Bind events
@@ -83,8 +83,8 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
           // if (!this.$element.is(':visible')) return
 
           var scrollTop = getScrollTop();
-          var position = dimensions.offset(element[0]);
-          var elementHeight = dimensions.height(element[0]);
+          var position = $position.offset(element[0]);
+          var elementHeight = $position.height(element[0]);
 
           // Get required affix class according to position
           var affix = getRequiredAffixClass(unpin, position, elementHeight);
@@ -132,7 +132,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
           $affix.$parseOffsets();
           $affix.checkPosition();
         };
-        $affix.$debouncedOnResize = debounce($affix.$onResize, 50);
+        $affix.$debouncedOnResize = $debounce($affix.$onResize, 50);
 
         $affix.$parseOffsets = function() {
           var initialPosition = element.css('position');
@@ -146,10 +146,10 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
             if(options.offsetTop.match(/^[-+]\d+$/)) {
               initialAffixTop = - options.offsetTop * 1;
               if(options.offsetParent) {
-                offsetTop = dimensions.offset(parent[0]).top + (options.offsetTop * 1);
+                offsetTop = $position.offset(parent[0]).top + (options.offsetTop * 1);
               }
               else {
-                offsetTop = dimensions.offset(element[0]).top - dimensions.css(element[0], 'marginTop', true) + (options.offsetTop * 1);
+                offsetTop = $position.offset(element[0]).top - $position.css(element[0], 'marginTop', true) + (options.offsetTop * 1);
               }
             }
             else {
@@ -160,7 +160,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
           if(options.offsetBottom) {
             if(options.offsetParent && options.offsetBottom.match(/^[-+]\d+$/)) {
               // add 1 pixel due to rounding problems...
-              offsetBottom = getScrollHeight() - (dimensions.offset(parent[0]).top + dimensions.height(parent[0])) + (options.offsetBottom * 1) + 1;
+              offsetBottom = getScrollHeight() - ($position.offset(parent[0]).top + $position.height(parent[0])) + (options.offsetBottom * 1) + 1;
             }
             else {
               offsetBottom = options.offsetBottom * 1;

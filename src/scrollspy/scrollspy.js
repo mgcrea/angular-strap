@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', 'mgcrea.ngStrap.helpers.dimensions'])
+angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.position', 'mgcrea.ngStrap.helpers.debounce'])
 
   .provider('$scrollspy', function() {
 
@@ -13,7 +13,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
       offset: 100
     };
 
-    this.$get = function($window, $document, $rootScope, dimensions, debounce, throttle) {
+    this.$get = function($window, $document, $rootScope, $position, $debounce, $throttle) {
 
       var windowEl = angular.element($window);
       var docEl = angular.element($document.prop('documentElement'));
@@ -59,13 +59,13 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
           this.$$count = 1;
 
           // Bind events
-          debouncedCheckPosition = debounce(this.checkPosition, options.debounce);
-          throttledCheckPosition = throttle(this.checkPosition, options.throttle);
+          debouncedCheckPosition = $debounce(this.checkPosition, options.debounce);
+          throttledCheckPosition = $throttle(this.checkPosition, options.throttle);
           scrollEl.on('click', this.checkPositionWithEventLoop);
           windowEl.on('resize', debouncedCheckPosition);
           scrollEl.on('scroll', throttledCheckPosition);
 
-          debouncedCheckOffsets = debounce(this.checkOffsets, options.debounce);
+          debouncedCheckOffsets = $debounce(this.checkOffsets, options.debounce);
           unbindViewContentLoaded = $rootScope.$on('$viewContentLoaded', debouncedCheckOffsets);
           unbindIncludeContentLoaded = $rootScope.$on('$includeContentLoaded', debouncedCheckOffsets);
           debouncedCheckOffsets();
@@ -160,7 +160,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
 
           angular.forEach(trackedElements, function(trackedElement) {
             var targetElement = document.querySelector(trackedElement.target);
-            trackedElement.offsetTop = targetElement ? dimensions.offset(targetElement).top : null;
+            trackedElement.offsetTop = targetElement ? $position.offset(targetElement).top : null;
             if(options.offset && trackedElement.offsetTop !== null) trackedElement.offsetTop -= options.offset * 1;
           });
 
@@ -208,7 +208,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
 
   })
 
-  .directive('bsScrollspy', function($rootScope, debounce, dimensions, $scrollspy) {
+  .directive('bsScrollspy', function($rootScope, $scrollspy) {
 
     return {
       restrict: 'EAC',
@@ -237,7 +237,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
   })
 
 
-  .directive('bsScrollspyList', function($rootScope, debounce, dimensions, $scrollspy) {
+  .directive('bsScrollspyList', function($rootScope, $scrollspy) {
 
     return {
       restrict: 'A',
