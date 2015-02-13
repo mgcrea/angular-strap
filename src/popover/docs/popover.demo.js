@@ -8,7 +8,7 @@ angular.module('mgcrea.ngStrapDocs')
   });
 })
 
-.controller('PopoverDemoCtrl', function($scope) {
+.controller('PopoverDemoCtrl', function($scope, $popover) {
 
   $scope.popover = {title: 'Title', content: 'Hello Popover<br />This is a multiline message!'};
 

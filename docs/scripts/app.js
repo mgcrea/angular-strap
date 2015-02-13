@@ -23,51 +23,14 @@ angular.module('mgcrea.ngStrapDocs', [
 
 .config(function($routeProvider, $compileProvider, $locationProvider, $sceProvider) {
 
-  // configure html5 to get links working on jsfiddle
+  // Configure html5 to get links working on jsfiddle
   $locationProvider.html5Mode(false);
 
-  // disable strict context
+  // Disable strict context
   $sceProvider.enabled(false);
 
   // Disable scope debug data
   $compileProvider.debugInfoEnabled(false);
-
-  // $routeProvider
-    // .when('/', {
-    //   id: 'home',
-    //   templateUrl: 'views/home/main.html',
-    //   footerUrl: 'views/home/footer.html'
-    // })
-    // .when('/directives', {
-    //   id: 'getting-started',
-    //   templateUrl: 'views/getting-started/main.html',
-    //   headerUrl: 'views/common/header.html',
-    //   headerTitle: 'Getting started',
-    //   headerBody: 'An overview of Bootstrap, how to download and use, basic templates and examples, and more.',
-    //   footerUrl: 'views/common/footer.html',
-    //   reloadOnSearch: false
-    // })
-    // .when('/styles', {
-    //   id: 'styles',
-    //   controller: 'ComponentsCtrl',
-    //   templateUrl: 'views/styles/main.html',
-    //   headerUrl: 'views/common/header.html',
-    //   headerTitle: 'Styles',
-    //   headerBody: 'Fundamental HTML elements styled and enhanced with extensible classes.',
-    //   footerUrl: 'views/common/footer.html',
-    //   reloadOnSearch: false
-    // })
-    // .when('/javascript', {
-    //   controller: 'JavascriptCtrl',
-    //   templateUrl: 'views/javascript.html',
-    //   headerUrl: 'views/layout/header.html',
-    //   headerTitle: 'Javascript',
-    //   headerBody: 'Bring components to life with over a dozen custom AngularJS plugins.',
-    //   reloadOnSearch: false
-    // })
-    // .otherwise({
-    //   redirectTo: '/directives'
-    // });
 
 })
 
@@ -75,15 +38,10 @@ angular.module('mgcrea.ngStrapDocs', [
 
   $scope.$location = $location;
 
-  $scope.$scrollTo = function(id) {
-    $location.hash(id);
+  $scope.$scrollTo = function(hash) {
+    $location.hash(hash);
     $anchorScroll();
   };
-
-  $rootScope.$on('$routeChangeSuccess', function(newRoute, oldRoute) {
-    // $location.hash($routeParams.scrollTo);
-    // $anchorScroll();
-  });
 
   $scope.createPlunkr = function() {
     var myPlunkr = $plunkr();
@@ -97,23 +55,17 @@ angular.module('mgcrea.ngStrapDocs', [
 
   // FastClick
   $window.FastClick.attach($window.document.body);
-
+  
+  // Support simple anchor id scrolling
   var bodyElement = angular.element($window.document.body);
-  var targetElement = bodyElement; //angular.element(document.querySelector('body > .bs-docs-container'));
-  targetElement.on('click', function(evt) {
+  bodyElement.on('click', function(evt) {
     var el = angular.element(evt.target);
     var hash = el.attr('href');
     if(!hash || hash[0] !== '#') return;
     if(hash.length > 1 && hash[1] === '/') return;
     if(evt.which !== 1) return;
-    evt.preventDefault();
-    console.warn('$location.hash', hash);
     $location.hash(hash.substr(1));
-    // $location.path('/' + hash.substr(1));
-    // $location.search('id', hash.substr(1));
     $anchorScroll();
-    $rootScope.$digest();
-    console.warn('in');
   });
 
   // Initial $anchorScroll()
@@ -124,7 +76,12 @@ angular.module('mgcrea.ngStrapDocs', [
 })
 
 .directive('code', function() {
-  return {restrict: 'E', terminal: true};
+
+  return {
+    restrict: 'E',
+    terminal: true
+  };
+
 })
 
 .directive('appendSource', function($window, $compile, indent) {
@@ -193,29 +150,3 @@ angular.module('mgcrea.ngStrapDocs', [
   return lines.join('\n');
 
 });
-
-// function normalizeHtml(html) {
-//   var lines = html.split('\n');
-//   var splitString = lines.filter(String);
-//   if(!splitString.length) return '';
-
-//   // Remove any leading blank lines
-//   while(lines.length && lines[0].match(/^\s*$/)) lines.shift();
-//   // Remove any trailing blank lines
-//   while(lines.length && lines[lines.length - 1].match(/^\s*$/)) lines.pop();
-//   // Calculate proper indent
-//   var indent = 0;
-//   for(; indent < splitString[0].length && splitString[0][indent] === ' '; indent++) {}
-//   for(; indent < splitString[0].length && splitString[0][indent] === '\t'; indent+=2) {}
-//   var re = new RegExp('^' + Array.apply(null, new Array(indent)).map(String.prototype.valueOf, '\\s').join(''), ['g']);
-
-//   lines = lines.map(function(line) {
-//     return line.replace(re, '').replace(/=""/g, '');
-//   });
-
-//   lines = lines.filter(function(line, num) {
-//     if((!num || num === lines.length) && !line.trim()) return false;
-//     return true;
-//   });
-//   return lines.join('\n');
-// }
