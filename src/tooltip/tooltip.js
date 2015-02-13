@@ -346,7 +346,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if (autoPlace) {
             var originalPlacement = placement;
             var container = options.container ? angular.element(document.querySelector(options.container)) : element.parent();
-            var containerPosition = getPosition(container);
+            var containerPosition = getPosition(container, autoPlace);
 
             // Determine if the vertical placement
             if (originalPlacement.indexOf('bottom') >= 0 && elementPosition.bottom + tipHeight > containerPosition.bottom) {
@@ -470,7 +470,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Private methods
 
-        function getPosition($element) {
+        function getPosition($element, auto) {
           $element = $element || (options.target || element);
 
           var el = $element[0];
@@ -494,6 +494,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           var elPos;
           if (options.container === 'body') {
             elPos = dimensions.offset(el);
+
+            if (auto) {
+                elRect = angular.extend({}, { top: 0, right: window.innerWidth, bottom: window.innerHeight, left: 0 });
+            }
           } else {
             elPos = dimensions.position(el);
           }
