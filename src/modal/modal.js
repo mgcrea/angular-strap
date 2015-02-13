@@ -275,17 +275,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         return angular.element((element || document).querySelectorAll(query));
       }
 
-      var fetchPromises = {};
       function fetchTemplate(template) {
-        if(fetchPromises[template]) return fetchPromises[template];
-        return (fetchPromises[template] = $q.when($templateCache.get(template) || $http.get(template))
-        .then(function(res) {
-          if(angular.isObject(res)) {
-            $templateCache.put(template, res.data);
-            return res.data;
-          }
-          return res;
-        }));
+        return $http.get(template, {cache: $templateCache}).then(function(res) {
+          return res.data;
+        });
       }
 
       return ModalFactory;

@@ -477,15 +477,15 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           var elRect = el.getBoundingClientRect();
           var rect = {};
-          
+
           // IE8 has issues with angular.extend and using elRect directly.
           // By coping the values of elRect into a new object, we can continue to use extend
           for (var p in elRect) {
             if (elRect.hasOwnProperty(p)) {
-              rect[p] = elRect[p];  
+              rect[p] = elRect[p];
             }
           }
-          
+
           if (elRect.width === null) {
             // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
             rect = angular.extend({}, rect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top });
@@ -601,17 +601,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         return angular.element((element || document).querySelectorAll(query));
       }
 
-      var fetchPromises = {};
       function fetchTemplate(template) {
-        if(fetchPromises[template]) return fetchPromises[template];
-        return (fetchPromises[template] = $q.when($templateCache.get(template) || $http.get(template))
-        .then(function(res) {
-          if(angular.isObject(res)) {
-            $templateCache.put(template, res.data);
-            return res.data;
-          }
-          return res;
-        }));
+        return $http.get(template, {cache: $templateCache}).then(function(res) {
+          return res.data;
+        });
       }
 
       return TooltipFactory;
