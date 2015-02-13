@@ -278,17 +278,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       var fetchPromises = {};
       function fetchTemplate(template) {
         if(fetchPromises[template]) return fetchPromises[template];
-        return (fetchPromises[template] = $q.when($templateCache.get(template) || $http.get(template))
-        .then(function(res) {
-          // Support ngInclude $templateCache format
-          if(angular.isArray(res)) {
-            return res[1];
-          // Support $http response
-          } else if(angular.isObject(res)) {
-            $templateCache.put(template, res.data);
-            return res.data;
-          }
-          return res;
+        return (fetchPromises[template] = $http.get(template, {cache: $templateCache}).then(function(res) {
+          return res.data;
         }));
       }
 
