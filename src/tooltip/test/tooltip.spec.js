@@ -806,6 +806,13 @@ describe('tooltip', function() {
         expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);
       });
 
+      it('should support custom template loaded by ngInclude', function() {
+        $templateCache.put('custom', [200, '<div class="tooltip"><div class="tooltip-inner">foo: {{title}}</div></div>', {}, 'OK']);
+        var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);
+      });
+
       it('should request custom template via $http', function() {
         $httpBackend.expectGET('custom').respond(200, '<div class="tooltip"><div class="tooltip-inner">foo: {{title}}</div></div>');
         var elm = compileDirective('options-template');

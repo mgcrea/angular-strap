@@ -393,6 +393,13 @@ describe('modal', function() {
         expect(sandboxEl.find('.modal-inner').text()).toBe('foo: ' + scope.modal.title);
       });
 
+      it('should support custom template loaded by ngInclude', function() {
+        $templateCache.put('custom', [200, '<div class="modal"><div class="modal-inner">foo: {{title}}</div></div>', {}, 'OK']);
+        var elm = compileDirective('options-template');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-inner').text()).toBe('foo: ' + scope.modal.title);
+      });
+
       it('should request custom template via $http', function() {
         $httpBackend.expectGET('custom').respond(200,  '<div class="modal"><div class="modal-inner">foo: {{title}}</div></div>');
         var elm = compileDirective('options-template');
