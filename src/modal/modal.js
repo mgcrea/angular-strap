@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
+angular.module('mgcrea.ngStrap.modal', [])
 
   .provider('$modal', function() {
 
@@ -20,7 +20,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       show: true
     };
 
-    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
+    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, $sce) {
 
       var forEach = angular.forEach;
       var trim = String.prototype.trim;
