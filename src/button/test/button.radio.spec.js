@@ -74,6 +74,12 @@ describe('bs-radio', function () {
                '  <label class="btn"><input type="radio" value="right">Right</label>' +
                '</div>'
     },
+    'radio-with-ngrepeat': {
+      scope: {items: [{value: 'left', label: 'Left'}, {value: 'right', label: 'Right'}]},
+      element: '<div class="btn-group">' +
+               '  <label class="btn" ng-repeat="item in items"><input type="radio" ng-model="radio.value" value="{{ item.value }}" bs-radio>{{ item.label }}</label>' +
+               '</div>'
+    }
   };
 
   function compileDirective(template, locals) {
@@ -240,6 +246,12 @@ describe('bs-radio', function () {
       $$rAF.flush();
       expect(firstChild).not.toHaveClass('active');
       expect(secondChild).toHaveClass('active');
+    });
+
+    it('with ngrepeat markup', function () {
+      var element = compileDirective('radio-with-ngrepeat', {radio: {value: 'right'}});
+      var childInputs = element.find('input');
+      expect(childInputs.eq(1).parent('label')).toHaveClass('active');
     });
 
   });
