@@ -33,7 +33,7 @@
     "CONTRIBUTING.md"
   ],
   "dependencies": {
-    "angular": "^1.2.21",
+    "angular": "^1.2.21"
   },
   "devDependencies": {
     "angular-animate": "^1.2.21",
