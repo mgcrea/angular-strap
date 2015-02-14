@@ -132,6 +132,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
         // Protected methods
 
         $scrollspy.$activateElement = function(element) {
+          // deactivate the old target
           if(activeTarget) {
             var activeElement = $scrollspy.$getTrackedElement(activeTarget);
             if(activeElement) {
@@ -141,10 +142,15 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
               }
             }
           }
+
+          // activate the new target
           activeTarget = element.target;
           element.source.addClass('active');
           if(nodeName(element.source, 'li') && nodeName(element.source.parent().parent(), 'li')) {
             element.source.parent().parent().addClass('active');
+            if(nodeName(element.source.parent().parent().parent().parent(), 'li')) {
+              element.source.parent().parent().parent().parent().addClass('active');
+            }
           }
         };
 
