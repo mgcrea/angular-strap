@@ -3,6 +3,7 @@
 describe('aside', function () {
 
   var $compile, $templateCache, scope, sandboxEl;
+  var bodyEl = $('body');
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.aside'));
@@ -43,6 +44,9 @@ describe('aside', function () {
     'options-template': {
       scope: {aside: {title: 'Title', content: 'Hello aside!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a data-template="custom" bs-aside="aside">click me</a>'
+    },
+    'options-backdrop': {
+      element: '<a data-placement="center" bs-aside="aside" data-backdrop="0">click me</a>'
     }
   };
 
@@ -171,6 +175,24 @@ describe('aside', function () {
       });
 
     });
+
+    describe('backdrop', function() {
+      it('should show backdrop by default', function() {
+        var elm = compileDirective('default');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(1);
+      });
+
+      it('should not show backdrop if option value if falsy', function() {
+        var elm = compileDirective('options-backdrop');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(0);
+      });
+
+    });
+
 
   });
 
