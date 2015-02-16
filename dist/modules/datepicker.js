@@ -398,6 +398,10 @@ angular.module('mgcrea.ngStrap.datepicker', [
           //   date = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
           // }
           controller.$dateValue = date;
+          
+          //Trigger validation
+          validateAgainstMinMaxDate(date);
+          
           return getDateFormattedString();
         });
 
