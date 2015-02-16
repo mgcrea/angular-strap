@@ -499,9 +499,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // IE8 has issues with angular.extend and using elRect directly.
           // By coping the values of elRect into a new object, we can continue to use extend
           for (var p in elRect) {
-            if (elRect.hasOwnProperty(p)) {
-              rect[p] = elRect[p];
-            }
+            // DO NOT use hasOwnProperty when inspecting the return of getBoundingClientRect.
+            rect[p] = elRect[p];
           }
 
           if (rect.width === null) {
