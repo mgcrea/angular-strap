@@ -312,7 +312,12 @@ angular.module('mgcrea.ngStrap.datepicker', [
             validateAgainstMinMaxDate(controller.$dateValue);
           });
         });
-
+		
+		// Observe date format
+        angular.isDefined(attr['dateFormat']) && attr.$observe('dateFormat', function(newValue) {
+          datepicker.$options['dateFormat'] = newValue;
+        });
+		
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
           datepicker.update(controller.$dateValue);
