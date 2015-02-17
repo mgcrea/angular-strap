@@ -115,6 +115,13 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
+        // use string regex match boolean attr falsy values, leave truthy values be
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach(['html', 'container'], function(key) {
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+            options[key] = false;
+        });
+
         // Support scope as an object
         attr.bsDropdown && scope.$watch(attr.bsDropdown, function(newValue, oldValue) {
           scope.content = newValue;

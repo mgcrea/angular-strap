@@ -80,7 +80,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach(['keyboard', 'html', 'container'], function(key) {
+        angular.forEach(['keyboard', 'html', 'container', 'dismissable'], function(key) {
           if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
             options[key] = false;
         });
