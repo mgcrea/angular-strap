@@ -20,6 +20,6 @@ angular.module('mgcrea.ngStrapDocs')
 
   var myPopover = $popover(angular.element(document.querySelector('#popover-as-service')), asAServiceOptions);
   $scope.togglePopover = function() {
-    myPopover.$promise.then(myPopover.hide);
+    myPopover.$promise.then(myPopover.toggle);
   };
 });
