@@ -189,11 +189,13 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             return $select.select(scope.$activeIndex);
           }
 
-          // Navigate with keyboard
-          if(evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--;
-          else if(evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
-          else if(angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
-          scope.$digest();
+          if (!options.multiple) {
+            // Navigate with keyboard
+            if(evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--;
+            else if(evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
+            else if(angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
+            scope.$digest();
+          }
         };
 
         // Overrides
