@@ -184,6 +184,11 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           evt.preventDefault();
           evt.stopPropagation();
 
+          // release focus on tab
+          if (options.multiple && evt.keyCode === 9) {
+            return $select.hide();
+          }
+
           // Select with enter
           if(!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
             return $select.select(scope.$activeIndex);
