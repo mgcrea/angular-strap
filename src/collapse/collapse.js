@@ -21,6 +21,13 @@ angular.module('mgcrea.ngStrap.collapse', [])
         if(angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
+      // use string regex match boolean attr falsy values, leave truthy values be
+      var falseValueRegExp = /^(false|0|)$/i;
+      angular.forEach(['disallowToggle', 'startCollapsed', 'allowMultiple'], function(key) {
+        if(angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key]))
+          self.$options[key] = false;
+      });
+
       self.$toggles = [];
       self.$targets = [];
 

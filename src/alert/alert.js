@@ -78,6 +78,13 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
+        // use string regex match boolean attr falsy values, leave truthy values be
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach(['keyboard', 'html', 'container', 'dismissable'], function(key) {
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+            options[key] = false;
+        });
+
         // Support scope as data-attrs
         angular.forEach(['title', 'content', 'type'], function(key) {
           attr[key] && attr.$observe(key, function(newValue, oldValue) {
