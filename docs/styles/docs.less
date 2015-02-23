@@ -1,0 +1,137 @@
+@import (reference) "../../bower_components/bootstrap/less/bootstrap";
+
+@brand-primary: hsl(1, 45%, 50%); // Bootstrap 3.0-RC1
+@docs-color: @brand-primary;
+@white-background-color: #f9f9f9;
+
+@import "docs/masthead";
+@import "docs/navbar";
+@import "docs/sidebar";
+@import "docs/examples";
+@import "docs/old-docs";
+@import "docs/footer";
+
+// html, body {
+//   -webkit-font-smoothing: antialiased;
+//   font-smoothing: antialiased;
+// }
+// button, select, textarea, input, pre {
+//   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+//   font-smoothing: antialiased;
+// }
+
+
+.am-fade.aside-backdrop, .am-fade.modal-backdrop {
+  background-color: rgba(0, 0, 0, .5);
+}
+.bs-docs-aside {
+  min-width: 200px;
+}
+
+/*
+ * Docs sections
+ *
+ * Content blocks for each component or feature.
+ */
+
+/* Space things out */
+.bs-docs-section + .bs-docs-section {
+  // padding-top: 40px; // h1 janky fix does the job
+}
+
+/* Janky fix for preventing navbar from overlapping */
+h1[id] {
+  padding-top: 80px;
+  margin-top: -45px;
+}
+h2[id] {
+  padding-top: 60px;
+  margin-top: -45px;
+}
+
+/*
+ * Page headers
+ *
+ * Jumbotron-esque headers at the top of every page that's not the homepage.
+ */
+
+
+/* Page headers */
+.bs-header {
+  padding: 30px 15px 40px; /* side padding builds on .container 15px, so 30px */
+  font-size: 16px;
+  text-align: center;
+  text-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.15);
+}
+.bs-header h1 {
+  color: hsl(0, 0%, 100%);
+}
+.bs-header p {
+  font-weight: 300;
+  line-height: 1.5;
+}
+.bs-header .container {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .bs-header {
+    font-size: 21px;
+    text-align: left;
+  }
+  .bs-header h1 {
+    font-size: 60px;
+    line-height: 1;
+  }
+}
+
+@media (min-width: 992px) {
+  .bs-header h1,
+  .bs-header p {
+    margin-right: 300px;
+  }
+}
+
+
+
+/*
+ * Code snippets
+ *
+ * Generated via Pygments and Jekyll, these are snippets of HTML, CSS, and JS.
+ */
+
+.highlight {
+  display: none; /* hidden by default, until >480px */
+  padding: 9px 14px;
+  margin-bottom: 14px;
+  background-color: hsl(240, 14%, 97%);
+  border: 1px solid hsl(240, 13%, 90%);
+  border-radius: 4px;
+}
+.highlight pre {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: transparent;
+  border: 0;
+  white-space: nowrap;
+}
+.highlight pre code {
+  font-size: inherit;
+  color: hsl(0, 0%, 20%); /* Effectively the base text color */
+}
+.highlight pre .lineno {
+  display: inline-block;
+  width: 22px;
+  padding-right: 5px;
+  margin-right: 10px;
+  text-align: right;
+  color: hsl(240, 6%, 76%);
+}
+
+/* Show code snippets when we have the space */
+@media (min-width: 481px) {
+  .highlight {
+    display: block;
+  }
+}
