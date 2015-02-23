@@ -290,9 +290,12 @@ describe('typeahead', function () {
     });
 
     describe('placement', function () {
-      var $$rAF;
-      beforeEach(inject(function (_$$rAF_) {
-        $$rAF = _$$rAF_
+      var $$rAF,
+          $timeout;
+      
+      beforeEach(inject(function (_$$rAF_, _$timeout_) {
+        $$rAF = _$$rAF_;
+        $timeout = _$timeout_;
       }));
 
       it('should default to `top` placement', function() {
@@ -316,6 +319,41 @@ describe('typeahead', function () {
         expect(sandboxEl.children('.dropdown-menu').hasClass('bottom-right')).toBeTruthy();
       });
 
+      it('should re-apply placement when the results change', function () {
+        var typeahead = $typeahead($('<input>'), null, { placement: 'top' });
+        spyOn(typeahead, '$applyPlacement');
+        typeahead.update([]);
+
+        $timeout.flush();
+        expect(typeahead.$applyPlacement).toHaveBeenCalled();
+      });
+      
+      it('should not re-apply placement when the results change if the placement is bottom', function () {
+        var typeahead = $typeahead($('<input>'), null, { placement: 'bottom' });
+        spyOn(typeahead, '$applyPlacement');
+        typeahead.update([]);
+
+        $timeout.flush();
+        expect(typeahead.$applyPlacement).not.toHaveBeenCalled();
+      });
+      
+      it('should not re-apply placement when the results change if the placement is bottom-left', function () {
+        var typeahead = $typeahead($('<input>'), null, { placement: 'bottom-left' });
+        spyOn(typeahead, '$applyPlacement');
+        typeahead.update([]);
+
+        $timeout.flush();
+        expect(typeahead.$applyPlacement).not.toHaveBeenCalled();
+      });
+      
+      it('should not re-apply placement when the results change if the placement is bottom-right', function () {
+        var typeahead = $typeahead($('<input>'), null, { placement: 'bottom-right' });
+        spyOn(typeahead, '$applyPlacement');
+        typeahead.update([]);
+
+        $timeout.flush();
+        expect(typeahead.$applyPlacement).not.toHaveBeenCalled();
+      });
     });
 
     describe('trigger', function () {
