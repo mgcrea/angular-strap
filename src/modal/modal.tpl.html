@@ -1,8 +1,8 @@
-<div class="modal" tabindex="-1" role="dialog">
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header" ng-show="title">
-        <button type="button" class="close" ng-click="$hide()">&times;</button>
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" ng-bind="title"></h4>
       </div>
       <div class="modal-body" ng-bind="content"></div>
