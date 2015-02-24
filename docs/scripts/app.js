@@ -2,7 +2,7 @@
 
 angular.module('mgcrea.ngStrapDocs', ['mgcrea.ngStrap', 'mgcrea.ngPlunkr', 'ngRoute', 'ngAnimate'])
 
-.constant('version', 'v2.1.6')
+.constant('version', 'v2.2.0')
 
 .config(function($plunkrProvider, version) {
 
