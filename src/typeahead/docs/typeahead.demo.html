@@ -32,7 +32,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
       </div>
       <div class="form-group">
         <label>Icon</label>
-        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-disable-auto-select="true" data-animation="am-flip-x" bs-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-auto-select="true" data-animation="am-flip-x" bs-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
       </div>
       <hr>
       <!-- Using an async data provider -->
@@ -149,7 +149,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
           </td>
         </tr>
         <tr>
-          <td>disableAutoSelect</td>
+          <td>autoSelect</td>
           <td>boolean</td>
           <td>false</td>
           <td>
