@@ -83,6 +83,9 @@ describe('typeahead', function () {
     },
     'options-minLength': {
       element: '<input type="text" ng-model="selectedState" data-min-length="0" ng-options="state for state in states" bs-typeahead>'
+    },
+    'options-trimValue': {
+      element: '<input type="text" ng-model="selectedState" data-trim-value="false" ng-options="state for state in states" bs-typeahead ng-trim="false">'
     }
   };
 
