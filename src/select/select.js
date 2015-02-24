@@ -264,13 +264,13 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           inputEl.after(element);
         }
 
-        // Build proper ngOptions
-        var parsedOptions = $parseOptions(attr.ngOptions);
+        // Build proper bsOptions
+        var parsedOptions = $parseOptions(attr.bsOptions);
 
         // Initialize select
         var select = $select(element, controller, options);
 
-        // Watch ngOptions values before filtering for changes
+        // Watch bsOptions values before filtering for changes
         var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
         scope.$watch(watchedOptions, function(newValue, oldValue) {
           // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);

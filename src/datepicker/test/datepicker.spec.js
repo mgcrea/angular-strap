@@ -55,16 +55,16 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" ng-required="true" bs-datepicker>'
     },
     'options-animation': {
-      element: '<div class="btn" data-animation="am-flip-x" ng-model="datepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-datepicker></div>'
+      element: '<div class="btn" data-animation="am-flip-x" ng-model="datepickeredIcon" bs-datepicker></div>'
     },
     'options-placement': {
-      element: '<div class="btn" data-placement="bottom" ng-model="datepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-datepicker></div>'
+      element: '<div class="btn" data-placement="bottom" ng-model="datepickeredIcon" bs-datepicker></div>'
     },
     'options-placement-exotic': {
-      element: '<div class="btn" data-placement="bottom-right" ng-model="datepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-datepicker></div>'
+      element: '<div class="btn" data-placement="bottom-right" ng-model="datepickeredIcon" bs-datepicker></div>'
     },
     'options-trigger': {
-      element: '<div class="btn" data-trigger="hover" ng-model="datepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-datepicker></div>'
+      element: '<div class="btn" data-trigger="hover" ng-model="datepickeredIcon" bs-datepicker></div>'
     },
     'options-template': {
       element: '<input type="text" data-template="custom" ng-model="selectedDate" bs-datepicker>'

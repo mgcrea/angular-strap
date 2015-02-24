@@ -53,16 +53,16 @@ describe('timepicker', function() {
       element: '<input type="text" ng-model="selectedTime" ng-required="true" bs-timepicker>'
     },
     'options-animation': {
-      element: '<div class="btn" data-animation="am-flip-x" ng-model="timepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-timepicker></div>'
+      element: '<div class="btn" data-animation="am-flip-x" ng-model="timepickeredIcon" bs-timepicker></div>'
     },
     'options-placement': {
-      element: '<div class="btn" data-placement="bottom" ng-model="timepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-timepicker></div>'
+      element: '<div class="btn" data-placement="bottom" ng-model="timepickeredIcon" bs-timepicker></div>'
     },
     'options-placement-exotic': {
-      element: '<div class="btn" data-placement="bottom-right" ng-model="timepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-timepicker></div>'
+      element: '<div class="btn" data-placement="bottom-right" ng-model="timepickeredIcon" bs-timepicker></div>'
     },
     'options-trigger': {
-      element: '<div class="btn" data-trigger="hover" ng-model="timepickeredIcon" ng-options="icon.value as icon.label for icon in icons" bs-timepicker></div>'
+      element: '<div class="btn" data-trigger="hover" ng-model="timepickeredIcon" bs-timepicker></div>'
     },
     'options-template': {
       element: '<input type="text" data-template="custom" ng-model="selectedTime" bs-timepicker>'
