@@ -83,6 +83,10 @@ describe('typeahead', function () {
     },
     'options-minLength': {
       element: '<input type="text" ng-model="selectedState" data-min-length="0" ng-options="state for state in states" bs-typeahead>'
+    },
+    'options-autoSelect': {
+      scope: {states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
+      element: '<input type="text" ng-model="selectedState" data-min-length="0" data-auto-select="1" ng-options="state for state in states" bs-typeahead>'
     }
   };
 
@@ -432,6 +436,22 @@ describe('typeahead', function () {
       scope.$digest();
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
       expect(scope.$$childHead.$isVisible()).toBeTruthy();
+    });
+
+  });
+
+  describe('autoSelect', function() {
+
+    it('should not auto-select the first match upon meeting minLength', function() {
+      var elm = compileDirective('options-minLength', {});
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').hasClass('active')).not.toBeTruthy();
+    });
+
+    it('should auto-select the first match upon meeting minLength', function() {
+      var elm = compileDirective('options-autoSelect', {});
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').hasClass('active')).toBeTruthy();
     });
 
   });

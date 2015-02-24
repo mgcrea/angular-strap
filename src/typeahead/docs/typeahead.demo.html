@@ -32,7 +32,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
       </div>
       <div class="form-group">
         <label>Icon</label>
-        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-animation="am-flip-x" ng-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-auto-select="true" data-animation="am-flip-x" ng-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
       </div>
       <hr>
       <!-- Using an async data provider -->
@@ -146,6 +146,14 @@ $scope.selectedAddress = "{{selectedAddress}}";
           <td>1</td>
           <td>
             <p>The minimum character length needed before triggering autocomplete suggestions.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>autoSelect</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether or not the first match will automatically be selected upon typing.</p>
           </td>
         </tr>
         <tr>
