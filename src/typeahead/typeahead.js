@@ -18,6 +18,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       minLength: 1,
       filter: 'filter',
       limit: 6,
+      disableAutoSelect: false,
       comparator: ''
     };
 
@@ -38,7 +39,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         scope.$resetMatches = function(){
           scope.$matches = [];
-          scope.$activeIndex = 0;
+          scope.$activeIndex = options.disableAutoSelect ? -1 : 0; // If set to 0, the first match will be highlighted
         };
         scope.$resetMatches();
 
@@ -63,7 +64,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.update = function(matches) {
           scope.$matches = matches;
           if(scope.$activeIndex >= matches.length) {
-            scope.$activeIndex = 0;
+            scope.$activeIndex = options.disableAutoSelect ? -1 : 0;
           }
           
           // When the placement is not one of the bottom placements, re-calc the positioning
@@ -158,6 +159,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if(options.keyboard) {
             element.off('keydown', $typeahead.$onKeyDown);
           }
+          if( options.disableAutoSelect )
+            $typeahead.activate(-1);
           hide();
         };
 
@@ -183,7 +186,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'comparator', 'id'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'disableAutoSelect', 'comparator', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

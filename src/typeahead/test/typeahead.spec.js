@@ -83,6 +83,10 @@ describe('typeahead', function () {
     },
     'options-minLength': {
       element: '<input type="text" ng-model="selectedState" data-min-length="0" bs-options="state for state in states" bs-typeahead>'
+    },
+    'options-disableAutoSelect': {
+      scope: {states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
+      element: '<input type="text" ng-model="selectedState" data-min-length="0" data-disable-auto-select="1" ng-options="state for state in states" bs-typeahead>'
     }
   };
 
@@ -292,7 +296,7 @@ describe('typeahead', function () {
     describe('placement', function () {
       var $$rAF,
           $timeout;
-      
+
       beforeEach(inject(function (_$$rAF_, _$timeout_) {
         $$rAF = _$$rAF_;
         $timeout = _$timeout_;
@@ -327,7 +331,7 @@ describe('typeahead', function () {
         $timeout.flush();
         expect(typeahead.$applyPlacement).toHaveBeenCalled();
       });
-      
+
       it('should not re-apply placement when the results change if the placement is bottom', function () {
         var typeahead = $typeahead($('<input>'), null, { placement: 'bottom' });
         spyOn(typeahead, '$applyPlacement');
@@ -336,7 +340,7 @@ describe('typeahead', function () {
         $timeout.flush();
         expect(typeahead.$applyPlacement).not.toHaveBeenCalled();
       });
-      
+
       it('should not re-apply placement when the results change if the placement is bottom-left', function () {
         var typeahead = $typeahead($('<input>'), null, { placement: 'bottom-left' });
         spyOn(typeahead, '$applyPlacement');
@@ -345,7 +349,7 @@ describe('typeahead', function () {
         $timeout.flush();
         expect(typeahead.$applyPlacement).not.toHaveBeenCalled();
       });
-      
+
       it('should not re-apply placement when the results change if the placement is bottom-right', function () {
         var typeahead = $typeahead($('<input>'), null, { placement: 'bottom-right' });
         spyOn(typeahead, '$applyPlacement');
@@ -432,6 +436,22 @@ describe('typeahead', function () {
       scope.$digest();
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
       expect(scope.$$childHead.$isVisible()).toBeTruthy();
+    });
+
+  });
+
+  describe('disableAutoSelect', function() {
+
+    it('should not auto-select the first match upon meeting minLength', function() {
+      var elm = compileDirective('options-disableAutoSelect', {});
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').hasClass('active')).not.toBeTruthy();
+    });
+
+    it('should auto-select the first match upon meeting minLength', function() {
+      var elm = compileDirective('options-minLength', {});
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').hasClass('active')).toBeTruthy();
     });
 
   });
