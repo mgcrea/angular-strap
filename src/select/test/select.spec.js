@@ -2,17 +2,18 @@
 
 describe('select', function () {
 
-  var $compile, $templateCache, $select, scope, sandboxEl;
+  var $compile, $templateCache, $select, scope, sandboxEl, $timeout;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.select'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$select_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$select_, _$timeout_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $select = _$select_;
+    $timeout = _$timeout_;
   }));
 
   afterEach(function() {
@@ -103,6 +104,12 @@ describe('select', function () {
     return jQuery(element[0]);
   }
 
+  function triggerKeyDown(elm, keyCode) {
+    var evt = $.Event('keydown');
+    evt.which = evt.keyCode = keyCode;
+    angular.element(elm[0]).triggerHandler(evt);
+  }
+
   // Tests
 
   describe('with default template', function () {
@@ -150,6 +157,28 @@ describe('select', function () {
       angular.element(elm.next('button')[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
+    });
+
+  });
+
+  describe('when model has no initial selection', function() {
+
+    it('should not have any selection upon open until down key', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.active').length).toBe(0);
+      $timeout.flush();
+      triggerKeyDown( elm, 40 );
+      expect(sandboxEl.find('.active').length).toBe(1);
+    });
+
+    it('should not have any selection upon open until up key', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.active').length).toBe(0);
+      $timeout.flush();
+      triggerKeyDown( elm, 38 );
+      expect(sandboxEl.find('.active').length).toBe(1);
     });
 
   });
