@@ -12,6 +12,7 @@ var config = require('ng-factory').use(gulp, {
 
 gulp.task('serve', ['ng:serve']);
 gulp.task('build', ['ng:build']);
+gulp.task('pages', ['ng:pages']);
 gulp.task('test', ['ng:test']);
 
 //
