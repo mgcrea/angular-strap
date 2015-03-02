@@ -46,7 +46,7 @@ angular.module('mgcrea.ngStrap.navbar', [])
             if(options.strict) {
               pattern = '^' + pattern + '$';
             }
-            var regexp = new RegExp(pattern, ['i']);
+            var regexp = new RegExp(pattern, 'i');
 
             if(regexp.test(newValue)) {
               liElement.addClass(options.activeClass);
