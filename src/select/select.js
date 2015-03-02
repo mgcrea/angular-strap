@@ -48,7 +48,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         var scope = $select.$scope;
 
         scope.$matches = [];
-        scope.$activeIndex = 0;
+        scope.$activeIndex = -1;
         scope.$isMultiple = options.multiple;
         scope.$showAllNoneButtons = options.allNoneButtons && options.multiple;
         scope.$iconCheckmark = options.iconCheckmark;
@@ -197,6 +197,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           if (!options.multiple) {
             // Navigate with keyboard
             if(evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--;
+            else if(evt.keyCode === 38 && scope.$activeIndex < 0) scope.$activeIndex = scope.$matches.length - 1;
             else if(evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
             else if(angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
             scope.$digest();
@@ -223,6 +224,9 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         var _hide = $select.hide;
         $select.hide = function() {
+          if(!options.multiple && !controller.$modelValue) {
+            scope.$activeIndex = -1;
+          } 
           $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
           if(options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
