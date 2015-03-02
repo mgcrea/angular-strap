@@ -29,6 +29,10 @@ describe('alert', function() {
       scope: {alert: {title: 'Title', content: 'Hello alert!'}},
       element: '<a title="{{alert.title}}" data-content="{{alert.content}}" bs-alert>click me</a>'
     },
+    'default-no-title': {
+      scope: {alert: {content: 'Hello alert!'}, title: 'Title'},
+      element: '<a data-content="{{alert.content}}" bs-alert>click me</a>'
+    },
     'markup-scope': {
       element: '<a bs-alert="alert">click me</a>'
     },
@@ -99,6 +103,13 @@ describe('alert', function() {
       angular.element(elm.find('[bs-alert]')).triggerHandler('click');
       expect(sandboxEl.find('.alert > strong').html()).toBe(scope.items[0].alert.title);
       expect(sandboxEl.find('.alert > span').html()).toBe(scope.items[0].alert.content);
+    });
+
+    it('should overwrite inherited title when no value specified', function() {
+      var elm = compileDirective('default-no-title');
+      angular.element(elm[0]).triggerHandler('click');
+      expect(sandboxEl.find('.alert > strong').html()).toBe('');
+      expect(sandboxEl.find('.alert > span').html()).toBe(scope.alert.content);
     });
 
   });

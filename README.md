@@ -91,7 +91,7 @@ Please submit all pull requests the against master branch. If your pull request 
 
 	The MIT License
 
-	Copyright (c) 2012 - 2014 Olivier Louvignes
+	Copyright (c) 2012 – 2014 Olivier Louvignes
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal

@@ -26,63 +26,67 @@ describe('typeahead', function () {
   var templates = {
     'default': {
       scope: {selectedState: '', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
-      element: '<input type="text" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
+      element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'default-with-id': {
       scope: {selectedState: '', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
-      element: '<input id="typeahead1" type="text" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
+      element: '<input id="typeahead1" type="text" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'default-value': {
       scope: {selectedState: 'Alaska', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
-      element: '<input type="text" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
+      element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'watch-options': {
-      element: '<input type="text" ng-model="selectedState" ng-options="state for state in states" data-watch-options="1" bs-typeahead>'
+      element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" data-watch-options="1" bs-typeahead>'
     },
     'single-match': {
       scope: {selectedCode: '', codes: ['000000', '000001']},
-      element: '<input type="text" ng-model="selecteCode" ng-options="code for code in codes" bs-typeahead>'
+      element: '<input type="text" ng-model="selecteCode" bs-options="code for code in codes" bs-typeahead>'
     },
     'comparator': {
       scope: {selectedCode: '', codes: ['001000', '002001']},
-      element: '<input type="text" ng-model="selecteCode" ng-options="code for code in codes" bs-typeahead comparator="{{ comparator }}">'
+      element: '<input type="text" ng-model="selecteCode" bs-options="code for code in codes" bs-typeahead comparator="{{ comparator }}">'
     },
     'markup-ngRepeat': {
-      element: '<ul><li ng-repeat="i in [1, 2, 3]"><input type="text" ng-model="selectedState" ng-options="state for state in states" bs-typeahead></li></ul>'
+      element: '<ul><li ng-repeat="i in [1, 2, 3]"><input type="text" ng-model="selectedState" bs-options="state for state in states" bs-typeahead></li></ul>'
     },
     'markup-objectValue': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '<i class="fa fa-gear"></i> Gear'}, {value: 'Globe', label: '<i class="fa fa-globe"></i> Globe'}, {value: 'Heart', label: '<i class="fa fa-heart"></i> Heart'}, {value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}]},
-      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon as icon.label for icon in icons" bs-typeahead>'
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" bs-options="icon as icon.label for icon in icons" bs-typeahead>'
     },
     'markup-objectValue-custom': {
       scope: {selectedIcon: {}, icons: [{val: 'gear', fr_FR: '<i class="fa fa-gear"></i> Gear'}, {val: 'globe', fr_FR: '<i class="fa fa-globe"></i> Globe'}, {val: 'heart', fr_FR: '<i class="fa fa-heart"></i> Heart'}, {val: 'camera', fr_FR: '<i class="fa fa-camera"></i> Camera'}]},
-      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon as icon[\'fr_FR\'] for icon in icons" bs-typeahead>'
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" bs-options="icon as icon[\'fr_FR\'] for icon in icons" bs-typeahead>'
     },
     'markup-renew-items': {
       scope: {selectedIcon: {}, icons: function(){return [{alt: 'Gear'}, {alt: 'Globe'}, {alt: 'Heart'}, {alt: 'Camera'}];}},
-      element: '<input type="text" class="form-control" ng-model="selectedIcon" ng-options="icon as icon.alt for icon in icons()" bs-typeahead>'
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" bs-options="icon as icon.alt for icon in icons()" bs-typeahead>'
     },
     'options-animation': {
-      element: '<input type="text" data-animation="am-flip-x" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
+      element: '<input type="text" data-animation="am-flip-x" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'options-placement': {
-      element: '<input type="text" data-placement="bottom" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
+      element: '<input type="text" data-placement="bottom" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'options-placement-exotic': {
-      element: '<input type="text" data-placement="bottom-right" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
+      element: '<input type="text" data-placement="bottom-right" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'options-trigger': {
-      element: '<input type="text" data-trigger="hover" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
+      element: '<input type="text" data-trigger="hover" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'options-html': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '<i class="fa fa-gear"></i> Gear'}, {value: 'Globe', label: '<i class="fa fa-globe"></i> Globe'}, {value: 'Heart', label: '<i class="fa fa-heart"></i> Heart'}, {value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}]},
-      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon.value as icon.label for icon in icons" bs-typeahead>'
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" bs-options="icon.value as icon.label for icon in icons" bs-typeahead>'
     },
     'options-template': {
-      element: '<input type="text" data-template="custom" ng-model="selectedState" ng-options="state for state in states" bs-typeahead>'
+      element: '<input type="text" data-template="custom" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'options-minLength': {
-      element: '<input type="text" ng-model="selectedState" data-min-length="0" ng-options="state for state in states" bs-typeahead>'
+      element: '<input type="text" ng-model="selectedState" data-min-length="0" bs-options="state for state in states" bs-typeahead>'
+    },
+    'options-autoSelect': {
+      scope: {states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
+      element: '<input type="text" ng-model="selectedState" data-min-length="0" data-auto-select="1" ng-options="state for state in states" bs-typeahead>'
     }
   };
 
@@ -259,7 +263,7 @@ describe('typeahead', function () {
 
   });
 
-  describe('ngOptions', function () {
+  describe('bsOptions', function () {
 
     it('should correctly watch for changes', function() {
       var elm = compileDirective('watch-options');
@@ -292,7 +296,7 @@ describe('typeahead', function () {
     describe('placement', function () {
       var $$rAF,
           $timeout;
-      
+
       beforeEach(inject(function (_$$rAF_, _$timeout_) {
         $$rAF = _$$rAF_;
         $timeout = _$timeout_;
@@ -327,7 +331,7 @@ describe('typeahead', function () {
         $timeout.flush();
         expect(typeahead.$applyPlacement).toHaveBeenCalled();
       });
-      
+
       it('should not re-apply placement when the results change if the placement is bottom', function () {
         var typeahead = $typeahead($('<input>'), null, { placement: 'bottom' });
         spyOn(typeahead, '$applyPlacement');
@@ -336,7 +340,7 @@ describe('typeahead', function () {
         $timeout.flush();
         expect(typeahead.$applyPlacement).not.toHaveBeenCalled();
       });
-      
+
       it('should not re-apply placement when the results change if the placement is bottom-left', function () {
         var typeahead = $typeahead($('<input>'), null, { placement: 'bottom-left' });
         spyOn(typeahead, '$applyPlacement');
@@ -345,7 +349,7 @@ describe('typeahead', function () {
         $timeout.flush();
         expect(typeahead.$applyPlacement).not.toHaveBeenCalled();
       });
-      
+
       it('should not re-apply placement when the results change if the placement is bottom-right', function () {
         var typeahead = $typeahead($('<input>'), null, { placement: 'bottom-right' });
         spyOn(typeahead, '$applyPlacement');
@@ -432,6 +436,22 @@ describe('typeahead', function () {
       scope.$digest();
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
       expect(scope.$$childHead.$isVisible()).toBeTruthy();
+    });
+
+  });
+
+  describe('autoSelect', function() {
+
+    it('should not auto-select the first match upon meeting minLength', function() {
+      var elm = compileDirective('options-minLength', {});
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').hasClass('active')).not.toBeTruthy();
+    });
+
+    it('should auto-select the first match upon meeting minLength', function() {
+      var elm = compileDirective('options-autoSelect', {});
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').hasClass('active')).toBeTruthy();
     });
 
   });

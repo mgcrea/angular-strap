@@ -2,17 +2,18 @@
 
 describe('select', function () {
 
-  var $compile, $templateCache, $select, scope, sandboxEl;
+  var $compile, $templateCache, $select, scope, sandboxEl, $timeout;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.select'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$select_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$select_, _$timeout_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $select = _$select_;
+    $timeout = _$timeout_;
   }));
 
   afterEach(function() {
@@ -25,72 +26,72 @@ describe('select', function () {
   var templates = {
     'default': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'default-with-id': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button id="select1" type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button id="select1" type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'markup-ngRepeat': {
-      element: '<ul><li ng-repeat="i in [1, 2, 3]"><button type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button></li></ul>'
+      element: '<ul><li ng-repeat="i in [1, 2, 3]"><button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button></li></ul>'
     },
     'markup-select': {
-      element: '<select type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></select>'
+      element: '<select type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></select>'
     },
-    'markup-ngOptions-filtered': {
-      element: '<button type="button" class="btn" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons | orderBy:\'icon.value\'" bs-select></button>'
+    'markup-bsOptions-filtered': {
+      element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons | orderBy:\'icon.value\'" bs-select></button>'
     },
-    'markup-ngOptions-array': {
+    'markup-bsOptions-array': {
       scope: {selectedMonth: 0, months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']},
-      element: '<div type="button" class="btn" ng-model="selectedMonth" ng-options="months.indexOf(month) as month for month in months" bs-select></div>'
-      // element: '<select type="button" class="btn" ng-model="selectedMonth" ng-options="months.indexOf(month) as month for month in months"></select>'
+      element: '<div type="button" class="btn" ng-model="selectedMonth" bs-options="months.indexOf(month) as month for month in months" bs-select></div>'
+      // element: '<select type="button" class="btn" ng-model="selectedMonth" bs-options="months.indexOf(month) as month for month in months"></select>'
     },
     'options-multiple': {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-multiple-all-none-buttons': {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-multiple-all-none-buttons-text': {
       scope: {allText: 'select all', noneText: 'select none', selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="1" data-all-text="{{allText}}" data-none-text="{{noneText}}" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="1" data-all-text="{{allText}}" data-none-text="{{noneText}}" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-multiple-required': {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" required bs-select></button>'
+      element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" required bs-select></button>'
     },
     'options-maxLength': {
       scope: {selectedIcons: ['Globe', 'Heart', 'Camera'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" data-multiple="1" data-max-length="2" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-multiple="1" data-max-length="2" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-maxLengthHtml': {
       scope: {selectedIcons: ['Globe', 'Heart', 'Camera'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" data-multiple="1" data-max-length="2" data-max-length-html="foo" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-multiple="1" data-max-length="2" data-max-length-html="foo" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-animation': {
-      element: '<button type="button" class="btn" data-animation="am-flip-x" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-animation="am-flip-x" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-placement': {
-      element: '<button type="button" class="btn" data-placement="bottom" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-placement="bottom" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-placement-exotic': {
-      element: '<button type="button" class="btn" data-placement="bottom-right" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-placement="bottom-right" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-trigger': {
-      element: '<button type="button" class="btn" data-trigger="hover" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-trigger="hover" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-html': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '<i class="fa fa-gear"></i> Gear'}, {value: 'Globe', label: '<i class="fa fa-globe"></i> Globe'}, {value: 'Heart', label: '<i class="fa fa-heart"></i> Heart'}, {value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}]},
-      element: '<button type="button" class="btn" class="form-control" ng-model="selectedIcon" data-html="1" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" class="form-control" ng-model="selectedIcon" data-html="1" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-template': {
-      element: '<button type="button" class="btn" data-template="custom" ng-model="selectedIcon" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-template="custom" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-multiple-sort': {
       scope: {sort: true, selectedIcons: [], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" data-sort="{{ sort }}" data-multiple="1" ng-model="selectedIcons" ng-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-sort="{{ sort }}" data-multiple="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     }
   };
 
@@ -101,6 +102,12 @@ describe('select', function () {
     element = $compile(element)(scope);
     scope.$digest();
     return jQuery(element[0]);
+  }
+
+  function triggerKeyDown(elm, keyCode) {
+    var evt = $.Event('keydown');
+    evt.which = evt.keyCode = keyCode;
+    angular.element(elm[0]).triggerHandler(evt);
   }
 
   // Tests
@@ -154,7 +161,29 @@ describe('select', function () {
 
   });
 
-  describe('ngOptions', function () {
+  describe('when model has no initial selection', function() {
+
+    it('should not have any selection upon open until down key', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.active').length).toBe(0);
+      $timeout.flush();
+      triggerKeyDown( elm, 40 );
+      expect(sandboxEl.find('.active').length).toBe(1);
+    });
+
+    it('should not have any selection upon open until up key', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.active').length).toBe(0);
+      $timeout.flush();
+      triggerKeyDown( elm, 38 );
+      expect(sandboxEl.find('.active').length).toBe(1);
+    });
+
+  });
+
+  describe('bsOptions', function () {
 
     it('should correctly watch for changes', function() {
       var elm = compileDirective('default');
@@ -165,14 +194,14 @@ describe('select', function () {
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
     });
 
-    it('should support ngOptions with filters', function() {
-      var elm = compileDirective('markup-ngOptions-filtered');
+    it('should support bsOptions with filters', function() {
+      var elm = compileDirective('markup-bsOptions-filtered');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
     });
 
-    it('should support ngOptions with arrays', function() {
-      var elm = compileDirective('markup-ngOptions-array');
+    it('should support bsOptions with arrays', function() {
+      var elm = compileDirective('markup-bsOptions-array');
       angular.element(elm[0]).triggerHandler('focus');
       expect(elm.text().trim()).toBe(scope.months[scope.selectedMonth]);
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.months.length);
@@ -285,7 +314,7 @@ describe('select', function () {
     describe('placement', function () {
       var $$rAF;
       beforeEach(inject(function (_$$rAF_) {
-        $$rAF = _$$rAF_
+        $$rAF = _$$rAF_;
       }));
 
       it('should default to `top` placement', function() {
