@@ -220,30 +220,30 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
   })
 
-  .directive('bsAffix', function($affix, $window) {
+  .directive('bsAffix', function($affix, $window, $timeout) {
 
     return {
       restrict: 'EAC',
       require: '^?bsAffixTarget',
       link: function postLink(scope, element, attr, affixTarget) {
+        $timeout(function() {
+          var options = {scope: scope, target: affixTarget ? affixTarget.$element : angular.element($window)};
+          angular.forEach(['offsetTop', 'offsetBottom', 'offsetParent', 'offsetUnpin', 'inlineStyles'], function(key) {
+            if(angular.isDefined(attr[key])) {
+              var option = attr[key];
+              if (/true/i.test(option)) option = true;
+              if (/false/i.test(option)) option = false;
+              options[key] = option;
+            }
+          });
 
-        var options = {scope: scope, target: affixTarget ? affixTarget.$element : angular.element($window)};
-        angular.forEach(['offsetTop', 'offsetBottom', 'offsetParent', 'offsetUnpin', 'inlineStyles'], function(key) {
-          if(angular.isDefined(attr[key])) {
-            var option = attr[key];
-            if (/true/i.test(option)) option = true;
-            if (/false/i.test(option)) option = false;
-            options[key] = option;
-          }
-        });
-
-        var affix = $affix(element, options);
-        scope.$on('$destroy', function() {
-          affix && affix.destroy();
-          options = null;
-          affix = null;
-        });
-
+          var affix = $affix(element, options);
+          scope.$on('$destroy', function() {
+            affix && affix.destroy();
+            options = null;
+            affix = null;
+          });
+        }, 0);
       }
     };
 
