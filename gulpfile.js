@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var config = require('ng-factory').use(gulp, {
+  docsViews: '*/docs/{,*/}*.tpl.{html,jade}',
   bower: {
     exclude: /jquery|js\/bootstrap/
   }

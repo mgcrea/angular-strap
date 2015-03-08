@@ -26,7 +26,7 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-template="aside/docs/aside.tpl.demo.html" data-placement="left" data-animation="am-slide-left" bs-aside="aside" data-container="body">Custom aside
+    <button type="button" class="btn btn-lg btn-danger" data-template="aside/docs/aside.demo.tpl.html" data-placement="left" data-animation="am-slide-left" bs-aside="aside" data-container="body">Custom aside
       <br />
       <small>(using data-template)</small>
     </button>
@@ -52,7 +52,7 @@
             var myAside = $aside({title: 'My Title', content: 'My Content', show: true});
 
             // Pre-fetch an external template populated with a custom scope
-            var myOtherAside = $aside({scope: $scope, template: 'aside/docs/aside.tpl.demo.html'});
+            var myOtherAside = $aside({scope: $scope, template: 'aside/docs/aside.demo.tpl.html'});
             // Show when some event occurs (use $promise property to ensure the template has been loaded)
             myOtherAside.$promise.then(function() {
               myOtherAside.show();
