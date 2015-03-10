@@ -84,6 +84,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
           if(angular.isDate(date) && !isNaN(date.getTime())) {
             $datepicker.$date = date;
             $picker.update.call($picker, date);
+          } else {
+            $datepicker.$date = date;
+            $datepicker.setMode(options.startView);
           }
           // Build only if pristine
           $datepicker.$build(true);
