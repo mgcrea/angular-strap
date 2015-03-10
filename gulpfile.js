@@ -2,9 +2,11 @@
 
 var gulp = require('gulp');
 var config = require('ng-factory').use(gulp, {
-  docsViews: '*/docs/{,*/}*.tpl.{html,jade}',
+  src: {
+    docsViews: '*/docs/{,*/}*.tpl.{html,jade}'
+  },
   bower: {
-    exclude: /jquery|js\/bootstrap/
+    exclude: /jquery|js\/bootstrap|\.less|\.woff2/
   }
 });
 
@@ -37,3 +39,11 @@ var src = config.src;
 //     fs.symlinkSync('./../data', path.join(src.dest, 'data'));
 //   } catch(err) {}
 // });
+
+var docs = config.docs;
+gulp.task('ng:afterPages', function() {
+  // gulp.src(['bower_components/font-awesome/fonts/*.{woff,woff2}'], {cwd: docs.cwd})
+    // .pipe(gulp.dest(path.join(docs.dest, 'fonts')));
+  gulp.src(['bower_components/highlightjs/styles/github.css'], {cwd: docs.cwd, base: docs.cwd})
+    .pipe(gulp.dest(docs.dest));
+});
