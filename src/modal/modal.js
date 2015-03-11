@@ -75,7 +75,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             var templateEl = angular.element(template);
             return fetchTemplate(options.contentTemplate)
             .then(function(contentTemplate) {
-              var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
+              var contentEl = findElement('[ng-bind="content"], [data-ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
               // Drop the default footer as you probably don't want it if you use a custom contentTemplate
               if(!config.template) contentEl.next().remove();
               return templateEl[0].outerHTML;
