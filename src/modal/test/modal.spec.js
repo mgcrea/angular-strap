@@ -66,6 +66,9 @@ describe('modal', function() {
     'options-template': {
       scope: {modal: {title: 'Title', content: 'Hello Modal!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-template="custom" bs-modal>click me</a>'
+    },
+    'options-prefix-event': {
+      element: '<a data-prefix-event="customprefix" bs-modal="modal">click me</a>'
     }
   };
 
@@ -310,6 +313,18 @@ describe('modal', function() {
       angular.element(elm[0]).triggerHandler('click');
       scope.$digest();
       expect(id).toBe('modal1');
+    });
+
+    it('should allow setting custom event prefix', function() {
+      var elm = compileDirective('options-prefix-event');
+      var eventTriggered = false;
+      scope.$on('customprefix.show.before', function(evt, modal) {
+        eventTriggered = true;
+      });
+
+      angular.element(elm[0]).triggerHandler('click');
+      scope.$digest();
+      expect(eventTriggered).toBe(true);
     });
 
   });
