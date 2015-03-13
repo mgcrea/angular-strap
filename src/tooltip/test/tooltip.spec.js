@@ -1055,6 +1055,18 @@ describe('tooltip', function() {
         expect(tip.style.top).toBe('-9999px');
         expect(tip.style.left).toBe('-9999px');
       }));
+
+      it('should have the correct width when right:0 is previously set for the tooltip', inject(function (dimensions) {
+        bodyEl.append('<style>' +
+                      '    .tooltip { position: absolute; right: 0; } ' +
+                      '</style>');
+
+        var elm = compileDirective('options-placement-top');
+        angular.element(elm[0]).triggerHandler('mouseenter');
+
+        var tip = sandboxEl.children('.tooltip')[0];
+        expect(tip.offsetWidth <= 500).toBe(true);
+      }));
     });
 
     describe('standard placements', function() {
