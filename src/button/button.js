@@ -140,7 +140,6 @@ angular.module('mgcrea.ngStrap.button', [])
 
         // Support `label > input[type="radio"]` markup
         var isInput = element[0].nodeName === 'INPUT';
-        var activeElement = isInput ? element.parent() : element;
 
         var value;
         attr.$observe('value', function(v) {
@@ -154,7 +153,7 @@ angular.module('mgcrea.ngStrap.button', [])
           var isActive = angular.equals(controller.$modelValue, value);
           $$rAF(function() {
             if(isInput) element[0].checked = isActive;
-            activeElement.toggleClass(options.activeClass, isActive);
+            element.toggleClass(options.activeClass, isActive);
           });
         };
 
