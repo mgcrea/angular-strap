@@ -81,6 +81,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.select = function(index) {
+          if(index === -1) return;
           var value = scope.$matches[index].value;
           // console.log('$setViewValue', value);
           controller.$setViewValue(value);
@@ -120,8 +121,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.$onKeyDown = function(evt) {
           if(!/(38|40|13)/.test(evt.keyCode)) return;
 
-          // Let ngSubmit pass if the typeahead tip is hidden
-          if($typeahead.$isVisible()) {
+          // Let ngSubmit pass if the typeahead tip is hidden or no option is selected
+          if($typeahead.$isVisible() && !(evt.keyCode === 13 && scope.$activeIndex === -1)) {
             evt.preventDefault();
             evt.stopPropagation();
           }
