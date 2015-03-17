@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.6 - 2015-01-11
+ * @version v2.2.1 - 2015-03-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -160,6 +160,10 @@ angular.module('mgcrea.ngStrap.tab', [])
         if(bsTabsCtrl.$options.animation) {
           element.addClass(bsTabsCtrl.$options.animation);
         }
+
+        attrs.$observe('disabled', function(newValue, oldValue) {
+          scope.disabled = scope.$eval(newValue);
+        });
 
         // Push pane to parent bsTabs controller
         bsTabsCtrl.$push(scope);

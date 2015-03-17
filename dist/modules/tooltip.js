@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.6 - 2015-01-11
+ * @version v2.2.1 - 2015-03-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -29,7 +29,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       type: '',
       delay: 0,
       autoClose: false,
-      bsEnabled: true
+      bsEnabled: true,
+      viewport: {
+       selector: 'body',
+       padding: 0
+      }
     };
 
     this.$get = ["$window", "$rootScope", "$compile", "$q", "$templateCache", "$http", "$animate", "$sce", "dimensions", "$$rAF", "$timeout", function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $sce, dimensions, $$rAF, $timeout) {
@@ -218,19 +222,28 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // Options: custom classes
           if(options.customClass) tipElement.addClass(options.customClass);
 
+          // Append the element, without any animations.  If we append
+          // using $animate.enter, some of the animations cause the placement
+          // to be off due to the transforms.
+          after ? after.after(tipElement) : parent.prepend(tipElement);
+
+          $tooltip.$isShown = scope.$isShown = true;
+          safeDigest(scope);
+
+          // Now, apply placement
+          $tooltip.$applyPlacement();
+
+          // Once placed, animate it.
           // Support v1.3+ $animate
           // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
           var promise = $animate.enter(tipElement, parent, after, enterAnimateCallback);
           if(promise && promise.then) promise.then(enterAnimateCallback);
-
-          $tooltip.$isShown = scope.$isShown = true;
           safeDigest(scope);
-          $$rAF(function () {
-            $tooltip.$applyPlacement();
 
-            // Once placed, make the tooltip visible
+          $$rAF(function () {
+            // Once the tooltip is placed and the animation starts, make the tooltip visible
             if(tipElement) tipElement.css({visibility: 'visible'});
-          }); // var a = bodyEl.offsetWidth + 1; ?
+          });
 
           // Bind events
           if(options.keyboard) {
@@ -325,6 +338,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           options.bsEnabled = isEnabled;
         };
 
+        $tooltip.setViewport = function(viewport) {
+          options.viewport = viewport;
+        };
+
         // Protected methods
 
         $tooltip.$applyPlacement = function() {
@@ -352,7 +369,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // If we're auto placing, we need to check the positioning
           if (autoPlace) {
             var originalPlacement = placement;
-            var container = options.container ? angular.element(document.querySelector(options.container)) : element.parent();
+            var container = options.container ? findElement(options.container) : element.parent();
             var containerPosition = getPosition(container);
 
             // Determine if the vertical placement
@@ -380,7 +397,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           // Get the tooltip's top and left coordinates to center it with this directive.
           var tipPosition = getCalculatedOffset(placement, elementPosition, tipWidth, tipHeight);
-          applyPlacementCss(tipPosition.top, tipPosition.left);
+          applyPlacement(tipPosition, placement);
         };
 
         $tooltip.$onKeyUp = function(evt) {
@@ -480,22 +497,28 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         function getPosition($element) {
           $element = $element || (options.target || element);
 
-          var el = $element[0];
+          var el = $element[0],
+              isBody = el.tagName === 'BODY';
 
           var elRect = el.getBoundingClientRect();
-          if (elRect.width === null) {
+          var rect = {};
+
+          // IE8 has issues with angular.extend and using elRect directly.
+          // By coping the values of elRect into a new object, we can continue to use extend
+          for (var p in elRect) {
+            // DO NOT use hasOwnProperty when inspecting the return of getBoundingClientRect.
+            rect[p] = elRect[p];
+          }
+
+          if (rect.width === null) {
             // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
-            elRect = angular.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top });
+            rect = angular.extend({}, rect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top });
           }
+          var elOffset = isBody ? { top: 0, left: 0 } : dimensions.offset(el),
+              scroll = { scroll:  isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.prop('scrollTop') || 0 },
+              outerDims = isBody ? { width: document.documentElement.clientWidth, height: $window.innerHeight } : null;
 
-          var elPos;
-          if (options.container === 'body') {
-            elPos = dimensions.offset(el);
-          } else {
-            elPos = dimensions.position(el);
-          }
-
-          return angular.extend({}, elRect, elPos);
+          return angular.extend({}, rect, scroll, outerDims, elOffset);
         }
 
         function getCalculatedOffset(placement, position, actualWidth, actualHeight) {
@@ -555,8 +578,101 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           return offset;
         }
 
-        function applyPlacementCss(top, left) {
-          tipElement.css({ top: top + 'px', left: left + 'px' });
+        function applyPlacement(offset, placement) {
+          var tip = tipElement[0],
+              width = tip.offsetWidth,
+              height = tip.offsetHeight;
+
+          // manually read margins because getBoundingClientRect includes difference
+          var marginTop = parseInt(dimensions.css(tip, 'margin-top'), 10),
+              marginLeft = parseInt(dimensions.css(tip, 'margin-left'), 10);
+
+          // we must check for NaN for ie 8/9
+          if (isNaN(marginTop)) marginTop  = 0;
+          if (isNaN(marginLeft)) marginLeft = 0;
+
+          offset.top  = offset.top + marginTop;
+          offset.left = offset.left + marginLeft;
+
+          // dimensions setOffset doesn't round pixel values
+          // so we use setOffset directly with our own function
+          dimensions.setOffset(tip, angular.extend({
+            using: function (props) {
+              tipElement.css({
+                top: Math.round(props.top) + 'px',
+                left: Math.round(props.left) + 'px'
+              });
+            }
+          }, offset), 0);
+
+          // check to see if placing tip in new offset caused the tip to resize itself
+          var actualWidth = tip.offsetWidth,
+              actualHeight = tip.offsetHeight;
+
+          if (placement === 'top' && actualHeight !== height) {
+            offset.top = offset.top + height - actualHeight;
+          }
+
+          // If it's an exotic placement, exit now instead of
+          // applying a delta and changing the arrow
+          if (/top-left|top-right|bottom-left|bottom-right/.test(placement)) return;
+
+          var delta = getViewportAdjustedDelta(placement, offset, actualWidth, actualHeight);
+
+          if (delta.left) {
+            offset.left += delta.left;
+          } else {
+            offset.top += delta.top;
+          }
+
+          dimensions.setOffset(tip, offset);
+
+          if (/top|right|bottom|left/.test(placement)) {
+            var isVertical = /top|bottom/.test(placement),
+                arrowDelta = isVertical ? delta.left * 2 - width + actualWidth : delta.top * 2 - height + actualHeight,
+                arrowOffsetPosition = isVertical ? 'offsetWidth' : 'offsetHeight';
+
+            replaceArrow(arrowDelta, tip[arrowOffsetPosition], isVertical);
+          }
+        }
+
+        function getViewportAdjustedDelta(placement, position, actualWidth, actualHeight) {
+          var delta = { top: 0, left: 0 },
+              $viewport = options.viewport && findElement(options.viewport.selector || options.viewport);
+
+          if (!$viewport) {
+           return delta;
+          }
+
+          var viewportPadding = options.viewport && options.viewport.padding || 0,
+              viewportDimensions = getPosition($viewport);
+
+          if (/right|left/.test(placement)) {
+            var topEdgeOffset    = position.top - viewportPadding - viewportDimensions.scroll,
+                bottomEdgeOffset = position.top + viewportPadding - viewportDimensions.scroll + actualHeight;
+            if (topEdgeOffset < viewportDimensions.top) { // top overflow
+              delta.top = viewportDimensions.top - topEdgeOffset;
+            } else if (bottomEdgeOffset > viewportDimensions.top + viewportDimensions.height) { // bottom overflow
+              delta.top = viewportDimensions.top + viewportDimensions.height - bottomEdgeOffset;
+            }
+          } else {
+            var leftEdgeOffset  = position.left - viewportPadding,
+                rightEdgeOffset = position.left + viewportPadding + actualWidth;
+            if (leftEdgeOffset < viewportDimensions.left) { // left overflow
+              delta.left = viewportDimensions.left - leftEdgeOffset;
+            } else if (rightEdgeOffset > viewportDimensions.width) { // right overflow
+              delta.left = viewportDimensions.left + viewportDimensions.width - rightEdgeOffset;
+            }
+          }
+
+          return delta;
+        }
+
+        function replaceArrow(delta, dimension, isHorizontal) {
+          var $arrow = findElement('.tooltip-arrow, .arrow', tipElement[0]);
+
+          $arrow.css(isHorizontal ? 'left' : 'top', 50 * (1 - delta / dimension) + '%')
+                .css(isHorizontal ? 'top' : 'left', '');
         }
 
         function destroyTipElement() {
@@ -601,13 +717,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       var fetchPromises = {};
       function fetchTemplate(template) {
         if(fetchPromises[template]) return fetchPromises[template];
-        return (fetchPromises[template] = $q.when($templateCache.get(template) || $http.get(template))
-        .then(function(res) {
-          if(angular.isObject(res)) {
-            $templateCache.put(template, res.data);
-            return res.data;
-          }
-          return res;
+        return (fetchPromises[template] = $http.get(template, {cache: $templateCache}).then(function(res) {
+          return res.data;
         }));
       }
 
@@ -626,9 +737,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'target', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id'], function(key) {
+        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
+
+        // should not parse target attribute, only data-target
+        if(element.attr('data-target')) {
+          options.target = element.attr('data-target');
+        }
 
         // overwrite inherited title value when no value specified
         // fix for angular 1.3.1 531a8de72c439d8ddd064874bf364c00cedabb11
@@ -672,6 +788,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           if(!tooltip || !angular.isDefined(newValue)) return;
           if(angular.isString(newValue)) newValue = !!newValue.match(/true|1|,?(tooltip),?/i);
           newValue === false ? tooltip.setEnabled(false) : tooltip.setEnabled(true);
+        });
+
+        // Viewport support
+        attr.viewport && scope.$watch(attr.viewport, function (newValue) {
+          if(!tooltip || !angular.isDefined(newValue)) return;
+          tooltip.setViewport(newValue);
         });
 
         // Initialize popover

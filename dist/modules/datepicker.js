@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.6 - 2015-01-11
+ * @version v2.2.1 - 2015-03-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -28,6 +28,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
       useNative: false,
       dateType: 'date',
       dateFormat: 'shortDate',
+      timezone: null,
       modelDateFormat: null,
       dayFormat: 'dd',
       monthFormat: 'MMM',
@@ -272,7 +273,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -347,6 +348,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         // viewValue -> $parsers -> modelValue
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
+          var date;
           // Null values should correctly reset the model value & validity
           if(!viewValue) {
             controller.$setValidity('date', true);
@@ -364,16 +366,20 @@ angular.module('mgcrea.ngStrap.datepicker', [
           } else {
             validateAgainstMinMaxDate(parsedDate);
           }
+
           if(options.dateType === 'string') {
-            return formatDate(parsedDate, options.modelDateFormat || options.dateFormat);
-          } else if(options.dateType === 'number') {
-            return controller.$dateValue.getTime();
+            date = dateParser.timezoneOffsetAdjust(parsedDate, options.timezone, true);
+            return formatDate(date, options.modelDateFormat || options.dateFormat);
+          }
+          date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
+          if(options.dateType === 'number') {
+            return date.getTime();
           } else if(options.dateType === 'unix') {
-            return controller.$dateValue.getTime() / 1000;
+            return date.getTime() / 1000;
           } else if(options.dateType === 'iso') {
-            return controller.$dateValue.toISOString();
+            return date.toISOString();
           } else {
-            return new Date(controller.$dateValue);
+            return new Date(date);
           }
         });
 
@@ -397,7 +403,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
           //   var today = new Date();
           //   date = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
           // }
-          controller.$dateValue = date;
+          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
           return getDateFormattedString();
         });
 
@@ -463,7 +469,6 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         var startDate = picker.$date || (options.startDate ? dateParser.getDateForAttribute('startDate', options.startDate) : new Date());
         var viewDate = {year: startDate.getFullYear(), month: startDate.getMonth(), date: startDate.getDate()};
-        var timezoneOffset = startDate.getTimezoneOffset() * 6e4;
 
         var views = [{
             format: options.dayFormat,
@@ -481,7 +486,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
             build: function() {
               var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1), firstDayOfMonthOffset = firstDayOfMonth.getTimezoneOffset();
               var firstDate = new Date(+firstDayOfMonth - mod(firstDayOfMonth.getDay() - options.startWeek, 7) * 864e5), firstDateOffset = firstDate.getTimezoneOffset();
-              var today = new Date().toDateString();
+              var today = dateParser.timezoneOffsetAdjust(new Date(), options.timezone).toDateString();
               // Handle daylight time switch
               if(firstDateOffset !== firstDayOfMonthOffset) firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60e3);
               var days = [], day;

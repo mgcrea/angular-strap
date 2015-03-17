@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.6 - 2015-01-11
+ * @version v2.2.1 - 2015-03-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -28,6 +28,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
       useNative: true,
       timeType: 'date',
       timeFormat: 'shortTime',
+      timezone: null,
       modelTimeFormat: null,
       autoclose: false,
       minTime: -Infinity,
@@ -35,6 +36,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
       length: 5,
       hourStep: 1,
       minuteStep: 5,
+      roundDisplay: false,
       iconUp: 'glyphicon glyphicon-chevron-up',
       iconDown: 'glyphicon glyphicon-chevron-down',
       arrowBehavior: 'pager'
@@ -55,14 +57,22 @@ angular.module('mgcrea.ngStrap.timepicker', [
         var scope = $timepicker.$scope;
 
         var lang = options.lang;
-        var formatDate = function(date, format) {
-          return $dateFormatter.formatDate(date, format, lang);
+        var formatDate = function(date, format, timezone) {
+          return $dateFormatter.formatDate(date, format, lang, timezone);
         };
+
+        function floorMinutes(time)
+        {
+          // coeff used to floor current time to nearest minuteStep interval
+          var coeff = 1000 * 60 * options.minuteStep;
+          return new Date(Math.floor(time.getTime() / coeff) * coeff);
+        }
 
         // View vars
 
         var selectedIndex = 0;
-        var startDate = controller.$dateValue || new Date();
+        var defaultDate = options.roundDisplay ? floorMinutes(new Date()) : new Date();
+        var startDate = controller.$dateValue || defaultDate;
         var viewDate = {hour: startDate.getHours(), meridian: startDate.getHours() < 12, minute: startDate.getMinutes(), second: startDate.getSeconds(), millisecond: startDate.getMilliseconds()};
 
         var format = $dateFormatter.getDatetimeFormat(options.timeFormat, lang);
@@ -353,8 +363,14 @@ angular.module('mgcrea.ngStrap.timepicker', [
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'id'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+
+        // use string regex match for boolean values
+        var falseValueRegExp = /^(false|0|)$/;
+        angular.forEach(['roundDisplay'], function(key) {
+          if(angular.isDefined(attr[key])) options[key] = !falseValueRegExp.test(attr[key]);
         });
 
         // Visibility binding support
@@ -370,8 +386,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
         options = timepicker.$options;
 
         var lang = options.lang;
-        var formatDate = function(date, format) {
-          return $dateFormatter.formatDate(date, format, lang);
+        var formatDate = function(date, format, timezone) {
+          return $dateFormatter.formatDate(date, format, lang, timezone);
         };
 
         // Initialize parser
@@ -411,6 +427,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
         // viewValue -> $parsers -> modelValue
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
+          var date;
           // Null values should correctly reset the model value & validity
           if(!viewValue) {
             // BREAKING CHANGE:
@@ -428,16 +445,20 @@ angular.module('mgcrea.ngStrap.timepicker', [
           } else {
             validateAgainstMinMaxTime(parsedTime);
           }
+
           if(options.timeType === 'string') {
-            return formatDate(parsedTime, options.modelTimeFormat || options.timeFormat);
-          } else if(options.timeType === 'number') {
-            return controller.$dateValue.getTime();
+            date = dateParser.timezoneOffsetAdjust(parsedTime, options.timezone, true);
+            return formatDate(date, options.modelTimeFormat || options.timeFormat);
+          }
+          date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
+          if(options.timeType === 'number') {
+            return date.getTime();
           } else if(options.timeType === 'unix') {
-            return controller.$dateValue.getTime() / 1000;
+            return date.getTime() / 1000;
           } else if(options.timeType === 'iso') {
-            return controller.$dateValue.toISOString();
+            return date.toISOString();
           } else {
-            return new Date(controller.$dateValue);
+            return new Date(date);
           }
         });
 
@@ -458,7 +479,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
           }
           // Setup default value?
           // if(isNaN(date.getTime())) date = new Date(new Date().setMinutes(0) + 36e5);
-          controller.$dateValue = date;
+          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
           return getTimeFormattedString();
         });
 
