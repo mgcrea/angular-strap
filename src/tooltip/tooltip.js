@@ -222,34 +222,36 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           $tooltip.$isShown = scope.$isShown = true;
           safeDigest(scope);
+          
+          // Allow $digest to complete if in progress
+          $timeout(function() {
+              // Now, apply placement
+              $tooltip.$applyPlacement();
 
-          // Now, apply placement
-          $tooltip.$applyPlacement();
+              // Once placed, animate it.
+              // Support v1.3+ $animate
+              // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
+              var promise = $animate.enter(tipElement, parent, after, enterAnimateCallback);
+              if(promise && promise.then) promise.then(enterAnimateCallback);
+              safeDigest(scope);
 
-          // Once placed, animate it.
-          // Support v1.3+ $animate
-          // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
-          var promise = $animate.enter(tipElement, parent, after, enterAnimateCallback);
-          if(promise && promise.then) promise.then(enterAnimateCallback);
-          safeDigest(scope);
+              $$rAF(function () {
+                // Once the tooltip is placed and the animation starts, make the tooltip visible
+                if(tipElement) tipElement.css({visibility: 'visible'});
+              });
 
-          $$rAF(function () {
-            // Once the tooltip is placed and the animation starts, make the tooltip visible
-            if(tipElement) tipElement.css({visibility: 'visible'});
-          });
+              // Bind events
+              if(options.keyboard) {
+                if(options.trigger !== 'focus') {
+                  $tooltip.focus();
+                }
+                bindKeyboardEvents();
+              }
 
-          // Bind events
-          if(options.keyboard) {
-            if(options.trigger !== 'focus') {
-              $tooltip.focus();
-            }
-            bindKeyboardEvents();
-          }
-
-          if(options.autoClose) {
-            bindAutoCloseEvents();
-          }
-
+              if(options.autoClose) {
+                bindAutoCloseEvents();
+              }
+           });
         };
 
         function enterAnimateCallback() {
