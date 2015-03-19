@@ -94,6 +94,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         // Protected methods
 
         $typeahead.$isVisible = function() {
+          // if it hasn't been positioned yet, it needs to be visible so that positioning happens correctly
+          if($typeahead.$element.css('top')=='-9999px' && $typeahead.$element.css('left')=='-9999px') return true;
           if(!options.minLength || !controller) {
             return !!scope.$matches.length;
           }
