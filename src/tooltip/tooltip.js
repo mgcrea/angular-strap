@@ -76,6 +76,16 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             $tooltip.show();
           });
         };
+        scope.$leave = function() {
+          scope.$$postDigest(function() {
+            $tooltip.leave();
+          });
+        };
+        scope.$enter = function() {
+          scope.$$postDigest(function() {
+            $tooltip.enter();
+          });
+        };
         scope.$toggle = function() {
           scope.$$postDigest(function() {
             $tooltip.toggle();
