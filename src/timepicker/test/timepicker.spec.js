@@ -38,18 +38,18 @@ describe('timepicker', function() {
       element: '<input id="timepicker1" type="text" ng-model="selectedTime" bs-timepicker>'
     },
     'value-past': {
-      scope: {selectedTime: new Date(1970, 0, 1, 10, 30)},
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42)},
       element: '<input type="text" ng-model="selectedTime" bs-timepicker>'
     },
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><input type="text" ng-model="selectedTime" bs-timepicker></li></ul>'
     },
     'markup-ngChange': {
-      scope: {selectedDate: new Date(1970, 0, 1, 10, 30), onChange: function() {}},
+      scope: {selectedDate: new Date(1970, 0, 1, 10, 30, 42), onChange: function() {}},
       element: '<input type="text" ng-model="selectedTime" ng-change="onChange()" bs-timepicker>'
     },
     'markup-ngRequired': {
-      scope: {selectedTime: new Date(2012, 5, 15, 9, 30)},
+      scope: {selectedTime: new Date(2012, 5, 15, 9, 30, 42)},
       element: '<input type="text" ng-model="selectedTime" ng-required="true" bs-timepicker>'
     },
     'options-animation': {
@@ -68,8 +68,16 @@ describe('timepicker', function() {
       element: '<input type="text" data-template="custom" ng-model="selectedTime" bs-timepicker>'
     },
     'options-timeFormat': {
-      scope: {selectedTime: new Date(1970, 0, 1, 10, 30)},
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42)},
       element: '<input type="text" ng-model="selectedTime" data-time-format="HH:mm" bs-timepicker>'
+    },
+    'options-timeFormat-seconds': {
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42)},
+      element: '<input type="text" ng-model="selectedTime" data-time-format="HH:mm:ss" bs-timepicker>'
+    },
+    'options-timeFormat-seconds-meridian': {
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42)},
+      element: '<input type="text" ng-model="selectedTime" data-time-format="HH:mm:ss a" bs-timepicker>'
     },
     'options-timezone-utc': {
       element: '<input type="text" ng-model="selectedTime" data-time-format="HH:mm" data-timezone="UTC" bs-timepicker>'
@@ -83,19 +91,19 @@ describe('timepicker', function() {
       element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-time-format="HH:mm" bs-timepicker>'
     },
     'options-timeType-number': {
-      scope: {selectedTime: new Date(1970, 0, 1, 10, 30).getTime()},
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42).getTime()},
       element: '<input type="text" ng-model="selectedTime" data-time-type="number" data-time-format="HH:mm" bs-timepicker>'
     },
     'options-timeType-unix': {
-      scope: {selectedTime: new Date(1970, 0, 1, 10, 30) / 1000},
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42) / 1000},
       element: '<input type="text" ng-model="selectedTime" data-time-type="unix" data-time-format="HH:mm" bs-timepicker>'
     },
     'options-timeType-iso': {
-      scope: {selectedTime: new Date(1970, 0, 1, 10, 30).toISOString()},
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42).toISOString()},
       element: '<input type="text" ng-model="selectedTime" data-time-type="iso" data-time-format="HH:mm" bs-timepicker>'
     },
     'options-minTime': {
-      scope: {selectedTime: new Date(1970, 0, 1, 10, 30), minTime: '09:30 AM'},
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 0), minTime: '09:30 AM'},
       element: '<input type="text" ng-model="selectedTime" data-min-time="{{minTime}}" bs-timepicker>'
     },
     'options-minTime-now': {
@@ -107,7 +115,7 @@ describe('timepicker', function() {
       element: '<input type="text" ng-model="selectedTime" data-max-time="now" bs-timepicker>'
     },
     'options-maxTime': {
-      scope: {selectedTime: new Date(1970, 0, 1, 10, 30), maxTime: '10:30 PM'},
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 0), maxTime: '10:30 PM'},
       element: '<input type="text" ng-model="selectedTime" data-max-time="{{maxTime}}" bs-timepicker>'
     },
     'options-autoclose': {
@@ -117,15 +125,18 @@ describe('timepicker', function() {
       element: '<input type="text" ng-model="selectedTime" data-use-native="1" bs-timepicker>'
     },
     'options-modelTimeFormat': {
-      scope: {selectedTime: '12:20:00'},
+      scope: {selectedTime: '12:20:10'},
       element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-model-time-format="HH:mm:ss" data-time-format="HH:mm" bs-timepicker>'
     },
     'options-arrowBehavior': {
-      scope: {selectedTime: new Date(1970, 0, 1, 10, 30), arrowBehavior: 'pager'},
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42), arrowBehavior: 'pager'},
       element: '<input type="text" ng-model="selectedTime" length="5" data-arrow-behavior="{{ arrowBehavior }}" bs-timepicker>'
     },
     'options-roundDisplay': {
       element: '<input type="text" data-minute-step="15" ng-model="selectedTime" data-round-display="true" bs-timepicker>'
+    },
+    'options-roundDisplay-seconds': {
+      element: '<input type="text" data-minute-step="15" data-second-step="20" ng-model="selectedTime" data-round-display="true" data-time-format="HH:mm:ss" bs-timepicker>'
     },
     'bsShow-attr': {
       scope: {selectedTime: new Date()},
@@ -183,7 +194,7 @@ describe('timepicker', function() {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(6) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
     });
 
     it('should correctly update the model when the view is updated', function() {
@@ -199,7 +210,7 @@ describe('timepicker', function() {
       expect(scope.selectedTime.toISOString().substr(0, 10)).toBe('1970-01-01');
       angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(11)')).triggerHandler('click');
       expect(elm.val()).toBe('11:30 AM');
-      expect(scope.selectedTime).toEqual(new Date(1970, 0, 1, 11, 30));
+      expect(scope.selectedTime).toEqual(new Date(1970, 0, 1, 11, 30, 42));
       expect(scope.selectedTime.toISOString().substr(0, 10)).toBe('1970-01-01');
     });
 
@@ -239,7 +250,7 @@ describe('timepicker', function() {
       var elm = compileDirective('default', {selectedTime: undefined});
       expect(elm.val()).toBe('');
       angular.element(elm[0]).triggerHandler('focus');
-      var amButton = angular.element(sandboxEl.find('.dropdown-menu tbody td:eq(4) button:eq(0)')[0]);
+      var amButton = angular.element(sandboxEl.find('.dropdown-menu tbody td:eq(6) button:eq(0)')[0]);
       spyOn(scope.$$childHead, '$switchMeridian');
       amButton.triggerHandler('click');
       // expect not to throw exception
@@ -283,12 +294,12 @@ describe('timepicker', function() {
 
       expect(elm.val()).toBe('9:30 AM');
       expect(scope.selectedTime).toBeDefined();
-      expect(scope.selectedTime).toEqual(new Date(2012, 5, 15, 9, 30));
+      expect(scope.selectedTime).toEqual(new Date(2012, 5, 15, 9, 30, 42));
 
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(6) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
 
     });
 
@@ -615,10 +626,30 @@ describe('timepicker', function() {
 
     });
 
+    describe('seconds display', function() {
+
+      it('should hide seconds', function() {
+        var elm = compileDirective('options-timeFormat');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu thead .btn').length).toBe(2);
+        expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 2);
+        expect(sandboxEl.find('.dropdown-menu tfoot .btn').length).toBe(2);
+      });
+
+      it('should show seconds', function() {
+        var elm = compileDirective('options-timeFormat-seconds');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu thead .btn').length).toBe(3);
+        expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 3);
+        expect(sandboxEl.find('.dropdown-menu tfoot .btn').length).toBe(3);
+      });
+
+    });
+
     describe('keyboard', function() {
 
       it('should support keyboard navigation', function() {
-        var elm = compileDirective('default', { selectedTime: new Date(2014, 10, 23, 8, 30) });
+        var elm = compileDirective('default', { selectedTime: new Date(2014, 10, 23, 8, 30, 40) });
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         // need to flush timeout to register keyboard events
@@ -647,12 +678,37 @@ describe('timepicker', function() {
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe('30');
       });
 
+      it('should support keyboard navigation with seconds', function() {
+        var elm = compileDirective('options-timeFormat-seconds', { selectedTime: new Date(2014, 10, 23, 8, 30, 40) });
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('focus');
+        // need to flush timeout to register keyboard events
+        // IMPORTANT: do it before $animate.triggerCallbacks, because
+        // on 1.3 that seems to do both and we get an error in 1.2
+        $timeout.flush();
+        $animate.triggerCallbacks();
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('08');
+
+        // cursor right -> select minutes
+        triggerKeyDown(elm, 39);
+        // cursor right -> select seconds
+        triggerKeyDown(elm, 39);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe('40');
+        // cursor up
+        triggerKeyDown(elm, 38);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe('35');
+        // cursor down
+        triggerKeyDown(elm, 40);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe('40');
+      });
+
       function getSelection(element) {
         return { start: element[0].selectionStart, end: element[0].selectionEnd};
       }
 
       it('should select date part when using keyboard navigation', function() {
-        var elm = compileDirective('default', { selectedTime: new Date(2014, 10, 23, 8, 30) });
+        var elm = compileDirective('default', { selectedTime: new Date(2014, 10, 23, 8, 30, 40) });
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         // need to flush timeout to register keyboard events
@@ -690,6 +746,41 @@ describe('timepicker', function() {
         expect(selection.end).toBe(4);
       });
 
+      it('should select date part when using keyboard navigation with seconds', function() {
+        var elm = compileDirective('default', { selectedTime: new Date(2014, 10, 23, 8, 30, 40) });
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('focus');
+        // need to flush timeout to register keyboard events
+        // IMPORTANT: do it before $animate.triggerCallbacks, because
+        // on 1.3 that seems to do both and we get an error in 1.2
+        $timeout.flush();
+        $animate.triggerCallbacks();
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('8');
+
+        // cursor down -> select hours
+        triggerKeyDown(elm, 40);
+
+        // cursor right -> select minutes
+        triggerKeyDown(elm, 39);
+
+        // cursor right -> select seconds
+        triggerKeyDown(elm, 39);
+        selection = getSelection(elm);
+        expect(selection.start).toBe(5);
+        expect(selection.end).toBe(7);
+        // cursor up -> select seconds
+        triggerKeyDown(elm, 38);
+        expect(selection.start).toBe(5);
+        expect(selection.end).toBe(7);
+
+        // cursor right -> select hours
+        triggerKeyDown(elm, 39);
+        var selection = getSelection(elm);
+        expect(selection.start).toBe(0);
+        expect(selection.end).toBe(1);
+      });
+
     });
 
     describe('timeFormat', function() {
@@ -700,6 +791,23 @@ describe('timepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
         expect(elm.val()).toBe('09:30');
+      });
+
+      it('should correctly display time with seconds and meridian', function() {
+        var elm = compileDirective('options-timeFormat-seconds-meridian');
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'ss'));
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(6) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+      });
+
+      it('should support a custom timeFormat with seconds', function() {
+        var elm = compileDirective('options-timeFormat-seconds');
+        expect(elm.val()).toBe('10:30:42');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(47)')).triggerHandler('click');
+        expect(elm.val()).toBe('10:30:47');
       });
 
     });
@@ -756,32 +864,32 @@ describe('timepicker', function() {
       it('should support a number timeType', function() {
         var elm = compileDirective('options-timeType-number');
         expect(elm.val()).toBe('10:30');
-        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 10, 30).getTime());
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 10, 30, 42).getTime());
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
         expect(elm.val()).toBe('09:30');
-        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30).getTime());
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30, 42).getTime());
       });
 
       it('should support a unix timeType', function() {
         var elm = compileDirective('options-timeType-unix');
         expect(elm.val()).toBe('10:30');
-        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 10, 30).getTime() / 1000);
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 10, 30, 42).getTime() / 1000);
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
         expect(elm.val()).toBe('09:30');
-        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30) / 1000);
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30, 42) / 1000);
       });
 
       it('should support a iso timeType', function() {
         var elm = compileDirective('options-timeType-iso');
         var date = new Date(1970, 0, 1, 10, 30);
         expect(elm.val()).toBe(date.getHours() + ':' + date.getMinutes());
-        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 10, 30).toISOString());
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 10, 30, 42).toISOString());
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(09)')).triggerHandler('click');
         expect(elm.val()).toBe('09:30');
-        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30).toISOString());
+        expect(scope.selectedTime).toBe(new Date(1970, 0, 1, 9, 30, 42).toISOString());
       });
 
     });
@@ -861,7 +969,7 @@ describe('timepicker', function() {
       });
 
       it('should ignore date part of ngModel when validating with minTime', function() {
-        var elm = compileDirective('options-minTime', { selectedTime: new Date(1957, 6, 13, 10, 30)});
+        var elm = compileDirective('options-minTime', { selectedTime: new Date(1957, 6, 13, 10, 30, 42)});
         angular.element(elm[0]).triggerHandler('change');
         expect(elm.hasClass('ng-valid-min')).toBeTruthy();
       });
@@ -974,13 +1082,13 @@ describe('timepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(13)')).triggerHandler('click');
         expect(elm.val()).toBe('13:20');
-        expect(scope.selectedTime).toBe('13:20:00');
+        expect(scope.selectedTime).toBe('13:20:10');
 
         // Should correctly set the model if the date is manually typed into the input
         elm.val('10:00');
         angular.element(elm[0]).triggerHandler('change');
         scope.$digest();
-        expect(scope.selectedTime).toBe('10:00:00');
+        expect(scope.selectedTime).toBe('10:00:10');
 
       });
 
@@ -1017,13 +1125,44 @@ describe('timepicker', function() {
 
     describe('roundDisplay', function() {
 
-      it('should floor display minutes to nearest minuteStep interval when ngModel value is undefined', function() {
-        var elm = compileDirective('options-roundDisplay', { selectedTime: undefined });
-        var currentTime = new Date();
-        currentTime.setMinutes(currentTime.getMinutes() - currentTime.getMinutes() % 15);
-        angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0)').text()).toBe(dateFilter(currentTime, 'h'));
-        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2)').text()).toBe(dateFilter(currentTime, 'mm'));
+      var currentTime, i = 0;
+      var times = [
+        new Date(1970, 6, 13, 10, 33, 42),
+        new Date(1970, 6, 13, 10, 33, 0),
+        new Date(1970, 6, 13, 10, 0, 59),
+        new Date(1970, 6, 13, 10, 0, 0),
+        new Date(1970, 6, 13),
+        new Date(1970, 6, 13, 23, 59, 59)
+      ];
+
+      beforeAll(function() { jasmine.clock().install(); });
+      afterAll(function() { jasmine.clock().uninstall(); });
+
+      beforeEach(function() {
+        jasmine.clock().mockDate(times[i]);
+        currentTime = new Date();
+      });
+
+      afterEach(function() { i++; });
+
+      angular.forEach(times, function() {
+        it('should floor display minutes to nearest minuteStep interval when ngModel value is undefined', function() {
+          var elm = compileDirective('options-roundDisplay', { selectedTime: undefined });
+          currentTime.setMinutes(currentTime.getMinutes() - currentTime.getMinutes() % 15);
+          angular.element(elm[0]).triggerHandler('focus');
+          expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0)').text()).toBe(dateFilter(currentTime, 'h'));
+          expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2)').text()).toBe(dateFilter(currentTime, 'mm'));
+        });
+
+        it('should floor display minutes to nearest minuteStep interval when ngModel value is undefined and seconds are shown', function() {
+          var elm = compileDirective('options-roundDisplay-seconds', { selectedTime: undefined });
+          currentTime.setMinutes(currentTime.getMinutes() - currentTime.getMinutes() % 15);
+          currentTime.setSeconds(0);
+          angular.element(elm[0]).triggerHandler('focus');
+          expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0)').text()).toBe(dateFilter(currentTime, 'HH'));
+          expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2)').text()).toBe(dateFilter(currentTime, 'mm'));
+          expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4)').text()).toBe(dateFilter(currentTime, 'ss'));
+        });
       });
 
     });
