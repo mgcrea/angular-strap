@@ -24,7 +24,7 @@ angular.module('mgcrea.ngStrap.helpers.dateFormatter', [])
     };
 
     function splitTimeFormat(format) {
-      return /(h+)([:\.])?(m+)[ ]?(a?)/i.exec(format).slice(1);
+      return /(h+)([:\.])?(m+)([:\.])?(s*)[ ]?(a?)/i.exec(format).slice(1);
     }
 
     // h:mm a => h
@@ -37,14 +37,24 @@ angular.module('mgcrea.ngStrap.helpers.dateFormatter', [])
       return splitTimeFormat(timeFormat)[2];
     };
 
+    // h:mm:ss a => ss
+    this.secondsFormat = function(timeFormat) {
+      return splitTimeFormat(timeFormat)[4];
+    };
+
     // h:mm a => :
     this.timeSeparator = function(timeFormat) {
       return splitTimeFormat(timeFormat)[1];
     };
 
+    // h:mm:ss a => true, h:mm a => false
+    this.showSeconds = function(timeFormat) {
+      return !!splitTimeFormat(timeFormat)[4];
+    };
+
     // h:mm a => true, H.mm => false
     this.showAM = function(timeFormat) {
-      return !!splitTimeFormat(timeFormat)[3];
+      return !!splitTimeFormat(timeFormat)[5];
     };
 
     this.formatDate = function(date, format, lang, timezone){
