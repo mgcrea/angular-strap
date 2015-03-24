@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.6 - 2015-01-11
+ * @version v2.2.1 - 2015-03-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -54,8 +54,8 @@ angular.module('mgcrea.ngStrap.helpers.dateFormatter', [])
       return !!splitTimeFormat(timeFormat)[3];
     };
 
-    this.formatDate = function(date, format, lang){
-      return dateFilter(date, format);
+    this.formatDate = function(date, format, lang, timezone){
+      return dateFilter(date, format, timezone);
     };
 
   }]);

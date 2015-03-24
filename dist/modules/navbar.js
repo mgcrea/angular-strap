@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.6 - 2015-01-11
+ * @version v2.2.1 - 2015-03-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -53,7 +53,7 @@ angular.module('mgcrea.ngStrap.navbar', [])
             if(options.strict) {
               pattern = '^' + pattern + '$';
             }
-            var regexp = new RegExp(pattern, ['i']);
+            var regexp = new RegExp(pattern, 'i');
 
             if(regexp.test(newValue)) {
               liElement.addClass(options.activeClass);

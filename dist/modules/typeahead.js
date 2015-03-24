@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.1.6 - 2015-01-11
+ * @version v2.2.1 - 2015-03-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -25,6 +25,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       minLength: 1,
       filter: 'filter',
       limit: 6,
+      autoSelect: false,
       comparator: ''
     };
 
@@ -45,7 +46,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         scope.$resetMatches = function(){
           scope.$matches = [];
-          scope.$activeIndex = 0;
+          scope.$activeIndex = options.autoSelect ? 0 : -1; // If set to 0, the first match will be highlighted
         };
         scope.$resetMatches();
 
@@ -70,8 +71,16 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.update = function(matches) {
           scope.$matches = matches;
           if(scope.$activeIndex >= matches.length) {
-            scope.$activeIndex = 0;
+            scope.$activeIndex = options.autoSelect ? 0: -1;
           }
+          
+          // When the placement is not one of the bottom placements, re-calc the positioning
+          // so the results render correctly.
+          if (/^(bottom|bottom-left|bottom-right)$/.test(options.placement)) return;
+          
+          // wrap in a $timeout so the results are updated
+          // before repositioning
+          $timeout($typeahead.$applyPlacement);
         };
 
         $typeahead.activate = function(index) {
@@ -157,6 +166,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if(options.keyboard) {
             element.off('keydown', $typeahead.$onKeyDown);
           }
+          if(!options.autoSelect)
+            $typeahead.activate(-1);
           hide();
         };
 
@@ -182,27 +193,30 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'comparator', 'id'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
-        // Build proper ngOptions
+        // Disable browser autocompletion
+        element.attr('autocomplete' ,'off');
+        
+        // Build proper bsOptions
         var filter = options.filter || defaults.filter;
         var limit = options.limit || defaults.limit;
         var comparator = options.comparator || defaults.comparator;
 
-        var ngOptions = attr.ngOptions;
-        if(filter) ngOptions += ' | ' + filter + ':$viewValue';
-        if (comparator) ngOptions += ':' + comparator;
-        if(limit) ngOptions += ' | limitTo:' + limit;
-        var parsedOptions = $parseOptions(ngOptions);
+        var bsOptions = attr.bsOptions;
+        if(filter) bsOptions += ' | ' + filter + ':$viewValue';
+        if (comparator) bsOptions += ':' + comparator;
+        if(limit) bsOptions += ' | limitTo:' + limit;
+        var parsedOptions = $parseOptions(bsOptions);
 
         // Initialize typeahead
         var typeahead = $typeahead(element, controller, options);
 
         // Watch options on demand
         if(options.watchOptions) {
-          // Watch ngOptions values before filtering for changes, drop function calls
+          // Watch bsOptions values before filtering for changes, drop function calls
           var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '').trim();
           scope.$watch(watchedOptions, function (newValue, oldValue) {
             // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
