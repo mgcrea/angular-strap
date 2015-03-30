@@ -191,6 +191,13 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
+        // use string regex match boolean attr falsy values, leave truthy values be
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach(['html', 'container'], function(key) {
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+            options[key] = false;
+        });
+
         // Disable browser autocompletion
         element.attr('autocomplete' ,'off');
 

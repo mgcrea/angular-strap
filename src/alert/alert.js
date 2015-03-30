@@ -78,6 +78,13 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
+        // use string regex match boolean attr falsy values, leave truthy values be
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach(['keyboard', 'html', 'container', 'dismissable'], function(key) {
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+            options[key] = false;
+        });
+
         // overwrite inherited title value when no value specified
         // fix for angular 1.3.1 531a8de72c439d8ddd064874bf364c00cedabb11
         if (!scope.hasOwnProperty('title')){

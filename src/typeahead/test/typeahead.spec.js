@@ -76,13 +76,16 @@ describe('typeahead', function () {
     },
     'options-html': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '<i class="fa fa-gear"></i> Gear'}, {value: 'Globe', label: '<i class="fa fa-globe"></i> Globe'}, {value: 'Heart', label: '<i class="fa fa-heart"></i> Heart'}, {value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}]},
-      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" bs-options="icon.value as icon.label for icon in icons" bs-typeahead>'
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="{{html}}" bs-options="icon.value as icon.label for icon in icons" bs-typeahead>'
     },
     'options-template': {
       element: '<input type="text" data-template="custom" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'options-minLength': {
       element: '<input type="text" ng-model="selectedState" data-min-length="0" bs-options="state for state in states" bs-typeahead>'
+    },
+    'options-container': {
+      element: '<input type="text" data-container="{{container}}" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'options-autoSelect': {
       scope: {states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
@@ -375,14 +378,39 @@ describe('typeahead', function () {
 
     describe('html', function () {
 
-      it('should correctly compile inner content', function() {
-        var elm = compileDirective('options-html');
+      it('should correctly compile inner content when truthy', function() {
+        var elm = compileDirective('options-html', {html: 'true'});
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
         expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[0].label);
       });
 
+      it('should NOT compile inner content when falsy', function() {
+        var elm = compileDirective('options-html', {html: 'false'});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
+        expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).not.toBe(scope.icons[0].label);
+      });
+
     });
+
+    describe('container', function() {
+
+      it('should put typeahead in a container when specified', function() {
+        var testElm = $('<div id="testElm"></div>');
+        sandboxEl.append(testElm);
+        var elm = compileDirective('options-container', angular.extend({}, templates.default.scope, {container: '#testElm'}));
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(testElm.find('ul.typeahead').length).toBe(1);
+      })
+
+      it('should put typeahead in sandbox when container is falsy', function() {
+        var elm = compileDirective('options-container', angular.extend({}, templates.default.scope, {container: 'false'}));
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('ul.typeahead').length).toBe(1);
+      })
+
+    })
 
     describe('template', function () {
 

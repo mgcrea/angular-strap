@@ -119,7 +119,7 @@ describe('timepicker', function() {
       element: '<input type="text" ng-model="selectedTime" data-max-time="{{maxTime}}" bs-timepicker>'
     },
     'options-autoclose': {
-      element: '<input type="text" ng-model="selectedTime" data-autoclose="1" bs-timepicker>'
+      element: '<input type="text" ng-model="selectedTime" data-autoclose="{{autoclose}}" bs-timepicker>'
     },
     'options-useNative': {
       element: '<input type="text" ng-model="selectedTime" data-use-native="1" bs-timepicker>'
@@ -133,10 +133,10 @@ describe('timepicker', function() {
       element: '<input type="text" ng-model="selectedTime" length="5" data-arrow-behavior="{{ arrowBehavior }}" bs-timepicker>'
     },
     'options-roundDisplay': {
-      element: '<input type="text" data-minute-step="15" ng-model="selectedTime" data-round-display="true" bs-timepicker>'
+      element: '<input type="text" data-minute-step="15" ng-model="selectedTime" data-round-display="{{roundDisplay}}" bs-timepicker>'
     },
     'options-roundDisplay-seconds': {
-      element: '<input type="text" data-minute-step="15" data-second-step="20" ng-model="selectedTime" data-round-display="true" data-time-format="HH:mm:ss" bs-timepicker>'
+      element: '<input type="text" data-minute-step="15" data-second-step="20" ng-model="selectedTime" data-round-display="{{roundDisplay}}" data-time-format="HH:mm:ss" bs-timepicker>'
     },
     'bsShow-attr': {
       scope: {selectedTime: new Date()},
@@ -145,6 +145,10 @@ describe('timepicker', function() {
     'bsShow-binding': {
       scope: {isVisible: false, selectedTime: new Date()},
       element: '<input type="text" ng-model="selectedTime" bs-timepicker bs-show="isVisible">'
+    },
+    'options-container': {
+      scope: {selectedTime: new Date()},
+      element: '<input type="text" data-container="{{container}}" ng-model="selectedTime" bs-timepicker>'
     }
   };
 
@@ -537,13 +541,22 @@ describe('timepicker', function() {
 
     describe('autoclose', function() {
 
-      it('should close on select', function() {
-        var elm = compileDirective('options-autoclose');
-        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+      it('should close on select if truthy', function() {
+        var elm = compileDirective('options-autoclose', {autoclose: 'true'});
         angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
         $timeout.flush();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+      });
+
+      it('should NOT close on select if falsy', function() {
+        var elm = compileDirective('options-autoclose', {autoclose: 'false'});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
+        $timeout.flush();
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
       });
 
     });
@@ -1146,16 +1159,16 @@ describe('timepicker', function() {
       afterEach(function() { i++; });
 
       angular.forEach(times, function() {
-        it('should floor display minutes to nearest minuteStep interval when ngModel value is undefined', function() {
-          var elm = compileDirective('options-roundDisplay', { selectedTime: undefined });
+        it('should floor display minutes to nearest minuteStep interval when ngModel value is undefined and roundDisplay is true', function() {
+          var elm = compileDirective('options-roundDisplay', { selectedTime: undefined, roundDisplay: 'true' });
           currentTime.setMinutes(currentTime.getMinutes() - currentTime.getMinutes() % 15);
           angular.element(elm[0]).triggerHandler('focus');
           expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0)').text()).toBe(dateFilter(currentTime, 'h'));
           expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2)').text()).toBe(dateFilter(currentTime, 'mm'));
         });
 
-        it('should floor display minutes to nearest minuteStep interval when ngModel value is undefined and seconds are shown', function() {
-          var elm = compileDirective('options-roundDisplay-seconds', { selectedTime: undefined });
+        it('should floor display minutes to nearest minuteStep interval when ngModel value is undefined and seconds are shown and roundDisplay is true', function() {
+          var elm = compileDirective('options-roundDisplay-seconds', { selectedTime: undefined, roundDisplay: 'true' });
           currentTime.setMinutes(currentTime.getMinutes() - currentTime.getMinutes() % 15);
           currentTime.setSeconds(0);
           angular.element(elm[0]).triggerHandler('focus');
@@ -1165,7 +1178,39 @@ describe('timepicker', function() {
         });
       });
 
+
+/*
+      // seems this would fail when currentTime % 15 == 0, so will leave it out for now
+
+      it('should NOT floor display minutes to nearest minuteStep interval when ngModel value is undefined and roundDisplay is false', function() {
+        var elm = compileDirective('options-roundDisplay', { selectedTime: undefined, roundDisplay: 'false' });
+        currentTime.setMinutes(currentTime.getMinutes() - currentTime.getMinutes() % 15);
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2)').text()).not.toBe(dateFilter(currentTime, 'mm'));
+      });
+*/
+
     });
+
+    describe('container', function() {
+
+      it('should append to container if defined', function() {
+        var testElm = $('<div id="testElm"></div>');
+        sandboxEl.append(testElm);
+        var elm = compileDirective('options-container', {container: '#testElm'});
+        expect(testElm.children('.dropdown-menu.timepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(testElm.children('.dropdown-menu.timepicker').length).toBe(1);
+      })
+
+      it('should put datepicker in sandbox when container is falsy', function() {
+        var elm = compileDirective('options-container', {container: 'false'});
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
+      })
+
+    })
 
   });
 

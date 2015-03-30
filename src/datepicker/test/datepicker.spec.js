@@ -153,7 +153,7 @@ describe('datepicker', function() {
       element: '<input type="text" ng-model="selectedDate" data-start-date="{{startDate}}" bs-datepicker>'
     },
     'options-autoclose': {
-      element: '<input type="text" ng-model="selectedDate" data-autoclose="1" bs-datepicker>'
+      element: '<input type="text" ng-model="selectedDate" data-autoclose="{{autoclose}}" bs-datepicker>'
     },
     'options-useNative': {
       element: '<input type="text" ng-model="selectedDate" data-use-native="1" bs-datepicker>'
@@ -193,6 +193,10 @@ describe('datepicker', function() {
     'bsShow-binding': {
       scope: {isVisible: false, selectedDate: new Date()},
       element: '<input type="text" ng-model="selectedDate" bs-datepicker bs-show="isVisible">'
+    },
+    'options-container': {
+      scope: {selectedDate: new Date()},
+      element: '<input type="text" data-container="{{container}}" ng-model="selectedDate" bs-datepicker>'
     }
   };
 
@@ -739,13 +743,22 @@ describe('datepicker', function() {
 
     describe('autoclose', function() {
 
-      it('should close on select', function() {
-        var elm = compileDirective('options-autoclose');
+      it('should close on select if truthy', function() {
+        var elm = compileDirective('options-autoclose', {autoclose: "true"});
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
         $timeout.flush();
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+      });
+
+      it('should NOT close on select if falsy', function() {
+        var elm = compileDirective('options-autoclose', {autoclose: "false"});
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
+        $timeout.flush();
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).not.toBe(0);
       });
 
     });
@@ -1107,6 +1120,24 @@ describe('datepicker', function() {
       });
 
     });
+
+    describe('container', function() {
+
+      it('should append to container if defined', function() {
+        var testElm = $('<div id="testElm"></div>');
+        sandboxEl.append(testElm);
+        var elm = compileDirective('options-container', {container: '#testElm'});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(testElm.find('.datepicker').length).toBe(1);
+      })
+
+      it('should put datepicker in sandbox when container is falsy', function() {
+        var elm = compileDirective('options-container', {container: 'false'});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.datepicker').length).toBe(1);
+      })
+
+    })
 
   });
 
