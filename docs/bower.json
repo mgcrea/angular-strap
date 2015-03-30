@@ -1,16 +1,16 @@
 {
   "name": "angular-strap-docs",
   "dependencies": {
-    "angular": "~1.3.13",
-    "angular-route": "~1.3.13",
-    "angular-i18n": "~1.3.13",
-    "angular-animate": "~1.3.13",
+    "angular": "~1.3.14",
+    "angular-animate": "~1.3.14",
+    "angular-i18n": "~1.3.14",
+    "angular-motion": "~0.3.4",
+    "angular-route": "~1.3.14",
+    "bootstrap": "~3.3.4",
+    "bootstrap-additions": "~0.2.3",
     "fastclick": "~1.0.6",
     "font-awesome": "~4.3.0",
-    "highlightjs": "~8.4.0",
-    "bootstrap": "~3.3.2",
-    "bootstrap-additions": "~0.2.3",
-    "angular-motion": "~0.3.4"
+    "highlightjs": "~8.4.0"
   },
   "devDependencies": {
   }
