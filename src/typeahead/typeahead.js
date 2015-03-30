@@ -66,11 +66,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if(scope.$activeIndex >= matches.length) {
             scope.$activeIndex = options.autoSelect ? 0: -1;
           }
-          
+
           // When the placement is not one of the bottom placements, re-calc the positioning
           // so the results render correctly.
           if (/^(bottom|bottom-left|bottom-right)$/.test(options.placement)) return;
-          
+
           // wrap in a $timeout so the results are updated
           // before repositioning
           $timeout($typeahead.$applyPlacement);
@@ -192,7 +192,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Disable browser autocompletion
         element.attr('autocomplete' ,'off');
-        
+
         // Build proper bsOptions
         var filter = options.filter || defaults.filter;
         var limit = options.limit || defaults.limit;
@@ -211,13 +211,13 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         if(options.watchOptions) {
           // Watch bsOptions values before filtering for changes, drop function calls
           var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '').trim();
-          scope.$watch(watchedOptions, function (newValue, oldValue) {
+          scope.$watchCollection(watchedOptions, function (newValue, oldValue) {
             // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
             parsedOptions.valuesFn(scope, controller).then(function (values) {
               typeahead.update(values);
               controller.$render();
             });
-          }, true);
+          });
         }
 
         // Watch model for changes

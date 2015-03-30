@@ -226,7 +226,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         $select.hide = function() {
           if(!options.multiple && !controller.$modelValue) {
             scope.$activeIndex = -1;
-          } 
+          }
           $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
           if(options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
@@ -276,14 +276,14 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Watch bsOptions values before filtering for changes
         var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
-        scope.$watch(watchedOptions, function(newValue, oldValue) {
+        scope.$watchCollection(watchedOptions, function(newValue, oldValue) {
           // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
           parsedOptions.valuesFn(scope, controller)
           .then(function(values) {
             select.update(values);
             controller.$render();
           });
-        }, true);
+        });
 
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
