@@ -40,10 +40,6 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         // Common vars
         var options = angular.extend({}, defaults, config);
 
-        // parse sort option value to support attribute as string
-        // when binded to interpolated value
-        options.sort = options.sort.toString().match(/true|1/i);
-
         $select = $tooltip(element, options);
         var scope = $select.$scope;
 
@@ -256,9 +252,26 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Directive options
         var options = {scope: scope, placeholder: defaults.placeholder};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'placeholder', 'multiple', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
+
+        // use string regex match boolean attr falsy values, leave truthy values be
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach(['html', 'container', 'allNoneButtons', 'sort'], function(key) {
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+            options[key] = false;
+        });
+
+        // Only parse data-multiple. Angular sets existence attributes to true (multiple/required/etc), they apply this
+        // to data-multiple as well for some reason, so we'll parse this ourselves and disregard multiple
+        var dataMultiple = element.attr('data-multiple');
+        if(angular.isDefined(dataMultiple)) {
+          if(falseValueRegExp.test(dataMultiple))
+            options.multiple = false;
+          else
+            options.multiple = dataMultiple;
+        }
 
         // Add support for select markup
         if(element[0].nodeName.toLowerCase() === 'select') {

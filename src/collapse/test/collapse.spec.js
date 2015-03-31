@@ -54,14 +54,25 @@ describe('collapse', function () {
     'options-activeClass': {
       element: '<div data-active-class="active" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     },
-    'options-disallowToggle': {
+    // Note: for some reason, attributes send to a controller (as is the case in collapse) are NOT interpolated. Thus we can't do our usual:
+    // data-disallow-toggle="{{disallowToggle}}", as the value received in the controller will be "{{disallowToggle}}" instead of the scope's value
+    'options-disallowToggle-true': {
       element: '<div data-disallow-toggle="true" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     },
-    'options-startCollapsed': {
+    'options-disallowToggle-false': {
+      element: '<div data-disallow-toggle="false" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
+    },
+    'options-startCollapsed-true': {
       element: '<div data-start-collapsed="true" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     },
-    'default-multiple': {
+    'options-startCollapsed-false': {
+      element: '<div data-start-collapsed="false" class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
+    },
+    'default-multiple-true': {
       element: '<div class="panel-group" data-allow-multiple="true" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
+    },
+    'default-multiple-false': {
+      element: '<div class="panel-group" data-allow-multiple="false" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     },
     'binding-ngModel-multiple': {
       scope: {panel: {active: [1]}},
@@ -182,24 +193,44 @@ describe('collapse', function () {
 
     describe('disallowToggle', function () {
 
-      it('should support disallowToggle flag', function() {
-        var elm = compileDirective('options-disallowToggle');
-        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
-        sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
-        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+      it('should support disallowToggle flag if true', function() {
+        var elm = compileDirective('options-disallowToggle-true');
+        var $heading = sandboxEl.find('a[bs-collapse-toggle]:eq(0)');
+        var $target = sandboxEl.find('[bs-collapse-target]:eq(0)');
+        expect($target.hasClass('in')).toBeTruthy();
+        $heading.triggerHandler('click');
+        expect($target.hasClass('in')).toBeTruthy();
+      });
+
+      it('should NOT support disallowToggle flag if false', function() {
+        var elm = compileDirective('options-disallowToggle-false');
+        var $heading = sandboxEl.find('a[bs-collapse-toggle]:eq(0)');
+        var $target = sandboxEl.find('[bs-collapse-target]:eq(0)');
+        expect($target.hasClass('in')).toBeTruthy();
+        $heading.triggerHandler('click');
+        expect($target.hasClass('in')).toBeFalsy();
       });
 
     });
 
     describe('startCollapsed', function () {
 
-      it('should support startCollapsed flag', function() {
-        var elm = compileDirective('options-startCollapsed');
+      it('should support startCollapsed flag when true', function() {
+        var elm = compileDirective('options-startCollapsed-true');
         expect(sandboxEl.find('[bs-collapse-target]').hasClass('in')).toBeFalsy();
         sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
         expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
         sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
         expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
+      });
+
+      it('should NOT support startCollapsed flag when false', function() {
+        var elm = compileDirective('options-startCollapsed-false');
+        expect(sandboxEl.find('[bs-collapse-target]').hasClass('in')).toBeTruthy();
+        sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
+        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
+        sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
+        expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
       });
 
     });
@@ -208,8 +239,8 @@ describe('collapse', function () {
 
       describe('with default template', function () {
 
-        it('should open each panel on click', function() {
-          var elm = compileDirective('default-multiple');
+        it('should open each panel on click when allowMultiple is true', function() {
+          var elm = compileDirective('default-multiple-true');
           expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
           expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
           sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
@@ -218,6 +249,15 @@ describe('collapse', function () {
           sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
           expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
           expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
+        });
+
+        it('should open each panel on click when allowMultiple is false', function() {
+          var elm = compileDirective('default-multiple-false');
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
+          sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+          expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
+          expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeTruthy();
         });
 
       });
