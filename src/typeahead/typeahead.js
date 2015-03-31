@@ -19,7 +19,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       filter: 'filter',
       limit: 6,
       autoSelect: false,
-      comparator: ''
+      comparator: '',
+      trimValue: true
     };
 
     this.$get = function($window, $rootScope, $tooltip, $timeout) {
@@ -193,9 +194,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach(['html', 'container'], function(key) {
-          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
-            options[key] = false;
+        angular.forEach(['html', 'container', 'trimValue'], function(key) {
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
 
         // Disable browser autocompletion
@@ -265,7 +265,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
-          element.val(selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '').trim() : '');
+          var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
+          element.val(options.trimValue === false ? value : value.trim());
         };
 
         // Garbage collection

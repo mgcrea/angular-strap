@@ -88,8 +88,11 @@ describe('typeahead', function () {
       element: '<input type="text" data-container="{{container}}" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'options-autoSelect': {
-      scope: {states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
       element: '<input type="text" ng-model="selectedState" data-min-length="0" data-auto-select="1" bs-options="state for state in states" bs-typeahead>'
+    },
+    'options-trimValue': {
+      scope: {selectedState: '', states: [' Alabama ', ' Alaska', 'Arizona ']},
+      element: '<input type="text" ng-model="selectedState" data-trim-value="{{trimValue}}" bs-options="state for state in states" bs-typeahead>'
     }
   };
 
@@ -402,15 +405,15 @@ describe('typeahead', function () {
         var elm = compileDirective('options-container', angular.extend({}, templates.default.scope, {container: '#testElm'}));
         angular.element(elm[0]).triggerHandler('focus');
         expect(testElm.find('ul.typeahead').length).toBe(1);
-      })
+      });
 
       it('should put typeahead in sandbox when container is falsy', function() {
         var elm = compileDirective('options-container', angular.extend({}, templates.default.scope, {container: 'false'}));
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('ul.typeahead').length).toBe(1);
-      })
+      });
 
-    })
+    });
 
     describe('template', function () {
 
@@ -444,6 +447,24 @@ describe('typeahead', function () {
         angular.element(elm[0]).triggerHandler('focus');
         expect(angular.element(sandboxEl.find('.dropdown-inner > .btn')[0]).triggerHandler('click'));
         expect(scope.dropdown.counter).toBe(2);
+      });
+
+    });
+
+    describe('trimValue', function () {
+
+      it('should correctly trim model value when truthy', function() {
+        var elm = compileDirective('options-trimValue', {trimValue: 'true'});
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+        expect(elm.val()).toBe(scope.states[0].trim());
+      });
+
+      it('should NOT trim model value when falsy', function() {
+        var elm = compileDirective('options-trimValue', {trimValue: 'false'});
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
+        expect(elm.val()).toBe(scope.states[0]);
       });
 
     });
