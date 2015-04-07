@@ -211,7 +211,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           }
           $modal.$isShown = scope.$isShown = false;
           safeDigest(scope);
-
+          
+          //Trigger onHide
+          if (typeof (options.onHide) === 'function') options.onHide();
+          
           // Unbind events
           if(options.backdrop) {
             modalElement.off('click', hideOnBackdropClick);
