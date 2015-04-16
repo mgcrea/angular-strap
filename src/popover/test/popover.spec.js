@@ -35,6 +35,10 @@ describe('popover', function () {
       scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
       element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover></a>'
     },
+    'default-with-namespace': {
+      scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
+      element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover data-prefix-event="datepicker"></a>'
+    },
     'default-with-id': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
       element: '<a id="popover1" class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover></a>'
@@ -461,6 +465,52 @@ describe('popover', function () {
 
     });
 
+    describe('prefix', function () {
+      it('should call namespaced events through provider', function() {
+        var myPopover = $popover(sandboxEl, angular.extend({prefixEvent: 'datepicker'}, templates['default'].scope.popover));
+        var emit = spyOn(myPopover.$scope, '$emit');
+        scope.$digest();
+        myPopover.show();
+        myPopover.hide();
+        $animate.triggerCallbacks();
+
+        expect(emit).toHaveBeenCalledWith('datepicker.show.before', myPopover);
+        expect(emit).toHaveBeenCalledWith('datepicker.show', myPopover);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide.before', myPopover);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide', myPopover);
+      });
+
+
+      it('should call namespaced events through directive', function() {
+        var elm = compileDirective('default-with-namespace');
+        var showBefore, show, hide, hideBefore;
+        scope.$on('datepicker.show.before', function() {
+          showBefore = true;
+        });
+        scope.$on('datepicker.show', function() {
+          show = true;
+        });
+        scope.$on('datepicker.hide.before', function() {
+          hideBefore = true;
+        });
+        scope.$on('datepicker.hide', function() {
+          hide = true;
+        });
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+
+        expect(showBefore).toBe(true);
+        expect(show).toBe(true);
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+
+        expect(hideBefore).toBe(true);
+        expect(hide).toBe(true);
+      });
+
+    });
 
   });
 
