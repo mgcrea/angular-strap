@@ -33,6 +33,10 @@ describe('timepicker', function() {
       scope: {selectedTime: new Date()},
       element: '<input type="text" ng-model="selectedTime" bs-timepicker>'
     },
+    'default-with-namespace': {
+      scope: {selectedTime: new Date()},
+      element: '<input type="text" ng-model="selectedTime" bs-timepicker data-prefix-event="datepicker">'
+    },
     'default-with-id': {
       scope: {selectedTime: new Date()},
       element: '<input id="timepicker1" type="text" ng-model="selectedTime" bs-timepicker>'
@@ -1211,6 +1215,52 @@ describe('timepicker', function() {
       })
 
     })
+
+    describe('prefix', function () {
+      it('should call namespaced events through provider', function() {
+        var myTimepicker = $timepicker(sandboxEl, { $datevalue: new Date() }, {prefixEvent: 'datepicker', scope : scope});
+        var emit = spyOn(myTimepicker.$scope, '$emit');
+        scope.$digest();
+        myTimepicker.show();
+        myTimepicker.hide();
+        $animate.triggerCallbacks();
+
+        expect(emit).toHaveBeenCalledWith('datepicker.show.before', myTimepicker);
+        expect(emit).toHaveBeenCalledWith('datepicker.show', myTimepicker);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide.before', myTimepicker);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide', myTimepicker);
+      });
+
+      it('should call namespaced events through directive', function() {
+        var elm = compileDirective('default-with-namespace');
+        var showBefore, show, hideBefore, hide;
+        scope.$on('datepicker.show.before', function() {
+          showBefore = true;
+        });
+        scope.$on('datepicker.show', function() {
+          show = true;
+        });
+        scope.$on('datepicker.hide.before', function() {
+          hideBefore = true;
+        });
+        scope.$on('datepicker.hide', function() {
+          hide = true;
+        });
+
+        angular.element(elm[0]).triggerHandler('focus');
+        $animate.triggerCallbacks();
+
+        expect(showBefore).toBe(true);
+        expect(show).toBe(true);
+
+        angular.element(elm[0]).triggerHandler('blur');
+        $animate.triggerCallbacks();
+
+        expect(hideBefore).toBe(true);
+        expect(hide).toBe(true);
+      });
+
+    });
 
   });
 

@@ -2,18 +2,21 @@
 
 describe('select', function () {
 
-  var $compile, $templateCache, $select, scope, sandboxEl, $timeout;
+  var $compile, $templateCache, $select, scope, sandboxEl, $timeout, $animate;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.select'));
+  beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$select_, _$timeout_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$select_, _$timeout_, _$animate_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $select = _$select_;
     $timeout = _$timeout_;
+    $animate = _$animate_;
   }));
 
   afterEach(function() {
@@ -27,6 +30,10 @@ describe('select', function () {
     'default': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
+    'default-with-namespace': {
+      scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select data-prefix-event="datepicker"></button>'
     },
     'default-with-id': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
@@ -467,6 +474,62 @@ describe('select', function () {
 
 
     })
+
+    describe('prefix', function () {
+      it('should call namespaced events through provider', function() {
+        var fauxController = { $setViewValue : angular.noop };
+        var mySelect = $select(sandboxEl, fauxController, {prefixEvent: 'datepicker'});
+        var emit = spyOn(mySelect.$scope, '$emit');
+        scope.$digest();
+        mySelect.show();
+        mySelect.hide();
+        var option = {value : 'Canada'};
+        mySelect.update([option]);
+        mySelect.select(0);
+        $animate.triggerCallbacks();
+
+        expect(emit).toHaveBeenCalledWith('datepicker.show.before', mySelect);
+        expect(emit).toHaveBeenCalledWith('datepicker.show', mySelect);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide.before', mySelect);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide', mySelect);
+        expect(emit).toHaveBeenCalledWith('datepicker.select', option.value, 0, mySelect);
+      });
+
+      it('should call namespaced events through directive', function() {
+        var elm = compileDirective('default-with-namespace');
+
+        var select, beforeShow, show, beforeHide, hide;
+        scope.$on('datepicker.select', function() {
+          select = true;
+        });
+        scope.$on('datepicker.show.before', function() {
+          beforeShow = true;
+        });
+        scope.$on('datepicker.show', function() {
+          show = true;
+        });
+        scope.$on('datepicker.hide', function() {
+          hide = true;
+        });
+        scope.$on('datepicker.hide.before', function() {
+          beforeHide = true;
+        });
+
+        angular.element(elm[0]).triggerHandler('focus');
+        $animate.triggerCallbacks();
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+
+        angular.element(elm[0]).triggerHandler('blur');
+        $animate.triggerCallbacks();
+
+        expect(select).toBe(true);
+        expect(beforeShow).toBe(true);
+        expect(show).toBe(true);
+        expect(hide).toBe(true);
+        expect(beforeHide).toBe(true);
+      });
+
+    });
 
   });
 

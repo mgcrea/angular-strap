@@ -36,6 +36,10 @@ describe('modal', function() {
       scope: {modal: {title: 'Title', content: 'Hello Modal!'}},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" bs-modal>click me</a>'
     },
+    'default-with-namespace': {
+      scope: {modal: {title: 'Title', content: 'Hello Modal!'}},
+      element: '<a title="{{modal.title}}" data-content="{{modal.content}}" bs-modal data-prefix-event="datepicker">click me</a>'
+    },
     'default-with-id': {
       scope: {modal: {title: 'Title', content: 'Hello Modal!'}},
       element: '<a id="modal1" title="{{modal.title}}" data-content="{{modal.content}}" bs-modal>click me</a>'
@@ -316,6 +320,35 @@ describe('modal', function() {
       angular.element(elm[0]).triggerHandler('click');
       scope.$digest();
       expect(id).toBe('modal1');
+    });
+
+    it('should call namespaced events through directive', function() {
+      var elm = compileDirective('default-with-namespace');
+      var showBefore, show, hide, hideBefore;
+      scope.$on('datepicker.show.before', function() {
+        showBefore = true;
+      });
+      scope.$on('datepicker.show', function() {
+        show = true;
+      });
+      scope.$on('datepicker.hide.before', function() {
+        hideBefore = true;
+      });
+      scope.$on('datepicker.hide', function() {
+        hide = true;
+      });
+
+      angular.element(elm[0]).triggerHandler('click');
+      $animate.triggerCallbacks();
+
+      expect(showBefore).toBe(true);
+      expect(show).toBe(true);
+
+      angular.element(elm[0]).triggerHandler('click');
+      $animate.triggerCallbacks();
+
+      expect(hideBefore).toBe(true);
+      expect(hide).toBe(true);
     });
 
   });

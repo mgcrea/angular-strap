@@ -2,18 +2,21 @@
 
 describe('typeahead', function () {
 
-  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q;
+  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q, $animate;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.typeahead'));
+  beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_, _$animate_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $typeahead = _$typeahead_;
     $q = _$q_;
+    $animate = _$animate_;
   }));
 
   afterEach(function() {
@@ -27,6 +30,10 @@ describe('typeahead', function () {
     'default': {
       scope: {selectedState: '', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
       element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
+    },
+    'default-with-namespace': {
+      scope: {selectedState: '', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
+      element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" bs-typeahead data-prefix-event="datepicker">'
     },
     'default-with-id': {
       scope: {selectedState: '', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
@@ -535,5 +542,59 @@ describe('typeahead', function () {
       expect(id).toBe('typeahead1');
     });
   });
+
+  describe('prefix', function () {
+    it('should dispatch namespaced events from provider', function() {
+      var fauxController = { $setViewValue : angular.noop, $render : angular.noop};
+      var myTypeahead = $typeahead(sandboxEl, fauxController, {prefixEvent: 'datepicker'});
+      var emit = spyOn(myTypeahead.$scope, '$emit');
+      scope.$digest();
+      myTypeahead.show();
+      myTypeahead.hide();
+      var option = {value : 'Canada'};
+      myTypeahead.update([option]);
+      myTypeahead.select(0);
+      $animate.triggerCallbacks();
+
+      expect(emit).toHaveBeenCalledWith('datepicker.show.before', myTypeahead);
+      expect(emit).toHaveBeenCalledWith('datepicker.show', myTypeahead);
+      expect(emit).toHaveBeenCalledWith('datepicker.hide.before', myTypeahead);
+      expect(emit).toHaveBeenCalledWith('datepicker.hide', myTypeahead);
+      expect(emit).toHaveBeenCalledWith('datepicker.select', option.value, 0, myTypeahead);
+    });
+
+    it('should dispatch namespaced events from directive', function() {
+      var elm = compileDirective('default-with-namespace');
+
+      var select, showBefore, show, hideBefore, hide;
+      scope.$on('datepicker.select', function() {
+        select = true;
+      });
+      scope.$on('datepicker.show.before', function() {
+        showBefore = true;
+      });
+      scope.$on('datepicker.show', function() {
+        show = true;
+      });
+      scope.$on('datepicker.hide.before', function() {
+        hideBefore = true;
+      });
+      scope.$on('datepicker.hide', function() {
+        hide = true;
+      });
+
+      angular.element(elm[0]).triggerHandler('focus');
+      $animate.triggerCallbacks();
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+      angular.element(elm[0]).triggerHandler('blur');
+      $animate.triggerCallbacks();
+
+      expect(select).toBe(true);
+      expect(show).toBe(true);
+      expect(hide).toBe(true);
+    });
+
+  });
+
 
 });
