@@ -4,7 +4,7 @@ angular.module('mgcrea.ngStrap.progressbar', [])
 .provider('$progressbar', function (){
     var defaults = {
       type: '',
-      animate: function (){ return true;}
+      animate: true
     };
 
     this.$get = function (){
@@ -22,11 +22,11 @@ angular.module('mgcrea.ngStrap.progressbar', [])
       scope:{
         value: '=',
         type: '@',
-        animate: '&'
+        animate: '=?'
       },
       link: function (scope, element, attr){
         scope.type = scope.type || $progressbar.defaults.type;
-        scope.animate = angular.isDefined(scope.animate()) ? scope.animate : $progressbar.defaults.animate;
+        scope.animate = angular.isDefined(scope.animate) ? scope.animate : $progressbar.defaults.animate;
       }
     };
   });
