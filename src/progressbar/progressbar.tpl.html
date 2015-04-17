@@ -1,5 +1,5 @@
 <div class="progress">
-  <div class="progress-bar" ng-class="barClass" role="progressbar" aria-valuenow="{{value}}"
+  <div class="progress-bar" ng-class="type ? 'progress-bar-'+type : null" role="progressbar" aria-valuenow="{{value}}"
        aria-valuemin="0" aria-valuemax="100"
        ng-style="{width: value + '%', 'webkit-transition': animate() ? null : 'none', 'transition': animate() ? null : 'none'}">
         <span class="sr-only">{{value}}%</span>

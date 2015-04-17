@@ -3,7 +3,7 @@
 angular.module('mgcrea.ngStrap.progressbar', [])
 .provider('$progressbar', function (){
     var defaults = {
-      barType: '',
+      type: '',
       animate: function (){ return true;}
     };
 
@@ -25,16 +25,8 @@ angular.module('mgcrea.ngStrap.progressbar', [])
         animate: '&'
       },
       link: function (scope, element, attr){
-        scope.type = scope.type || $progressbar.defaults.barType;
+        scope.type = scope.type || $progressbar.defaults.type;
         scope.animate = angular.isDefined(scope.animate()) ? scope.animate : $progressbar.defaults.animate;
-        scope.$watch('type', function (){
-          if(scope.type) {
-            scope.barClass = 'progress-bar-' + scope.type;
-          }
-          else{
-            scope.barClass = null;
-          }
-        });
       }
     };
   });
