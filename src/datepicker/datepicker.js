@@ -36,8 +36,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
       minView: 0,
       startWeek: 0,
       daysOfWeekDisabled: '',
-      iconLeft: 'glyphicon glyphicon-chevron-left',
-      iconRight: 'glyphicon glyphicon-chevron-right'
+      iconLeft: '&laquo;',
+      iconRight: '&raquo;'
     };
 
     this.$get = function($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
