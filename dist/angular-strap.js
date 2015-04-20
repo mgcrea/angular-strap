@@ -3269,7 +3269,14 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         var scope = $select.$scope;
 
         scope.$matches = [];
-        scope.$activeIndex = -1;
+        
+        if (options.multiple) {
+          scope.$activeIndex = [];
+        }
+        else {
+          scope.$activeIndex = -1;
+        }
+
         scope.$isMultiple = options.multiple;
         scope.$showAllNoneButtons = options.allNoneButtons && options.multiple;
         scope.$iconCheckmark = options.iconCheckmark;
