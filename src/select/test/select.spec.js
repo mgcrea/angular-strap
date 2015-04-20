@@ -169,6 +169,13 @@ describe('select', function () {
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
     });
+    
+    it('should support null ng-model initial value', function() {
+      var elm = compileDirective('default', { selectedIcon: null });
+      expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+      expect(scope.selectedIcon).toBe(scope.icons[1].value);
+    });
 
   });
 
