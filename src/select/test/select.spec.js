@@ -177,6 +177,13 @@ describe('select', function () {
       expect(scope.selectedIcon).toBe(scope.icons[1].value);
     });
 
+    it('should support null ng-model initial value', function() {
+      var elm = compileDirective('default', { selectedIcon: null });
+      expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+      expect(scope.selectedIcon).toBe(scope.icons[1].value);
+    });
+
   });
 
   describe('when model has no initial selection', function() {
@@ -300,6 +307,12 @@ describe('select', function () {
 
       });
 
+      it('should support null ng-model initial value', function() {
+        var elm = compileDirective('options-multiple', { selectedIcons: null });
+        expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcons).toEqual([ scope.icons[1].value ]);
+      });
     });
 
     describe('maxLength', function () {
