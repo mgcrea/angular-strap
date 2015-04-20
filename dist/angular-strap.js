@@ -3373,6 +3373,9 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         $select.$isActive = function(index) {
           if(options.multiple) {
+            if (scope.$activeIndex == -1) {
+                scope.$activeIndex = [];
+            }
             return scope.$activeIndex.indexOf(index) !== -1;
           } else {
             return scope.$activeIndex === index;
