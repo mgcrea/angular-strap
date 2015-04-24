@@ -16,7 +16,8 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
       backdrop: true,
       keyboard: true,
       html: false,
-      show: true
+      show: true,
+      hideBodyScroll: false
     };
 
     this.$get = function($modal) {

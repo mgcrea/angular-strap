@@ -17,7 +17,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       backdrop: true,
       keyboard: true,
       html: false,
-      show: true
+      show: true,
+      hideBodyScroll: true
     };
 
     this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
@@ -27,6 +28,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
       var htmlReplaceRegExp = /ng-bind="/ig;
+      var elementCounter = 0;
 
       function ModalFactory(config) {
 
@@ -147,6 +149,17 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             return;
           }
 
+          elementCounter++;
+
+          //Hide bodyscroll
+          if(options.hideBodyScroll && $window.document.body.clientWidth < $window.innerWidth) {
+            var scrollbarWidth = measureScrollbar(),
+                wrappers = findElement('body, .' + options.prefixClass + '-scroll-shift');
+            if(scrollbarWidth) {
+              wrappers.css('padding-right', scrollbarWidth + 'px');
+            }
+          }
+
           // Set the initial positioning.
           modalElement.css({display: 'block'}).addClass(options.placement);
 
@@ -201,6 +214,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
             return;
           }
+
+          elementCounter--;
+
           var promise = $animate.leave(modalElement, leaveAnimateCallback);
           // Support v1.3+ $animate
           // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
@@ -224,10 +240,16 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         function leaveAnimateCallback() {
+          if(elementCounter > 1) return;
           scope.$emit(options.prefixEvent + '.hide', $modal);
           bodyElement.removeClass(options.prefixClass + '-open');
           if(options.animation) {
             bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
+          }
+          //Show bodyscroll
+          if(options.hideBodyScroll) {
+            var wrappers = findElement('body, .' + options.prefixClass + '-scroll-shift');
+            wrappers.css('padding-right', '');
           }
         }
 
@@ -261,6 +283,15 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         function preventEventDefault(evt) {
           evt.preventDefault();
+        }
+
+        function measureScrollbar() {
+          var scrollDiv = angular.element(document.createElement('div'));
+          scrollDiv.addClass(options.prefixClass + '-scrollbar-measure');
+          bodyElement.append(scrollDiv);
+          var scrollbarWidth = scrollDiv[0].offsetWidth - scrollDiv[0].clientWidth;
+          scrollDiv.remove();
+          return scrollbarWidth;
         }
 
         return $modal;

@@ -22,7 +22,8 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
       // Specific options
       duration: false,
       type: false,
-      dismissable: true
+      dismissable: true,
+      hideBodyScroll: false
     };
 
     this.$get = function($modal, $timeout) {
