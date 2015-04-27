@@ -270,7 +270,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       // Helper functions
 
       function safeDigest(scope) {
-        scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
+        try {
+          scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
+        } catch (e) {}
       }
 
       function findElement(query, element) {
