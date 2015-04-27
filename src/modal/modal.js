@@ -28,7 +28,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
       var htmlReplaceRegExp = /ng-bind="/ig;
-      var elementCounter = 0;
+      var elementCounter = {};
 
       function ModalFactory(config) {
 
@@ -40,6 +40,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(!options.element && !options.container) {
           options.container = 'body';
+        }
+
+        if(!elementCounter[options.prefixClass]) {
+            elementCounter[options.prefixClass] = 0;
         }
 
         // store $id to identify the triggering element in events
@@ -149,7 +153,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             return;
           }
 
-          elementCounter++;
+          elementCounter[options.prefixClass]++;
 
           //Hide bodyscroll
           if(options.hideBodyScroll && $window.document.body.clientWidth < $window.innerWidth) {
@@ -215,7 +219,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             return;
           }
 
-          elementCounter--;
+          elementCounter[options.prefixClass]--;
 
           var promise = $animate.leave(modalElement, leaveAnimateCallback);
           // Support v1.3+ $animate
@@ -240,8 +244,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         };
 
         function leaveAnimateCallback() {
-          if(elementCounter > 1) return;
           scope.$emit(options.prefixEvent + '.hide', $modal);
+          if(elementCounter[options.prefixClass] > 0) return;
           bodyElement.removeClass(options.prefixClass + '-open');
           if(options.animation) {
             bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
