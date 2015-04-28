@@ -273,6 +273,19 @@ describe('datepicker', function() {
       expect(elm.val()).toBe((today.getMonth() + 1) + '/15/' + (today.getFullYear() + '').substr(2));
     });
 
+    it('should correctly select the first day of the month', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+
+      // change to next month
+      angular.element(sandboxEl.find('.dropdown-menu thead button:eq(2)')[0]).triggerHandler('click');
+
+      // select the first day of the month
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(01)')[0]).triggerHandler('click');
+      expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(1);
+      expect(elm.val()).toBe((today.getMonth() + 1 + 1) + '/1/' + (today.getFullYear() + '').substr(2));
+    });
+
     it('should correctly set the model with manually typed value', function() {
       var elm = compileDirective('default', { selectedDate: new Date(2014, 1, 10)});
       angular.element(elm[0]).triggerHandler('focus');
