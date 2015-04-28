@@ -478,7 +478,11 @@ angular.module('mgcrea.ngStrap.datepicker', [
               if(!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
                 angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$build();
-              } else if(date.getDate() !== viewDate.date) {
+              } else if(date.getDate() !== viewDate.date || date.getDate() === 1) {
+                // chaging picker current month will cause viewDate.date to be set to first day of the month,
+                // in $datepicker.$selectPane, so picker would not update selected day display if
+                // user picks first day of the new month.
+                // As a workaround, we are always forcing update when picked date is first day of month.
                 viewDate.date = picker.$date.getDate();
                 picker.$updateSelected();
               }
