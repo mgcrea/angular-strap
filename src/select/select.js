@@ -182,9 +182,9 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           if (options.multiple && evt.keyCode === 9) {
             return $select.hide();
           }
-		  
+
 		  evt.preventDefault();
-          evt.stopPropagation();
+		  evt.stopPropagation();
 
           // Select with enter
           if(!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
