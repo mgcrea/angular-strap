@@ -19,7 +19,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       filter: 'filter',
       limit: 6,
       autoSelect: false,
-      comparator: ''
+      comparator: '',
+      trimValue: true
     };
 
     this.$get = function($window, $rootScope, $tooltip, $timeout) {
@@ -66,11 +67,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if(scope.$activeIndex >= matches.length) {
             scope.$activeIndex = options.autoSelect ? 0: -1;
           }
-          
+
           // When the placement is not one of the bottom placements, re-calc the positioning
           // so the results render correctly.
           if (/^(bottom|bottom-left|bottom-right)$/.test(options.placement)) return;
-          
+
           // wrap in a $timeout so the results are updated
           // before repositioning
           $timeout($typeahead.$applyPlacement);
@@ -81,6 +82,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.select = function(index) {
+          if(index === -1) return;
           var value = scope.$matches[index].value;
           // console.log('$setViewValue', value);
           controller.$setViewValue(value);
@@ -120,8 +122,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.$onKeyDown = function(evt) {
           if(!/(38|40|13)/.test(evt.keyCode)) return;
 
-          // Let ngSubmit pass if the typeahead tip is hidden
-          if($typeahead.$isVisible()) {
+          // Let ngSubmit pass if the typeahead tip is hidden or no option is selected
+          if($typeahead.$isVisible() && !(evt.keyCode === 13 && scope.$activeIndex === -1)) {
             evt.preventDefault();
             evt.stopPropagation();
           }
@@ -186,13 +188,19 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+
+        // use string regex match boolean attr falsy values, leave truthy values be
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach(['html', 'container', 'trimValue'], function(key) {
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
 
         // Disable browser autocompletion
         element.attr('autocomplete' ,'off');
-        
+
         // Build proper bsOptions
         var filter = options.filter || defaults.filter;
         var limit = options.limit || defaults.limit;
@@ -211,13 +219,13 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         if(options.watchOptions) {
           // Watch bsOptions values before filtering for changes, drop function calls
           var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '').trim();
-          scope.$watch(watchedOptions, function (newValue, oldValue) {
+          scope.$watchCollection(watchedOptions, function (newValue, oldValue) {
             // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
             parsedOptions.valuesFn(scope, controller).then(function (values) {
               typeahead.update(values);
               controller.$render();
             });
-          }, true);
+          });
         }
 
         // Watch model for changes
@@ -257,7 +265,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
-          element.val(selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '').trim() : '');
+          var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
+          element.val(options.trimValue === false ? value : value.trim());
         };
 
         // Garbage collection

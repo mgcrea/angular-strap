@@ -2,18 +2,21 @@
 
 describe('select', function () {
 
-  var $compile, $templateCache, $select, scope, sandboxEl, $timeout;
+  var $compile, $templateCache, $select, scope, sandboxEl, $timeout, $animate;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.select'));
+  beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$select_, _$timeout_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$select_, _$timeout_, _$animate_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $select = _$select_;
     $timeout = _$timeout_;
+    $animate = _$animate_;
   }));
 
   afterEach(function() {
@@ -27,6 +30,10 @@ describe('select', function () {
     'default': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
+    'default-with-namespace': {
+      scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select data-prefix-event="datepicker"></button>'
     },
     'default-with-id': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
@@ -52,7 +59,7 @@ describe('select', function () {
     },
     'options-multiple-all-none-buttons': {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="{{allNoneButtons}}" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-multiple-all-none-buttons-text': {
       scope: {allText: 'select all', noneText: 'select none', selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
@@ -84,7 +91,7 @@ describe('select', function () {
     },
     'options-html': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '<i class="fa fa-gear"></i> Gear'}, {value: 'Globe', label: '<i class="fa fa-globe"></i> Globe'}, {value: 'Heart', label: '<i class="fa fa-heart"></i> Heart'}, {value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}]},
-      element: '<button type="button" class="btn" class="form-control" ng-model="selectedIcon" data-html="1" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" class="form-control" ng-model="selectedIcon" data-html="{{html}}" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-template': {
       element: '<button type="button" class="btn" data-template="custom" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
@@ -92,6 +99,10 @@ describe('select', function () {
     'options-multiple-sort': {
       scope: {sort: true, selectedIcons: [], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-sort="{{ sort }}" data-multiple="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
+    'options-container': {
+      scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" data-container="{{container}}" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     }
   };
 
@@ -157,6 +168,20 @@ describe('select', function () {
       angular.element(elm.next('button')[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
+    });
+    
+    it('should support null ng-model initial value', function() {
+      var elm = compileDirective('default', { selectedIcon: null });
+      expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+      expect(scope.selectedIcon).toBe(scope.icons[1].value);
+    });
+
+    it('should support null ng-model initial value', function() {
+      var elm = compileDirective('default', { selectedIcon: null });
+      expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+      expect(scope.selectedIcon).toBe(scope.icons[1].value);
     });
 
   });
@@ -240,7 +265,7 @@ describe('select', function () {
       });
 
       it('should select and deselect all items', function() {
-        var elm = compileDirective('options-multiple-all-none-buttons');
+        var elm = compileDirective('options-multiple-all-none-buttons', {allNoneButtons: 'true'});
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li > div > button').length).toBe(2);
 
@@ -260,7 +285,7 @@ describe('select', function () {
       });
 
       it('should show default all/none button labels', function() {
-        var elm = compileDirective('options-multiple-all-none-buttons');
+        var elm = compileDirective('options-multiple-all-none-buttons', {allNoneButtons: 'true'});
         angular.element(elm[0]).triggerHandler('focus');
 
         expect(sandboxEl.find('.dropdown-menu li > div > button:eq(0)').text()).toBe('All');
@@ -275,6 +300,19 @@ describe('select', function () {
         expect(sandboxEl.find('.dropdown-menu li > div > button:eq(1)').text()).toBe('select none');
       });
 
+      it('should NOT show allOrNothingButtons if allOrNothingButtons is falsy', function() {
+        var elm = compileDirective('options-multiple-all-none-buttons', {allNoneButtons: 'false'});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu li > div > button').length).toBe(0);
+
+      });
+
+      it('should support null ng-model initial value', function() {
+        var elm = compileDirective('options-multiple', { selectedIcons: null });
+        expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcons).toEqual([ scope.icons[1].value ]);
+      });
     });
 
     describe('maxLength', function () {
@@ -355,11 +393,18 @@ describe('select', function () {
 
     describe('html', function () {
 
-      it('should correctly compile inner content', function() {
-        var elm = compileDirective('options-html');
+      it('should correctly compile inner content when html is true', function() {
+        var elm = compileDirective('options-html', {html: 'true'});
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
         expect(sandboxEl.find('.dropdown-menu li:eq(0) a > span').html()).toBe(scope.icons[0].label);
+      });
+
+      it('should NOT correctly compile inner content when html is false', function() {
+        var elm = compileDirective('options-html', {html: 'false'});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
+        expect(sandboxEl.find('.dropdown-menu li:eq(0) a > span').html()).not.toBe(scope.icons[0].label);
       });
 
     });
@@ -427,6 +472,81 @@ describe('select', function () {
         angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
         angular.element(sandboxEl.find('.dropdown-menu li:eq(2) a')[0]).triggerHandler('click');
         expect(scope.selectedIcons).toEqual([scope.icons[3].value, scope.icons[1].value, scope.icons[2].value]);
+      });
+
+    });
+
+    describe('container', function() {
+
+      it('should put select in a container when specified', function() {
+        var testElm = $('<div id="testElm"></div>');
+        sandboxEl.append(testElm);
+        var elm = compileDirective('options-container', {container: '#testElm'});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(testElm.children('.dropdown-menu.select').length).toBe(1);
+      })
+
+      it('should put select in sandbox when container is falsy', function() {
+        var elm = compileDirective('options-container', {container: 'false'});
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.children('.dropdown-menu.select').length).toBe(1);
+      })
+
+
+    })
+
+    describe('prefix', function () {
+      it('should call namespaced events through provider', function() {
+        var fauxController = { $setViewValue : angular.noop };
+        var mySelect = $select(sandboxEl, fauxController, {prefixEvent: 'datepicker'});
+        var emit = spyOn(mySelect.$scope, '$emit');
+        scope.$digest();
+        mySelect.show();
+        mySelect.hide();
+        var option = {value : 'Canada'};
+        mySelect.update([option]);
+        mySelect.select(0);
+        $animate.triggerCallbacks();
+
+        expect(emit).toHaveBeenCalledWith('datepicker.show.before', mySelect);
+        expect(emit).toHaveBeenCalledWith('datepicker.show', mySelect);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide.before', mySelect);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide', mySelect);
+        expect(emit).toHaveBeenCalledWith('datepicker.select', option.value, 0, mySelect);
+      });
+
+      it('should call namespaced events through directive', function() {
+        var elm = compileDirective('default-with-namespace');
+
+        var select, beforeShow, show, beforeHide, hide;
+        scope.$on('datepicker.select', function() {
+          select = true;
+        });
+        scope.$on('datepicker.show.before', function() {
+          beforeShow = true;
+        });
+        scope.$on('datepicker.show', function() {
+          show = true;
+        });
+        scope.$on('datepicker.hide', function() {
+          hide = true;
+        });
+        scope.$on('datepicker.hide.before', function() {
+          beforeHide = true;
+        });
+
+        angular.element(elm[0]).triggerHandler('focus');
+        $animate.triggerCallbacks();
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+
+        angular.element(elm[0]).triggerHandler('blur');
+        $animate.triggerCallbacks();
+
+        expect(select).toBe(true);
+        expect(beforeShow).toBe(true);
+        expect(show).toBe(true);
+        expect(hide).toBe(true);
+        expect(beforeHide).toBe(true);
       });
 
     });

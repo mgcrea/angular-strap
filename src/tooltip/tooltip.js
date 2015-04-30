@@ -206,7 +206,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
           // Set the initial positioning.  Make the tooltip invisible
           // so IE doesn't try to focus on it off screen.
-          tipElement.css({top: '-9999px', left: '-9999px', display: 'block', visibility: 'hidden'});
+          tipElement.css({top: '-9999px', left: '-9999px', right: 'auto', display: 'block', visibility: 'hidden'});
 
           // Options: animation
           if(options.animation) tipElement.addClass(options.animation);
@@ -593,7 +593,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             using: function (props) {
               tipElement.css({
                 top: Math.round(props.top) + 'px',
-                left: Math.round(props.left) + 'px'
+                left: Math.round(props.left) + 'px',
+                right: ''
               });
             }
           }, offset), 0);
@@ -730,13 +731,24 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id'], function(key) {
+        angular.forEach(['template', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
-        // should not parse target attribute, only data-target
-        if(element.attr('data-target')) {
-          options.target = element.attr('data-target');
+        // use string regex match boolean attr falsy values, leave truthy values be
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach(['html', 'container'], function(key) {
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+            options[key] = false;
+        });
+
+        // should not parse target attribute (anchor tag), only data-target #1454
+        var dataTarget = element.attr('data-target');
+        if(angular.isDefined(dataTarget)) {
+          if(falseValueRegExp.test(dataTarget))
+            options.target = false;
+          else
+            options.target = dataTarget;
         }
 
         // overwrite inherited title value when no value specified
