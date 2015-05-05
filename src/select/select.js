@@ -257,7 +257,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Directive options
         var options = {scope: scope, placeholder: defaults.placeholder};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent'], function(key) {
+        angular.forEach(['limit', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -306,6 +306,24 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
           // console.warn('scope.$watch(%s)', attr.ngModel, newValue, oldValue);
+          var limit = (angular.isDefined(options.limit)) ? parseInt(options.limit, 10) : undefined;
+          if(options.multiple && limit !== undefined){
+            if(newValue != null){
+              if(limit < newValue.length){
+                for(var i = 0; i < newValue.length; i++){
+                  if(i >= oldValue.length) break;
+                  if(!angular.equals(newValue[i], oldValue[i])) break;
+                }
+
+                if(i === newValue.length){
+                  newValue.pop();
+                }else{
+                  newValue.splice(i, 1);
+                }
+              }
+            }
+          }
+
           select.$updateActiveIndex();
           controller.$render();
         }, true);

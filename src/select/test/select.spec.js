@@ -69,6 +69,10 @@ describe('select', function () {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" required bs-select></button>'
     },
+    'options-multiple-limit': {
+      scope: {selectedIcons: ['Globe', 'Heart', 'Camera'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" data-multiple="1" data-limit="2" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
     'options-maxLength': {
       scope: {selectedIcons: ['Globe', 'Heart', 'Camera'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" data-max-length="2" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
@@ -169,7 +173,7 @@ describe('select', function () {
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
     });
-    
+
     it('should support null ng-model initial value', function() {
       var elm = compileDirective('default', { selectedIcon: null });
       expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
@@ -312,6 +316,24 @@ describe('select', function () {
         expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
         angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
         expect(scope.selectedIcons).toEqual([ scope.icons[1].value ]);
+      });
+    });
+
+    describe('limit', function(){
+      it('Should not allow you to select more options that specified by the limit', function(){
+        var elm = compileDirective('options-multiple-limit', { selectedIcons: null });
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(0);
+
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcons.length).toEqual(1);
+
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(2) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcons.length).toEqual(2);
+
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(3) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcons.length).toEqual(2);
+        expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(2);
       });
     });
 
