@@ -6,16 +6,24 @@ var config = require('ng-factory').use(gulp, {
     docsViews: '*/docs/{,*/}*.tpl.{html,jade}'
   },
   bower: {
-    exclude: /jquery|js\/bootstrap|\.less|\.woff2/
+    exclude: /jquery|js\/bootstrap|\.less/
   }
 });
 
 //
 // Aliases
 
-gulp.task('serve', ['ng:serve']);
-gulp.task('build', ['ng:build']);
-gulp.task('pages', ['ng:pages']);
+gulp.task('serve', gulp.series('ng:serve'));
+
+var del = require('del');
+var path = require('path');
+gulp.task('build', gulp.series('ng:build', function afterBuild(done) {
+  var paths = config.paths;
+  // Delete useless module.* build files
+  del(path.join(paths.dest, 'module.*'), done);
+}));
+
+// gulp.task('pages', ['ng:pages']);
 // gulp.task('test', ['ng:test']);
 
 //
