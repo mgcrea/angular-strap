@@ -578,6 +578,42 @@ describe('tooltip', function() {
 
   });
 
+  describe('redraw event listener', function () {
+    it('should listen for redraw events', function() {
+      var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
+      var applyPlacement = spyOn(myTooltip, '$applyPlacement');
+      scope.$digest();
+
+      myTooltip.show();
+      $rootScope.$broadcast('tooltip.redraw');
+      myTooltip.hide();
+      $animate.triggerCallbacks();
+      $rootScope.$broadcast('tooltip.redraw');
+
+      // $applyPlacement should have been called twice: immediately after show
+      // and again after the first $broadcast. The second $broadcast should not
+      // result in an $applyPlacement call because the tooltip was hidden
+      expect(applyPlacement.calls.count()).toEqual(2);
+    });
+
+    it('should listen for the namespaced redraw event', function() {
+      var myTooltip = $tooltip(sandboxEl, angular.extend({prefixEvent: 'datepicker'}, templates['default'].scope.tooltip));
+      var applyPlacement = spyOn(myTooltip, '$applyPlacement');
+      scope.$digest();
+
+      myTooltip.show();
+      $rootScope.$broadcast('datepicker.redraw');
+      myTooltip.hide();
+      $animate.triggerCallbacks();
+      $rootScope.$broadcast('datepicker.redraw');
+
+      // $applyPlacement should have been called twice: immediately after show
+      // and again after the first $broadcast. The second $broadcast should not
+      // result in an $applyPlacement call because the tooltip was hidden
+      expect(applyPlacement.calls.count()).toEqual(2);
+    });
+  });
+
   describe('show / hide events', function() {
 
     it('should dispatch show and show.before events', function() {

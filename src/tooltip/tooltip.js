@@ -180,6 +180,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
         };
 
+        scope.$on(options.prefixEvent + '.redraw', function () {
+          if ($tooltip.$isShown) {
+            $tooltip.$applyPlacement();
+          }
+        });
+
         $tooltip.show = function() {
           if (!options.bsEnabled || $tooltip.$isShown) return;
 
