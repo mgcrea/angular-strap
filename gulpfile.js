@@ -9,6 +9,7 @@ var config = require('ng-factory').use(gulp, {
     exclude: /jquery|js\/bootstrap|\.less/
   }
 });
+var paths = config.paths;
 
 //
 // Tasks
@@ -18,13 +19,11 @@ gulp.task('serve', gulp.series('ng:serve'));
 var del = require('del');
 var path = require('path');
 gulp.task('build', gulp.series('ng:build', function afterBuild(done) {
-  var paths = config.paths;
   // Delete useless module.* build files
   del(path.join(paths.dest, 'module.*'), done);
 }));
 
 gulp.task('pages', gulp.series('ng:build', function afterPages(done) {
-  var paths = config.docs;
   return gulp.src(['bower_components/highlightjs/styles/github.css'], {cwd: paths.cwd, base: paths.cwd})
     .pipe(gulp.dest(paths.dest));
 }));
@@ -33,17 +32,17 @@ gulp.task('pages', gulp.series('ng:build', function afterPages(done) {
 // Tests
 
 var gutil = require('gulp-util');
-var runSequence = require('run-sequence');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
-var testTimezone = '';
 gulp.task('jshint', function() {
-  gulp.src(src.scripts, {cwd: src.cwd})
+  return gulp.src(paths.scripts, {cwd: paths.cwd})
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 });
+
 var karma = require('karma').server;
-gulp.task('karma:unit', ['ng:test/templates'], function() {
+var testTimezone = '';
+gulp.task('karma:unit', gulp.series('ng:test/templates', function() {
   // if testTimezone has value, set the environment timezone
   // before starting karma, so PhantomJS picks up the
   // timezone setting
@@ -60,7 +59,7 @@ gulp.task('karma:unit', ['ng:test/templates'], function() {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);
   });
-});
+}));
 gulp.task('karma:server', ['ng:test/templates'], function() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
@@ -102,17 +101,15 @@ gulp.task('karma:travis~1.2.0', ['ng:test/templates'], function() {
   });
 });
 
-gulp.task('test', function() {
-  runSequence('ng:test/clean', 'ng:test/templates', ['jshint', 'karma:unit']);
-});
+/*
+gulp.task('test', gulp.series('ng:test/clean', 'ng:test/templates', ['jshint', 'karma:unit']));
 gulp.task('test:timezone', function() {
   // parse command line argument for optional timezone
   // invoke like this:
   //     gulp test:timezone --Europe/Paris
   var timezone = process.argv[3] || '';
   testTimezone = timezone.replace(/-/g, '');
-  runSequence('ng:test/clean', 'ng:test/templates', ['jshint', 'karma:unit']);
+  return gulp.series('ng:test/clean', 'ng:test/templates', ['jshint', 'karma:unit']);
 });
-gulp.task('test:server', function() {
-  runSequence('ng:test/clean', 'ng:test/templates', 'karma:server');
-});
+gulp.task('test:server', gulp.series('ng:test/clean', 'ng:test/templates', 'karma:server'));
+*/
