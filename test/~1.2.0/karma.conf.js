@@ -21,10 +21,8 @@ module.exports = function(config) {
       'test/~1.2.0/components/angular-mocks.js',
       'bower_components/jquery/dist/jquery.js',
       'src/{,*/}*.js',
-      'test/.tmp/templates/{,*/}*.js',
-      'test/effroi.js',
+      '.tmp/modules/*.tpl.min.js',
       'test/helpers.js',
-      'test/async.js',
       // 'test/mock/**/*.js',
       // 'test/spec/**/*.js',
       'src/{,*/}/test/*.spec.js'
