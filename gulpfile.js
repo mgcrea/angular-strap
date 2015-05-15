@@ -11,7 +11,7 @@ var config = require('ng-factory').use(gulp, {
 });
 
 //
-// Aliases
+// Tasks
 
 gulp.task('serve', gulp.series('ng:serve'));
 
@@ -23,41 +23,14 @@ gulp.task('build', gulp.series('ng:build', function afterBuild(done) {
   del(path.join(paths.dest, 'module.*'), done);
 }));
 
-// gulp.task('pages', ['ng:pages']);
-// gulp.task('test', ['ng:test']);
+gulp.task('pages', gulp.series('ng:build', function afterPages(done) {
+  var paths = config.docs;
+  return gulp.src(['bower_components/highlightjs/styles/github.css'], {cwd: paths.cwd, base: paths.cwd})
+    .pipe(gulp.dest(paths.dest));
+}));
 
 //
-// Hooks
-
-var fs = require('fs');
-var path = require('path');
-var src = config.src;
-// gulp.task('ng:afterBuild', function() {
-//   // gulp.src(['bower_components/font-awesome/fonts/*.woff'], {cwd: src.cwd})
-//   //   .pipe(gulp.dest(path.join(src.dest, 'fonts')));
-//   gulp.src(['bower_components/angular-strap/dist/modules/*.js'], {cwd: src.cwd, base: src.cwd})
-//     .pipe(gulp.dest(src.dest));
-//   gulp.src(['bower_components/socket.io-client/*.js'], {cwd: src.cwd, base: src.cwd})
-//     .pipe(gulp.dest(src.dest));
-//   gulp.src(['libraries/**/*.js'], {cwd: src.cwd, base: src.cwd})
-//     .pipe(gulp.dest(src.dest));
-//   // gulp.src(['data/**/*'], {cwd: path.join(src.cwd, '..')})
-//   //   .pipe(gulp.dest(path.join(src.dest, 'data')));
-//   try {
-//     fs.symlinkSync('./../data', path.join(src.dest, 'data'));
-//   } catch(err) {}
-// });
-
-var docs = config.docs;
-gulp.task('ng:afterPages', function() {
-  // gulp.src(['bower_components/font-awesome/fonts/*.{woff,woff2}'], {cwd: docs.cwd})
-    // .pipe(gulp.dest(path.join(docs.dest, 'fonts')));
-  gulp.src(['bower_components/highlightjs/styles/github.css'], {cwd: docs.cwd, base: docs.cwd})
-    .pipe(gulp.dest(docs.dest));
-});
-
 // Tests
-//
 
 var gutil = require('gulp-util');
 var runSequence = require('run-sequence');
