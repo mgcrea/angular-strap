@@ -60,7 +60,7 @@ gulp.task('karma:unit', gulp.series('ng:test/templates', function() {
     process.exit(code);
   });
 }));
-gulp.task('karma:server', ['ng:test/templates'], function() {
+gulp.task('karma:server', gulp.series('ng:test/templates', function karmaServer() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -71,9 +71,9 @@ gulp.task('karma:server', ['ng:test/templates'], function() {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);
   });
-});
+}));
 // codeclimate-test-reporter
-gulp.task('karma:travis', ['ng:test/templates'], function() {
+gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -88,8 +88,8 @@ gulp.task('karma:travis', ['ng:test/templates'], function() {
     //     process.exit(code);
     //   });
   });
-});
-gulp.task('karma:travis~1.2.0', ['ng:test/templates'], function() {
+}));
+gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', function karmaTravis120() {
   karma.start({
     configFile: path.join(__dirname, 'test/~1.2.0/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -99,17 +99,15 @@ gulp.task('karma:travis~1.2.0', ['ng:test/templates'], function() {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);
   });
-});
+}));
 
-/*
-gulp.task('test', gulp.series('ng:test/clean', 'ng:test/templates', ['jshint', 'karma:unit']));
+gulp.task('test', gulp.series('ng:test/templates', gulp.parallel('jshint', 'karma:unit')));
 gulp.task('test:timezone', function() {
   // parse command line argument for optional timezone
   // invoke like this:
   //     gulp test:timezone --Europe/Paris
   var timezone = process.argv[3] || '';
   testTimezone = timezone.replace(/-/g, '');
-  return gulp.series('ng:test/clean', 'ng:test/templates', ['jshint', 'karma:unit']);
+  return gulp.series('ng:test/templates', gulp.parallel('jshint', 'karma:unit'));
 });
-gulp.task('test:server', gulp.series('ng:test/clean', 'ng:test/templates', 'karma:server'));
-*/
+gulp.task('test:server', gulp.series('ng:test/templates', 'karma:server'));
