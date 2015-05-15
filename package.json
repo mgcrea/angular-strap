@@ -33,7 +33,7 @@
   "dependencies": {},
   "devDependencies": {
     "del": "^1.1.1",
-    "factory-angular-channels": "^0.7",
+    "factory-angular-channels": "^0.7.1",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-jshint": "^1.10.0",
     "gulp-util": "^3.0.4",
