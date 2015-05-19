@@ -32,12 +32,23 @@ angular.module('mgcrea.ngStrap.tab', [])
       self.$activePaneChangeListeners = self.$viewChangeListeners = [];
 
       self.$push = function(pane) {
+        if(angular.isUndefined(self.$panes.$active)) {
+          $scope.$setActive(pane.name || 0);
+        }
         self.$panes.push(pane);
       };
 
       self.$remove = function(pane) {
         var index = self.$panes.indexOf(pane);
-        var activeIndex = self.$panes.$active;
+        var active = self.$panes.$active;
+        var activeIndex;
+        if(angular.isString(active)) {
+          activeIndex = self.$panes.map(function(pane) {
+            return pane.name;
+          }).indexOf(active);
+        } else {
+          activeIndex = self.$panes.$active;
+        }
 
         // remove pane from $panes array
         self.$panes.splice(index, 1);
@@ -52,15 +63,22 @@ angular.module('mgcrea.ngStrap.tab', [])
           // so select the previous one
           activeIndex--;
         }
-        self.$setActive(activeIndex);
+        if(activeIndex >= 0 && activeIndex < self.$panes.length) {
+          self.$setActive(self.$panes[activeIndex].name || activeIndex);
+        } else {
+          self.$setActive();
+        }
       };
 
-      self.$panes.$active = 0;
       self.$setActive = $scope.$setActive = function(value) {
         self.$panes.$active = value;
         self.$activePaneChangeListeners.forEach(function(fn) {
           fn();
         });
+      };
+
+      self.$isActive = $scope.$isActive = function($pane, $index) {
+        return self.$panes.$active === $pane.name || self.$panes.$active === $index;
       };
 
     };
@@ -103,7 +121,7 @@ angular.module('mgcrea.ngStrap.tab', [])
           // modelValue -> $formatters -> viewValue
           ngModelCtrl.$formatters.push(function(modelValue) {
             // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
-            bsTabsCtrl.$setActive(modelValue * 1);
+            bsTabsCtrl.$setActive(modelValue);
             return modelValue;
           });
 
@@ -121,7 +139,7 @@ angular.module('mgcrea.ngStrap.tab', [])
 
           // watch bsActivePane for value changes
           scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
-            bsTabsCtrl.$setActive(newValue * 1);
+            bsTabsCtrl.$setActive(newValue);
           }, true);
         }
       }
@@ -147,6 +165,9 @@ angular.module('mgcrea.ngStrap.tab', [])
           scope.title = $sce.trustAsHtml(newValue);
         });
 
+        // Save tab name into scope
+        scope.name = attrs.name;
+
         // Add animation class
         if(bsTabsCtrl.$options.animation) {
           element.addClass(bsTabsCtrl.$options.animation);
@@ -166,8 +187,7 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         function render() {
           var index = bsTabsCtrl.$panes.indexOf(scope);
-          var active = bsTabsCtrl.$panes.$active;
-          $animate[index === active ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
+          $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
         }
 
         bsTabsCtrl.$activePaneChangeListeners.push(function() {

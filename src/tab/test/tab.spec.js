@@ -40,6 +40,10 @@ describe('tab', function () {
       scope: {tab: {active: 1}},
       element: '<div ng-model="tab.active" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
     },
+    'binding-named-ngModel': {
+      scope: {tab: {active: 'title-1'}},
+      element: '<div ng-model="tab.active" bs-tabs><div title="title-1" name="title-1" bs-pane>content-1</div><div title="title-2" name="title-2" bs-pane>content-2</div></div>'
+    },
     'template-ngModel-ngRepeat': {
       scope: {
         tab: {active: 1},
@@ -49,6 +53,10 @@ describe('tab', function () {
           {title:'About', content: 'Etsy mixtape wayfarers...'}
       ]},
       element: '<div ng-model="tab.active" bs-tabs><div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
+    },
+    'binding-named-bsActivePane': {
+      scope: {tab: {active: 'title-1'}},
+      element: '<div bs-active-pane="tab.active" bs-tabs><div title="title-1" name="title-1" bs-pane>content-1</div><div title="title-2" name="title-2" bs-pane>content-2</div></div>'
     },
     'binding-bsActivePane': {
       scope: {tab: {active: 1}},
@@ -210,6 +218,18 @@ describe('tab', function () {
         var elm = compileDirective('binding-' + bindingAttribute);
         sandboxEl.find('.nav-tabs > li:eq(0) > a').triggerHandler('click');
         expect(scope.tab.active).toBe(0);
+      });
+
+      it('should set active tab by name', function() {
+        var elm = compileDirective('binding-named-' + bindingAttribute, {tab: {active: 'title-2'}});
+        expect(sandboxEl.find('.nav-tabs > li.active').index()).toBe(1);
+        expect(sandboxEl.find('.tab-content > .tab-pane.active').attr('name')).toBe('title-2');
+      });
+
+      it('should set tab name into model if it is provided', function() {
+        var elm = compileDirective('binding-named-' + bindingAttribute);
+        sandboxEl.find('.nav-tabs > li:eq(1) > a').triggerHandler('click');
+        expect(scope.tab.active).toBe('title-2');
       });
 
       it('should keep active pane when adding a new pane after', function() {
