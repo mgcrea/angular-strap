@@ -68,7 +68,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
       self.$targets.$active = !self.$options.startCollapsed ? [0] : [];
       self.$setActive = $scope.$setActive = function(value) {
         if(angular.isArray(value)) {
-          self.$targets.$active = angular.copy(value);
+          self.$targets.$active = value;
         }
         else if(!self.$options.disallowToggle) {
           // toogle element active status

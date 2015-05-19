@@ -286,10 +286,12 @@ describe('collapse', function () {
         });
 
         it('should correctly apply view changes to the model', function() {
-          var elm = compileDirective('binding-ngModel-multiple');
+          var outerModel = [1];
+          var elm = compileDirective('binding-ngModel-multiple', {panel: {active: outerModel}});
           expect(scope.panel.active).toEqual([1]);
           sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
           expect(scope.panel.active).toEqual([1,0]);
+          expect(scope.panel.active).toEqual(outerModel);
         });
 
       });
