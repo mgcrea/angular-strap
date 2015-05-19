@@ -10,9 +10,11 @@ AngularStrap is a set of native directives that enables seamless integration of 
 
 - If you don't want to use `ngAnimate`, you will have to include a tiny [ngAnimate mock](https://github.com/mgcrea/angular-strap/wiki/ngAnimate-mock).
 
+
 ## Documentation and examples
 
 + Check the [documentation](http://mgcrea.github.io/angular-strap) and [changelog](https://github.com/mgcrea/angular-strap/releases).
+
 
 ## Communication
 
@@ -21,6 +23,7 @@ AngularStrap is a set of native directives that enables seamless integration of 
 - If you **found a bug**, open an issue.
 - If you **have a feature request**, open an issue.
 - If you **want to contribute**, submit a pull request.
+
 
 ## Quick start
 
@@ -31,7 +34,7 @@ AngularStrap is a set of native directives that enables seamless integration of 
 $ bower install angular-strap --save
 ```
 
-+ Include the required libraries is your `index.html`:
++ Include the required libraries in your `index.html`:
 
 >
 ``` html
@@ -71,11 +74,9 @@ You can quickly hack around (the docs) with:
 	$ gulp serve
 
 
-
 ## Contributing
 
 Please submit all pull requests the against master branch. If your pull request contains JavaScript patches or features, you should include relevant unit tests. Thanks!
-
 
 
 ## Authors
@@ -84,7 +85,6 @@ Please submit all pull requests the against master branch. If your pull request 
 
 + http://olouv.com
 + http://github.com/mgcrea
-
 
 
 ## Copyright and license
