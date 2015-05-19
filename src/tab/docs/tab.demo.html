@@ -156,6 +156,14 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
             <p>Disable pane</p>
           </td>
         </tr>
+        <tr>
+          <td>name</td>
+          <td>string</td>
+          <td>''</td>
+          <td>
+            <p>Tab name. If provided, it will be used for `bsActivePane` instead of number</p>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -192,7 +200,7 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
           <td>bsActivePane</td>
           <td>number</td>
           <td>
-            <p>Binds to the active tab pane index (zero based).</p>
+            <p>Info about current selected tab. If it has the name, it will be here, otherwise – active tab pane index (zero based).</p>
             <p>You can use it to set the active tab pane from code or to get the currently active tab pane.</p>
           </td>
         </tr>
