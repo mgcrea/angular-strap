@@ -278,6 +278,11 @@ describe('typeahead', function () {
       var elm = compileDirective('markup-objectValue', {}, function(scope) { scope.selectedIcon = 'Ge' });
       expect(elm.val()).toBe('Ge'); // display value will be undefined, use model value for display
     });
+
+    it('should use \'\' if the  model is an object and the display value cannot be determined', function () {
+      var elm = compileDirective('markup-objectValue', {}, function(scope) { scope.selectedIcon = {} });
+      expect(elm.val()).toBe('');
+    });
   });
 
   describe('bsOptions', function () {
