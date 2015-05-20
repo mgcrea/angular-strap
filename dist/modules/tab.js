@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.2 - 2015-05-15
+ * @version v2.2.3 - 2015-05-20
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -25,25 +25,42 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
     self.$panes = $scope.$panes = [];
     self.$activePaneChangeListeners = self.$viewChangeListeners = [];
     self.$push = function(pane) {
+      if (angular.isUndefined(self.$panes.$active)) {
+        $scope.$setActive(pane.name || 0);
+      }
       self.$panes.push(pane);
     };
     self.$remove = function(pane) {
       var index = self.$panes.indexOf(pane);
-      var activeIndex = self.$panes.$active;
+      var active = self.$panes.$active;
+      var activeIndex;
+      if (angular.isString(active)) {
+        activeIndex = self.$panes.map(function(pane) {
+          return pane.name;
+        }).indexOf(active);
+      } else {
+        activeIndex = self.$panes.$active;
+      }
       self.$panes.splice(index, 1);
       if (index < activeIndex) {
         activeIndex--;
       } else if (index === activeIndex && activeIndex === self.$panes.length) {
         activeIndex--;
       }
-      self.$setActive(activeIndex);
+      if (activeIndex >= 0 && activeIndex < self.$panes.length) {
+        self.$setActive(self.$panes[activeIndex].name || activeIndex);
+      } else {
+        self.$setActive();
+      }
     };
-    self.$panes.$active = 0;
     self.$setActive = $scope.$setActive = function(value) {
       self.$panes.$active = value;
       self.$activePaneChangeListeners.forEach(function(fn) {
         fn();
       });
+    };
+    self.$isActive = $scope.$isActive = function($pane, $index) {
+      return self.$panes.$active === $pane.name || self.$panes.$active === $index;
     };
   };
   this.$get = function() {
@@ -70,7 +87,7 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
           ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
         });
         ngModelCtrl.$formatters.push(function(modelValue) {
-          bsTabsCtrl.$setActive(modelValue * 1);
+          bsTabsCtrl.$setActive(modelValue);
           return modelValue;
         });
       }
@@ -80,7 +97,7 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
           parsedBsActivePane.assign(scope, bsTabsCtrl.$panes.$active);
         });
         scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
-          bsTabsCtrl.$setActive(newValue * 1);
+          bsTabsCtrl.$setActive(newValue);
         }, true);
       }
     }
@@ -96,6 +113,7 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
       attrs.$observe('title', function(newValue, oldValue) {
         scope.title = $sce.trustAsHtml(newValue);
       });
+      scope.name = attrs.name;
       if (bsTabsCtrl.$options.animation) {
         element.addClass(bsTabsCtrl.$options.animation);
       }
@@ -108,8 +126,7 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
       });
       function render() {
         var index = bsTabsCtrl.$panes.indexOf(scope);
-        var active = bsTabsCtrl.$panes.$active;
-        $animate[index === active ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
+        $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
       }
       bsTabsCtrl.$activePaneChangeListeners.push(function() {
         render();

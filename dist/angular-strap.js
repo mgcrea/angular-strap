@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.2 - 2015-05-15
+ * @version v2.2.3 - 2015-05-20
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -182,6 +182,125 @@
       } ]
     };
   });
+  angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
+    var defaults = this.defaults = {
+      activeClass: 'active',
+      toggleEvent: 'click'
+    };
+    this.$get = function() {
+      return {
+        defaults: defaults
+      };
+    };
+  }).directive('bsCheckboxGroup', function() {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      compile: function postLink(element, attr) {
+        element.attr('data-toggle', 'buttons');
+        element.removeAttr('ng-model');
+        var children = element[0].querySelectorAll('input[type="checkbox"]');
+        angular.forEach(children, function(child) {
+          var childEl = angular.element(child);
+          childEl.attr('bs-checkbox', '');
+          childEl.attr('ng-model', attr.ngModel + '.' + childEl.attr('value'));
+        });
+      }
+    };
+  }).directive('bsCheckbox', [ '$button', '$$rAF', function($button, $$rAF) {
+    var defaults = $button.defaults;
+    var constantValueRegExp = /^(true|false|\d+)$/;
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        var options = defaults;
+        var isInput = element[0].nodeName === 'INPUT';
+        var activeElement = isInput ? element.parent() : element;
+        var trueValue = angular.isDefined(attr.trueValue) ? attr.trueValue : true;
+        if (constantValueRegExp.test(attr.trueValue)) {
+          trueValue = scope.$eval(attr.trueValue);
+        }
+        var falseValue = angular.isDefined(attr.falseValue) ? attr.falseValue : false;
+        if (constantValueRegExp.test(attr.falseValue)) {
+          falseValue = scope.$eval(attr.falseValue);
+        }
+        var hasExoticValues = typeof trueValue !== 'boolean' || typeof falseValue !== 'boolean';
+        if (hasExoticValues) {
+          controller.$parsers.push(function(viewValue) {
+            return viewValue ? trueValue : falseValue;
+          });
+          controller.$formatters.push(function(modelValue) {
+            return angular.equals(modelValue, trueValue);
+          });
+          scope.$watch(attr.ngModel, function(newValue, oldValue) {
+            controller.$render();
+          });
+        }
+        controller.$render = function() {
+          var isActive = angular.equals(controller.$modelValue, trueValue);
+          $$rAF(function() {
+            if (isInput) element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
+        };
+        element.bind(options.toggleEvent, function() {
+          scope.$apply(function() {
+            if (!isInput) {
+              controller.$setViewValue(!activeElement.hasClass('active'));
+            }
+            if (!hasExoticValues) {
+              controller.$render();
+            }
+          });
+        });
+      }
+    };
+  } ]).directive('bsRadioGroup', function() {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      compile: function postLink(element, attr) {
+        element.attr('data-toggle', 'buttons');
+        element.removeAttr('ng-model');
+        var children = element[0].querySelectorAll('input[type="radio"]');
+        angular.forEach(children, function(child) {
+          angular.element(child).attr('bs-radio', '');
+          angular.element(child).attr('ng-model', attr.ngModel);
+        });
+      }
+    };
+  }).directive('bsRadio', [ '$button', '$$rAF', function($button, $$rAF) {
+    var defaults = $button.defaults;
+    var constantValueRegExp = /^(true|false|\d+)$/;
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        var options = defaults;
+        var isInput = element[0].nodeName === 'INPUT';
+        var activeElement = isInput ? element.parent() : element;
+        var value;
+        attr.$observe('value', function(v) {
+          value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
+          controller.$render();
+        });
+        controller.$render = function() {
+          var isActive = angular.equals(controller.$modelValue, value);
+          $$rAF(function() {
+            if (isInput) element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
+        };
+        element.bind(options.toggleEvent, function() {
+          scope.$apply(function() {
+            controller.$setViewValue(value);
+            controller.$render();
+          });
+        });
+      }
+    };
+  } ]);
   angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$alert', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -327,125 +446,6 @@
       }
     };
   } ]);
-  angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
-    var defaults = this.defaults = {
-      activeClass: 'active',
-      toggleEvent: 'click'
-    };
-    this.$get = function() {
-      return {
-        defaults: defaults
-      };
-    };
-  }).directive('bsCheckboxGroup', function() {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      compile: function postLink(element, attr) {
-        element.attr('data-toggle', 'buttons');
-        element.removeAttr('ng-model');
-        var children = element[0].querySelectorAll('input[type="checkbox"]');
-        angular.forEach(children, function(child) {
-          var childEl = angular.element(child);
-          childEl.attr('bs-checkbox', '');
-          childEl.attr('ng-model', attr.ngModel + '.' + childEl.attr('value'));
-        });
-      }
-    };
-  }).directive('bsCheckbox', [ '$button', '$$rAF', function($button, $$rAF) {
-    var defaults = $button.defaults;
-    var constantValueRegExp = /^(true|false|\d+)$/;
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
-        var options = defaults;
-        var isInput = element[0].nodeName === 'INPUT';
-        var activeElement = isInput ? element.parent() : element;
-        var trueValue = angular.isDefined(attr.trueValue) ? attr.trueValue : true;
-        if (constantValueRegExp.test(attr.trueValue)) {
-          trueValue = scope.$eval(attr.trueValue);
-        }
-        var falseValue = angular.isDefined(attr.falseValue) ? attr.falseValue : false;
-        if (constantValueRegExp.test(attr.falseValue)) {
-          falseValue = scope.$eval(attr.falseValue);
-        }
-        var hasExoticValues = typeof trueValue !== 'boolean' || typeof falseValue !== 'boolean';
-        if (hasExoticValues) {
-          controller.$parsers.push(function(viewValue) {
-            return viewValue ? trueValue : falseValue;
-          });
-          controller.$formatters.push(function(modelValue) {
-            return angular.equals(modelValue, trueValue);
-          });
-          scope.$watch(attr.ngModel, function(newValue, oldValue) {
-            controller.$render();
-          });
-        }
-        controller.$render = function() {
-          var isActive = angular.equals(controller.$modelValue, trueValue);
-          $$rAF(function() {
-            if (isInput) element[0].checked = isActive;
-            activeElement.toggleClass(options.activeClass, isActive);
-          });
-        };
-        element.bind(options.toggleEvent, function() {
-          scope.$apply(function() {
-            if (!isInput) {
-              controller.$setViewValue(!activeElement.hasClass('active'));
-            }
-            if (!hasExoticValues) {
-              controller.$render();
-            }
-          });
-        });
-      }
-    };
-  } ]).directive('bsRadioGroup', function() {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      compile: function postLink(element, attr) {
-        element.attr('data-toggle', 'buttons');
-        element.removeAttr('ng-model');
-        var children = element[0].querySelectorAll('input[type="radio"]');
-        angular.forEach(children, function(child) {
-          angular.element(child).attr('bs-radio', '');
-          angular.element(child).attr('ng-model', attr.ngModel);
-        });
-      }
-    };
-  }).directive('bsRadio', [ '$button', '$$rAF', function($button, $$rAF) {
-    var defaults = $button.defaults;
-    var constantValueRegExp = /^(true|false|\d+)$/;
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
-        var options = defaults;
-        var isInput = element[0].nodeName === 'INPUT';
-        var activeElement = isInput ? element.parent() : element;
-        var value;
-        attr.$observe('value', function(v) {
-          value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
-          controller.$render();
-        });
-        controller.$render = function() {
-          var isActive = angular.equals(controller.$modelValue, value);
-          $$rAF(function() {
-            if (isInput) element[0].checked = isActive;
-            activeElement.toggleClass(options.activeClass, isActive);
-          });
-        };
-        element.bind(options.toggleEvent, function() {
-          scope.$apply(function() {
-            controller.$setViewValue(value);
-            controller.$render();
-          });
-        });
-      }
-    };
-  } ]);
   angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
     var defaults = this.defaults = {
       animation: 'am-collapse',
@@ -491,7 +491,7 @@
       self.$targets.$active = !self.$options.startCollapsed ? [ 0 ] : [];
       self.$setActive = $scope.$setActive = function(value) {
         if (angular.isArray(value)) {
-          self.$targets.$active = angular.copy(value);
+          self.$targets.$active = value;
         } else if (!self.$options.disallowToggle) {
           isActive(value) ? deactivateItem(value) : activateItem(value);
         } else {
@@ -2576,6 +2576,134 @@
       }
     };
   } ]);
+  angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      template: 'tab/tab.tpl.html',
+      navClass: 'nav-tabs',
+      activeClass: 'active'
+    };
+    var controller = this.controller = function($scope, $element, $attrs) {
+      var self = this;
+      self.$options = angular.copy(defaults);
+      angular.forEach([ 'animation', 'navClass', 'activeClass' ], function(key) {
+        if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
+      });
+      $scope.$navClass = self.$options.navClass;
+      $scope.$activeClass = self.$options.activeClass;
+      self.$panes = $scope.$panes = [];
+      self.$activePaneChangeListeners = self.$viewChangeListeners = [];
+      self.$push = function(pane) {
+        if (angular.isUndefined(self.$panes.$active)) {
+          $scope.$setActive(pane.name || 0);
+        }
+        self.$panes.push(pane);
+      };
+      self.$remove = function(pane) {
+        var index = self.$panes.indexOf(pane);
+        var active = self.$panes.$active;
+        var activeIndex;
+        if (angular.isString(active)) {
+          activeIndex = self.$panes.map(function(pane) {
+            return pane.name;
+          }).indexOf(active);
+        } else {
+          activeIndex = self.$panes.$active;
+        }
+        self.$panes.splice(index, 1);
+        if (index < activeIndex) {
+          activeIndex--;
+        } else if (index === activeIndex && activeIndex === self.$panes.length) {
+          activeIndex--;
+        }
+        if (activeIndex >= 0 && activeIndex < self.$panes.length) {
+          self.$setActive(self.$panes[activeIndex].name || activeIndex);
+        } else {
+          self.$setActive();
+        }
+      };
+      self.$setActive = $scope.$setActive = function(value) {
+        self.$panes.$active = value;
+        self.$activePaneChangeListeners.forEach(function(fn) {
+          fn();
+        });
+      };
+      self.$isActive = $scope.$isActive = function($pane, $index) {
+        return self.$panes.$active === $pane.name || self.$panes.$active === $index;
+      };
+    };
+    this.$get = function() {
+      var $tab = {};
+      $tab.defaults = defaults;
+      $tab.controller = controller;
+      return $tab;
+    };
+  }).directive('bsTabs', [ '$window', '$animate', '$tab', '$parse', function($window, $animate, $tab, $parse) {
+    var defaults = $tab.defaults;
+    return {
+      require: [ '?ngModel', 'bsTabs' ],
+      transclude: true,
+      scope: true,
+      controller: [ '$scope', '$element', '$attrs', $tab.controller ],
+      templateUrl: function(element, attr) {
+        return attr.template || defaults.template;
+      },
+      link: function postLink(scope, element, attrs, controllers) {
+        var ngModelCtrl = controllers[0];
+        var bsTabsCtrl = controllers[1];
+        if (ngModelCtrl) {
+          bsTabsCtrl.$activePaneChangeListeners.push(function() {
+            ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
+          });
+          ngModelCtrl.$formatters.push(function(modelValue) {
+            bsTabsCtrl.$setActive(modelValue);
+            return modelValue;
+          });
+        }
+        if (attrs.bsActivePane) {
+          var parsedBsActivePane = $parse(attrs.bsActivePane);
+          bsTabsCtrl.$activePaneChangeListeners.push(function() {
+            parsedBsActivePane.assign(scope, bsTabsCtrl.$panes.$active);
+          });
+          scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
+            bsTabsCtrl.$setActive(newValue);
+          }, true);
+        }
+      }
+    };
+  } ]).directive('bsPane', [ '$window', '$animate', '$sce', function($window, $animate, $sce) {
+    return {
+      require: [ '^?ngModel', '^bsTabs' ],
+      scope: true,
+      link: function postLink(scope, element, attrs, controllers) {
+        var ngModelCtrl = controllers[0];
+        var bsTabsCtrl = controllers[1];
+        element.addClass('tab-pane');
+        attrs.$observe('title', function(newValue, oldValue) {
+          scope.title = $sce.trustAsHtml(newValue);
+        });
+        scope.name = attrs.name;
+        if (bsTabsCtrl.$options.animation) {
+          element.addClass(bsTabsCtrl.$options.animation);
+        }
+        attrs.$observe('disabled', function(newValue, oldValue) {
+          scope.disabled = scope.$eval(newValue);
+        });
+        bsTabsCtrl.$push(scope);
+        scope.$on('$destroy', function() {
+          bsTabsCtrl.$remove(scope);
+        });
+        function render() {
+          var index = bsTabsCtrl.$panes.indexOf(scope);
+          $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
+        }
+        bsTabsCtrl.$activePaneChangeListeners.push(function() {
+          render();
+        });
+        render();
+      }
+    };
+  } ]);
   angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser', 'mgcrea.ngStrap.helpers.dateFormatter', 'mgcrea.ngStrap.tooltip' ]).provider('$timepicker', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -3015,117 +3143,6 @@
           options = null;
           timepicker = null;
         });
-      }
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      template: 'tab/tab.tpl.html',
-      navClass: 'nav-tabs',
-      activeClass: 'active'
-    };
-    var controller = this.controller = function($scope, $element, $attrs) {
-      var self = this;
-      self.$options = angular.copy(defaults);
-      angular.forEach([ 'animation', 'navClass', 'activeClass' ], function(key) {
-        if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
-      });
-      $scope.$navClass = self.$options.navClass;
-      $scope.$activeClass = self.$options.activeClass;
-      self.$panes = $scope.$panes = [];
-      self.$activePaneChangeListeners = self.$viewChangeListeners = [];
-      self.$push = function(pane) {
-        self.$panes.push(pane);
-      };
-      self.$remove = function(pane) {
-        var index = self.$panes.indexOf(pane);
-        var activeIndex = self.$panes.$active;
-        self.$panes.splice(index, 1);
-        if (index < activeIndex) {
-          activeIndex--;
-        } else if (index === activeIndex && activeIndex === self.$panes.length) {
-          activeIndex--;
-        }
-        self.$setActive(activeIndex);
-      };
-      self.$panes.$active = 0;
-      self.$setActive = $scope.$setActive = function(value) {
-        self.$panes.$active = value;
-        self.$activePaneChangeListeners.forEach(function(fn) {
-          fn();
-        });
-      };
-    };
-    this.$get = function() {
-      var $tab = {};
-      $tab.defaults = defaults;
-      $tab.controller = controller;
-      return $tab;
-    };
-  }).directive('bsTabs', [ '$window', '$animate', '$tab', '$parse', function($window, $animate, $tab, $parse) {
-    var defaults = $tab.defaults;
-    return {
-      require: [ '?ngModel', 'bsTabs' ],
-      transclude: true,
-      scope: true,
-      controller: [ '$scope', '$element', '$attrs', $tab.controller ],
-      templateUrl: function(element, attr) {
-        return attr.template || defaults.template;
-      },
-      link: function postLink(scope, element, attrs, controllers) {
-        var ngModelCtrl = controllers[0];
-        var bsTabsCtrl = controllers[1];
-        if (ngModelCtrl) {
-          bsTabsCtrl.$activePaneChangeListeners.push(function() {
-            ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
-          });
-          ngModelCtrl.$formatters.push(function(modelValue) {
-            bsTabsCtrl.$setActive(modelValue * 1);
-            return modelValue;
-          });
-        }
-        if (attrs.bsActivePane) {
-          var parsedBsActivePane = $parse(attrs.bsActivePane);
-          bsTabsCtrl.$activePaneChangeListeners.push(function() {
-            parsedBsActivePane.assign(scope, bsTabsCtrl.$panes.$active);
-          });
-          scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
-            bsTabsCtrl.$setActive(newValue * 1);
-          }, true);
-        }
-      }
-    };
-  } ]).directive('bsPane', [ '$window', '$animate', '$sce', function($window, $animate, $sce) {
-    return {
-      require: [ '^?ngModel', '^bsTabs' ],
-      scope: true,
-      link: function postLink(scope, element, attrs, controllers) {
-        var ngModelCtrl = controllers[0];
-        var bsTabsCtrl = controllers[1];
-        element.addClass('tab-pane');
-        attrs.$observe('title', function(newValue, oldValue) {
-          scope.title = $sce.trustAsHtml(newValue);
-        });
-        if (bsTabsCtrl.$options.animation) {
-          element.addClass(bsTabsCtrl.$options.animation);
-        }
-        attrs.$observe('disabled', function(newValue, oldValue) {
-          scope.disabled = scope.$eval(newValue);
-        });
-        bsTabsCtrl.$push(scope);
-        scope.$on('$destroy', function() {
-          bsTabsCtrl.$remove(scope);
-        });
-        function render() {
-          var index = bsTabsCtrl.$panes.indexOf(scope);
-          var active = bsTabsCtrl.$panes.$active;
-          $animate[index === active ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
-        }
-        bsTabsCtrl.$activePaneChangeListeners.push(function() {
-          render();
-        });
-        render();
       }
     };
   } ]);

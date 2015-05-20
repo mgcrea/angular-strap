@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.2 - 2015-05-15
+ * @version v2.2.3 - 2015-05-20
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -52,7 +52,7 @@ angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
     self.$targets.$active = !self.$options.startCollapsed ? [ 0 ] : [];
     self.$setActive = $scope.$setActive = function(value) {
       if (angular.isArray(value)) {
-        self.$targets.$active = angular.copy(value);
+        self.$targets.$active = value;
       } else if (!self.$options.disallowToggle) {
         isActive(value) ? deactivateItem(value) : activateItem(value);
       } else {
