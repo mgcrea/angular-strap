@@ -108,9 +108,9 @@ gulp.task('karma:travis~1.4.0', gulp.series('ng:test/templates', function karmaT
     configFile: path.join(__dirname, 'test/~1.4.0/karma.conf.js'),
     browsers: ['PhantomJS'],
     reporters: ['dots'],
-    // singleRun: true
-    autoWatch: true,
-    singleRun: false
+    singleRun: true
+    // autoWatch: true,
+    // singleRun: false
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);

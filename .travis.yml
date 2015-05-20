@@ -21,9 +21,9 @@ before_script:
   - date --rfc-2822
 
 script:
+  - gulp jshint karma:travis
   - gulp karma:travis~1.2.0
   - gulp karma:travis~1.4.0
-  - gulp jshint karma:travis
 
 after_script:
   - cat test/coverage/*/lcov.info | codeclimate
