@@ -274,6 +274,10 @@ describe('typeahead', function () {
       expect(elm.val()).toBe(jQuery('div').html(scope.states[0]).text().trim());
     });
 
+    it('should use the model value if the display value cannot be determined', function () {
+      var elm = compileDirective('markup-objectValue', {}, function(scope) { scope.selectedIcon = 'Ge' });
+      expect(elm.val()).toBe('Ge'); // display value will be undefined, use model value for display
+    });
   });
 
   describe('bsOptions', function () {

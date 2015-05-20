@@ -146,7 +146,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.show = function() {
           show();
           // use timeout to hookup the events to prevent
-          // event bubbling from being processed imediately.
+          // event bubbling from being processed immediately.
           $timeout(function() {
             $typeahead.$element && $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
             if(options.keyboard) {
@@ -255,7 +255,16 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         controller.$formatters.push(function(modelValue) {
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
           var displayValue = parsedOptions.displayValue(modelValue);
-          return displayValue === undefined ? '' : displayValue;
+
+          // If we can determine the displayValue, use that
+          if (displayValue) return displayValue;
+
+          // If there's no display value, attempt to use the modelValue.
+          // If the model is an object not much we can do
+          if (modelValue && typeof modelValue !== 'object') {
+            return modelValue;
+          }
+          return '';
         });
 
         // Model rendering in view
