@@ -10,8 +10,6 @@ angular.module('mgcrea.ngStrapDocs')
     {title:'About', content: 'Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney\'s organic lomo retro fanny pack lo-fi farm-to-table readymade.', disabled: true}
   ];
 
-  $scope.tabs.activeTab = 1;
-
   $scope.pushTab = function() {
     $scope.tabs.push({title: 'Contact', content: 'Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid.'});
   };
