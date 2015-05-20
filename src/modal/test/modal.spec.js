@@ -197,7 +197,7 @@ describe('modal', function() {
       expect(sandboxEl.children('.modal').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
       elmScope.$show();
-      $animate.triggerCallbacks();
+      try { $animate.triggerCallbacks(); } catch(err) {}
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(1);
       expect(elmScope.$isShown).toBeTruthy();
@@ -222,7 +222,7 @@ describe('modal', function() {
       expect(sandboxEl.children('.modal').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
       elmScope.$hide();
-      $animate.triggerCallbacks();
+      try { $animate.triggerCallbacks(); } catch(err) {}
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
@@ -232,7 +232,7 @@ describe('modal', function() {
       expect(sandboxEl.children('.modal').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
       elmScope.$show();
-      $animate.triggerCallbacks();
+      try { $animate.triggerCallbacks(); } catch(err) {}
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(1);
       expect(elmScope.$isShown).toBeTruthy();
@@ -294,10 +294,10 @@ describe('modal', function() {
       });
       var myModal = $modal(templates['default'].scope.modal);
       scope.$digest();
-      $animate.triggerCallbacks();
+      try { $animate.triggerCallbacks(); } catch(err) {}
     });
 
-    it('should can cancel hide on hide.before event', function() {
+    it('should be able to cancel hide on hide.before event', function() {
       $rootScope.$on('modal.hide.before', function(e) {
         e.preventDefault();
       });
