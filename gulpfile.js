@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var config = require('ng-factory').use(gulp, {
+  cdn: true,
   src: {
     docsViews: '*/docs/{,*/}*.tpl.{html,jade}'
   },
