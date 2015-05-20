@@ -103,6 +103,17 @@ gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', function karmaT
     process.exit(code);
   });
 }));
+gulp.task('karma:travis~1.4.0', gulp.series('ng:test/templates', function karmaTravis140() {
+  karma.start({
+    configFile: path.join(__dirname, 'test/~1.4.0/karma.conf.js'),
+    browsers: ['PhantomJS'],
+    reporters: ['dots'],
+    singleRun: true
+  }, function(code) {
+    gutil.log('Karma has exited with ' + code);
+    process.exit(code);
+  });
+}));
 
 gulp.task('test', gulp.series('ng:test/templates', gulp.parallel('jshint', 'karma:unit')));
 gulp.task('test:timezone', function() {
