@@ -227,10 +227,13 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           $tooltip.$applyPlacement();
 
           // Once placed, animate it.
-          // Support v1.3+ $animate
-          // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
-          var promise = $animate.enter(tipElement, parent, after, enterAnimateCallback);
-          if(promise && promise.then) promise.then(enterAnimateCallback);
+          // Support v1.2+ $animate
+          // https://github.com/angular/angular.js/issues/11713
+          if(angular.version.minor <= 2) {
+            $animate.enter(tipElement, parent, after, enterAnimateCallback);
+          } else {
+            $animate.enter(tipElement, parent, after).then(enterAnimateCallback);
+          }
           safeDigest(scope);
 
           $$rAF(function () {
@@ -285,10 +288,13 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           // in leaveAnimateCallback
           _tipToHide = tipElement;
 
-          // Support v1.3+ $animate
-          // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
-          var promise = $animate.leave(tipElement, leaveAnimateCallback);
-          if(promise && promise.then) promise.then(leaveAnimateCallback);
+          // Support v1.2+ $animate
+          // https://github.com/angular/angular.js/issues/11713
+          if(angular.version.minor <= 2) {
+            $animate.leave(tipElement, leaveAnimateCallback);
+          } else {
+            $animate.leave(tipElement).then(leaveAnimateCallback);
+          }
 
           $tooltip.$isShown = scope.$isShown = false;
           safeDigest(scope);

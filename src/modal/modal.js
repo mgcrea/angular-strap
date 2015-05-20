@@ -161,10 +161,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(options.backdrop) {
             $animate.enter(backdropElement, bodyElement, null);
           }
-          // Support v1.3+ $animate
-          // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
-          var promise = $animate.enter(modalElement, parent, after, enterAnimateCallback);
-          if(promise && promise.then) promise.then(enterAnimateCallback);
+
+          // Support v1.2+ $animate
+          // https://github.com/angular/angular.js/issues/11713
+          if(angular.version.minor <= 2) {
+            $animate.enter(modalElement, parent, after, enterAnimateCallback);
+          } else {
+            $animate.enter(modalElement, parent, after).then(enterAnimateCallback);
+          }
 
           $modal.$isShown = scope.$isShown = true;
           safeDigest(scope);
@@ -201,10 +205,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           if(scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
             return;
           }
-          var promise = $animate.leave(modalElement, leaveAnimateCallback);
-          // Support v1.3+ $animate
-          // https://github.com/angular/angular.js/commit/bf0f5502b1bbfddc5cdd2f138efd9188b8c652a9
-          if(promise && promise.then) promise.then(leaveAnimateCallback);
+
+          // Support v1.2+ $animate
+          // https://github.com/angular/angular.js/issues/11713
+          if(angular.version.minor <= 2) {
+            $animate.leave(modalElement, leaveAnimateCallback);
+          } else {
+            $animate.leave(modalElement).then(leaveAnimateCallback);
+          }
 
           if(options.backdrop) {
             $animate.leave(backdropElement);
