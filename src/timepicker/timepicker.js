@@ -352,9 +352,9 @@ angular.module('mgcrea.ngStrap.timepicker', [
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
           $timeout(function() {
-            $timepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
+            $timepicker.$element && $timepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
             if(options.keyboard) {
-              element.on('keydown', $timepicker.$onKeyDown);
+              element && element.on('keydown', $timepicker.$onKeyDown);
             }
           }, 0, false);
         };
@@ -362,9 +362,9 @@ angular.module('mgcrea.ngStrap.timepicker', [
         var _hide = $timepicker.hide;
         $timepicker.hide = function(blur) {
           if(!$timepicker.$isShown) return;
-          $timepicker.$element.off(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
+          $timepicker.$element && $timepicker.$element.off(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
           if(options.keyboard) {
-            element.off('keydown', $timepicker.$onKeyDown);
+            element && element.off('keydown', $timepicker.$onKeyDown);
           }
           _hide(blur);
         };

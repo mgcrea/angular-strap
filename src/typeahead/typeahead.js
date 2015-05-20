@@ -148,18 +148,18 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
           $timeout(function() {
-            $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
+            $typeahead.$element && $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
             if(options.keyboard) {
-              element.on('keydown', $typeahead.$onKeyDown);
+              element && element.on('keydown', $typeahead.$onKeyDown);
             }
           }, 0, false);
         };
 
         var hide = $typeahead.hide;
         $typeahead.hide = function() {
-          $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
+          $typeahead.$element && $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
           if(options.keyboard) {
-            element.off('keydown', $typeahead.$onKeyDown);
+            element && element.off('keydown', $typeahead.$onKeyDown);
           }
           if(!options.autoSelect)
             $typeahead.activate(-1);
