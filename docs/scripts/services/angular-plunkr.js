@@ -18,9 +18,9 @@ angular.module('mgcrea.ngPlunkr', ['mgcrea.ngStrap.helpers.debounce'])
     // styles
     '    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.3.0/css/font-awesome.css">\n' +
     '    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.4/css/bootstrap.min.css">\n' +
-    '    <link rel="stylesheet" href="style.css" />\n' +
     '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libs.min.css">\n' +
     '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/docs.min.css">\n' +
+    '    <link rel="stylesheet" href="style.css" />\n' +
 
     // scripts
     '    <script src="//cdn.jsdelivr.net/angularjs/' + ngVersion + '/angular.min.js" data-semver="' + ngVersion + '"></script>\n' +
