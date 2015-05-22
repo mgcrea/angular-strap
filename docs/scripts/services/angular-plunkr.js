@@ -4,7 +4,7 @@ angular.module('mgcrea.ngPlunkr', ['mgcrea.ngStrap.helpers.debounce'])
 
 .run(function($templateCache, version) {
 
-  var ngVersion = '1.3.8';
+  var ngVersion = '1.3.15';
 
   var templateHtml = '' +
     '<!DOCTYPE html>\n' +
@@ -14,23 +14,23 @@ angular.module('mgcrea.ngPlunkr', ['mgcrea.ngStrap.helpers.debounce'])
     '    <meta charset="utf-8" />\n' +
     '    <title>AngularJS Plunker</title>\n' +
     '    <script>document.write(\'<base href="\' + document.location + \'" />\');</script>\n' +
+
+    // styles
+    '    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.3.0/css/font-awesome.css">\n' +
+    '    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.4/css/bootstrap.min.css">\n' +
     '    <link rel="stylesheet" href="style.css" />\n' +
+    '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libs.min.css">\n' +
+    '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/docs.min.css">\n' +
 
-    '    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">\n' +
-    '    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">\n' +
-    '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/static/styles/angular-motion.min.css">\n' +
-    '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css">\n' +
-    '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libraries.min.css">\n' +
-    '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/main.min.css">\n' +
-
-    '    <script src="//code.angularjs.org/' + ngVersion + '/angular.min.js" data-semver="' + ngVersion + '"></script>\n' +
-    '    <script src="//code.angularjs.org/' + ngVersion + '/angular-animate.min.js" data-semver="' + ngVersion + '"></script>\n' +
-    '    <script src="//code.angularjs.org/' + ngVersion + '/angular-sanitize.min.js" data-semver="' + ngVersion + '"></script>\n' +
+    // scripts
+    '    <script src="//cdn.jsdelivr.net/angularjs/' + ngVersion + '/angular.min.js" data-semver="' + ngVersion + '"></script>\n' +
+    '    <script src="//cdn.jsdelivr.net/angularjs/' + ngVersion + '/angular-animate.min.js" data-semver="' + ngVersion + '"></script>\n' +
+    '    <script src="//cdn.jsdelivr.net/angularjs/' + ngVersion + '/angular-sanitize.min.js" data-semver="' + ngVersion + '"></script>\n' +
     '    <script src="//mgcrea.github.io/angular-strap/dist/angular-strap.js" data-semver="' + version + '"></script>\n' +
     '    <script src="//mgcrea.github.io/angular-strap/dist/angular-strap.tpl.js" data-semver="' + version + '"></script>\n' +
+    '    <script src="//mgcrea.github.io/angular-strap/docs/angular-strap.docs.tpl.js" data-semver="' + version + '"></script>\n' +
     '    <script src="app.js"></script>\n' +
-    '    <script src="//mgcrea.github.io/angular-strap/scripts/docs.tpl.js" data-semver="' + version + '"></script>\n' +
-    '    <script src="//mgcrea.github.io/angular-strap/scripts/demo.tpl.js" data-semver="' + version + '"></script>\n' +
+
     '  </head>\n' +
     '\n' +
     '  <body ng-controller="MainCtrl">\n' +
