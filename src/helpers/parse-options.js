@@ -8,7 +8,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
       regexp: /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/
     };
 
-    this.$get = function($parse, $q) {
+    this.$get = function($parse, $q, $filter) {
 
       function ParseOptionsFactory(attr, config) {
 
@@ -28,12 +28,13 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
           keyName = match[5],
           groupByFn = $parse(match[3] || ''),
           valueFn = $parse(match[2] ? match[1] : valueName),
-          valuesFn = $parse(match[7]);
+          valuesFn = $parse(match[7].split('|')[0]);
         };
 
         $parseOptions.valuesFn = function(scope, controller) {
           return $q.when(valuesFn(scope, controller))
           .then(function(values) {
+            values = $filter('filter')(values, controller.$viewValue);
             $parseOptions.$values = values ? parseValues(values, scope) : {};
             return $parseOptions.$values;
           });
