@@ -13,16 +13,16 @@
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="navbar/docs/navbar.demo.html" data-content-js-url="navbar/docs/navbar.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip></a></h3>
   <pre class="bs-example-scope">$location.path() = "{{$location.path()}}";</pre>
   <div class="bs-example" append-source>
-    <div class="navbar navbar-default" role="navigation" bs-navbar>
+    <nav class="navbar navbar-default" role="navigation" bs-navbar>
       <div class="navbar-header">
         <a class="navbar-brand" href="#">Brand</a>
       </div>
       <ul class="nav navbar-nav">
-        <li data-match-route="/?(navbar)?"><a href="#/">Home</a></li>
+        <li data-match-route="/$"><a href="#/">Home</a></li>
         <li data-match-route="/page-one"><a href="#/page-one">Page One</a></li>
         <li data-match-route="/page-two.*"><a href="#/page-two/sub-a">Page Two</a></li>
       </ul>
-    </div>
+    </nav>
   </div>
 
   <h2 id="navbars-usage">Usage</h2>

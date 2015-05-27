@@ -3,7 +3,6 @@
 // @import "angular-motion/main";
 // @import "bootstrap-additions/bootstrap-additions";
 @import "main/animations";
-@import "docs/docs";
 // @import "dev/animations";
 
 
@@ -33,6 +32,7 @@
 // @brand-primary: #E74C3C; // ALIZARIN
 // @brand-primary: #C0392B; // POMEGRANATE
 @docs-color: @brand-primary;
+@import "docs/docs";
 
 // .am-fade {
 
@@ -105,6 +105,11 @@ body {
 
 .btn[bs-select] {
   outline: none;
+}
+
+.modal-backdrop {
+  z-index: 1040;
+  bottom: 0px;
 }
 
 .datepicker.dropdown-menu {
@@ -243,6 +248,9 @@ body {
 }
 
 input[type="checkbox"] {
+  cursor: pointer;
+}
+.panel-heading[role="tab"] .panel-title a {
   cursor: pointer;
 }
 

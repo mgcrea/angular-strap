@@ -26,6 +26,12 @@ describe('affix', function () {
                '  <div style="width: 100px; height: 100px; background: red; margin-top:20px;" bs-affix data-offset-bottom="+250"></div>' +
                '  <div style="height: 600px; background: blue;"></div>' +
                '</div>'
+    },
+    'noAddedInlineStyles': {
+      element: '<div class="container" style="height: 200px;overflow: auto;" bs-affix-target>' +
+               '  <div style="height: 100px; background: red; margin-top:20px;" bs-affix data-inline-styles="false" data-offset-bottom="+250"></div>' +
+               '  <div style="height: 600px; background: blue;"></div>' +
+               '</div>'
     }
   };
 
@@ -110,6 +116,31 @@ describe('affix', function () {
       var affix = scrollTarget.find('[bs-affix]');
 
       expect(affix.css('width')).not.toBe('');
+    });
+  });
+
+  describe('inline styles', function() {
+
+    beforeEach(module('ngSanitize'));
+    beforeEach(module('mgcrea.ngStrap.affix'));
+
+    beforeEach(inject(sandboxSetup));
+
+    it('should not have inline styling applied if inline-styles=false', function(done) {
+      var scrollTarget = compileDirective('noAddedInlineStyles');
+      var affix = scrollTarget.find('[bs-affix]');
+
+      expect(affix.css('position')).toBe('static');
+      expect(affix.css('top')).toBe('auto');
+
+      scrollTarget.scrollTop(50);
+
+      setTimeout(function() {
+        // styles are the same even after scrolling
+        expect(affix.css('position')).toBe('static');
+        expect(affix.css('top')).toBe('auto');
+        done();
+      }, 0);
     });
   });
 

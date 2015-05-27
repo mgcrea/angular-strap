@@ -23,12 +23,12 @@ $scope.icons = "{{icons}}";
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
     <label>Single select:&nbsp;</label>
-    <button type="button" class="btn btn-default" ng-model="selectedIcon" data-html="1" ng-options="icon.value as icon.label for icon in icons" bs-select>
+    <button type="button" class="btn btn-default" ng-model="selectedIcon" data-html="1" bs-options="icon.value as icon.label for icon in icons" bs-select>
       Action <span class="caret"></span>
     </button>
     <hr>
     <label>Multiple select:&nbsp;</label>
-    <button type="button" class="btn btn-default" ng-model="selectedIcons" data-html="1" data-multiple="1" data-animation="am-flip-x" ng-options="icon.value as icon.label for icon in icons" bs-select>
+    <button type="button" class="btn btn-default" ng-model="selectedIcons" data-html="1" data-multiple="1" data-animation="am-flip-x" bs-options="icon.value as icon.label for icon in icons" bs-select>
       Action <span class="caret"></span>
     </button>
   </div>
@@ -36,6 +36,11 @@ $scope.icons = "{{icons}}";
 
   <h2 id="selects-usage">Usage</h2>
   <p>Append a <code>bs-select</code>attribute to any element to enable the directive.</p>
+  <p>Available items are specified using the <code>bs-options</code> attribute. This attribute uses AngularJS <a href="https://docs.angularjs.org/api/ng/directive/ngOptions" target="_blank">ngOptions</a> array data source syntax.</p>
+  <div class="callout callout-danger">
+    <h4>Breaking Change</h4>
+    <p>If you are using AngularStrap prior to version 2.2.0, please use <code>ng-options</code> instead of <code>bs-options</code>.</p>
+  </div>
   <div class="callout callout-info">
     <h4>The module exposes a <code>$select</code>service</h4>
     <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>

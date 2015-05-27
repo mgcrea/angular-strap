@@ -38,7 +38,8 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
       <!-- Custom example -->
       <div class="form-group" ng-class="{'has-error': timepickerForm.time2.$invalid}">
         <label class="control-label"><i class="fa fa-clock-o"></i> Time <small>(as number)</small></label>
-        <input type="text" class="form-control" size="5" ng-model="selectedTimeAsNumber" data-time-format="HH:mm" data-time-type="number" data-min-time="10:00" data-max-time="13:30" data-autoclose="1" name="time2" bs-timepicker>
+        <input type="text" class="form-control" size="8" ng-model="selectedTimeAsNumber" data-time-format="HH:mm:ss"
+               data-time-type="number" data-min-time="10:00:00" data-max-time="13:30:00" data-autoclose="1" name="time2" bs-timepicker>
       </div>
       <hr>
 
@@ -59,7 +60,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           <input type="text" size="10" class="form-control" ng-model="sharedDate" data-autoclose="1" placeholder="Date" bs-datepicker>
         </div>
         <div class="form-group">
-          <input type="text" size="8" class="form-control" ng-model="sharedDate" data-autoclose="1" placeholder="Time" bs-timepicker>
+          <input type="text" size="8" class="form-control" ng-model="sharedDate" data-time-format="h:mm:ss a" data-autoclose="1" placeholder="Time" bs-timepicker>
         </div>
       </div>
 
@@ -233,6 +234,22 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           <td>5</td>
           <td>
             <p>Default step for minutes.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>secondStep</td>
+          <td>number</td>
+          <td>5</td>
+          <td>
+            <p>Default step for seconds.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>roundDisplay</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether the picker should round the minute values displayed when no initial time is specified. The rounding is made by dividing time in minuteStep intervals and flooring the current time to the nearest.</p>
           </td>
         </tr>
         <tr>

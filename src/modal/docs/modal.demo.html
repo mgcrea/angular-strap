@@ -21,7 +21,7 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-animation="am-fade-and-slide-top" data-template="modal/docs/modal.tpl.demo.html" bs-modal="modal">Custom Modal
+    <button type="button" class="btn btn-lg btn-danger" data-animation="am-fade-and-slide-top" data-template="modal/docs/modal.demo.tpl.html" bs-modal="modal">Custom Modal
       <br />
       <small>(using data-template)</small>
     </button>
@@ -67,7 +67,7 @@
             var myModal = $modal({title: 'My Title', content: 'My Content', show: true});
 
             // Pre-fetch an external template populated with a custom scope
-            var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.tpl.demo.html', show: false});
+            var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.demo.tpl.html', show: false});
             // Show when some event occurs (use $promise property to ensure the template has been loaded)
             $scope.showModal = function() {
               myOtherModal.$promise.then(myOtherModal.show);

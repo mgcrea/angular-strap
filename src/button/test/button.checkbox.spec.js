@@ -47,6 +47,12 @@ describe('bs-checkbox', function () {
     'checkbox-group': {
       element: '<div class="btn-group" ng-model="checkbox.value" bs-checkbox-group><label class="btn"><input type="checkbox" value="left">Left</label><label class="btn"><input type="checkbox" value="right">Right</label></div>'
     },
+    'checkbox-with-ngrepeat': {
+      scope: {items: [{value: 'left', label: 'Left'}, {value: 'right', label: 'Right'}]},
+      element: '<div class="btn-group">' +
+               '  <label class="btn" ng-repeat="item in items"><input type="checkbox" ng-model="checkbox.value[item.value]" value="{{ item.value }}" bs-checkbox>{{ item.label }}</label>' +
+               '</div>'
+    }
   };
 
   function compileDirective(template, locals) {
@@ -130,7 +136,7 @@ describe('bs-checkbox', function () {
       expect(element.children('input').is(':checked')).toBeTruthy();
     });*/
 
-    it('should correctly support button.btn markup', function () {
+    it('with button.btn markup', function () {
       var element = compileDirective('checkbox-button-markup', {checkbox: {value: 0}});
       expect(element).not.toHaveClass('active');
       scope.checkbox.value = 1;
@@ -139,13 +145,19 @@ describe('bs-checkbox', function () {
       expect(element).toHaveClass('active');
     });
 
-    it('should correctly support div.btn markup', function () {
+    it('with div.btn markup', function () {
       var element = compileDirective('checkbox-div-markup', {checkbox: {value: 'yes'}});
       expect(element).toHaveClass('active');
       scope.checkbox.value = 'no';
       scope.$digest();
       $$rAF.flush();
       expect(element).not.toHaveClass('active');
+    });
+
+    it('with ngrepeat markup', function () {
+      var element = compileDirective('checkbox-with-ngrepeat', {checkbox: {value: {left: false, right: true}}});
+      var childInputs = element.find('input');
+      expect(childInputs.eq(1).parent('label')).toHaveClass('active');
     });
 
   });

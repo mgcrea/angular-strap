@@ -37,9 +37,15 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" title="{{popover.title}}" data-content="{{popover.content}}" data-template="popover/docs/popover.tpl.demo.html" data-animation="am-flip-x" data-auto-close="1" bs-popover>Custom Popover
+    <button type="button" class="btn btn-lg btn-danger" title="{{popover.title}}" data-content="{{popover.content}}" data-template="popover/docs/popover.demo.tpl.html" data-animation="am-flip-x" data-auto-close="1" bs-popover>Custom Popover
       <br />
       <small>(using data-template)</small>
+    </button>
+
+    <!-- A popover can also be triggered programmatically using the $popover service -->
+    <button type="button" id="popover-as-service" class="btn btn-lg btn-primary" title="{{popover.title}}" ng-click="togglePopover()">Click to toggle popover
+      <br />
+      <small>(using $popover service)</small>
     </button>
   </div>
 
@@ -51,7 +57,7 @@
     <div class="highlight">
       <pre>
         <code class="javascript" highlight-block>
-          var myPopover = $popover(element, {title: 'My Title', content: 'My Content'});
+          var myPopover = $popover(element, {title: 'My Title', content: 'My Content', trigger: 'manual'});
         </code>
       </pre>
     </div>
@@ -173,6 +179,16 @@
           <td>''</td>
           <td>
             The popover instance id for usage in event handlers.
+          </td>
+        </tr>
+        <tr>
+          <td>viewport</td>
+          <td>string | object</td>
+          <td>{ selector: 'body', padding: 0 }</td>
+          <td>
+            <p>
+              Keeps the popover within the bounds of this element. Example: viewport: '#viewport' or { "selector": "#viewport", "padding": 0 }
+            </p>
           </td>
         </tr>
       </tbody>

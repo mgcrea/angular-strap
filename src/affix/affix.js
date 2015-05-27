@@ -5,7 +5,8 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
   .provider('$affix', function() {
 
     var defaults = this.defaults = {
-      offsetTop: 'auto'
+      offsetTop: 'auto',
+      inlineStyles: true
     };
 
     this.$get = function($window, debounce, dimensions) {
@@ -98,11 +99,13 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
           if(affix === 'top') {
             unpin = null;
-            element.css('position', (options.offsetParent) ? '' : 'relative');
             if(setWidth) {
               element.css('width', '');
             }
-            element.css('top', '');
+            if (options.inlineStyles) {
+              element.css('position', (options.offsetParent) ? '' : 'relative');
+              element.css('top', '');
+            }
           } else if(affix === 'bottom') {
             if (options.offsetUnpin) {
               unpin = -(options.offsetUnpin * 1);
@@ -115,15 +118,19 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
             if(setWidth) {
               element.css('width', '');
             }
-            element.css('position', (options.offsetParent) ? '' : 'relative');
-            element.css('top', (options.offsetParent) ? '' : ((bodyEl[0].offsetHeight - offsetBottom - elementHeight - initialOffsetTop) + 'px'));
+            if (options.inlineStyles) {
+              element.css('position', (options.offsetParent) ? '' : 'relative');
+              element.css('top', (options.offsetParent) ? '' : ((bodyEl[0].offsetHeight - offsetBottom - elementHeight - initialOffsetTop) + 'px'));
+            }
           } else { // affix === 'middle'
             unpin = null;
             if(setWidth) {
               element.css('width', element[0].offsetWidth + 'px');
             }
-            element.css('position', 'fixed');
-            element.css('top', initialAffixTop + 'px');
+            if (options.inlineStyles) {
+              element.css('position', 'fixed');
+              element.css('top', initialAffixTop + 'px');
+            }
           }
 
         };
@@ -137,7 +144,9 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
         $affix.$parseOffsets = function() {
           var initialPosition = element.css('position');
           // Reset position to calculate correct offsetTop
-          element.css('position', (options.offsetParent) ? '' : 'relative');
+          if (options.inlineStyles){
+            element.css('position', (options.offsetParent) ? '' : 'relative');
+          }
 
           if(options.offsetTop) {
             if(options.offsetTop === 'auto') {
@@ -168,7 +177,9 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
           }
 
           // Bring back the element's position after calculations
-          element.css('position', initialPosition);
+          if (options.inlineStyles){
+            element.css('position', initialPosition);
+          }
         };
 
         // Private methods
@@ -216,9 +227,14 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
       require: '^?bsAffixTarget',
       link: function postLink(scope, element, attr, affixTarget) {
 
-        var options = {scope: scope, offsetTop: 'auto', target: affixTarget ? affixTarget.$element : angular.element($window)};
-        angular.forEach(['offsetTop', 'offsetBottom', 'offsetParent', 'offsetUnpin'], function(key) {
-          if(angular.isDefined(attr[key])) options[key] = attr[key];
+        var options = {scope: scope, target: affixTarget ? affixTarget.$element : angular.element($window)};
+        angular.forEach(['offsetTop', 'offsetBottom', 'offsetParent', 'offsetUnpin', 'inlineStyles'], function(key) {
+          if(angular.isDefined(attr[key])) {
+            var option = attr[key];
+            if (/true/i.test(option)) option = true;
+            if (/false/i.test(option)) option = false;
+            options[key] = option;
+          }
         });
 
         var affix = $affix(element, options);

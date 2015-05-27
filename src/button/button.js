@@ -142,7 +142,11 @@ angular.module('mgcrea.ngStrap.button', [])
         var isInput = element[0].nodeName === 'INPUT';
         var activeElement = isInput ? element.parent() : element;
 
-        var value = constantValueRegExp.test(attr.value) ? scope.$eval(attr.value) : attr.value;
+        var value;
+        attr.$observe('value', function(v) {
+          value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
+          controller.$render();
+        });
 
         // model -> view
         controller.$render = function () {

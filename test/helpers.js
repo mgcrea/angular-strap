@@ -46,3 +46,16 @@ function countScopes(s, count) {
   }
   return ++count;
 }
+
+function d() {
+  var args = Array.prototype.slice.call(arguments);
+  var time = new Date().toISOString();
+  console.log(time + ' - ' + 'break' + ': ' + console.log.call(console, args.length === 1 ? args[0] : args, false, 10, true));
+}
+function dd() {
+  d.apply(null, arguments);
+  var stack = new Error().stack.split('\n');
+  stack.splice(1, 1);
+  console.log(stack.join('\n'));
+  process.exit(1);
+}

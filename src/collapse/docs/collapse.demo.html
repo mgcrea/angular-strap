@@ -15,16 +15,16 @@ $scope.panels.activePanel = {{ panels.activePanel }};
   </pre>
   <div class="bs-example" append-source>
     <!-- ngModel is optional -->
-    <div class="panel-group" ng-model="panels.activePanel" bs-collapse>
+    <div class="panel-group" ng-model="panels.activePanel" role="tablist" aria-multiselectable="true" bs-collapse>
       <div class="panel panel-default" ng-repeat="panel in panels">
-        <div class="panel-heading">
+        <div class="panel-heading" role="tab">
           <h4 class="panel-title">
             <a bs-collapse-toggle>
               {{ panel.title }}
             </a>
           </h4>
         </div>
-        <div class="panel-collapse" bs-collapse-target>
+        <div class="panel-collapse" role="tabpanel" bs-collapse-target>
           <div class="panel-body">
             {{ panel.body }}
           </div>
@@ -48,16 +48,16 @@ $scope.panels.activePanel = {{ panels.activePanel }};
   </pre>
   <div class="bs-example" append-source>
     <!-- ngModel is optional -->
-    <div class="panel-group" ng-model="multiplePanels.activePanels" data-allow-multiple="true" bs-collapse>
+    <div class="panel-group" ng-model="multiplePanels.activePanels" data-allow-multiple="true" role="tablist" aria-multiselectable="true" bs-collapse>
       <div class="panel panel-default" ng-repeat="panel in panels">
-        <div class="panel-heading">
+        <div class="panel-heading" role="tab">
           <h4 class="panel-title">
             <a bs-collapse-toggle>
               {{ panel.title }}
             </a>
           </h4>
         </div>
-        <div class="panel-collapse" bs-collapse-target>
+        <div class="panel-collapse" role="tabpanel" bs-collapse-target>
           <div class="panel-body">
             {{ panel.body }}
           </div>
@@ -126,7 +126,7 @@ $scope.panels.activePanel = {{ panels.activePanel }};
           <td>boolean</td>
           <td>false</td>
           <td>
-            <p>Disallow double-click toggling behavior</p>
+            <p>Prevents elements from being collapsed by clicking its toggle element, i.e., a panel can only be closed by opening another panel.</p>
           </td>
         </tr>
         <tr>

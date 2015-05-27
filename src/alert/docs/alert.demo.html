@@ -32,7 +32,7 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="am-fade-and-slide-top" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
+    <button class="btn btn-lg btn-danger" data-template="alert/docs/alert.demo.tpl.html" data-placement="top" data-duration="3" data-animation="am-fade-and-slide-top" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
       <br />
       <small>(using data-template)</small>
     </button>
@@ -105,12 +105,16 @@
           <td>'info'</td>
           <td>default content value if <code>data-type</code>attribute isn't present</td>
         </tr>
+<!--
+Removing keyboard from the docs. Our template doesn't have tabindex for focus stealing issues, keyboard won't work
+so remove the option then. Just looks bad to have an option that doesn't work
         <tr>
           <td>keyboard</td>
           <td>boolean</td>
           <td>true</td>
           <td>Closes the alert when escape key is pressed</td>
         </tr>
+-->
         <tr>
           <td>show</td>
           <td>boolean</td>

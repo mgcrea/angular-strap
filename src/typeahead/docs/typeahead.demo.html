@@ -28,17 +28,17 @@ $scope.selectedAddress = "{{selectedAddress}}";
     <form class="form-inline" role="form">
       <div class="form-group">
         <label><i class="fa fa-globe"></i> State</label>
-        <input type="text" class="form-control" ng-model="selectedState" ng-options="state for state in states" placeholder="Enter state" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedState" bs-options="state for state in states" placeholder="Enter state" bs-typeahead>
       </div>
       <div class="form-group">
         <label>Icon</label>
-        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-animation="am-flip-x" ng-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-auto-select="true" data-animation="am-flip-x" bs-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
       </div>
       <hr>
       <!-- Using an async data provider -->
       <div class="form-group">
         <label><i class="fa fa-home"></i> Address <small>(async via maps.googleapis.com)</small></label>
-        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" ng-options="address.formatted_address as address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" bs-options="address.formatted_address as address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead>
       </div>
     </form>
   </div>
@@ -46,6 +46,11 @@ $scope.selectedAddress = "{{selectedAddress}}";
 
   <h2 id="typeaheads-usage">Usage</h2>
   <p>Append a <code>bs-typeahead</code>attribute to any element to enable the directive.</p>
+  <p>Available items are specified using the <code>bs-options</code> attribute. This attribute uses AngularJS <a href="https://docs.angularjs.org/api/ng/directive/ngOptions" target="_blank">ngOptions</a> array data source syntax.</p>
+  <div class="callout callout-danger">
+    <h4>Breaking Change</h4>
+    <p>If you are using AngularStrap prior to version 2.2.0, please use <code>ng-options</code> instead of <code>bs-options</code>.</p>
+  </div>
   <div class="callout callout-info">
     <h4>The module exposes a <code>$typeahead</code>service</h4>
     <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
@@ -149,6 +154,14 @@ $scope.selectedAddress = "{{selectedAddress}}";
           </td>
         </tr>
         <tr>
+          <td>autoSelect</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether or not the first match will automatically be selected upon typing.</p>
+          </td>
+        </tr>
+        <tr>
           <td>comparator</td>
           <td>string</td>
           <td>''</td>
@@ -162,6 +175,14 @@ $scope.selectedAddress = "{{selectedAddress}}";
           <td>''</td>
           <td>
             The typeahead instance id for usage in event handlers.
+          </td>
+        </tr>
+        <tr>
+          <td>watchOptions</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            Whether or not the suggestions collection should be watched for changes.
           </td>
         </tr>
       </tbody>

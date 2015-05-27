@@ -11,12 +11,20 @@
 
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="tab/docs/tab.demo.html" data-content-js-url="tab/docs/tab.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
   <pre class="bs-example-scope">$scope.tabs = {{tabs | json}};
-$scope.tabs.activeTab = {{ tabs.activeTab }};
+$scope.tabs.activeTab = "{{ tabs.activeTab }}";
   </pre>
   <div class="bs-example" append-source>
+    <div class="btn btn-default" ng-click="toggleThirdTab()">
+      {{ tabs[2].disabled ? 'Enable' : 'Disable' }} third tab
+    </div>
+    <div class="btn btn-default" ng-click="tabs.activeTab='Profile'">
+      Select "Profile" tab
+    </div>
+    <hr />
     <!-- bsActivePane is optional -->
     <div bs-active-pane="tabs.activeTab" bs-tabs>
-      <div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>
+      <div ng-repeat="tab in tabs" title="{{ tab.title }}" name="{{ tab.title }}" disabled="{{ tab.disabled }}" ng-bind="tab.content" bs-pane>
+      </div>
     </div>
   </div>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
@@ -87,8 +95,9 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
 
   <h3>Options</h3>
   <p>Options can be passed via data attributes or as an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object on
-    <code>bs-tabs</code>. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <code>bs-tabs</code> or <code>bs-pane</code>. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
   <div class="table-responsive">
+    <h4>bs-tabs options</h4>
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
@@ -103,7 +112,7 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
           <td>animation</td>
           <td>string</td>
           <td>am-fade</td>
-          <td>apply a CSS animation to tab panes with <code>ngAnimate</code></td>
+          <td>Apply a CSS animation to tab panes with <code>ngAnimate</code></td>
         </tr>
         <tr>
           <td>template</td>
@@ -127,6 +136,35 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
           <td>active</td>
           <td>
             <p>Class to be applied to the animated element</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>bs-pane options</h4>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">Name</th>
+          <th style="width: 100px;">type</th>
+          <th style="width: 50px;">default</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>disabled</td>
+          <td>string</td>
+          <td>false</td>
+          <td>
+            <p>Disable pane</p>
+          </td>
+        </tr>
+        <tr>
+          <td>name</td>
+          <td>string</td>
+          <td>''</td>
+          <td>
+            <p>Tab name. If provided, it will be used for `bsActivePane` instead of number</p>
           </td>
         </tr>
       </tbody>
@@ -165,7 +203,7 @@ $scope.tabs.activeTab = {{ tabs.activeTab }};
           <td>bsActivePane</td>
           <td>number</td>
           <td>
-            <p>Binds to the active tab pane index (zero based).</p>
+            <p>Info about current selected tab. If it has the name, it will be here, otherwise – active tab pane index (zero based).</p>
             <p>You can use it to set the active tab pane from code or to get the currently active tab pane.</p>
           </td>
         </tr>
