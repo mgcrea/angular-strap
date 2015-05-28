@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.3 - 2015-05-20
+ * @version v2.2.4 - 2015-05-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -313,18 +313,18 @@ angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser
       $timepicker.show = function() {
         _show();
         $timeout(function() {
-          $timepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
+          $timepicker.$element && $timepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
           if (options.keyboard) {
-            element.on('keydown', $timepicker.$onKeyDown);
+            element && element.on('keydown', $timepicker.$onKeyDown);
           }
         }, 0, false);
       };
       var _hide = $timepicker.hide;
       $timepicker.hide = function(blur) {
         if (!$timepicker.$isShown) return;
-        $timepicker.$element.off(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
+        $timepicker.$element && $timepicker.$element.off(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
         if (options.keyboard) {
-          element.off('keydown', $timepicker.$onKeyDown);
+          element && element.off('keydown', $timepicker.$onKeyDown);
         }
         _hide(blur);
       };

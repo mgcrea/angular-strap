@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Bootstrap",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "keywords": [
     "angular",
     "bootstrap"
@@ -32,14 +32,14 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "del": "^1.1.1",
-    "factory-angular-channels": "^0.7.1",
+    "del": "^1.2.0",
+    "factory-angular-channels": "^0.7.2",
     "gulp": "gulpjs/gulp#4.0",
-    "gulp-jshint": "^1.10.0",
+    "gulp-jshint": "^1.11.0",
     "gulp-util": "^3.0.4",
     "jasmine-core": "^2.3.4",
-    "jshint-stylish": "^1.0.2",
-    "karma": "^0.12.31",
+    "jshint-stylish": "^2.0.0",
+    "karma": "^0.12.33",
     "karma-chrome-launcher": "^0.1.12",
     "karma-coverage": "^0.3.1",
     "karma-jasmine": "^0.3.5",

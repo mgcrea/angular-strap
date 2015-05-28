@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.3 - 2015-05-20
+ * @version v2.2.4 - 2015-05-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -133,8 +133,11 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
         if (options.backdrop) {
           $animate.enter(backdropElement, bodyElement, null);
         }
-        var promise = $animate.enter(modalElement, parent, after, enterAnimateCallback);
-        if (promise && promise.then) promise.then(enterAnimateCallback);
+        if (angular.version.minor <= 2) {
+          $animate.enter(modalElement, parent, after, enterAnimateCallback);
+        } else {
+          $animate.enter(modalElement, parent, after).then(enterAnimateCallback);
+        }
         $modal.$isShown = scope.$isShown = true;
         safeDigest(scope);
         var el = modalElement[0];
@@ -162,8 +165,11 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
         if (scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
           return;
         }
-        var promise = $animate.leave(modalElement, leaveAnimateCallback);
-        if (promise && promise.then) promise.then(leaveAnimateCallback);
+        if (angular.version.minor <= 2) {
+          $animate.leave(modalElement, leaveAnimateCallback);
+        } else {
+          $animate.leave(modalElement).then(leaveAnimateCallback);
+        }
         if (options.backdrop) {
           $animate.leave(backdropElement);
         }

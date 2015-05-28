@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.3 - 2015-05-20
+ * @version v2.2.4 - 2015-05-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -87,7 +87,9 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
       $select.activate = function(index) {
         if (options.multiple) {
           $select.$isActive(index) ? scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1) : scope.$activeIndex.push(index);
-          if (options.sort) scope.$activeIndex.sort();
+          if (options.sort) scope.$activeIndex.sort(function(a, b) {
+            return a - b;
+          });
         } else {
           scope.$activeIndex = index;
         }

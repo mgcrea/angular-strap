@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.3 - 2015-05-20
+ * @version v2.2.4 - 2015-05-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -167,8 +167,11 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.helpers.dimensions' ]
         $tooltip.$isShown = scope.$isShown = true;
         safeDigest(scope);
         $tooltip.$applyPlacement();
-        var promise = $animate.enter(tipElement, parent, after, enterAnimateCallback);
-        if (promise && promise.then) promise.then(enterAnimateCallback);
+        if (angular.version.minor <= 2) {
+          $animate.enter(tipElement, parent, after, enterAnimateCallback);
+        } else {
+          $animate.enter(tipElement, parent, after).then(enterAnimateCallback);
+        }
         safeDigest(scope);
         $$rAF(function() {
           if (tipElement) tipElement.css({
@@ -207,8 +210,11 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.helpers.dimensions' ]
         scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
         _blur = blur;
         _tipToHide = tipElement;
-        var promise = $animate.leave(tipElement, leaveAnimateCallback);
-        if (promise && promise.then) promise.then(leaveAnimateCallback);
+        if (angular.version.minor <= 2) {
+          $animate.leave(tipElement, leaveAnimateCallback);
+        } else {
+          $animate.leave(tipElement).then(leaveAnimateCallback);
+        }
         $tooltip.$isShown = scope.$isShown = false;
         safeDigest(scope);
         if (options.keyboard && tipElement !== null) {

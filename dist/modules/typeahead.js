@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.3 - 2015-05-20
+ * @version v2.2.4 - 2015-05-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -106,17 +106,17 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       $typeahead.show = function() {
         show();
         $timeout(function() {
-          $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
+          $typeahead.$element && $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
           if (options.keyboard) {
-            element.on('keydown', $typeahead.$onKeyDown);
+            element && element.on('keydown', $typeahead.$onKeyDown);
           }
         }, 0, false);
       };
       var hide = $typeahead.hide;
       $typeahead.hide = function() {
-        $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
+        $typeahead.$element && $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
         if (options.keyboard) {
-          element.off('keydown', $typeahead.$onKeyDown);
+          element && element.off('keydown', $typeahead.$onKeyDown);
         }
         if (!options.autoSelect) $typeahead.activate(-1);
         hide();
@@ -178,7 +178,11 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       });
       controller.$formatters.push(function(modelValue) {
         var displayValue = parsedOptions.displayValue(modelValue);
-        return displayValue === undefined ? '' : displayValue;
+        if (displayValue) return displayValue;
+        if (modelValue && typeof modelValue !== 'object') {
+          return modelValue;
+        }
+        return '';
       });
       controller.$render = function() {
         if (controller.$isEmpty(controller.$viewValue)) return element.val('');

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.3 - 2015-05-20
+ * @version v2.2.4 - 2015-05-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -46,7 +46,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       $dropdown.show = function() {
         show();
         $timeout(function() {
-          options.keyboard && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+          options.keyboard && $dropdown.$element && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
           bodyEl.on('click', onBodyClick);
         }, 0, false);
         parentEl.hasClass('dropdown') && parentEl.addClass('open');
@@ -54,7 +54,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       var hide = $dropdown.hide;
       $dropdown.hide = function() {
         if (!$dropdown.$isShown) return;
-        options.keyboard && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+        options.keyboard && $dropdown.$element && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
         bodyEl.off('click', onBodyClick);
         parentEl.hasClass('dropdown') && parentEl.removeClass('open');
         hide();
