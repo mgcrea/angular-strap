@@ -102,7 +102,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         $select.activate = function(index) {
           if(options.multiple) {
             $select.$isActive(index) ? scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1) : scope.$activeIndex.push(index);
-            if(options.sort) scope.$activeIndex.sort();
+            if(options.sort) scope.$activeIndex.sort(function(a, b) { return a - b; }); // use numeric sort instead of default sort
           } else {
             scope.$activeIndex = index;
           }
