@@ -97,7 +97,11 @@ describe('select', function () {
       element: '<button type="button" class="btn" data-template="custom" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-multiple-sort': {
-      scope: {sort: true, selectedIcons: [], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      scope: {sort: true, selectedIcons: [], icons: [
+        {value: 'Gear0', label: '> Gear0'}, {value: 'Globe1', label: '> Globe1'}, {value: 'Heart2', label: '> Heart2'}, {value: 'Camera3', label: '> Camera3'},
+        {value: 'Gear4', label: '> Gear4'}, {value: 'Globe5', label: '> Globe5'}, {value: 'Heart6', label: '> Heart6'}, {value: 'Camera7', label: '> Camera7'},
+        {value: 'Gear8', label: '> Gear8'}, {value: 'Globe9', label: '> Globe9'}, {value: 'Heart10', label: '> Heart10'}, {value: 'Camera11', label: '> Camera11'}
+      ]},
       element: '<button type="button" class="btn" data-sort="{{ sort }}" data-multiple="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-container': {
@@ -169,7 +173,7 @@ describe('select', function () {
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
     });
-    
+
     it('should support null ng-model initial value', function() {
       var elm = compileDirective('default', { selectedIcon: null });
       expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
@@ -453,7 +457,20 @@ describe('select', function () {
         angular.element(sandboxEl.find('.dropdown-menu li:eq(3) a')[0]).triggerHandler('click');
         angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
         angular.element(sandboxEl.find('.dropdown-menu li:eq(2) a')[0]).triggerHandler('click');
-        expect(scope.selectedIcons).toEqual([scope.icons[1].value, scope.icons[2].value, scope.icons[3].value]);
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(7) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(6) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(4) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(9) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(5) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(10) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(8) a')[0]).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(11) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcons).toEqual([
+          scope.icons[1].value, scope.icons[2].value, scope.icons[3].value,
+          scope.icons[4].value, scope.icons[5].value, scope.icons[6].value,
+          scope.icons[7].value, scope.icons[8].value, scope.icons[9].value,
+          scope.icons[10].value, scope.icons[11].value
+        ]);
       });
 
       it('should sort selected items by selection order when sort it false', function() {
