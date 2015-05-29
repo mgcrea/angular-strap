@@ -127,3 +127,5 @@ gulp.task('test:timezone', function() {
   return gulp.series('ng:test/templates', gulp.parallel('jshint', 'karma:unit'));
 });
 gulp.task('test:server', gulp.series('ng:test/templates', 'karma:server'));
+
+gulp.task('default', gulp.task('build'));
