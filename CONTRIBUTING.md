@@ -12,7 +12,9 @@ Regarding code style like indentation and whitespace, **follow the conventions y
 ## Modifying the code
 First, ensure that you have the latest [Node.js](http://nodejs.org/) and [npm](http://npmjs.org/) installed.
 
-Test that gulp's CLI and Bower are installed by running `gulp --version` and `bower --version`.  If the commands aren't found, run `npm install -g gulp bower`.  For more information about installing the tools, see the [getting started with gulp guide](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) or [bower.io](http://bower.io/) respectively.
+Test that gulp's CLI and Bower are installed by running `gulp --version` and `bower --version`.  If the commands aren't found, run `npm install -g gulpjs/gulp#4.0 bower`.  For more information about installing the tools, see the [getting started with gulp guide](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) or [bower.io](http://bower.io/) respectively.
+
+> Currently, AngularStrap uses gulp 4.0 which is not yet available on npm repository, so you will need to install it from github.
 
 1. Fork and clone the repo.
 1. Run `npm install` to install all build dependencies (including gulp).
