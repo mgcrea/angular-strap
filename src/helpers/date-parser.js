@@ -114,7 +114,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         'M'     : function(value) { return this.setMonth(1 * value - 1); },
         'yyyy'  : proto.setFullYear,
         'yy'    : function(value) { return this.setFullYear(2000 + 1 * value); },
-        'y'     : proto.setFullYear
+        'y'     : function(value) { return (1 * value <= 50 && value.length === 2) ? this.setFullYear(2000 + 1 * value) : this.setFullYear(1 * value); }
       };
 
       var regex, setMap;
