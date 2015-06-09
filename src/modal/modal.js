@@ -84,7 +84,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         }
 
         // Fetch, compile then initialize modal
-        var modalLinker, modalElement;
+        var modalLinker, modalElement, modalScope;
         var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
         backdropElement.css({position:'fixed', top:'0px', left:'0px', bottom:'0px', right:'0px', 'z-index': 1038});
         $modal.$promise.then(function(template) {
@@ -109,10 +109,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         $modal.destroy = function() {
 
           // Remove element
-          if(modalElement) {
-            modalElement.remove();
-            modalElement = null;
-          }
+          destroyModalElement();
+
+          // remove backdrop element
           if(backdropElement) {
             backdropElement.remove();
             backdropElement = null;
@@ -120,7 +119,6 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
           // Destroy scope
           scope.$destroy();
-
         };
 
         $modal.show = function() {
@@ -140,8 +138,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
             }
           }
 
+          // destroy any existing modal elements
+          if(modalElement) destroyModalElement();
+
+          // create a new scope, so we can destroy it and all child scopes
+          // when destroying the modal element
+          modalScope = $modal.$scope.$new();
           // Fetch a cloned element linked from template
-          modalElement = $modal.$element = modalLinker(scope, function(clonedElement, scope) {});
+          modalElement = $modal.$element = modalLinker(modalScope, function(clonedElement, scope) {});
 
           if(scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
             return;
@@ -185,14 +189,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           }
 
           // Bind events
-          if(options.backdrop) {
-            modalElement.on('click', hideOnBackdropClick);
-            backdropElement.on('click', hideOnBackdropClick);
-            backdropElement.on('wheel', preventEventDefault);
-          }
-          if(options.keyboard) {
-            modalElement.on('keyup', $modal.$onKeyUp);
-          }
+          bindBackdropEvents();
+          bindKeyboardEvents();
         };
 
         function enterAnimateCallback() {
@@ -221,14 +219,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           safeDigest(scope);
 
           // Unbind events
-          if(options.backdrop) {
-            modalElement.off('click', hideOnBackdropClick);
-            backdropElement.off('click', hideOnBackdropClick);
-            backdropElement.off('wheel', preventEventDefault);
-          }
-          if(options.keyboard) {
-            modalElement.off('keyup', $modal.$onKeyUp);
-          }
+          unbindBackdropEvents();
+          unbindKeyboardEvents();
         };
 
         function leaveAnimateCallback() {
@@ -260,6 +252,34 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         };
 
+        function bindBackdropEvents() {
+          if(options.backdrop) {
+            modalElement.on('click', hideOnBackdropClick);
+            backdropElement.on('click', hideOnBackdropClick);
+            backdropElement.on('wheel', preventEventDefault);
+          }
+        }
+
+        function unbindBackdropEvents() {
+          if(options.backdrop) {
+            modalElement.off('click', hideOnBackdropClick);
+            backdropElement.off('click', hideOnBackdropClick);
+            backdropElement.off('wheel', preventEventDefault);
+          }
+        }
+
+        function bindKeyboardEvents() {
+          if(options.keyboard) {
+            modalElement.on('keyup', $modal.$onKeyUp);
+          }
+        }
+
+        function unbindKeyboardEvents() {
+          if(options.keyboard) {
+            modalElement.off('keyup', $modal.$onKeyUp);
+          }
+        }
+
         // Private methods
 
         function hideOnBackdropClick(evt) {
@@ -269,6 +289,24 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         function preventEventDefault(evt) {
           evt.preventDefault();
+        }
+
+        function destroyModalElement() {
+          if($modal.$isShown && modalElement !== null) {
+            // un-bind events
+            unbindBackdropEvents();
+            unbindKeyboardEvents();
+          }
+
+          if(modalScope) {
+            modalScope.$destroy();
+            modalScope = null;
+          }
+
+          if(modalElement) {
+            modalElement.remove();
+            modalElement = $modal.$element = null;
+          }
         }
 
         return $modal;

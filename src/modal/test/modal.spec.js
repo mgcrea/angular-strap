@@ -546,6 +546,43 @@ describe('modal', function() {
         expect(scope.modal.counter).toBe(2);
       });
 
+      it('should destroy inner scopes when hidding modal', function() {
+        var scopeCount = countScopes(scope, 0);
+        var originalScope = scope;
+        scope = scope.$new();
+        $templateCache.put('custom', '<div class="modal"><div class="modal-inner"><div ng-if="1===1">Fake element to force creation of a new $scope</div><div class="btn" ng-click="$hide()"></div></div></div>');
+        var elm = compileDirective('options-template');
+
+        // We are only destroying the modal element before showing another
+        // modal. This is to avoid timming issues with the hide animation
+        // callback, because we could be showing a new modal before the
+        // hide animation callback has been called and then the modal element
+        // variables would be replaced with the new modal.
+        // So, for this test to work, we need to show/hide the modal once
+        // before counting the number of scopes expected.
+        angular.element(elm[0]).triggerHandler('click');
+        expect(angular.element(sandboxEl.find('.modal-inner > .btn')[0]).triggerHandler('click'));
+
+        // repeat process to test creation/destruction of inner scopes
+        var scopeCountAfterShow = countScopes(scope, 0);
+        for (var i = 0; i < 10; i++) {
+          // show modal
+          angular.element(elm[0]).triggerHandler('click');
+
+          // hide modal
+          expect(angular.element(sandboxEl.find('.modal-inner > .btn')[0]).triggerHandler('click'));
+        }
+
+        // scope count should be the same as it was when directive finished initialization
+        expect(countScopes(scope, 0)).toBe(scopeCountAfterShow);
+
+        scope.$destroy();
+        scope = originalScope;
+
+        // scope count should be the same as it was before directive was initialized
+        expect(countScopes(scope, 0)).toBe(scopeCount);
+      });
+
     });
 
     describe('container', function() {
