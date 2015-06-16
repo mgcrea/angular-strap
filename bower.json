@@ -1,7 +1,6 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Bootstrap",
-  "version": "2.2.4",
   "keywords": [
     "angular",
     "bootstrap"
