@@ -218,7 +218,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         // Watch options on demand
         if(options.watchOptions) {
           // Watch bsOptions values before filtering for changes, drop function calls
-          var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '').trim();
+          var parsedValue = parsedOptions.$match[7].replace(/\|.+/, '').replace(/\(.*\)/g, '');
+          var watchedOptions = (options.trimValue === false) ? parsedValue : parsedValue.trim();
           scope.$watchCollection(watchedOptions, function (newValue, oldValue) {
             // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
             parsedOptions.valuesFn(scope, controller).then(function (values) {
