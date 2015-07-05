@@ -28,6 +28,9 @@ describe('collapse', function () {
     'default': {
       element: '<div class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     },
+    'jade-attributes': {
+      element: '<div class="panel-group" bs-collapse="bs-collapse"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle="bs-collapse-toggle">title-1</a></h4></div><div class="panel-collapse" bs-collapse-target="bs-collapse-target"><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle="bs-collapse-toggle">title-2</a></h4></div><div class="panel-collapse" bs-collapse-target="bs-collapse-target"><div class="panel-body">content-2</div></div></div></div>'
+    },
     'template-ngRepeat': {
       scope: {panels: [
         {title:'Collapsible Group Item #1', body: 'Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.'},
@@ -98,6 +101,20 @@ describe('collapse', function () {
 
     it('should navigate between panels on click', function() {
       var elm = compileDirective('default');
+      expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+      sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+      expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
+      expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeTruthy();
+      sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+      expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
+    });
+
+  });
+
+  describe('with jade-like template', function () {
+
+    it('should navigate between panels on click', function() {
+      var elm = compileDirective('jade-attributes');
       expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
       sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
       expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
