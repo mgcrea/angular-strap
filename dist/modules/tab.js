@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.4 - 2015-05-28
+ * @version v2.2.4 - 2015-07-09
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -24,11 +24,19 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
     $scope.$activeClass = self.$options.activeClass;
     self.$panes = $scope.$panes = [];
     self.$activePaneChangeListeners = self.$viewChangeListeners = [];
+    self.endPaneKeep = false;
     self.$push = function(pane) {
       if (angular.isUndefined(self.$panes.$active)) {
         $scope.$setActive(pane.name || 0);
       }
-      self.$panes.push(pane);
+      if (self.endPaneKeep) {
+        self.$panes.splice(self.$panes.length - 1, 0, pane);
+      } else {
+        self.$panes.push(pane);
+        if (pane.keepEnd) {
+          self.endPaneKeep = true;
+        }
+      }
     };
     self.$remove = function(pane) {
       var index = self.$panes.indexOf(pane);
@@ -113,6 +121,9 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
       attrs.$observe('title', function(newValue, oldValue) {
         scope.title = $sce.trustAsHtml(newValue);
       });
+      if (attrs.keepEnd) {
+        scope.keepEnd = true;
+      }
       scope.name = attrs.name;
       if (bsTabsCtrl.$options.animation) {
         element.addClass(bsTabsCtrl.$options.animation);
