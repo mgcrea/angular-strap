@@ -86,6 +86,9 @@ describe('tab', function () {
     },
     'pane-options-disabled': {
       element: '<div bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane disabled="true">content-2</div></div>'
+    },
+    'keepPaneAtEnd': {
+      element: '<div bs-tabs><div title="title-1" keep-end="true" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div><div title="title-3" bs-pane>content-3</div></div>'
     }
   };
 
@@ -186,7 +189,7 @@ describe('tab', function () {
       expect(sandboxEl.find('.tab-content > .tab-pane').length).toBe(scope.tabs.length);
       scope.tabs.push({title:'New Tab', content: 'New tab content...'});
       scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);      
+      expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);
       expect(sandboxEl.find('.tab-content > .tab-pane').length).toBe(scope.tabs.length);
     });
 
@@ -195,7 +198,7 @@ describe('tab', function () {
       expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);
       scope.tabs.pop();
       scope.$digest();
-      expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);      
+      expect(sandboxEl.find('.nav-tabs > li').length).toBe(scope.tabs.length);
     });
 
   });
@@ -351,6 +354,30 @@ describe('tab', function () {
         expect(sandboxEl.find('.nav-tabs > li:eq(1)').hasClass('disabled')).toBeTruthy();
       });
 
+    });
+
+  });
+
+  describe('with keep-end attribute', function () {
+
+    it('should correctly compile inner content', function() {
+      var elm = compileDirective('keepPaneAtEnd');
+      expect(sandboxEl.find('.nav-tabs > li').length).toBe(3);
+      expect(sandboxEl.find('.nav-tabs > li:eq(0)').text()).toBe('title-2');
+      expect(sandboxEl.find('.tab-content > .tab-pane').length).toBe(3);
+    });
+
+    it('should navigate between panes on click', function() {
+      var elm = compileDirective('keepPaneAtEnd');
+      sandboxEl.find('.nav-tabs > li:eq(2) > a').triggerHandler('click');
+      expect(sandboxEl.find('.nav-tabs > li.active').text()).toBe('title-1');
+      expect(sandboxEl.find('.tab-content > .tab-pane.active').text()).toBe('content-1');
+      sandboxEl.find('.nav-tabs > li:eq(1) > a').triggerHandler('click');
+      expect(sandboxEl.find('.nav-tabs > li.active').text()).toBe('title-3');
+      expect(sandboxEl.find('.tab-content > .tab-pane.active').text()).toBe('content-3');
+      sandboxEl.find('.nav-tabs > li:eq(0) > a').triggerHandler('click');
+      expect(sandboxEl.find('.nav-tabs > li.active').text()).toBe('title-2');
+      expect(sandboxEl.find('.tab-content > .tab-pane.active').text()).toBe('content-2');
     });
 
   });

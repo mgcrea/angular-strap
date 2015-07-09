@@ -31,11 +31,24 @@ angular.module('mgcrea.ngStrap.tab', [])
       // activePaneChangeListeners to make more sense.
       self.$activePaneChangeListeners = self.$viewChangeListeners = [];
 
+      // Are we keeping a pane at the end
+      self.endPaneKeep = false;
+
       self.$push = function(pane) {
         if(angular.isUndefined(self.$panes.$active)) {
           $scope.$setActive(pane.name || 0);
         }
-        self.$panes.push(pane);
+        // If we are keeping a pane at the end insert new pane before last index
+        if (self.endPaneKeep) {
+          self.$panes.splice(self.$panes.length -1, 0, pane);
+        } else {
+          // add to pane array
+          self.$panes.push(pane);
+          // If keeping at end save the index
+          if (pane.keepEnd) {
+            self.endPaneKeep = true;
+          }
+        }
       };
 
       self.$remove = function(pane) {
@@ -164,6 +177,11 @@ angular.module('mgcrea.ngStrap.tab', [])
         attrs.$observe('title', function(newValue, oldValue) {
           scope.title = $sce.trustAsHtml(newValue);
         });
+
+        // If pane has keepEnd we will set it in the scope
+        if (attrs.keepEnd) {
+          scope.keepEnd = true;
+        }
 
         // Save tab name into scope
         scope.name = attrs.name;
