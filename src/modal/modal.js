@@ -21,7 +21,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       show: true
     };
 
-    this.$get = function($window, $rootScope, $bsCompiler, $compile, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
+    this.$get = function($window, $rootScope, $bsCompiler, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
 
       var forEach = angular.forEach;
       var trim = String.prototype.trim;
