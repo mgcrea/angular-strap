@@ -40,7 +40,7 @@ describe('aside', function () {
     },
     'options-template': {
       scope: {aside: {title: 'Title', content: 'Hello aside!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a data-template="custom" bs-aside="aside">click me</a>'
+      element: '<a data-template-url="custom" bs-aside="aside">click me</a>'
     },
     'options-html': {
       scope: {aside: {title: 'title<br>next', content: 'content<br>next'}},

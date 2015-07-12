@@ -9,6 +9,12 @@ describe('modal', function() {
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('mgcrea.ngStrap.modal'));
+  beforeEach(module(function($controllerProvider) {
+    $controllerProvider.register('MyModalController', function($scope) {
+      $scope.title = 'foo';
+      $scope.content = 'bar';
+    });
+  }));
 
   beforeEach(inject(function($injector) {
     $rootScope = $injector.get('$rootScope');
@@ -54,6 +60,9 @@ describe('modal', function() {
     'markup-ngClick-service': {
       element: '<a ng-click="showModal()">click me</a>'
     },
+    'options-controller': {
+      element: '<a data-controller="MyModalController" bs-modal>click me</a>'
+    },
     'options-placement': {
       element: '<a data-placement="bottom" bs-modal="modal">click me</a>'
     },
@@ -75,7 +84,7 @@ describe('modal', function() {
     },
     'options-template': {
       scope: {modal: {title: 'Title', content: 'Hello Modal!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-template="custom" bs-modal>click me</a>'
+      element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-template-url="custom" bs-modal>click me</a>'
     },
     'options-contentTemplate': {
       scope: {modal: {title: 'Title', content: 'Hello Modal!', counter: 0}, items: ['foo', 'bar', 'baz']},
@@ -413,6 +422,17 @@ describe('modal', function() {
         var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
         modal.triggerHandler(evt)
         expect(bodyEl.find('.modal').length).toBe(1);
+      });
+
+    });
+
+    describe('controller', function() {
+
+      it('should properly invoke our passed controller', function() {
+        var elm = compileDirective('options-controller');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-title').html()).toBe('foo');
+        expect(sandboxEl.find('.modal-body').html()).toBe('bar');
       });
 
     });

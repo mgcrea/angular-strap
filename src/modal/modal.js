@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
+angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.helpers.dimensions'])
 
   .provider('$modal', function() {
 
@@ -10,7 +10,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       prefixClass: 'modal',
       prefixEvent: 'modal',
       placement: 'top',
-      template: 'modal/modal.tpl.html',
+      templateUrl: 'modal/modal.tpl.html',
+      template: '',
       contentTemplate: false,
       container: false,
       element: null,
@@ -20,13 +21,12 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       show: true
     };
 
-    this.$get = function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
+    this.$get = function($window, $rootScope, $bsCompiler, $compile, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
 
       var forEach = angular.forEach;
       var trim = String.prototype.trim;
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
-      var htmlReplaceRegExp = /ng-bind="/ig;
 
       function ModalFactory(config) {
 
@@ -34,7 +34,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Common vars
         var options = $modal.$options = angular.extend({}, defaults, config);
-        $modal.$promise = fetchTemplate(options.template);
+
+        var compilePromise = $modal.$promise = $bsCompiler.compile(options)
+        var compileData;
+
         var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(!options.element && !options.container) {
           options.container = 'body';
@@ -69,29 +72,12 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         // Publish isShown as a protected var on scope
         $modal.$isShown = scope.$isShown = false;
 
-        // Support contentTemplate option
-        if(options.contentTemplate) {
-          $modal.$promise = $modal.$promise.then(function(template) {
-            var templateEl = angular.element(template);
-            return fetchTemplate(options.contentTemplate)
-            .then(function(contentTemplate) {
-              var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
-              // Drop the default footer as you probably don't want it if you use a custom contentTemplate
-              if(!config.template) contentEl.next().remove();
-              return templateEl[0].outerHTML;
-            });
-          });
-        }
-
         // Fetch, compile then initialize modal
         var modalLinker, modalElement, modalScope;
         var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
         backdropElement.css({position:'fixed', top:'0px', left:'0px', bottom:'0px', right:'0px', 'z-index': 1038});
-        $modal.$promise.then(function(template) {
-          if(angular.isObject(template)) template = template.data;
-          if(options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
-          template = trim.apply(template);
-          modalLinker = $compile(template);
+        compilePromise.then(function(data) {
+          compileData = data;
           $modal.init();
         });
 
@@ -144,8 +130,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
           // create a new scope, so we can destroy it and all child scopes
           // when destroying the modal element
           modalScope = $modal.$scope.$new();
-          // Fetch a cloned element linked from template
-          modalElement = $modal.$element = modalLinker(modalScope, function(clonedElement, scope) {});
+          // Fetch a cloned element linked from template (noop callback is required)
+          modalElement = $modal.$element = compileData.link(modalScope, function(clonedElement, scope) {});
 
           if(scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
             return;
@@ -323,14 +309,6 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         return angular.element((element || document).querySelectorAll(query));
       }
 
-      var fetchPromises = {};
-      function fetchTemplate(template) {
-        if(fetchPromises[template]) return fetchPromises[template];
-        return (fetchPromises[template] = $http.get(template, {cache: $templateCache}).then(function(res) {
-          return res.data;
-        }));
-      }
-
       return ModalFactory;
 
     };
@@ -346,9 +324,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'contentTemplate', 'controller', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
+
+        if(options.template && /\.html$/.test(options.template)) {
+          options.templateUrl = options.template;
+          options.template = '';
+        }
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;

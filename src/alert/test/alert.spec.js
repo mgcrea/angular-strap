@@ -61,7 +61,7 @@ describe('alert', function() {
     },
     'options-template': {
       scope: {alert: {title: 'Title', content: 'Hello alert!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a data-template="custom" bs-alert="alert">click me</a>'
+      element: '<a data-template-url="custom" bs-alert="alert">click me</a>'
     }
   };
 
