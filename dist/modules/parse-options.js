@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.4 - 2015-05-28
+ * @version v2.3.0 - 2015-07-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -24,8 +24,17 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', []).provider('$parseOption
         valuesFn = $parse(match[7]);
       };
       $parseOptions.valuesFn = function(scope, controller) {
-        return $q.when(valuesFn(scope, controller)).then(function(values) {
-          $parseOptions.$values = values ? parseValues(values, scope) : {};
+        var valuesPromise;
+        try {
+          valuesPromise = valuesFn(scope, controller);
+        } catch (err) {
+          valuesPromise = [];
+        }
+        return $q.when(valuesPromise).then(function(values) {
+          if (!angular.isArray(values)) {
+            values = [];
+          }
+          $parseOptions.$values = values.length ? parseValues(values, scope) : [];
           return $parseOptions.$values;
         });
       };

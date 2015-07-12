@@ -1,20 +1,21 @@
 /**
  * angular-strap
- * @version v2.2.4 - 2015-05-28
+ * @version v2.3.0 - 2015-07-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
 
-angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$modal', function() {
+angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$modal', function() {
   var defaults = this.defaults = {
     animation: 'am-fade',
     backdropAnimation: 'am-fade',
     prefixClass: 'modal',
     prefixEvent: 'modal',
     placement: 'top',
-    template: 'modal/modal.tpl.html',
+    templateUrl: 'modal/modal.tpl.html',
+    template: '',
     contentTemplate: false,
     container: false,
     element: null,
@@ -23,16 +24,15 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
     html: false,
     show: true
   };
-  this.$get = [ '$window', '$rootScope', '$compile', '$q', '$templateCache', '$http', '$animate', '$timeout', '$sce', 'dimensions', function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
+  this.$get = [ '$window', '$rootScope', '$bsCompiler', '$q', '$templateCache', '$http', '$animate', '$timeout', '$sce', 'dimensions', function($window, $rootScope, $bsCompiler, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
     var forEach = angular.forEach;
     var trim = String.prototype.trim;
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
     var bodyElement = angular.element($window.document.body);
-    var htmlReplaceRegExp = /ng-bind="/gi;
     function ModalFactory(config) {
       var $modal = {};
       var options = $modal.$options = angular.extend({}, defaults, config);
-      $modal.$promise = fetchTemplate(options.template);
+      var promise = $modal.$promise = $bsCompiler.compile(options);
       var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
       if (!options.element && !options.container) {
         options.container = 'body';
@@ -57,17 +57,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
         });
       };
       $modal.$isShown = scope.$isShown = false;
-      if (options.contentTemplate) {
-        $modal.$promise = $modal.$promise.then(function(template) {
-          var templateEl = angular.element(template);
-          return fetchTemplate(options.contentTemplate).then(function(contentTemplate) {
-            var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
-            if (!config.template) contentEl.next().remove();
-            return templateEl[0].outerHTML;
-          });
-        });
-      }
-      var modalLinker, modalElement;
+      var compileData, modalElement, modalScope;
       var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
       backdropElement.css({
         position: 'fixed',
@@ -77,11 +67,8 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
         right: '0px',
         'z-index': 1038
       });
-      $modal.$promise.then(function(template) {
-        if (angular.isObject(template)) template = template.data;
-        if (options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
-        template = trim.apply(template);
-        modalLinker = $compile(template);
+      promise.then(function(data) {
+        compileData = data;
         $modal.init();
       });
       $modal.init = function() {
@@ -92,10 +79,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
         }
       };
       $modal.destroy = function() {
-        if (modalElement) {
-          modalElement.remove();
-          modalElement = null;
-        }
+        destroyModalElement();
         if (backdropElement) {
           backdropElement.remove();
           backdropElement = null;
@@ -117,7 +101,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
             after = options.element;
           }
         }
-        modalElement = $modal.$element = modalLinker(scope, function(clonedElement, scope) {});
+        if (modalElement) destroyModalElement();
+        modalScope = $modal.$scope.$new();
+        modalElement = $modal.$element = compileData.link(modalScope, function(clonedElement, scope) {});
         if (scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
           return;
         }
@@ -148,14 +134,8 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
         if (options.animation) {
           bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
         }
-        if (options.backdrop) {
-          modalElement.on('click', hideOnBackdropClick);
-          backdropElement.on('click', hideOnBackdropClick);
-          backdropElement.on('wheel', preventEventDefault);
-        }
-        if (options.keyboard) {
-          modalElement.on('keyup', $modal.$onKeyUp);
-        }
+        bindBackdropEvents();
+        bindKeyboardEvents();
       };
       function enterAnimateCallback() {
         scope.$emit(options.prefixEvent + '.show', $modal);
@@ -175,14 +155,8 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
         }
         $modal.$isShown = scope.$isShown = false;
         safeDigest(scope);
-        if (options.backdrop) {
-          modalElement.off('click', hideOnBackdropClick);
-          backdropElement.off('click', hideOnBackdropClick);
-          backdropElement.off('wheel', preventEventDefault);
-        }
-        if (options.keyboard) {
-          modalElement.off('keyup', $modal.$onKeyUp);
-        }
+        unbindBackdropEvents();
+        unbindKeyboardEvents();
       };
       function leaveAnimateCallback() {
         scope.$emit(options.prefixEvent + '.hide', $modal);
@@ -203,12 +177,50 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
           evt.stopPropagation();
         }
       };
+      function bindBackdropEvents() {
+        if (options.backdrop) {
+          modalElement.on('click', hideOnBackdropClick);
+          backdropElement.on('click', hideOnBackdropClick);
+          backdropElement.on('wheel', preventEventDefault);
+        }
+      }
+      function unbindBackdropEvents() {
+        if (options.backdrop) {
+          modalElement.off('click', hideOnBackdropClick);
+          backdropElement.off('click', hideOnBackdropClick);
+          backdropElement.off('wheel', preventEventDefault);
+        }
+      }
+      function bindKeyboardEvents() {
+        if (options.keyboard) {
+          modalElement.on('keyup', $modal.$onKeyUp);
+        }
+      }
+      function unbindKeyboardEvents() {
+        if (options.keyboard) {
+          modalElement.off('keyup', $modal.$onKeyUp);
+        }
+      }
       function hideOnBackdropClick(evt) {
         if (evt.target !== evt.currentTarget) return;
         options.backdrop === 'static' ? $modal.focus() : $modal.hide();
       }
       function preventEventDefault(evt) {
         evt.preventDefault();
+      }
+      function destroyModalElement() {
+        if ($modal.$isShown && modalElement !== null) {
+          unbindBackdropEvents();
+          unbindKeyboardEvents();
+        }
+        if (modalScope) {
+          modalScope.$destroy();
+          modalScope = null;
+        }
+        if (modalElement) {
+          modalElement.remove();
+          modalElement = $modal.$element = null;
+        }
       }
       return $modal;
     }
@@ -217,15 +229,6 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
     }
     function findElement(query, element) {
       return angular.element((element || document).querySelectorAll(query));
-    }
-    var fetchPromises = {};
-    function fetchTemplate(template) {
-      if (fetchPromises[template]) return fetchPromises[template];
-      return fetchPromises[template] = $http.get(template, {
-        cache: $templateCache
-      }).then(function(res) {
-        return res.data;
-      });
     }
     return ModalFactory;
   } ];
@@ -239,7 +242,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).
         element: element,
         show: false
       };
-      angular.forEach([ 'template', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'controller', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;

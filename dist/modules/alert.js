@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.4 - 2015-05-28
+ * @version v2.3.0 - 2015-07-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -13,7 +13,7 @@ angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$al
     prefixClass: 'alert',
     prefixEvent: 'alert',
     placement: null,
-    template: 'alert/alert.tpl.html',
+    templateUrl: 'alert/alert.tpl.html',
     container: false,
     element: null,
     backdrop: false,
@@ -56,7 +56,7 @@ angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$al
         element: element,
         show: false
       };
-      angular.forEach([ 'template', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;

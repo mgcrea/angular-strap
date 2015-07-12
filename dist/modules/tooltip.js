@@ -1,13 +1,13 @@
 /**
  * angular-strap
- * @version v2.2.4 - 2015-05-28
+ * @version v2.3.0 - 2015-07-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
 
-angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$tooltip', function() {
+angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$tooltip', function() {
   var defaults = this.defaults = {
     animation: 'am-fade',
     customClass: '',
@@ -16,7 +16,8 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.helpers.dimensions' ]
     container: false,
     target: false,
     placement: 'top',
-    template: 'tooltip/tooltip.tpl.html',
+    templateUrl: 'tooltip/tooltip.tpl.html',
+    template: '',
     contentTemplate: false,
     trigger: 'hover focus',
     keyboard: false,
@@ -32,17 +33,17 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.helpers.dimensions' ]
       padding: 0
     }
   };
-  this.$get = [ '$window', '$rootScope', '$compile', '$q', '$templateCache', '$http', '$animate', '$sce', 'dimensions', '$$rAF', '$timeout', function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $sce, dimensions, $$rAF, $timeout) {
+  this.$get = [ '$window', '$rootScope', '$bsCompiler', '$q', '$templateCache', '$http', '$animate', '$sce', 'dimensions', '$$rAF', '$timeout', function($window, $rootScope, $bsCompiler, $q, $templateCache, $http, $animate, $sce, dimensions, $$rAF, $timeout) {
     var trim = String.prototype.trim;
     var isTouch = 'createTouch' in $window.document;
     var htmlReplaceRegExp = /ng-bind="/gi;
     var $body = angular.element($window.document);
     function TooltipFactory(element, config) {
       var $tooltip = {};
-      var nodeName = element[0].nodeName.toLowerCase();
       var options = $tooltip.$options = angular.extend({}, defaults, config);
-      $tooltip.$promise = fetchTemplate(options.template);
+      var promise = $tooltip.$promise = $bsCompiler.compile(options);
       var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+      var nodeName = element[0].nodeName.toLowerCase();
       if (options.delay && angular.isString(options.delay)) {
         var split = options.delay.split(',').map(parseFloat);
         options.delay = split.length > 1 ? {
@@ -76,24 +77,9 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.helpers.dimensions' ]
       };
       $tooltip.$isShown = scope.$isShown = false;
       var timeout, hoverState;
-      if (options.contentTemplate) {
-        $tooltip.$promise = $tooltip.$promise.then(function(template) {
-          var templateEl = angular.element(template);
-          return fetchTemplate(options.contentTemplate).then(function(contentTemplate) {
-            var contentEl = findElement('[ng-bind="content"]', templateEl[0]);
-            if (!contentEl.length) contentEl = findElement('[ng-bind="title"]', templateEl[0]);
-            contentEl.removeAttr('ng-bind').html(contentTemplate);
-            return templateEl[0].outerHTML;
-          });
-        });
-      }
-      var tipLinker, tipElement, tipTemplate, tipContainer, tipScope;
-      $tooltip.$promise.then(function(template) {
-        if (angular.isObject(template)) template = template.data;
-        if (options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
-        template = trim.apply(template);
-        tipTemplate = template;
-        tipLinker = $compile(template);
+      var compileData, tipElement, tipContainer, tipScope;
+      promise.then(function(data) {
+        compileData = data;
         $tooltip.init();
       });
       $tooltip.init = function() {
@@ -152,7 +138,7 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.helpers.dimensions' ]
         }
         if (tipElement) destroyTipElement();
         tipScope = $tooltip.$scope.$new();
-        tipElement = $tooltip.$element = tipLinker(tipScope, function(clonedElement, scope) {});
+        tipElement = $tooltip.$element = compileData.link(tipScope, function(clonedElement, scope) {});
         tipElement.css({
           top: '-9999px',
           left: '-9999px',
@@ -536,7 +522,7 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.helpers.dimensions' ]
       var options = {
         scope: scope
       };
-      angular.forEach([ 'template', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;

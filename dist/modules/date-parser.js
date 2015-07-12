@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.4 - 2015-05-28
+ * @version v2.3.0 - 2015-07-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -133,7 +133,9 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
         yy: function(value) {
           return this.setFullYear(2e3 + 1 * value);
         },
-        y: proto.setFullYear
+        y: function(value) {
+          return 1 * value <= 50 && value.length === 2 ? this.setFullYear(2e3 + 1 * value) : this.setFullYear(1 * value);
+        }
       };
       var regex, setMap;
       $dateParser.init = function() {

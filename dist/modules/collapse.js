@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.4 - 2015-05-28
+ * @version v2.3.0 - 2015-07-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -23,7 +23,9 @@ angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
     });
     var falseValueRegExp = /^(false|0|)$/i;
     angular.forEach([ 'disallowToggle', 'startCollapsed', 'allowMultiple' ], function(key) {
-      if (angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key])) self.$options[key] = false;
+      if (angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key])) {
+        self.$options[key] = false;
+      }
     });
     self.$toggles = [];
     self.$targets = [];
@@ -143,7 +145,7 @@ angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
         bsCollapseCtrl.$unregisterToggle(element);
       });
       element.on('click', function() {
-        var index = attrs.bsCollapseToggle || bsCollapseCtrl.$toggles.indexOf(element);
+        var index = attrs.bsCollapseToggle && attrs.bsCollapseToggle !== 'bs-collapse-toggle' ? attrs.bsCollapseToggle : bsCollapseCtrl.$toggles.indexOf(element);
         bsCollapseCtrl.$setActive(index * 1);
         scope.$apply();
       });

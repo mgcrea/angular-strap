@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.4 - 2015-05-28
+ * @version v2.3.0 - 2015-07-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -13,7 +13,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
     prefixClass: 'typeahead',
     prefixEvent: '$typeahead',
     placement: 'bottom-left',
-    template: 'typeahead/typeahead.tpl.html',
+    templateUrl: 'typeahead/typeahead.tpl.html',
     trigger: 'focus',
     container: false,
     keyboard: true,
@@ -26,7 +26,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
     comparator: '',
     trimValue: true
   };
-  this.$get = [ '$window', '$rootScope', '$tooltip', '$timeout', function($window, $rootScope, $tooltip, $timeout) {
+  this.$get = [ '$window', '$rootScope', '$tooltip', '$$rAF', '$timeout', function($window, $rootScope, $tooltip, $$rAF, $timeout) {
     var bodyEl = angular.element($window.document.body);
     function TypeaheadFactory(element, controller, config) {
       var $typeahead = {};
@@ -57,8 +57,8 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         if (scope.$activeIndex >= matches.length) {
           scope.$activeIndex = options.autoSelect ? 0 : -1;
         }
-        if (/^(bottom|bottom-left|bottom-right)$/.test(options.placement)) return;
-        $timeout($typeahead.$applyPlacement);
+        safeDigest(scope);
+        $$rAF($typeahead.$applyPlacement);
       };
       $typeahead.activate = function(index) {
         scope.$activeIndex = index;
@@ -123,6 +123,9 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       };
       return $typeahead;
     }
+    function safeDigest(scope) {
+      scope.$$phase || scope.$root && scope.$root.$$phase || scope.$digest();
+    }
     TypeaheadFactory.defaults = defaults;
     return TypeaheadFactory;
   } ];
@@ -135,14 +138,14 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       var options = {
         scope: scope
       };
-      angular.forEach([ 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'html', 'container', 'trimValue' ], function(key) {
         if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
       });
-      element.attr('autocomplete', 'off');
+      element.attr('autocomplete', 'false');
       var filter = options.filter || defaults.filter;
       var limit = options.limit || defaults.limit;
       var comparator = options.comparator || defaults.comparator;

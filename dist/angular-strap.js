@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.4 - 2015-05-28
+ * @version v2.3.0 - 2015-07-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -188,7 +188,7 @@
       prefixClass: 'alert',
       prefixEvent: 'alert',
       placement: null,
-      template: 'alert/alert.tpl.html',
+      templateUrl: 'alert/alert.tpl.html',
       container: false,
       element: null,
       backdrop: false,
@@ -231,7 +231,7 @@
           element: element,
           show: false
         };
-        angular.forEach([ 'template', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
@@ -269,7 +269,7 @@
       prefixClass: 'aside',
       prefixEvent: 'aside',
       placement: 'right',
-      template: 'aside/aside.tpl.html',
+      templateUrl: 'aside/aside.tpl.html',
       contentTemplate: false,
       container: false,
       element: null,
@@ -298,7 +298,7 @@
           element: element,
           show: false
         };
-        angular.forEach([ 'template', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
@@ -327,6 +327,125 @@
       }
     };
   } ]);
+  angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
+    var defaults = this.defaults = {
+      activeClass: 'active',
+      toggleEvent: 'click'
+    };
+    this.$get = function() {
+      return {
+        defaults: defaults
+      };
+    };
+  }).directive('bsCheckboxGroup', function() {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      compile: function postLink(element, attr) {
+        element.attr('data-toggle', 'buttons');
+        element.removeAttr('ng-model');
+        var children = element[0].querySelectorAll('input[type="checkbox"]');
+        angular.forEach(children, function(child) {
+          var childEl = angular.element(child);
+          childEl.attr('bs-checkbox', '');
+          childEl.attr('ng-model', attr.ngModel + '.' + childEl.attr('value'));
+        });
+      }
+    };
+  }).directive('bsCheckbox', [ '$button', '$$rAF', function($button, $$rAF) {
+    var defaults = $button.defaults;
+    var constantValueRegExp = /^(true|false|\d+)$/;
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        var options = defaults;
+        var isInput = element[0].nodeName === 'INPUT';
+        var activeElement = isInput ? element.parent() : element;
+        var trueValue = angular.isDefined(attr.trueValue) ? attr.trueValue : true;
+        if (constantValueRegExp.test(attr.trueValue)) {
+          trueValue = scope.$eval(attr.trueValue);
+        }
+        var falseValue = angular.isDefined(attr.falseValue) ? attr.falseValue : false;
+        if (constantValueRegExp.test(attr.falseValue)) {
+          falseValue = scope.$eval(attr.falseValue);
+        }
+        var hasExoticValues = typeof trueValue !== 'boolean' || typeof falseValue !== 'boolean';
+        if (hasExoticValues) {
+          controller.$parsers.push(function(viewValue) {
+            return viewValue ? trueValue : falseValue;
+          });
+          controller.$formatters.push(function(modelValue) {
+            return angular.equals(modelValue, trueValue);
+          });
+          scope.$watch(attr.ngModel, function(newValue, oldValue) {
+            controller.$render();
+          });
+        }
+        controller.$render = function() {
+          var isActive = angular.equals(controller.$modelValue, trueValue);
+          $$rAF(function() {
+            if (isInput) element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
+        };
+        element.bind(options.toggleEvent, function() {
+          scope.$apply(function() {
+            if (!isInput) {
+              controller.$setViewValue(!activeElement.hasClass('active'));
+            }
+            if (!hasExoticValues) {
+              controller.$render();
+            }
+          });
+        });
+      }
+    };
+  } ]).directive('bsRadioGroup', function() {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      compile: function postLink(element, attr) {
+        element.attr('data-toggle', 'buttons');
+        element.removeAttr('ng-model');
+        var children = element[0].querySelectorAll('input[type="radio"]');
+        angular.forEach(children, function(child) {
+          angular.element(child).attr('bs-radio', '');
+          angular.element(child).attr('ng-model', attr.ngModel);
+        });
+      }
+    };
+  }).directive('bsRadio', [ '$button', '$$rAF', function($button, $$rAF) {
+    var defaults = $button.defaults;
+    var constantValueRegExp = /^(true|false|\d+)$/;
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        var options = defaults;
+        var isInput = element[0].nodeName === 'INPUT';
+        var activeElement = isInput ? element.parent() : element;
+        var value;
+        attr.$observe('value', function(v) {
+          value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
+          controller.$render();
+        });
+        controller.$render = function() {
+          var isActive = angular.equals(controller.$modelValue, value);
+          $$rAF(function() {
+            if (isInput) element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
+        };
+        element.bind(options.toggleEvent, function() {
+          scope.$apply(function() {
+            controller.$setViewValue(value);
+            controller.$render();
+          });
+        });
+      }
+    };
+  } ]);
   angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
     var defaults = this.defaults = {
       animation: 'am-collapse',
@@ -343,7 +462,9 @@
       });
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'disallowToggle', 'startCollapsed', 'allowMultiple' ], function(key) {
-        if (angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key])) self.$options[key] = false;
+        if (angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key])) {
+          self.$options[key] = false;
+        }
       });
       self.$toggles = [];
       self.$targets = [];
@@ -463,7 +584,7 @@
           bsCollapseCtrl.$unregisterToggle(element);
         });
         element.on('click', function() {
-          var index = attrs.bsCollapseToggle || bsCollapseCtrl.$toggles.indexOf(element);
+          var index = attrs.bsCollapseToggle && attrs.bsCollapseToggle !== 'bs-collapse-toggle' ? attrs.bsCollapseToggle : bsCollapseCtrl.$toggles.indexOf(element);
           bsCollapseCtrl.$setActive(index * 1);
           scope.$apply();
         });
@@ -508,7 +629,7 @@
       animation: 'am-fade',
       prefixClass: 'datepicker',
       placement: 'bottom-left',
-      template: 'datepicker/datepicker.tpl.html',
+      templateUrl: 'datepicker/datepicker.tpl.html',
       trigger: 'focus',
       container: false,
       keyboard: true,
@@ -712,10 +833,9 @@
       require: 'ngModel',
       link: function postLink(scope, element, attr, controller) {
         var options = {
-          scope: scope,
-          controller: controller
+          scope: scope
         };
-        angular.forEach([ 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
@@ -1059,7 +1179,7 @@
       prefixClass: 'dropdown',
       prefixEvent: 'dropdown',
       placement: 'bottom-left',
-      template: 'dropdown/dropdown.tpl.html',
+      templateUrl: 'dropdown/dropdown.tpl.html',
       trigger: 'click',
       container: false,
       keyboard: true,
@@ -1126,7 +1246,7 @@
         var options = {
           scope: scope
         };
-        angular.forEach([ 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'id' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
@@ -1150,125 +1270,86 @@
       }
     };
   } ]);
-  angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
-    var defaults = this.defaults = {
-      activeClass: 'active',
-      toggleEvent: 'click'
-    };
-    this.$get = function() {
-      return {
-        defaults: defaults
-      };
-    };
-  }).directive('bsCheckboxGroup', function() {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      compile: function postLink(element, attr) {
-        element.attr('data-toggle', 'buttons');
-        element.removeAttr('ng-model');
-        var children = element[0].querySelectorAll('input[type="checkbox"]');
-        angular.forEach(children, function(child) {
-          var childEl = angular.element(child);
-          childEl.attr('bs-checkbox', '');
-          childEl.attr('ng-model', attr.ngModel + '.' + childEl.attr('value'));
+  angular.module('mgcrea.ngStrap.core', []).service('$bsCompiler', bsCompilerService);
+  function bsCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
+    this.compile = function(options) {
+      if (options.template && /\.html$/.test(options.template)) {
+        console.warn('Deprecated use of `template` option to pass a file. Please use the `templateUrl` option instead.');
+        options.templateUrl = options.template;
+        options.template = '';
+      }
+      var templateUrl = options.templateUrl;
+      var template = options.template || '';
+      var controller = options.controller;
+      var controllerAs = options.controllerAs;
+      var resolve = angular.copy(options.resolve || {});
+      var locals = angular.copy(options.locals || {});
+      var transformTemplate = options.transformTemplate || angular.identity;
+      var bindToController = options.bindToController;
+      angular.forEach(resolve, function(value, key) {
+        if (angular.isString(value)) {
+          resolve[key] = $injector.get(value);
+        } else {
+          resolve[key] = $injector.invoke(value);
+        }
+      });
+      angular.extend(resolve, locals);
+      if (templateUrl) {
+        resolve.$template = fetchTemplate(templateUrl);
+      } else {
+        resolve.$template = $q.when(template);
+      }
+      if (options.contentTemplate) {
+        resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.contentTemplate) ]).then(function(templates) {
+          var templateEl = angular.element(templates[0]);
+          var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+          if (!options.templateUrl) contentEl.next().remove();
+          return templateEl[0].outerHTML;
         });
       }
-    };
-  }).directive('bsCheckbox', [ '$button', '$$rAF', function($button, $$rAF) {
-    var defaults = $button.defaults;
-    var constantValueRegExp = /^(true|false|\d+)$/;
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
-        var options = defaults;
-        var isInput = element[0].nodeName === 'INPUT';
-        var activeElement = isInput ? element.parent() : element;
-        var trueValue = angular.isDefined(attr.trueValue) ? attr.trueValue : true;
-        if (constantValueRegExp.test(attr.trueValue)) {
-          trueValue = scope.$eval(attr.trueValue);
+      return $q.all(resolve).then(function(locals) {
+        var template = transformTemplate(locals.$template);
+        if (options.html) {
+          template = template.replace(/ng-bind="/gi, 'ng-bind-html="');
         }
-        var falseValue = angular.isDefined(attr.falseValue) ? attr.falseValue : false;
-        if (constantValueRegExp.test(attr.falseValue)) {
-          falseValue = scope.$eval(attr.falseValue);
-        }
-        var hasExoticValues = typeof trueValue !== 'boolean' || typeof falseValue !== 'boolean';
-        if (hasExoticValues) {
-          controller.$parsers.push(function(viewValue) {
-            return viewValue ? trueValue : falseValue;
-          });
-          controller.$formatters.push(function(modelValue) {
-            return angular.equals(modelValue, trueValue);
-          });
-          scope.$watch(attr.ngModel, function(newValue, oldValue) {
-            controller.$render();
-          });
-        }
-        controller.$render = function() {
-          var isActive = angular.equals(controller.$modelValue, trueValue);
-          $$rAF(function() {
-            if (isInput) element[0].checked = isActive;
-            activeElement.toggleClass(options.activeClass, isActive);
-          });
-        };
-        element.bind(options.toggleEvent, function() {
-          scope.$apply(function() {
-            if (!isInput) {
-              controller.$setViewValue(!activeElement.hasClass('active'));
+        var element = angular.element('<div>').html(template.trim()).contents();
+        var linkFn = $compile(element);
+        return {
+          locals: locals,
+          element: element,
+          link: function link(scope) {
+            locals.$scope = scope;
+            if (controller) {
+              var invokeCtrl = $controller(controller, locals, true);
+              if (bindToController) {
+                angular.extend(invokeCtrl.instance, locals);
+              }
+              var ctrl = angular.isObject(invokeCtrl) ? invokeCtrl : invokeCtrl();
+              element.data('$ngControllerController', ctrl);
+              element.children().data('$ngControllerController', ctrl);
+              if (controllerAs) {
+                scope[controllerAs] = ctrl;
+              }
             }
-            if (!hasExoticValues) {
-              controller.$render();
-            }
-          });
-        });
-      }
-    };
-  } ]).directive('bsRadioGroup', function() {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      compile: function postLink(element, attr) {
-        element.attr('data-toggle', 'buttons');
-        element.removeAttr('ng-model');
-        var children = element[0].querySelectorAll('input[type="radio"]');
-        angular.forEach(children, function(child) {
-          angular.element(child).attr('bs-radio', '');
-          angular.element(child).attr('ng-model', attr.ngModel);
-        });
-      }
-    };
-  }).directive('bsRadio', [ '$button', '$$rAF', function($button, $$rAF) {
-    var defaults = $button.defaults;
-    var constantValueRegExp = /^(true|false|\d+)$/;
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
-        var options = defaults;
-        var isInput = element[0].nodeName === 'INPUT';
-        var activeElement = isInput ? element.parent() : element;
-        var value;
-        attr.$observe('value', function(v) {
-          value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
-          controller.$render();
-        });
-        controller.$render = function() {
-          var isActive = angular.equals(controller.$modelValue, value);
-          $$rAF(function() {
-            if (isInput) element[0].checked = isActive;
-            activeElement.toggleClass(options.activeClass, isActive);
-          });
+            return linkFn.apply(null, arguments);
+          }
         };
-        element.bind(options.toggleEvent, function() {
-          scope.$apply(function() {
-            controller.$setViewValue(value);
-            controller.$render();
-          });
-        });
-      }
+      });
     };
-  } ]);
+    function findElement(query, element) {
+      return angular.element((element || document).querySelectorAll(query));
+    }
+    var fetchPromises = {};
+    function fetchTemplate(template) {
+      if (fetchPromises[template]) return fetchPromises[template];
+      return fetchPromises[template] = $http.get(template, {
+        cache: $templateCache
+      }).then(function(res) {
+        return res.data;
+      });
+    }
+  }
+  bsCompilerService.$inject = [ '$q', '$http', '$injector', '$compile', '$controller', '$templateCache' ];
   angular.module('mgcrea.ngStrap.helpers.dateFormatter', []).service('$dateFormatter', [ '$locale', 'dateFilter', function($locale, dateFilter) {
     this.getDefaultLocale = function() {
       return $locale.id;
@@ -1430,7 +1511,9 @@
           yy: function(value) {
             return this.setFullYear(2e3 + 1 * value);
           },
-          y: proto.setFullYear
+          y: function(value) {
+            return 1 * value <= 50 && value.length === 2 ? this.setFullYear(2e3 + 1 * value) : this.setFullYear(1 * value);
+          }
         };
         var regex, setMap;
         $dateParser.init = function() {
@@ -1717,8 +1800,17 @@
           valuesFn = $parse(match[7]);
         };
         $parseOptions.valuesFn = function(scope, controller) {
-          return $q.when(valuesFn(scope, controller)).then(function(values) {
-            $parseOptions.$values = values ? parseValues(values, scope) : {};
+          var valuesPromise;
+          try {
+            valuesPromise = valuesFn(scope, controller);
+          } catch (err) {
+            valuesPromise = [];
+          }
+          return $q.when(valuesPromise).then(function(values) {
+            if (!angular.isArray(values)) {
+              values = [];
+            }
+            $parseOptions.$values = values.length ? parseValues(values, scope) : [];
             return $parseOptions.$values;
           });
         };
@@ -1764,14 +1856,15 @@
     raf.supported = rafSupported;
     return raf;
   } ]);
-  angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$modal', function() {
+  angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$modal', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
       backdropAnimation: 'am-fade',
       prefixClass: 'modal',
       prefixEvent: 'modal',
       placement: 'top',
-      template: 'modal/modal.tpl.html',
+      templateUrl: 'modal/modal.tpl.html',
+      template: '',
       contentTemplate: false,
       container: false,
       element: null,
@@ -1780,16 +1873,15 @@
       html: false,
       show: true
     };
-    this.$get = [ '$window', '$rootScope', '$compile', '$q', '$templateCache', '$http', '$animate', '$timeout', '$sce', 'dimensions', function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
+    this.$get = [ '$window', '$rootScope', '$bsCompiler', '$q', '$templateCache', '$http', '$animate', '$timeout', '$sce', 'dimensions', function($window, $rootScope, $bsCompiler, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
       var forEach = angular.forEach;
       var trim = String.prototype.trim;
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
-      var htmlReplaceRegExp = /ng-bind="/gi;
       function ModalFactory(config) {
         var $modal = {};
         var options = $modal.$options = angular.extend({}, defaults, config);
-        $modal.$promise = fetchTemplate(options.template);
+        var promise = $modal.$promise = $bsCompiler.compile(options);
         var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if (!options.element && !options.container) {
           options.container = 'body';
@@ -1814,17 +1906,7 @@
           });
         };
         $modal.$isShown = scope.$isShown = false;
-        if (options.contentTemplate) {
-          $modal.$promise = $modal.$promise.then(function(template) {
-            var templateEl = angular.element(template);
-            return fetchTemplate(options.contentTemplate).then(function(contentTemplate) {
-              var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(contentTemplate);
-              if (!config.template) contentEl.next().remove();
-              return templateEl[0].outerHTML;
-            });
-          });
-        }
-        var modalLinker, modalElement;
+        var compileData, modalElement, modalScope;
         var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
         backdropElement.css({
           position: 'fixed',
@@ -1834,11 +1916,8 @@
           right: '0px',
           'z-index': 1038
         });
-        $modal.$promise.then(function(template) {
-          if (angular.isObject(template)) template = template.data;
-          if (options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
-          template = trim.apply(template);
-          modalLinker = $compile(template);
+        promise.then(function(data) {
+          compileData = data;
           $modal.init();
         });
         $modal.init = function() {
@@ -1849,10 +1928,7 @@
           }
         };
         $modal.destroy = function() {
-          if (modalElement) {
-            modalElement.remove();
-            modalElement = null;
-          }
+          destroyModalElement();
           if (backdropElement) {
             backdropElement.remove();
             backdropElement = null;
@@ -1874,7 +1950,9 @@
               after = options.element;
             }
           }
-          modalElement = $modal.$element = modalLinker(scope, function(clonedElement, scope) {});
+          if (modalElement) destroyModalElement();
+          modalScope = $modal.$scope.$new();
+          modalElement = $modal.$element = compileData.link(modalScope, function(clonedElement, scope) {});
           if (scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
             return;
           }
@@ -1905,14 +1983,8 @@
           if (options.animation) {
             bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
           }
-          if (options.backdrop) {
-            modalElement.on('click', hideOnBackdropClick);
-            backdropElement.on('click', hideOnBackdropClick);
-            backdropElement.on('wheel', preventEventDefault);
-          }
-          if (options.keyboard) {
-            modalElement.on('keyup', $modal.$onKeyUp);
-          }
+          bindBackdropEvents();
+          bindKeyboardEvents();
         };
         function enterAnimateCallback() {
           scope.$emit(options.prefixEvent + '.show', $modal);
@@ -1932,14 +2004,8 @@
           }
           $modal.$isShown = scope.$isShown = false;
           safeDigest(scope);
-          if (options.backdrop) {
-            modalElement.off('click', hideOnBackdropClick);
-            backdropElement.off('click', hideOnBackdropClick);
-            backdropElement.off('wheel', preventEventDefault);
-          }
-          if (options.keyboard) {
-            modalElement.off('keyup', $modal.$onKeyUp);
-          }
+          unbindBackdropEvents();
+          unbindKeyboardEvents();
         };
         function leaveAnimateCallback() {
           scope.$emit(options.prefixEvent + '.hide', $modal);
@@ -1960,12 +2026,50 @@
             evt.stopPropagation();
           }
         };
+        function bindBackdropEvents() {
+          if (options.backdrop) {
+            modalElement.on('click', hideOnBackdropClick);
+            backdropElement.on('click', hideOnBackdropClick);
+            backdropElement.on('wheel', preventEventDefault);
+          }
+        }
+        function unbindBackdropEvents() {
+          if (options.backdrop) {
+            modalElement.off('click', hideOnBackdropClick);
+            backdropElement.off('click', hideOnBackdropClick);
+            backdropElement.off('wheel', preventEventDefault);
+          }
+        }
+        function bindKeyboardEvents() {
+          if (options.keyboard) {
+            modalElement.on('keyup', $modal.$onKeyUp);
+          }
+        }
+        function unbindKeyboardEvents() {
+          if (options.keyboard) {
+            modalElement.off('keyup', $modal.$onKeyUp);
+          }
+        }
         function hideOnBackdropClick(evt) {
           if (evt.target !== evt.currentTarget) return;
           options.backdrop === 'static' ? $modal.focus() : $modal.hide();
         }
         function preventEventDefault(evt) {
           evt.preventDefault();
+        }
+        function destroyModalElement() {
+          if ($modal.$isShown && modalElement !== null) {
+            unbindBackdropEvents();
+            unbindKeyboardEvents();
+          }
+          if (modalScope) {
+            modalScope.$destroy();
+            modalScope = null;
+          }
+          if (modalElement) {
+            modalElement.remove();
+            modalElement = $modal.$element = null;
+          }
         }
         return $modal;
       }
@@ -1974,15 +2078,6 @@
       }
       function findElement(query, element) {
         return angular.element((element || document).querySelectorAll(query));
-      }
-      var fetchPromises = {};
-      function fetchTemplate(template) {
-        if (fetchPromises[template]) return fetchPromises[template];
-        return fetchPromises[template] = $http.get(template, {
-          cache: $templateCache
-        }).then(function(res) {
-          return res.data;
-        });
       }
       return ModalFactory;
     } ];
@@ -1996,7 +2091,7 @@
           element: element,
           show: false
         };
-        angular.forEach([ 'template', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'controller', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
@@ -2062,90 +2157,6 @@
               liElement.removeClass(options.activeClass);
             }
           });
-        });
-      }
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.popover', [ 'mgcrea.ngStrap.tooltip' ]).provider('$popover', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      customClass: '',
-      container: false,
-      target: false,
-      placement: 'right',
-      template: 'popover/popover.tpl.html',
-      contentTemplate: false,
-      trigger: 'click',
-      keyboard: true,
-      html: false,
-      title: '',
-      content: '',
-      delay: 0,
-      autoClose: false
-    };
-    this.$get = [ '$tooltip', function($tooltip) {
-      function PopoverFactory(element, config) {
-        var options = angular.extend({}, defaults, config);
-        var $popover = $tooltip(element, options);
-        if (options.content) {
-          $popover.$scope.content = options.content;
-        }
-        return $popover;
-      }
-      return PopoverFactory;
-    } ];
-  }).directive('bsPopover', [ '$window', '$sce', '$popover', function($window, $sce, $popover) {
-    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
-    return {
-      restrict: 'EAC',
-      scope: true,
-      link: function postLink(scope, element, attr) {
-        var options = {
-          scope: scope
-        };
-        angular.forEach([ 'template', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'customClass', 'autoClose', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
-        });
-        var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'html', 'container', 'autoClose' ], function(key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
-        });
-        var dataTarget = element.attr('data-target');
-        if (angular.isDefined(dataTarget)) {
-          if (falseValueRegExp.test(dataTarget)) options.target = false; else options.target = dataTarget;
-        }
-        angular.forEach([ 'title', 'content' ], function(key) {
-          attr[key] && attr.$observe(key, function(newValue, oldValue) {
-            scope[key] = $sce.trustAsHtml(newValue);
-            angular.isDefined(oldValue) && requestAnimationFrame(function() {
-              popover && popover.$applyPlacement();
-            });
-          });
-        });
-        attr.bsPopover && scope.$watch(attr.bsPopover, function(newValue, oldValue) {
-          if (angular.isObject(newValue)) {
-            angular.extend(scope, newValue);
-          } else {
-            scope.content = newValue;
-          }
-          angular.isDefined(oldValue) && requestAnimationFrame(function() {
-            popover && popover.$applyPlacement();
-          });
-        }, true);
-        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
-          if (!popover || !angular.isDefined(newValue)) return;
-          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
-          newValue === true ? popover.show() : popover.hide();
-        });
-        attr.viewport && scope.$watch(attr.viewport, function(newValue) {
-          if (!popover || !angular.isDefined(newValue)) return;
-          popover.setViewport(newValue);
-        });
-        var popover = $popover(element, options);
-        scope.$on('$destroy', function() {
-          if (popover) popover.destroy();
-          options = null;
-          popover = null;
         });
       }
     };
@@ -2329,7 +2340,7 @@
       prefixClass: 'select',
       prefixEvent: '$select',
       placement: 'bottom-left',
-      template: 'select/select.tpl.html',
+      templateUrl: 'select/select.tpl.html',
       trigger: 'focus',
       container: false,
       keyboard: true,
@@ -2523,7 +2534,7 @@
           scope: scope,
           placeholder: defaults.placeholder
         };
-        angular.forEach([ 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
@@ -2580,6 +2591,90 @@
           if (select) select.destroy();
           options = null;
           select = null;
+        });
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.popover', [ 'mgcrea.ngStrap.tooltip' ]).provider('$popover', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      customClass: '',
+      container: false,
+      target: false,
+      placement: 'right',
+      templateUrl: 'popover/popover.tpl.html',
+      contentTemplate: false,
+      trigger: 'click',
+      keyboard: true,
+      html: false,
+      title: '',
+      content: '',
+      delay: 0,
+      autoClose: false
+    };
+    this.$get = [ '$tooltip', function($tooltip) {
+      function PopoverFactory(element, config) {
+        var options = angular.extend({}, defaults, config);
+        var $popover = $tooltip(element, options);
+        if (options.content) {
+          $popover.$scope.content = options.content;
+        }
+        return $popover;
+      }
+      return PopoverFactory;
+    } ];
+  }).directive('bsPopover', [ '$window', '$sce', '$popover', function($window, $sce, $popover) {
+    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+    return {
+      restrict: 'EAC',
+      scope: true,
+      link: function postLink(scope, element, attr) {
+        var options = {
+          scope: scope
+        };
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'customClass', 'autoClose', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach([ 'html', 'container', 'autoClose' ], function(key) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+        var dataTarget = element.attr('data-target');
+        if (angular.isDefined(dataTarget)) {
+          if (falseValueRegExp.test(dataTarget)) options.target = false; else options.target = dataTarget;
+        }
+        angular.forEach([ 'title', 'content' ], function(key) {
+          attr[key] && attr.$observe(key, function(newValue, oldValue) {
+            scope[key] = $sce.trustAsHtml(newValue);
+            angular.isDefined(oldValue) && requestAnimationFrame(function() {
+              popover && popover.$applyPlacement();
+            });
+          });
+        });
+        attr.bsPopover && scope.$watch(attr.bsPopover, function(newValue, oldValue) {
+          if (angular.isObject(newValue)) {
+            angular.extend(scope, newValue);
+          } else {
+            scope.content = newValue;
+          }
+          angular.isDefined(oldValue) && requestAnimationFrame(function() {
+            popover && popover.$applyPlacement();
+          });
+        }, true);
+        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
+          if (!popover || !angular.isDefined(newValue)) return;
+          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
+          newValue === true ? popover.show() : popover.hide();
+        });
+        attr.viewport && scope.$watch(attr.viewport, function(newValue) {
+          if (!popover || !angular.isDefined(newValue)) return;
+          popover.setViewport(newValue);
+        });
+        var popover = $popover(element, options);
+        scope.$on('$destroy', function() {
+          if (popover) popover.destroy();
+          options = null;
+          popover = null;
         });
       }
     };
@@ -2712,449 +2807,7 @@
       }
     };
   } ]);
-  angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser', 'mgcrea.ngStrap.helpers.dateFormatter', 'mgcrea.ngStrap.tooltip' ]).provider('$timepicker', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      prefixClass: 'timepicker',
-      placement: 'bottom-left',
-      template: 'timepicker/timepicker.tpl.html',
-      trigger: 'focus',
-      container: false,
-      keyboard: true,
-      html: false,
-      delay: 0,
-      useNative: true,
-      timeType: 'date',
-      timeFormat: 'shortTime',
-      timezone: null,
-      modelTimeFormat: null,
-      autoclose: false,
-      minTime: -Infinity,
-      maxTime: +Infinity,
-      length: 5,
-      hourStep: 1,
-      minuteStep: 5,
-      secondStep: 5,
-      roundDisplay: false,
-      iconUp: 'glyphicon glyphicon-chevron-up',
-      iconDown: 'glyphicon glyphicon-chevron-down',
-      arrowBehavior: 'pager'
-    };
-    this.$get = [ '$window', '$document', '$rootScope', '$sce', '$dateFormatter', '$tooltip', '$timeout', function($window, $document, $rootScope, $sce, $dateFormatter, $tooltip, $timeout) {
-      var bodyEl = angular.element($window.document.body);
-      var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
-      var isTouch = 'createTouch' in $window.document && isNative;
-      if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
-      function timepickerFactory(element, controller, config) {
-        var $timepicker = $tooltip(element, angular.extend({}, defaults, config));
-        var parentScope = config.scope;
-        var options = $timepicker.$options;
-        var scope = $timepicker.$scope;
-        var lang = options.lang;
-        var formatDate = function(date, format, timezone) {
-          return $dateFormatter.formatDate(date, format, lang, timezone);
-        };
-        function floorMinutes(time) {
-          var coeff = 1e3 * 60 * options.minuteStep;
-          return new Date(Math.floor(time.getTime() / coeff) * coeff);
-        }
-        var selectedIndex = 0;
-        var defaultDate = options.roundDisplay ? floorMinutes(new Date()) : new Date();
-        var startDate = controller.$dateValue || defaultDate;
-        var viewDate = {
-          hour: startDate.getHours(),
-          meridian: startDate.getHours() < 12,
-          minute: startDate.getMinutes(),
-          second: startDate.getSeconds(),
-          millisecond: startDate.getMilliseconds()
-        };
-        var format = $dateFormatter.getDatetimeFormat(options.timeFormat, lang);
-        var hoursFormat = $dateFormatter.hoursFormat(format), timeSeparator = $dateFormatter.timeSeparator(format), minutesFormat = $dateFormatter.minutesFormat(format), secondsFormat = $dateFormatter.secondsFormat(format), showSeconds = $dateFormatter.showSeconds(format), showAM = $dateFormatter.showAM(format);
-        scope.$iconUp = options.iconUp;
-        scope.$iconDown = options.iconDown;
-        scope.$select = function(date, index) {
-          $timepicker.select(date, index);
-        };
-        scope.$moveIndex = function(value, index) {
-          $timepicker.$moveIndex(value, index);
-        };
-        scope.$switchMeridian = function(date) {
-          $timepicker.switchMeridian(date);
-        };
-        $timepicker.update = function(date) {
-          if (angular.isDate(date) && !isNaN(date.getTime())) {
-            $timepicker.$date = date;
-            angular.extend(viewDate, {
-              hour: date.getHours(),
-              minute: date.getMinutes(),
-              second: date.getSeconds(),
-              millisecond: date.getMilliseconds()
-            });
-            $timepicker.$build();
-          } else if (!$timepicker.$isBuilt) {
-            $timepicker.$build();
-          }
-        };
-        $timepicker.select = function(date, index, keep) {
-          if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) controller.$dateValue = new Date(1970, 0, 1);
-          if (!angular.isDate(date)) date = new Date(date);
-          if (index === 0) controller.$dateValue.setHours(date.getHours()); else if (index === 1) controller.$dateValue.setMinutes(date.getMinutes()); else if (index === 2) controller.$dateValue.setSeconds(date.getSeconds());
-          controller.$setViewValue(angular.copy(controller.$dateValue));
-          controller.$render();
-          if (options.autoclose && !keep) {
-            $timeout(function() {
-              $timepicker.hide(true);
-            });
-          }
-        };
-        $timepicker.switchMeridian = function(date) {
-          if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) {
-            return;
-          }
-          var hours = (date || controller.$dateValue).getHours();
-          controller.$dateValue.setHours(hours < 12 ? hours + 12 : hours - 12);
-          controller.$setViewValue(angular.copy(controller.$dateValue));
-          controller.$render();
-        };
-        $timepicker.$build = function() {
-          var i, midIndex = scope.midIndex = parseInt(options.length / 2, 10);
-          var hours = [], hour;
-          for (i = 0; i < options.length; i++) {
-            hour = new Date(1970, 0, 1, viewDate.hour - (midIndex - i) * options.hourStep);
-            hours.push({
-              date: hour,
-              label: formatDate(hour, hoursFormat),
-              selected: $timepicker.$date && $timepicker.$isSelected(hour, 0),
-              disabled: $timepicker.$isDisabled(hour, 0)
-            });
-          }
-          var minutes = [], minute;
-          for (i = 0; i < options.length; i++) {
-            minute = new Date(1970, 0, 1, 0, viewDate.minute - (midIndex - i) * options.minuteStep);
-            minutes.push({
-              date: minute,
-              label: formatDate(minute, minutesFormat),
-              selected: $timepicker.$date && $timepicker.$isSelected(minute, 1),
-              disabled: $timepicker.$isDisabled(minute, 1)
-            });
-          }
-          var seconds = [], second;
-          for (i = 0; i < options.length; i++) {
-            second = new Date(1970, 0, 1, 0, 0, viewDate.second - (midIndex - i) * options.secondStep);
-            seconds.push({
-              date: second,
-              label: formatDate(second, secondsFormat),
-              selected: $timepicker.$date && $timepicker.$isSelected(second, 2),
-              disabled: $timepicker.$isDisabled(second, 2)
-            });
-          }
-          var rows = [];
-          for (i = 0; i < options.length; i++) {
-            if (showSeconds) {
-              rows.push([ hours[i], minutes[i], seconds[i] ]);
-            } else {
-              rows.push([ hours[i], minutes[i] ]);
-            }
-          }
-          scope.rows = rows;
-          scope.showSeconds = showSeconds;
-          scope.showAM = showAM;
-          scope.isAM = ($timepicker.$date || hours[midIndex].date).getHours() < 12;
-          scope.timeSeparator = timeSeparator;
-          $timepicker.$isBuilt = true;
-        };
-        $timepicker.$isSelected = function(date, index) {
-          if (!$timepicker.$date) return false; else if (index === 0) {
-            return date.getHours() === $timepicker.$date.getHours();
-          } else if (index === 1) {
-            return date.getMinutes() === $timepicker.$date.getMinutes();
-          } else if (index === 2) {
-            return date.getSeconds() === $timepicker.$date.getSeconds();
-          }
-        };
-        $timepicker.$isDisabled = function(date, index) {
-          var selectedTime;
-          if (index === 0) {
-            selectedTime = date.getTime() + viewDate.minute * 6e4 + viewDate.second * 1e3;
-          } else if (index === 1) {
-            selectedTime = date.getTime() + viewDate.hour * 36e5 + viewDate.second * 1e3;
-          } else if (index === 2) {
-            selectedTime = date.getTime() + viewDate.hour * 36e5 + viewDate.minute * 6e4;
-          }
-          return selectedTime < options.minTime * 1 || selectedTime > options.maxTime * 1;
-        };
-        scope.$arrowAction = function(value, index) {
-          if (options.arrowBehavior === 'picker') {
-            $timepicker.$setTimeByStep(value, index);
-          } else {
-            $timepicker.$moveIndex(value, index);
-          }
-        };
-        $timepicker.$setTimeByStep = function(value, index) {
-          var newDate = new Date($timepicker.$date);
-          var hours = newDate.getHours(), hoursLength = formatDate(newDate, hoursFormat).length;
-          var minutes = newDate.getMinutes(), minutesLength = formatDate(newDate, minutesFormat).length;
-          var seconds = newDate.getSeconds(), secondsLength = formatDate(newDate, secondsFormat).length;
-          if (index === 0) {
-            newDate.setHours(hours - parseInt(options.hourStep, 10) * value);
-          } else if (index === 1) {
-            newDate.setMinutes(minutes - parseInt(options.minuteStep, 10) * value);
-          } else if (index === 2) {
-            newDate.setSeconds(seconds - parseInt(options.secondStep, 10) * value);
-          }
-          $timepicker.select(newDate, index, true);
-        };
-        $timepicker.$moveIndex = function(value, index) {
-          var targetDate;
-          if (index === 0) {
-            targetDate = new Date(1970, 0, 1, viewDate.hour + value * options.length, viewDate.minute, viewDate.second);
-            angular.extend(viewDate, {
-              hour: targetDate.getHours()
-            });
-          } else if (index === 1) {
-            targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute + value * options.length * options.minuteStep, viewDate.second);
-            angular.extend(viewDate, {
-              minute: targetDate.getMinutes()
-            });
-          } else if (index === 2) {
-            targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute, viewDate.second + value * options.length * options.secondStep);
-            angular.extend(viewDate, {
-              second: targetDate.getSeconds()
-            });
-          }
-          $timepicker.$build();
-        };
-        $timepicker.$onMouseDown = function(evt) {
-          if (evt.target.nodeName.toLowerCase() !== 'input') evt.preventDefault();
-          evt.stopPropagation();
-          if (isTouch) {
-            var targetEl = angular.element(evt.target);
-            if (targetEl[0].nodeName.toLowerCase() !== 'button') {
-              targetEl = targetEl.parent();
-            }
-            targetEl.triggerHandler('click');
-          }
-        };
-        $timepicker.$onKeyDown = function(evt) {
-          if (!/(38|37|39|40|13)/.test(evt.keyCode) || evt.shiftKey || evt.altKey) return;
-          evt.preventDefault();
-          evt.stopPropagation();
-          if (evt.keyCode === 13) return $timepicker.hide(true);
-          var newDate = new Date($timepicker.$date);
-          var hours = newDate.getHours(), hoursLength = formatDate(newDate, hoursFormat).length;
-          var minutes = newDate.getMinutes(), minutesLength = formatDate(newDate, minutesFormat).length;
-          var seconds = newDate.getSeconds(), secondsLength = formatDate(newDate, secondsFormat).length;
-          var sepLength = 1;
-          var lateralMove = /(37|39)/.test(evt.keyCode);
-          var count = 2 + showSeconds * 1 + showAM * 1;
-          if (lateralMove) {
-            if (evt.keyCode === 37) selectedIndex = selectedIndex < 1 ? count - 1 : selectedIndex - 1; else if (evt.keyCode === 39) selectedIndex = selectedIndex < count - 1 ? selectedIndex + 1 : 0;
-          }
-          var selectRange = [ 0, hoursLength ];
-          var incr = 0;
-          if (evt.keyCode === 38) incr = -1;
-          if (evt.keyCode === 40) incr = +1;
-          var isSeconds = selectedIndex === 2 && showSeconds;
-          var isMeridian = selectedIndex === 2 && !showSeconds || selectedIndex === 3 && showSeconds;
-          if (selectedIndex === 0) {
-            newDate.setHours(hours + incr * parseInt(options.hourStep, 10));
-            hoursLength = formatDate(newDate, hoursFormat).length;
-            selectRange = [ 0, hoursLength ];
-          } else if (selectedIndex === 1) {
-            newDate.setMinutes(minutes + incr * parseInt(options.minuteStep, 10));
-            minutesLength = formatDate(newDate, minutesFormat).length;
-            selectRange = [ hoursLength + sepLength, minutesLength ];
-          } else if (isSeconds) {
-            newDate.setSeconds(seconds + incr * parseInt(options.secondStep, 10));
-            secondsLength = formatDate(newDate, secondsFormat).length;
-            selectRange = [ hoursLength + sepLength + minutesLength + sepLength, secondsLength ];
-          } else if (isMeridian) {
-            if (!lateralMove) $timepicker.switchMeridian();
-            selectRange = [ hoursLength + sepLength + minutesLength + sepLength + (secondsLength + sepLength) * showSeconds, 2 ];
-          }
-          $timepicker.select(newDate, selectedIndex, true);
-          createSelection(selectRange[0], selectRange[1]);
-          parentScope.$digest();
-        };
-        function createSelection(start, length) {
-          var end = start + length;
-          if (element[0].createTextRange) {
-            var selRange = element[0].createTextRange();
-            selRange.collapse(true);
-            selRange.moveStart('character', start);
-            selRange.moveEnd('character', end);
-            selRange.select();
-          } else if (element[0].setSelectionRange) {
-            element[0].setSelectionRange(start, end);
-          } else if (angular.isUndefined(element[0].selectionStart)) {
-            element[0].selectionStart = start;
-            element[0].selectionEnd = end;
-          }
-        }
-        function focusElement() {
-          element[0].focus();
-        }
-        var _init = $timepicker.init;
-        $timepicker.init = function() {
-          if (isNative && options.useNative) {
-            element.prop('type', 'time');
-            element.css('-webkit-appearance', 'textfield');
-            return;
-          } else if (isTouch) {
-            element.prop('type', 'text');
-            element.attr('readonly', 'true');
-            element.on('click', focusElement);
-          }
-          _init();
-        };
-        var _destroy = $timepicker.destroy;
-        $timepicker.destroy = function() {
-          if (isNative && options.useNative) {
-            element.off('click', focusElement);
-          }
-          _destroy();
-        };
-        var _show = $timepicker.show;
-        $timepicker.show = function() {
-          _show();
-          $timeout(function() {
-            $timepicker.$element && $timepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
-            if (options.keyboard) {
-              element && element.on('keydown', $timepicker.$onKeyDown);
-            }
-          }, 0, false);
-        };
-        var _hide = $timepicker.hide;
-        $timepicker.hide = function(blur) {
-          if (!$timepicker.$isShown) return;
-          $timepicker.$element && $timepicker.$element.off(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
-          if (options.keyboard) {
-            element && element.off('keydown', $timepicker.$onKeyDown);
-          }
-          _hide(blur);
-        };
-        return $timepicker;
-      }
-      timepickerFactory.defaults = defaults;
-      return timepickerFactory;
-    } ];
-  }).directive('bsTimepicker', [ '$window', '$parse', '$q', '$dateFormatter', '$dateParser', '$timepicker', function($window, $parse, $q, $dateFormatter, $dateParser, $timepicker) {
-    var defaults = $timepicker.defaults;
-    var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
-    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
-    return {
-      restrict: 'EAC',
-      require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
-        var options = {
-          scope: scope,
-          controller: controller
-        };
-        angular.forEach([ 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
-        });
-        var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'html', 'container', 'autoclose', 'useNative', 'roundDisplay' ], function(key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
-        });
-        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
-          if (!timepicker || !angular.isDefined(newValue)) return;
-          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(timepicker),?/i);
-          newValue === true ? timepicker.show() : timepicker.hide();
-        });
-        if (isNative && (options.useNative || defaults.useNative)) options.timeFormat = 'HH:mm';
-        var timepicker = $timepicker(element, controller, options);
-        options = timepicker.$options;
-        var lang = options.lang;
-        var formatDate = function(date, format, timezone) {
-          return $dateFormatter.formatDate(date, format, lang, timezone);
-        };
-        var dateParser = $dateParser({
-          format: options.timeFormat,
-          lang: lang
-        });
-        angular.forEach([ 'minTime', 'maxTime' ], function(key) {
-          angular.isDefined(attr[key]) && attr.$observe(key, function(newValue) {
-            timepicker.$options[key] = dateParser.getTimeForAttribute(key, newValue);
-            !isNaN(timepicker.$options[key]) && timepicker.$build();
-            validateAgainstMinMaxTime(controller.$dateValue);
-          });
-        });
-        scope.$watch(attr.ngModel, function(newValue, oldValue) {
-          timepicker.update(controller.$dateValue);
-        }, true);
-        function validateAgainstMinMaxTime(parsedTime) {
-          if (!angular.isDate(parsedTime)) return;
-          var isMinValid = isNaN(options.minTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) >= options.minTime;
-          var isMaxValid = isNaN(options.maxTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) <= options.maxTime;
-          var isValid = isMinValid && isMaxValid;
-          controller.$setValidity('date', isValid);
-          controller.$setValidity('min', isMinValid);
-          controller.$setValidity('max', isMaxValid);
-          if (!isValid) {
-            return;
-          }
-          controller.$dateValue = parsedTime;
-        }
-        controller.$parsers.unshift(function(viewValue) {
-          var date;
-          if (!viewValue) {
-            controller.$setValidity('date', true);
-            return null;
-          }
-          var parsedTime = angular.isDate(viewValue) ? viewValue : dateParser.parse(viewValue, controller.$dateValue);
-          if (!parsedTime || isNaN(parsedTime.getTime())) {
-            controller.$setValidity('date', false);
-            return;
-          } else {
-            validateAgainstMinMaxTime(parsedTime);
-          }
-          if (options.timeType === 'string') {
-            date = dateParser.timezoneOffsetAdjust(parsedTime, options.timezone, true);
-            return formatDate(date, options.modelTimeFormat || options.timeFormat);
-          }
-          date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
-          if (options.timeType === 'number') {
-            return date.getTime();
-          } else if (options.timeType === 'unix') {
-            return date.getTime() / 1e3;
-          } else if (options.timeType === 'iso') {
-            return date.toISOString();
-          } else {
-            return new Date(date);
-          }
-        });
-        controller.$formatters.push(function(modelValue) {
-          var date;
-          if (angular.isUndefined(modelValue) || modelValue === null) {
-            date = NaN;
-          } else if (angular.isDate(modelValue)) {
-            date = modelValue;
-          } else if (options.timeType === 'string') {
-            date = dateParser.parse(modelValue, null, options.modelTimeFormat);
-          } else if (options.timeType === 'unix') {
-            date = new Date(modelValue * 1e3);
-          } else {
-            date = new Date(modelValue);
-          }
-          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
-          return getTimeFormattedString();
-        });
-        controller.$render = function() {
-          element.val(getTimeFormattedString());
-        };
-        function getTimeFormattedString() {
-          return !controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : formatDate(controller.$dateValue, options.timeFormat);
-        }
-        scope.$on('$destroy', function() {
-          if (timepicker) timepicker.destroy();
-          options = null;
-          timepicker = null;
-        });
-      }
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$tooltip', function() {
+  angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$tooltip', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
       customClass: '',
@@ -3163,7 +2816,8 @@
       container: false,
       target: false,
       placement: 'top',
-      template: 'tooltip/tooltip.tpl.html',
+      templateUrl: 'tooltip/tooltip.tpl.html',
+      template: '',
       contentTemplate: false,
       trigger: 'hover focus',
       keyboard: false,
@@ -3179,17 +2833,17 @@
         padding: 0
       }
     };
-    this.$get = [ '$window', '$rootScope', '$compile', '$q', '$templateCache', '$http', '$animate', '$sce', 'dimensions', '$$rAF', '$timeout', function($window, $rootScope, $compile, $q, $templateCache, $http, $animate, $sce, dimensions, $$rAF, $timeout) {
+    this.$get = [ '$window', '$rootScope', '$bsCompiler', '$q', '$templateCache', '$http', '$animate', '$sce', 'dimensions', '$$rAF', '$timeout', function($window, $rootScope, $bsCompiler, $q, $templateCache, $http, $animate, $sce, dimensions, $$rAF, $timeout) {
       var trim = String.prototype.trim;
       var isTouch = 'createTouch' in $window.document;
       var htmlReplaceRegExp = /ng-bind="/gi;
       var $body = angular.element($window.document);
       function TooltipFactory(element, config) {
         var $tooltip = {};
-        var nodeName = element[0].nodeName.toLowerCase();
         var options = $tooltip.$options = angular.extend({}, defaults, config);
-        $tooltip.$promise = fetchTemplate(options.template);
+        var promise = $tooltip.$promise = $bsCompiler.compile(options);
         var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+        var nodeName = element[0].nodeName.toLowerCase();
         if (options.delay && angular.isString(options.delay)) {
           var split = options.delay.split(',').map(parseFloat);
           options.delay = split.length > 1 ? {
@@ -3223,24 +2877,9 @@
         };
         $tooltip.$isShown = scope.$isShown = false;
         var timeout, hoverState;
-        if (options.contentTemplate) {
-          $tooltip.$promise = $tooltip.$promise.then(function(template) {
-            var templateEl = angular.element(template);
-            return fetchTemplate(options.contentTemplate).then(function(contentTemplate) {
-              var contentEl = findElement('[ng-bind="content"]', templateEl[0]);
-              if (!contentEl.length) contentEl = findElement('[ng-bind="title"]', templateEl[0]);
-              contentEl.removeAttr('ng-bind').html(contentTemplate);
-              return templateEl[0].outerHTML;
-            });
-          });
-        }
-        var tipLinker, tipElement, tipTemplate, tipContainer, tipScope;
-        $tooltip.$promise.then(function(template) {
-          if (angular.isObject(template)) template = template.data;
-          if (options.html) template = template.replace(htmlReplaceRegExp, 'ng-bind-html="');
-          template = trim.apply(template);
-          tipTemplate = template;
-          tipLinker = $compile(template);
+        var compileData, tipElement, tipContainer, tipScope;
+        promise.then(function(data) {
+          compileData = data;
           $tooltip.init();
         });
         $tooltip.init = function() {
@@ -3299,7 +2938,7 @@
           }
           if (tipElement) destroyTipElement();
           tipScope = $tooltip.$scope.$new();
-          tipElement = $tooltip.$element = tipLinker(tipScope, function(clonedElement, scope) {});
+          tipElement = $tooltip.$element = compileData.link(tipScope, function(clonedElement, scope) {});
           tipElement.css({
             top: '-9999px',
             left: '-9999px',
@@ -3683,7 +3322,7 @@
         var options = {
           scope: scope
         };
-        angular.forEach([ 'template', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
@@ -3739,13 +3378,454 @@
       }
     };
   } ]);
+  angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser', 'mgcrea.ngStrap.helpers.dateFormatter', 'mgcrea.ngStrap.tooltip' ]).provider('$timepicker', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      prefixClass: 'timepicker',
+      placement: 'bottom-left',
+      templateUrl: 'timepicker/timepicker.tpl.html',
+      trigger: 'focus',
+      container: false,
+      keyboard: true,
+      html: false,
+      delay: 0,
+      useNative: true,
+      timeType: 'date',
+      timeFormat: 'shortTime',
+      timezone: null,
+      modelTimeFormat: null,
+      autoclose: false,
+      minTime: -Infinity,
+      maxTime: +Infinity,
+      length: 5,
+      hourStep: 1,
+      minuteStep: 5,
+      secondStep: 5,
+      roundDisplay: false,
+      iconUp: 'glyphicon glyphicon-chevron-up',
+      iconDown: 'glyphicon glyphicon-chevron-down',
+      arrowBehavior: 'pager'
+    };
+    this.$get = [ '$window', '$document', '$rootScope', '$sce', '$dateFormatter', '$tooltip', '$timeout', function($window, $document, $rootScope, $sce, $dateFormatter, $tooltip, $timeout) {
+      var bodyEl = angular.element($window.document.body);
+      var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
+      var isTouch = 'createTouch' in $window.document && isNative;
+      if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
+      function timepickerFactory(element, controller, config) {
+        var $timepicker = $tooltip(element, angular.extend({}, defaults, config));
+        var parentScope = config.scope;
+        var options = $timepicker.$options;
+        var scope = $timepicker.$scope;
+        var lang = options.lang;
+        var formatDate = function(date, format, timezone) {
+          return $dateFormatter.formatDate(date, format, lang, timezone);
+        };
+        function floorMinutes(time) {
+          var coeff = 1e3 * 60 * options.minuteStep;
+          return new Date(Math.floor(time.getTime() / coeff) * coeff);
+        }
+        var selectedIndex = 0;
+        var defaultDate = options.roundDisplay ? floorMinutes(new Date()) : new Date();
+        var startDate = controller.$dateValue || defaultDate;
+        var viewDate = {
+          hour: startDate.getHours(),
+          meridian: startDate.getHours() < 12,
+          minute: startDate.getMinutes(),
+          second: startDate.getSeconds(),
+          millisecond: startDate.getMilliseconds()
+        };
+        var format = $dateFormatter.getDatetimeFormat(options.timeFormat, lang);
+        var hoursFormat = $dateFormatter.hoursFormat(format), timeSeparator = $dateFormatter.timeSeparator(format), minutesFormat = $dateFormatter.minutesFormat(format), secondsFormat = $dateFormatter.secondsFormat(format), showSeconds = $dateFormatter.showSeconds(format), showAM = $dateFormatter.showAM(format);
+        scope.$iconUp = options.iconUp;
+        scope.$iconDown = options.iconDown;
+        scope.$select = function(date, index) {
+          $timepicker.select(date, index);
+        };
+        scope.$moveIndex = function(value, index) {
+          $timepicker.$moveIndex(value, index);
+        };
+        scope.$switchMeridian = function(date) {
+          $timepicker.switchMeridian(date);
+        };
+        $timepicker.update = function(date) {
+          if (angular.isDate(date) && !isNaN(date.getTime())) {
+            $timepicker.$date = date;
+            angular.extend(viewDate, {
+              hour: date.getHours(),
+              minute: date.getMinutes(),
+              second: date.getSeconds(),
+              millisecond: date.getMilliseconds()
+            });
+            $timepicker.$build();
+          } else if (!$timepicker.$isBuilt) {
+            $timepicker.$build();
+          }
+        };
+        $timepicker.select = function(date, index, keep) {
+          if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) controller.$dateValue = new Date(1970, 0, 1);
+          if (!angular.isDate(date)) date = new Date(date);
+          if (index === 0) controller.$dateValue.setHours(date.getHours()); else if (index === 1) controller.$dateValue.setMinutes(date.getMinutes()); else if (index === 2) controller.$dateValue.setSeconds(date.getSeconds());
+          controller.$setViewValue(angular.copy(controller.$dateValue));
+          controller.$render();
+          if (options.autoclose && !keep) {
+            $timeout(function() {
+              $timepicker.hide(true);
+            });
+          }
+        };
+        $timepicker.switchMeridian = function(date) {
+          if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) {
+            return;
+          }
+          var hours = (date || controller.$dateValue).getHours();
+          controller.$dateValue.setHours(hours < 12 ? hours + 12 : hours - 12);
+          controller.$setViewValue(angular.copy(controller.$dateValue));
+          controller.$render();
+        };
+        $timepicker.$build = function() {
+          var i, midIndex = scope.midIndex = parseInt(options.length / 2, 10);
+          var hours = [], hour;
+          for (i = 0; i < options.length; i++) {
+            hour = new Date(1970, 0, 1, viewDate.hour - (midIndex - i) * options.hourStep);
+            hours.push({
+              date: hour,
+              label: formatDate(hour, hoursFormat),
+              selected: $timepicker.$date && $timepicker.$isSelected(hour, 0),
+              disabled: $timepicker.$isDisabled(hour, 0)
+            });
+          }
+          var minutes = [], minute;
+          for (i = 0; i < options.length; i++) {
+            minute = new Date(1970, 0, 1, 0, viewDate.minute - (midIndex - i) * options.minuteStep);
+            minutes.push({
+              date: minute,
+              label: formatDate(minute, minutesFormat),
+              selected: $timepicker.$date && $timepicker.$isSelected(minute, 1),
+              disabled: $timepicker.$isDisabled(minute, 1)
+            });
+          }
+          var seconds = [], second;
+          for (i = 0; i < options.length; i++) {
+            second = new Date(1970, 0, 1, 0, 0, viewDate.second - (midIndex - i) * options.secondStep);
+            seconds.push({
+              date: second,
+              label: formatDate(second, secondsFormat),
+              selected: $timepicker.$date && $timepicker.$isSelected(second, 2),
+              disabled: $timepicker.$isDisabled(second, 2)
+            });
+          }
+          var rows = [];
+          for (i = 0; i < options.length; i++) {
+            if (showSeconds) {
+              rows.push([ hours[i], minutes[i], seconds[i] ]);
+            } else {
+              rows.push([ hours[i], minutes[i] ]);
+            }
+          }
+          scope.rows = rows;
+          scope.showSeconds = showSeconds;
+          scope.showAM = showAM;
+          scope.isAM = ($timepicker.$date || hours[midIndex].date).getHours() < 12;
+          scope.timeSeparator = timeSeparator;
+          $timepicker.$isBuilt = true;
+        };
+        $timepicker.$isSelected = function(date, index) {
+          if (!$timepicker.$date) return false; else if (index === 0) {
+            return date.getHours() === $timepicker.$date.getHours();
+          } else if (index === 1) {
+            return date.getMinutes() === $timepicker.$date.getMinutes();
+          } else if (index === 2) {
+            return date.getSeconds() === $timepicker.$date.getSeconds();
+          }
+        };
+        $timepicker.$isDisabled = function(date, index) {
+          var selectedTime;
+          if (index === 0) {
+            selectedTime = date.getTime() + viewDate.minute * 6e4 + viewDate.second * 1e3;
+          } else if (index === 1) {
+            selectedTime = date.getTime() + viewDate.hour * 36e5 + viewDate.second * 1e3;
+          } else if (index === 2) {
+            selectedTime = date.getTime() + viewDate.hour * 36e5 + viewDate.minute * 6e4;
+          }
+          return selectedTime < options.minTime * 1 || selectedTime > options.maxTime * 1;
+        };
+        scope.$arrowAction = function(value, index) {
+          if (options.arrowBehavior === 'picker') {
+            $timepicker.$setTimeByStep(value, index);
+          } else {
+            $timepicker.$moveIndex(value, index);
+          }
+        };
+        $timepicker.$setTimeByStep = function(value, index) {
+          var newDate = new Date($timepicker.$date);
+          var hours = newDate.getHours(), hoursLength = formatDate(newDate, hoursFormat).length;
+          var minutes = newDate.getMinutes(), minutesLength = formatDate(newDate, minutesFormat).length;
+          var seconds = newDate.getSeconds(), secondsLength = formatDate(newDate, secondsFormat).length;
+          if (index === 0) {
+            newDate.setHours(hours - parseInt(options.hourStep, 10) * value);
+          } else if (index === 1) {
+            newDate.setMinutes(minutes - parseInt(options.minuteStep, 10) * value);
+          } else if (index === 2) {
+            newDate.setSeconds(seconds - parseInt(options.secondStep, 10) * value);
+          }
+          $timepicker.select(newDate, index, true);
+        };
+        $timepicker.$moveIndex = function(value, index) {
+          var targetDate;
+          if (index === 0) {
+            targetDate = new Date(1970, 0, 1, viewDate.hour + value * options.length, viewDate.minute, viewDate.second);
+            angular.extend(viewDate, {
+              hour: targetDate.getHours()
+            });
+          } else if (index === 1) {
+            targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute + value * options.length * options.minuteStep, viewDate.second);
+            angular.extend(viewDate, {
+              minute: targetDate.getMinutes()
+            });
+          } else if (index === 2) {
+            targetDate = new Date(1970, 0, 1, viewDate.hour, viewDate.minute, viewDate.second + value * options.length * options.secondStep);
+            angular.extend(viewDate, {
+              second: targetDate.getSeconds()
+            });
+          }
+          $timepicker.$build();
+        };
+        $timepicker.$onMouseDown = function(evt) {
+          if (evt.target.nodeName.toLowerCase() !== 'input') evt.preventDefault();
+          evt.stopPropagation();
+          if (isTouch) {
+            var targetEl = angular.element(evt.target);
+            if (targetEl[0].nodeName.toLowerCase() !== 'button') {
+              targetEl = targetEl.parent();
+            }
+            targetEl.triggerHandler('click');
+          }
+        };
+        $timepicker.$onKeyDown = function(evt) {
+          if (!/(38|37|39|40|13)/.test(evt.keyCode) || evt.shiftKey || evt.altKey) return;
+          evt.preventDefault();
+          evt.stopPropagation();
+          if (evt.keyCode === 13) return $timepicker.hide(true);
+          var newDate = new Date($timepicker.$date);
+          var hours = newDate.getHours(), hoursLength = formatDate(newDate, hoursFormat).length;
+          var minutes = newDate.getMinutes(), minutesLength = formatDate(newDate, minutesFormat).length;
+          var seconds = newDate.getSeconds(), secondsLength = formatDate(newDate, secondsFormat).length;
+          var sepLength = 1;
+          var lateralMove = /(37|39)/.test(evt.keyCode);
+          var count = 2 + showSeconds * 1 + showAM * 1;
+          if (lateralMove) {
+            if (evt.keyCode === 37) selectedIndex = selectedIndex < 1 ? count - 1 : selectedIndex - 1; else if (evt.keyCode === 39) selectedIndex = selectedIndex < count - 1 ? selectedIndex + 1 : 0;
+          }
+          var selectRange = [ 0, hoursLength ];
+          var incr = 0;
+          if (evt.keyCode === 38) incr = -1;
+          if (evt.keyCode === 40) incr = +1;
+          var isSeconds = selectedIndex === 2 && showSeconds;
+          var isMeridian = selectedIndex === 2 && !showSeconds || selectedIndex === 3 && showSeconds;
+          if (selectedIndex === 0) {
+            newDate.setHours(hours + incr * parseInt(options.hourStep, 10));
+            hoursLength = formatDate(newDate, hoursFormat).length;
+            selectRange = [ 0, hoursLength ];
+          } else if (selectedIndex === 1) {
+            newDate.setMinutes(minutes + incr * parseInt(options.minuteStep, 10));
+            minutesLength = formatDate(newDate, minutesFormat).length;
+            selectRange = [ hoursLength + sepLength, minutesLength ];
+          } else if (isSeconds) {
+            newDate.setSeconds(seconds + incr * parseInt(options.secondStep, 10));
+            secondsLength = formatDate(newDate, secondsFormat).length;
+            selectRange = [ hoursLength + sepLength + minutesLength + sepLength, secondsLength ];
+          } else if (isMeridian) {
+            if (!lateralMove) $timepicker.switchMeridian();
+            selectRange = [ hoursLength + sepLength + minutesLength + sepLength + (secondsLength + sepLength) * showSeconds, 2 ];
+          }
+          $timepicker.select(newDate, selectedIndex, true);
+          createSelection(selectRange[0], selectRange[1]);
+          parentScope.$digest();
+        };
+        function createSelection(start, length) {
+          var end = start + length;
+          if (element[0].createTextRange) {
+            var selRange = element[0].createTextRange();
+            selRange.collapse(true);
+            selRange.moveStart('character', start);
+            selRange.moveEnd('character', end);
+            selRange.select();
+          } else if (element[0].setSelectionRange) {
+            element[0].setSelectionRange(start, end);
+          } else if (angular.isUndefined(element[0].selectionStart)) {
+            element[0].selectionStart = start;
+            element[0].selectionEnd = end;
+          }
+        }
+        function focusElement() {
+          element[0].focus();
+        }
+        var _init = $timepicker.init;
+        $timepicker.init = function() {
+          if (isNative && options.useNative) {
+            element.prop('type', 'time');
+            element.css('-webkit-appearance', 'textfield');
+            return;
+          } else if (isTouch) {
+            element.prop('type', 'text');
+            element.attr('readonly', 'true');
+            element.on('click', focusElement);
+          }
+          _init();
+        };
+        var _destroy = $timepicker.destroy;
+        $timepicker.destroy = function() {
+          if (isNative && options.useNative) {
+            element.off('click', focusElement);
+          }
+          _destroy();
+        };
+        var _show = $timepicker.show;
+        $timepicker.show = function() {
+          _show();
+          $timeout(function() {
+            $timepicker.$element && $timepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
+            if (options.keyboard) {
+              element && element.on('keydown', $timepicker.$onKeyDown);
+            }
+          }, 0, false);
+        };
+        var _hide = $timepicker.hide;
+        $timepicker.hide = function(blur) {
+          if (!$timepicker.$isShown) return;
+          $timepicker.$element && $timepicker.$element.off(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
+          if (options.keyboard) {
+            element && element.off('keydown', $timepicker.$onKeyDown);
+          }
+          _hide(blur);
+        };
+        return $timepicker;
+      }
+      timepickerFactory.defaults = defaults;
+      return timepickerFactory;
+    } ];
+  }).directive('bsTimepicker', [ '$window', '$parse', '$q', '$dateFormatter', '$dateParser', '$timepicker', function($window, $parse, $q, $dateFormatter, $dateParser, $timepicker) {
+    var defaults = $timepicker.defaults;
+    var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
+    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+    return {
+      restrict: 'EAC',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        var options = {
+          scope: scope
+        };
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach([ 'html', 'container', 'autoclose', 'useNative', 'roundDisplay' ], function(key) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
+          if (!timepicker || !angular.isDefined(newValue)) return;
+          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(timepicker),?/i);
+          newValue === true ? timepicker.show() : timepicker.hide();
+        });
+        if (isNative && (options.useNative || defaults.useNative)) options.timeFormat = 'HH:mm';
+        var timepicker = $timepicker(element, controller, options);
+        options = timepicker.$options;
+        var lang = options.lang;
+        var formatDate = function(date, format, timezone) {
+          return $dateFormatter.formatDate(date, format, lang, timezone);
+        };
+        var dateParser = $dateParser({
+          format: options.timeFormat,
+          lang: lang
+        });
+        angular.forEach([ 'minTime', 'maxTime' ], function(key) {
+          angular.isDefined(attr[key]) && attr.$observe(key, function(newValue) {
+            timepicker.$options[key] = dateParser.getTimeForAttribute(key, newValue);
+            !isNaN(timepicker.$options[key]) && timepicker.$build();
+            validateAgainstMinMaxTime(controller.$dateValue);
+          });
+        });
+        scope.$watch(attr.ngModel, function(newValue, oldValue) {
+          timepicker.update(controller.$dateValue);
+        }, true);
+        function validateAgainstMinMaxTime(parsedTime) {
+          if (!angular.isDate(parsedTime)) return;
+          var isMinValid = isNaN(options.minTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) >= options.minTime;
+          var isMaxValid = isNaN(options.maxTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) <= options.maxTime;
+          var isValid = isMinValid && isMaxValid;
+          controller.$setValidity('date', isValid);
+          controller.$setValidity('min', isMinValid);
+          controller.$setValidity('max', isMaxValid);
+          if (!isValid) {
+            return;
+          }
+          controller.$dateValue = parsedTime;
+        }
+        controller.$parsers.unshift(function(viewValue) {
+          var date;
+          if (!viewValue) {
+            controller.$setValidity('date', true);
+            return null;
+          }
+          var parsedTime = angular.isDate(viewValue) ? viewValue : dateParser.parse(viewValue, controller.$dateValue);
+          if (!parsedTime || isNaN(parsedTime.getTime())) {
+            controller.$setValidity('date', false);
+            return;
+          } else {
+            validateAgainstMinMaxTime(parsedTime);
+          }
+          if (options.timeType === 'string') {
+            date = dateParser.timezoneOffsetAdjust(parsedTime, options.timezone, true);
+            return formatDate(date, options.modelTimeFormat || options.timeFormat);
+          }
+          date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
+          if (options.timeType === 'number') {
+            return date.getTime();
+          } else if (options.timeType === 'unix') {
+            return date.getTime() / 1e3;
+          } else if (options.timeType === 'iso') {
+            return date.toISOString();
+          } else {
+            return new Date(date);
+          }
+        });
+        controller.$formatters.push(function(modelValue) {
+          var date;
+          if (angular.isUndefined(modelValue) || modelValue === null) {
+            date = NaN;
+          } else if (angular.isDate(modelValue)) {
+            date = modelValue;
+          } else if (options.timeType === 'string') {
+            date = dateParser.parse(modelValue, null, options.modelTimeFormat);
+          } else if (options.timeType === 'unix') {
+            date = new Date(modelValue * 1e3);
+          } else {
+            date = new Date(modelValue);
+          }
+          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+          return getTimeFormattedString();
+        });
+        controller.$render = function() {
+          element.val(getTimeFormattedString());
+        };
+        function getTimeFormattedString() {
+          return !controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : formatDate(controller.$dateValue, options.timeFormat);
+        }
+        scope.$on('$destroy', function() {
+          if (timepicker) timepicker.destroy();
+          options = null;
+          timepicker = null;
+        });
+      }
+    };
+  } ]);
   angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions' ]).provider('$typeahead', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
       prefixClass: 'typeahead',
       prefixEvent: '$typeahead',
       placement: 'bottom-left',
-      template: 'typeahead/typeahead.tpl.html',
+      templateUrl: 'typeahead/typeahead.tpl.html',
       trigger: 'focus',
       container: false,
       keyboard: true,
@@ -3758,7 +3838,7 @@
       comparator: '',
       trimValue: true
     };
-    this.$get = [ '$window', '$rootScope', '$tooltip', '$timeout', function($window, $rootScope, $tooltip, $timeout) {
+    this.$get = [ '$window', '$rootScope', '$tooltip', '$$rAF', '$timeout', function($window, $rootScope, $tooltip, $$rAF, $timeout) {
       var bodyEl = angular.element($window.document.body);
       function TypeaheadFactory(element, controller, config) {
         var $typeahead = {};
@@ -3789,8 +3869,8 @@
           if (scope.$activeIndex >= matches.length) {
             scope.$activeIndex = options.autoSelect ? 0 : -1;
           }
-          if (/^(bottom|bottom-left|bottom-right)$/.test(options.placement)) return;
-          $timeout($typeahead.$applyPlacement);
+          safeDigest(scope);
+          $$rAF($typeahead.$applyPlacement);
         };
         $typeahead.activate = function(index) {
           scope.$activeIndex = index;
@@ -3855,6 +3935,9 @@
         };
         return $typeahead;
       }
+      function safeDigest(scope) {
+        scope.$$phase || scope.$root && scope.$root.$$phase || scope.$digest();
+      }
       TypeaheadFactory.defaults = defaults;
       return TypeaheadFactory;
     } ];
@@ -3867,14 +3950,14 @@
         var options = {
           scope: scope
         };
-        angular.forEach([ 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach([ 'html', 'container', 'trimValue' ], function(key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
-        element.attr('autocomplete', 'off');
+        element.attr('autocomplete', 'false');
         var filter = options.filter || defaults.filter;
         var limit = options.limit || defaults.limit;
         var comparator = options.comparator || defaults.comparator;
