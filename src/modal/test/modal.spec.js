@@ -76,6 +76,10 @@ describe('modal', function() {
     'options-template': {
       scope: {modal: {title: 'Title', content: 'Hello Modal!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-template="custom" bs-modal>click me</a>'
+    },
+    'options-contentTemplate': {
+      scope: {modal: {title: 'Title', content: 'Hello Modal!', counter: 0}, items: ['foo', 'bar', 'baz']},
+      element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-content-template="custom" bs-modal>click me</a>'
     }
   };
 
@@ -581,6 +585,17 @@ describe('modal', function() {
 
         // scope count should be the same as it was before directive was initialized
         expect(countScopes(scope, 0)).toBe(scopeCount);
+      });
+
+    });
+
+    describe('contentTemplate', function() {
+
+      it('should support custom contentTemplate', function() {
+        $templateCache.put('custom', 'baz: {{title}}');
+        var elm = compileDirective('options-contentTemplate');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-body').text()).toBe('baz: ' + scope.modal.title);
       });
 
     });
