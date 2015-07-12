@@ -71,7 +71,7 @@ describe('datepicker', function() {
       element: '<div class="btn" data-trigger="hover" ng-model="datepickeredIcon" bs-datepicker></div>'
     },
     'options-template': {
-      element: '<input type="text" data-template="custom" ng-model="selectedDate" bs-datepicker>'
+      element: '<input type="text" data-template-url="custom" ng-model="selectedDate" bs-datepicker>'
     },
     'options-typeStringDateFormat': {
       scope: {selectedDate: '22/02/1986'},

@@ -72,7 +72,7 @@ describe('popover', function () {
     },
     'options-template': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a data-template="custom" bs-popover="popover">click me</a>'
+      element: '<a data-template-url="custom" bs-popover="popover">click me</a>'
     },
     'options-autoClose': {
       scope: {popover: {title: 'Title', content: '<div class="message">Hello Popover<br>This is a multiline message!</div>'}},
@@ -80,7 +80,7 @@ describe('popover', function () {
     },
     'options-autoClose-with-template': {
       scope: {popover: {title: 'Title', counter: 0, content: 'Hello'}},
-      element: '<a class="btn" data-auto-close="true" data-template="custom" bs-popover="popover"></a>'
+      element: '<a class="btn" data-auto-close="true" data-template-url="custom" bs-popover="popover"></a>'
     },
     'bsShow-attr': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
@@ -433,6 +433,7 @@ describe('popover', function () {
       it('should not close when clicking link inside popover content', function() {
         $templateCache.put('custom', '<div class="popover"><div class="popover-content"><a class="btn" ng-click="popover.counter=popover.counter+1">click me</a></div></div>');
         var elm = compileDirective('options-autoClose-with-template');
+        scope.popover.counter = 0;
         expect(sandboxEl.children().length).toBe(1);
         angular.element(elm[0]).triggerHandler('click');
         $timeout.flush();

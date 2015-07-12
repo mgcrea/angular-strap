@@ -86,7 +86,7 @@ describe('typeahead', function () {
       element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="{{html}}" bs-options="icon.value as icon.label for icon in icons" bs-typeahead>'
     },
     'options-template': {
-      element: '<input type="text" data-template="custom" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
+      element: '<input type="text" data-template-url="custom" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
     'options-minLength': {
       element: '<input type="text" ng-model="selectedState" data-min-length="0" bs-options="state for state in states" bs-typeahead>'

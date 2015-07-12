@@ -13,7 +13,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
       // prefixEvent: 'timepicker',
       prefixClass: 'timepicker',
       placement: 'bottom-left',
-      template: 'timepicker/timepicker.tpl.html',
+      templateUrl: 'timepicker/timepicker.tpl.html',
       trigger: 'focus',
       container: false,
       keyboard: true,
@@ -393,8 +393,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
       link: function postLink(scope, element, attr, controller) {
 
         // Directive options
-        var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent'], function(key) {
+        var options = {scope: scope};
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

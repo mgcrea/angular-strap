@@ -148,7 +148,7 @@ describe('tooltip', function() {
     },
     'options-template': {
       scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a title="{{tooltip.title}}" data-template="custom" bs-tooltip>hover me</a>'
+      element: '<a title="{{tooltip.title}}" data-template-url="custom" bs-tooltip>hover me</a>'
     },
     'options-contentTemplate': {
       scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},

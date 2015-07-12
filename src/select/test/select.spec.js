@@ -94,7 +94,7 @@ describe('select', function () {
       element: '<button type="button" class="btn" class="form-control" ng-model="selectedIcon" data-html="{{html}}" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-template': {
-      element: '<button type="button" class="btn" data-template="custom" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" data-template-url="custom" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
     'options-multiple-sort': {
       scope: {sort: true, selectedIcons: [], icons: [

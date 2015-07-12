@@ -13,7 +13,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
       // prefixEvent: 'datepicker',
       prefixClass: 'datepicker',
       placement: 'bottom-left',
-      template: 'datepicker/datepicker.tpl.html',
+      templateUrl: 'datepicker/datepicker.tpl.html',
       trigger: 'focus',
       container: false,
       keyboard: true,
@@ -267,8 +267,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
       link: function postLink(scope, element, attr, controller) {
 
         // Directive options
-        var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent'], function(key) {
+        var options = {scope: scope};
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

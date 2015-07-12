@@ -14,7 +14,6 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
       prefixEvent: 'alert',
       placement: null,
       templateUrl: 'alert/alert.tpl.html',
-      template: '',
       container: false,
       element: null,
       backdrop: false,
@@ -75,7 +74,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'templateUrl', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

@@ -34,16 +34,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Common vars
         var options = $modal.$options = angular.extend({}, defaults, config);
-
-        var compilePromise = $modal.$promise = $bsCompiler.compile(options);
-        var compileData;
-
+        var promise = $modal.$promise = $bsCompiler.compile(options);
         var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+
         if(!options.element && !options.container) {
           options.container = 'body';
         }
 
-        // store $id to identify the triggering element in events
+        // Store $id to identify the triggering element in events
         // give priority to options.id, otherwise, try to use
         // element id if defined
         $modal.$id = options.id || options.element && options.element.attr('id') || '';
@@ -73,10 +71,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         $modal.$isShown = scope.$isShown = false;
 
         // Fetch, compile then initialize modal
-        var modalLinker, modalElement, modalScope;
+        var compileData, modalElement, modalScope;
         var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
         backdropElement.css({position:'fixed', top:'0px', left:'0px', bottom:'0px', right:'0px', 'z-index': 1038});
-        compilePromise.then(function(data) {
+        promise.then(function(data) {
           compileData = data;
           $modal.init();
         });
@@ -324,7 +322,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'templateUrl', 'contentTemplate', 'controller', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'controller', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

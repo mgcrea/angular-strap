@@ -9,7 +9,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
       prefixClass: 'dropdown',
       prefixEvent: 'dropdown',
       placement: 'bottom-left',
-      template: 'dropdown/dropdown.tpl.html',
+      templateUrl: 'dropdown/dropdown.tpl.html',
       trigger: 'click',
       container: false,
       keyboard: true,
@@ -111,7 +111,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'id'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

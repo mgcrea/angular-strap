@@ -10,7 +10,6 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
       prefixEvent: 'aside',
       placement: 'right',
       templateUrl: 'aside/aside.tpl.html',
-      template: '',
       contentTemplate: false,
       container: false,
       element: null,
@@ -51,7 +50,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
       link: function postLink(scope, element, attr, transclusion) {
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'templateUrl', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 

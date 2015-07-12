@@ -59,7 +59,7 @@ describe('dropdown', function () {
       element: '<a data-html="{{html}}" bs-dropdown="dropdown">click me</a>'
     },
     'options-template': {
-      element: '<a title="{{dropdown.title}}" data-template="custom" bs-dropdown>click me</a>'
+      element: '<a title="{{dropdown.title}}" data-template-url="custom" bs-dropdown>click me</a>'
     },
     'bsShow-attr': {
       scope: {dropdown: [{text: 'Another action', href: '#foo'}, {text: 'External link', href: '/auth/facebook', target: '_self'}, {text: 'Something else here', click: '$alert(\'working ngClick!\')'}, {divider: true}, {text: 'Separated link', href: '#separatedLink'}]},

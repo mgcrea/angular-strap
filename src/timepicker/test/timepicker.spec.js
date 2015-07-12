@@ -69,7 +69,7 @@ describe('timepicker', function() {
       element: '<div class="btn" data-trigger="hover" ng-model="timepickeredIcon" bs-timepicker></div>'
     },
     'options-template': {
-      element: '<input type="text" data-template="custom" ng-model="selectedTime" bs-timepicker>'
+      element: '<input type="text" data-template-url="custom" ng-model="selectedTime" bs-timepicker>'
     },
     'options-timeFormat': {
       scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42)},
