@@ -41,7 +41,10 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
           }
           return $q.when(valuesPromise)
           .then(function(values) {
-            $parseOptions.$values = values ? parseValues(values, scope) : {};
+            if(!angular.isArray(values)) {
+              values = [];
+            }
+            $parseOptions.$values = values.length ? parseValues(values, scope) : [];
             return $parseOptions.$values;
           });
         };
