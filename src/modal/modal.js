@@ -328,11 +328,6 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
-        if(options.template && /\.html$/.test(options.template)) {
-          options.templateUrl = options.template;
-          options.template = '';
-        }
-
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach(['backdrop', 'keyboard', 'html', 'container'], function(key) {

@@ -135,13 +135,37 @@
  <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
           </td>
         </tr>
-<tr>
-          <td>template</td>
-          <td>path</td>
+        <tr>
+          <td>controller</td>
+          <td>string|function</td>
           <td>false</td>
           <td>
+            <p>Controller fn that should be associated with newly created scope or the name of a registered controller if passed as a string.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>controllerAs</td>
+          <td>string</td>
+          <td>false</td>
+          <td>
+            <p>A controller alias name. If present the controller will be published to scope under the `controllerAs` name.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>string</td>
+          <td>''</td>
+          <td>
+            <p>Provide an html template as a string (when templateUrl is falsy).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>templateUrl</td>
+          <td>path</td>
+          <td>'aside/aside.tpl.html'</td>
+          <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
-            <p>It should be a <code>div.aside</code> element following Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/aside/aside.tpl.html" target="_blank">like this</a>).</p>
+            <p>It should be a <code>div.aside</code> element following Bootstrap Additions styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/aside/aside.tpl.html" target="_blank">like this</a>).</p>
           </td>
         </tr>
         <tr>
