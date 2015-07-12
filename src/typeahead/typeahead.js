@@ -23,7 +23,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       trimValue: true
     };
 
-    this.$get = function($window, $rootScope, $tooltip, $timeout) {
+    this.$get = function($window, $rootScope, $tooltip, $$rAF, $timeout) {
 
       var bodyEl = angular.element($window.document.body);
 
@@ -68,13 +68,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             scope.$activeIndex = options.autoSelect ? 0: -1;
           }
 
-          // When the placement is not one of the bottom placements, re-calc the positioning
-          // so the results render correctly.
-          if (/^(bottom|bottom-left|bottom-right)$/.test(options.placement)) return;
-
           // wrap in a $timeout so the results are updated
           // before repositioning
-          $timeout($typeahead.$applyPlacement);
+          safeDigest(scope);
+          $$rAF($typeahead.$applyPlacement);
         };
 
         $typeahead.activate = function(index) {
@@ -168,6 +165,12 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         return $typeahead;
 
+      }
+
+      // Helper functions
+
+      function safeDigest(scope) {
+        scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
       }
 
       TypeaheadFactory.defaults = defaults;

@@ -2,14 +2,14 @@
 
 describe('typeahead', function () {
 
-  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q, $animate;
+  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q, $animate, $$rAF;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.typeahead'));
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_, _$animate_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_, _$animate_, _$$rAF_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
@@ -17,6 +17,7 @@ describe('typeahead', function () {
     $typeahead = _$typeahead_;
     $q = _$q_;
     $animate = _$animate_;
+    $$rAF = _$$rAF_;
   }));
 
   afterEach(function() {
@@ -350,7 +351,7 @@ describe('typeahead', function () {
         spyOn(typeahead, '$applyPlacement');
         typeahead.update([]);
 
-        $timeout.flush();
+        $$rAF.flush();
         expect(typeahead.$applyPlacement).toHaveBeenCalled();
       });
 
