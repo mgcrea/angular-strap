@@ -32,7 +32,14 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
         };
 
         $parseOptions.valuesFn = function(scope, controller) {
-          return $q.when(valuesFn(scope, controller))
+          var valuesPromise;
+          try {
+            // Might throw 'notarray' error since cea8e75
+            valuesPromise = valuesFn(scope, controller);
+          } catch(err) {
+            valuesPromise = [];
+          }
+          return $q.when(valuesPromise)
           .then(function(values) {
             $parseOptions.$values = values ? parseValues(values, scope) : {};
             return $parseOptions.$values;
