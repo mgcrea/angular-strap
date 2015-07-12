@@ -28,7 +28,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
           keyName = match[5],
           groupByFn = $parse(match[3] || ''),
           valueFn = $parse(match[2] ? match[1] : valueName),
-          valuesFn = $parse(match[7]);
+          valuesFn = $parse(match[7].split('|')[0]);
         };
 
         $parseOptions.valuesFn = function(scope, controller) {
@@ -41,6 +41,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
           }
           return $q.when(valuesPromise)
           .then(function(values) {
+            values = $filter('filter')(values, controller.$viewValue);
             $parseOptions.$values = values ? parseValues(values, scope) : {};
             return $parseOptions.$values;
           });
