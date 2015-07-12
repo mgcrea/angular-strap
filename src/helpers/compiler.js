@@ -7,6 +7,7 @@ angular.module('mgcrea.ngStrap.core', [])
   .service('$bsCompiler', bsCompilerService);
 
 function bsCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
+  /* jshint validthis: true */
 
   /*
    * @ngdoc service
@@ -140,7 +141,8 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
             if (bindToController) {
               angular.extend(invokeCtrl.instance, locals);
             }
-            var ctrl = invokeCtrl();
+            // Support angular@~1.2 invokeCtrl
+            var ctrl = angular.isObject(invokeCtrl) ? invokeCtrl : invokeCtrl();
             // See angular-route source for this logic
             element.data('$ngControllerController', ctrl);
             element.children().data('$ngControllerController', ctrl);

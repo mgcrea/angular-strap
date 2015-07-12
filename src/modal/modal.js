@@ -35,7 +35,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         // Common vars
         var options = $modal.$options = angular.extend({}, defaults, config);
 
-        var compilePromise = $modal.$promise = $bsCompiler.compile(options)
+        var compilePromise = $modal.$promise = $bsCompiler.compile(options);
         var compileData;
 
         var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
