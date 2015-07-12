@@ -15,10 +15,10 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/~1.4.0/components/angular.js',
-      'test/~1.4.0/components/angular-animate.js',
-      'test/~1.4.0/components/angular-sanitize.js',
-      'test/~1.4.0/components/angular-mocks.js',
+      'test/~1.3.0/components/angular.js',
+      'test/~1.3.0/components/angular-animate.js',
+      'test/~1.3.0/components/angular-sanitize.js',
+      'test/~1.3.0/components/angular-mocks.js',
       'bower_components/jquery/dist/jquery.js',
       'src/{,*/}*.js',
       '.tmp/modules/*.tpl.min.js',

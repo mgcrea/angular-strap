@@ -103,9 +103,9 @@ gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', function karmaT
     process.exit(code);
   });
 }));
-gulp.task('karma:travis~1.4.0', gulp.series('ng:test/templates', function karmaTravis140() {
+gulp.task('karma:travis~1.3.0', gulp.series('ng:test/templates', function karmaTravis130() {
   karma.start({
-    configFile: path.join(__dirname, 'test/~1.4.0/karma.conf.js'),
+    configFile: path.join(__dirname, 'test/~1.3.0/karma.conf.js'),
     browsers: ['PhantomJS'],
     reporters: ['dots'],
     singleRun: true

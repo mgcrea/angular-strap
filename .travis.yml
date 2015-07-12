@@ -22,8 +22,8 @@ before_script:
 
 script:
   - gulp jshint karma:travis
+  - gulp karma:travis~1.3.0
   - gulp karma:travis~1.2.0
-  - gulp karma:travis~1.4.0
 
 after_script:
   - cat test/coverage/*/lcov.info | codeclimate
