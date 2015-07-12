@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.4.0
+ * @license AngularJS v1.4.2
  * (c) 2010-2015 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -504,7 +504,8 @@ var $$AnimateChildrenDirective = [function() {
  * unless you really need a digest to kick off afterwards.
  *
  * Keep in mind that, to make this easier, ngAnimate has tweaked the JS animations API to recognize when a runner instance is returned from $animateCss
- * (so there is no need to call `runner.done(doneFn)` inside of your JavaScript animation code). Check the [animation code above](#usage) to see how this works.
+ * (so there is no need to call `runner.done(doneFn)` inside of your JavaScript animation code).
+ * Check the {@link ngAnimate.$animateCss#usage animation code above} to see how this works.
  *
  * @param {DOMElement} element the element that will be animated
  * @param {object} options the animation-related options that will be applied during the animation
@@ -3020,7 +3021,7 @@ var $$AnimationProvider = ['$animateProvider', function($animateProvider) {
  *   opacity:0;
  * }
  *
- * /&#42; The starting CSS styles for the enter animation &#42;/
+ * /&#42; The finishing CSS styles for the enter animation &#42;/
  * .fade.ng-enter.ng-enter-active {
  *   opacity:1;
  * }
@@ -3275,7 +3276,7 @@ var $$AnimationProvider = ['$animateProvider', function($animateProvider) {
  * ## CSS + JS Animations Together
  *
  * AngularJS 1.4 and higher has taken steps to make the amalgamation of CSS and JS animations more flexible. However, unlike earlier versions of Angular,
- * defining CSS and JS animations to work off of the same CSS class will not work anymore. Therefore example below will only result in **JS animations taking
+ * defining CSS and JS animations to work off of the same CSS class will not work anymore. Therefore the example below will only result in **JS animations taking
  * charge of the animation**:
  *
  * ```html
@@ -3304,8 +3305,8 @@ var $$AnimationProvider = ['$animateProvider', function($animateProvider) {
  * }
  * ```
  *
- * Does this mean that CSS and JS animations cannot be used together? Do JS-based animations always have higher priority? We can suppliment for the
- * lack of CSS animations by making use of the `$animateCss` service to trigger our own tweaked-out, CSS-based animations directly from
+ * Does this mean that CSS and JS animations cannot be used together? Do JS-based animations always have higher priority? We can make up for the
+ * lack of CSS animations by using the `$animateCss` service to trigger our own tweaked-out, CSS-based animations directly from
  * our own JS-based animation code:
  *
  * ```js
@@ -3603,7 +3604,7 @@ var $$AnimationProvider = ['$animateProvider', function($animateProvider) {
  * ngModule.directive('greetingBox', ['$animate', function($animate) {
  *   return function(scope, element, attrs) {
  *     attrs.$observe('active', function(value) {
- *       value ? $animate.addClass(element, 'on') ? $animate.removeClass(element, 'on');
+ *       value ? $animate.addClass(element, 'on') : $animate.removeClass(element, 'on');
  *     });
  *   });
  * }]);
@@ -3614,7 +3615,7 @@ var $$AnimationProvider = ['$animateProvider', function($animateProvider) {
  *
  * ```css
  * /&#42; normally we would create a CSS class to reference on the element &#42;/
- * [greeting-box].on { transition:0.5s linear all; background:green; color:white; }
+ * greeting-box.on { transition:0.5s linear all; background:green; color:white; }
  * ```
  *
  * The `$animate` service contains a variety of other methods like `enter`, `leave`, `animate` and `setClass`. To learn more about what's
