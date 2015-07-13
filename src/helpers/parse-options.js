@@ -32,14 +32,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
         };
 
         $parseOptions.valuesFn = function(scope, controller) {
-          var valuesPromise;
-          try {
-            // Might throw 'notarray' error since cea8e75
-            valuesPromise = valuesFn(scope, controller);
-          } catch(err) {
-            valuesPromise = [];
-          }
-          return $q.when(valuesPromise)
+          return $q.when(valuesFn(scope, controller))
           .then(function(values) {
             if(!angular.isArray(values)) {
               values = [];
