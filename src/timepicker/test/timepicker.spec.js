@@ -133,8 +133,8 @@ describe('timepicker', function() {
       element: '<input type="text" ng-model="selectedTime" data-time-type="string" data-model-time-format="HH:mm:ss" data-time-format="HH:mm" bs-timepicker>'
     },
     'options-arrowBehavior': {
-      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42), arrowBehavior: 'pager'},
-      element: '<input type="text" ng-model="selectedTime" length="5" data-arrow-behavior="{{ arrowBehavior }}" bs-timepicker>'
+      scope: {selectedTime: new Date(1970, 0, 1, 10, 30, 42), arrowBehavior: 'pager', timeType: 'date'},
+      element: '<input type="text" ng-model="selectedTime" length="5" data-time-type="{{ timeType }}" data-arrow-behavior="{{ arrowBehavior }}" bs-timepicker>'
     },
     'options-roundDisplay': {
       element: '<input type="text" data-minute-step="15" ng-model="selectedTime" data-round-display="{{roundDisplay}}" bs-timepicker>'
@@ -1127,7 +1127,7 @@ describe('timepicker', function() {
       });
 
       it('should change ngModel value when set to picker', function() {
-        var elm = compileDirective('options-arrowBehavior', { arrowBehavior: 'picker' });
+        var elm = compileDirective('options-arrowBehavior', {arrowBehavior: 'picker'});
 
         // we are going to increment time by 1 hour
         var testTime = new Date(scope.selectedTime.getTime() + (1 * 60 * 60 * 1000));
@@ -1136,6 +1136,18 @@ describe('timepicker', function() {
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
         sandboxEl.find('.dropdown-menu thead button:eq(0)').triggerHandler('click');
         expect(scope.selectedTime).toEqual(testTime);
+      });
+
+      it('should change ngModel value when set to picker with an empty model', function() {
+        var elm = compileDirective('options-arrowBehavior', {arrowBehavior: 'picker', selectedTime: '', timeType: 'string'});
+
+        // we are going to increment time by 1 hour
+        var testTime = new Date(Date.now() + (1 * 60 * 60 * 1000));
+
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
+        sandboxEl.find('.dropdown-menu thead button:eq(0)').triggerHandler('click');
+        expect(scope.selectedTime).toEqual(dateFilter(testTime, 'h:00 a'));
       });
 
     });

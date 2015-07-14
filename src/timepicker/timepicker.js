@@ -201,11 +201,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
         };
 
         $timepicker.$setTimeByStep = function(value, index) {
-          var currentDate = $timepicker.$date;
-          if (!currentDate) {
-            currentDate = startDate;
-          }
-          var newDate = new Date(currentDate);
+          var newDate = new Date($timepicker.$date || startDate);
           var hours = newDate.getHours(), hoursLength = formatDate(newDate, hoursFormat).length;
           var minutes = newDate.getMinutes(), minutesLength = formatDate(newDate, minutesFormat).length;
           var seconds = newDate.getSeconds(), secondsLength = formatDate(newDate, secondsFormat).length;
