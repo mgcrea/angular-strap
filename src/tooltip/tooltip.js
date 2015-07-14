@@ -352,13 +352,13 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           // If we're auto placing, we need to check the positioning
           if (autoPlace) {
             var originalPlacement = placement;
-            var container = options.container ? findElement(options.container) : element.parent();
-            var containerPosition = getPosition(container);
+            var viewport = options.viewport ? findElement(options.viewport.selector || options.viewport) : false;
+            var viewportPosition = getPosition(viewport);
 
             // Determine if the vertical placement
-            if (originalPlacement.indexOf('bottom') >= 0 && elementPosition.bottom + tipHeight > containerPosition.bottom) {
+            if (originalPlacement.indexOf('bottom') >= 0 && elementPosition.bottom + tipHeight > viewportPosition.bottom) {
               placement = originalPlacement.replace('bottom', 'top');
-            } else if (originalPlacement.indexOf('top') >= 0 && elementPosition.top - tipHeight < containerPosition.top) {
+            } else if (originalPlacement.indexOf('top') >= 0 && elementPosition.top - tipHeight < viewportPosition.top) {
               placement = originalPlacement.replace('top', 'bottom');
             }
 
@@ -366,11 +366,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
             // The exotic placements of left and right are opposite of the standard placements.  Their arrows are put on the left/right
             // and flow in the opposite direction of their placement.
             if ((originalPlacement === 'right' || originalPlacement === 'bottom-left' || originalPlacement === 'top-left') &&
-                elementPosition.right + tipWidth > containerPosition.width) {
+                elementPosition.right + tipWidth > viewportPosition.width) {
 
               placement = originalPlacement === 'right' ? 'left' : placement.replace('left', 'right');
             } else if ((originalPlacement === 'left' || originalPlacement === 'bottom-right' || originalPlacement === 'top-right') &&
-                elementPosition.left - tipWidth < containerPosition.left) {
+                elementPosition.left - tipWidth < viewportPosition.left) {
 
               placement = originalPlacement === 'left' ? 'right' : placement.replace('right', 'left');
             }

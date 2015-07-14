@@ -769,12 +769,12 @@ describe('tooltip', function() {
           var elm = compileDirective('options-placement-auto-exotic-top-left');
           angular.element(elm[0]).triggerHandler('mouseenter');
 
-         // need to change the width and height so we don't trigger
+          // need to change the width and height so we don't trigger
           // the repositioning
           sandboxEl.children('.tooltip').css({ width: 0, height: 0 });
 
           $$rAF.flush();
-          expect(sandboxEl.children('.tooltip').hasClass('top-left')).toBeTruthy();
+          expect(sandboxEl.children('.tooltip').hasClass('bottom-right')).toBeTruthy();
         })
 
         it('should default to `top` when `auto` placement is set without a preference', function () {

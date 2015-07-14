@@ -1,18 +1,44 @@
 <!doctype html>
-<html lang="en" ng-app="viewport">
+<html lang="en" ng-app="mgcrea.ngStrapDocs">
 <head>
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Tooltip Viewport Example</title>
+  <title>AngularStrap - AngularJS 1.2+ native directives for Twitter Bootstrap 3.</title>
+  <meta name="description" content="AngularJS 1.2+ native directives for Twitter Bootstrap 3.">
 
+  <!-- Sets initial viewport load and disables zooming  -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-  
-  <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-  <link href="bower_components/bootstrap-additions/dist/bootstrap-additions.css" rel="stylesheet">
+  <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- Set a shorter title for iOS6 devices when saved to home screen -->
+  <meta name="apple-mobile-web-app-title" content="AngularStrap">
 
-  <link rel="stylesheet" href="bower_components/highlightjs/styles/github.css">
+  <!-- Properties for Google+ snippets -->
+  <meta property="og:title" content="AngularStrap">
+  <meta property="og:description" content="AngularJS 1.2+ native directives for Twitter Bootstrap 3.">
+  <meta property="og:image" content="http://mgcrea.github.io/angular-strap/static/images/snippet-logo.png">
+
+<!--[if lt IE 9]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.3/es5-shim.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<![endif]-->
+
+  <link rel="author" href="https://plus.google.com/103156582871250188205">
+  <link rel="icon" href="http://angularjs.org/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="http://angularjs.org/favicon.ico" type="image/x-icon">
+
+  <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css">
   <link rel="stylesheet" href="bower_components/bootstrap-additions/dist/bootstrap-additions.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="bower_components/highlightjs/styles/default.css">
+  <!-- endinject -->
+  <link rel="stylesheet" href="bower_components/highlightjs/styles/github.css">
+
+  <!-- inject:css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endinject -->
 
   <style>
     body {
@@ -41,68 +67,106 @@
       bottom: 0;
       left: 0;
     }
-    
+
     .btn-bottom-right {
       position: absolute;
       bottom: 0;
       right: 0;
     }
   </style>
-   
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular-sanitize.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular-animate.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular-route.min.js"></script>
 
-  <script src="scripts/angular-strap.tpl.js"></script>
-  
-  <script src="module.js"></script>
-  <script src="helpers/raf.js"></script>
-  <script src="helpers/dimensions.js"></script>
-  <script src="helpers/debounce.js"></script>
-  <script src="helpers/parse-options.js"></script>
-  <script src="helpers/date-parser.js"></script>
-  <script src="modal/modal.js"></script>
-  <script src="aside/aside.js"></script>
-  <script src="alert/alert.js"></script>
-  <script src="button/button.js"></script>
-  <script src="select/select.js"></script>
-  <script src="datepicker/datepicker.js"></script>
-  <script src="timepicker/timepicker.js"></script>
-  <script src="navbar/navbar.js"></script>
-  <script src="tooltip/tooltip.js"></script>
-  <script src="popover/popover.js"></script>
-  <script src="dropdown/dropdown.js"></script>
-  <script src="typeahead/typeahead.js"></script>
-  <script src="scrollspy/scrollspy.js"></script>
-  <script src="affix/affix.js"></script>
-  <script src="tab/tab.js"></script>
-  <script src="collapse/collapse.js"></script>
-   
+</head>
+<body>
+  <button type="button" class="btn btn-default pull-right" bs-tooltip data-title="This should be shifted to the left" data-placement="bottom">Shift Left</button>
+  <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted to the right" data-placement="bottom">Shift Right</button>
+  <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="right">Shift Down</button>
+  <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="right" data-animation="am-flip-x">Shift Down w/ Animation</button>
+  <button type="button" class="btn btn-default" bs-tooltip data-title="This should not be shifted down" data-placement="right" data-viewport="null">Don't Shift Down</button>
+
+  <button type="button" class="btn btn-default tooltip-right btn-bottom-left" bs-tooltip data-title="This should be shifted up" data-placement="right">Shift Up</button>
+  <button type="button" class="btn btn-default tooltip-right btn-bottom-right" bs-tooltip data-title="This should be shifted left" data-placement="top">Shift Left</button>
+
+  <div class="container-viewport">
+    <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted to the right" data-placement="bottom" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Right</button>
+    <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="right" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Down</button>
+    <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="right" data-viewport="{selector: '.container-viewport', padding: 2}" data-animation="am-slide-top">Shift Down w/ Animation</button>
+    <button type="button" class="btn btn-default" bs-tooltip data-title="This should not be shifted down" data-placement="right" data-viewport="null">Don't Shift Down</button>
+
+    <button type="button" class="btn btn-default pull-right" bs-tooltip data-title="This should be shifted to the left" data-placement="bottom" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Left</button>
+
+    <button type="button" class="btn btn-default tooltip-viewport-right btn-bottom-left" bs-tooltip data-title="This should be shifted up" data-placement="right" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Up</button>
+    <button type="button" class="btn btn-default tooltip-viewport-right btn-bottom-right" bs-tooltip data-title="This should be shifted left" data-placement="top" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Left</button>
+  </div>
+
+  <!-- bower:js -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/fastclick/lib/fastclick.js"></script>
+  <script src="bower_components/highlightjs/highlight.pack.js"></script>
+  <!-- endinject -->
+
+  <!-- source:js -->
+  <script src="src/module.js"></script>
+  <script src="src/affix/affix.js"></script>
+  <script src="src/aside/aside.js"></script>
+  <script src="src/alert/alert.js"></script>
+  <script src="src/collapse/collapse.js"></script>
+  <script src="src/button/button.js"></script>
+  <script src="src/datepicker/datepicker.js"></script>
+  <script src="src/dropdown/dropdown.js"></script>
+  <script src="src/helpers/compiler.js"></script>
+  <script src="src/helpers/date-formatter.js"></script>
+  <script src="src/helpers/date-parser.js"></script>
+  <script src="src/helpers/debounce.js"></script>
+  <script src="src/helpers/dimensions.js"></script>
+  <script src="src/helpers/parse-options.js"></script>
+  <script src="src/helpers/raf.js"></script>
+  <script src="src/modal/modal.js"></script>
+  <script src="src/navbar/navbar.js"></script>
+  <script src="src/popover/popover.js"></script>
+  <script src="src/scrollspy/scrollspy.js"></script>
+  <script src="src/select/select.js"></script>
+  <script src="src/timepicker/timepicker.js"></script>
+  <script src="src/tab/tab.js"></script>
+  <script src="src/tooltip/tooltip.js"></script>
+  <script src="src/typeahead/typeahead.js"></script>
+  <!-- endinject -->
+
+  <!-- inject:js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers/main.js"></script>
+  <script src="scripts/directives/append-source.js"></script>
+  <script src="scripts/directives/code.js"></script>
+  <script src="scripts/directives/highlight-block.js"></script>
+  <script src="scripts/services/angular-plunkr.js"></script>
+  <script src="scripts/services/indent.js"></script>
+  <!-- endinject -->
+
+  <!-- source-docs:js -->
+  <script src="src/button/docs/button.demo.js"></script>
+  <script src="src/aside/docs/aside.demo.js"></script>
+  <script src="src/alert/docs/alert.demo.js"></script>
+  <script src="src/collapse/docs/collapse.demo.js"></script>
+  <script src="src/dropdown/docs/dropdown.demo.js"></script>
+  <script src="src/datepicker/docs/datepicker.demo.js"></script>
+  <script src="src/popover/docs/popover.demo.js"></script>
+  <script src="src/modal/docs/modal.demo.js"></script>
+  <script src="src/navbar/docs/navbar.demo.js"></script>
+  <script src="src/select/docs/select.demo.js"></script>
+  <script src="src/tab/docs/tab.demo.js"></script>
+  <script src="src/timepicker/docs/timepicker.demo.js"></script>
+  <script src="src/typeahead/docs/typeahead.demo.js"></script>
+  <script src="src/tooltip/docs/tooltip.demo.js"></script>
+  <!-- endinject -->
+
+  <!-- views:js -->
+  <!-- endinject -->
+
   <script>
     angular.module('viewport', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.popover', 'ngAnimate']);
   </script>
-</head>
-<body>
-    <button type="button" class="btn btn-default pull-right" bs-tooltip data-title="This should be shifted to the left" data-placement="bottom">Shift Left</button>
-    <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted to the right" data-placement="bottom">Shift Right</button>
-    <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="right">Shift Down</button>
-    <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="right" data-animation="am-flip-x">Shift Down w/ Animation</button>
-    <button type="button" class="btn btn-default" bs-tooltip data-title="This should not be shifted down" data-placement="right" data-viewport="null">Don't Shift Down</button>
 
-    <button type="button" class="btn btn-default tooltip-right btn-bottom-left" bs-tooltip data-title="This should be shifted up" data-placement="right">Shift Up</button>
-    <button type="button" class="btn btn-default tooltip-right btn-bottom-right" bs-tooltip data-title="This should be shifted left" data-placement="top">Shift Left</button>
-
-    <div class="container-viewport">
-      <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted to the right" data-placement="bottom" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Right</button>
-      <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="right" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Down</button>
-      <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="right" data-viewport="{selector: '.container-viewport', padding: 2}" data-animation="am-slide-top">Shift Down w/ Animation</button>
-      <button type="button" class="btn btn-default" bs-tooltip data-title="This should not be shifted down" data-placement="right" data-viewport="null">Don't Shift Down</button>
-
-      <button type="button" class="btn btn-default pull-right" bs-tooltip data-title="This should be shifted to the left" data-placement="bottom" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Left</button>
-
-      <button type="button" class="btn btn-default tooltip-viewport-right btn-bottom-left" bs-tooltip data-title="This should be shifted up" data-placement="right" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Up</button>
-      <button type="button" class="btn btn-default tooltip-viewport-right btn-bottom-right" bs-tooltip data-title="This should be shifted left" data-placement="top" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Left</button>
-    </div>
 </body>
 </html>
+
