@@ -26,7 +26,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
 </pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
     <form class="form-inline" role="form">
-      <div class="form-group">
+<!--       <div class="form-group">
         <label><i class="fa fa-globe"></i> State</label>
         <input type="text" class="form-control" ng-model="selectedState" bs-options="state for state in states" placeholder="Enter state" bs-typeahead>
       </div>
@@ -34,11 +34,11 @@ $scope.selectedAddress = "{{selectedAddress}}";
         <label>Icon</label>
         <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-auto-select="true" data-animation="am-flip-x" bs-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
       </div>
-      <hr>
+      <hr> -->
       <!-- Using an async data provider -->
       <div class="form-group">
         <label><i class="fa fa-home"></i> Address <small>(async via maps.googleapis.com)</small></label>
-        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" bs-options="address.formatted_address as address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" bs-options="address.formatted_address as address.formatted_address for address in getAddress($viewValue)" data-comparator="startsWith" placeholder="Enter address" bs-typeahead>
       </div>
     </form>
   </div>
@@ -192,7 +192,7 @@ $scope.selectedAddress = "{{selectedAddress}}";
           <td>
             If provided and set to false, overrides the default behavior of automatically trimming spaces from inputs. (Added in 2.2.4)
           </td>
-        </tr>        
+        </tr>
       </tbody>
     </table>
   </div>

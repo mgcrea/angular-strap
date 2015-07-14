@@ -16,7 +16,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       html: false,
       delay: 0,
       minLength: 1,
-      filter: 'filter',
+      filter: 'bsAsyncFilter',
       limit: 6,
       autoSelect: false,
       comparator: '',
@@ -180,6 +180,18 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
   })
 
+  .filter('bsAsyncFilter', function($filter) {
+    return function(array, expression, comparator) {
+      if(array && angular.isFunction(array.then)) {
+        return array.then(function(results) {
+          return $filter('filter')(results, expression, comparator);
+        });
+      } else {
+        return $filter('filter')(array, expression, comparator);
+      }
+    };
+  })
+
   .directive('bsTypeahead', function($window, $parse, $q, $typeahead, $parseOptions) {
 
     var defaults = $typeahead.defaults;
@@ -211,7 +223,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         var bsOptions = attr.bsOptions;
         if(filter) bsOptions += ' | ' + filter + ':$viewValue';
-        if (comparator) bsOptions += ':' + comparator;
+        if(comparator) bsOptions += ':' + comparator;
         if(limit) bsOptions += ' | limitTo:' + limit;
         var parsedOptions = $parseOptions(bsOptions);
 
@@ -260,7 +272,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           var displayValue = parsedOptions.displayValue(modelValue);
 
           // If we can determine the displayValue, use that
-          if (displayValue) return displayValue;
+          if (displayValue) {
+            return displayValue;
+          }
 
           // If there's no display value, attempt to use the modelValue.
           // If the model is an object not much we can do
@@ -273,7 +287,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         // Model rendering in view
         controller.$render = function () {
           // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
-          if(controller.$isEmpty(controller.$viewValue)) return element.val('');
+          if(controller.$isEmpty(controller.$viewValue)) {
+            return element.val('');
+          }
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
