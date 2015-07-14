@@ -128,13 +128,6 @@ describe('parseOptions', function () {
         });
       });
 
-      it('should support incorrect filtered values', function() {
-        scope.values = {};
-        var parsedOptions = $parseOptions('val for val in values | filter:b:startsWith');
-        var parsedValues = getParsedValues(parsedOptions);
-        expect(parsedValues).toEqual([]);
-      });
-
     });
 
     describe('with "select as label for value in array" format', function() {
