@@ -57,6 +57,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         // element id if defined
         $tooltip.$id = options.id || element.attr('id') || '';
 
+        $tooltip.$viewport = options.viewport && findElement(options.viewport.selector || options.viewport)
+
         // Support scope as string options
         if(options.title) {
           scope.title = $sce.trustAsHtml(options.title);
@@ -352,8 +354,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           // If we're auto placing, we need to check the positioning
           if (autoPlace) {
             var originalPlacement = placement;
-            var viewport = options.viewport ? findElement(options.viewport.selector || options.viewport) : false;
-            var viewportPosition = getPosition(viewport);
+            var viewportPosition = getPosition($tooltip.$viewport);
 
             // Determine if the vertical placement
             if (originalPlacement.indexOf('bottom') >= 0 && elementPosition.bottom + tipHeight > viewportPosition.bottom) {
@@ -621,30 +622,27 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         }
 
         function getViewportAdjustedDelta(placement, position, actualWidth, actualHeight) {
-          var delta = { top: 0, left: 0 },
-              $viewport = options.viewport && findElement(options.viewport.selector || options.viewport);
+          var delta = { top: 0, left: 0 }
+          if (!$tooltip.$viewport) return delta
 
-          if (!$viewport) {
-           return delta;
-          }
 
-          var viewportPadding = options.viewport && options.viewport.padding || 0,
-              viewportDimensions = getPosition($viewport);
+          var viewportPadding = options.viewport && options.viewport.padding || 0
+          var viewportDimensions = getPosition($tooltip.$viewport)
 
           if (/right|left/.test(placement)) {
-            var topEdgeOffset    = position.top - viewportPadding - viewportDimensions.scroll,
-                bottomEdgeOffset = position.top + viewportPadding - viewportDimensions.scroll + actualHeight;
+            var topEdgeOffset = position.top - viewportPadding - viewportDimensions.scroll;
+            var bottomEdgeOffset = position.top + viewportPadding - viewportDimensions.scroll + actualHeight;
             if (topEdgeOffset < viewportDimensions.top) { // top overflow
               delta.top = viewportDimensions.top - topEdgeOffset;
             } else if (bottomEdgeOffset > viewportDimensions.top + viewportDimensions.height) { // bottom overflow
               delta.top = viewportDimensions.top + viewportDimensions.height - bottomEdgeOffset;
             }
           } else {
-            var leftEdgeOffset  = position.left - viewportPadding,
-                rightEdgeOffset = position.left + viewportPadding + actualWidth;
+            var leftEdgeOffset = position.left - viewportPadding;
+            var rightEdgeOffset = position.left + viewportPadding + actualWidth;
             if (leftEdgeOffset < viewportDimensions.left) { // left overflow
               delta.left = viewportDimensions.left - leftEdgeOffset;
-            } else if (rightEdgeOffset > viewportDimensions.width) { // right overflow
+            } else if (rightEdgeOffset > viewportDimensions.right) { // right overflow
               delta.left = viewportDimensions.left + viewportDimensions.width - rightEdgeOffset;
             }
           }
