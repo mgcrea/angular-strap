@@ -64,9 +64,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         $typeahead.update = function(matches) {
           scope.$matches = matches;
-          if (scope.$activeIndex >= matches.length) {
-            scope.$activeIndex = options.autoSelect ? 0 : -1;
-          }
+          scope.$activeIndex = options.autoSelect ? 0 : -1;
 
           // wrap in a $timeout so the results are updated
           // before repositioning
