@@ -245,8 +245,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           scope.$emit(options.prefixEvent + '.show', $tooltip);
         }
 
-        $tooltip.leave = function() {
+        $tooltip.leave = function(e) {
 
+          if(e.type == 'blur' && $(document.activeElement).parents().index($tooltip.$element) >= 0) {
+            $(e.target).focus();
+            return;
+          }
           clearTimeout(timeout);
           hoverState = 'out';
           if (!options.delay || !options.delay.hide) {
