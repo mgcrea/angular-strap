@@ -386,6 +386,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         var _show = $timepicker.show;
         $timepicker.show = function() {
+		  if(element.attr('readonly') || element.attr('disabled')) return;
           _show();
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
