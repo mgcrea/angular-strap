@@ -222,7 +222,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         var _show = $datepicker.show;
         $datepicker.show = function() {
-		  if(element.attr('readonly') || element.attr('disabled')) return;
+          if((!isTouch && element.attr('readonly')) || element.attr('disabled')) return;
           _show();
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
