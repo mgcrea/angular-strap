@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.0 - 2015-07-12
+ * @version v2.3.1 - 2015-07-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -239,18 +239,18 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         }
         tipElement.addClass(options.placement);
         var elementPosition = getPosition(), tipWidth = tipElement.prop('offsetWidth'), tipHeight = tipElement.prop('offsetHeight');
+        $tooltip.$viewport = options.viewport && findElement(options.viewport.selector || options.viewport);
         if (autoPlace) {
           var originalPlacement = placement;
-          var container = options.container ? findElement(options.container) : element.parent();
-          var containerPosition = getPosition(container);
-          if (originalPlacement.indexOf('bottom') >= 0 && elementPosition.bottom + tipHeight > containerPosition.bottom) {
+          var viewportPosition = getPosition($tooltip.$viewport);
+          if (originalPlacement.indexOf('bottom') >= 0 && elementPosition.bottom + tipHeight > viewportPosition.bottom) {
             placement = originalPlacement.replace('bottom', 'top');
-          } else if (originalPlacement.indexOf('top') >= 0 && elementPosition.top - tipHeight < containerPosition.top) {
+          } else if (originalPlacement.indexOf('top') >= 0 && elementPosition.top - tipHeight < viewportPosition.top) {
             placement = originalPlacement.replace('top', 'bottom');
           }
-          if ((originalPlacement === 'right' || originalPlacement === 'bottom-left' || originalPlacement === 'top-left') && elementPosition.right + tipWidth > containerPosition.width) {
+          if ((originalPlacement === 'right' || originalPlacement === 'bottom-left' || originalPlacement === 'top-left') && elementPosition.right + tipWidth > viewportPosition.width) {
             placement = originalPlacement === 'right' ? 'left' : placement.replace('left', 'right');
-          } else if ((originalPlacement === 'left' || originalPlacement === 'bottom-right' || originalPlacement === 'top-right') && elementPosition.left - tipWidth < containerPosition.left) {
+          } else if ((originalPlacement === 'left' || originalPlacement === 'bottom-right' || originalPlacement === 'top-right') && elementPosition.left - tipWidth < viewportPosition.left) {
             placement = originalPlacement === 'left' ? 'right' : placement.replace('right', 'left');
           }
           tipElement.removeClass(originalPlacement).addClass(placement);
@@ -450,23 +450,24 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         var delta = {
           top: 0,
           left: 0
-        }, $viewport = options.viewport && findElement(options.viewport.selector || options.viewport);
-        if (!$viewport) {
-          return delta;
-        }
-        var viewportPadding = options.viewport && options.viewport.padding || 0, viewportDimensions = getPosition($viewport);
+        };
+        if (!$tooltip.$viewport) return delta;
+        var viewportPadding = options.viewport && options.viewport.padding || 0;
+        var viewportDimensions = getPosition($tooltip.$viewport);
         if (/right|left/.test(placement)) {
-          var topEdgeOffset = position.top - viewportPadding - viewportDimensions.scroll, bottomEdgeOffset = position.top + viewportPadding - viewportDimensions.scroll + actualHeight;
+          var topEdgeOffset = position.top - viewportPadding - viewportDimensions.scroll;
+          var bottomEdgeOffset = position.top + viewportPadding - viewportDimensions.scroll + actualHeight;
           if (topEdgeOffset < viewportDimensions.top) {
             delta.top = viewportDimensions.top - topEdgeOffset;
           } else if (bottomEdgeOffset > viewportDimensions.top + viewportDimensions.height) {
             delta.top = viewportDimensions.top + viewportDimensions.height - bottomEdgeOffset;
           }
         } else {
-          var leftEdgeOffset = position.left - viewportPadding, rightEdgeOffset = position.left + viewportPadding + actualWidth;
+          var leftEdgeOffset = position.left - viewportPadding;
+          var rightEdgeOffset = position.left + viewportPadding + actualWidth;
           if (leftEdgeOffset < viewportDimensions.left) {
             delta.left = viewportDimensions.left - leftEdgeOffset;
-          } else if (rightEdgeOffset > viewportDimensions.width) {
+          } else if (rightEdgeOffset > viewportDimensions.right) {
             delta.left = viewportDimensions.left + viewportDimensions.width - rightEdgeOffset;
           }
         }

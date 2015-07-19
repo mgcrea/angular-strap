@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.0 - 2015-07-12
+ * @version v2.3.1 - 2015-07-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -36,10 +36,11 @@ angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser
     arrowBehavior: 'pager'
   };
   this.$get = [ '$window', '$document', '$rootScope', '$sce', '$dateFormatter', '$tooltip', '$timeout', function($window, $document, $rootScope, $sce, $dateFormatter, $tooltip, $timeout) {
-    var bodyEl = angular.element($window.document.body);
     var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
     var isTouch = 'createTouch' in $window.document && isNative;
-    if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
+    if (!defaults.lang) {
+      defaults.lang = $dateFormatter.getDefaultLocale();
+    }
     function timepickerFactory(element, controller, config) {
       var $timepicker = $tooltip(element, angular.extend({}, defaults, config));
       var parentScope = config.scope;
@@ -186,10 +187,10 @@ angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         }
       };
       $timepicker.$setTimeByStep = function(value, index) {
-        var newDate = new Date($timepicker.$date);
-        var hours = newDate.getHours(), hoursLength = formatDate(newDate, hoursFormat).length;
-        var minutes = newDate.getMinutes(), minutesLength = formatDate(newDate, minutesFormat).length;
-        var seconds = newDate.getSeconds(), secondsLength = formatDate(newDate, secondsFormat).length;
+        var newDate = new Date($timepicker.$date || startDate);
+        var hours = newDate.getHours();
+        var minutes = newDate.getMinutes();
+        var seconds = newDate.getSeconds();
         if (index === 0) {
           newDate.setHours(hours - parseInt(options.hourStep, 10) * value);
         } else if (index === 1) {
@@ -234,7 +235,10 @@ angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         if (!/(38|37|39|40|13)/.test(evt.keyCode) || evt.shiftKey || evt.altKey) return;
         evt.preventDefault();
         evt.stopPropagation();
-        if (evt.keyCode === 13) return $timepicker.hide(true);
+        if (evt.keyCode === 13) {
+          $timepicker.hide(true);
+          return;
+        }
         var newDate = new Date($timepicker.$date);
         var hours = newDate.getHours(), hoursLength = formatDate(newDate, hoursFormat).length;
         var minutes = newDate.getMinutes(), minutesLength = formatDate(newDate, minutesFormat).length;
@@ -311,6 +315,7 @@ angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser
       };
       var _show = $timepicker.show;
       $timepicker.show = function() {
+        if (!isTouch && element.attr('readonly') || element.attr('disabled')) return;
         _show();
         $timeout(function() {
           $timepicker.$element && $timepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $timepicker.$onMouseDown);
@@ -336,7 +341,6 @@ angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser
 }).directive('bsTimepicker', [ '$window', '$parse', '$q', '$dateFormatter', '$dateParser', '$timepicker', function($window, $parse, $q, $dateFormatter, $dateParser, $timepicker) {
   var defaults = $timepicker.defaults;
   var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
-  var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
   return {
     restrict: 'EAC',
     require: 'ngModel',
@@ -399,7 +403,7 @@ angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         var parsedTime = angular.isDate(viewValue) ? viewValue : dateParser.parse(viewValue, controller.$dateValue);
         if (!parsedTime || isNaN(parsedTime.getTime())) {
           controller.$setValidity('date', false);
-          return;
+          return undefined;
         } else {
           validateAgainstMinMaxTime(parsedTime);
         }

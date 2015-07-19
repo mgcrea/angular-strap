@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.0 - 2015-07-12
+ * @version v2.3.1 - 2015-07-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
     html: false,
     delay: 0,
     minLength: 1,
-    filter: 'filter',
+    filter: 'bsAsyncFilter',
     limit: 6,
     autoSelect: false,
     comparator: '',
@@ -129,7 +129,17 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
     TypeaheadFactory.defaults = defaults;
     return TypeaheadFactory;
   } ];
-}).directive('bsTypeahead', [ '$window', '$parse', '$q', '$typeahead', '$parseOptions', function($window, $parse, $q, $typeahead, $parseOptions) {
+}).filter('bsAsyncFilter', [ '$filter', function($filter) {
+  return function(array, expression, comparator) {
+    if (array && angular.isFunction(array.then)) {
+      return array.then(function(results) {
+        return $filter('filter')(results, expression, comparator);
+      });
+    } else {
+      return $filter('filter')(array, expression, comparator);
+    }
+  };
+} ]).directive('bsTypeahead', [ '$window', '$parse', '$q', '$typeahead', '$parseOptions', function($window, $parse, $q, $typeahead, $parseOptions) {
   var defaults = $typeahead.defaults;
   return {
     restrict: 'EAC',
@@ -181,14 +191,18 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       });
       controller.$formatters.push(function(modelValue) {
         var displayValue = parsedOptions.displayValue(modelValue);
-        if (displayValue) return displayValue;
+        if (displayValue) {
+          return displayValue;
+        }
         if (modelValue && typeof modelValue !== 'object') {
           return modelValue;
         }
         return '';
       });
       controller.$render = function() {
-        if (controller.$isEmpty(controller.$viewValue)) return element.val('');
+        if (controller.$isEmpty(controller.$viewValue)) {
+          return element.val('');
+        }
         var index = typeahead.$getIndex(controller.$modelValue);
         var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
         selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;

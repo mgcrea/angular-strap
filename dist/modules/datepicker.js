@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.0 - 2015-07-12
+ * @version v2.3.1 - 2015-07-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -185,6 +185,7 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
       };
       var _show = $datepicker.show;
       $datepicker.show = function() {
+        if (!isTouch && element.attr('readonly') || element.attr('disabled')) return;
         _show();
         $timeout(function() {
           if (!$datepicker.$isShown) return;
