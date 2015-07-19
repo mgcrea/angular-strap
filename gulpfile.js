@@ -1,4 +1,5 @@
 'use strict';
+/* eslint node:true */
 
 var gulp = require('gulp');
 var config = require('ng-factory').use(gulp, {
@@ -43,7 +44,7 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter(stylish));
 });
 
-var karma = require('karma').server;
+var Server = require('karma').Server;
 var testTimezone = '';
 gulp.task('karma:unit', gulp.series('ng:test/templates', function() {
   // if testTimezone has value, set the environment timezone
@@ -53,7 +54,7 @@ gulp.task('karma:unit', gulp.series('ng:test/templates', function() {
     console.log('Setting timezone to => [' + testTimezone + ']');
     process.env.TZ = testTimezone;
   }
-  karma.start({
+  new Server({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
     reporters: ['dots'],
@@ -61,10 +62,10 @@ gulp.task('karma:unit', gulp.series('ng:test/templates', function() {
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);
-  });
+  }).start();
 }));
 gulp.task('karma:server', gulp.series('ng:test/templates', function karmaServer() {
-  karma.start({
+  new Server({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
     reporters: ['progress'],
@@ -73,11 +74,11 @@ gulp.task('karma:server', gulp.series('ng:test/templates', function karmaServer(
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);
-  });
+  }).start();
 }));
 // codeclimate-test-reporter
 gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis() {
-  karma.start({
+  new Server({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
     reporters: ['dots', 'coverage'],
@@ -85,15 +86,15 @@ gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis(
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);
-    // gulp.src('test/coverage/**/lcov.info')
-    //   .pipe(coveralls())
-    //   .on('end', function() {
-    //     process.exit(code);
-    //   });
-  });
+    gulp.src('test/coverage/**/lcov.info')
+      .pipe(coveralls())
+      .on('end', function() {
+        process.exit(code);
+      });
+  }).start();
 }));
 gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', function karmaTravis120() {
-  karma.start({
+  new Server({
     configFile: path.join(__dirname, 'test/~1.2.0/karma.conf.js'),
     browsers: ['PhantomJS'],
     reporters: ['dots'],
@@ -101,10 +102,10 @@ gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', function karmaT
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);
-  });
+  }).start();
 }));
 gulp.task('karma:travis~1.3.0', gulp.series('ng:test/templates', function karmaTravis130() {
-  karma.start({
+  new Server({
     configFile: path.join(__dirname, 'test/~1.3.0/karma.conf.js'),
     browsers: ['PhantomJS'],
     reporters: ['dots'],
@@ -114,7 +115,7 @@ gulp.task('karma:travis~1.3.0', gulp.series('ng:test/templates', function karmaT
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
     process.exit(code);
-  });
+  }).start();
 }));
 
 gulp.task('test', gulp.series('ng:test/templates', gulp.parallel('jshint', 'karma:unit')));

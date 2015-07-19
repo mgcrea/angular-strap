@@ -24,12 +24,7 @@
     "type": "git",
     "url": "https://github.com/mgcrea/angular-strap.git"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/mgcrea/angular-strap/blob/master/LICENSE.md"
-    }
-  ],
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "del": "^1.2.0",
@@ -39,14 +34,14 @@
     "gulp-util": "^3.0.6",
     "jasmine-core": "^2.3.4",
     "jshint-stylish": "^2.0.1",
-    "karma": "^0.12.37",
+    "karma": "^0.13.2",
     "karma-chrome-launcher": "^0.2.0",
     "karma-coverage": "^0.4.2",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.0",
     "karma-sauce-launcher": "^0.2.14",
     "ng-factory": "^1.0",
-    "undertaker-lib-tasks": "^0.3.2"
+    "undertaker-lib-tasks": "^0.3.4"
   },
   "engines": {
     "node": "^0.10"
