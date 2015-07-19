@@ -57,8 +57,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         // element id if defined
         $tooltip.$id = options.id || element.attr('id') || '';
 
-        $tooltip.$viewport = options.viewport && findElement(options.viewport.selector || options.viewport)
-
         // Support scope as string options
         if(options.title) {
           scope.title = $sce.trustAsHtml(options.title);
@@ -351,6 +349,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
               tipWidth = tipElement.prop('offsetWidth'),
               tipHeight = tipElement.prop('offsetHeight');
 
+          // Refresh viewport position
+          $tooltip.$viewport = options.viewport && findElement(options.viewport.selector || options.viewport);
+
           // If we're auto placing, we need to check the positioning
           if (autoPlace) {
             var originalPlacement = placement;
@@ -621,13 +622,13 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           }
         }
 
+        // @source https://github.com/twbs/bootstrap/blob/v3.3.5/js/tooltip.js#L380
         function getViewportAdjustedDelta(placement, position, actualWidth, actualHeight) {
-          var delta = { top: 0, left: 0 }
-          if (!$tooltip.$viewport) return delta
+          var delta = {top: 0, left: 0};
+          if (!$tooltip.$viewport) return delta;
 
-
-          var viewportPadding = options.viewport && options.viewport.padding || 0
-          var viewportDimensions = getPosition($tooltip.$viewport)
+          var viewportPadding = options.viewport && options.viewport.padding || 0;
+          var viewportDimensions = getPosition($tooltip.$viewport);
 
           if (/right|left/.test(placement)) {
             var topEdgeOffset = position.top - viewportPadding - viewportDimensions.scroll;
