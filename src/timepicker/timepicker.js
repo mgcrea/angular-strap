@@ -505,7 +505,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
           var date;
 
-           // If the model needs to be updated to matter what, these validation routines
+          // If the model needs to be updated to matter what, these validation routines
           // can be overridden by setting the attribute overrideValidation eq true
           if (defaults.overrideValidation){
             return viewValue;
@@ -533,7 +533,6 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             date = dateParser.timezoneOffsetAdjust(parsedTime, options.timezone, true);
             return formatDate(date, options.modelTimeFormat || options.timeFormat);
           }
-
           date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
           if (options.timeType === 'number') {
             return date.getTime();
@@ -544,7 +543,6 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           } else {
             return new Date(date);
           }
-          
         });
 
         // modelValue -> $formatters -> viewValue
