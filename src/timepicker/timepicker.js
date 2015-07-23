@@ -32,7 +32,8 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
       roundDisplay: false,
       iconUp: 'glyphicon glyphicon-chevron-up',
       iconDown: 'glyphicon glyphicon-chevron-down',
-      arrowBehavior: 'pager'
+      arrowBehavior: 'pager',
+      overrideValidation: 'false'
     };
 
     this.$get = function($window, $document, $rootScope, $sce, $dateFormatter, $tooltip, $timeout) {
@@ -503,38 +504,50 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
           var date;
-          // Null values should correctly reset the model value & validity
-          if (!viewValue) {
-            // BREAKING CHANGE:
-            // return null (not undefined) when input value is empty, so angularjs 1.3
-            // ngModelController can go ahead and run validators, like ngRequired
-            controller.$setValidity('date', true);
-            return null;
-          }
-          var parsedTime = angular.isDate(viewValue) ? viewValue : dateParser.parse(viewValue, controller.$dateValue);
-          if (!parsedTime || isNaN(parsedTime.getTime())) {
-            controller.$setValidity('date', false);
-            // Return undefined, causes ngModelController to
-            // invalidate model value
-            return undefined;
+
+           // If the model needs to be updated to matter what, these validation routines
+          // can be overridden by setting the attribute overrideValidation eq true
+          if (!defaults.overrideValidation){
+
+            // Null values should correctly reset the model value & validity
+            if (!viewValue) {
+              // BREAKING CHANGE:
+              // return null (not undefined) when input value is empty, so angularjs 1.3
+              // ngModelController can go ahead and run validators, like ngRequired
+              controller.$setValidity('date', true);
+              return null;
+            }
+            var parsedTime = angular.isDate(viewValue) ? viewValue : dateParser.parse(viewValue, controller.$dateValue);
+            if (!parsedTime || isNaN(parsedTime.getTime())) {
+              controller.$setValidity('date', false);
+              // Return undefined, causes ngModelController to
+              // invalidate model value
+              return undefined;
+            } else {
+              validateAgainstMinMaxTime(parsedTime);
+            }
+
+            if (options.timeType === 'string') {
+              date = dateParser.timezoneOffsetAdjust(parsedTime, options.timezone, true);
+              return formatDate(date, options.modelTimeFormat || options.timeFormat);
+            }
+
+            date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
+            if (options.timeType === 'number') {
+              return date.getTime();
+            } else if (options.timeType === 'unix') {
+              return date.getTime() / 1000;
+            } else if (options.timeType === 'iso') {
+              return date.toISOString();
+            } else {
+              return new Date(date);
+            }
           } else {
-            validateAgainstMinMaxTime(parsedTime);
+            return viewValue;
           }
 
-          if (options.timeType === 'string') {
-            date = dateParser.timezoneOffsetAdjust(parsedTime, options.timezone, true);
-            return formatDate(date, options.modelTimeFormat || options.timeFormat);
-          }
-          date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
-          if (options.timeType === 'number') {
-            return date.getTime();
-          } else if (options.timeType === 'unix') {
-            return date.getTime() / 1000;
-          } else if (options.timeType === 'iso') {
-            return date.toISOString();
-          } else {
-            return new Date(date);
-          }
+          
+          
         });
 
         // modelValue -> $formatters -> viewValue
