@@ -507,7 +507,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
           // If the model needs to be updated to matter what, these validation routines
           // can be overridden by setting the attribute overrideValidation eq true
-          if (defaults.overrideValidation === 'true'){
+          if (defaults.overrideValidation === 'true' && viewValue instanceof Date === false){
             return viewValue;
           } 
 

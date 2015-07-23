@@ -39,7 +39,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
       startWeek: 0,
       daysOfWeekDisabled: '',
       iconLeft: 'glyphicon glyphicon-chevron-left',
-      iconRight: 'glyphicon glyphicon-chevron-right'
+      iconRight: 'glyphicon glyphicon-chevron-right',
+      overrideValidation: 'false'
     };
 
     this.$get = function($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
@@ -352,6 +353,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
           var date;
+
+          // If the model needs to be updated to matter what, these validation routines
+          // can be overridden by setting the attribute overrideValidation eq true
+          if (defaults.overrideValidation === 'true' && viewValue instanceof Date === false){
+            return viewValue;
+          } 
+
           // Null values should correctly reset the model value & validity
           if(!viewValue) {
             controller.$setValidity('date', true);

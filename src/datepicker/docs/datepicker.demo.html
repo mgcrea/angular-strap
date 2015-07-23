@@ -168,7 +168,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
             <p>If type is "number" then datepicker uses milliseconds to set date, if "unix" - seconds</p>
           </td>
         </tr>
-		<tr>
+    <tr>
           <td>timezone</td>
           <td>string</td>
           <td>null</td>
@@ -272,6 +272,14 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>
             <p>Array of date ranges to disable.</p>
             <p>Example date range: <code>{ start: new Date(2010, 11, 24), end: new Date(2010, 11, 25) }</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>overrideValidation</td>
+          <td>string</td>
+          <td>'false'</td>
+          <td>
+            <p>When set to true, provides a way to override internal validation, so anything typed into the form will update the view model.</p>
           </td>
         </tr>
       </tbody>
