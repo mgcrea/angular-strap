@@ -32,7 +32,8 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
       roundDisplay: false,
       iconUp: 'glyphicon glyphicon-chevron-up',
       iconDown: 'glyphicon glyphicon-chevron-down',
-      arrowBehavior: 'pager'
+      arrowBehavior: 'pager',
+      overrideValidation: 'false'
     };
 
     this.$get = function($window, $document, $rootScope, $sce, $dateFormatter, $tooltip, $timeout) {
@@ -503,6 +504,13 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         controller.$parsers.unshift(function(viewValue) {
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
           var date;
+
+          // If the model needs to be updated to matter what, these validation routines
+          // can be overridden by setting the attribute overrideValidation eq true
+          if (defaults.overrideValidation === 'true'){
+            return viewValue;
+          } 
+
           // Null values should correctly reset the model value & validity
           if (!viewValue) {
             // BREAKING CHANGE:
