@@ -252,9 +252,16 @@ angular.module('mgcrea.ngStrap.collapse', [])
           var index = bsCollapseCtrl.$targets.indexOf(element);
           var active = bsCollapseCtrl.$activeIndexes();
           var action = 'removeClass';
+          
           if (allOpen) {
-            action = 'addClass';   
-          } else if (angular.isArray(active)) {
+              if (angular.isArray(active)) {
+                  active.push(index);
+              } else {
+                  active = index;
+              }
+          }
+            
+          if (angular.isArray(active)) {
             if (active.indexOf(index) !== -1) {
               action = 'addClass';
             }
