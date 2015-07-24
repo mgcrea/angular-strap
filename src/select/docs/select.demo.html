@@ -16,9 +16,9 @@
   </div>
 
   <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="select/docs/select.demo.html" data-content-js-url="select/docs/select.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip></a></h3>
-  <pre class="bs-example-scope">$scope.selectedIcon = "{{selectedIcon}}";
-$scope.selectedIcons = "{{selectedIcons}}";
-$scope.icons = "{{icons}}";
+  <pre class="bs-example-scope">$scope.selectedIcon = {{ !selectedIcon ? '""' : selectedIcon}};
+$scope.selectedIcons = {{selectedIcons}};
+$scope.icons = {{icons}};
 </pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
