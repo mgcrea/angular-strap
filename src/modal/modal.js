@@ -18,7 +18,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       backdrop: true,
       keyboard: true,
       html: false,
-      show: true
+      show: true,
+      zIndex: 1040
     };
 
     this.$get = function($window, $rootScope, $bsCompiler, $q, $templateCache, $http, $animate, $timeout, $sce, dimensions) {
@@ -73,7 +74,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         // Fetch, compile then initialize modal
         var compileData, modalElement, modalScope;
         var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
-        backdropElement.css({position:'fixed', top:'0px', left:'0px', bottom:'0px', right:'0px', 'z-index': 1038});
+        backdropElement.css({position:'fixed', top:'0px', left:'0px', bottom:'0px', right:'0px', 'z-index': options.zIndex - 2});
         promise.then(function(data) {
           compileData = data;
           $modal.init();
@@ -136,7 +137,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
 
           // Set the initial positioning.
-          modalElement.css({display: 'block'}).addClass(options.placement);
+          modalElement.css({display: 'block', 'z-index': options.zIndex}).addClass(options.placement);
 
           // Options: animation
           if(options.animation) {
@@ -322,7 +323,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'controller', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'controller', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'id', 'prefixEvent', 'prefixClass', 'zIndex'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
