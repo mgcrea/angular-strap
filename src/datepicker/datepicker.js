@@ -25,6 +25,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
       dateFormat: 'shortDate',
       timezone: null,
       modelDateFormat: null,
+	  autoAdaptModelDateFormat: false,
       dayFormat: 'dd',
       monthFormat: 'MMM',
       yearFormat: 'yyyy',
@@ -395,7 +396,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
           } else if(angular.isDate(modelValue)) {
             date = modelValue;
           } else if(options.dateType === 'string') {
-            date = dateParser.parse(modelValue, null, options.modelDateFormat);
+			if(options.autoAdaptModelDateFormat)
+            {
+              date = isNaN(Date.parse(modelValue)) ? false : new Date(modelValue);
+            }
+            else {
+              date = dateParser.parse(modelValue, null, options.modelDateFormat);
+            }
           } else if(options.dateType === 'unix') {
             date = new Date(modelValue * 1000);
           } else {
