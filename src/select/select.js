@@ -140,6 +140,8 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             }
           } else if(scope.$activeIndex >= scope.$matches.length) {
             scope.$activeIndex = options.multiple ? [] : 0;
+          } else if(!controller.$modelValue && !options.multiple) {
+            scope.$activeIndex = -1;
           }
         };
 

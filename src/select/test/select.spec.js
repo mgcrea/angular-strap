@@ -254,6 +254,21 @@ describe('select', function () {
       expect(sandboxEl.find('.dropdown-menu li.active').index()).toBe(2);
     });
 
+    it('should correctly update when model is cleared', function() {
+      var elm = compileDirective('default');
+      scope.selectedIcon = scope.icons[2].value;
+      scope.$digest();
+      expect(elm.text().trim()).toBe(scope.icons[2].label);
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(1);
+      expect(sandboxEl.find('.dropdown-menu li.active').index()).toBe(2);
+      
+      scope.selectedIcon = null;
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(0);
+      expect(sandboxEl.find('.dropdown-menu li.active').index()).toBe(-1);
+    });
   });
 
   describe('options', function () {
