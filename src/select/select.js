@@ -115,6 +115,9 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             $select.activate(index);
             if(options.multiple) {
               controller.$setViewValue(scope.$activeIndex.map(function(index) {
+                if (undefined === scope.$matches[index]) {
+                  return null;
+                }
                 return scope.$matches[index].value;
               }));
             } else {
