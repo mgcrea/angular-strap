@@ -5,6 +5,7 @@
 angular.module('mgcrea.ngStrapDocs', ['mgcrea.ngStrap', 'mgcrea.ngPlunkr', 'ngRoute', 'ngAnimate'])
 
 .constant('version', 'v2.3.1')
+.constant('ngVersion', angular.version.full)
 
 .config(function($plunkrProvider, version) {
 
@@ -31,9 +32,10 @@ angular.module('mgcrea.ngStrapDocs', ['mgcrea.ngStrap', 'mgcrea.ngPlunkr', 'ngRo
 
 })
 
-.run(function($window, $rootScope, $location, $anchorScroll, version) {
+.run(function($window, $rootScope, $location, $anchorScroll, version, ngVersion) {
 
   $rootScope.version = version;
+  $rootScope.ngVersion = ngVersion;
 
   // FastClick
   $window.FastClick.attach($window.document.body);
