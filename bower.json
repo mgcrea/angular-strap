@@ -1,7 +1,7 @@
 {
-  "name": "angular-strap",
+  "name": "angular-mindfor-strap",
   "description": "AngularStrap - AngularJS directives for Bootstrap",
-  "version": "2.3.1",
+  "version": "2.3.11",
   "keywords": [
     "angular",
     "bootstrap"
