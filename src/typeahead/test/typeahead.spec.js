@@ -47,6 +47,10 @@ describe('typeahead', function () {
       scope: {selectedState: 'Alaska', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
       element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" bs-typeahead>'
     },
+    'default-autocomplete-present': {
+      scope: {selectedState: '', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
+      element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" bs-typeahead autocomplete="thisShouldNotChange">'
+    },
     'watch-options': {
       element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" data-watch-options="1" bs-typeahead>'
     },
@@ -292,6 +296,16 @@ describe('typeahead', function () {
     it('should use \'\' if the  model is an object and the display value cannot be determined', function () {
       var elm = compileDirective('markup-objectValue', {}, function(scope) { scope.selectedIcon = {} });
       expect(elm.val()).toBe('');
+    });
+
+    it('should add the autocomplete attribute if one is not already present', function () {
+      var elm = compileDirective('default');
+      expect(elm.attr('autocomplete')).toBe('false');
+    });
+
+    it('should not change an already present autocomplete attribute', function () {
+      var elm = compileDirective('default-autocomplete-present');
+      expect(elm.attr('autocomplete')).toBe('thisShouldNotChange');
     });
   });
 
