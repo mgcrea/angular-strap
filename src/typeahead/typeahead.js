@@ -217,7 +217,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         });
 
         // Disable browser autocompletion
-        element.attr('autocomplete', 'false');
+        if (!element.attr('autocomplete')) element.attr('autocomplete', 'false');
 
         // Build proper bsOptions
         var filter = options.filter || defaults.filter;
