@@ -3343,22 +3343,29 @@
           scope.$digest();
         };
         var show = $typeahead.show;
+        var keyDownAttached = false;
         $typeahead.show = function() {
           show();
+          // use timeout to hookup the events to prevent
+          // event bubbling from being processed immediately.
           $timeout(function() {
             $typeahead.$element && $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
-            if (options.keyboard) {
+            if (options.keyboard && !keyDownAttached) {
               element && element.on('keydown', $typeahead.$onKeyDown);
+              keyDownAttached = true;
             }
           }, 0, false);
         };
+
         var hide = $typeahead.hide;
         $typeahead.hide = function() {
           $typeahead.$element && $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
           if (options.keyboard) {
             element && element.off('keydown', $typeahead.$onKeyDown);
+              keyDownAttached = false;
           }
-          if (!options.autoSelect) $typeahead.activate(-1);
+          if (!options.autoSelect)
+            $typeahead.activate(-1);
           hide();
         };
         return $typeahead;
