@@ -57,6 +57,10 @@ describe('select', function () {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
+    'options-multiple-undefined-value': {
+      scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" data-multiple="1" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
     'options-multiple-all-none-buttons': {
       scope: {selectedIcons: ['Globe'], icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" data-multiple="1" all-none-buttons="{{allNoneButtons}}" ng-model="selectedIcons" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
@@ -600,6 +604,22 @@ describe('select', function () {
 
       expect(selected).toBe(1);
     });
+
+    it('should dispatch .select event when item is selected and replace undefined value', function() {
+      var elm = compileDirective('options-multiple-undefined-value');
+
+      var selected = null;
+      scope.$on('$select.select', function(evt, value, index, select) {
+        selected = index;
+      });
+
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+
+      expect(selected).toBe(1);
+    });
+
+
 
     it('should call .select event with select element instance id', function() {
       var elm = compileDirective('default-with-id');
