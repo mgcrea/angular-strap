@@ -305,7 +305,7 @@ describe('typeahead', function () {
 
     it('should add the autocomplete attribute if one is not already present', function () {
       var elm = compileDirective('default');
-      expect(elm.attr('autocomplete')).toBe('false');
+      expect(elm.attr('autocomplete')).toBe('off');
     });
 
     it('should not change an already present autocomplete attribute', function () {
