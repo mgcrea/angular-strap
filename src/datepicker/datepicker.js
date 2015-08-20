@@ -25,7 +25,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
       dateFormat: 'shortDate',
       timezone: null,
       modelDateFormat: null,
-	  autoAdaptModelDateFormat: false,
+	    autoAdaptModelDateFormat: false,
       dayFormat: 'dd',
       monthFormat: 'MMM',
       yearFormat: 'yyyy',
@@ -270,13 +270,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'autoAdaptModelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach(['html', 'container', 'autoclose', 'useNative'], function(key) {
+        angular.forEach(['html', 'container', 'autoclose','autoAdaptModelDateFormat', 'useNative'], function(key) {
           if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
             options[key] = false;
         });
@@ -396,7 +396,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
           } else if(angular.isDate(modelValue)) {
             date = modelValue;
           } else if(options.dateType === 'string') {
-			if(options.autoAdaptModelDateFormat)
+            if(options.autoAdaptModelDateFormat)
             {
               date = isNaN(Date.parse(modelValue)) ? false : new Date(modelValue);
             }

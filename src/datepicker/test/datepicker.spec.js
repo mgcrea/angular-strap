@@ -170,6 +170,9 @@ describe('datepicker', function() {
       scope: {selectedDate: 'December 1, 2014' },
       element: '<input type="text" ng-model="selectedDate" data-date-format="shortDate" data-model-date-format="longDate" data-date-type="string" bs-datepicker>'
     },
+    'options-autoAdaptModelDateFormat': {
+      element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" data-auto-adapt-model-date-format={{autoadaptmodeldateformat}} data-date-type="string" bs-datepicker>'
+    },
     'options-daysOfWeekDisabled': {
       scope: {selectedDate: new Date(2014, 6, 27)},
       element: '<input type="text" ng-model="selectedDate" data-days-of-week-disabled="{{daysOfWeekDisabled}}" bs-datepicker>'
@@ -1197,6 +1200,35 @@ describe('datepicker', function() {
       angular.element(elm[0]).triggerHandler('change');
       scope.$digest();
       expect(scope.selectedDate).toBe('November 20, 2014');
+    });
+
+  });
+
+  describe('autoAdaptModelDateFormat', function() {
+
+    it('should support a parsable string(dd/MM/yyyy) of Date', function() {
+      var elm = compileDirective('options-autoAdaptModelDateFormat',{ autoadaptmodeldateformat: "true" });
+
+      scope.selectedDate='05/19/2014';
+      scope.$digest();
+      expect(elm.val()).toBe('2014-05-19');
+    });
+
+    it('should support a parsable string(yyyy-MM-dd) of Date', function() {
+      var elm = compileDirective('options-autoAdaptModelDateFormat',{ autoadaptmodeldateformat: "true" });
+
+      scope.selectedDate='2014-05-20';
+      scope.$digest();
+      expect(elm.val()).toBe('2014-05-20');
+    });
+
+
+    it('should support a parsable string(yyyy/MM/dd) of Date', function() {
+      var elm = compileDirective('options-autoAdaptModelDateFormat',{ autoadaptmodeldateformat: "true" });
+
+      scope.selectedDate='2014/05/20';
+      scope.$digest();
+      expect(elm.val()).toBe('2014-05-20');
     });
 
   });
