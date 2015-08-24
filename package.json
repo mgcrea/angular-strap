@@ -27,26 +27,26 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "del": "^1.2.0",
-    "factory-angular-channels": "^0.7.3",
+    "del": "^1.2.1",
+    "factory-angular-channels": "^0.8.2",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-jshint": "^1.11.2",
     "gulp-util": "^3.0.6",
     "jasmine-core": "^2.3.4",
     "jshint-stylish": "^2.0.1",
-    "karma": "^0.13.2",
+    "karma": "^0.13.9",
     "karma-chrome-launcher": "^0.2.0",
-    "karma-coverage": "^0.4.2",
+    "karma-coverage": "^0.5.0",
     "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-phantomjs-launcher": "^0.2.1",
     "karma-sauce-launcher": "^0.2.14",
     "ng-factory": "^1.0",
-    "undertaker-lib-tasks": "^0.3.4"
+    "undertaker-lib-tasks": "^0.4.0"
   },
   "engines": {
     "node": "^0.10"
   },
   "scripts": {
-    "test": "gulp jshint karma:unit"
+    "test": "$(npm bin)/gulp jshint karma:unit"
   }
 }
