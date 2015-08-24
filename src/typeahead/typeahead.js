@@ -196,6 +196,20 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
   .directive('bsTypeahead', function($window, $parse, $q, $typeahead, $parseOptions) {
 
     var defaults = $typeahead.defaults;
+    
+    function setSelectionRange(input, selectionStart, selectionEnd) {
+      if (input.setSelectionRange) {
+        input.setSelectionRange(selectionStart, selectionEnd);
+      }
+      // handle older IE
+      else if (input.createTextRange) {
+        var range = input.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', selectionEnd);
+        range.moveStart('character', selectionStart);
+        range.select();
+      }
+    }
 
     return {
       restrict: 'EAC',
@@ -297,7 +311,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
           var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
+          var currentCursorPos = element[0].selectionEnd;
           element.val(options.trimValue === false ? value : value.trim());
+          setSelectionRange(element[0], currentCursorPos, currentCursorPos);
         };
 
         // Garbage collection
