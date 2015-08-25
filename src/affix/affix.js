@@ -94,9 +94,6 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
           if(affixed === affix) return;
           affixed = affix;
 
-          // Add proper affix class
-          element.removeClass(reset).addClass('affix' + ((affix !== 'middle') ? '-' + affix : ''));
-
           if(affix === 'top') {
             unpin = null;
             if(setWidth) {
@@ -132,6 +129,9 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
               element.css('top', initialAffixTop + 'px');
             }
           }
+
+          // Add proper affix class
+          element.removeClass(reset).addClass('affix' + ((affix !== 'middle') ? '-' + affix : ''));
 
         };
 

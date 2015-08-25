@@ -115,6 +115,9 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             $select.activate(index);
             if(options.multiple) {
               controller.$setViewValue(scope.$activeIndex.map(function(index) {
+                if (angular.isUndefined(scope.$matches[index])) {
+                  return null;
+                }
                 return scope.$matches[index].value;
               }));
             } else {
@@ -140,6 +143,8 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             }
           } else if(scope.$activeIndex >= scope.$matches.length) {
             scope.$activeIndex = options.multiple ? [] : 0;
+          } else if(!controller.$modelValue && !options.multiple) {
+            scope.$activeIndex = -1;
           }
         };
 
