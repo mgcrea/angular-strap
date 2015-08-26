@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.1 - 2015-07-19
+ * @version v2.3.1 - 2015-08-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -141,6 +141,17 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
   };
 } ]).directive('bsTypeahead', [ '$window', '$parse', '$q', '$typeahead', '$parseOptions', function($window, $parse, $q, $typeahead, $parseOptions) {
   var defaults = $typeahead.defaults;
+  function setSelectionRange(input, selectionStart, selectionEnd) {
+    if (input.setSelectionRange) {
+      input.setSelectionRange(selectionStart, selectionEnd);
+    } else if (input.createTextRange) {
+      var range = input.createTextRange();
+      range.collapse(true);
+      range.moveEnd('character', selectionEnd);
+      range.moveStart('character', selectionStart);
+      range.select();
+    }
+  }
   return {
     restrict: 'EAC',
     require: 'ngModel',
@@ -207,7 +218,9 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
         selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
         var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
+        var currentCursorPos = element[0].selectionEnd;
         element.val(options.trimValue === false ? value : value.trim());
+        setSelectionRange(element[0], currentCursorPos, currentCursorPos);
       };
       scope.$on('$destroy', function() {
         if (typeahead) typeahead.destroy();
