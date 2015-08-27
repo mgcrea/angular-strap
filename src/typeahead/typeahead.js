@@ -150,6 +150,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             $typeahead.$element && $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
             if (options.keyboard && !isKeyDownAttached) {
               element && element.on('keydown', $typeahead.$onKeyDown);
+              isKeyDownAttached = true;
             }
           }, 0, false);
         };
