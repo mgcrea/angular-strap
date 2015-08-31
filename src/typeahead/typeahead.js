@@ -15,6 +15,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       keyboard: true,
       html: false,
       delay: 0,
+      asyncdelay: 0,
       minLength: 1,
       filter: 'bsAsyncFilter',
       limit: 6,
@@ -206,7 +207,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var options = {
           scope: scope
         };
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'asyncdelay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass'], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -250,23 +251,28 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
           // console.warn('$watch', element.attr('ng-model'), newValue);
           scope.$modelValue = newValue; // Publish modelValue on scope for custom templates
-          parsedOptions.valuesFn(scope, controller)
-            .then(function(values) {
-              // Prevent input with no future prospect if selectMode is truthy
-              // @TODO test selectMode
-              if (options.selectMode && !values.length && newValue.length > 0) {
-                controller.$setViewValue(controller.$viewValue.substring(0, controller.$viewValue.length - 1));
-                return;
-              }
-              if (values.length > limit) values = values.slice(0, limit);
-              var isVisible = typeahead.$isVisible();
-              isVisible && typeahead.update(values);
-              // Do not re-queue an update if a correct value has been selected
-              if (values.length === 1 && values[0].value === newValue) return;
-              !isVisible && typeahead.update(values);
-              // Queue a new rendering that will leverage collection loading
-              controller.$render();
-            });
+          if (scope.valuesTimer) {
+            clearTimeout(scope.valuesTimer);
+          }
+          scope.valuesTimer = setTimeout(function() {
+            parsedOptions.valuesFn(scope, controller)
+              .then(function(values) {
+                // Prevent input with no future prospect if selectMode is truthy
+                // @TODO test selectMode
+                if (options.selectMode && !values.length && newValue.length > 0) {
+                  controller.$setViewValue(controller.$viewValue.substring(0, controller.$viewValue.length - 1));
+                  return;
+                }
+                if (values.length > limit) values = values.slice(0, limit);
+                var isVisible = typeahead.$isVisible();
+                isVisible && typeahead.update(values);
+                // Do not re-queue an update if a correct value has been selected
+                if (values.length === 1 && values[0].value === newValue) return;
+                !isVisible && typeahead.update(values);
+                // Queue a new rendering that will leverage collection loading
+                controller.$render();
+              });
+          }, options.asyncdelay);
         });
 
         // modelValue -> $formatters -> viewValue
