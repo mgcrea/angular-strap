@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.1 - 2015-07-19
+ * @version v2.3.1 - 2015-08-31
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -19,6 +19,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
     keyboard: true,
     html: false,
     delay: 0,
+    asyncdelay: 0,
     minLength: 1,
     filter: 'bsAsyncFilter',
     limit: 6,
@@ -148,14 +149,14 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       var options = {
         scope: scope
       };
-      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'asyncdelay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'html', 'container', 'trimValue' ], function(key) {
         if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
       });
-      element.attr('autocomplete', 'false');
+      if (!element.attr('autocomplete')) element.attr('autocomplete', 'false');
       var filter = options.filter || defaults.filter;
       var limit = options.limit || defaults.limit;
       var comparator = options.comparator || defaults.comparator;
@@ -176,18 +177,23 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       }
       scope.$watch(attr.ngModel, function(newValue, oldValue) {
         scope.$modelValue = newValue;
-        parsedOptions.valuesFn(scope, controller).then(function(values) {
-          if (options.selectMode && !values.length && newValue.length > 0) {
-            controller.$setViewValue(controller.$viewValue.substring(0, controller.$viewValue.length - 1));
-            return;
-          }
-          if (values.length > limit) values = values.slice(0, limit);
-          var isVisible = typeahead.$isVisible();
-          isVisible && typeahead.update(values);
-          if (values.length === 1 && values[0].value === newValue) return;
-          !isVisible && typeahead.update(values);
-          controller.$render();
-        });
+        if (scope.valuesTimer) {
+          clearTimeout(scope.valuesTimer);
+        }
+        scope.valuesTimer = setTimeout(function() {
+          parsedOptions.valuesFn(scope, controller).then(function(values) {
+            if (options.selectMode && !values.length && newValue.length > 0) {
+              controller.$setViewValue(controller.$viewValue.substring(0, controller.$viewValue.length - 1));
+              return;
+            }
+            if (values.length > limit) values = values.slice(0, limit);
+            var isVisible = typeahead.$isVisible();
+            isVisible && typeahead.update(values);
+            if (values.length === 1 && values[0].value === newValue) return;
+            !isVisible && typeahead.update(values);
+            controller.$render();
+          });
+        }, options.asyncdelay);
       });
       controller.$formatters.push(function(modelValue) {
         var displayValue = parsedOptions.displayValue(modelValue);
