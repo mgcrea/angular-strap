@@ -213,6 +213,19 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           }
         };
 
+        $select.$isIE = function() {
+          var ua = $window.navigator.userAgent;
+          return ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0 || ua.indexOf('Edge/') > 0;
+        };
+
+        $select.$selectScrollFix = function(e) {
+          if ($document[0].activeElement.tagName === 'UL') {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            e.target.focus();
+          }
+        };
+
         // Overrides
 
         var _show = $select.show;
@@ -299,6 +312,10 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Initialize select
         var select = $select(element, controller, options);
+
+        if (select.$isIE()) {
+          element[0].addEventListener('blur', select.$selectScrollFix);
+        }
 
         // Watch bsOptions values before filtering for changes
         var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
