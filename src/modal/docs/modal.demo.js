@@ -13,12 +13,17 @@ angular.module('mgcrea.ngStrapDocs')
 
   // Controller usage example
   //
-  // var myModal = $modal({title: 'Title', content: 'Hello Modal<br />This is a multiline message!', show: false});
-  // $scope.showModal = function() {
-  //   myModal.$promise.then(myModal.show);
-  // };
-  // $scope.hideModal = function() {
-  //   myModal.$promise.then(myModal.hide);
-  // };
+  function MyModalController($scope) {
+    $scope.title = 'Some Title';
+    $scope.content = 'Hello Modal<br />This is a multiline message from a controller!';
+  }
+  MyModalController.$inject = ['$scope'];
+  var myModal = $modal({controller: MyModalController, templateUrl: 'modal/docs/modal.demo.tpl.html', show: false});
+  $scope.showModal = function() {
+    myModal.$promise.then(myModal.show);
+  };
+  $scope.hideModal = function() {
+    myModal.$promise.then(myModal.hide);
+  };
 
 });

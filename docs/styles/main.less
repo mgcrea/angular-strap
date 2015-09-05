@@ -1,13 +1,12 @@
 
-@import (reference) "../bower_components/bootstrap/less/bootstrap";
+@import "../bower_components/bootstrap/less/bootstrap";
 // @import "angular-motion/main";
 // @import "bootstrap-additions/bootstrap-additions";
 @import "main/animations";
-@import "docs/docs";
 // @import "dev/animations";
 
 
-@brand-primary: hsl(1, 45%, 50%); // Bootstrap 3.0-RC1
+// @brand-primary: hsl(1, 45%, 50%); // Bootstrap 3.0-RC1
 // @brand-primary: hsl(264, 34%, 36%); // Bootstrap 3.0
 // @brand-primary: hsl(220, 84%, 53%); // iOS7-blue
 
@@ -32,7 +31,9 @@
 
 // @brand-primary: #E74C3C; // ALIZARIN
 // @brand-primary: #C0392B; // POMEGRANATE
-@docs-color: @brand-primary;
+@docs-color: hsl(1, 45%, 50%);
+@import "docs/docs";
+
 
 // .am-fade {
 
@@ -215,7 +216,7 @@ body {
 .bs-docs-home,
 .bs-header {
   color: white;
-  background: @brand-primary url("./../images/triangular-red.png");
+  background: @docs-color url("./../images/triangular-red.png");
   padding-bottom: 20px;
 }
 
@@ -248,6 +249,9 @@ body {
 }
 
 input[type="checkbox"] {
+  cursor: pointer;
+}
+.panel-heading[role="tab"] .panel-title a {
   cursor: pointer;
 }
 

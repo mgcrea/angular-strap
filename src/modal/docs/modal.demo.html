@@ -21,10 +21,17 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-animation="am-fade-and-slide-top" data-template="modal/docs/modal.tpl.demo.html" bs-modal="modal">Custom Modal
+    <button type="button" class="btn btn-lg btn-danger" data-animation="am-fade-and-slide-top" data-template-url="modal/docs/modal.demo.tpl.html" bs-modal="modal">Custom Modal
       <br />
       <small>(using data-template)</small>
     </button>
+
+    <!-- You can use a custom html template with the `data-template` attr -->
+    <button type="button" class="btn btn-lg btn-danger" ng-click="showModal()">Modal
+      <br />
+      <small>(using service)</small>
+    </button>
+
 
   </div>
 
@@ -67,7 +74,7 @@
             var myModal = $modal({title: 'My Title', content: 'My Content', show: true});
 
             // Pre-fetch an external template populated with a custom scope
-            var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.tpl.demo.html', show: false});
+            var myOtherModal = $modal({scope: $scope, template: 'modal/docs/modal.demo.tpl.html', show: false});
             // Show when some event occurs (use $promise property to ensure the template has been loaded)
             $scope.showModal = function() {
               myOtherModal.$promise.then(myOtherModal.show);
@@ -157,9 +164,33 @@
           </td>
         </tr>
         <tr>
-          <td>template</td>
-          <td>path</td>
+          <td>controller</td>
+          <td>string|function</td>
           <td>false</td>
+          <td>
+            <p>Controller fn that should be associated with newly created scope or the name of a registered controller if passed as a string.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>controllerAs</td>
+          <td>string</td>
+          <td>false</td>
+          <td>
+            <p>A controller alias name. If present the controller will be published to scope under the `controllerAs` name.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>string</td>
+          <td>''</td>
+          <td>
+            <p>Provide an html template as a string (when templateUrl is falsy).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>templateUrl</td>
+          <td>path</td>
+          <td>'modal/modal.tpl.html'</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
             <p>It should be a <code>div.modal</code> element following Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/modal/modal.tpl.html" target="_blank">like this</a>).</p>

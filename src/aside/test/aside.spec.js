@@ -2,16 +2,18 @@
 
 describe('aside', function () {
 
-  var $compile, $templateCache, scope, sandboxEl;
+  var $compile, $templateCache, scope, sandboxEl, $aside;
+  var bodyEl = $('body');
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.aside'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$aside_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
+    $aside = _$aside_;
   }));
 
   afterEach(function() {
@@ -36,13 +38,22 @@ describe('aside', function () {
     'options-placement': {
       element: '<a data-placement="left" bs-aside="aside">click me</a>'
     },
-    'options-html': {
-      scope: {aside: {title: 'Title', content: 'Hello aside<br>This is a multiline message!'}},
-      element: '<a data-html="1" bs-aside="aside">click me</a>'
-    },
     'options-template': {
       scope: {aside: {title: 'Title', content: 'Hello aside!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a data-template="custom" bs-aside="aside">click me</a>'
+      element: '<a data-template-url="custom" bs-aside="aside">click me</a>'
+    },
+    'options-html': {
+      scope: {aside: {title: 'title<br>next', content: 'content<br>next'}},
+      element: '<a bs-aside="aside" data-html="{{html}}">click me</a>'
+    },
+    'options-backdrop': {
+      element: '<a bs-aside="aside" data-backdrop="{{backdrop}}">click me</a>'
+    },
+    'options-keyboard': {
+      element: '<a bs-aside="aside" data-keyboard="{{keyboard}}">click me</a>'
+    },
+    'options-container': {
+      element: '<a bs-aside="aside" data-container="{{container}}">click me</a>'
     }
   };
 
@@ -128,11 +139,25 @@ describe('aside', function () {
 
     describe('html', function () {
 
-      it('should correctly compile inner content', function() {
-        var elm = compileDirective('options-html');
+      it('should not compile inner content by default', function() {
+        var elm = compileDirective('default', {aside: {title: 'title<br>next', content: 'content<br>next'}});
         angular.element(elm[0]).triggerHandler('click');
-        expect(sandboxEl.find('.aside-title').html()).toBe(scope.aside.title);
-        expect(sandboxEl.find('.aside-body').html()).toBe(scope.aside.content);
+        expect(sandboxEl.find('.aside-title').html()).not.toBe('title<br>next');
+        expect(sandboxEl.find('.aside-body').html()).not.toBe('content<br>next');
+      });
+
+      it('should compile inner content if html is truthy', function() {
+        var elm = compileDirective('options-html', {html: 'true'});
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.aside-title').html()).toBe('title<br>next');
+        expect(sandboxEl.find('.aside-body').html()).toBe('content<br>next');
+      });
+
+      it('should NOT compile inner content if html is false', function() {
+        var elm = compileDirective('options-html', {html: 'false'});
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.aside-title').html()).not.toBe('title<br>next');
+        expect(sandboxEl.find('.aside-body').html()).not.toBe('content<br>next');
       });
 
     });
@@ -170,7 +195,122 @@ describe('aside', function () {
         expect(scope.aside.counter).toBe(2);
       });
 
+      it('should destroy inner scopes when hidding aside', function() {
+        var scopeCount = countScopes(scope, 0);
+        var originalScope = scope;
+        scope = scope.$new();
+        $templateCache.put('custom', '<div class="aside"><div class="aside-inner"><div ng-if="1===1">Fake element to force creation of a new $scope</div><div class="btn" ng-click="$hide()"></div></div></div>');
+        var elm = compileDirective('options-template');
+
+        // We are only destroying the aside element before showing another
+        // aside. This is to avoid timming issues with the hide animation
+        // callback, because we could be showing a new aside before the
+        // hide animation callback has been called and then the aside element
+        // variables would be replaced with the new aside.
+        // So, for this test to work, we need to show/hide the aside once
+        // before counting the number of scopes expected.
+        angular.element(elm[0]).triggerHandler('click');
+        expect(angular.element(sandboxEl.find('.aside-inner > .btn')[0]).triggerHandler('click'));
+
+        // repeat process to test creation/destruction of inner scopes
+        var scopeCountAfterShow = countScopes(scope, 0);
+        for (var i = 0; i < 10; i++) {
+          // show aside
+          angular.element(elm[0]).triggerHandler('click');
+
+          // hide aside
+          expect(angular.element(sandboxEl.find('.aside-inner > .btn')[0]).triggerHandler('click'));
+        }
+
+        // scope count should be the same as it was when directive finished initialization
+        expect(countScopes(scope, 0)).toBe(scopeCountAfterShow);
+
+        scope.$destroy();
+        scope = originalScope;
+
+        // scope count should be the same as it was before directive was initialized
+        expect(countScopes(scope, 0)).toBe(scopeCount);
+      });
+
     });
+
+    describe('backdrop', function() {
+      it('should show backdrop by default', function() {
+        var elm = compileDirective('default');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(1);
+      });
+
+      it('should show backdrop if data-backdrop is truthy', function() {
+        var elm = compileDirective('options-backdrop', {backdrop: 'true'});
+        expect(bodyEl.find('.aside-backdrop').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(1);
+      });
+
+      it('should not show backdrop if data-backdrop is false', function() {
+        var elm = compileDirective('options-backdrop', {backdrop: 'false'});
+        expect(bodyEl.find('.aside-backdrop').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(0);
+      });
+
+    });
+
+    describe('keyboard', function() {
+
+      it('should remove aside when data-keyboard is truthy', function() {
+        var elm = compileDirective('options-keyboard', {keyboard: 'true'});
+        expect(bodyEl.find('.aside').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        var aside = bodyEl.find('.aside');
+        expect(aside.length).toBe(1);
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        aside.triggerHandler(evt)
+        expect(bodyEl.find('.aside').length).toBe(0);
+      });
+
+      it('should NOT remove aside when data-keyboard is falsy', function() {
+        var elm = compileDirective('options-keyboard', {keyboard: 'false'});
+        expect(bodyEl.find('.aside').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        var aside = bodyEl.find('.aside');
+        expect(aside.length).toBe(1);
+        var evt = jQuery.Event( 'keyup', { keyCode: 27, which: 27 } );
+        aside.triggerHandler(evt)
+        expect(bodyEl.find('.aside').length).toBe(1);
+      });
+
+    });
+
+    describe('container', function() {
+
+      it('accepts element object', function() {
+        var testElm = angular.element('<div></div>');
+        sandboxEl.append(testElm);
+        var myaside = $aside(angular.extend({}, templates['default'].scope.aside, {container: testElm}));
+        scope.$digest();
+        expect(angular.element(testElm.children()[0]).hasClass('aside')).toBeTruthy();
+      });
+
+      it('accepts data-container element selector', function() {
+        var testElm = angular.element('<div id="testElm"></div>');
+        sandboxEl.append(testElm);
+        var elm = compileDirective('options-container', {container: '#testElm'});
+        angular.element(elm[0]).triggerHandler('click');
+        expect(angular.element(testElm.children()[0]).hasClass('aside')).toBeTruthy();
+      });
+
+      it('should belong to sandbox when data-container is falsy', function() {
+        var elm = compileDirective('options-container', angular.extend({}, templates['default'].scope.aside, {container: 'false'}));
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.aside').length).toBe(1);
+      });
+
+    });
+
+
 
   });
 

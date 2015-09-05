@@ -35,6 +35,10 @@ describe('popover', function () {
       scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
       element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover></a>'
     },
+    'default-with-namespace': {
+      scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
+      element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover data-prefix-event="datepicker"></a>'
+    },
     'default-with-id': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
       element: '<a id="popover1" class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover></a>'
@@ -59,20 +63,24 @@ describe('popover', function () {
       element: '<a data-trigger="hover" bs-popover="popover">hover me</a>'
     },
     'options-html': {
-      scope: {popover: {title: 'Title', content: 'Hello Popover<br>This is a multiline message!'}},
-      element: '<a class="btn" data-html="1" bs-popover="popover"></a>'
+      scope: {popover: {title: 'title<br>next', content: 'content<br>next'}},
+      element: '<a class="btn" data-html="{{html}}" bs-popover="popover"></a>'
+    },
+    'options-container': {
+      scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
+      element: '<a data-container="{{container}}" bs-popover="popover">hover me</a>'
     },
     'options-template': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a data-template="custom" bs-popover="popover">click me</a>'
+      element: '<a data-template-url="custom" bs-popover="popover">click me</a>'
     },
     'options-autoClose': {
       scope: {popover: {title: 'Title', content: '<div class="message">Hello Popover<br>This is a multiline message!</div>'}},
-      element: '<a class="btn" data-auto-close="true" bs-popover="popover"></a>'
+      element: '<a class="btn" data-auto-close="{{autoClose}}" bs-popover="popover"></a>'
     },
     'options-autoClose-with-template': {
       scope: {popover: {title: 'Title', counter: 0, content: 'Hello'}},
-      element: '<a class="btn" data-auto-close="true" data-template="custom" bs-popover="popover"></a>'
+      element: '<a class="btn" data-auto-close="true" data-template-url="custom" bs-popover="popover"></a>'
     },
     'bsShow-attr': {
       scope: {popover: {title: 'Title', content: 'Hello Popover!'}},
@@ -291,14 +299,60 @@ describe('popover', function () {
 
     describe('html', function () {
 
-      it('should correctly compile inner content', function() {
-        var elm = compileDirective('options-html');
+      it('should NOT correctly compile inner content by default', function() {
+        var elm = compileDirective('default', {popover: {title: 'title<br>next', content: 'content<br>next'}});
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.popover-title').html()).not.toBe(scope.popover.title);
+        expect(sandboxEl.find('.popover-content').html()).not.toBe(scope.popover.content);
+      });
+
+      it('should correctly compile inner content when truthy', function() {
+        var elm = compileDirective('options-html', {html: 'true'});
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.find('.popover-title').html()).toBe(scope.popover.title);
         expect(sandboxEl.find('.popover-content').html()).toBe(scope.popover.content);
       });
 
+      it('should NOT correctly compile inner content when truthy', function() {
+        var elm = compileDirective('options-html', {html: 'false'});
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.popover-title').html()).not.toBe(scope.popover.title);
+        expect(sandboxEl.find('.popover-content').html()).not.toBe(scope.popover.content);
+      });
+
     });
+
+    describe('container', function() {
+      it('accepts element object', function() {
+        var testElm = angular.element('<div></div>');
+        sandboxEl.append(testElm);
+        var myPopover = $popover(sandboxEl, angular.extend({}, templates['default'].scope.popover, {container: testElm}));
+        scope.$digest();
+        myPopover.show();
+        $animate.triggerCallbacks();
+        expect(angular.element(testElm.children()[0]).hasClass('popover')).toBeTruthy();
+      });
+
+      it('should be contained by element specified in data-container', function() {
+        var testElm = angular.element('<div id="testElm"></div>');
+        sandboxEl.append(testElm);
+        var elm = compileDirective('options-container', angular.extend({}, templates['default'].scope.popover, {container: '#testElm'}));
+        expect(testElm.children('.popover').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+        expect(testElm.children('.popover').length).toBe(1);
+      });
+
+      it('should belong to sandbox when data-container is falsy', function() {
+        var elm = compileDirective('options-container', angular.extend({}, templates['default'].scope.popover, {container: 'false'}));
+        expect(sandboxEl.children('.popover').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+        expect(sandboxEl.children('.popover').length).toBe(1);
+      });
+
+    });
+
 
     describe('template', function () {
 
@@ -336,8 +390,8 @@ describe('popover', function () {
     });
 
     describe('autoClose', function() {
-      it('should close when clicking outside popover', function() {
-        var elm = compileDirective('options-autoClose');
+      it('should close when clicking outside popover when autoClose is truthy', function() {
+        var elm = compileDirective('options-autoClose', {autoClose: 'true'});
         expect(sandboxEl.children().length).toBe(1);
         angular.element(elm[0]).triggerHandler('click');
         $timeout.flush();
@@ -346,8 +400,28 @@ describe('popover', function () {
         expect(sandboxEl.children().length).toBe(1);
       });
 
-      it('should not close when clicking inside popover', function() {
-        var elm = compileDirective('options-autoClose');
+      it('should not close when clicking inside popover when autoClose is truthy', function() {
+        var elm = compileDirective('options-autoClose', {autoClose: 'true'});
+        expect(sandboxEl.children().length).toBe(1);
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
+        expect(sandboxEl.children().length).toBe(2);
+        angular.element(sandboxEl.find('.popover')[0]).triggerHandler('click');
+        expect(sandboxEl.children().length).toBe(2);
+      });
+
+      it('should NOT close when clicking outside popover when autoClose is falsy', function() {
+        var elm = compileDirective('options-autoClose', {autoClose: 'false'});
+        expect(sandboxEl.children().length).toBe(1);
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
+        expect(sandboxEl.children().length).toBe(2);
+        angular.element($window.document).triggerHandler('click');
+        expect(sandboxEl.children().length).toBe(2);
+      });
+
+      it('should not close when clicking inside popover when autoClose is falsy', function() {
+        var elm = compileDirective('options-autoClose', {autoClose: 'false'});
         expect(sandboxEl.children().length).toBe(1);
         angular.element(elm[0]).triggerHandler('click');
         $timeout.flush();
@@ -359,6 +433,7 @@ describe('popover', function () {
       it('should not close when clicking link inside popover content', function() {
         $templateCache.put('custom', '<div class="popover"><div class="popover-content"><a class="btn" ng-click="popover.counter=popover.counter+1">click me</a></div></div>');
         var elm = compileDirective('options-autoClose-with-template');
+        scope.popover.counter = 0;
         expect(sandboxEl.children().length).toBe(1);
         angular.element(elm[0]).triggerHandler('click');
         $timeout.flush();
@@ -391,6 +466,52 @@ describe('popover', function () {
 
     });
 
+    describe('prefix', function () {
+      it('should call namespaced events through provider', function() {
+        var myPopover = $popover(sandboxEl, angular.extend({prefixEvent: 'datepicker'}, templates['default'].scope.popover));
+        var emit = spyOn(myPopover.$scope, '$emit');
+        scope.$digest();
+        myPopover.show();
+        myPopover.hide();
+        $animate.triggerCallbacks();
+
+        expect(emit).toHaveBeenCalledWith('datepicker.show.before', myPopover);
+        expect(emit).toHaveBeenCalledWith('datepicker.show', myPopover);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide.before', myPopover);
+        expect(emit).toHaveBeenCalledWith('datepicker.hide', myPopover);
+      });
+
+
+      it('should call namespaced events through directive', function() {
+        var elm = compileDirective('default-with-namespace');
+        var showBefore, show, hide, hideBefore;
+        scope.$on('datepicker.show.before', function() {
+          showBefore = true;
+        });
+        scope.$on('datepicker.show', function() {
+          show = true;
+        });
+        scope.$on('datepicker.hide.before', function() {
+          hideBefore = true;
+        });
+        scope.$on('datepicker.hide', function() {
+          hide = true;
+        });
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+
+        expect(showBefore).toBe(true);
+        expect(show).toBe(true);
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.triggerCallbacks();
+
+        expect(hideBefore).toBe(true);
+        expect(hide).toBe(true);
+      });
+
+    });
 
   });
 

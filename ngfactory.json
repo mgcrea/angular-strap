@@ -1,0 +1,11 @@
+{
+  "type": "library",
+  "name": "angular-strap",
+  "username": "mgcrea",
+  "module": "mgcrea.ngStrap",
+  "license": "MIT",
+  "ngVersion": "~1.3.0",
+  "htmlPreprocessor": "none",
+  "jsPreprocessor": "none",
+  "cssPreprocessor": "less"
+}

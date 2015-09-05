@@ -55,11 +55,11 @@ describe('dropdown', function () {
       element: '<a data-trigger="hover" bs-dropdown="dropdown">hover me</a>'
     },
     'options-html': {
-      scope: {dropdown: [{text: '<i icon="fa fa-edit"></i> Edit', href: '#foo'}]},
-      element: '<a bs-dropdown="dropdown">click me</a>'
+      scope: {dropdown: [{text: 'hello<br>next', href: '#foo'}]},
+      element: '<a data-html="{{html}}" bs-dropdown="dropdown">click me</a>'
     },
     'options-template': {
-      element: '<a title="{{dropdown.title}}" data-template="custom" bs-dropdown>click me</a>'
+      element: '<a title="{{dropdown.title}}" data-template-url="custom" bs-dropdown>click me</a>'
     },
     'bsShow-attr': {
       scope: {dropdown: [{text: 'Another action', href: '#foo'}, {text: 'External link', href: '/auth/facebook', target: '_self'}, {text: 'Something else here', click: '$alert(\'working ngClick!\')'}, {divider: true}, {text: 'Separated link', href: '#separatedLink'}]},
@@ -68,6 +68,10 @@ describe('dropdown', function () {
     'bsShow-binding': {
       scope: {isVisible: false, dropdown: [{text: 'Another action', href: '#foo'}, {text: 'External link', href: '/auth/facebook', target: '_self'}, {text: 'Something else here', click: '$alert(\'working ngClick!\')'}, {divider: true}, {text: 'Separated link', href: '#separatedLink'}]},
       element: '<a bs-dropdown="dropdown" bs-show="isVisible">click me</a>'
+    },
+    'options-container': {
+      scope: {dropdown: [{text: 'bar', href: '#foo'}]},
+      element: '<a data-container="{{container}}" bs-dropdown="dropdown">click me</a>'
     }
   };
 
@@ -340,11 +344,18 @@ describe('dropdown', function () {
 
     describe('html', function () {
 
-      it('should correctly compile inner content', function() {
-        var elm = compileDirective('options-html');
+      it('should correctly compile inner content when html is true', function() {
+        var elm = compileDirective('options-html', {html: 'true'});
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.dropdown.length);
-        expect(sandboxEl.find('.dropdown-menu a:eq(0)').text()).toBe(scope.dropdown[0].text);
+        expect(sandboxEl.find('.dropdown-menu a:eq(0)').html()).toBe(scope.dropdown[0].text);
+      });
+
+      it('should NOT correctly compile inner content when html is false', function() {
+        var elm = compileDirective('options-html', {html: 'false'});
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.dropdown.length);
+        expect(sandboxEl.find('.dropdown-menu a:eq(0)').html()).not.toBe(scope.dropdown[0].text);
       });
 
     });
@@ -383,6 +394,26 @@ describe('dropdown', function () {
       });
 
     });
+
+    describe('container', function() {
+
+      it('should put dropdown in a container when specified', function() {
+        var testElm = $('<div id="testElm"></div>');
+        sandboxEl.append(testElm);
+        var elm = compileDirective('options-container', {container: '#testElm'});
+        expect(testElm.children('.dropdown-menu').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(testElm.children('.dropdown-menu').length).toBe(1);
+      })
+
+      it('should put dropdown in sandbox when container is falsy', function() {
+        var elm = compileDirective('options-container', {container: 'false'});
+        expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.children('.dropdown-menu').length).toBe(1);
+      })
+
+    })
 
   });
 

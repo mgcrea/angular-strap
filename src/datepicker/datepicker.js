@@ -9,9 +9,11 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
     var defaults = this.defaults = {
       animation: 'am-fade',
+      //uncommenting the following line will break backwards compatability
+      // prefixEvent: 'datepicker',
       prefixClass: 'datepicker',
       placement: 'bottom-left',
-      template: 'datepicker/datepicker.tpl.html',
+      templateUrl: 'datepicker/datepicker.tpl.html',
       trigger: 'focus',
       container: false,
       keyboard: true,
@@ -220,6 +222,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         var _show = $datepicker.show;
         $datepicker.show = function() {
+          if((!isTouch && element.attr('readonly')) || element.attr('disabled')) return;
           _show();
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
@@ -265,9 +268,16 @@ angular.module('mgcrea.ngStrap.datepicker', [
       link: function postLink(scope, element, attr, controller) {
 
         // Directive options
-        var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id'], function(key) {
+        var options = {scope: scope};
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+
+        // use string regex match boolean attr falsy values, leave truthy values be
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach(['html', 'container', 'autoclose', 'useNative'], function(key) {
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+            options[key] = false;
         });
 
         // Visibility binding support
@@ -471,7 +481,11 @@ angular.module('mgcrea.ngStrap.datepicker', [
               if(!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
                 angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$build();
-              } else if(date.getDate() !== viewDate.date) {
+              } else if(date.getDate() !== viewDate.date || date.getDate() === 1) {
+                // chaging picker current month will cause viewDate.date to be set to first day of the month,
+                // in $datepicker.$selectPane, so picker would not update selected day display if
+                // user picks first day of the new month.
+                // As a workaround, we are always forcing update when picked date is first day of month.
                 viewDate.date = picker.$date.getDate();
                 picker.$updateSelected();
               }

@@ -46,6 +46,11 @@ $scope.selectedAddress = "{{selectedAddress}}";
 
   <h2 id="typeaheads-usage">Usage</h2>
   <p>Append a <code>bs-typeahead</code>attribute to any element to enable the directive.</p>
+  <p>Available items are specified using the <code>bs-options</code> attribute. This attribute uses AngularJS <a href="https://docs.angularjs.org/api/ng/directive/ngOptions" target="_blank">ngOptions</a> array data source syntax.</p>
+  <div class="callout callout-danger">
+    <h4>Breaking Change</h4>
+    <p>If you are using AngularStrap prior to version 2.2.0, please use <code>ng-options</code> instead of <code>bs-options</code>.</p>
+  </div>
   <div class="callout callout-info">
     <h4>The module exposes a <code>$typeahead</code>service</h4>
     <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
@@ -170,6 +175,22 @@ $scope.selectedAddress = "{{selectedAddress}}";
           <td>''</td>
           <td>
             The typeahead instance id for usage in event handlers.
+          </td>
+        </tr>
+        <tr>
+          <td>watchOptions</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            Whether or not the suggestions collection should be watched for changes.
+          </td>
+        </tr>
+        <tr>
+          <td>trimValue</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>
+            If provided and set to false, overrides the default behavior of automatically trimming spaces from inputs. (Added in 2.2.4)
           </td>
         </tr>
       </tbody>

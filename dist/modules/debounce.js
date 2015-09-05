@@ -1,62 +1,49 @@
 /**
  * angular-strap
- * @version v2.2.1 - 2015-03-10
+ * @version v2.3.1 - 2015-07-19
  * @link http://mgcrea.github.io/angular-strap
- * @author Olivier Louvignes (olivier@mg-crea.com)
+ * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
 
-angular.module('mgcrea.ngStrap.helpers.debounce', [])
-
-// @source jashkenas/underscore
-// @url https://github.com/jashkenas/underscore/blob/1.5.2/underscore.js#L693
-.factory('debounce', ["$timeout", function($timeout) {
+angular.module('mgcrea.ngStrap.helpers.debounce', []).factory('debounce', [ '$timeout', function($timeout) {
   return function(func, wait, immediate) {
     var timeout = null;
     return function() {
-      var context = this,
-        args = arguments,
-        callNow = immediate && !timeout;
-      if(timeout) {
+      var context = this, args = arguments, callNow = immediate && !timeout;
+      if (timeout) {
         $timeout.cancel(timeout);
       }
       timeout = $timeout(function later() {
         timeout = null;
-        if(!immediate) {
+        if (!immediate) {
           func.apply(context, args);
         }
       }, wait, false);
-      if(callNow) {
+      if (callNow) {
         func.apply(context, args);
       }
       return timeout;
     };
   };
-}])
-
-
-// @source jashkenas/underscore
-// @url https://github.com/jashkenas/underscore/blob/1.5.2/underscore.js#L661
-.factory('throttle', ["$timeout", function($timeout) {
+} ]).factory('throttle', [ '$timeout', function($timeout) {
   return function(func, wait, options) {
     var timeout = null;
     options || (options = {});
     return function() {
-      var context = this,
-        args = arguments;
-      if(!timeout) {
-        if(options.leading !== false) {
+      var context = this, args = arguments;
+      if (!timeout) {
+        if (options.leading !== false) {
           func.apply(context, args);
         }
         timeout = $timeout(function later() {
           timeout = null;
-          if(options.trailing !== false) {
+          if (options.trailing !== false) {
             func.apply(context, args);
           }
         }, wait, false);
       }
     };
   };
-}]);
-
+} ]);

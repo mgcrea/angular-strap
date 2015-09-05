@@ -1,0 +1,17 @@
+{
+  "name": "angular-strap-docs",
+  "dependencies": {
+    "angular": "~1.4",
+    "angular-animate": "~1.4",
+    "angular-i18n": "~1.4",
+    "angular-motion": "^0.4.2",
+    "angular-route": "~1.4",
+    "bootstrap": "~3.3.4",
+    "bootstrap-additions": "^0.3.1",
+    "fastclick": "~1.0.6",
+    "font-awesome": "~4.3.0",
+    "highlightjs": "~8.5.0"
+  },
+  "devDependencies": {
+  }
+}

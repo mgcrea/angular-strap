@@ -21,6 +21,14 @@ angular.module('mgcrea.ngStrap.collapse', [])
         if(angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
+      // use string regex match boolean attr falsy values, leave truthy values be
+      var falseValueRegExp = /^(false|0|)$/i;
+      angular.forEach(['disallowToggle', 'startCollapsed', 'allowMultiple'], function(key) {
+        if(angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key])) {
+          self.$options[key] = false;
+        }
+      });
+
       self.$toggles = [];
       self.$targets = [];
 
@@ -61,7 +69,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
       self.$targets.$active = !self.$options.startCollapsed ? [0] : [];
       self.$setActive = $scope.$setActive = function(value) {
         if(angular.isArray(value)) {
-          self.$targets.$active = angular.copy(value);
+          self.$targets.$active = value;
         }
         else if(!self.$options.disallowToggle) {
           // toogle element active status
@@ -203,7 +211,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
         });
 
         element.on('click', function() {
-          var index = attrs.bsCollapseToggle || bsCollapseCtrl.$toggles.indexOf(element);
+          var index = attrs.bsCollapseToggle && attrs.bsCollapseToggle !== 'bs-collapse-toggle' ? attrs.bsCollapseToggle : bsCollapseCtrl.$toggles.indexOf(element);
           bsCollapseCtrl.$setActive(index * 1);
           scope.$apply();
         });

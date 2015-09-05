@@ -286,16 +286,31 @@ describe('dateParser', function () {
   describe('parse', function () {
 
     describe('date format "dd/MM/yyyy"', function() {
-        beforeEach(function() {
-          parser = $dateParser({ format: 'dd/MM/yyyy' });
-        });
-        generateTestCasesForParsing([
-          {val:'01/01/2014', expect: new Date(2014,0,1), reason:'4 digit year with leading digits'},
-          {val:'20/10/2014', expect: new Date(2014,9,20), reason:'4 digit year unambiguous day/month'},
-          {val:'10/10/2014', expect: new Date(2014,9,10), reason:'4 digit year ambiguous day/month'},
-          {val:'10/10/1814', expect: new Date(1814,9,10), reason:'4 digit year ambiguous day/month with different century'},
-          {val:'30/02/2014', expect: false, reason:'non-existing month day'},
-        ]);
+      beforeEach(function() {
+        parser = $dateParser({ format: 'dd/MM/yyyy' });
+      });
+      generateTestCasesForParsing([
+        {val:'01/01/2014', expect: new Date(2014,0,1), reason:'4 digit year with leading digits'},
+        {val:'20/10/2014', expect: new Date(2014,9,20), reason:'4 digit year unambiguous day/month'},
+        {val:'10/10/2014', expect: new Date(2014,9,10), reason:'4 digit year ambiguous day/month'},
+        {val:'10/10/1814', expect: new Date(1814,9,10), reason:'4 digit year ambiguous day/month with different century'},
+        {val:'30/02/2014', expect: false, reason:'non-existing month day'},
+      ]);
+    });
+
+    describe('date format "M/d/y"', function() {
+      beforeEach(function() {
+        parser = $dateParser({ format: 'M/d/y' });
+      });
+      generateTestCasesForParsing([
+        {val: '1/1/1',    expect: new Date(1,0,1),    reason:'1 digit year gives one digit year'},
+        {val: '1/1/00',   expect: new Date(2000,0,1), reason:'2 digit year less than fifty gives current century'},
+        {val: '1/1/50',   expect: new Date(2050,0,1), reason:'2 digit year equal to fifty gives current century'},
+        {val: '1/1/51',   expect: new Date(1951,0,1), reason:'2 digit year greater than fifty gives previous century'},
+        {val: '1/1/99',   expect: new Date(1999,0,1), reason:'2 digit year, maximum possible, gives previous century'},
+        {val: '1/1/123',  expect: new Date(123,0,1),  reason:'3 digit year gives three digit year'},
+        {val: '1/1/2015', expect: new Date(2015,0,1), reason:'4 digit year gives four digit year'},
+      ]);
     });
 
     describe('date format "dd/MM/yyyy" with base values', function() {

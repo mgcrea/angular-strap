@@ -112,6 +112,22 @@ describe('parseOptions', function () {
         });
       });
 
+      it('should support filtered values', function() {
+        scope.values = [
+          'foo',
+          'bar',
+          'baz'
+        ];
+        var parsedOptions = $parseOptions('val for val in values | filter:b:startsWith');
+        var parsedValues = getParsedValues(parsedOptions);
+        generateParsedValuesLengthTests(parsedValues, scope.values);
+
+        angular.forEach(parsedValues, function(v) {
+          expect(v.label).toBe(scope.values[v.index]);
+          expect(v.value).toBe(scope.values[v.index]);
+        });
+      });
+
     });
 
     describe('with "select as label for value in array" format', function() {

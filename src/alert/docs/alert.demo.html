@@ -32,7 +32,7 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button class="btn btn-lg btn-danger" data-template="alert/docs/alert.tpl.demo.html" data-placement="top" data-duration="3" data-animation="am-fade-and-slide-top" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
+    <button class="btn btn-lg btn-danger" data-template="alert/docs/alert.demo.tpl.html" data-placement="top" data-duration="3" data-animation="am-fade-and-slide-top" data-container="body" data-keyboard="true" bs-alert="alert">Custom alert
       <br />
       <small>(using data-template)</small>
     </button>
@@ -105,12 +105,16 @@
           <td>'info'</td>
           <td>default content value if <code>data-type</code>attribute isn't present</td>
         </tr>
+<!--
+Removing keyboard from the docs. Our template doesn't have tabindex for focus stealing issues, keyboard won't work
+so remove the option then. Just looks bad to have an option that doesn't work
         <tr>
           <td>keyboard</td>
           <td>boolean</td>
           <td>true</td>
           <td>Closes the alert when escape key is pressed</td>
         </tr>
+-->
         <tr>
           <td>show</td>
           <td>boolean</td>
@@ -126,11 +130,36 @@
           </td>
         </tr>
         <tr>
-          <td>template</td>
-          <td>path</td>
+          <td>controller</td>
+          <td>string|function</td>
           <td>false</td>
           <td>
+            <p>Controller fn that should be associated with newly created scope or the name of a registered controller if passed as a string.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>controllerAs</td>
+          <td>string</td>
+          <td>false</td>
+          <td>
+            <p>A controller alias name. If present the controller will be published to scope under the `controllerAs` name.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>template</td>
+          <td>string</td>
+          <td>''</td>
+          <td>
+            <p>Provide an html template as a string (when templateUrl is falsy).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>templateUrl</td>
+          <td>path</td>
+          <td>'alert/alert.tpl.html'</td>
+          <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+            <p>It should be a <code>div.alert</code> element following Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/alert/alert.tpl.html" target="_blank">like this</a>).</p>
           </td>
         </tr>
         <tr>

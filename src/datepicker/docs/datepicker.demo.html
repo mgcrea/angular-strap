@@ -168,6 +168,15 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
             <p>If type is "number" then datepicker uses milliseconds to set date, if "unix" - seconds</p>
           </td>
         </tr>
+		<tr>
+          <td>timezone</td>
+          <td>string</td>
+          <td>null</td>
+          <td>
+            <p>Timezone of your date - null, UTC</p>
+            <p>"UTC" for UTC or null for local timezone.</p>
+          </td>
+        </tr>
         <tr>
           <td>autoclose</td>
           <td>boolean</td>
@@ -189,7 +198,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>date*</td>
           <td>-Infinity</td>
           <td>
-            <p>Minimum allowed date for selection <small>(* fed into the <code>Date</code> constructor)</small>. You can use the string "today" that will resolve the current date.</p>
+            <p>Minimum allowed date for selection <small>(* fed into the <code>Date</code> constructor)</small>. You can set this to the current date by passing the string "today" into the 'data-min-date' attribute, or by setting minDate to <code>new Date()</code> when configuring the provider defaults.</p>
           </td>
         </tr>
         <tr>
@@ -197,7 +206,7 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>date*</td>
           <td>+Infinity</td>
           <td>
-            <p>Maximum allowed date for selection <small>(* fed into the <code>Date</code> constructor)</small>. You can use the string "today" that will resolve the current date.</p>
+            <p>Maximum allowed date for selection <small>(* fed into the <code>Date</code> constructor)</small>. You can set this to the current date by passing the string "today" into the 'data-max-date' attribute, or by setting maxDate to <code>new Date()</code> when configuring the provider defaults.</p>
           </td>
         </tr>
         <tr>

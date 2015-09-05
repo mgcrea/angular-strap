@@ -1,13 +1,11 @@
 'use strict';
+// bower install angular#~1.3 angular-route#~1.3 angular-animate#~1.3
+// bower install angular#~1.4 angular-route#~1.4 angular-animate#~1.4
 
-angular.module('mgcrea.ngStrapDocs', [
-  'mgcrea.ngStrap',
-  'mgcrea.ngPlunkr',
-  'ngRoute',
-  'ngAnimate'
-])
+angular.module('mgcrea.ngStrapDocs', ['mgcrea.ngStrap', 'mgcrea.ngPlunkr', 'ngRoute', 'ngAnimate'])
 
-.constant('version', 'v2.1.6')
+.constant('version', 'v2.3.1')
+.constant('ngVersion', angular.version.full)
 
 .config(function($plunkrProvider, version) {
 
@@ -34,28 +32,14 @@ angular.module('mgcrea.ngStrapDocs', [
 
 })
 
-.controller('MainCtrl', function ($scope, $rootScope, $location, $anchorScroll, $plunkr) {
-
-  $scope.$location = $location;
-
-  $scope.$scrollTo = function(hash) {
-    $location.hash(hash);
-    $anchorScroll();
-  };
-
-  $scope.createPlunkr = function() {
-    var myPlunkr = $plunkr();
-  };
-
-})
-
-.run(function($window, $rootScope, $location, $anchorScroll, version) {
+.run(function($window, $rootScope, $location, $anchorScroll, version, ngVersion) {
 
   $rootScope.version = version;
+  $rootScope.ngVersion = ngVersion;
 
   // FastClick
   $window.FastClick.attach($window.document.body);
-  
+
   // Support simple anchor id scrolling
   var bodyElement = angular.element($window.document.body);
   bodyElement.on('click', function(evt) {
@@ -72,81 +56,5 @@ angular.module('mgcrea.ngStrapDocs', [
   setTimeout(function() {
     $anchorScroll();
   }, 0);
-
-})
-
-.directive('code', function() {
-
-  return {
-    restrict: 'E',
-    terminal: true
-  };
-
-})
-
-.directive('appendSource', function($window, $compile, indent) {
-
-  return {
-    compile: function(element, attr) {
-
-      // Directive options
-      var options = {placement: 'after'};
-      angular.forEach(['placement', 'hlClass'], function(key) {
-        if(angular.isDefined(attr[key])) options[key] = attr[key];
-      });
-
-      var hlElement = angular.element('<div class="highlight" ng-non-bindable><pre><code class="html" style="margin:0"></code></pre></div>');
-      var codeElement = hlElement.children('pre').children('code');
-      var elementHtml = indent(element.html());
-      codeElement.text(elementHtml);
-      if(options.hlClass) codeElement.addClass(options.hlClass);
-      element[options.placement](hlElement);
-      $window.hljs.highlightBlock(codeElement[0]);
-
-    }
-  };
-
-})
-
-.directive('highlightBlock', function($window, indent) {
-
-  return {
-    compile: function(element, attr) {
-      element.html(indent(element.html()));
-      return function postLink(scope, element, attr) {
-        $window.hljs.highlightBlock(element[0]);
-      };
-    }
-  };
-
-
-})
-
-.value('indent', function(text, spaces) {
-
-  if(!text) return text;
-  var lines = text.split(/\r?\n/);
-  var prefix = '      '.substr(0, spaces || 0);
-  var i;
-
-  // Remove any leading blank lines
-  while(lines.length && lines[0].match(/^\s*$/)) lines.shift();
-  // Remove any trailing blank lines
-  while(lines.length && lines[lines.length - 1].match(/^\s*$/)) lines.pop();
-  // Calculate proper indent
-  var minIndent = 999;
-  for(i = 0; i < lines.length; i++) {
-    var line = lines[0];
-    var indent = line.match(/^\s*/)[0];
-    if(indent !== line && indent.length < minIndent) {
-      minIndent = indent.length;
-    }
-  }
-
-  for(i = 0; i < lines.length; i++) {
-    lines[i] = prefix + lines[i].substring(minIndent).replace(/=""/g, '');
-  }
-  lines.push('');
-  return lines.join('\n');
 
 });
