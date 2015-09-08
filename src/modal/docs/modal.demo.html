@@ -180,6 +180,22 @@
           </td>
         </tr>
         <tr>
+          <td>resolve</td>
+          <td>object</td>
+          <td>false</td>
+          <td>
+            <p>Object containing dependencies that will be injected into the controller's constructor when all the dependencies have resolved. The controller won't load if the promise is rejected.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>locals</td>
+          <td>object</td>
+          <td>false</td>
+          <td>
+            <p>Object containing dependencies that will be injected into the controller's constructor. Similar to resolve but expects literal values instead of promises.</p>
+          </td>
+        </tr>
+        <tr>
           <td>template</td>
           <td>string</td>
           <td>''</td>
