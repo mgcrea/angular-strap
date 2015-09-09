@@ -17,6 +17,7 @@ describe('select', function () {
     $select = _$select_;
     $timeout = _$timeout_;
     $animate = _$animate_;
+    $animate.flush = $animate.flush || $animate.triggerCallbacks;
   }));
 
   afterEach(function() {
@@ -266,7 +267,7 @@ describe('select', function () {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(1);
       expect(sandboxEl.find('.dropdown-menu li.active').index()).toBe(2);
-      
+
       scope.selectedIcon = null;
       scope.$digest();
       angular.element(elm[0]).triggerHandler('focus');
@@ -542,7 +543,7 @@ describe('select', function () {
         var option = {value : 'Canada'};
         mySelect.update([option]);
         mySelect.select(0);
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(emit).toHaveBeenCalledWith('datepicker.show.before', mySelect);
         expect(emit).toHaveBeenCalledWith('datepicker.show', mySelect);
@@ -572,11 +573,11 @@ describe('select', function () {
         });
 
         angular.element(elm[0]).triggerHandler('focus');
-        $animate.triggerCallbacks();
+        $animate.flush();
         angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
 
         angular.element(elm[0]).triggerHandler('blur');
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(select).toBe(true);
         expect(beforeShow).toBe(true);

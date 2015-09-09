@@ -15,6 +15,7 @@ describe('timepicker', function() {
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $animate = _$animate_;
+    $animate.flush = $animate.flush || $animate.triggerCallbacks;
     $timepicker = _$timepicker_;
     dateFilter = _dateFilter_;
     today = new Date();
@@ -362,19 +363,19 @@ describe('timepicker', function() {
     it('should not create additional scopes after first show', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
       angular.element(elm[0]).triggerHandler('blur');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
 
       var scopeCount = countScopes(scope, 0);
 
       for (var i = 0; i < 10; i++) {
         angular.element(elm[0]).triggerHandler('focus');
-        $animate.triggerCallbacks();
+        $animate.flush();
         angular.element(elm[0]).triggerHandler('blur');
-        $animate.triggerCallbacks();
+        $animate.flush();
       }
 
       expect(countScopes(scope, 0)).toBe(scopeCount);
@@ -388,9 +389,9 @@ describe('timepicker', function() {
 
       for (var i = 0; i < 10; i++) {
         angular.element(elm[0]).triggerHandler('focus');
-        $animate.triggerCallbacks();
+        $animate.flush();
         angular.element(elm[0]).triggerHandler('blur');
-        $animate.triggerCallbacks();
+        $animate.flush();
       }
 
       scope.$destroy();
@@ -492,7 +493,7 @@ describe('timepicker', function() {
       expect(emit).toHaveBeenCalledWith('tooltip.show.before', myTimepicker);
       // show only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('tooltip.show', myTimepicker);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('tooltip.show', myTimepicker);
     });
 
@@ -507,7 +508,7 @@ describe('timepicker', function() {
       expect(emit).toHaveBeenCalledWith('tooltip.hide.before', myTimepicker);
       // hide only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('tooltip.hide', myTimepicker);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('tooltip.hide', myTimepicker);
     });
 
@@ -670,10 +671,10 @@ describe('timepicker', function() {
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         // need to flush timeout to register keyboard events
-        // IMPORTANT: do it before $animate.triggerCallbacks, because
+        // IMPORTANT: do it before $animate.flush, because
         // on 1.3 that seems to do both and we get an error in 1.2
         $timeout.flush();
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('8');
 
@@ -700,10 +701,10 @@ describe('timepicker', function() {
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         // need to flush timeout to register keyboard events
-        // IMPORTANT: do it before $animate.triggerCallbacks, because
+        // IMPORTANT: do it before $animate.flush, because
         // on 1.3 that seems to do both and we get an error in 1.2
         $timeout.flush();
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('08');
 
@@ -729,10 +730,10 @@ describe('timepicker', function() {
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         // need to flush timeout to register keyboard events
-        // IMPORTANT: do it before $animate.triggerCallbacks, because
+        // IMPORTANT: do it before $animate.flush, because
         // on 1.3 that seems to do both and we get an error in 1.2
         $timeout.flush();
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('8');
 
@@ -768,10 +769,10 @@ describe('timepicker', function() {
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
         // need to flush timeout to register keyboard events
-        // IMPORTANT: do it before $animate.triggerCallbacks, because
+        // IMPORTANT: do it before $animate.flush, because
         // on 1.3 that seems to do both and we get an error in 1.2
         $timeout.flush();
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(sandboxEl.children('.dropdown-menu.timepicker').length).toBe(1);
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe('8');
 
@@ -1235,7 +1236,7 @@ describe('timepicker', function() {
         scope.$digest();
         myTimepicker.show();
         myTimepicker.hide();
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(emit).toHaveBeenCalledWith('datepicker.show.before', myTimepicker);
         expect(emit).toHaveBeenCalledWith('datepicker.show', myTimepicker);
@@ -1260,13 +1261,13 @@ describe('timepicker', function() {
         });
 
         angular.element(elm[0]).triggerHandler('focus');
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(showBefore).toBe(true);
         expect(show).toBe(true);
 
         angular.element(elm[0]).triggerHandler('blur');
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(hideBefore).toBe(true);
         expect(hide).toBe(true);

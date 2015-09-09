@@ -17,6 +17,7 @@ describe('typeahead', function () {
     $typeahead = _$typeahead_;
     $q = _$q_;
     $animate = _$animate_;
+    $animate.flush = $animate.flush || $animate.triggerCallbacks;
     $$rAF = _$$rAF_;
   }));
 
@@ -587,7 +588,7 @@ describe('typeahead', function () {
       var option = {value : 'Canada'};
       myTypeahead.update([option]);
       myTypeahead.select(0);
-      $animate.triggerCallbacks();
+      $animate.flush();
 
       expect(emit).toHaveBeenCalledWith('datepicker.show.before', myTypeahead);
       expect(emit).toHaveBeenCalledWith('datepicker.show', myTypeahead);
@@ -617,10 +618,10 @@ describe('typeahead', function () {
       });
 
       angular.element(elm[0]).triggerHandler('focus');
-      $animate.triggerCallbacks();
+      $animate.flush();
       angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
       angular.element(elm[0]).triggerHandler('blur');
-      $animate.triggerCallbacks();
+      $animate.flush();
 
       expect(select).toBe(true);
       expect(show).toBe(true);

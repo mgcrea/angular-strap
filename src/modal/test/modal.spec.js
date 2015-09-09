@@ -22,6 +22,7 @@ describe('modal', function() {
     $templateCache = $injector.get('$templateCache');
     $$rAF = $injector.get('$$rAF');
     $animate = $injector.get('$animate');
+    $animate.flush = $animate.flush || $animate.triggerCallbacks;
     $httpBackend = $injector.get('$httpBackend');
     $modal = $injector.get('$modal');
 
@@ -210,22 +211,22 @@ describe('modal', function() {
       expect(sandboxEl.children('.modal').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
       elmScope.$show();
-      try { $animate.triggerCallbacks(); } catch(err) {}
+      try { $animate.flush(); } catch(err) {}
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(1);
       expect(elmScope.$isShown).toBeTruthy();
       elmScope.$hide();
-      $animate.triggerCallbacks();
+      $animate.flush();
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
       elmScope.$toggle();
-      $animate.triggerCallbacks();
+      $animate.flush();
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(1);
       expect(elmScope.$isShown).toBeTruthy();
       elmScope.$toggle();
-      $animate.triggerCallbacks();
+      $animate.flush();
       scope.$digest();
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
@@ -235,7 +236,7 @@ describe('modal', function() {
       expect(sandboxEl.children('.modal').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
       elmScope.$hide();
-      try { $animate.triggerCallbacks(); } catch(err) {}
+      try { $animate.flush(); } catch(err) {}
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
@@ -245,12 +246,12 @@ describe('modal', function() {
       expect(sandboxEl.children('.modal').length).toBe(0);
       expect(elmScope.$isShown).toBeFalsy();
       elmScope.$show();
-      try { $animate.triggerCallbacks(); } catch(err) {}
+      try { $animate.flush(); } catch(err) {}
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(1);
       expect(elmScope.$isShown).toBeTruthy();
       elmScope.$show();
-      $animate.triggerCallbacks();
+      $animate.flush();
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(1);
       expect(elmScope.$isShown).toBeTruthy();
@@ -268,7 +269,7 @@ describe('modal', function() {
       expect(emit).toHaveBeenCalledWith('modal.show.before', myModal);
       // show only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('modal.show', myModal);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('modal.show', myModal);
     });
 
@@ -281,7 +282,7 @@ describe('modal', function() {
       expect(emit).toHaveBeenCalledWith('modal.hide.before', myModal);
       // hide only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('modal.hide', myModal);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('modal.hide', myModal);
     });
 
@@ -290,7 +291,7 @@ describe('modal', function() {
       var emit = spyOn(myModal.$scope, '$emit').and.callThrough();
       scope.$digest();
       myModal.hide();
-      $animate.triggerCallbacks();
+      $animate.flush();
 
       expect(emit).toHaveBeenCalledWith('alert.show.before', myModal);
       expect(emit).toHaveBeenCalledWith('alert.show', myModal);
@@ -307,7 +308,7 @@ describe('modal', function() {
       });
       var myModal = $modal(templates['default'].scope.modal);
       scope.$digest();
-      try { $animate.triggerCallbacks(); } catch(err) {}
+      try { $animate.flush(); } catch(err) {}
     });
 
     it('should be able to cancel hide on hide.before event', function() {
@@ -320,7 +321,7 @@ describe('modal', function() {
       var myModal = $modal(templates['default'].scope.modal);
       scope.$digest();
       myModal.hide();
-      $animate.triggerCallbacks();
+      $animate.flush();
     });
 
     it('should call show.before event with modal element instance id', function() {
@@ -352,13 +353,13 @@ describe('modal', function() {
       });
 
       angular.element(elm[0]).triggerHandler('click');
-      $animate.triggerCallbacks();
+      $animate.flush();
 
       expect(showBefore).toBe(true);
       expect(show).toBe(true);
 
       angular.element(elm[0]).triggerHandler('click');
-      $animate.triggerCallbacks();
+      $animate.flush();
 
       expect(hideBefore).toBe(true);
       expect(hide).toBe(true);

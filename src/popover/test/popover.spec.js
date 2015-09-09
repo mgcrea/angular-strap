@@ -21,6 +21,7 @@ describe('popover', function () {
     $timeout = _$timeout_;
     $popover = _$popover_;
     $animate = _$animate_;
+    $animate.flush = $animate.flush || $animate.triggerCallbacks;
   }));
 
   afterEach(function() {
@@ -204,7 +205,7 @@ describe('popover', function () {
       expect(emit).toHaveBeenCalledWith('tooltip.show.before', myPopover);
       // show only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('tooltip.show', myPopover);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('tooltip.show', myPopover);
     });
 
@@ -219,7 +220,7 @@ describe('popover', function () {
       expect(emit).toHaveBeenCalledWith('tooltip.hide.before', myPopover);
       // hide only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('tooltip.hide', myPopover);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('tooltip.hide', myPopover);
     });
 
@@ -329,7 +330,7 @@ describe('popover', function () {
         var myPopover = $popover(sandboxEl, angular.extend({}, templates['default'].scope.popover, {container: testElm}));
         scope.$digest();
         myPopover.show();
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(angular.element(testElm.children()[0]).hasClass('popover')).toBeTruthy();
       });
 
@@ -339,7 +340,7 @@ describe('popover', function () {
         var elm = compileDirective('options-container', angular.extend({}, templates['default'].scope.popover, {container: '#testElm'}));
         expect(testElm.children('.popover').length).toBe(0);
         angular.element(elm[0]).triggerHandler('click');
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(testElm.children('.popover').length).toBe(1);
       });
 
@@ -347,7 +348,7 @@ describe('popover', function () {
         var elm = compileDirective('options-container', angular.extend({}, templates['default'].scope.popover, {container: 'false'}));
         expect(sandboxEl.children('.popover').length).toBe(0);
         angular.element(elm[0]).triggerHandler('click');
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(sandboxEl.children('.popover').length).toBe(1);
       });
 
@@ -473,7 +474,7 @@ describe('popover', function () {
         scope.$digest();
         myPopover.show();
         myPopover.hide();
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(emit).toHaveBeenCalledWith('datepicker.show.before', myPopover);
         expect(emit).toHaveBeenCalledWith('datepicker.show', myPopover);
@@ -499,13 +500,13 @@ describe('popover', function () {
         });
 
         angular.element(elm[0]).triggerHandler('click');
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(showBefore).toBe(true);
         expect(show).toBe(true);
 
         angular.element(elm[0]).triggerHandler('click');
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(hideBefore).toBe(true);
         expect(hide).toBe(true);
