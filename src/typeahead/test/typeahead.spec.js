@@ -2,22 +2,26 @@
 
 describe('typeahead', function () {
 
-  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q, $animate, $$rAF;
+  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q, $animate, $timeout, $$rAF;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.typeahead'));
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_, _$animate_, _$$rAF_) {
+  beforeEach(inject(function ($injector, _$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_, _$animate_, _$$rAF_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $typeahead = _$typeahead_;
     $q = _$q_;
-    $animate = _$animate_;
-    $animate.flush = $animate.flush || $animate.triggerCallbacks;
+    $animate = $injector.get('$animate');
+    $timeout = $injector.get('$timeout');
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
     $$rAF = _$$rAF_;
   }));
 

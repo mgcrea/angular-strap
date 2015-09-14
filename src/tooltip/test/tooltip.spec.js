@@ -4,7 +4,7 @@
 describe('tooltip', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $rootScope, $compile, $templateCache, $$rAF, $animate, $httpBackend, $tooltip, scope;
+  var $rootScope, $compile, $templateCache, $$rAF, $animate, $timeout, $httpBackend, $tooltip, scope;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('ngAnimate'));
@@ -17,7 +17,11 @@ describe('tooltip', function() {
     $templateCache = $injector.get('$templateCache');
     $$rAF = $injector.get('$$rAF');
     $animate = $injector.get('$animate');
-    $animate.flush = $animate.flush || $animate.triggerCallbacks;
+    $timeout = $injector.get('$timeout');
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
     $httpBackend = $injector.get('$httpBackend');
     $tooltip = $injector.get('$tooltip');
 

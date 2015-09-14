@@ -10,18 +10,21 @@ describe('datepicker', function() {
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.datepicker'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _dateFilter_, _$datepicker_, _$timeout_) {
+  beforeEach(inject(function ($injector, _$rootScope_, _$compile_, _$templateCache_, _$animate_, _dateFilter_, _$datepicker_, _$timeout_) {
     scope = _$rootScope_.$new();
     $compile = _$compile_;
     $templateCache = _$templateCache_;
-    $animate = _$animate_;
-    $animate.flush = $animate.flush || $animate.triggerCallbacks;
+    $animate = $injector.get('$animate');
+    $timeout = $injector.get('$timeout');
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
     dateFilter = _dateFilter_;
     today = new Date();
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
     $datepicker = _$datepicker_;
-    $timeout = _$timeout_;
   }));
 
   afterEach(function() {

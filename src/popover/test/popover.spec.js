@@ -12,16 +12,19 @@ describe('popover', function () {
     return angular.element(this[0]).triggerHandler(evt);
   };
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$window_, _$timeout_, _$popover_, _$animate_) {
+  beforeEach(inject(function ($injector, _$rootScope_, _$compile_, _$templateCache_, _$window_, _$timeout_, _$popover_, _$animate_) {
     scope = _$rootScope_;
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo('body');
     $window = _$window_;
-    $timeout = _$timeout_;
     $popover = _$popover_;
-    $animate = _$animate_;
-    $animate.flush = $animate.flush || $animate.triggerCallbacks;
+    $animate = $injector.get('$animate');
+    $timeout = $injector.get('$timeout');
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
   }));
 
   afterEach(function() {

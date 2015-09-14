@@ -9,17 +9,20 @@ describe('timepicker', function() {
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.timepicker'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timepicker_, _dateFilter_, _$timeout_) {
+  beforeEach(inject(function ($injector, _$rootScope_, _$compile_, _$templateCache_, _$timepicker_, _dateFilter_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
-    $animate = _$animate_;
-    $animate.flush = $animate.flush || $animate.triggerCallbacks;
+    $animate = $injector.get('$animate');
+    $timeout = $injector.get('$timeout');
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
     $timepicker = _$timepicker_;
     dateFilter = _dateFilter_;
     today = new Date();
-    $timeout = _$timeout_;
   }));
 
   afterEach(function() {
