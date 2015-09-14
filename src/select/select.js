@@ -187,13 +187,14 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         $select.$onKeyDown = function(evt) {
           if (!/(9|13|38|40)/.test(evt.keyCode)) return;
-          evt.preventDefault();
-          evt.stopPropagation();
 
           // release focus on tab
           if (options.multiple && evt.keyCode === 9) {
             return $select.hide();
           }
+
+          evt.preventDefault();
+          evt.stopPropagation();
 
           // Select with enter
           if(!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
