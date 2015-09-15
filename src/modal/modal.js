@@ -264,7 +264,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
         }
 
-        // Private methods
+        // Private helpers
 
         function hideOnBackdropClick(evt) {
           if(evt.target !== evt.currentTarget) return;
