@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.1 - 2015-07-19
+ * @version v2.3.1 - 2015-08-31
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -101,6 +101,9 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
           $select.activate(index);
           if (options.multiple) {
             controller.$setViewValue(scope.$activeIndex.map(function(index) {
+              if (angular.isUndefined(scope.$matches[index])) {
+                return null;
+              }
               return scope.$matches[index].value;
             }));
           } else {
@@ -121,6 +124,8 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
           }
         } else if (scope.$activeIndex >= scope.$matches.length) {
           scope.$activeIndex = options.multiple ? [] : 0;
+        } else if (!controller.$modelValue && !options.multiple) {
+          scope.$activeIndex = -1;
         }
       };
       $select.$isVisible = function() {
