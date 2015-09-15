@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.1 - 2015-07-19
+ * @version v2.3.2 - 2015-09-15
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -55,7 +55,6 @@ angular.module('mgcrea.ngStrap.affix', [ 'mgcrea.ngStrap.helpers.dimensions', 'm
         var affix = getRequiredAffixClass(unpin, position, elementHeight);
         if (affixed === affix) return;
         affixed = affix;
-        element.removeClass(reset).addClass('affix' + (affix !== 'middle' ? '-' + affix : ''));
         if (affix === 'top') {
           unpin = null;
           if (setWidth) {
@@ -88,6 +87,7 @@ angular.module('mgcrea.ngStrap.affix', [ 'mgcrea.ngStrap.helpers.dimensions', 'm
             element.css('top', initialAffixTop + 'px');
           }
         }
+        element.removeClass(reset).addClass('affix' + (affix !== 'middle' ? '-' + affix : ''));
       };
       $affix.$onResize = function() {
         $affix.$parseOffsets();
