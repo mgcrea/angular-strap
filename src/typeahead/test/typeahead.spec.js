@@ -2,21 +2,26 @@
 
 describe('typeahead', function () {
 
-  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q, $animate, $$rAF;
+  var $compile, $templateCache, $typeahead, scope, sandboxEl, $q, $animate, $timeout, $$rAF;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.typeahead'));
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_, _$animate_, _$$rAF_) {
+  beforeEach(inject(function ($injector, _$rootScope_, _$compile_, _$templateCache_, _$typeahead_, _$q_, _$animate_, _$$rAF_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $typeahead = _$typeahead_;
     $q = _$q_;
-    $animate = _$animate_;
+    $animate = $injector.get('$animate');
+    $timeout = $injector.get('$timeout');
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
     $$rAF = _$$rAF_;
   }));
 
@@ -300,7 +305,7 @@ describe('typeahead', function () {
 
     it('should add the autocomplete attribute if one is not already present', function () {
       var elm = compileDirective('default');
-      expect(elm.attr('autocomplete')).toBe('false');
+      expect(elm.attr('autocomplete')).toBe('off');
     });
 
     it('should not change an already present autocomplete attribute', function () {
@@ -587,7 +592,7 @@ describe('typeahead', function () {
       var option = {value : 'Canada'};
       myTypeahead.update([option]);
       myTypeahead.select(0);
-      $animate.triggerCallbacks();
+      $animate.flush();
 
       expect(emit).toHaveBeenCalledWith('datepicker.show.before', myTypeahead);
       expect(emit).toHaveBeenCalledWith('datepicker.show', myTypeahead);
@@ -617,10 +622,10 @@ describe('typeahead', function () {
       });
 
       angular.element(elm[0]).triggerHandler('focus');
-      $animate.triggerCallbacks();
+      $animate.flush();
       angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
       angular.element(elm[0]).triggerHandler('blur');
-      $animate.triggerCallbacks();
+      $animate.flush();
 
       expect(select).toBe(true);
       expect(show).toBe(true);

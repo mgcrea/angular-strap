@@ -9,14 +9,18 @@ describe('select', function () {
   beforeEach(module('ngAnimate'));
   beforeEach(module('ngAnimateMock'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$select_, _$timeout_, _$animate_) {
+  beforeEach(inject(function ($injector, _$rootScope_, _$compile_, _$templateCache_, _$select_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $select = _$select_;
-    $timeout = _$timeout_;
-    $animate = _$animate_;
+    $animate = $injector.get('$animate');
+    $timeout = $injector.get('$timeout');
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
   }));
 
   afterEach(function() {
@@ -266,7 +270,7 @@ describe('select', function () {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(1);
       expect(sandboxEl.find('.dropdown-menu li.active').index()).toBe(2);
-      
+
       scope.selectedIcon = null;
       scope.$digest();
       angular.element(elm[0]).triggerHandler('focus');
@@ -542,7 +546,7 @@ describe('select', function () {
         var option = {value : 'Canada'};
         mySelect.update([option]);
         mySelect.select(0);
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(emit).toHaveBeenCalledWith('datepicker.show.before', mySelect);
         expect(emit).toHaveBeenCalledWith('datepicker.show', mySelect);
@@ -572,11 +576,11 @@ describe('select', function () {
         });
 
         angular.element(elm[0]).triggerHandler('focus');
-        $animate.triggerCallbacks();
+        $animate.flush();
         angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
 
         angular.element(elm[0]).triggerHandler('blur');
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(select).toBe(true);
         expect(beforeShow).toBe(true);

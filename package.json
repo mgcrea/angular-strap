@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Bootstrap",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "keywords": [
     "angular",
     "bootstrap"
@@ -36,7 +36,7 @@
     "jshint-stylish": "^2.0.1",
     "karma": "^0.13.9",
     "karma-chrome-launcher": "^0.2.0",
-    "karma-coverage": "^0.5.0",
+    "karma-coverage": "^0.5.1",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-sauce-launcher": "^0.2.14",

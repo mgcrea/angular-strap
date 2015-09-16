@@ -4,7 +4,7 @@
 describe('tooltip', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $rootScope, $compile, $templateCache, $$rAF, $animate, $httpBackend, $tooltip, scope;
+  var $rootScope, $compile, $templateCache, $$rAF, $animate, $timeout, $httpBackend, $tooltip, scope;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('ngAnimate'));
@@ -17,6 +17,11 @@ describe('tooltip', function() {
     $templateCache = $injector.get('$templateCache');
     $$rAF = $injector.get('$$rAF');
     $animate = $injector.get('$animate');
+    $timeout = $injector.get('$timeout');
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
     $httpBackend = $injector.get('$httpBackend');
     $tooltip = $injector.get('$tooltip');
 
@@ -200,7 +205,7 @@ describe('tooltip', function() {
       var elm = compileDirective('default');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
     });
 
@@ -208,7 +213,7 @@ describe('tooltip', function() {
       var elm = compileDirective('default');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       angular.element(elm[0]).triggerHandler('mouseleave');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
     });
@@ -216,28 +221,28 @@ describe('tooltip', function() {
     it('should correctly compile inner content', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.tooltip.title);
     });
 
     it('should support scope as object', function() {
       var elm = compileDirective('markup-scope');
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.tooltip.title);
     });
 
     it('should support ngRepeat markup', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-tooltip]')).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.items[0].tooltip);
     });
 
     it('should support button markup', function() {
       var elm = compileDirective('markup-button');
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
       angular.element(elm[0]).triggerHandler('click');
       expect(sandboxEl.children('.tooltip').length).toBe(1);
@@ -250,19 +255,19 @@ describe('tooltip', function() {
       var elm = compileDirective('default');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
       angular.element(elm[0]).triggerHandler('mouseleave');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(0);
 
       var scopeCount = countScopes(scope, 0);
 
       for (var i = 0; i < 10; i++) {
         angular.element(elm[0]).triggerHandler('mouseenter');
-        $animate.triggerCallbacks();
+        $animate.flush();
         angular.element(elm[0]).triggerHandler('mouseleave');
-        $animate.triggerCallbacks();
+        $animate.flush();
       }
 
       expect(countScopes(scope, 0)).toBe(scopeCount);
@@ -276,9 +281,9 @@ describe('tooltip', function() {
 
       for (var i = 0; i < 10; i++) {
         angular.element(elm[0]).triggerHandler('mouseenter');
-        $animate.triggerCallbacks();
+        $animate.flush();
         angular.element(elm[0]).triggerHandler('mouseleave');
-        $animate.triggerCallbacks();
+        $animate.flush();
       }
 
       scope.$destroy();
@@ -342,7 +347,7 @@ describe('tooltip', function() {
       var elm = compileDirective('bsEnabled-attr');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(0);
     });
 
@@ -350,7 +355,7 @@ describe('tooltip', function() {
       var elm = compileDirective('bsEnabled-attr-binding');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
     });
 
@@ -358,7 +363,7 @@ describe('tooltip', function() {
       var elm = compileDirective('bsEnabled-attr-binding');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
       angular.element(elm[0]).triggerHandler('mouseleave');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
@@ -368,7 +373,7 @@ describe('tooltip', function() {
       var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: false });
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(0);
     });
 
@@ -376,7 +381,7 @@ describe('tooltip', function() {
       var elm = compileDirective('bsEnabled-attr-binding');
       expect(sandboxEl.children('.tooltip').length).toBe(0);
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
       scope.isEnabled = false;
       scope.$digest();
@@ -387,14 +392,14 @@ describe('tooltip', function() {
     it('should support undefined value', function() {
       var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: undefined });
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
     });
 
     it('should support string values', function() {
       var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: 'true' });
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.tooltip').length).toBe(1);
       angular.element(elm[0]).triggerHandler('mouseleave');
       scope.isEnabled = 'false';
@@ -425,21 +430,21 @@ describe('tooltip', function() {
     it('should support string value', function() {
       var elm = compileDirective('bsTooltip-string');
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.tooltip.title);
     });
 
     it('should support string value from within ngRepeat markup', function() {
       var elm = compileDirective('bsTooltip-ngRepeat-string');
       angular.element(elm.find('[bs-tooltip]')).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.find('.tooltip-inner').html()).toBe(scope.items[0].tooltip);
     });
 
     it('should overwrite inherited title when no value specified', function() {
       var elm = compileDirective('bsTooltip-noValue');
       angular.element(elm[0]).triggerHandler('mouseenter');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.find('.tooltip-inner').html()).toBe('');
     });
 
@@ -452,7 +457,7 @@ describe('tooltip', function() {
       scope.$digest();
       expect(bodyEl.children('.tooltip').length).toBe(0);
       myTooltip.show();
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(bodyEl.children('.tooltip').length).toBe(1);
       myTooltip.hide();
       expect(bodyEl.children('.tooltip').length).toBe(0);
@@ -462,11 +467,11 @@ describe('tooltip', function() {
       var options = angular.extend({ show: true }, templates['default'].scope.tooltip);
       var myTooltip = $tooltip(sandboxEl, options);
       scope.$digest();
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(bodyEl.children('.tooltip').length).toBe(1);
       myTooltip.hide();
       scope.$digest();
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(bodyEl.children('.tooltip').length).toBe(0);
     });
 
@@ -589,7 +594,7 @@ describe('tooltip', function() {
       expect(emit).toHaveBeenCalledWith('tooltip.show.before', myTooltip);
       // show only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('tooltip.show', myTooltip);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('tooltip.show', myTooltip);
     });
 
@@ -604,7 +609,7 @@ describe('tooltip', function() {
       expect(emit).toHaveBeenCalledWith('tooltip.hide.before', myTooltip);
       // hide only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('tooltip.hide', myTooltip);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('tooltip.hide', myTooltip);
     });
 
@@ -614,7 +619,7 @@ describe('tooltip', function() {
       scope.$digest();
       myTooltip.show();
       myTooltip.hide();
-      $animate.triggerCallbacks();
+      $animate.flush();
 
       expect(emit).toHaveBeenCalledWith('datepicker.show.before', myTooltip);
       expect(emit).toHaveBeenCalledWith('datepicker.show', myTooltip);
@@ -671,7 +676,7 @@ describe('tooltip', function() {
       it('should support delay', function(done) {
         var elm = compileDirective('options-delay');
         angular.element(elm[0]).triggerHandler('mouseenter');
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(sandboxEl.children('.tooltip').length).toBe(0);
         setTimeout(function() {
@@ -683,7 +688,7 @@ describe('tooltip', function() {
       it('should support multiple delay', function(done) {
         var elm = compileDirective('options-delay-multiple');
         angular.element(elm[0]).triggerHandler('mouseenter');
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(sandboxEl.children('.tooltip').length).toBe(0);
         setTimeout(function() {
@@ -905,7 +910,7 @@ describe('tooltip', function() {
         var myTooltip = $tooltip(sandboxEl, angular.extend({}, templates['default'].scope.tooltip, {container: testElm}));
         scope.$digest();
         myTooltip.show();
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(angular.element(testElm.children()[0]).hasClass('tooltip')).toBeTruthy();
       });
 
@@ -915,7 +920,7 @@ describe('tooltip', function() {
         var elm = compileDirective('options-container', angular.extend({}, templates['default'].scope.tooltip, {container: '#testElm'}));
         expect(testElm.children('.tooltip').length).toBe(0);
         angular.element(elm[0]).triggerHandler('mouseenter');
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(testElm.children('.tooltip').length).toBe(1);
       });
 
@@ -923,7 +928,7 @@ describe('tooltip', function() {
         var elm = compileDirective('options-container', angular.extend({}, templates['default'].scope.tooltip, {container: 'false'}));
         expect(sandboxEl.children('.tooltip').length).toBe(0);
         angular.element(elm[0]).triggerHandler('mouseenter');
-        $animate.triggerCallbacks();
+        $animate.flush();
         expect(sandboxEl.children('.tooltip').length).toBe(1);
       });
 

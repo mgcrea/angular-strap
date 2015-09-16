@@ -10,13 +10,17 @@ describe('dropdown', function () {
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.dropdown'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timeout_, _$dropdown_) {
+  beforeEach(inject(function ($injector, _$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timeout_, _$dropdown_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
-    $animate = _$animate_;
-    $timeout = _$timeout_;
+    $animate = $injector.get('$animate');
+    $timeout = $injector.get('$timeout');
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
     $dropdown = _$dropdown_;
   }));
 
@@ -131,19 +135,19 @@ describe('dropdown', function () {
     it('should not create additional scopes after first show', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('click');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.dropdown-menu').length).toBe(1);
       angular.element(elm[0]).triggerHandler('click');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
 
       var scopeCount = countScopes(scope, 0);
 
       for (var i = 0; i < 10; i++) {
         angular.element(elm[0]).triggerHandler('click');
-        $animate.triggerCallbacks();
+        $animate.flush();
         angular.element(elm[0]).triggerHandler('click');
-        $animate.triggerCallbacks();
+        $animate.flush();
       }
 
       expect(countScopes(scope, 0)).toBe(scopeCount);
@@ -157,9 +161,9 @@ describe('dropdown', function () {
 
       for (var i = 0; i < 10; i++) {
         angular.element(elm[0]).triggerHandler('click');
-        $animate.triggerCallbacks();
+        $animate.flush();
         angular.element(elm[0]).triggerHandler('click');
-        $animate.triggerCallbacks();
+        $animate.flush();
       }
 
       scope.$destroy();
@@ -249,7 +253,7 @@ describe('dropdown', function () {
       expect(emit).toHaveBeenCalledWith('dropdown.show.before', myDropdown);
       // show only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('dropdown.show', myDropdown);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('dropdown.show', myDropdown);
     });
 
@@ -264,7 +268,7 @@ describe('dropdown', function () {
       expect(emit).toHaveBeenCalledWith('dropdown.hide.before', myDropdown);
       // hide only fires AFTER the animation is complete
       expect(emit).not.toHaveBeenCalledWith('dropdown.hide', myDropdown);
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(emit).toHaveBeenCalledWith('dropdown.hide', myDropdown);
     });
 
