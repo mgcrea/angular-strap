@@ -92,6 +92,43 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           }
         };
 
+        scope.$selectAllAtOnce = function () {
+          if(!options.multiple)
+            scope.$selectAll();
+          else
+            for (var i = 0; i < scope.$matches.length; i++) {
+              if (!scope.$isActive(i)) {
+                $select.activate(i);
+
+                controller.$setViewValue(scope.$activeIndex.map(function(index) {
+                  if (angular.isUndefined(scope.$matches[index])) {
+                    return null;
+                  }
+
+                  return scope.$matches[index].value;
+                }));
+              }
+            }
+        };
+
+        scope.$selectNoneAtOnce = function () {
+          if(!options.multiple)
+            scope.$selectNone();
+          else
+            for (var i = 0; i < scope.$matches.length; i++) {
+              if (scope.$isActive(i)) {
+                $select.activate(i);
+
+                controller.$setViewValue(scope.$activeIndex.map(function(index) {
+                  if (angular.isUndefined(scope.$matches[index])) {
+                    return null;
+                  }
+                  return scope.$matches[index].value;
+                }));
+              }
+            }
+        };
+
         // Public methods
 
         $select.update = function(matches) {
