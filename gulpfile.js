@@ -33,6 +33,7 @@ gulp.task('pages', gulp.series('ng:pages', function afterPages(done) {
 
 var ngAnnotate = require('gulp-ng-annotate');
 var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
 gulp.task('compat', function() {
   var paths = config.paths;
   return gulp.src(paths.dest + '/angular-strap.js')
@@ -45,7 +46,10 @@ gulp.task('compat', function() {
         {from: '$modal', to: '$bsModal'}
       ]
     }))
-    .pipe(rename('angular-strap.compat.js'))
+    .pipe(rename(function(file) { file.extname = '.compat.js'; }))
+    .pipe(gulp.dest(paths.dest))
+    .pipe(uglify({output: {indent_level: 2, quote_style: 1}}))
+    .pipe(rename(function(file) { file.extname = '.min.js'; }))
     .pipe(gulp.dest(paths.dest))
 })
 

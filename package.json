@@ -33,6 +33,7 @@
     "gulp-jshint": "^1.11.2",
     "gulp-ng-annotate": "^1.1.0",
     "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.4.1",
     "gulp-util": "^3.0.6",
     "jasmine-core": "^2.3.4",
     "jshint-stylish": "^2.0.1",
