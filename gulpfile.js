@@ -31,6 +31,24 @@ gulp.task('pages', gulp.series('ng:pages', function afterPages(done) {
     .pipe(gulp.dest(paths.dest));
 }));
 
+var ngAnnotate = require('gulp-ng-annotate');
+var rename = require('gulp-rename');
+gulp.task('compat', function() {
+  var paths = config.paths;
+  return gulp.src(paths.dest + '/angular-strap.js')
+    .pipe(ngAnnotate({
+      add: true,
+      remove: true,
+      rename: [
+        {from: '$tooltip', to: '$bsTooltip'},
+        {from: '$button', to: '$bsButton'},
+        {from: '$modal', to: '$bsModal'}
+      ]
+    }))
+    .pipe(rename('angular-strap.compat.js'))
+    .pipe(gulp.dest(paths.dest))
+})
+
 //
 // Tests
 
