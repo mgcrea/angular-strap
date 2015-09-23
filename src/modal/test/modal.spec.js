@@ -255,7 +255,6 @@ describe('modal', function() {
       expect(sandboxEl.children('.modal').length).toBe(1);
       expect(elmScope.$isShown).toBeTruthy();
       elmScope.$show();
-      $animate.flush();
       scope.$digest();
       expect(sandboxEl.children('.modal').length).toBe(1);
       expect(elmScope.$isShown).toBeTruthy();
