@@ -7,7 +7,7 @@ var config = require('ng-factory').use(gulp, {
   src: {
     docsViews: '*/docs/{,*/}*.tpl.{html,jade}'
   },
-  bower: {
+  bower: {
     exclude: /jquery|js\/bootstrap|\.less/
   }
 });
@@ -17,9 +17,53 @@ var config = require('ng-factory').use(gulp, {
 
 gulp.task('serve', gulp.series('ng:serve'));
 
+var ngAnnotate = require('gulp-ng-annotate');
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
+
+gulp.task('compat', function() {
+  var paths = config.paths;
+  var providers = [
+    '$affix', '$alert', '$aside', '$button', '$collapse', '$datepicker', 'datepickerViews',
+    '$dropdown', '$dateFormatter', '$dateParser', 'debounce', 'throttle', 'dimensions',
+    '$parseOptions', '$$rAF', '$modal', '$navbar', '$popover', '$scrollspy', '$select', '$tab',
+    '$timepicker', '$tooltip', '$typeahead'
+  ];
+  var compatProviders = providers.map(function(provider) {
+    var prependBs = function(what) {
+      var start = what.lastIndexOf('$') + 1;
+      if (start < 1) {
+        start = 0;
+      }
+      return what.substr(0, start) + 'bs' + what.substr(start, 1).toUpperCase() +
+             what.substring(start + 1, what.length);
+    };
+    return {
+      from: provider,
+      to: prependBs(provider)
+    }
+  });
+  return gulp.src(paths.dest + '/angular-strap.js')
+    .pipe(ngAnnotate({
+      add: true,
+      remove: true,
+      rename: compatProviders
+    }))
+    .pipe(rename(function(file) {
+      file.extname = '.compat.js';
+    }))
+    .pipe(gulp.dest(paths.dest))
+    .pipe(uglify({output: {indent_level: 2, quote_style: 1}}))
+    .pipe(rename(function(file) {
+      file.extname = '.min.js';
+    }))
+    .pipe(gulp.dest(paths.dest))
+});
+
 var del = require('del');
 var path = require('path');
-gulp.task('build', gulp.series('ng:build', function afterBuild(done) {
+
+gulp.task('build', gulp.series('ng:build', 'compat', function afterBuild(done) {
   var paths = config.paths;
   // Delete useless module.* build files
   del(path.join(paths.dest, 'module.*'), done);
@@ -27,31 +71,10 @@ gulp.task('build', gulp.series('ng:build', function afterBuild(done) {
 
 gulp.task('pages', gulp.series('ng:pages', function afterPages(done) {
   var paths = config.docs;
-  return gulp.src(['bower_components/highlightjs/styles/github.css'], {cwd: paths.cwd, base: paths.cwd})
+  return gulp.src(['bower_components/highlightjs/styles/github.css'],
+    {cwd: paths.cwd, base: paths.cwd})
     .pipe(gulp.dest(paths.dest));
 }));
-
-var ngAnnotate = require('gulp-ng-annotate');
-var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
-gulp.task('compat', function() {
-  var paths = config.paths;
-  return gulp.src(paths.dest + '/angular-strap.js')
-    .pipe(ngAnnotate({
-      add: true,
-      remove: true,
-      rename: [
-        {from: '$tooltip', to: '$bsTooltip'},
-        {from: '$button', to: '$bsButton'},
-        {from: '$modal', to: '$bsModal'}
-      ]
-    }))
-    .pipe(rename(function(file) { file.extname = '.compat.js'; }))
-    .pipe(gulp.dest(paths.dest))
-    .pipe(uglify({output: {indent_level: 2, quote_style: 1}}))
-    .pipe(rename(function(file) { file.extname = '.min.js'; }))
-    .pipe(gulp.dest(paths.dest))
-})
 
 //
 // Tests
