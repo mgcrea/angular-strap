@@ -26,7 +26,7 @@ gulp.task('compat', function() {
   var providers = [
     '$affix', '$alert', '$aside', '$button', '$collapse', '$datepicker', 'datepickerViews',
     '$dropdown', '$dateFormatter', '$dateParser', 'debounce', 'throttle', 'dimensions',
-    '$parseOptions', '$$rAF', '$modal', '$navbar', '$popover', '$scrollspy', '$select', '$tab',
+    '$parseOptions', '$modal', '$navbar', '$popover', '$scrollspy', '$select', '$tab',
     '$timepicker', '$tooltip', '$typeahead'
   ];
   var compatProviders = providers.map(function(provider) {
