@@ -164,6 +164,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
 
         };
 
+        scope.$on(options.prefixEvent + '.redraw', function () {
+          if ($tooltip.$isShown) {
+            $tooltip.$applyPlacement();
+          }
+        });
+
         $tooltip.show = function() {
           if (!options.bsEnabled || $tooltip.$isShown) return;
 
