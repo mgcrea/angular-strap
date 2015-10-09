@@ -63,10 +63,10 @@ gulp.task('compat', function() {
 var del = require('del');
 var path = require('path');
 
-gulp.task('build', gulp.series('ng:build', 'compat', function afterBuild(done) {
+gulp.task('build', gulp.series('ng:build', 'compat', function afterBuild() {
   var paths = config.paths;
   // Delete useless module.* build files
-  del(path.join(paths.dest, 'module.*'), done);
+  return del(path.join(paths.dest, 'module.*'));
 }));
 
 gulp.task('pages', gulp.series('ng:pages', function afterPages(done) {
