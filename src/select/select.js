@@ -133,18 +133,20 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         // Protected methods
 
         $select.$updateActiveIndex = function() {
-          if(controller.$modelValue && scope.$matches.length) {
-            if(options.multiple && angular.isArray(controller.$modelValue)) {
+          if(options.multiple) {
+            if(angular.isArray(controller.$modelValue)) {
               scope.$activeIndex = controller.$modelValue.map(function(value) {
                 return $select.$getIndex(value);
               });
             } else {
-              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
+              scope.$activeIndex = [];
             }
-          } else if(scope.$activeIndex >= scope.$matches.length) {
-            scope.$activeIndex = options.multiple ? [] : 0;
-          } else if(!controller.$modelValue && !options.multiple) {
-            scope.$activeIndex = -1;
+          } else {
+            if(angular.isDefined(controller.$modelValue) && scope.$matches.length) {
+              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
+            } else {
+              scope.$activeIndex = -1;
+            }
           }
         };
 
@@ -246,7 +248,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         var _hide = $select.hide;
         $select.hide = function() {
-          if(!options.multiple && !controller.$modelValue) {
+          if(!options.multiple && angular.isUndefined(controller.$modelValue)) {
             scope.$activeIndex = -1;
           }
           $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);

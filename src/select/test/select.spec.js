@@ -39,6 +39,10 @@ describe('select', function () {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select data-prefix-event="datepicker"></button>'
     },
+    'default-with-null-option': {
+      scope: {selectedIcon: null, icons: [{value: null, label: 'Null value'}, {value: 'Gear', label: '> Gear'}]},
+      element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select data-prefix-event="datepicker"></button>'
+    },
     'default-with-id': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button id="select1" type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
@@ -189,11 +193,10 @@ describe('select', function () {
       expect(scope.selectedIcon).toBe(scope.icons[1].value);
     });
 
-    it('should support null ng-model initial value', function() {
-      var elm = compileDirective('default', { selectedIcon: null });
+    it('should highlight null value', function() {
+      var elm = compileDirective('default-with-null-option', { selectedIcon: null });
       expect(function() { angular.element(elm[0]).triggerHandler('focus') }).not.toThrow();
-      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
-      expect(scope.selectedIcon).toBe(scope.icons[1].value);
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)')).toHaveClass('active');
     });
 
   });
