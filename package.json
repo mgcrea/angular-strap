@@ -44,6 +44,7 @@
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-sauce-launcher": "^0.2.14",
     "ng-factory": "^1.0",
+    "phantomjs": "^1.9.18",
     "undertaker-lib-tasks": "^0.4.0"
   },
   "engines": {
