@@ -1315,7 +1315,7 @@ so remove the option then. Just looks bad to have an option that doesn't work
         <tr>
           <td>viewport</td>
           <td>string | object</td>
-          <td>{ selector: &apos;body&apos;, padding: 0 }</td> 	 	 	
+          <td>{ selector: &apos;body&apos;, padding: 0 }</td>
           <td>
             <p>
               Keeps the tooltip within the bounds of this element. Example: viewport: &apos;#viewport&apos; or { &quot;selector&quot;: &quot;#viewport&quot;, &quot;padding&quot;: 0 }
@@ -3252,8 +3252,16 @@ $scope.panels.activePanel = {{ panels.activePanel }};
         </tr>
         <tr>
           <td>template</td>
+          <td>string</td>
+          <td>''</td>
+          <td>
+            <p>Provide an html template as a string (when templateUrl is falsy).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>templateUrl</td>
           <td>path</td>
-          <td>false</td>
+          <td>dropdown/dropdown.tpl.html</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
           </td>
