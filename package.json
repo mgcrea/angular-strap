@@ -28,6 +28,8 @@
   "dependencies": {},
   "devDependencies": {
     "del": "^2.0.2",
+    "eslint": "^1.6.0",
+    "eslint-config-airbnb": "^0.1.0",
     "factory-angular-channels": "^0.8.6",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-jshint": "^1.11.2",

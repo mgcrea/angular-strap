@@ -9,7 +9,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
     var defaults = this.defaults = {
       animation: 'am-fade',
-      //uncommenting the following line will break backwards compatability
+      // Uncommenting the following line will break backwards compatability
       // prefixEvent: 'datepicker',
       prefixClass: 'datepicker',
       placement: 'bottom-left',
@@ -44,10 +44,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
     this.$get = function($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
 
-      var bodyEl = angular.element($window.document.body);
       var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
       var isTouch = ('createTouch' in $window.document) && isNative;
-      if(!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
+      if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
 
       function DatepickerFactory(element, controller, config) {
 
@@ -55,7 +54,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         var parentScope = config.scope;
         var options = $datepicker.$options;
         var scope = $datepicker.$scope;
-        if(options.startView) options.startView -= options.minView;
+        if (options.startView) options.startView -= options.minView;
 
         // View vars
 
@@ -83,7 +82,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         $datepicker.update = function(date) {
           // console.warn('$datepicker.update() newValue=%o', date);
-          if(angular.isDate(date) && !isNaN(date.getTime())) {
+          if (angular.isDate(date) && !isNaN(date.getTime())) {
             $datepicker.$date = date;
             $picker.update.call($picker, date);
           }
@@ -93,18 +92,18 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         $datepicker.updateDisabledDates = function(dateRanges) {
           options.disabledDateRanges = dateRanges;
-          for(var i = 0, l = scope.rows.length; i < l; i++) {
+          for (var i = 0, l = scope.rows.length; i < l; i++) {
             angular.forEach(scope.rows[i], $datepicker.$setDisabledEl);
           }
         };
 
         $datepicker.select = function(date, keep) {
           // console.warn('$datepicker.select', date, scope.$mode);
-          if(!angular.isDate(controller.$dateValue)) controller.$dateValue = new Date(date);
-          if(!scope.$mode || keep) {
+          if (!angular.isDate(controller.$dateValue)) controller.$dateValue = new Date(date);
+          if (!scope.$mode || keep) {
             controller.$setViewValue(angular.copy(date));
             controller.$render();
-            if(options.autoclose && !keep) {
+            if (options.autoclose && !keep) {
               $timeout(function() { $datepicker.hide(true); });
             }
           } else {
@@ -125,13 +124,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         $datepicker.$build = function(pristine) {
           // console.warn('$datepicker.$build() viewDate=%o', viewDate);
-          if(pristine === true && $picker.built) return;
-          if(pristine === false && !$picker.built) return;
+          if (pristine === true && $picker.built) return;
+          if (pristine === false && !$picker.built) return;
           $picker.build.call($picker);
         };
 
         $datepicker.$updateSelected = function() {
-          for(var i = 0, l = scope.rows.length; i < l; i++) {
+          for (var i = 0, l = scope.rows.length; i < l; i++) {
             angular.forEach(scope.rows[i], updateSelected);
           }
         };
@@ -159,9 +158,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
           evt.preventDefault();
           evt.stopPropagation();
           // Emulate click for mobile devices
-          if(isTouch) {
+          if (isTouch) {
             var targetEl = angular.element(evt.target);
-            if(targetEl[0].nodeName.toLowerCase() !== 'button') {
+            if (targetEl[0].nodeName.toLowerCase() !== 'button') {
               targetEl = targetEl.parent();
             }
             targetEl.triggerHandler('click');
@@ -173,12 +172,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
           evt.preventDefault();
           evt.stopPropagation();
 
-          if(evt.keyCode === 13) {
-            if(!scope.$mode) {
-              return $datepicker.hide(true);
+          if (evt.keyCode === 13) {
+            if (!scope.$mode) {
+              $datepicker.hide(true);
             } else {
-              return scope.$apply(function() { $datepicker.setMode(scope.$mode - 1); });
+              scope.$apply(function() { $datepicker.setMode(scope.$mode - 1); });
             }
+            return;
           }
 
           // Navigate with keyboard
@@ -200,11 +200,11 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         var _init = $datepicker.init;
         $datepicker.init = function() {
-          if(isNative && options.useNative) {
+          if (isNative && options.useNative) {
             element.prop('type', 'date');
             element.css('-webkit-appearance', 'textfield');
             return;
-          } else if(isTouch) {
+          } else if (isTouch) {
             element.prop('type', 'text');
             element.attr('readonly', 'true');
             element.on('click', focusElement);
@@ -214,7 +214,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         var _destroy = $datepicker.destroy;
         $datepicker.destroy = function() {
-          if(isNative && options.useNative) {
+          if (isNative && options.useNative) {
             element.off('click', focusElement);
           }
           _destroy();
@@ -222,15 +222,15 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         var _show = $datepicker.show;
         $datepicker.show = function() {
-          if((!isTouch && element.attr('readonly')) || element.attr('disabled')) return;
+          if ((!isTouch && element.attr('readonly')) || element.attr('disabled')) return;
           _show();
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
           $timeout(function() {
             // if $datepicker is no longer showing, don't setup events
-            if(!$datepicker.$isShown) return;
+            if (!$datepicker.$isShown) return;
             $datepicker.$element.on(isTouch ? 'touchstart' : 'mousedown', $datepicker.$onMouseDown);
-            if(options.keyboard) {
+            if (options.keyboard) {
               element.on('keydown', $datepicker.$onKeyDown);
             }
           }, 0, false);
@@ -238,9 +238,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         var _hide = $datepicker.hide;
         $datepicker.hide = function(blur) {
-          if(!$datepicker.$isShown) return;
+          if (!$datepicker.$isShown) return;
           $datepicker.$element.off(isTouch ? 'touchstart' : 'mousedown', $datepicker.$onMouseDown);
-          if(options.keyboard) {
+          if (options.keyboard) {
             element.off('keydown', $datepicker.$onKeyDown);
           }
           _hide(blur);
@@ -270,29 +270,22 @@ angular.module('mgcrea.ngStrap.datepicker', [
         // Directive options
         var options = {scope: scope};
         angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent'], function(key) {
-          if(angular.isDefined(attr[key])) options[key] = attr[key];
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach(['html', 'container', 'autoclose', 'useNative'], function(key) {
-          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
           }
-        });
-
-        // Visibility binding support
-        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
-          if(!datepicker || !angular.isDefined(newValue)) return;
-          if(angular.isString(newValue)) newValue = !!newValue.match(/true|,?(datepicker),?/i);
-          newValue === true ? datepicker.show() : datepicker.hide();
         });
 
         // Initialize datepicker
         var datepicker = $datepicker(element, controller, options);
         options = datepicker.$options;
         // Set expected iOS format
-        if(isNative && options.useNative) options.dateFormat = 'yyyy-MM-dd';
+        if (isNative && options.useNative) options.dateFormat = 'yyyy-MM-dd';
 
         var lang = options.lang;
 
@@ -301,6 +294,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
         };
 
         var dateParser = $dateParser({format: options.dateFormat, lang: lang, strict: options.strictFormat});
+
+        // Visibility binding support
+        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
+          if (!datepicker || !angular.isDefined(newValue)) return;
+          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(datepicker),?/i);
+          newValue === true ? datepicker.show() : datepicker.hide();
+        });
 
         // Observe attributes for changes
         angular.forEach(['minDate', 'maxDate'], function(key) {
@@ -351,7 +351,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
           controller.$setValidity('min', isMinValid);
           controller.$setValidity('max', isMaxValid);
           // Only update the model when we have a valid date
-          if(isValid) controller.$dateValue = parsedDate;
+          if (isValid) controller.$dateValue = parsedDate;
         }
 
         // viewValue -> $parsers -> modelValue
@@ -359,7 +359,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
           // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
           var date;
           // Null values should correctly reset the model value & validity
-          if(!viewValue) {
+          if (!viewValue) {
             controller.$setValidity('date', true);
             // BREAKING CHANGE:
             // return null (not undefined) when input value is empty, so angularjs 1.3
@@ -367,7 +367,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
             return null;
           }
           var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
-          if(!parsedDate || isNaN(parsedDate.getTime())) {
+          if (!parsedDate || isNaN(parsedDate.getTime())) {
             controller.$setValidity('date', false);
             // return undefined, causes ngModelController to
             // invalidate model value
@@ -376,16 +376,16 @@ angular.module('mgcrea.ngStrap.datepicker', [
             validateAgainstMinMaxDate(parsedDate);
           }
 
-          if(options.dateType === 'string') {
+          if (options.dateType === 'string') {
             date = dateParser.timezoneOffsetAdjust(parsedDate, options.timezone, true);
             return formatDate(date, options.modelDateFormat || options.dateFormat);
           }
           date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
-          if(options.dateType === 'number') {
+          if (options.dateType === 'number') {
             return date.getTime();
-          } else if(options.dateType === 'unix') {
+          } else if (options.dateType === 'unix') {
             return date.getTime() / 1000;
-          } else if(options.dateType === 'iso') {
+          } else if (options.dateType === 'iso') {
             return date.toISOString();
           } else {
             return new Date(date);
@@ -396,19 +396,19 @@ angular.module('mgcrea.ngStrap.datepicker', [
         controller.$formatters.push(function(modelValue) {
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
           var date;
-          if(angular.isUndefined(modelValue) || modelValue === null) {
+          if (angular.isUndefined(modelValue) || modelValue === null) {
             date = NaN;
-          } else if(angular.isDate(modelValue)) {
+          } else if (angular.isDate(modelValue)) {
             date = modelValue;
-          } else if(options.dateType === 'string') {
+          } else if (options.dateType === 'string') {
             date = dateParser.parse(modelValue, null, options.modelDateFormat);
-          } else if(options.dateType === 'unix') {
+          } else if (options.dateType === 'unix') {
             date = new Date(modelValue * 1000);
           } else {
             date = new Date(modelValue);
           }
           // Setup default value?
-          // if(isNaN(date.getTime())) {
+          // if (isNaN(date.getTime())) {
           //   var today = new Date();
           //   date = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
           // }
@@ -428,7 +428,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          if(datepicker) datepicker.destroy();
+          if (datepicker) datepicker.destroy();
           options = null;
           datepicker = null;
         });
@@ -484,10 +484,10 @@ angular.module('mgcrea.ngStrap.datepicker', [
             split: 7,
             steps: { month: 1 },
             update: function(date, force) {
-              if(!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
+              if (!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
                 angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$build();
-              } else if(date.getDate() !== viewDate.date || date.getDate() === 1) {
+              } else if (date.getDate() !== viewDate.date || date.getDate() === 1) {
                 // chaging picker current month will cause viewDate.date to be set to first day of the month,
                 // in $datepicker.$selectPane, so picker would not update selected day display if
                 // user picks first day of the new month.
@@ -501,7 +501,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
               var firstDate = new Date(+firstDayOfMonth - mod(firstDayOfMonth.getDay() - options.startWeek, 7) * 864e5), firstDateOffset = firstDate.getTimezoneOffset();
               var today = dateParser.timezoneOffsetAdjust(new Date(), options.timezone).toDateString();
               // Handle daylight time switch
-              if(firstDateOffset !== firstDayOfMonthOffset) firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60e3);
+              if (firstDateOffset !== firstDayOfMonthOffset) firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60e3);
               var days = [], day;
               for(var i = 0; i < 42; i++) { // < 7 * 6
                 day = dateParser.daylightSavingAdjust(new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i));
@@ -543,10 +543,10 @@ angular.module('mgcrea.ngStrap.datepicker', [
               var actualTime = picker.$date.getTime();
               var newDate;
 
-              if(evt.keyCode === 37) newDate = new Date(actualTime - 1 * 864e5);
-              else if(evt.keyCode === 38) newDate = new Date(actualTime - 7 * 864e5);
-              else if(evt.keyCode === 39) newDate = new Date(actualTime + 1 * 864e5);
-              else if(evt.keyCode === 40) newDate = new Date(actualTime + 7 * 864e5);
+              if (evt.keyCode === 37) newDate = new Date(actualTime - 1 * 864e5);
+              else if (evt.keyCode === 38) newDate = new Date(actualTime - 7 * 864e5);
+              else if (evt.keyCode === 39) newDate = new Date(actualTime + 1 * 864e5);
+              else if (evt.keyCode === 40) newDate = new Date(actualTime + 7 * 864e5);
 
               if (!this.isDisabled(newDate)) picker.select(newDate, true);
             }
@@ -556,10 +556,10 @@ angular.module('mgcrea.ngStrap.datepicker', [
             split: 4,
             steps: { year: 1 },
             update: function(date, force) {
-              if(!this.built || date.getFullYear() !== viewDate.year) {
+              if (!this.built || date.getFullYear() !== viewDate.year) {
                 angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$build();
-              } else if(date.getMonth() !== viewDate.month) {
+              } else if (date.getMonth() !== viewDate.month) {
                 angular.extend(viewDate, {month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$updateSelected();
               }
@@ -590,10 +590,10 @@ angular.module('mgcrea.ngStrap.datepicker', [
               var actualMonth = picker.$date.getMonth();
               var newDate = new Date(picker.$date);
 
-              if(evt.keyCode === 37) newDate.setMonth(actualMonth - 1);
-              else if(evt.keyCode === 38) newDate.setMonth(actualMonth - 4);
-              else if(evt.keyCode === 39) newDate.setMonth(actualMonth + 1);
-              else if(evt.keyCode === 40) newDate.setMonth(actualMonth + 4);
+              if (evt.keyCode === 37) newDate.setMonth(actualMonth - 1);
+              else if (evt.keyCode === 38) newDate.setMonth(actualMonth - 4);
+              else if (evt.keyCode === 39) newDate.setMonth(actualMonth + 1);
+              else if (evt.keyCode === 40) newDate.setMonth(actualMonth + 4);
 
               if (!this.isDisabled(newDate)) picker.select(newDate, true);
             }
@@ -603,10 +603,10 @@ angular.module('mgcrea.ngStrap.datepicker', [
             split: 4,
             steps: { year: 12 },
             update: function(date, force) {
-              if(!this.built || force || parseInt(date.getFullYear()/20, 10) !== parseInt(viewDate.year/20, 10)) {
+              if (!this.built || force || parseInt(date.getFullYear()/20, 10) !== parseInt(viewDate.year/20, 10)) {
                 angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$build();
-              } else if(date.getFullYear() !== viewDate.year) {
+              } else if (date.getFullYear() !== viewDate.year) {
                 angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
                 picker.$updateSelected();
               }
@@ -637,10 +637,10 @@ angular.module('mgcrea.ngStrap.datepicker', [
               var actualYear = picker.$date.getFullYear(),
                   newDate = new Date(picker.$date);
 
-              if(evt.keyCode === 37) newDate.setYear(actualYear - 1);
-              else if(evt.keyCode === 38) newDate.setYear(actualYear - 4);
-              else if(evt.keyCode === 39) newDate.setYear(actualYear + 1);
-              else if(evt.keyCode === 40) newDate.setYear(actualYear + 4);
+              if (evt.keyCode === 37) newDate.setYear(actualYear - 1);
+              else if (evt.keyCode === 38) newDate.setYear(actualYear - 4);
+              else if (evt.keyCode === 39) newDate.setYear(actualYear + 1);
+              else if (evt.keyCode === 40) newDate.setYear(actualYear + 4);
 
               if (!this.isDisabled(newDate)) picker.select(newDate, true);
             }
