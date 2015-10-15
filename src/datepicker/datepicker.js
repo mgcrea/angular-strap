@@ -276,8 +276,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach(['html', 'container', 'autoclose', 'useNative'], function(key) {
-          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
+          }
         });
 
         // Visibility binding support
@@ -312,12 +313,12 @@ angular.module('mgcrea.ngStrap.datepicker', [
             validateAgainstMinMaxDate(controller.$dateValue);
           });
         });
-		
-		// Observe date format
-        angular.isDefined(attr['dateFormat']) && attr.$observe('dateFormat', function(newValue) {
-          datepicker.$options['dateFormat'] = newValue;
+
+        // Observe date format
+        angular.isDefined(attr.dateFormat) && attr.$observe('dateFormat', function(newValue) {
+          datepicker.$options.dateFormat = newValue;
         });
-		
+
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
           datepicker.update(controller.$dateValue);
