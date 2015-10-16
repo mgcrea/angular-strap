@@ -85,7 +85,12 @@ angular.module('mgcrea.ngStrap.datepicker', [
           if (angular.isDate(date) && !isNaN(date.getTime())) {
             $datepicker.$date = date;
             $picker.update.call($picker, date);
+          } else if(scope.rows){
+            // DESELECT The Active Date In The Picker When Date Is Changed
+            $datepicker.$date = null;
+            $datepicker.$updateSelected();
           }
+
           // Build only if pristine
           $datepicker.$build(true);
         };
