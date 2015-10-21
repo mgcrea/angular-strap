@@ -357,24 +357,16 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
             var originalPlacement = placement;
             var viewportPosition = getPosition($tooltip.$viewport);
 
-            // Determine if the vertical placement
-            if (originalPlacement.indexOf('bottom') >= 0 && elementPosition.bottom + tipHeight > viewportPosition.bottom) {
-              placement = originalPlacement.replace('bottom', 'top');
-            } else if (originalPlacement.indexOf('top') >= 0 && elementPosition.top - tipHeight < viewportPosition.top) {
+            if (/top/.test(originalPlacement) && elementPosition.bottom + tipHeight > viewportPosition.bottom) {
               placement = originalPlacement.replace('top', 'bottom');
+            } else if (/bottom/.test(originalPlacement) && elementPosition.top - tipHeight < viewportPosition.top) {
+              placement = originalPlacement.replace('bottom', 'top');
             }
 
-            // Determine the horizontal placement
-            // The exotic placements of left and right are opposite of the standard placements.  Their arrows are put on the left/right
-            // and flow in the opposite direction of their placement.
-            if ((originalPlacement === 'right' || originalPlacement === 'bottom-left' || originalPlacement === 'top-left') &&
-                elementPosition.right + tipWidth > viewportPosition.width) {
-
-              placement = originalPlacement === 'right' ? 'left' : placement.replace('left', 'right');
-            } else if ((originalPlacement === 'left' || originalPlacement === 'bottom-right' || originalPlacement === 'top-right') &&
-                elementPosition.left - tipWidth < viewportPosition.left) {
-
-              placement = originalPlacement === 'left' ? 'right' : placement.replace('right', 'left');
+            if (/left/.test(originalPlacement) && elementPosition.left - tipWidth < viewportPosition.left) {
+              placement = placement.replace('left', 'right');
+            } else if (/right/.test(originalPlacement) && elementPosition.right + tipWidth > viewportPosition.width) {
+              placement = placement.replace('right', 'left');
             }
 
             tipElement.removeClass(originalPlacement).addClass(placement);
@@ -552,11 +544,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
             }
           } else if(split[0] === 'left' || split[0] === 'right') {
             switch (split[1]) {
-            case 'top':
-              offset.top = position.top - actualHeight;
-              break;
-            case 'bottom':
-              offset.top = position.top + position.height;
+              case 'top':
+                offset.top = position.top - actualHeight + position.height;
+                break;
+              case 'bottom':
+                offset.top = position.top;
             }
           }
 
