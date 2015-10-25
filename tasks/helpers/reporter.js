@@ -10,17 +10,15 @@ module.exports = function ccm() {
 
   var ccReporter = path.join(__dirname, 'node_modules', '.bin', 'codeclimate-test-reporter');
   return through2.obj(function handleFile(file, encoding, next) {
-    exec(util.format('CODECLIMATE_REPO_TOKEN=%s %s < "%s"', process.env.CODE_CLIMATE_TOKEN, ccReporter, file.path))
-      .then(function execCompleted(stdout, stderr) {
-        if (stderr) {
-          next(new gutil.PluginError({
-            message: stderr
-          }));
-          return;
-        }
-        gutil.log('Coverage file posted: "%s"', file.path);
-        next();
-      })
-      .catch(next);
+    exec(util.format('CODECLIMATE_REPO_TOKEN=%s %s < "%s"', process.env.CODE_CLIMATE_TOKEN, ccReporter, file.path), function(err) {
+      if (err) {
+        next(new gutil.PluginError({
+          message: err
+        }));
+        return;
+      }
+      gutil.log('Coverage file posted: "%s"', file.path);
+      next();
+    });
   });
 };
