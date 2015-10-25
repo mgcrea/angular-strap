@@ -28,29 +28,26 @@
   "dependencies": {},
   "devDependencies": {
     "del": "^2.0.2",
-    "eslint": "^1.6.0",
+    "eslint": "^1.7.3",
     "eslint-config-airbnb": "^0.1.0",
-    "factory-angular-channels": "^0.8.6",
+    "factory-angular-channels": "^0.8.9",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-jshint": "^1.11.2",
     "gulp-ng-annotate": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.4.2",
-    "gulp-util": "^3.0.6",
+    "gulp-util": "^3.0.7",
     "jasmine-core": "^2.3.4",
     "jshint-stylish": "^2.0.1",
-    "karma": "^0.13.11",
+    "karma": "^0.13.14",
     "karma-chrome-launcher": "^0.2.1",
-    "karma-coverage": "^0.5.2",
+    "karma-coverage": "^0.5.3",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.1",
-    "karma-sauce-launcher": "^0.2.14",
+    "karma-sauce-launcher": "^0.3.0",
     "ng-factory": "^1.0",
     "phantomjs": "^1.9.18",
     "undertaker-lib-tasks": "^0.4.3"
-  },
-  "engines": {
-    "node": "^0.10"
   },
   "scripts": {
     "test": "$(npm bin)/gulp jshint karma:unit"

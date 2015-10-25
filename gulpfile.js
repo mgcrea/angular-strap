@@ -91,7 +91,7 @@ gulp.task('jshint', function() {
 
 var Server = require('karma').Server;
 var testTimezone = '';
-gulp.task('karma:unit', gulp.series('ng:test/templates', function() {
+gulp.task('karma:unit', gulp.series('ng:test/templates', function(done) {
   // if testTimezone has value, set the environment timezone
   // before starting karma, so PhantomJS picks up the
   // timezone setting
@@ -106,7 +106,7 @@ gulp.task('karma:unit', gulp.series('ng:test/templates', function() {
     singleRun: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    process.exit(code);
+    done();
   }).start();
 }));
 gulp.task('karma:server', gulp.series('ng:test/templates', function karmaServer() {
