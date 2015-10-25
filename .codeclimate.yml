@@ -5,4 +5,5 @@ exclude_paths:
 - "tasks/*"
 - "docs/*"
 - "dist/*"
+- "src/*/docs/*"
 - "gulpfile.js"
