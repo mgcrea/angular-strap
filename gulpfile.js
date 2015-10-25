@@ -109,7 +109,7 @@ gulp.task('karma:unit', gulp.series('ng:test/templates', function(done) {
     done();
   }).start();
 }));
-gulp.task('karma:server', gulp.series('ng:test/templates', function karmaServer() {
+gulp.task('karma:server', gulp.series('ng:test/templates', function karmaServer(done) {
   new Server({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -118,11 +118,11 @@ gulp.task('karma:server', gulp.series('ng:test/templates', function karmaServer(
     singleRun: false
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    process.exit(code);
+    done();
   }).start();
 }));
 // codeclimate-test-reporter
-gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis() {
+gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis(done) {
   new Server({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -134,11 +134,11 @@ gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis(
     gulp.src('test/coverage/**/lcov.info')
       .pipe(coveralls())
       .on('end', function() {
-        process.exit(code);
+        done();
       });
   }).start();
 }));
-gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', function karmaTravis120() {
+gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', function karmaTravis120(done) {
   new Server({
     configFile: path.join(__dirname, 'test/~1.2.0/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -146,10 +146,10 @@ gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', function karmaT
     singleRun: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    process.exit(code);
+    done();
   }).start();
 }));
-gulp.task('karma:travis~1.3.0', gulp.series('ng:test/templates', function karmaTravis130() {
+gulp.task('karma:travis~1.3.0', gulp.series('ng:test/templates', function karmaTravis130(done) {
   new Server({
     configFile: path.join(__dirname, 'test/~1.3.0/karma.conf.js'),
     browsers: ['PhantomJS'],
@@ -159,7 +159,7 @@ gulp.task('karma:travis~1.3.0', gulp.series('ng:test/templates', function karmaT
     // singleRun: false
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    process.exit(code);
+    done();
   }).start();
 }));
 
