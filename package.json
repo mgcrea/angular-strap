@@ -27,11 +27,11 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "codeclimate-test-reporter": "^0.1.1",
     "del": "^2.0.2",
     "eslint": "^1.7.3",
     "eslint-config-airbnb": "^0.1.0",
     "factory-angular-channels": "^0.8.9",
-    "gulp-codeclimate-reporter": "^1.0.0",
     "gulp-jshint": "^1.11.2",
     "gulp-ng-annotate": "^1.1.0",
     "gulp-pre": "^4.0.0-alpha.4",

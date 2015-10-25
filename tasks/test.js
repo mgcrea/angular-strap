@@ -5,7 +5,7 @@ var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var path = require('path');
 var Server = require('karma').Server;
-var reporter = require('gulp-codeclimate-reporter');
+var reporter = require('./helpers/reporter');
 
 module.exports = function(gulp, config) {
 
