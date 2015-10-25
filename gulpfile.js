@@ -130,7 +130,6 @@ gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis(
     singleRun: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    process.exit(code);
     gulp.src('test/coverage/**/lcov.info')
       .pipe(coveralls())
       .on('end', function() {
