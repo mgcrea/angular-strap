@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.3 - 2015-09-24
+ * @version v2.3.4 - 2015-10-25
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -44,6 +44,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       };
       var show = $dropdown.show;
       $dropdown.show = function() {
+        if (!scope.content) return;
         show();
         $timeout(function() {
           options.keyboard && $dropdown.$element && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
