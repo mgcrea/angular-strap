@@ -233,6 +233,15 @@ describe('select', function () {
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
     });
+    
+    it('should correctly watch for changes for elements in arrays', function() {
+      var elm = compileDirective('default');
+      scope.icons[0].label = scope.icons[0].label + "s" 
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
+      expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
+    });
 
     it('should support bsOptions with filters', function() {
       var elm = compileDirective('markup-bsOptions-filtered');

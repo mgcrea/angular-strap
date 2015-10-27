@@ -321,14 +321,14 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Watch bsOptions values before filtering for changes
         var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
-        scope.$watchCollection(watchedOptions, function(newValue, oldValue) {
+        scope.$watch(watchedOptions, function(newValue, oldValue) {
           // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
           parsedOptions.valuesFn(scope, controller)
           .then(function(values) {
             select.update(values);
             controller.$render();
           });
-        });
+        }, true);
 
         // Watch model for changes
         scope.$watch(attr.ngModel, function(newValue, oldValue) {
