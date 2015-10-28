@@ -60,7 +60,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         var show = $dropdown.show;
         $dropdown.show = function() {
-          if(!scope.content) return;
+          if(this.$options.templateUrl === defaults.templateUrl && !scope.content) return;
           show();
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
