@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.4 - 2015-10-25
+ * @version v2.3.5 - 2015-10-29
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -1359,179 +1359,6 @@
       }
     };
   } ]);
-  angular.module('mgcrea.ngStrap.scrollspy', [ 'mgcrea.ngStrap.helpers.debounce', 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$scrollspy', function() {
-    var spies = this.$$spies = {};
-    var defaults = this.defaults = {
-      debounce: 150,
-      throttle: 100,
-      offset: 100
-    };
-    this.$get = [ '$window', '$document', '$rootScope', 'dimensions', 'debounce', 'throttle', function($window, $document, $rootScope, dimensions, debounce, throttle) {
-      var windowEl = angular.element($window);
-      var docEl = angular.element($document.prop('documentElement'));
-      var bodyEl = angular.element($window.document.body);
-      function nodeName(element, name) {
-        return element[0].nodeName && element[0].nodeName.toLowerCase() === name.toLowerCase();
-      }
-      function ScrollSpyFactory(config) {
-        var options = angular.extend({}, defaults, config);
-        if (!options.element) options.element = bodyEl;
-        var isWindowSpy = nodeName(options.element, 'body');
-        var scrollEl = isWindowSpy ? windowEl : options.element;
-        var scrollId = isWindowSpy ? 'window' : options.id;
-        if (spies[scrollId]) {
-          spies[scrollId].$$count++;
-          return spies[scrollId];
-        }
-        var $scrollspy = {};
-        var unbindViewContentLoaded, unbindIncludeContentLoaded;
-        var trackedElements = $scrollspy.$trackedElements = [];
-        var sortedElements = [];
-        var activeTarget;
-        var debouncedCheckPosition;
-        var throttledCheckPosition;
-        var debouncedCheckOffsets;
-        var viewportHeight;
-        var scrollTop;
-        $scrollspy.init = function() {
-          this.$$count = 1;
-          debouncedCheckPosition = debounce(this.checkPosition, options.debounce);
-          throttledCheckPosition = throttle(this.checkPosition, options.throttle);
-          scrollEl.on('click', this.checkPositionWithEventLoop);
-          windowEl.on('resize', debouncedCheckPosition);
-          scrollEl.on('scroll', throttledCheckPosition);
-          debouncedCheckOffsets = debounce(this.checkOffsets, options.debounce);
-          unbindViewContentLoaded = $rootScope.$on('$viewContentLoaded', debouncedCheckOffsets);
-          unbindIncludeContentLoaded = $rootScope.$on('$includeContentLoaded', debouncedCheckOffsets);
-          debouncedCheckOffsets();
-          if (scrollId) {
-            spies[scrollId] = $scrollspy;
-          }
-        };
-        $scrollspy.destroy = function() {
-          this.$$count--;
-          if (this.$$count > 0) {
-            return;
-          }
-          scrollEl.off('click', this.checkPositionWithEventLoop);
-          windowEl.off('resize', debouncedCheckPosition);
-          scrollEl.off('scroll', throttledCheckPosition);
-          unbindViewContentLoaded();
-          unbindIncludeContentLoaded();
-          if (scrollId) {
-            delete spies[scrollId];
-          }
-        };
-        $scrollspy.checkPosition = function() {
-          if (!sortedElements.length) return;
-          scrollTop = (isWindowSpy ? $window.pageYOffset : scrollEl.prop('scrollTop')) || 0;
-          viewportHeight = Math.max($window.innerHeight, docEl.prop('clientHeight'));
-          if (scrollTop < sortedElements[0].offsetTop && activeTarget !== sortedElements[0].target) {
-            return $scrollspy.$activateElement(sortedElements[0]);
-          }
-          for (var i = sortedElements.length; i--; ) {
-            if (angular.isUndefined(sortedElements[i].offsetTop) || sortedElements[i].offsetTop === null) continue;
-            if (activeTarget === sortedElements[i].target) continue;
-            if (scrollTop < sortedElements[i].offsetTop) continue;
-            if (sortedElements[i + 1] && scrollTop > sortedElements[i + 1].offsetTop) continue;
-            return $scrollspy.$activateElement(sortedElements[i]);
-          }
-        };
-        $scrollspy.checkPositionWithEventLoop = function() {
-          setTimeout($scrollspy.checkPosition, 1);
-        };
-        $scrollspy.$activateElement = function(element) {
-          if (activeTarget) {
-            var activeElement = $scrollspy.$getTrackedElement(activeTarget);
-            if (activeElement) {
-              activeElement.source.removeClass('active');
-              if (nodeName(activeElement.source, 'li') && nodeName(activeElement.source.parent().parent(), 'li')) {
-                activeElement.source.parent().parent().removeClass('active');
-              }
-            }
-          }
-          activeTarget = element.target;
-          element.source.addClass('active');
-          if (nodeName(element.source, 'li') && nodeName(element.source.parent().parent(), 'li')) {
-            element.source.parent().parent().addClass('active');
-          }
-        };
-        $scrollspy.$getTrackedElement = function(target) {
-          return trackedElements.filter(function(obj) {
-            return obj.target === target;
-          })[0];
-        };
-        $scrollspy.checkOffsets = function() {
-          angular.forEach(trackedElements, function(trackedElement) {
-            var targetElement = document.querySelector(trackedElement.target);
-            trackedElement.offsetTop = targetElement ? dimensions.offset(targetElement).top : null;
-            if (options.offset && trackedElement.offsetTop !== null) trackedElement.offsetTop -= options.offset * 1;
-          });
-          sortedElements = trackedElements.filter(function(el) {
-            return el.offsetTop !== null;
-          }).sort(function(a, b) {
-            return a.offsetTop - b.offsetTop;
-          });
-          debouncedCheckPosition();
-        };
-        $scrollspy.trackElement = function(target, source) {
-          trackedElements.push({
-            target: target,
-            source: source
-          });
-        };
-        $scrollspy.untrackElement = function(target, source) {
-          var toDelete;
-          for (var i = trackedElements.length; i--; ) {
-            if (trackedElements[i].target === target && trackedElements[i].source === source) {
-              toDelete = i;
-              break;
-            }
-          }
-          trackedElements = trackedElements.splice(toDelete, 1);
-        };
-        $scrollspy.activate = function(i) {
-          trackedElements[i].addClass('active');
-        };
-        $scrollspy.init();
-        return $scrollspy;
-      }
-      return ScrollSpyFactory;
-    } ];
-  }).directive('bsScrollspy', [ '$rootScope', 'debounce', 'dimensions', '$scrollspy', function($rootScope, debounce, dimensions, $scrollspy) {
-    return {
-      restrict: 'EAC',
-      link: function postLink(scope, element, attr) {
-        var options = {
-          scope: scope
-        };
-        angular.forEach([ 'offset', 'target' ], function(key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
-        });
-        var scrollspy = $scrollspy(options);
-        scrollspy.trackElement(options.target, element);
-        scope.$on('$destroy', function() {
-          if (scrollspy) {
-            scrollspy.untrackElement(options.target, element);
-            scrollspy.destroy();
-          }
-          options = null;
-          scrollspy = null;
-        });
-      }
-    };
-  } ]).directive('bsScrollspyList', [ '$rootScope', 'debounce', 'dimensions', '$scrollspy', function($rootScope, debounce, dimensions, $scrollspy) {
-    return {
-      restrict: 'A',
-      compile: function postLink(element, attr) {
-        var children = element[0].querySelectorAll('li > a[href]');
-        angular.forEach(children, function(child) {
-          var childEl = angular.element(child);
-          childEl.parent().attr('bs-scrollspy', '').attr('data-target', childEl.attr('href'));
-        });
-      }
-    };
-  } ]);
   angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions' ]).provider('$select', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -1812,6 +1639,179 @@
           if (select) select.destroy();
           options = null;
           select = null;
+        });
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.scrollspy', [ 'mgcrea.ngStrap.helpers.debounce', 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$scrollspy', function() {
+    var spies = this.$$spies = {};
+    var defaults = this.defaults = {
+      debounce: 150,
+      throttle: 100,
+      offset: 100
+    };
+    this.$get = [ '$window', '$document', '$rootScope', 'dimensions', 'debounce', 'throttle', function($window, $document, $rootScope, dimensions, debounce, throttle) {
+      var windowEl = angular.element($window);
+      var docEl = angular.element($document.prop('documentElement'));
+      var bodyEl = angular.element($window.document.body);
+      function nodeName(element, name) {
+        return element[0].nodeName && element[0].nodeName.toLowerCase() === name.toLowerCase();
+      }
+      function ScrollSpyFactory(config) {
+        var options = angular.extend({}, defaults, config);
+        if (!options.element) options.element = bodyEl;
+        var isWindowSpy = nodeName(options.element, 'body');
+        var scrollEl = isWindowSpy ? windowEl : options.element;
+        var scrollId = isWindowSpy ? 'window' : options.id;
+        if (spies[scrollId]) {
+          spies[scrollId].$$count++;
+          return spies[scrollId];
+        }
+        var $scrollspy = {};
+        var unbindViewContentLoaded, unbindIncludeContentLoaded;
+        var trackedElements = $scrollspy.$trackedElements = [];
+        var sortedElements = [];
+        var activeTarget;
+        var debouncedCheckPosition;
+        var throttledCheckPosition;
+        var debouncedCheckOffsets;
+        var viewportHeight;
+        var scrollTop;
+        $scrollspy.init = function() {
+          this.$$count = 1;
+          debouncedCheckPosition = debounce(this.checkPosition, options.debounce);
+          throttledCheckPosition = throttle(this.checkPosition, options.throttle);
+          scrollEl.on('click', this.checkPositionWithEventLoop);
+          windowEl.on('resize', debouncedCheckPosition);
+          scrollEl.on('scroll', throttledCheckPosition);
+          debouncedCheckOffsets = debounce(this.checkOffsets, options.debounce);
+          unbindViewContentLoaded = $rootScope.$on('$viewContentLoaded', debouncedCheckOffsets);
+          unbindIncludeContentLoaded = $rootScope.$on('$includeContentLoaded', debouncedCheckOffsets);
+          debouncedCheckOffsets();
+          if (scrollId) {
+            spies[scrollId] = $scrollspy;
+          }
+        };
+        $scrollspy.destroy = function() {
+          this.$$count--;
+          if (this.$$count > 0) {
+            return;
+          }
+          scrollEl.off('click', this.checkPositionWithEventLoop);
+          windowEl.off('resize', debouncedCheckPosition);
+          scrollEl.off('scroll', throttledCheckPosition);
+          unbindViewContentLoaded();
+          unbindIncludeContentLoaded();
+          if (scrollId) {
+            delete spies[scrollId];
+          }
+        };
+        $scrollspy.checkPosition = function() {
+          if (!sortedElements.length) return;
+          scrollTop = (isWindowSpy ? $window.pageYOffset : scrollEl.prop('scrollTop')) || 0;
+          viewportHeight = Math.max($window.innerHeight, docEl.prop('clientHeight'));
+          if (scrollTop < sortedElements[0].offsetTop && activeTarget !== sortedElements[0].target) {
+            return $scrollspy.$activateElement(sortedElements[0]);
+          }
+          for (var i = sortedElements.length; i--; ) {
+            if (angular.isUndefined(sortedElements[i].offsetTop) || sortedElements[i].offsetTop === null) continue;
+            if (activeTarget === sortedElements[i].target) continue;
+            if (scrollTop < sortedElements[i].offsetTop) continue;
+            if (sortedElements[i + 1] && scrollTop > sortedElements[i + 1].offsetTop) continue;
+            return $scrollspy.$activateElement(sortedElements[i]);
+          }
+        };
+        $scrollspy.checkPositionWithEventLoop = function() {
+          setTimeout($scrollspy.checkPosition, 1);
+        };
+        $scrollspy.$activateElement = function(element) {
+          if (activeTarget) {
+            var activeElement = $scrollspy.$getTrackedElement(activeTarget);
+            if (activeElement) {
+              activeElement.source.removeClass('active');
+              if (nodeName(activeElement.source, 'li') && nodeName(activeElement.source.parent().parent(), 'li')) {
+                activeElement.source.parent().parent().removeClass('active');
+              }
+            }
+          }
+          activeTarget = element.target;
+          element.source.addClass('active');
+          if (nodeName(element.source, 'li') && nodeName(element.source.parent().parent(), 'li')) {
+            element.source.parent().parent().addClass('active');
+          }
+        };
+        $scrollspy.$getTrackedElement = function(target) {
+          return trackedElements.filter(function(obj) {
+            return obj.target === target;
+          })[0];
+        };
+        $scrollspy.checkOffsets = function() {
+          angular.forEach(trackedElements, function(trackedElement) {
+            var targetElement = document.querySelector(trackedElement.target);
+            trackedElement.offsetTop = targetElement ? dimensions.offset(targetElement).top : null;
+            if (options.offset && trackedElement.offsetTop !== null) trackedElement.offsetTop -= options.offset * 1;
+          });
+          sortedElements = trackedElements.filter(function(el) {
+            return el.offsetTop !== null;
+          }).sort(function(a, b) {
+            return a.offsetTop - b.offsetTop;
+          });
+          debouncedCheckPosition();
+        };
+        $scrollspy.trackElement = function(target, source) {
+          trackedElements.push({
+            target: target,
+            source: source
+          });
+        };
+        $scrollspy.untrackElement = function(target, source) {
+          var toDelete;
+          for (var i = trackedElements.length; i--; ) {
+            if (trackedElements[i].target === target && trackedElements[i].source === source) {
+              toDelete = i;
+              break;
+            }
+          }
+          trackedElements = trackedElements.splice(toDelete, 1);
+        };
+        $scrollspy.activate = function(i) {
+          trackedElements[i].addClass('active');
+        };
+        $scrollspy.init();
+        return $scrollspy;
+      }
+      return ScrollSpyFactory;
+    } ];
+  }).directive('bsScrollspy', [ '$rootScope', 'debounce', 'dimensions', '$scrollspy', function($rootScope, debounce, dimensions, $scrollspy) {
+    return {
+      restrict: 'EAC',
+      link: function postLink(scope, element, attr) {
+        var options = {
+          scope: scope
+        };
+        angular.forEach([ 'offset', 'target' ], function(key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+        var scrollspy = $scrollspy(options);
+        scrollspy.trackElement(options.target, element);
+        scope.$on('$destroy', function() {
+          if (scrollspy) {
+            scrollspy.untrackElement(options.target, element);
+            scrollspy.destroy();
+          }
+          options = null;
+          scrollspy = null;
+        });
+      }
+    };
+  } ]).directive('bsScrollspyList', [ '$rootScope', 'debounce', 'dimensions', '$scrollspy', function($rootScope, debounce, dimensions, $scrollspy) {
+    return {
+      restrict: 'A',
+      compile: function postLink(element, attr) {
+        var children = element[0].querySelectorAll('li > a[href]');
+        angular.forEach(children, function(child) {
+          var childEl = angular.element(child);
+          childEl.parent().attr('bs-scrollspy', '').attr('data-target', childEl.attr('href'));
         });
       }
     };
@@ -2729,10 +2729,12 @@
         }
       });
       angular.extend(resolve, locals);
-      if (templateUrl) {
+      if (template) {
+        resolve.$template = $q.when(template);
+      } else if (templateUrl) {
         resolve.$template = fetchTemplate(templateUrl);
       } else {
-        resolve.$template = $q.when(template);
+        throw new Error('Missing `template` / `templateUrl` option.');
       }
       if (options.contentTemplate) {
         resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.contentTemplate) ]).then(function(templates) {
@@ -2822,7 +2824,6 @@
         };
         var show = $dropdown.show;
         $dropdown.show = function() {
-          if (!scope.content) return;
           show();
           $timeout(function() {
             options.keyboard && $dropdown.$element && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
@@ -2855,31 +2856,43 @@
     return {
       restrict: 'EAC',
       scope: true,
-      link: function postLink(scope, element, attr, transclusion) {
-        var options = {
-          scope: scope
+      compile: function(tElement, tAttrs) {
+        var options = {};
+        if (!tAttrs.bsDropdown) {
+          var nextSibling = tElement[0].nextSibling;
+          while (nextSibling && nextSibling.nodeType !== 1) {
+            nextSibling = nextSibling.nextSibling;
+          }
+          if (nextSibling.classList.contains('dropdown-menu')) {
+            options.template = nextSibling.outerHTML;
+            options.templateUrl = undefined;
+            nextSibling.parentNode.removeChild(nextSibling);
+          }
+        }
+        return function postLink(scope, element, attr) {
+          options.scope = scope;
+          angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id' ], function(key) {
+            if (angular.isDefined(tAttrs[key])) options[key] = tAttrs[key];
+          });
+          var falseValueRegExp = /^(false|0|)$/i;
+          angular.forEach([ 'html', 'container' ], function(key) {
+            if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+          });
+          attr.bsDropdown && scope.$watch(attr.bsDropdown, function(newValue, oldValue) {
+            scope.content = newValue;
+          }, true);
+          attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
+            if (!dropdown || !angular.isDefined(newValue)) return;
+            if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
+            newValue === true ? dropdown.show() : dropdown.hide();
+          });
+          var dropdown = $dropdown(element, options);
+          scope.$on('$destroy', function() {
+            if (dropdown) dropdown.destroy();
+            options = null;
+            dropdown = null;
+          });
         };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id' ], function(key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
-        });
-        var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'html', 'container' ], function(key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
-        });
-        attr.bsDropdown && scope.$watch(attr.bsDropdown, function(newValue, oldValue) {
-          scope.content = newValue;
-        }, true);
-        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
-          if (!dropdown || !angular.isDefined(newValue)) return;
-          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
-          newValue === true ? dropdown.show() : dropdown.hide();
-        });
-        var dropdown = $dropdown(element, options);
-        scope.$on('$destroy', function() {
-          if (dropdown) dropdown.destroy();
-          options = null;
-          dropdown = null;
-        });
       }
     };
   } ]);
