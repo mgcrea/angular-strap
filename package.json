@@ -46,7 +46,7 @@
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-sauce-launcher": "^0.3.0",
-    "ng-factory": "^1.0",
+    "ng-factory": "^1.1.0",
     "phantomjs": "^1.9.18",
     "through2": "^2.0.0",
     "undertaker-lib-tasks": "^0.5.1"
