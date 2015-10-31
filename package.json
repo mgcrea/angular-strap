@@ -29,10 +29,10 @@
   "devDependencies": {
     "codeclimate-test-reporter": "^0.1.1",
     "del": "^2.0.2",
-    "eslint": "^1.7.3",
+    "eslint": "^1.8.0",
     "eslint-config-airbnb": "^0.1.0",
-    "factory-angular-channels": "^0.8.9",
-    "gulp-jshint": "^1.11.2",
+    "factory-angular-channels": "^0.9.0",
+    "gulp-jshint": "^1.12.0",
     "gulp-ng-annotate": "^1.1.0",
     "gulp-pre": "^4.0.0-alpha.4",
     "gulp-rename": "^1.2.2",
@@ -49,7 +49,7 @@
     "ng-factory": "^1.0",
     "phantomjs": "^1.9.18",
     "through2": "^2.0.0",
-    "undertaker-lib-tasks": "^0.4.3"
+    "undertaker-lib-tasks": "^0.5.1"
   },
   "scripts": {
     "test": "$(npm bin)/gulp jshint karma:unit"
