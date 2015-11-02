@@ -11,7 +11,7 @@ angular.module('mgcrea.ngStrapDocs')
 .controller('DropdownDemoCtrl', function($scope, $alert) {
 
   $scope.dropdown = [
-    {text: '<i class="fa fa-download"></i>&nbsp;Another action', href: '#anotherAction'},
+    {text: '<i class="fa fa-download"></i>&nbsp;Another action', href: '#anotherAction', active: true},
     {text: '<i class="fa fa-globe"></i>&nbsp;Display an alert', click: '$alert("Holy guacamole!")'},
     {text: '<i class="fa fa-external-link"></i>&nbsp;External link', href: '/auth/facebook', target: '_self'},
     {divider: true},

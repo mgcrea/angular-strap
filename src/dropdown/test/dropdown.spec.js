@@ -33,7 +33,7 @@ describe('dropdown', function () {
 
   var templates = {
     'default': {
-      scope: {dropdown: [{text: 'Another action', href: '#foo'}, {text: 'External link', href: '/auth/facebook', target: '_self'}, {text: 'Something else here', click: '$alert(\'working ngClick!\')'}, {divider: true}, {text: 'Separated link', href: '#separatedLink'}]},
+      scope: {dropdown: [{text: 'Another action', href: '#foo'}, {text: 'External link', href: '/auth/facebook', target: '_self'}, {text: 'Something else here', click: '$alert(\'working ngClick!\')'}, {divider: true}, {text: 'Separated link', href: '#separatedLink', active: true}]},
       element: '<a bs-dropdown="dropdown">click me</a>'
     },
     'default-with-id': {
@@ -128,6 +128,7 @@ describe('dropdown', function () {
       expect(sandboxEl.find('.dropdown-menu a:eq(1)').attr('ng-click')).toBeUndefined();
       expect(sandboxEl.find('.dropdown-menu a:eq(2)').attr('href')).toBeDefined();
       expect(sandboxEl.find('.dropdown-menu a:eq(2)').attr('ng-click')).toBe('$eval(item.click);$hide()');
+      expect(sandboxEl.find('.dropdown-menu li:eq(4)').attr('class')).toContain('active');
     });
 
     it('should support ngRepeat markup', function() {
