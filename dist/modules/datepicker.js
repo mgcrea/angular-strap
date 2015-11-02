@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.3 - 2015-09-24
+ * @version v2.3.5 - 2015-10-29
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -40,7 +40,6 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
     iconRight: 'glyphicon glyphicon-chevron-right'
   };
   this.$get = [ '$window', '$document', '$rootScope', '$sce', '$dateFormatter', 'datepickerViews', '$tooltip', '$timeout', function($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
-    var bodyEl = angular.element($window.document.body);
     var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
     var isTouch = 'createTouch' in $window.document && isNative;
     if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
@@ -147,12 +146,13 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         evt.stopPropagation();
         if (evt.keyCode === 13) {
           if (!scope.$mode) {
-            return $datepicker.hide(true);
+            $datepicker.hide(true);
           } else {
-            return scope.$apply(function() {
+            scope.$apply(function() {
               $datepicker.setMode(scope.$mode - 1);
             });
           }
+          return;
         }
         $picker.onKeyDown(evt);
         parentScope.$digest();
@@ -224,12 +224,9 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
       });
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'html', 'container', 'autoclose', 'useNative' ], function(key) {
-        if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
-      });
-      attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
-        if (!datepicker || !angular.isDefined(newValue)) return;
-        if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(datepicker),?/i);
-        newValue === true ? datepicker.show() : datepicker.hide();
+        if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
+          options[key] = false;
+        }
       });
       var datepicker = $datepicker(element, controller, options);
       options = datepicker.$options;
@@ -243,12 +240,20 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         lang: lang,
         strict: options.strictFormat
       });
+      attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
+        if (!datepicker || !angular.isDefined(newValue)) return;
+        if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(datepicker),?/i);
+        newValue === true ? datepicker.show() : datepicker.hide();
+      });
       angular.forEach([ 'minDate', 'maxDate' ], function(key) {
         angular.isDefined(attr[key]) && attr.$observe(key, function(newValue) {
           datepicker.$options[key] = dateParser.getDateForAttribute(key, newValue);
           !isNaN(datepicker.$options[key]) && datepicker.$build(false);
           validateAgainstMinMaxDate(controller.$dateValue);
         });
+      });
+      angular.isDefined(attr.dateFormat) && attr.$observe('dateFormat', function(newValue) {
+        datepicker.$options.dateFormat = newValue;
       });
       scope.$watch(attr.ngModel, function(newValue, oldValue) {
         datepicker.update(controller.$dateValue);

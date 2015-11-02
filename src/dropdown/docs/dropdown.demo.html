@@ -26,6 +26,17 @@
       <small>(using an object)</small>
     </button>
 
+    <!-- Inlined sibling dropdown -->
+    <button type="button" class="btn btn-lg btn-primary" data-animation="am-flip-x" bs-dropdown aria-haspopup="true" aria-expanded="false">Click to toggle dropdown
+      <br />
+      <small>(using inlined sibling template)</small>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="#anotherAction"><i class="fa fa-download"></i>&nbsp;Some action</a></li>
+      <li><a ng-click="$alert('Holy guacamole')"><i class="fa fa-globe"></i>&nbsp;Display an alert</a></li>
+      <li ng-repeat="i in ['Foo', 'Bar', 'Baz']"><a ng-href="#action{{i}}"><i class="fa fa-chevron-right"></i>&nbsp;{{i}}</a></li>
+    </ul>
+
   </div>
 
   <h2 id="dropdowns-usage">Usage</h2>
@@ -111,10 +122,19 @@
         </tr>
         <tr>
           <td>template</td>
+          <td>string</td>
+          <td>''</td>
+          <td>
+            <p>Provide an html template as a string (when templateUrl is falsy).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>templateUrl</td>
           <td>path</td>
-          <td>false</td>
+          <td>'dropdown/dropdown.tpl.html'</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+            <p>It should be a <code>div.dropdown-menu</code> element following Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/dropdown/dropdown.tpl.html" target="_blank">like this</a>).</p>
           </td>
         </tr>
       </tbody>

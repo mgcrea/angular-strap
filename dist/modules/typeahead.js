@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.3 - 2015-09-24
+ * @version v2.3.5 - 2015-10-29
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -182,10 +182,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
             return;
           }
           if (values.length > limit) values = values.slice(0, limit);
-          var isVisible = typeahead.$isVisible();
-          isVisible && typeahead.update(values);
-          if (values.length === 1 && values[0].value === newValue) return;
-          !isVisible && typeahead.update(values);
+          typeahead.update(values);
           controller.$render();
         });
       });

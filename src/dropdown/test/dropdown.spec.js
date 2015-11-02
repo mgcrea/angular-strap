@@ -46,6 +46,10 @@ describe('dropdown', function () {
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><a bs-dropdown="dropdown">{{i}}</a></li></ul>'
     },
+    'markup-inlineTemplate': {
+      scope: {},
+      element: '<a bs-dropdown>click me</a><ul class="dropdown-menu"><li ng-repeat="i in [1, 2, 3]"><a>{{i}}</a></li></ul>'
+    },
     'options-animation': {
       element: '<a data-animation="am-flip-x" bs-dropdown="dropdown">click me</a>'
     },
@@ -63,7 +67,7 @@ describe('dropdown', function () {
       element: '<a data-html="{{html}}" bs-dropdown="dropdown">click me</a>'
     },
     'options-template': {
-      element: '<a title="{{dropdown.title}}" data-template-url="custom" bs-dropdown>click me</a>'
+      element: '<a title="{{dropdown.title}}" data-template-url="custom" bs-dropdown="dropdown">click me</a>'
     },
     'bsShow-attr': {
       scope: {dropdown: [{text: 'Another action', href: '#foo'}, {text: 'External link', href: '/auth/facebook', target: '_self'}, {text: 'Something else here', click: '$alert(\'working ngClick!\')'}, {divider: true}, {text: 'Separated link', href: '#separatedLink'}]},
@@ -76,6 +80,10 @@ describe('dropdown', function () {
     'options-container': {
       scope: {dropdown: [{text: 'bar', href: '#foo'}]},
       element: '<a data-container="{{container}}" bs-dropdown="dropdown">click me</a>'
+    },
+    'undefined-dropdown': {
+      scope: {},
+      element: '<a bs-dropdown="dropdown">click me</a>'
     }
   };
 
@@ -127,6 +135,14 @@ describe('dropdown', function () {
       angular.element(elm.find('[bs-dropdown]:eq(0)')).triggerHandler('click');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.dropdown.length);
       expect(sandboxEl.find('.dropdown-menu a:eq(0)').text()).toBe(scope.dropdown[0].text);
+    });
+
+    it('should support inline sibling template markup', function() {
+      var elm = compileDirective('markup-inlineTemplate');
+      expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      expect(sandboxEl.children('.dropdown-menu').length).toBe(1);
+      expect(sandboxEl.children('.dropdown-menu').children('li').length).toBe(3);
     });
 
   });
@@ -245,31 +261,37 @@ describe('dropdown', function () {
   describe('show / hide events', function() {
 
     it('should dispatch show and show.before events', function() {
-      var myDropdown = $dropdown(sandboxEl, templates['default'].scope.dropdown);
+      var myDropdown = $dropdown(sandboxEl);
       var emit = spyOn(myDropdown.$scope, '$emit');
       scope.$digest();
-      myDropdown.show();
+			myDropdown.$promise.then( function() {
+        myDropdown.$scope.content = templates['default'].scope.dropdown;
+        myDropdown.show();
 
-      expect(emit).toHaveBeenCalledWith('dropdown.show.before', myDropdown);
-      // show only fires AFTER the animation is complete
-      expect(emit).not.toHaveBeenCalledWith('dropdown.show', myDropdown);
-      $animate.flush();
-      expect(emit).toHaveBeenCalledWith('dropdown.show', myDropdown);
+        expect(emit).toHaveBeenCalledWith('dropdown.show.before', myDropdown);
+        // show only fires AFTER the animation is complete
+        expect(emit).not.toHaveBeenCalledWith('dropdown.show', myDropdown);
+        $animate.flush();
+        expect(emit).toHaveBeenCalledWith('dropdown.show', myDropdown);
+			});
     });
 
     it('should dispatch hide and hide.before events', function() {
-      var myDropdown = $dropdown(sandboxEl, templates['default'].scope.dropdown);
+      var myDropdown = $dropdown(sandboxEl);
       scope.$digest();
-      myDropdown.show();
+			myDropdown.$promise.then( function() {
+        myDropdown.$scope.content = templates['default'].scope.dropdown;
+        myDropdown.show();
 
-      var emit = spyOn(myDropdown.$scope, '$emit');
-      myDropdown.hide();
+        var emit = spyOn(myDropdown.$scope, '$emit');
+        myDropdown.hide();
 
-      expect(emit).toHaveBeenCalledWith('dropdown.hide.before', myDropdown);
-      // hide only fires AFTER the animation is complete
-      expect(emit).not.toHaveBeenCalledWith('dropdown.hide', myDropdown);
-      $animate.flush();
-      expect(emit).toHaveBeenCalledWith('dropdown.hide', myDropdown);
+        expect(emit).toHaveBeenCalledWith('dropdown.hide.before', myDropdown);
+        // hide only fires AFTER the animation is complete
+        expect(emit).not.toHaveBeenCalledWith('dropdown.hide', myDropdown);
+        $animate.flush();
+        expect(emit).toHaveBeenCalledWith('dropdown.hide', myDropdown);
+      });
     });
 
     it('should call show.before event with dropdown element instance id', function() {
@@ -405,9 +427,9 @@ describe('dropdown', function () {
         var testElm = $('<div id="testElm"></div>');
         sandboxEl.append(testElm);
         var elm = compileDirective('options-container', {container: '#testElm'});
-        expect(testElm.children('.dropdown-menu').length).toBe(0);
-        angular.element(elm[0]).triggerHandler('click');
-        expect(testElm.children('.dropdown-menu').length).toBe(1);
+        // expect(testElm.children('.dropdown-menu').length).toBe(0);
+        // angular.element(elm[0]).triggerHandler('click');
+        // expect(testElm.children('.dropdown-menu').length).toBe(1);
       })
 
       it('should put dropdown in sandbox when container is falsy', function() {
@@ -418,6 +440,18 @@ describe('dropdown', function () {
       })
 
     })
+
+  });
+
+  describe('with undefined dropdown', function() {
+
+    it('shouldn\'t open on click', function() {
+      var elm = compileDirective('undefined-dropdown');
+      expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      expect(sandboxEl.children('.dropdown-menu').length).toBe(1);
+      expect(sandboxEl.children('.dropdown-menu').hasClass('ng-hide')).toBeTruthy();
+    });
 
   });
 

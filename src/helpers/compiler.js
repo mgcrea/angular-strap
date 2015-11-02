@@ -99,10 +99,12 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
     // eg locals: { three: 3 }, will inject three into the controller
     angular.extend(resolve, locals);
 
-    if (templateUrl) {
+    if (template) {
+      resolve.$template = $q.when(template);
+    } else if (templateUrl) {
       resolve.$template = fetchTemplate(templateUrl);
     } else {
-      resolve.$template = $q.when(template);
+      throw new Error('Missing `template` / `templateUrl` option.');
     }
 
     if (options.contentTemplate) {

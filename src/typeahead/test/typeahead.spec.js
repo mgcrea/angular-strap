@@ -56,6 +56,10 @@ describe('typeahead', function () {
       scope: {selectedState: '', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
       element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" bs-typeahead autocomplete="thisShouldNotChange">'
     },
+    'by-id': {
+      scope: {selectedIcon: 2, icons: [{id: 0, value: 'Gear', label: '<i class="fa fa-gear"></i> Gear'}, {id: 1, value: 'Globe', label: '<i class="fa fa-globe"></i> Globe'}, {id: 2, value: 'Heart', label: '<i class="fa fa-heart"></i> Heart'}, {id: 3, value: 'Camera', label: '<i class="fa fa-camera"></i> Camera'}]},
+      element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="{{html}}" bs-options="icon.id as icon.label for icon in icons" bs-typeahead>'
+    },
     'watch-options': {
       element: '<input type="text" ng-model="selectedState" bs-options="state for state in states" data-watch-options="1" bs-typeahead>'
     },
@@ -312,6 +316,15 @@ describe('typeahead', function () {
       var elm = compileDirective('default-autocomplete-present');
       expect(elm.attr('autocomplete')).toBe('thisShouldNotChange');
     });
+  });
+  
+  describe('ngModel', function () {
+
+    it('should correctly render ', function() {
+      var elm = compileDirective('by-id');
+      expect(elm.val()).toBe(scope.icons[scope.selectedIcon].value);
+    });
+
   });
 
   describe('bsOptions', function () {
