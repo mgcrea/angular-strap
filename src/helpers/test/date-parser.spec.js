@@ -4,8 +4,6 @@ describe('dateParser', function () {
 
   var $compile, scope, $dateParser, parser, $locale;
 
-  var lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non velit nulla. Suspendisse sit amet tempus diam. Sed at ultricies neque. Suspendisse id felis a sem placerat ornare. Donec auctor, purus at molestie tempor, arcu enim molestie lacus, ac imperdiet massa urna eu massa. Praesent velit tellus, scelerisque a fermentum ut, ornare in diam. Phasellus egestas molestie feugiat. Vivamus sit amet viverra metus.';
-
   beforeEach(module('mgcrea.ngStrap.helpers.dateParser'));
 
   beforeEach(inject(function (_$rootScope_, _$compile_, _$dateParser_, _$locale_) {
@@ -388,6 +386,25 @@ describe('dateParser', function () {
         {val:'FEBRUARY', expect:new Date(1970,1,1), reason:'upper case month name'},
         {val:'february', expect:new Date(1970,1,1), reason:'lower case month name'},
         {val:'Fabulous', expect:false, reason:'invalid month name'},
+      ]);
+    });
+
+    describe('fullDate format "EEEE, d MMMM y"', function() {
+      beforeEach(function() {
+        parser = $dateParser({ format: "EEEE, d MMMM y" });
+      });
+      generateTestCasesForParsing([
+        {val:'Wednesday, 01 January 2014', expect: new Date(2014,0,1), reason:'full date'}
+      ]);
+    });
+
+    describe('fullDate format "EEEE, d \'de\' MMMM \'de\' y" with literals', function() {
+      beforeEach(function() {
+        parser = $dateParser({ format: "EEEE, d 'de' MMMM 'de' y" });
+      });
+      generateTestCasesForParsing([
+        {val:'Wednesday, 01 de January de 2014', expect: new Date(2014,0,1), reason:'full date with literals'},
+        {val:'Wednesday, 01 January 2014', expect: false, reason:'full date does not include literals'}
       ]);
     });
 
