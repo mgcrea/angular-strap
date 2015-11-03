@@ -423,5 +423,19 @@ describe('dateParser', function() {
       ]);
     });
 
+    describe('format with reserved symbols', function() {
+      beforeEach(function() {
+        parser = $dateParser({format: 'EEEE.d.y'});
+      });
+
+      it('should validate date with reserved symbols', function() {
+        expect(parser.isValid('Wednesday.01/2014')).toBe(true);
+      });
+
+      generateTestCasesForParsing([
+        {val: 'Wednesday.01/2014', expect: new Date(2014, 0, 1, 0, 0, 0), reason: 'format string with escaped literal'}
+      ]);
+    });
+
   });
 });

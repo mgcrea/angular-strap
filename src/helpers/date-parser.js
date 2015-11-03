@@ -278,13 +278,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         for(var i = 0; i < dateElements.length; i++) {
           re = re.split('${' + i + '}').join('(' + regExpMap[dateElements[i]] + ')');
         }
-        re = escapeReservedSymbols(re);
 
         return new RegExp('^' + re + '$', ['i']);
-      }
-
-      function escapeReservedSymbols(text) {
-        return text.replace(/\//g, '[\\/]').replace('/-/g', '[-]').replace(/\./g, '[.]').replace(/\\s/g, '[\\s]');
       }
 
       function setMapForFormat(format) {
