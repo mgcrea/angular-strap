@@ -228,29 +228,6 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
 
       // Private functions
 
-      function setMapForFormat(format) {
-        var keys = Object.keys(setFnMap), i;
-        var map = [], sortedMap = [];
-        // Map to setFn
-        var clonedFormat = format;
-        for(i = 0; i < keys.length; i++) {
-          if(format.split(keys[i]).length > 1) {
-            var index = clonedFormat.search(keys[i]);
-            format = format.split(keys[i]).join('');
-            if(setFnMap[keys[i]]) {
-              map[index] = setFnMap[keys[i]];
-            }
-          }
-        }
-        // Sort result map
-        angular.forEach(map, function(v) {
-          // conditional required since angular.forEach broke around v1.2.21
-          // related pr: https://github.com/angular/angular.js/pull/8525
-          if(v) sortedMap.push(v);
-        });
-        return sortedMap;
-      }
-
       function regExpForFormat(format) {
         // `format` string can contain literal values.
         // These need to be escaped by surrounding with
@@ -263,14 +240,15 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
       }
 
       function buildDateAbstractRegex(format) {
-        var literalRegex = /('.*?')/;
-        var formatParts = format.split(literalRegex);
+        var escapedLiteralFormat = format.replace(/''/g, '\\\'');
+        var literalRegex = /('(?:\\'|.)*?')/;
+        var formatParts = escapedLiteralFormat.split(literalRegex);
         var dateElements = Object.keys(regExpMap);
         var dateRegexParts = [];
 
         angular.forEach(formatParts, function (part) {
           if (isFormatStringLiteral(part)) {
-            part = removeLiteralEscapeChars(part);
+            part = trimLiteralEscapeChars(part);
           }
           else {
             // Abstract replaces to avoid collisions
@@ -285,11 +263,11 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
       }
 
       function isFormatStringLiteral(text) {
-        return text.indexOf('\'') == 0;
+        return /^'.*'$/.test(text);
       }
 
-      function removeLiteralEscapeChars(text) {
-        return text.replace(/'/g, '');
+      function trimLiteralEscapeChars(text) {
+        return text.replace(/^'(.*)'$/, '$1');
       }
 
       function buildDateParseRegex(abstractRegex) {
@@ -307,6 +285,28 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
 
       function escapeReservedSymbols(text) {
         return text.replace(/\//g, '[\\/]').replace('/-/g', '[-]').replace(/\./g, '[.]').replace(/\\s/g, '[\\s]');
+      }
+
+      function setMapForFormat(format) {
+        var re = buildDateAbstractRegex(format);
+        return buildDateParseValuesMap(re);
+      }
+
+      function buildDateParseValuesMap(abstractRegex) {
+        var dateElements = Object.keys(regExpMap);
+        var valuesRegex = new RegExp('\\${(\\d+)}', 'g');
+        var valuesMatch, keyIndex, valueKey, valueFunction;
+        var valuesFunctionMap = [];
+
+        while((valuesMatch = valuesRegex.exec(abstractRegex)) !== null) {
+          keyIndex = valuesMatch[1];
+          valueKey = dateElements[keyIndex];
+          valueFunction = setFnMap[valueKey];
+
+          valuesFunctionMap.push(valueFunction);
+        }
+
+        return valuesFunctionMap;
       }
 
       $dateParser.init();

@@ -408,5 +408,19 @@ describe('dateParser', function () {
       ]);
     });
 
+    describe('format with escaped literals', function() {
+      beforeEach(function() {
+        parser = $dateParser({ format: "'It''s' H 'o''clock'" });
+      });
+
+      it('should validate date with escaped literals', function() {
+        expect(parser.isValid('It\'s 3 o\'clock')).toBe(true);
+      });
+
+      generateTestCasesForParsing([
+        {val:'It\'s 3 o\'clock', expect: new Date(1970,0,1,3,0,0), reason:'format string with escaped literal'}
+      ]);
+    });
+
   });
 });
