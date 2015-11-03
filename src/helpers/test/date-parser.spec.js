@@ -425,7 +425,7 @@ describe('dateParser', function() {
 
     describe('format with reserved symbols', function() {
       beforeEach(function() {
-        parser = $dateParser({format: 'EEEE.d.y'});
+        parser = $dateParser({format: 'EEEE.d/y'});
       });
 
       it('should validate date with reserved symbols', function() {
