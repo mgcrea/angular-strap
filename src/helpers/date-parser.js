@@ -240,7 +240,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
       }
 
       function buildDateAbstractRegex(format) {
-        var escapedLiteralFormat = format.replace(/''/g, '\\\'');
+        var escapedFormat = escapeReservedSymbols(format);
+        var escapedLiteralFormat = escapedFormat.replace(/''/g, '\\\'');
         var literalRegex = /('(?:\\'|.)*?')/;
         var formatParts = escapedLiteralFormat.split(literalRegex);
         var dateElements = Object.keys(regExpMap);
@@ -260,6 +261,19 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         });
 
         return dateRegexParts.join('');
+      }
+
+      function escapeReservedSymbols(text) {
+        return text.replace(/\\/g, '[\\\\]')
+                   .replace(/-/g, '[-]')
+                   .replace(/\./g, '[.]')
+                   .replace(/\*/g, '[*]')
+                   .replace(/\+/g, '[+]')
+                   .replace(/\?/g, '[?]')
+                   .replace(/\$/g, '[$]')
+                   .replace(/\^/g, '[^]')
+                   .replace(/\//g, '[/]')
+                   .replace(/\\s/g, '[\\s]');
       }
 
       function isFormatStringLiteral(text) {

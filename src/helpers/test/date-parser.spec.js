@@ -432,6 +432,13 @@ describe('dateParser', function() {
         expect(parser.isValid('Wednesday.01/2014')).toBe(true);
       });
 
+      it('should ignore literal contents', function() {
+        parser = $dateParser({format: '\'.+*?\\$^\' EEEE.d/y'});
+        var testString = '.+*?\\$^ Wednesday.01/2014';
+        expect(parser.isValid(testString)).toBe(true);
+        expect(parser.parse(testString)).toEqual(new Date(2014, 0, 1, 0, 0, 0));
+      });
+
       generateTestCasesForParsing([
         {val: 'Wednesday.01/2014', expect: new Date(2014, 0, 1, 0, 0, 0), reason: 'format string with escaped literal'}
       ]);
