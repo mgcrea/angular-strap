@@ -1,7 +1,7 @@
-/* global countScopes */
 'use strict';
+/* global describe, beforeEach, inject, it, expect, afterEach, spyOn, countScopes */
 
-describe('dropdown', function () {
+describe('dropdown', function() {
 
   var $compile, $templateCache, scope, sandboxEl, $animate, $timeout, $dropdown;
 
@@ -9,8 +9,9 @@ describe('dropdown', function () {
   beforeEach(module('ngAnimateMock'));
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.dropdown'));
+  beforeEach(module('mgcrea.ngStrap.modal'));
 
-  beforeEach(inject(function ($injector, _$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timeout_, _$dropdown_) {
+  beforeEach(inject(function($injector, _$rootScope_, _$compile_, _$templateCache_, _$animate_, _$timeout_, _$dropdown_) {
     scope = _$rootScope_.$new();
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
@@ -19,7 +20,7 @@ describe('dropdown', function () {
     $timeout = $injector.get('$timeout');
     var flush = $animate.flush || $animate.triggerCallbacks;
     $animate.flush = function() {
-      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+      flush.call($animate); if (!$animate.triggerCallbacks) $timeout.flush();
     };
     $dropdown = _$dropdown_;
   }));
@@ -49,6 +50,9 @@ describe('dropdown', function () {
     'markup-inlineTemplate': {
       scope: {},
       element: '<a bs-dropdown>click me</a><ul class="dropdown-menu"><li ng-repeat="i in [1, 2, 3]"><a>{{i}}</a></li></ul>'
+    },
+    'markup-insideModal': {
+      element: '<a data-template-url="custom" bs-modal>click me</a>'
     },
     'options-animation': {
       element: '<a data-animation="am-flip-x" bs-dropdown="dropdown">click me</a>'
@@ -89,7 +93,7 @@ describe('dropdown', function () {
 
   function compileDirective(template, locals) {
     template = templates[template];
-    angular.extend(scope, template.scope || templates['default'].scope, locals);
+    angular.extend(scope, template.scope || templates.default.scope, locals);
     var element = $(template.element).appendTo(sandboxEl);
     element = $compile(element)(scope);
     scope.$digest();
@@ -98,7 +102,7 @@ describe('dropdown', function () {
 
   // Tests
 
-  describe('with default template', function () {
+  describe('with default template', function() {
 
     it('should open on click', function() {
       var elm = compileDirective('default');
@@ -144,6 +148,14 @@ describe('dropdown', function () {
       angular.element(elm[0]).triggerHandler('click');
       expect(sandboxEl.children('.dropdown-menu').length).toBe(1);
       expect(sandboxEl.children('.dropdown-menu').children('li').length).toBe(3);
+    });
+
+    it('should support being embedded in a modal', function() {
+      $templateCache.put('custom', '<a bs-dropdown="dropdown">click me</a>');
+      var elm = compileDirective('markup-insideModal');
+      angular.element(elm[0]).triggerHandler('click');
+      angular.element(elm[0]).triggerHandler('click');
+      angular.element(elm[0]).triggerHandler('click');
     });
 
   });
@@ -265,8 +277,9 @@ describe('dropdown', function () {
       var myDropdown = $dropdown(sandboxEl);
       var emit = spyOn(myDropdown.$scope, '$emit');
       scope.$digest();
-			myDropdown.$promise.then( function() {
-        myDropdown.$scope.content = templates['default'].scope.dropdown;
+      myDropdown.$promise
+      .then(function() {
+        myDropdown.$scope.content = templates.default.scope.dropdown;
         myDropdown.show();
 
         expect(emit).toHaveBeenCalledWith('dropdown.show.before', myDropdown);
@@ -274,14 +287,14 @@ describe('dropdown', function () {
         expect(emit).not.toHaveBeenCalledWith('dropdown.show', myDropdown);
         $animate.flush();
         expect(emit).toHaveBeenCalledWith('dropdown.show', myDropdown);
-			});
+      });
     });
 
     it('should dispatch hide and hide.before events', function() {
       var myDropdown = $dropdown(sandboxEl);
       scope.$digest();
-			myDropdown.$promise.then( function() {
-        myDropdown.$scope.content = templates['default'].scope.dropdown;
+      myDropdown.$promise.then( function() {
+        myDropdown.$scope.content = templates.default.scope.dropdown;
         myDropdown.show();
 
         var emit = spyOn(myDropdown.$scope, '$emit');
@@ -309,9 +322,9 @@ describe('dropdown', function () {
 
   });
 
-  describe('options', function () {
+  describe('options', function() {
 
-    describe('animation', function () {
+    describe('animation', function() {
 
       it('should default to `am-fade` animation', function() {
         var elm = compileDirective('default');
@@ -327,9 +340,9 @@ describe('dropdown', function () {
 
     });
 
-    describe('placement', function () {
+    describe('placement', function() {
       var $$rAF;
-      beforeEach(inject(function (_$$rAF_) {
+      beforeEach(inject(function(_$$rAF_) {
         $$rAF = _$$rAF_;
       }));
 
@@ -356,7 +369,7 @@ describe('dropdown', function () {
 
     });
 
-    describe('trigger', function () {
+    describe('trigger', function() {
 
       it('should support an alternative trigger', function() {
         var elm = compileDirective('options-trigger');
@@ -369,7 +382,7 @@ describe('dropdown', function () {
 
     });
 
-    describe('html', function () {
+    describe('html', function() {
 
       it('should correctly compile inner content when html is true', function() {
         var elm = compileDirective('options-html', {html: 'true'});
@@ -387,7 +400,7 @@ describe('dropdown', function () {
 
     });
 
-    describe('template', function () {
+    describe('template', function() {
 
       it('should support custom template', function() {
         $templateCache.put('custom', '<div class="dropdown"><div class="dropdown-inner">foo: {{dropdown.length}}</div></div>');
