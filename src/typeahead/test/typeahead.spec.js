@@ -117,6 +117,10 @@ describe('typeahead', function () {
     'options-trimValue': {
       scope: {selectedState: '', states: [' Alabama ', ' Alaska', 'Arizona ']},
       element: '<input type="text" ng-model="selectedState" data-trim-value="{{trimValue}}" bs-options="state for state in states" bs-typeahead>'
+    },
+    'options-selectOnTab': {
+      scope: {selectedState: '', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']},
+      element: '<input type="text" ng-model="selectedState" select-on-tab="true" bs-options="state for state in states" bs-typeahead>'
     }
   };
 
@@ -646,6 +650,20 @@ describe('typeahead', function () {
     });
 
   });
+  
+  describe('selectOnTab', function(){
+    it('should select an element on tab key press', function() {
+      var elm = compileDirective('options-selectOnTab');
+      
+      var selected = null;
+      scope.$on('$typeahead.select', function(evt, value, index, typeahead) {
+        selected = index;
+      });
+      angular.element(elm[0]).triggerHandler('focus');
+      triggerKeyDown(elm, 40);
+      triggerKeyDown(elm, 9);
 
+      expect(selected).toBe(1);
+  });
 
 });
