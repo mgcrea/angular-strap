@@ -664,6 +664,7 @@ describe('typeahead', function () {
       triggerKeyDown(elm, 9);
 
       expect(selected).toBe(1);
+    });
   });
 
 });
