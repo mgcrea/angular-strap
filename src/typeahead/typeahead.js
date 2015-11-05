@@ -20,7 +20,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       limit: 6,
       autoSelect: false,
       comparator: '',
-      trimValue: true
+      trimValue: true,
+      selectOnTab: false
     };
 
     this.$get = function($window, $rootScope, $tooltip, $$rAF, $timeout) {
@@ -118,7 +119,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.$onKeyDown = function(evt) {
-          if (!/(38|40|13)/.test(evt.keyCode)) return;
+          if (!/(38|40|13|9)/.test(evt.keyCode)) return;
 
           // Let ngSubmit pass if the typeahead tip is hidden or no option is selected
           if ($typeahead.$isVisible() && !(evt.keyCode === 13 && scope.$activeIndex === -1)) {
@@ -127,7 +128,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           }
 
           // Select with enter
-          if (evt.keyCode === 13 && scope.$matches.length) {
+          if ((evt.keyCode === 13 || (evt.keyCode === 9 && options.selectOnTab)) && scope.$matches.length) {
             $typeahead.select(scope.$activeIndex);
           }
 
@@ -206,7 +207,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var options = {
           scope: scope
         };
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass', 'selectOnTab'], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
