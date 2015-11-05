@@ -28,6 +28,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
 
+      var modalCount = 0;
+      var baseZindexValue = 1037;
+
       function ModalFactory(config) {
 
         var $modal = {};
@@ -131,6 +134,13 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           // Fetch a cloned element linked from template (noop callback is required)
           modalElement = $modal.$element = compileData.link(modalScope, function(clonedElement, scope) {});
 
+          // increment number of modals
+          modalCount++;
+
+          // set z-index
+          modalElement.css({'z-index': baseZindexValue + modalCount});
+          backdropElement.css({'z-index': baseZindexValue + modalCount});
+
           if(scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
             return;
           }
@@ -183,6 +193,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         $modal.hide = function() {
           if(!$modal.$isShown) return;
+
+          // decrement number of modals
+          modalCount--;
 
           if(scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
             return;
