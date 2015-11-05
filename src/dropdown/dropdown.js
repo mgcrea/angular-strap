@@ -109,9 +109,6 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
       scope: true,
       compile: function(tElement, tAttrs) {
 
-        // Directive options
-        var options = {};
-
         // Support for inlined template (next sibling)
         // It must be fetched before compilation
         if (!tAttrs.bsDropdown) {
@@ -120,8 +117,8 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
             nextSibling = nextSibling.nextSibling;
           }
           if (nextSibling.classList.contains('dropdown-menu')) {
-            options.template = nextSibling.outerHTML;
-            options.templateUrl = undefined;
+            tAttrs.template = nextSibling.outerHTML;
+            tAttrs.templateUrl = undefined;
             nextSibling.parentNode.removeChild(nextSibling);
           }
         }
@@ -129,7 +126,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         return function postLink(scope, element, attr) {
 
           // Directive options
-          options.scope = scope;
+          var options = {scope: scope};
           angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id'], function(key) {
             if (angular.isDefined(tAttrs[key])) options[key] = tAttrs[key];
           });
