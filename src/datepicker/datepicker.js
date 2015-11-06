@@ -360,6 +360,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         if (angular.isDefined(attr.dateFormat)) {
           attr.$observe('dateFormat', function (newValue) {
             datepicker.$options.dateFormat = newValue;
+          controller.$render();
           });
         }
 

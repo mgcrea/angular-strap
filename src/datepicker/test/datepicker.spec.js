@@ -116,6 +116,10 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="mediumDate" bs-datepicker>'
     },
+    'options-interpolated-dateFormat': {
+      scope: {dateFormat: 'yyyy-MM-dd', selectedDate: '2014-12-01' },
+      element: '<input type="text" ng-model="selectedDate" data-date-format="{{dateFormat}}" bs-datepicker>'
+    },
     'options-minDate': {
       scope: {selectedDate: new Date(1986, 1, 22), minDate: '02/20/86'},
       element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
@@ -986,6 +990,13 @@ describe('datepicker', function() {
         expect(elm.val()).toBe('Feb 24, 1986');
       });
 
+      it('should refresh view value when it change', function() {
+        var elm = compileDirective('options-interpolated-dateFormat');
+        expect(elm.val()).toBe('2014-12-01');
+        scope.dateFormat = 'dd/MM/yyyy';
+        scope.$apply();
+        expect(elm.val()).toBe('01/12/2014');
+      });
     });
 
     describe('timezone', function () {
