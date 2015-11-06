@@ -197,8 +197,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         $modal.hide = function() {
           if(!$modal.$isShown) return;
 
-          // decrement number of modals
-          backdropCount--;
+          if(options.backdrop) {
+              // decrement number of modals
+              backdropCount--;
+          }
 
           if(scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
             return;
