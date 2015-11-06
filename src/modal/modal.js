@@ -28,8 +28,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
 
-      var modalCount = 0;
-      var baseZindexValue = 1037;
+      var backdropCount = 0;
+      var dialogBaseZindex = 1050;
+      var backdropBaseZindex = 1040;
 
       function ModalFactory(config) {
 
@@ -76,7 +77,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         // Fetch, compile then initialize modal
         var compileData, modalElement, modalScope;
         var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
-        backdropElement.css({position:'fixed', top:'0px', left:'0px', bottom:'0px', right:'0px', 'z-index': 1038});
+        backdropElement.css({position:'fixed', top:'0px', left:'0px', bottom:'0px', right:'0px'});
         promise.then(function(data) {
           compileData = data;
           $modal.init();
@@ -134,12 +135,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           // Fetch a cloned element linked from template (noop callback is required)
           modalElement = $modal.$element = compileData.link(modalScope, function(clonedElement, scope) {});
 
-          // increment number of modals
-          modalCount++;
+          if(options.backdrop) {
+              // set z-index
+              modalElement.css({'z-index': dialogBaseZindex + (backdropCount * 20)});
+              backdropElement.css({'z-index': backdropBaseZindex + (backdropCount * 20)});
 
-          // set z-index
-          modalElement.css({'z-index': baseZindexValue + modalCount});
-          backdropElement.css({'z-index': baseZindexValue + modalCount});
+              // increment number of backdrops
+              backdropCount++;
+          }
 
           if(scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
             return;
@@ -195,7 +198,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           if(!$modal.$isShown) return;
 
           // decrement number of modals
-          modalCount--;
+          backdropCount--;
 
           if(scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
             return;
