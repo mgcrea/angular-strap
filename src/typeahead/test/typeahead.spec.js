@@ -660,8 +660,8 @@ describe('typeahead', function () {
         selected = index;
       });
       angular.element(elm[0]).triggerHandler('focus');
-      triggerKeyDown(elm, 40);
-      triggerKeyDown(elm, 9);
+      triggerKeyDown(elm[0], 40);
+      triggerKeyDown(elm[0], 9);
 
       expect(selected).toBe(1);
     });
