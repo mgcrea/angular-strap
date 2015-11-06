@@ -671,6 +671,28 @@ describe('modal', function() {
         expect(bodyEl.find('.modal-backdrop').length).toBe(0);
       });
 
+      it('should show backdrop above a previous modal dialog using the z-index value', function() {
+        var elm1 = compileDirective('default');
+        var elm2 = compileDirective('default');
+
+        expect(bodyEl.find('.modal-backdrop').length).toBe(0);
+
+        angular.element(elm1[0]).triggerHandler('click');
+        expect(bodyEl.find('.modal-backdrop').length).toBe(1);
+        var backdrop1 = bodyEl.find('.modal-backdrop')[0];
+        var modal1 = bodyEl.find('.modal')[0];
+
+        angular.element(elm2[0]).triggerHandler('click');
+        expect(bodyEl.find('.modal-backdrop').length).toBe(2);
+        var backdrop2 = bodyEl.find('.modal-backdrop')[0];
+        var modal2 = bodyEl.find('.modal')[1];
+
+        expect(angular.element(backdrop1).css('z-index')).toBe('1040');
+        expect(angular.element(modal1).css('z-index')).toBe('1050');
+        expect(angular.element(backdrop2).css('z-index')).toBe('1060');
+        expect(angular.element(modal2).css('z-index')).toBe('1070');
+      });
+
     });
 
 
