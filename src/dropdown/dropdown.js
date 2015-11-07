@@ -156,10 +156,23 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           // Garbage collection
           scope.$on('$destroy', function() {
             if (dropdown) dropdown.destroy();
-            options = null;
             dropdown = null;
           });
 
+          //Garbage collection of options
+          if (!options.compileDestroy) {
+            options.compileDestroy = function(compileScope) {
+              while (scope.$parent) {
+                scope = scope.$parent;
+                if ('$index' in scope) {
+                  compileScope = scope.$parent;
+                }
+              }
+              return compileScope;
+            }(scope).$on('$destroy', function() {
+              options = null;
+            });
+          }
         };
       }
     };
