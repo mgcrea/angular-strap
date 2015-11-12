@@ -205,6 +205,10 @@ describe('datepicker', function() {
     'options-container': {
       scope: {selectedDate: new Date()},
       element: '<input type="text" data-container="{{container}}" ng-model="selectedDate" bs-datepicker>'
+    },
+    'options-updateOn-blur': {
+      scope: {selectedDate: new Date()},
+      element: '<input type="text" ng-model="selectedDate" ng-model-options="{updateOn: \'blur\'}" bs-datepicker>'
     }
   };
 
@@ -1485,5 +1489,17 @@ describe('datepicker', function() {
       expect(hide).toBe(true);
     });
 
+  });
+
+  describe('updateOn Blur', function () {
+    it('should update ngModel on blur', function () {
+      var elm = compileDirective('options-updateOn-blur', { selectedDate: new Date(2014, 1, 10)});
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('11/30/14');
+      angular.element(elm[0]).triggerHandler('blur');
+      scope.$digest();
+      expect(scope.selectedDate).toEqual(new Date(2014, 10, 30));
+      expect(angular.element(elm[0]).hasClass('ng-valid')).toBeTruthy();
+    });
   });
 });
