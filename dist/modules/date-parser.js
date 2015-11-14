@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.5 - 2015-10-29
+ * @version v2.3.6 - 2015-11-14
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -212,38 +212,62 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
         }
         return date;
       };
-      function setMapForFormat(format) {
-        var keys = Object.keys(setFnMap), i;
-        var map = [], sortedMap = [];
-        var clonedFormat = format;
-        for (i = 0; i < keys.length; i++) {
-          if (format.split(keys[i]).length > 1) {
-            var index = clonedFormat.search(keys[i]);
-            format = format.split(keys[i]).join('');
-            if (setFnMap[keys[i]]) {
-              map[index] = setFnMap[keys[i]];
+      function regExpForFormat(format) {
+        var re = buildDateAbstractRegex(format);
+        return buildDateParseRegex(re);
+      }
+      function buildDateAbstractRegex(format) {
+        var escapedFormat = escapeReservedSymbols(format);
+        var escapedLiteralFormat = escapedFormat.replace(/''/g, '\\\'');
+        var literalRegex = /('(?:\\'|.)*?')/;
+        var formatParts = escapedLiteralFormat.split(literalRegex);
+        var dateElements = Object.keys(regExpMap);
+        var dateRegexParts = [];
+        angular.forEach(formatParts, function(part) {
+          if (isFormatStringLiteral(part)) {
+            part = trimLiteralEscapeChars(part);
+          } else {
+            for (var i = 0; i < dateElements.length; i++) {
+              part = part.split(dateElements[i]).join('${' + i + '}');
             }
           }
-        }
-        angular.forEach(map, function(v) {
-          if (v) sortedMap.push(v);
+          dateRegexParts.push(part);
         });
-        return sortedMap;
+        return dateRegexParts.join('');
       }
       function escapeReservedSymbols(text) {
-        return text.replace(/\//g, '[\\/]').replace('/-/g', '[-]').replace(/\./g, '[.]').replace(/\\s/g, '[\\s]');
+        return text.replace(/\\/g, '[\\\\]').replace(/-/g, '[-]').replace(/\./g, '[.]').replace(/\*/g, '[*]').replace(/\+/g, '[+]').replace(/\?/g, '[?]').replace(/\$/g, '[$]').replace(/\^/g, '[^]').replace(/\//g, '[/]').replace(/\\s/g, '[\\s]');
       }
-      function regExpForFormat(format) {
-        var keys = Object.keys(regExpMap), i;
-        var re = format;
-        for (i = 0; i < keys.length; i++) {
-          re = re.split(keys[i]).join('${' + i + '}');
+      function isFormatStringLiteral(text) {
+        return /^'.*'$/.test(text);
+      }
+      function trimLiteralEscapeChars(text) {
+        return text.replace(/^'(.*)'$/, '$1');
+      }
+      function buildDateParseRegex(abstractRegex) {
+        var dateElements = Object.keys(regExpMap);
+        var re = abstractRegex;
+        for (var i = 0; i < dateElements.length; i++) {
+          re = re.split('${' + i + '}').join('(' + regExpMap[dateElements[i]] + ')');
         }
-        for (i = 0; i < keys.length; i++) {
-          re = re.split('${' + i + '}').join('(' + regExpMap[keys[i]] + ')');
-        }
-        format = escapeReservedSymbols(format);
         return new RegExp('^' + re + '$', [ 'i' ]);
+      }
+      function setMapForFormat(format) {
+        var re = buildDateAbstractRegex(format);
+        return buildDateParseValuesMap(re);
+      }
+      function buildDateParseValuesMap(abstractRegex) {
+        var dateElements = Object.keys(regExpMap);
+        var valuesRegex = new RegExp('\\${(\\d+)}', 'g');
+        var valuesMatch, keyIndex, valueKey, valueFunction;
+        var valuesFunctionMap = [];
+        while ((valuesMatch = valuesRegex.exec(abstractRegex)) !== null) {
+          keyIndex = valuesMatch[1];
+          valueKey = dateElements[keyIndex];
+          valueFunction = setFnMap[valueKey];
+          valuesFunctionMap.push(valueFunction);
+        }
+        return valuesFunctionMap;
       }
       $dateParser.init();
       return $dateParser;

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.5 - 2015-10-29
+ * @version v2.3.6 - 2015-11-14
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -77,21 +77,22 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
     restrict: 'EAC',
     scope: true,
     compile: function(tElement, tAttrs) {
-      var options = {};
       if (!tAttrs.bsDropdown) {
         var nextSibling = tElement[0].nextSibling;
         while (nextSibling && nextSibling.nodeType !== 1) {
           nextSibling = nextSibling.nextSibling;
         }
         if (nextSibling.classList.contains('dropdown-menu')) {
-          options.template = nextSibling.outerHTML;
-          options.templateUrl = undefined;
+          tAttrs.template = nextSibling.outerHTML;
+          tAttrs.templateUrl = undefined;
           nextSibling.parentNode.removeChild(nextSibling);
         }
       }
       return function postLink(scope, element, attr) {
-        options.scope = scope;
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id' ], function(key) {
+        var options = {
+          scope: scope
+        };
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id', 'autoClose' ], function(key) {
           if (angular.isDefined(tAttrs[key])) options[key] = tAttrs[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;

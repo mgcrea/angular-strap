@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.5 - 2015-10-29
+ * @version v2.3.6 - 2015-11-14
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -29,6 +29,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
     var trim = String.prototype.trim;
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
     var bodyElement = angular.element($window.document.body);
+    var backdropCount = 0;
+    var dialogBaseZindex = 1050;
+    var backdropBaseZindex = 1040;
     function ModalFactory(config) {
       var $modal = {};
       var options = $modal.$options = angular.extend({}, defaults, config);
@@ -64,8 +67,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         top: '0px',
         left: '0px',
         bottom: '0px',
-        right: '0px',
-        'z-index': 1038
+        right: '0px'
       });
       promise.then(function(data) {
         compileData = data;
@@ -104,6 +106,15 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         if (modalElement) destroyModalElement();
         modalScope = $modal.$scope.$new();
         modalElement = $modal.$element = compileData.link(modalScope, function(clonedElement, scope) {});
+        if (options.backdrop) {
+          modalElement.css({
+            'z-index': dialogBaseZindex + backdropCount * 20
+          });
+          backdropElement.css({
+            'z-index': backdropBaseZindex + backdropCount * 20
+          });
+          backdropCount++;
+        }
         if (scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
           return;
         }
@@ -142,6 +153,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
       }
       $modal.hide = function() {
         if (!$modal.$isShown) return;
+        if (options.backdrop) {
+          backdropCount--;
+        }
         if (scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
           return;
         }

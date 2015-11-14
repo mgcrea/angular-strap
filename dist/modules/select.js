@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.5 - 2015-10-29
+ * @version v2.3.6 - 2015-11-14
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -250,12 +250,12 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
         element[0].addEventListener('blur', select.$selectScrollFix);
       }
       var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
-      scope.$watchCollection(watchedOptions, function(newValue, oldValue) {
+      scope.$watch(watchedOptions, function(newValue, oldValue) {
         parsedOptions.valuesFn(scope, controller).then(function(values) {
           select.update(values);
           controller.$render();
         });
-      });
+      }, true);
       scope.$watch(attr.ngModel, function(newValue, oldValue) {
         select.$updateActiveIndex();
         controller.$render();
