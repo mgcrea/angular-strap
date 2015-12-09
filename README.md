@@ -13,6 +13,15 @@ AngularStrap is a set of native directives that enables seamless integration of 
 - If you don't want to use `ngAnimate`, you will have to include a tiny [ngAnimate mock](https://github.com/mgcrea/angular-strap/wiki/ngAnimate-mock).
 
 
+## Modifications by SumTotal Systems, LLC, a SkillSoft Company
+
+**NOTE:** This version of AngularStrap has been modified by SumTotal in order to be more 508c and WCAG2AA compliant. Please note that this version is maintained separately from the offical repository. We'll do our best to make timely pull requests in order for the maintainers of the offical repository to merge in any of our changes which they feel enhance the core code. 
+
+Thanks,
+
+[Mike Gardner](mailto:mgardner@sumtotalsystems.com)
+
+
 ## Documentation and examples
 
 + Check the [documentation](http://mgcrea.github.io/angular-strap) and [changelog](https://github.com/mgcrea/angular-strap/releases).
