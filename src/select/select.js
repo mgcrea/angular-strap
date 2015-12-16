@@ -170,7 +170,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           var l = scope.$matches.length, i = l;
           if(!l) return;
           for(i = l; i--;) {
-            if(scope.$matches[i].value === value) break;
+            if (angular.equals(scope.$matches[i].value, value)) break;
           }
           if(i < 0) return;
           return i;
