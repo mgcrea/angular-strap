@@ -350,8 +350,11 @@ angular.module('mgcrea.ngStrap.datepicker', [
           controller.$setValidity('date', isValid);
           controller.$setValidity('min', isMinValid);
           controller.$setValidity('max', isMaxValid);
-          // Only update the model when we have a valid date
-          if (isValid) controller.$dateValue = parsedDate;
+          
+          var allowInvalid = controller.$options && controller.$options.allowInvalid;
+          if (isValid || allowInvalid) {
+            controller.$dateValue = parsedDate;
+          }
         }
 
         // viewValue -> $parsers -> modelValue
