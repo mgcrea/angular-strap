@@ -37,7 +37,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
     this.$get = function($window, $document, $rootScope, $sce, $dateFormatter, $tooltip, $timeout) {
 
-      var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
+      var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
       var isTouch = ('createTouch' in $window.document) && isNative;
       if (!defaults.lang) {
         defaults.lang = $dateFormatter.getDefaultLocale();
@@ -423,7 +423,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
   .directive('bsTimepicker', function($window, $parse, $q, $dateFormatter, $dateParser, $timepicker) {
 
     var defaults = $timepicker.defaults;
-    var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
+    var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
 
     return {
       restrict: 'EAC',
