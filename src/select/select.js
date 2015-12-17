@@ -30,7 +30,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
     this.$get = function($window, $document, $rootScope, $tooltip, $timeout) {
 
       var bodyEl = angular.element($window.document.body);
-      var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
+      var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
       var isTouch = ('createTouch' in $window.document) && isNative;
 
       function SelectFactory(element, controller, config) {
