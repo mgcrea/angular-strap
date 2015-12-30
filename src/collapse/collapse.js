@@ -32,7 +32,10 @@ angular.module('mgcrea.ngStrap.collapse', [])
       self.$toggles = [];
       self.$targets = [];
 
-      self.$viewChangeListeners = [];
+      // Please use $activePaneChangeListeners if you use `bsActivePanels`
+      // Because we removed `ngModel` as default, we rename viewChangeListeners to
+      // activePaneChangeListeners to make more sense.
+      self.$activePaneChangeListeners = self.$viewChangeListeners = [];
 
       self.$registerToggle = function(element) {
         self.$toggles.push(element);
@@ -60,7 +63,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
         // fix active item indexes
         fixActiveItemIndexes(index);
 
-        self.$viewChangeListeners.forEach(function(fn) {
+        self.$activePaneChangeListeners.forEach(function(fn) {
           fn();
         });
       };
@@ -78,7 +81,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
           activateItem(value);
         }
 
-        self.$viewChangeListeners.forEach(function(fn) {
+        self.$activePaneChangeListeners.forEach(function(fn) {
           fn();
         });
       };
@@ -139,7 +142,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
   })
 
-  .directive('bsCollapse', function($window, $animate, $collapse) {
+    .directive('bsCollapse', function($window, $animate, $collapse, $parse) {
 
     var defaults = $collapse.defaults;
 
@@ -154,7 +157,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
         if(ngModelCtrl) {
 
           // Update the modelValue following
-          bsCollapseCtrl.$viewChangeListeners.push(function() {
+          bsCollapseCtrl.$activePaneChangeListeners.push(function() {
             ngModelCtrl.$setViewValue(bsCollapseCtrl.$activeIndexes());
           });
 
@@ -185,6 +188,39 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
         }
 
+        if (attrs.bsActivePanels) {
+          // adapted from angularjs ngModelController bindings
+          // https://github.com/angular/angular.js/blob/v1.3.1/src%2Fng%2Fdirective%2Finput.js#L1730
+          var parsedBsActivePane = $parse(attrs.bsActivePanels);
+
+          // Update bsActivePanels value with change
+          bsCollapseCtrl.$activePaneChangeListeners.push(function() {
+            parsedBsActivePane.assign(scope, bsCollapseCtrl.$activeIndexes());
+          });
+
+          // watch bsActivePanels for value changes
+          scope.$watch(attrs.bsActivePanels, function(newValue, oldValue) {
+            if (angular.isArray(newValue)) {
+              // model value is an array, so just replace
+              // the active items directly
+              bsCollapseCtrl.$setActive(newValue);
+            }
+            else {
+              var activeIndexes = bsCollapseCtrl.$activeIndexes();
+
+              if (angular.isArray(activeIndexes)) {
+                // we have an array of selected indexes
+                if (activeIndexes.indexOf(newValue * 1) === -1) {
+                  // item with newValue index is not active
+                  bsCollapseCtrl.$setActive(newValue * 1);
+                }
+              }
+              else if (activeIndexes !== newValue * 1) {
+                bsCollapseCtrl.$setActive(newValue * 1);
+              }
+            }
+          }, true);
+        }
       }
     };
 
@@ -263,7 +299,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
           $animate[action](element, bsCollapseCtrl.$options.activeClass);
         }
 
-        bsCollapseCtrl.$viewChangeListeners.push(function() {
+        bsCollapseCtrl.$activePaneChangeListeners.push(function() {
           render();
         });
         render();
