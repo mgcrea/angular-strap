@@ -23,7 +23,7 @@ $scope.tabs.activeTab = "{{ tabs.activeTab }}";
     <hr />
     <!-- bsActivePane is optional -->
     <div bs-active-pane="tabs.activeTab" bs-tabs>
-      <div ng-repeat="tab in tabs" title="{{ tab.title }}" name="{{ tab.title }}" disabled="{{ tab.disabled }}" ng-bind="tab.content" bs-pane>
+      <div ng-repeat="tab in tabs" data-title="{{ tab.title }}" name="{{ tab.title }}" disabled="{{ tab.disabled }}" ng-bind="tab.content" bs-pane>
       </div>
     </div>
   </div>
