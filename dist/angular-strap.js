@@ -708,6 +708,9 @@
           return $filter('filter')(results, expression, comparator);
         });
       } else {
+        if (typeof array !== 'array') {
+          array = [];
+        }
         return $filter('filter')(array, expression, comparator);
       }
     };
