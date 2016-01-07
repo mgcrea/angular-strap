@@ -909,8 +909,7 @@ describe('tooltip', function() {
         $templateCache.put('custom', 'foo: {{title}}');
         var elm = compileDirective('options-contentTemplate');
         angular.element(elm[0]).triggerHandler('mouseenter');
-        // @TODO fixme
-        // expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);
+         expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);
       });
 
     });
