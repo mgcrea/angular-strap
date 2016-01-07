@@ -94,6 +94,9 @@ describe('modal', function() {
     'options-contentTemplate': {
       scope: {modal: {title: 'Title', content: 'Hello Modal!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-content-template="custom" bs-modal>click me</a>'
+    },
+    'options-modalClass': {
+      element: '<a bs-modal="modal" data-modal-class="my-custom-class">click me</a>'
     }
   };
 
@@ -695,6 +698,19 @@ describe('modal', function() {
 
     });
 
+    describe('modalClass', function() {
+      it('should add class to the modal element', function() {
+        var elm = compileDirective('options-modalClass');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.children('.modal')).toHaveClass('my-custom-class');
+      });
+
+      it('should not add class to the modal element when modalClass is not present', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.children('.modal')).not.toHaveClass('my-custom-class');
+      });
+    });
 
   });
 

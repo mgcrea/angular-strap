@@ -18,7 +18,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       backdrop: true,
       keyboard: true,
       html: false,
-      show: true
+      show: true,
+      modalClass: false
     };
 
     this.$get = function($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
@@ -150,6 +151,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
           // Set the initial positioning.
           modalElement.css({display: 'block'}).addClass(options.placement);
+
+          if(options.modalClass) {
+            modalElement.addClass(options.modalClass);
+          }
 
           // Options: animation
           if(options.animation) {
@@ -340,7 +345,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'modalClass'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
