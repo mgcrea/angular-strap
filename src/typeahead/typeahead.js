@@ -141,14 +141,16 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         // Overrides
 
         var show = $typeahead.show;
+        var isKeyDownAttached = false;
         $typeahead.show = function() {
           show();
           // use timeout to hookup the events to prevent
           // event bubbling from being processed immediately.
           $timeout(function() {
             $typeahead.$element && $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
-            if (options.keyboard) {
+            if (options.keyboard && !isKeyDownAttached) {
               element && element.on('keydown', $typeahead.$onKeyDown);
+              isKeyDownAttached = true;
             }
           }, 0, false);
         };
@@ -158,6 +160,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           $typeahead.$element && $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
           if (options.keyboard) {
             element && element.off('keydown', $typeahead.$onKeyDown);
+            isKeyDownAttached = false;
           }
           if (!options.autoSelect)
             $typeahead.activate(-1);
