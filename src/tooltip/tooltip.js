@@ -166,8 +166,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
 
         $tooltip.show = function() {
           if (!options.bsEnabled || $tooltip.$isShown) return;
-
           scope.$emit(options.prefixEvent + '.show.before', $tooltip);
+
+          // Destroy any existing element
+          if(tipElement) destroyTipElement();
+
           var parent, after;
           if (options.container) {
             parent = tipContainer;
@@ -181,9 +184,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
             after = element;
           }
 
-
-          // Hide any existing tipElement
-          if(tipElement) destroyTipElement();
           // Fetch a cloned element linked from template
           tipScope = $tooltip.$scope.$new();
           tipElement = $tooltip.$element = compileData.link(tipScope, function(clonedElement, scope) {});
