@@ -1,11 +1,13 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.7 - 2016-01-16
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
+
+bsCompilerService.$inject = [ '$q', '$http', '$injector', '$compile', '$controller', '$templateCache' ];
 
 angular.module('mgcrea.ngStrap.core', []).service('$bsCompiler', bsCompilerService);
 
@@ -42,7 +44,7 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
     if (options.contentTemplate) {
       resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.contentTemplate) ]).then(function(templates) {
         var templateEl = angular.element(templates[0]);
-        var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+        var contentEl = findElement('[ng-bind="content"], [ng-bind="title"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
         if (!options.templateUrl) contentEl.next().remove();
         return templateEl[0].outerHTML;
       });
@@ -89,5 +91,3 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
     });
   }
 }
-
-bsCompilerService.$inject = [ '$q', '$http', '$injector', '$compile', '$controller', '$templateCache' ];

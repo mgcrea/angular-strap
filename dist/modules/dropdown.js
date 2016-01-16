@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.7 - 2016-01-16
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -26,7 +26,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
     function DropdownFactory(element, config) {
       var $dropdown = {};
       var options = angular.extend({}, defaults, config);
-      var scope = $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+      $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
       $dropdown = $tooltip(element, options);
       var parentEl = element.parent();
       $dropdown.$onKeyDown = function(evt) {
@@ -46,17 +46,17 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       $dropdown.show = function() {
         show();
         $timeout(function() {
-          options.keyboard && $dropdown.$element && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+          if (options.keyboard && $dropdown.$element) $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
           bodyEl.on('click', onBodyClick);
         }, 0, false);
-        parentEl.hasClass('dropdown') && parentEl.addClass('open');
+        if (parentEl.hasClass('dropdown')) parentEl.addClass('open');
       };
       var hide = $dropdown.hide;
       $dropdown.hide = function() {
         if (!$dropdown.$isShown) return;
-        options.keyboard && $dropdown.$element && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+        if (options.keyboard && $dropdown.$element) $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
         bodyEl.off('click', onBodyClick);
-        parentEl.hasClass('dropdown') && parentEl.removeClass('open');
+        if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
         hide();
       };
       var destroy = $dropdown.destroy;
@@ -82,7 +82,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         while (nextSibling && nextSibling.nodeType !== 1) {
           nextSibling = nextSibling.nextSibling;
         }
-        if (nextSibling.classList.contains('dropdown-menu')) {
+        if (nextSibling && nextSibling.classList.contains('dropdown-menu')) {
           tAttrs.template = nextSibling.outerHTML;
           tAttrs.templateUrl = undefined;
           nextSibling.parentNode.removeChild(nextSibling);
@@ -99,15 +99,23 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         angular.forEach([ 'html', 'container' ], function(key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
-        attr.bsDropdown && scope.$watch(attr.bsDropdown, function(newValue, oldValue) {
-          scope.content = newValue;
-        }, true);
-        attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
-          if (!dropdown || !angular.isDefined(newValue)) return;
-          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
-          newValue === true ? dropdown.show() : dropdown.hide();
-        });
+        if (attr.bsDropdown) {
+          scope.$watch(attr.bsDropdown, function(newValue, oldValue) {
+            scope.content = newValue;
+          }, true);
+        }
         var dropdown = $dropdown(element, options);
+        if (attr.bsShow) {
+          scope.$watch(attr.bsShow, function(newValue, oldValue) {
+            if (!dropdown || !angular.isDefined(newValue)) return;
+            if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
+            if (newValue === true) {
+              dropdown.show();
+            } else {
+              dropdown.hide();
+            }
+          });
+        }
         scope.$on('$destroy', function() {
           if (dropdown) dropdown.destroy();
           options = null;
