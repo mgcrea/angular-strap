@@ -7,7 +7,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
     var defaults = this.defaults = {
       animation: 'am-fade',
       backdropAnimation: 'am-fade',
-      extraClass: false,
+      customClass: '',
       prefixClass: 'modal',
       prefixEvent: 'modal',
       placement: 'top',
@@ -152,9 +152,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           // Set the initial positioning.
           modalElement.css({display: 'block'}).addClass(options.placement);
 
-          // Options: extraClass
-          if(options.extraClass) {
-            modalElement.addClass(options.extraClass);
+          // Options: customClass
+          if(options.customClass) {
+            modalElement.addClass(options.customClass);
           }
 
           // Options: animation
@@ -346,11 +346,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'modalClass'], function(key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
-        // Options: alias modalClass to extraClass
+        // Options: alias modalClass to customClass
         if (options.modalClass) {
           options.extraClass = options.modalClass;
         }
