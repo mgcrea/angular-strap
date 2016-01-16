@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.7 - 2016-01-16
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -27,7 +27,6 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
     trimValue: true
   };
   this.$get = [ '$window', '$rootScope', '$tooltip', '$$rAF', '$timeout', function($window, $rootScope, $tooltip, $$rAF, $timeout) {
-    var bodyEl = angular.element($window.document.body);
     function TypeaheadFactory(element, controller, config) {
       var $typeahead = {};
       var options = angular.extend({}, defaults, config);
@@ -79,13 +78,11 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         return scope.$matches.length && angular.isString(controller.$viewValue) && controller.$viewValue.length >= options.minLength;
       };
       $typeahead.$getIndex = function(value) {
-        var l = scope.$matches.length, i = l;
-        if (!l) return;
-        for (i = l; i--; ) {
-          if (scope.$matches[i].value === value) break;
+        var index;
+        for (index = scope.$matches.length; index--; ) {
+          if (angular.equals(scope.$matches[index].value, value)) break;
         }
-        if (i < 0) return;
-        return i;
+        return index;
       };
       $typeahead.$onMouseDown = function(evt) {
         evt.preventDefault();
@@ -106,19 +103,23 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       $typeahead.show = function() {
         show();
         $timeout(function() {
-          $typeahead.$element && $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
-          if (options.keyboard) {
-            element && element.on('keydown', $typeahead.$onKeyDown);
+          if ($typeahead.$element) {
+            $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
+            if (options.keyboard) {
+              if (element) element.on('keydown', $typeahead.$onKeyDown);
+            }
           }
         }, 0, false);
       };
       var hide = $typeahead.hide;
       $typeahead.hide = function() {
-        $typeahead.$element && $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
+        if ($typeahead.$element) $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
         if (options.keyboard) {
-          element && element.off('keydown', $typeahead.$onKeyDown);
+          if (element) element.off('keydown', $typeahead.$onKeyDown);
         }
-        if (!options.autoSelect) $typeahead.activate(-1);
+        if (!options.autoSelect) {
+          $typeahead.activate(-1);
+        }
         hide();
       };
       return $typeahead;
@@ -135,9 +136,8 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       return array.then(function(results) {
         return $filter('filter')(results, expression, comparator);
       });
-    } else {
-      return $filter('filter')(array, expression, comparator);
     }
+    return $filter('filter')(array, expression, comparator);
   };
 } ]).directive('bsTypeahead', [ '$window', '$parse', '$q', '$typeahead', '$parseOptions', function($window, $parse, $q, $typeahead, $parseOptions) {
   var defaults = $typeahead.defaults;
@@ -201,7 +201,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
           return element.val('');
         }
         var index = typeahead.$getIndex(controller.$modelValue);
-        var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
+        var selected = index !== -1 ? typeahead.$scope.$matches[index].label : controller.$viewValue;
         selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
         var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
         element.val(options.trimValue === false ? value : value.trim());

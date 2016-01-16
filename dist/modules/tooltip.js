@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.7 - 2016-01-16
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -34,9 +34,7 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
     }
   };
   this.$get = [ '$window', '$rootScope', '$bsCompiler', '$q', '$templateCache', '$http', '$animate', '$sce', 'dimensions', '$$rAF', '$timeout', function($window, $rootScope, $bsCompiler, $q, $templateCache, $http, $animate, $sce, dimensions, $$rAF, $timeout) {
-    var trim = String.prototype.trim;
     var isTouch = 'createTouch' in $window.document;
-    var htmlReplaceRegExp = /ng-bind="/gi;
     var $body = angular.element($window.document);
     function TooltipFactory(element, config) {
       var $tooltip = {};
@@ -76,8 +74,12 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         });
       };
       $tooltip.$isShown = scope.$isShown = false;
-      var timeout, hoverState;
-      var compileData, tipElement, tipContainer, tipScope;
+      var timeout;
+      var hoverState;
+      var compileData;
+      var tipElement;
+      var tipContainer;
+      var tipScope;
       promise.then(function(data) {
         compileData = data;
         $tooltip.init();
@@ -102,7 +104,11 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         }
         if (options.show) {
           scope.$$postDigest(function() {
-            options.trigger === 'focus' ? element[0].focus() : $tooltip.show();
+            if (options.trigger === 'focus') {
+              element[0].focus();
+            } else {
+              $tooltip.show();
+            }
           });
         }
       };
@@ -124,7 +130,8 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
       $tooltip.show = function() {
         if (!options.bsEnabled || $tooltip.$isShown) return;
         scope.$emit(options.prefixEvent + '.show.before', $tooltip);
-        var parent, after;
+        var parent;
+        var after;
         if (options.container) {
           parent = tipContainer;
           if (tipContainer[0].lastChild) {
@@ -149,7 +156,11 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         if (options.animation) tipElement.addClass(options.animation);
         if (options.type) tipElement.addClass(options.prefixClass + '-' + options.type);
         if (options.customClass) tipElement.addClass(options.customClass);
-        after ? after.after(tipElement) : parent.prepend(tipElement);
+        if (after) {
+          after.after(tipElement);
+        } else {
+          parent.prepend(tipElement);
+        }
         $tooltip.$isShown = scope.$isShown = true;
         safeDigest(scope);
         $tooltip.$applyPlacement();
@@ -220,7 +231,11 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         }
       }
       $tooltip.toggle = function() {
-        $tooltip.$isShown ? $tooltip.leave() : $tooltip.enter();
+        if ($tooltip.$isShown) {
+          $tooltip.leave();
+        } else {
+          $tooltip.enter();
+        }
       };
       $tooltip.focus = function() {
         tipElement[0].focus();
@@ -233,20 +248,24 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
       };
       $tooltip.$applyPlacement = function() {
         if (!tipElement) return;
-        var placement = options.placement, autoToken = /\s?auto?\s?/i, autoPlace = autoToken.test(placement);
+        var placement = options.placement;
+        var autoToken = /\s?auto?\s?/i;
+        var autoPlace = autoToken.test(placement);
         if (autoPlace) {
           placement = placement.replace(autoToken, '') || defaults.placement;
         }
         tipElement.addClass(options.placement);
-        var elementPosition = getPosition(), tipWidth = tipElement.prop('offsetWidth'), tipHeight = tipElement.prop('offsetHeight');
+        var elementPosition = getPosition();
+        var tipWidth = tipElement.prop('offsetWidth');
+        var tipHeight = tipElement.prop('offsetHeight');
         $tooltip.$viewport = options.viewport && findElement(options.viewport.selector || options.viewport);
         if (autoPlace) {
           var originalPlacement = placement;
           var viewportPosition = getPosition($tooltip.$viewport);
-          if (/top/.test(originalPlacement) && elementPosition.bottom + tipHeight > viewportPosition.bottom) {
-            placement = originalPlacement.replace('top', 'bottom');
-          } else if (/bottom/.test(originalPlacement) && elementPosition.top - tipHeight < viewportPosition.top) {
+          if (/bottom/.test(originalPlacement) && elementPosition.bottom + tipHeight > viewportPosition.bottom) {
             placement = originalPlacement.replace('bottom', 'top');
+          } else if (/top/.test(originalPlacement) && elementPosition.top - tipHeight < viewportPosition.top) {
+            placement = originalPlacement.replace('top', 'bottom');
           }
           if (/left/.test(originalPlacement) && elementPosition.left - tipWidth < viewportPosition.left) {
             placement = placement.replace('left', 'right');
@@ -273,7 +292,11 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
       $tooltip.$onFocusElementMouseDown = function(evt) {
         evt.preventDefault();
         evt.stopPropagation();
-        $tooltip.$isShown ? element[0].blur() : element[0].focus();
+        if ($tooltip.$isShown) {
+          element[0].blur();
+        } else {
+          element[0].focus();
+        }
       };
       function bindTriggerEvents() {
         var triggers = options.trigger.split(' ');
@@ -283,7 +306,9 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
           } else if (trigger !== 'manual') {
             element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
             element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-            nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            if (nodeName === 'button' && trigger !== 'hover') {
+              element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            }
           }
         });
       }
@@ -296,7 +321,9 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
           } else if (trigger !== 'manual') {
             element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
             element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-            nodeName === 'button' && trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            if (nodeName === 'button' && trigger !== 'hover') {
+              element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            }
           }
         }
       }
@@ -334,7 +361,8 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
       }
       function getPosition($element) {
         $element = $element || (options.target || element);
-        var el = $element[0], isBody = el.tagName === 'BODY';
+        var el = $element[0];
+        var isBody = el.tagName === 'BODY';
         var elRect = el.getBoundingClientRect();
         var rect = {};
         for (var p in elRect) {
@@ -349,9 +377,11 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         var elOffset = isBody ? {
           top: 0,
           left: 0
-        } : dimensions.offset(el), scroll = {
+        } : dimensions.offset(el);
+        var scroll = {
           scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.prop('scrollTop') || 0
-        }, outerDims = isBody ? {
+        };
+        var outerDims = isBody ? {
           width: document.documentElement.clientWidth,
           height: $window.innerHeight
         } : null;
@@ -400,6 +430,10 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
 
            case 'right':
             offset.left = position.left + position.width - actualWidth;
+            break;
+
+           default:
+            break;
           }
         } else if (split[0] === 'left' || split[0] === 'right') {
           switch (split[1]) {
@@ -409,13 +443,20 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
 
            case 'bottom':
             offset.top = position.top;
+            break;
+
+           default:
+            break;
           }
         }
         return offset;
       }
       function applyPlacement(offset, placement) {
-        var tip = tipElement[0], width = tip.offsetWidth, height = tip.offsetHeight;
-        var marginTop = parseInt(dimensions.css(tip, 'margin-top'), 10), marginLeft = parseInt(dimensions.css(tip, 'margin-left'), 10);
+        var tip = tipElement[0];
+        var width = tip.offsetWidth;
+        var height = tip.offsetHeight;
+        var marginTop = parseInt(dimensions.css(tip, 'margin-top'), 10);
+        var marginLeft = parseInt(dimensions.css(tip, 'margin-left'), 10);
         if (isNaN(marginTop)) marginTop = 0;
         if (isNaN(marginLeft)) marginLeft = 0;
         offset.top = offset.top + marginTop;
@@ -429,7 +470,8 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
             });
           }
         }, offset), 0);
-        var actualWidth = tip.offsetWidth, actualHeight = tip.offsetHeight;
+        var actualWidth = tip.offsetWidth;
+        var actualHeight = tip.offsetHeight;
         if (placement === 'top' && actualHeight !== height) {
           offset.top = offset.top + height - actualHeight;
         }
@@ -442,7 +484,9 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         }
         dimensions.setOffset(tip, offset);
         if (/top|right|bottom|left/.test(placement)) {
-          var isVertical = /top|bottom/.test(placement), arrowDelta = isVertical ? delta.left * 2 - width + actualWidth : delta.top * 2 - height + actualHeight, arrowOffsetPosition = isVertical ? 'offsetWidth' : 'offsetHeight';
+          var isVertical = /top|bottom/.test(placement);
+          var arrowDelta = isVertical ? delta.left * 2 - width + actualWidth : delta.top * 2 - height + actualHeight;
+          var arrowOffsetPosition = isVertical ? 'offsetWidth' : 'offsetHeight';
           replaceArrow(arrowDelta, tip[arrowOffsetPosition], isVertical);
         }
       }
@@ -504,15 +548,6 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
     function findElement(query, element) {
       return angular.element((element || document).querySelectorAll(query));
     }
-    var fetchPromises = {};
-    function fetchTemplate(template) {
-      if (fetchPromises[template]) return fetchPromises[template];
-      return fetchPromises[template] = $http.get(template, {
-        cache: $templateCache
-      }).then(function(res) {
-        return res.data;
-      });
-    }
     return TooltipFactory;
   } ];
 }).directive('bsTooltip', [ '$window', '$location', '$sce', '$tooltip', '$$rAF', function($window, $location, $sce, $tooltip, $$rAF) {
@@ -520,6 +555,7 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
     restrict: 'EAC',
     scope: true,
     link: function postLink(scope, element, attr, transclusion) {
+      var tooltip;
       var options = {
         scope: scope
       };
@@ -528,11 +564,17 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
       });
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'html', 'container' ], function(key) {
-        if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
+          options[key] = false;
+        }
       });
       var dataTarget = element.attr('data-target');
       if (angular.isDefined(dataTarget)) {
-        if (falseValueRegExp.test(dataTarget)) options.target = false; else options.target = dataTarget;
+        if (falseValueRegExp.test(dataTarget)) {
+          options.target = false;
+        } else {
+          options.target = dataTarget;
+        }
       }
       if (!scope.hasOwnProperty('title')) {
         scope.title = '';
@@ -541,36 +583,56 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         if (angular.isDefined(newValue) || !scope.hasOwnProperty('title')) {
           var oldValue = scope.title;
           scope.title = $sce.trustAsHtml(newValue);
-          angular.isDefined(oldValue) && $$rAF(function() {
-            tooltip && tooltip.$applyPlacement();
-          });
+          if (angular.isDefined(oldValue)) {
+            $$rAF(function() {
+              if (tooltip) tooltip.$applyPlacement();
+            });
+          }
         }
       });
-      attr.bsTooltip && scope.$watch(attr.bsTooltip, function(newValue, oldValue) {
-        if (angular.isObject(newValue)) {
-          angular.extend(scope, newValue);
-        } else {
-          scope.title = newValue;
-        }
-        angular.isDefined(oldValue) && $$rAF(function() {
-          tooltip && tooltip.$applyPlacement();
+      if (attr.bsTooltip) {
+        scope.$watch(attr.bsTooltip, function(newValue, oldValue) {
+          if (angular.isObject(newValue)) {
+            angular.extend(scope, newValue);
+          } else {
+            scope.title = newValue;
+          }
+          if (angular.isDefined(oldValue)) {
+            $$rAF(function() {
+              if (tooltip) tooltip.$applyPlacement();
+            });
+          }
+        }, true);
+      }
+      if (attr.bsShow) {
+        scope.$watch(attr.bsShow, function(newValue, oldValue) {
+          if (!tooltip || !angular.isDefined(newValue)) return;
+          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(tooltip),?/i);
+          if (newValue === true) {
+            tooltip.show();
+          } else {
+            tooltip.hide();
+          }
         });
-      }, true);
-      attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
-        if (!tooltip || !angular.isDefined(newValue)) return;
-        if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(tooltip),?/i);
-        newValue === true ? tooltip.show() : tooltip.hide();
-      });
-      attr.bsEnabled && scope.$watch(attr.bsEnabled, function(newValue, oldValue) {
-        if (!tooltip || !angular.isDefined(newValue)) return;
-        if (angular.isString(newValue)) newValue = !!newValue.match(/true|1|,?(tooltip),?/i);
-        newValue === false ? tooltip.setEnabled(false) : tooltip.setEnabled(true);
-      });
-      attr.viewport && scope.$watch(attr.viewport, function(newValue) {
-        if (!tooltip || !angular.isDefined(newValue)) return;
-        tooltip.setViewport(newValue);
-      });
-      var tooltip = $tooltip(element, options);
+      }
+      if (attr.bsEnabled) {
+        scope.$watch(attr.bsEnabled, function(newValue, oldValue) {
+          if (!tooltip || !angular.isDefined(newValue)) return;
+          if (angular.isString(newValue)) newValue = !!newValue.match(/true|1|,?(tooltip),?/i);
+          if (newValue === false) {
+            tooltip.setEnabled(false);
+          } else {
+            tooltip.setEnabled(true);
+          }
+        });
+      }
+      if (attr.viewport) {
+        scope.$watch(attr.viewport, function(newValue) {
+          if (!tooltip || !angular.isDefined(newValue)) return;
+          tooltip.setViewport(newValue);
+        });
+      }
+      tooltip = $tooltip(element, options);
       scope.$on('$destroy', function() {
         if (tooltip) tooltip.destroy();
         options = null;

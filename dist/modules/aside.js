@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.7 - 2016-01-16
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -32,7 +32,6 @@ angular.module('mgcrea.ngStrap.aside', [ 'mgcrea.ngStrap.modal' ]).provider('$as
     return AsideFactory;
   } ];
 }).directive('bsAside', [ '$window', '$sce', '$aside', function($window, $sce, $aside) {
-  var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
   return {
     restrict: 'EAC',
     scope: true,
@@ -50,17 +49,21 @@ angular.module('mgcrea.ngStrap.aside', [ 'mgcrea.ngStrap.modal' ]).provider('$as
         if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
       });
       angular.forEach([ 'title', 'content' ], function(key) {
-        attr[key] && attr.$observe(key, function(newValue, oldValue) {
-          scope[key] = $sce.trustAsHtml(newValue);
-        });
-      });
-      attr.bsAside && scope.$watch(attr.bsAside, function(newValue, oldValue) {
-        if (angular.isObject(newValue)) {
-          angular.extend(scope, newValue);
-        } else {
-          scope.content = newValue;
+        if (attr[key]) {
+          attr.$observe(key, function(newValue, oldValue) {
+            scope[key] = $sce.trustAsHtml(newValue);
+          });
         }
-      }, true);
+      });
+      if (attr.bsAside) {
+        scope.$watch(attr.bsAside, function(newValue, oldValue) {
+          if (angular.isObject(newValue)) {
+            angular.extend(scope, newValue);
+          } else {
+            scope.content = newValue;
+          }
+        }, true);
+      }
       var aside = $aside(options);
       element.on(attr.trigger || 'click', aside.toggle);
       scope.$on('$destroy', function() {

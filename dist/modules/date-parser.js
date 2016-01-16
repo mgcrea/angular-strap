@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.7 - 2016-01-16
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -60,7 +60,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
   function indexOfCaseInsensitive(array, value) {
-    var len = array.length, str = value.toString().toLowerCase();
+    var len = array.length;
+    var str = value.toString().toLowerCase();
     for (var i = 0; i < len; i++) {
       if (array[i].toLowerCase() === str) {
         return i;
@@ -137,7 +138,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
           return 1 * value <= 50 && value.length === 2 ? this.setFullYear(2e3 + 1 * value) : this.setFullYear(1 * value);
         }
       };
-      var regex, setMap;
+      var regex;
+      var setMap;
       $dateParser.init = function() {
         $dateParser.$format = $locale.DATETIME_FORMATS[options.format] || options.format;
         regex = regExpForFormat($dateParser.$format);
@@ -156,7 +158,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
         if (!matches) return false;
         var date = baseDate && !isNaN(baseDate.getTime()) ? new ParseDate().fromDate(baseDate) : new ParseDate().fromDate(new Date(1970, 0, 1, 0));
         for (var i = 0; i < matches.length - 1; i++) {
-          formatSetMap[i] && formatSetMap[i].call(date, matches[i + 1]);
+          if (formatSetMap[i]) formatSetMap[i].call(date, matches[i + 1]);
         }
         var newDate = date.toDate();
         if (parseInt(date.day, 10) !== newDate.getDate()) {
@@ -173,7 +175,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
           date = new Date(value.substr(1, value.length - 2));
         } else if (isNumeric(value)) {
           date = new Date(parseInt(value, 10));
-        } else if (angular.isString(value) && 0 === value.length) {
+        } else if (angular.isString(value) && value.length === 0) {
           date = key === 'minDate' ? -Infinity : +Infinity;
         } else {
           date = new Date(value);
@@ -188,7 +190,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
           time = new Date(value.substr(1, value.length - 2)).setFullYear(1970, 0, 1);
         } else if (isNumeric(value)) {
           time = new Date(parseInt(value, 10)).setFullYear(1970, 0, 1);
-        } else if (angular.isString(value) && 0 === value.length) {
+        } else if (angular.isString(value) && value.length === 0) {
           time = key === 'minTime' ? -Infinity : +Infinity;
         } else {
           time = $dateParser.parse(value, new Date(1970, 0, 1, 0));
@@ -259,7 +261,10 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
       function buildDateParseValuesMap(abstractRegex) {
         var dateElements = Object.keys(regExpMap);
         var valuesRegex = new RegExp('\\${(\\d+)}', 'g');
-        var valuesMatch, keyIndex, valueKey, valueFunction;
+        var valuesMatch;
+        var keyIndex;
+        var valueKey;
+        var valueFunction;
         var valuesFunctionMap = [];
         while ((valuesMatch = valuesRegex.exec(abstractRegex)) !== null) {
           keyIndex = valuesMatch[1];
