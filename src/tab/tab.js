@@ -2,7 +2,7 @@
 
 angular.module('mgcrea.ngStrap.tab', [])
 
-  .provider('$tab', function() {
+  .provider('$tab', function () {
 
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -11,13 +11,13 @@ angular.module('mgcrea.ngStrap.tab', [])
       activeClass: 'active'
     };
 
-    var controller = this.controller = function($scope, $element, $attrs) {
+    var controller = this.controller = function ($scope, $element, $attrs) {
       var self = this;
 
       // Attributes options
       self.$options = angular.copy(defaults);
-      angular.forEach(['animation', 'navClass', 'activeClass'], function(key) {
-        if(angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
+      angular.forEach(['animation', 'navClass', 'activeClass'], function (key) {
+        if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
       // Publish options on scope
@@ -31,19 +31,19 @@ angular.module('mgcrea.ngStrap.tab', [])
       // activePaneChangeListeners to make more sense.
       self.$activePaneChangeListeners = self.$viewChangeListeners = [];
 
-      self.$push = function(pane) {
-        if(angular.isUndefined(self.$panes.$active)) {
+      self.$push = function (pane) {
+        if (angular.isUndefined(self.$panes.$active)) {
           $scope.$setActive(pane.name || 0);
         }
         self.$panes.push(pane);
       };
 
-      self.$remove = function(pane) {
+      self.$remove = function (pane) {
         var index = self.$panes.indexOf(pane);
         var active = self.$panes.$active;
         var activeIndex;
-        if(angular.isString(active)) {
-          activeIndex = self.$panes.map(function(pane) {
+        if (angular.isString(active)) {
+          activeIndex = self.$panes.map(function (pane) {
             return pane.name;
           }).indexOf(active);
         } else {
@@ -63,27 +63,27 @@ angular.module('mgcrea.ngStrap.tab', [])
           // so select the previous one
           activeIndex--;
         }
-        if(activeIndex >= 0 && activeIndex < self.$panes.length) {
+        if (activeIndex >= 0 && activeIndex < self.$panes.length) {
           self.$setActive(self.$panes[activeIndex].name || activeIndex);
         } else {
           self.$setActive();
         }
       };
 
-      self.$setActive = $scope.$setActive = function(value) {
+      self.$setActive = $scope.$setActive = function (value) {
         self.$panes.$active = value;
-        self.$activePaneChangeListeners.forEach(function(fn) {
+        self.$activePaneChangeListeners.forEach(function (fn) {
           fn();
         });
       };
 
-      self.$isActive = $scope.$isActive = function($pane, $index) {
+      self.$isActive = $scope.$isActive = function ($pane, $index) {
         return self.$panes.$active === $pane.name || self.$panes.$active === $index;
       };
 
     };
 
-    this.$get = function() {
+    this.$get = function () {
       var $tab = {};
       $tab.defaults = defaults;
       $tab.controller = controller;
@@ -92,7 +92,7 @@ angular.module('mgcrea.ngStrap.tab', [])
 
   })
 
-  .directive('bsTabs', function($window, $animate, $tab, $parse) {
+  .directive('bsTabs', function ($window, $animate, $tab, $parse) {
 
     var defaults = $tab.defaults;
 
@@ -101,7 +101,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       transclude: true,
       scope: true,
       controller: ['$scope', '$element', '$attrs', $tab.controller],
-      templateUrl: function(element, attr) {
+      templateUrl: function (element, attr) {
         return attr.template || defaults.template;
       },
       link: function postLink(scope, element, attrs, controllers) {
@@ -111,15 +111,15 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         // 'ngModel' does interfere with form validation
         // and status, use `bsActivePane` instead to avoid it
-        if(ngModelCtrl) {
+        if (ngModelCtrl) {
 
           // Update the modelValue following
-          bsTabsCtrl.$activePaneChangeListeners.push(function() {
+          bsTabsCtrl.$activePaneChangeListeners.push(function () {
             ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
           });
 
           // modelValue -> $formatters -> viewValue
-          ngModelCtrl.$formatters.push(function(modelValue) {
+          ngModelCtrl.$formatters.push(function (modelValue) {
             // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
             bsTabsCtrl.$setActive(modelValue);
             return modelValue;
@@ -133,12 +133,12 @@ angular.module('mgcrea.ngStrap.tab', [])
           var parsedBsActivePane = $parse(attrs.bsActivePane);
 
           // Update bsActivePane value with change
-          bsTabsCtrl.$activePaneChangeListeners.push(function() {
+          bsTabsCtrl.$activePaneChangeListeners.push(function () {
             parsedBsActivePane.assign(scope, bsTabsCtrl.$panes.$active);
           });
 
           // watch bsActivePane for value changes
-          scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
+          scope.$watch(attrs.bsActivePane, function (newValue, oldValue) {
             bsTabsCtrl.$setActive(newValue);
           }, true);
         }
@@ -147,7 +147,7 @@ angular.module('mgcrea.ngStrap.tab', [])
 
   })
 
-  .directive('bsPane', function($window, $animate, $sce) {
+  .directive('bsPane', function ($window, $animate, $sce) {
 
     return {
       require: ['^?ngModel', '^bsTabs'],
@@ -161,7 +161,7 @@ angular.module('mgcrea.ngStrap.tab', [])
         element.addClass('tab-pane');
 
         // Observe title attribute for change
-        attrs.$observe('title', function(newValue, oldValue) {
+        attrs.$observe('title', function (newValue, oldValue) {
           scope.title = $sce.trustAsHtml(newValue);
         });
 
@@ -169,11 +169,11 @@ angular.module('mgcrea.ngStrap.tab', [])
         scope.name = attrs.name;
 
         // Add animation class
-        if(bsTabsCtrl.$options.animation) {
+        if (bsTabsCtrl.$options.animation) {
           element.addClass(bsTabsCtrl.$options.animation);
         }
 
-        attrs.$observe('disabled', function(newValue, oldValue) {
+        attrs.$observe('disabled', function (newValue, oldValue) {
           scope.disabled = scope.$eval(newValue);
         });
 
@@ -181,7 +181,7 @@ angular.module('mgcrea.ngStrap.tab', [])
         bsTabsCtrl.$push(scope);
 
         // remove pane from tab controller when pane is destroyed
-        scope.$on('$destroy', function() {
+        scope.$on('$destroy', function () {
           bsTabsCtrl.$remove(scope);
         });
 
@@ -190,7 +190,7 @@ angular.module('mgcrea.ngStrap.tab', [])
           $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
         }
 
-        bsTabsCtrl.$activePaneChangeListeners.push(function() {
+        bsTabsCtrl.$activePaneChangeListeners.push(function () {
           render();
         });
         render();

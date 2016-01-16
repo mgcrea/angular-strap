@@ -2,7 +2,7 @@
 
 (angular.version.minor < 3 && angular.version.dot < 14) && angular.module('ng')
 
-.factory('$$rAF', function($window, $timeout) {
+.factory('$$rAF', function ($window, $timeout) {
 
   var requestAnimationFrame = $window.requestAnimationFrame ||
                               $window.webkitRequestAnimationFrame ||
@@ -15,15 +15,15 @@
 
   var rafSupported = !!requestAnimationFrame;
   var raf = rafSupported ?
-    function(fn) {
+    function (fn) {
       var id = requestAnimationFrame(fn);
-      return function() {
+      return function () {
         cancelAnimationFrame(id);
       };
     } :
-    function(fn) {
+    function (fn) {
       var timer = $timeout(fn, 16.66, false); // 1000 / 60 = 16.666
-      return function() {
+      return function () {
         $timeout.cancel(timer);
       };
     };

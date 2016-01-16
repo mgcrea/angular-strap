@@ -6,9 +6,11 @@
     "func-names": 0,
     "padded-blocks": 0,
     "no-use-before-define": [2, "nofunc"],
-    "no-unused-vars": 1,
+    "object-curly-spacing": [2, "never"],
+    "no-unused-vars": [2, {"args": "none"}],
     "vars-on-top": 1,
-    "id-length": [2, {"properties": "never", "exceptions": ["i", "j", "k", "l", "x", "y", "_"]}]
+    "id-length": 0,
+    "max-len": 0
   },
   "globals": {
     "angular": 1

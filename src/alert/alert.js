@@ -6,7 +6,7 @@
 
 angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
-  .provider('$alert', function() {
+  .provider('$alert', function () {
 
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -25,7 +25,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
       dismissable: true
     };
 
-    this.$get = function($modal, $timeout) {
+    this.$get = function ($modal, $timeout) {
 
       function AlertFactory(config) {
 
@@ -38,16 +38,16 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         // Support scope as string options [/*title, content, */ type, dismissable]
         $alert.$scope.dismissable = !!options.dismissable;
-        if(options.type) {
+        if (options.type) {
           $alert.$scope.type = options.type;
         }
 
         // Support auto-close duration
         var show = $alert.show;
-        if(options.duration) {
-          $alert.show = function() {
+        if (options.duration) {
+          $alert.show = function () {
             show();
-            $timeout(function() {
+            $timeout(function () {
               $alert.hide();
             }, options.duration * 1000);
           };
@@ -63,7 +63,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
   })
 
-  .directive('bsAlert', function($window, $sce, $alert) {
+  .directive('bsAlert', function ($window, $sce, $alert) {
 
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
@@ -74,33 +74,33 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable'], function(key) {
-          if(angular.isDefined(attr[key])) options[key] = attr[key];
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable'], function (key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach(['keyboard', 'html', 'container', 'dismissable'], function(key) {
-          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+        angular.forEach(['keyboard', 'html', 'container', 'dismissable'], function (key) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
             options[key] = false;
         });
 
         // overwrite inherited title value when no value specified
         // fix for angular 1.3.1 531a8de72c439d8ddd064874bf364c00cedabb11
-        if (!scope.hasOwnProperty('title')){
+        if (!scope.hasOwnProperty('title')) {
           scope.title = '';
         }
 
         // Support scope as data-attrs
-        angular.forEach(['title', 'content', 'type'], function(key) {
-          attr[key] && attr.$observe(key, function(newValue, oldValue) {
+        angular.forEach(['title', 'content', 'type'], function (key) {
+          attr[key] && attr.$observe(key, function (newValue, oldValue) {
             scope[key] = $sce.trustAsHtml(newValue);
           });
         });
 
         // Support scope as an object
-        attr.bsAlert && scope.$watch(attr.bsAlert, function(newValue, oldValue) {
-          if(angular.isObject(newValue)) {
+        attr.bsAlert && scope.$watch(attr.bsAlert, function (newValue, oldValue) {
+          if (angular.isObject(newValue)) {
             angular.extend(scope, newValue);
           } else {
             scope.content = newValue;
@@ -114,7 +114,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
         element.on(attr.trigger || 'click', alert.toggle);
 
         // Garbage collection
-        scope.$on('$destroy', function() {
+        scope.$on('$destroy', function () {
           if (alert) alert.destroy();
           options = null;
           alert = null;

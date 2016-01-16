@@ -2,7 +2,7 @@
 
 angular.module('mgcrea.ngStrap.navbar', [])
 
-  .provider('$navbar', function() {
+  .provider('$navbar', function () {
 
     var defaults = this.defaults = {
       activeClass: 'active',
@@ -10,13 +10,13 @@ angular.module('mgcrea.ngStrap.navbar', [])
       strict: false
     };
 
-    this.$get = function() {
+    this.$get = function () {
       return {defaults: defaults};
     };
 
   })
 
-  .directive('bsNavbar', function($window, $location, $navbar) {
+  .directive('bsNavbar', function ($window, $location, $navbar) {
 
     var defaults = $navbar.defaults;
 
@@ -26,29 +26,29 @@ angular.module('mgcrea.ngStrap.navbar', [])
 
         // Directive options
         var options = angular.copy(defaults);
-        angular.forEach(Object.keys(defaults), function(key) {
-          if(angular.isDefined(attr[key])) options[key] = attr[key];
+        angular.forEach(Object.keys(defaults), function (key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // Watch for the $location
-        scope.$watch(function() {
+        scope.$watch(function () {
 
           return $location.path();
 
-        }, function(newValue, oldValue) {
+        }, function (newValue, oldValue) {
 
           var liElements = element[0].querySelectorAll('li[' + options.routeAttr + ']');
 
-          angular.forEach(liElements, function(li) {
+          angular.forEach(liElements, function (li) {
 
             var liElement = angular.element(li);
             var pattern = liElement.attr(options.routeAttr).replace('/', '\\/');
-            if(options.strict) {
+            if (options.strict) {
               pattern = '^' + pattern + '$';
             }
             var regexp = new RegExp(pattern, 'i');
 
-            if(regexp.test(newValue)) {
+            if (regexp.test(newValue)) {
               liElement.addClass(options.activeClass);
             } else {
               liElement.removeClass(options.activeClass);
