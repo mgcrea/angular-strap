@@ -43,14 +43,17 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
         var $scrollspy = {};
 
         // Private vars
-        var unbindViewContentLoaded, unbindIncludeContentLoaded;
+        var unbindViewContentLoaded;
+        var unbindIncludeContentLoaded;
         var trackedElements = $scrollspy.$trackedElements = [];
         var sortedElements = [];
         var activeTarget;
         var debouncedCheckPosition;
         var throttledCheckPosition;
         var debouncedCheckOffsets;
+        /* eslint-disable no-unused-vars */
         var viewportHeight;
+        /* eslint-enable no-unused-vars */
         var scrollTop;
 
         $scrollspy.init = function () {

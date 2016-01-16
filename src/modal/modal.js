@@ -25,7 +25,6 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
     this.$get = function ($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
 
       var forEach = angular.forEach;
-      var trim = String.prototype.trim;
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
 
@@ -76,7 +75,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         $modal.$isShown = scope.$isShown = false;
 
         // Fetch, compile then initialize modal
-        var compileData, modalElement, modalScope;
+        var compileData;
+        var modalElement;
+        var modalScope;
         var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
         backdropElement.css({position: 'fixed', top: '0px', left: '0px', bottom: '0px', right: '0px'});
         promise.then(function (data) {
@@ -113,7 +114,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         $modal.show = function () {
           if ($modal.$isShown) return;
 
-          var parent, after;
+          var parent;
+          var after;
           if (angular.isElement(options.container)) {
             parent = options.container;
             after = options.container[0].lastChild ? angular.element(options.container[0].lastChild) : null;
@@ -240,9 +242,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         }
 
         $modal.toggle = function () {
-
-          $modal.$isShown ? $modal.hide() : $modal.show();
-
+          if ($modal.$isShown) {
+            $modal.hide();
+          } else {
+            $modal.show();
+          }
         };
 
         $modal.focus = function () {
@@ -292,7 +296,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         function hideOnBackdropClick(evt) {
           if (evt.target !== evt.currentTarget) return;
-          options.backdrop === 'static' ? $modal.focus() : $modal.hide();
+          if (options.backdrop === 'static') {
+            $modal.focus();
+          } else {
+            $modal.hide();
+          }
         }
 
         function preventEventDefault(evt) {
@@ -324,7 +332,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       // Helper functions
 
       function safeDigest(scope) {
+        /* eslint-disable no-unused-expressions */
         scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
+        /* eslint-enable no-unused-expressions */
       }
 
       function findElement(query, element) {
@@ -352,31 +362,34 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Options: alias modalClass to customClass
         if (options.modalClass) {
-          options.extraClass = options.modalClass;
+          options.customClass = options.modalClass;
         }
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach(['backdrop', 'keyboard', 'html', 'container'], function (key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
-            options[key] = false;
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
 
         // Support scope as data-attrs
         angular.forEach(['title', 'content'], function (key) {
-          attr[key] && attr.$observe(key, function (newValue, oldValue) {
-            scope[key] = $sce.trustAsHtml(newValue);
-          });
+          if (attr[key]) {
+            attr.$observe(key, function (newValue, oldValue) {
+              scope[key] = $sce.trustAsHtml(newValue);
+            });
+          }
         });
 
         // Support scope as an object
-        attr.bsModal && scope.$watch(attr.bsModal, function (newValue, oldValue) {
-          if (angular.isObject(newValue)) {
-            angular.extend(scope, newValue);
-          } else {
-            scope.content = newValue;
-          }
-        }, true);
+        if (attr.bsModal) {
+          scope.$watch(attr.bsModal, function (newValue, oldValue) {
+            if (angular.isObject(newValue)) {
+              angular.extend(scope, newValue);
+            } else {
+              scope.content = newValue;
+            }
+          }, true);
+        }
 
         // Initialize modal
         var modal = $modal(options);

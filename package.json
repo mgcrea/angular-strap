@@ -31,6 +31,7 @@
     "del": "^2.2.0",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^3.1.0",
+    "eslint-plugin-html": "^1.2.0",
     "factory-angular-channels": "^0.9.0",
     "gulp-jshint": "^2.0.0",
     "gulp-ng-annotate": "^1.1.0",
@@ -52,7 +53,9 @@
     "undertaker-lib-tasks": "^0.5.1"
   },
   "scripts": {
-    "test": "gulp jshint karma:unit",
+    "start": "gulp serve",
+    "test": "npm run test-eslint && gulp karma:unit",
+    "test-eslint": "eslint src/*/*.js",
     "test:watch": "npm run test -- -w"
   }
 }

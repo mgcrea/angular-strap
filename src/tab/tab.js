@@ -57,8 +57,7 @@ angular.module('mgcrea.ngStrap.tab', [])
           // we removed a pane before the active pane, so we need to
           // decrement the active pane index
           activeIndex--;
-        }
-        else if (index === activeIndex && activeIndex === self.$panes.length) {
+        } else if (index === activeIndex && activeIndex === self.$panes.length) {
           // we remove the active pane and it was the one at the end,
           // so select the previous one
           activeIndex--;
@@ -154,7 +153,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       scope: true,
       link: function postLink(scope, element, attrs, controllers) {
 
-        var ngModelCtrl = controllers[0];
+        // var ngModelCtrl = controllers[0];
         var bsTabsCtrl = controllers[1];
 
         // Add base class

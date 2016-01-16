@@ -5,8 +5,8 @@ angular.module('mgcrea.ngStrap.button', [])
   .provider('$button', function () {
 
     var defaults = this.defaults = {
-      activeClass:'active',
-      toggleEvent:'click'
+      activeClass: 'active',
+      toggleEvent: 'click'
     };
 
     this.$get = function () {

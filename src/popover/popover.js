@@ -57,6 +57,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
       scope: true,
       link: function postLink(scope, element, attr) {
 
+        var popover;
         // Directive options
         var options = {scope: scope};
         angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'customClass', 'autoClose', 'id', 'prefixClass', 'prefixEvent'], function (key) {
@@ -66,56 +67,72 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach(['html', 'container', 'autoClose'], function (key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
-            options[key] = false;
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
 
         // should not parse target attribute (anchor tag), only data-target #1454
         var dataTarget = element.attr('data-target');
         if (angular.isDefined(dataTarget)) {
-          if (falseValueRegExp.test(dataTarget))
+          if (falseValueRegExp.test(dataTarget)) {
             options.target = false;
-          else
+          } else {
             options.target = dataTarget;
+          }
         }
 
         // Support scope as data-attrs
         angular.forEach(['title', 'content'], function (key) {
-          attr[key] && attr.$observe(key, function (newValue, oldValue) {
-            scope[key] = $sce.trustAsHtml(newValue);
-            angular.isDefined(oldValue) && requestAnimationFrame(function () {
-              popover && popover.$applyPlacement();
+          if (attr[key]) {
+            attr.$observe(key, function (newValue, oldValue) {
+              scope[key] = $sce.trustAsHtml(newValue);
+              if (angular.isDefined(oldValue)) {
+                requestAnimationFrame(function () {
+                  if (popover) popover.$applyPlacement();
+                });
+              }
             });
-          });
+          }
         });
 
         // Support scope as an object
-        attr.bsPopover && scope.$watch(attr.bsPopover, function (newValue, oldValue) {
-          if (angular.isObject(newValue)) {
-            angular.extend(scope, newValue);
-          } else {
-            scope.content = newValue;
-          }
-          angular.isDefined(oldValue) && requestAnimationFrame(function () {
-            popover && popover.$applyPlacement();
-          });
-        }, true);
+        if (attr.bsPopover) {
+          scope.$watch(attr.bsPopover, function (newValue, oldValue) {
+            if (angular.isObject(newValue)) {
+              angular.extend(scope, newValue);
+            } else {
+              scope.content = newValue;
+            }
+            if (angular.isDefined(oldValue)) {
+              requestAnimationFrame(function () {
+                if (popover) popover.$applyPlacement();
+              });
+            }
+          }, true);
+        }
 
         // Visibility binding support
-        attr.bsShow && scope.$watch(attr.bsShow, function (newValue, oldValue) {
-          if (!popover || !angular.isDefined(newValue)) return;
-          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
-          newValue === true ? popover.show() : popover.hide();
-        });
+        if (attr.bsShow) {
+          scope.$watch(attr.bsShow, function (newValue, oldValue) {
+            if (!popover || !angular.isDefined(newValue)) return;
+            if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
+            if (newValue === true) {
+              popover.show();
+            } else {
+              popover.hide();
+            }
+          });
+        }
 
         // Viewport support
-        attr.viewport && scope.$watch(attr.viewport, function (newValue) {
-          if (!popover || !angular.isDefined(newValue)) return;
-          popover.setViewport(newValue);
-        });
+        if (attr.viewport) {
+          scope.$watch(attr.viewport, function (newValue) {
+            if (!popover || !angular.isDefined(newValue)) return;
+            popover.setViewport(newValue);
+          });
+        }
 
         // Initialize popover
-        var popover = $popover(element, options);
+        popover = $popover(element, options);
 
         // Garbage collection
         scope.$on('$destroy', function () {

@@ -29,7 +29,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
     this.$get = function ($window, $document, $rootScope, $tooltip, $timeout) {
 
-      var bodyEl = angular.element($window.document.body);
+      // var bodyEl = angular.element($window.document.body);
       var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
       var isTouch = ('createTouch' in $window.document) && isNative;
 
@@ -46,8 +46,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         scope.$matches = [];
         if (options.multiple) {
           scope.$activeIndex = [];
-        }
-        else {
+        } else {
           scope.$activeIndex = -1;
         }
         scope.$isMultiple = options.multiple;
@@ -101,7 +100,11 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         $select.activate = function (index) {
           if (options.multiple) {
-            $select.$isActive(index) ? scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1) : scope.$activeIndex.push(index);
+            if ($select.$isActive(index)) {
+              scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1);
+            } else {
+              scope.$activeIndex.push(index);
+            }
             if (options.sort) scope.$activeIndex.sort(function (a, b) { return a - b; }); // use numeric sort instead of default sort
           } else {
             scope.$activeIndex = index;
@@ -161,19 +164,16 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         $select.$isActive = function (index) {
           if (options.multiple) {
             return scope.$activeIndex.indexOf(index) !== -1;
-          } else {
-            return scope.$activeIndex === index;
           }
+          return scope.$activeIndex === index;
         };
 
         $select.$getIndex = function (value) {
-          var l = scope.$matches.length, i = l;
-          if (!l) return;
-          for (i = l; i--;) {
-            if (angular.equals(scope.$matches[i].value, value)) break;
+          var index;
+          for (index = scope.$matches.length; index--;) {
+            if (angular.equals(scope.$matches[index].value, value)) break;
           }
-          if (i < 0) return;
-          return i;
+          return index;
         };
 
         $select.$onMouseDown = function (evt) {
@@ -287,18 +287,20 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach(['html', 'container', 'allNoneButtons', 'sort'], function (key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
+          }
         });
 
         // Only parse data-multiple. Angular sets existence attributes to true (multiple/required/etc), they apply this
         // to data-multiple as well for some reason, so we'll parse this ourselves and disregard multiple
         var dataMultiple = element.attr('data-multiple');
         if (angular.isDefined(dataMultiple)) {
-          if (falseValueRegExp.test(dataMultiple))
+          if (falseValueRegExp.test(dataMultiple)) {
             options.multiple = false;
-          else
+          } else {
             options.multiple = dataMultiple;
+          }
         }
 
         // Add support for select markup
@@ -340,11 +342,12 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         // Model rendering in view
         controller.$render = function () {
           // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
-          var selected, index;
+          var selected;
+          var index;
           if (options.multiple && angular.isArray(controller.$modelValue)) {
             selected = controller.$modelValue.map(function (value) {
               index = select.$getIndex(value);
-              return angular.isDefined(index) ? select.$scope.$matches[index].label : false;
+              return index !== -1 ? select.$scope.$matches[index].label : false;
             }).filter(angular.isDefined);
             if (selected.length > (options.maxLength || defaults.maxLength)) {
               selected = selected.length + ' ' + (options.maxLengthHtml || defaults.maxLengthHtml);
@@ -353,7 +356,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             }
           } else {
             index = select.$getIndex(controller.$modelValue);
-            selected = angular.isDefined(index) ? select.$scope.$matches[index].label : false;
+            selected = index !== -1 ? select.$scope.$matches[index].label : false;
           }
           element.html((selected ? selected : options.placeholder) + (options.caretHtml ? options.caretHtml : defaults.caretHtml));
         };

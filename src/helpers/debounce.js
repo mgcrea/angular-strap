@@ -8,9 +8,9 @@ angular.module('mgcrea.ngStrap.helpers.debounce', [])
   return function (func, wait, immediate) {
     var timeout = null;
     return function () {
-      var context = this,
-        args = arguments,
-        callNow = immediate && !timeout;
+      var context = this;
+      var args = arguments;
+      var callNow = immediate && !timeout;
       if (timeout) {
         $timeout.cancel(timeout);
       }
@@ -34,10 +34,10 @@ angular.module('mgcrea.ngStrap.helpers.debounce', [])
 .factory('throttle', function ($timeout) {
   return function (func, wait, options) {
     var timeout = null;
-    options || (options = {});
+    if (!options) options = {};
     return function () {
-      var context = this,
-        args = arguments;
+      var context = this;
+      var args = arguments;
       if (!timeout) {
         if (options.leading !== false) {
           func.apply(context, args);
@@ -52,4 +52,3 @@ angular.module('mgcrea.ngStrap.helpers.debounce', [])
     };
   };
 });
-

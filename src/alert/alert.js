@@ -65,8 +65,6 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
   .directive('bsAlert', function ($window, $sce, $alert) {
 
-    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
-
     return {
       restrict: 'EAC',
       scope: true,
@@ -81,8 +79,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach(['keyboard', 'html', 'container', 'dismissable'], function (key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
-            options[key] = false;
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
 
         // overwrite inherited title value when no value specified
@@ -93,19 +90,23 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
         // Support scope as data-attrs
         angular.forEach(['title', 'content', 'type'], function (key) {
-          attr[key] && attr.$observe(key, function (newValue, oldValue) {
-            scope[key] = $sce.trustAsHtml(newValue);
-          });
+          if (attr[key]) {
+            attr.$observe(key, function (newValue, oldValue) {
+              scope[key] = $sce.trustAsHtml(newValue);
+            });
+          }
         });
 
         // Support scope as an object
-        attr.bsAlert && scope.$watch(attr.bsAlert, function (newValue, oldValue) {
-          if (angular.isObject(newValue)) {
-            angular.extend(scope, newValue);
-          } else {
-            scope.content = newValue;
-          }
-        }, true);
+        if (attr.bsAlert) {
+          scope.$watch(attr.bsAlert, function (newValue, oldValue) {
+            if (angular.isObject(newValue)) {
+              angular.extend(scope, newValue);
+            } else {
+              scope.content = newValue;
+            }
+          }, true);
+        }
 
         // Initialize alert
         var alert = $alert(options);

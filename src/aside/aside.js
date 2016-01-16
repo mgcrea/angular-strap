@@ -42,8 +42,6 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
 
   .directive('bsAside', function ($window, $sce, $aside) {
 
-    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
-
     return {
       restrict: 'EAC',
       scope: true,
@@ -57,25 +55,28 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach(['backdrop', 'keyboard', 'html', 'container'], function (key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
-            options[key] = false;
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
 
         // Support scope as data-attrs
         angular.forEach(['title', 'content'], function (key) {
-          attr[key] && attr.$observe(key, function (newValue, oldValue) {
-            scope[key] = $sce.trustAsHtml(newValue);
-          });
+          if (attr[key]) {
+            attr.$observe(key, function (newValue, oldValue) {
+              scope[key] = $sce.trustAsHtml(newValue);
+            });
+          }
         });
 
         // Support scope as an object
-        attr.bsAside && scope.$watch(attr.bsAside, function (newValue, oldValue) {
-          if (angular.isObject(newValue)) {
-            angular.extend(scope, newValue);
-          } else {
-            scope.content = newValue;
-          }
-        }, true);
+        if (attr.bsAside) {
+          scope.$watch(attr.bsAside, function (newValue, oldValue) {
+            if (angular.isObject(newValue)) {
+              angular.extend(scope, newValue);
+            } else {
+              scope.content = newValue;
+            }
+          }, true);
+        }
 
         // Initialize aside
         var aside = $aside(options);

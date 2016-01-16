@@ -49,7 +49,8 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
   }
 
   function indexOfCaseInsensitive(array, value) {
-    var len = array.length, str = value.toString().toLowerCase();
+    var len = array.length;
+    var str = value.toString().toLowerCase();
     for (var i = 0; i < len; i++) {
       if (array[i].toLowerCase() === str) { return i; }
     }
@@ -69,6 +70,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
 
       var $dateParser = {};
 
+      /* eslint-disable key-spacing, quote-props */
       var regExpMap = {
         'sss'   : '[0-9]{3}',
         'ss'    : '[0-5][0-9]',
@@ -90,7 +92,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         'M'     : options.strict ? '[1-9]|1[012]' : '0?[1-9]|1[012]',
         'yyyy'  : '[1]{1}[0-9]{3}|[2]{1}[0-9]{3}',
         'yy'    : '[0-9]{2}',
-        'y'     : options.strict ? '-?(0|[1-9][0-9]{0,3})' : '-?0*[0-9]{1,4}',
+        'y'     : options.strict ? '-?(0|[1-9][0-9]{0,3})' : '-?0*[0-9]{1,4}'
       };
 
       var setFnMap = {
@@ -116,8 +118,10 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         'yy'    : function (value) { return this.setFullYear(2000 + 1 * value); },
         'y'     : function (value) { return (1 * value <= 50 && value.length === 2) ? this.setFullYear(2000 + 1 * value) : this.setFullYear(1 * value); }
       };
+      /* eslint-enable key-spacing, quote-props */
 
-      var regex, setMap;
+      var regex;
+      var setMap;
 
       $dateParser.init = function () {
         $dateParser.$format = $locale.DATETIME_FORMATS[options.format] || options.format;
@@ -141,7 +145,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         // use custom ParseDate object to set parsed values
         var date = baseDate && !isNaN(baseDate.getTime()) ? new ParseDate().fromDate(baseDate) : new ParseDate().fromDate(new Date(1970, 0, 1, 0));
         for (var i = 0; i < matches.length - 1; i++) {
-          formatSetMap[i] && formatSetMap[i].call(date, matches[i + 1]);
+          if (formatSetMap[i]) formatSetMap[i].call(date, matches[i + 1]);
         }
         // convert back to native Date object
         var newDate = date.toDate();
@@ -164,7 +168,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
           date = new Date(value.substr(1, value.length - 2));
         } else if (isNumeric(value)) {
           date = new Date(parseInt(value, 10));
-        } else if (angular.isString(value) && 0 === value.length) { // Reset date
+        } else if (angular.isString(value) && value.length === 0) { // Reset date
           date = key === 'minDate' ? -Infinity : +Infinity;
         } else {
           date = new Date(value);
@@ -182,7 +186,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
           time = new Date(value.substr(1, value.length - 2)).setFullYear(1970, 0, 1);
         } else if (isNumeric(value)) {
           time = new Date(parseInt(value, 10)).setFullYear(1970, 0, 1);
-        } else if (angular.isString(value) && 0 === value.length) { // Reset time
+        } else if (angular.isString(value) && value.length === 0) { // Reset time
           time = key === 'minTime' ? -Infinity : +Infinity;
         } else {
           time = $dateParser.parse(value, new Date(1970, 0, 1, 0));
@@ -250,8 +254,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
         angular.forEach(formatParts, function (part) {
           if (isFormatStringLiteral(part)) {
             part = trimLiteralEscapeChars(part);
-          }
-          else {
+          } else {
             // Abstract replaces to avoid collisions
             for (var i = 0; i < dateElements.length; i++) {
               part = part.split(dateElements[i]).join('${' + i + '}');
@@ -304,9 +307,13 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
       function buildDateParseValuesMap(abstractRegex) {
         var dateElements = Object.keys(regExpMap);
         var valuesRegex = new RegExp('\\${(\\d+)}', 'g');
-        var valuesMatch, keyIndex, valueKey, valueFunction;
+        var valuesMatch;
+        var keyIndex;
+        var valueKey;
+        var valueFunction;
         var valuesFunctionMap = [];
 
+        /* eslint-disable no-cond-assign */
         while ((valuesMatch = valuesRegex.exec(abstractRegex)) !== null) {
           keyIndex = valuesMatch[1];
           valueKey = dateElements[keyIndex];

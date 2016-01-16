@@ -23,7 +23,7 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
      */
     fn.css = function (element, prop, extra) {
       var value;
-      if (element.currentStyle) { //IE
+      if (element.currentStyle) { // IE
         value = element.currentStyle[prop];
       } else if (window.getComputedStyle) {
         value = window.getComputedStyle(element)[prop];
@@ -59,16 +59,16 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
      * @param i
      */
     fn.setOffset = function (element, options, i) {
-      var curPosition,
-        curLeft,
-        curCSSTop,
-        curTop,
-        curOffset,
-        curCSSLeft,
-        calculatePosition,
-        position = fn.css(element, 'position'),
-        curElem = angular.element(element),
-        props = {};
+      var curPosition;
+      var curLeft;
+      var curCSSTop;
+      var curTop;
+      var curOffset;
+      var curCSSLeft;
+      var calculatePosition;
+      var position = fn.css(element, 'position');
+      var curElem = angular.element(element);
+      var props = {};
 
       // Set position first, in-case top/left are set even on static elem
       if (position === 'static') {
@@ -96,10 +96,10 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
         options = options.call(element, i, curOffset);
       }
 
-      if (options.top !== null ) {
+      if (options.top !== null) {
         props.top = (options.top - curOffset.top) + curTop;
       }
-      if ( options.left !== null ) {
+      if (options.left !== null) {
         props.left = (options.left - curOffset.left) + curLeft;
       }
 
@@ -121,9 +121,9 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
      */
     fn.position = function (element) {
 
-      var offsetParentRect = {top: 0, left: 0},
-        offsetParentElement,
-        offset;
+      var offsetParentRect = {top: 0, left: 0};
+      var offsetParentEl;
+      var offset;
 
       // Fixed elements are offset from window (parentOffset = {top:0, left: 0}, because it is it's only offset parent
       if (fn.css(element, 'position') === 'fixed') {
@@ -133,18 +133,18 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
 
       } else {
 
-        // Get *real* offsetParentElement
-        offsetParentElement = offsetParent(element);
+        // Get *real* offsetParentEl
+        offsetParentEl = offsetParentElement(element);
 
         // Get correct offsets
         offset = fn.offset(element);
-        if (!nodeName(offsetParentElement, 'html')) {
-          offsetParentRect = fn.offset(offsetParentElement);
+        if (!nodeName(offsetParentEl, 'html')) {
+          offsetParentRect = fn.offset(offsetParentEl);
         }
 
         // Add offsetParent borders
-        offsetParentRect.top += fn.css(offsetParentElement, 'borderTopWidth', true);
-        offsetParentRect.left += fn.css(offsetParentElement, 'borderLeftWidth', true);
+        offsetParentRect.top += fn.css(offsetParentEl, 'borderTopWidth', true);
+        offsetParentRect.left += fn.css(offsetParentEl, 'borderLeftWidth', true);
       }
 
       // Subtract parent offsets and element margins
@@ -162,7 +162,7 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
      * @required-by fn.position
      * @param element
      */
-    var offsetParent = function offsetParentElement(element) {
+    function offsetParentElement(element) {
       var docElement = element.ownerDocument;
       var offsetParent = element.offsetParent || docElement;
       if (nodeName(offsetParent, '#document')) return docElement.documentElement;
@@ -170,7 +170,7 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
         offsetParent = offsetParent.offsetParent;
       }
       return offsetParent || docElement.documentElement;
-    };
+    }
 
     /**
      * Provides equivalent of jQuery's height function

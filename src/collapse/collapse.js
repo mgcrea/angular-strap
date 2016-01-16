@@ -70,10 +70,8 @@ angular.module('mgcrea.ngStrap.collapse', [])
       self.$setActive = $scope.$setActive = function (value) {
         if (angular.isArray(value)) {
           self.$targets.$active = value;
-        }
-        else if (!self.$options.disallowToggle) {
-          // toogle element active status
-          isActive(value) ? deactivateItem(value) : activateItem(value);
+        } else if (!self.$options.disallowToggle && isActive(value)) {
+          deactivateItem(value);
         } else {
           activateItem(value);
         }
@@ -84,8 +82,10 @@ angular.module('mgcrea.ngStrap.collapse', [])
       };
 
       self.$activeIndexes = function () {
-        return self.$options.allowMultiple ? self.$targets.$active :
-          self.$targets.$active.length === 1 ? self.$targets.$active[0] : -1;
+        if (self.$options.allowMultiple) {
+          return self.$targets.$active;
+        }
+        return self.$targets.$active.length === 1 ? self.$targets.$active[0] : -1;
       };
 
       function fixActiveItemIndexes(index) {
@@ -141,8 +141,6 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
   .directive('bsCollapse', function ($window, $animate, $collapse) {
 
-    var defaults = $collapse.defaults;
-
     return {
       require: ['?ngModel', 'bsCollapse'],
       controller: ['$scope', '$element', '$attrs', $collapse.controller],
@@ -165,8 +163,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
               // model value is an array, so just replace
               // the active items directly
               bsCollapseCtrl.$setActive(modelValue);
-            }
-            else {
+            } else {
               var activeIndexes = bsCollapseCtrl.$activeIndexes();
 
               if (angular.isArray(activeIndexes)) {
@@ -175,8 +172,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
                   // item with modelValue index is not active
                   bsCollapseCtrl.$setActive(modelValue * 1);
                 }
-              }
-              else if (activeIndexes !== modelValue * 1) {
+              } else if (activeIndexes !== modelValue * 1) {
                 bsCollapseCtrl.$setActive(modelValue * 1);
               }
             }
@@ -196,7 +192,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
       require: ['^?ngModel', '^bsCollapse'],
       link: function postLink(scope, element, attrs, controllers) {
 
-        var ngModelCtrl = controllers[0];
+        // var ngModelCtrl = controllers[0];
         var bsCollapseCtrl = controllers[1];
 
         // Add base attr
@@ -230,7 +226,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
       // scope: true,
       link: function postLink(scope, element, attrs, controllers) {
 
-        var ngModelCtrl = controllers[0];
+        // var ngModelCtrl = controllers[0];
         var bsCollapseCtrl = controllers[1];
 
         // Add base class
@@ -257,8 +253,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
             if (active.indexOf(index) !== -1) {
               action = 'addClass';
             }
-          }
-          else if (index === active) {
+          } else if (index === active) {
             action = 'addClass';
           }
 

@@ -23,14 +23,14 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
         var targetEl = options.target;
 
         // Initial private vars
-        var reset = 'affix affix-top affix-bottom',
-          setWidth = false,
-          initialAffixTop = 0,
-          initialOffsetTop = 0,
-          offsetTop = 0,
-          offsetBottom = 0,
-          affixed = null,
-          unpin = null;
+        var reset = 'affix affix-top affix-bottom';
+        var setWidth = false;
+        var initialAffixTop = 0;
+        var initialOffsetTop = 0;
+        var offsetTop = 0;
+        var offsetBottom = 0;
+        var affixed = null;
+        var unpin = null;
 
         var parent = element.parent();
         // Options: custom parent
@@ -39,8 +39,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
             for (var i = 0; i < (options.offsetParent * 1) - 1; i++) {
               parent = parent.parent();
             }
-          }
-          else {
+          } else {
             parent = angular.element(options.offsetParent);
           }
         }
@@ -106,8 +105,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
           } else if (affix === 'bottom') {
             if (options.offsetUnpin) {
               unpin = -(options.offsetUnpin * 1);
-            }
-            else {
+            } else {
               // Calculate unpin threshold when affixed to bottom.
               // Hopefully the browser scrolls pixel by pixel.
               unpin = position.top - scrollTop;
@@ -156,12 +154,10 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
               initialAffixTop = - options.offsetTop * 1;
               if (options.offsetParent) {
                 offsetTop = dimensions.offset(parent[0]).top + (options.offsetTop * 1);
-              }
-              else {
+              } else {
                 offsetTop = dimensions.offset(element[0]).top - dimensions.css(element[0], 'marginTop', true) + (options.offsetTop * 1);
               }
-            }
-            else {
+            } else {
               offsetTop = options.offsetTop * 1;
             }
           }
@@ -170,8 +166,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
             if (options.offsetParent && options.offsetBottom.match(/^[-+]\d+$/)) {
               // add 1 pixel due to rounding problems...
               offsetBottom = getScrollHeight() - (dimensions.offset(parent[0]).top + dimensions.height(parent[0])) + (options.offsetBottom * 1) + 1;
-            }
-            else {
+            } else {
               offsetBottom = options.offsetBottom * 1;
             }
           }
@@ -184,21 +179,18 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
         // Private methods
 
-        function getRequiredAffixClass(unpin, position, elementHeight) {
-
+        function getRequiredAffixClass(_unpin, position, elementHeight) {
           var scrollTop = getScrollTop();
           var scrollHeight = getScrollHeight();
 
           if (scrollTop <= offsetTop) {
             return 'top';
-          } else if (unpin !== null && (scrollTop + unpin <= position.top)) {
+          } else if (_unpin !== null && (scrollTop + _unpin <= position.top)) {
             return 'middle';
           } else if (offsetBottom !== null && (position.top + elementHeight + initialAffixTop >= scrollHeight - offsetBottom)) {
             return 'bottom';
-          } else {
-            return 'middle';
           }
-
+          return 'middle';
         }
 
         function getScrollTop() {
@@ -239,7 +231,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
         var affix = $affix(element, options);
         scope.$on('$destroy', function () {
-          affix && affix.destroy();
+          if (affix) affix.destroy();
           options = null;
           affix = null;
         });

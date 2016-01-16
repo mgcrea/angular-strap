@@ -7,7 +7,6 @@ angular.module('mgcrea.ngStrap.core', [])
   .service('$bsCompiler', bsCompilerService);
 
 function bsCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
-  /* jshint validthis: true */
 
   /*
    * @ngdoc service

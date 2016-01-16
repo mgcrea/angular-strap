@@ -25,8 +25,6 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
     this.$get = function ($window, $rootScope, $tooltip, $$rAF, $timeout) {
 
-      var bodyEl = angular.element($window.document.body);
-
       function TypeaheadFactory(element, controller, config) {
 
         var $typeahead = {};
@@ -101,14 +99,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.$getIndex = function (value) {
-          var l = scope.$matches.length,
-            i = l;
-          if (!l) return;
-          for (i = l; i--;) {
-            if (scope.$matches[i].value === value) break;
+          var index;
+          for (index = scope.$matches.length; index--;) {
+            if (angular.equals(scope.$matches[index].value, value)) break;
           }
-          if (i < 0) return;
-          return i;
+          return index;
         };
 
         $typeahead.$onMouseDown = function (evt) {
@@ -146,21 +141,24 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           // use timeout to hookup the events to prevent
           // event bubbling from being processed immediately.
           $timeout(function () {
-            $typeahead.$element && $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
-            if (options.keyboard) {
-              element && element.on('keydown', $typeahead.$onKeyDown);
+            if ($typeahead.$element) {
+              $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
+              if (options.keyboard) {
+                if (element) element.on('keydown', $typeahead.$onKeyDown);
+              }
             }
           }, 0, false);
         };
 
         var hide = $typeahead.hide;
         $typeahead.hide = function () {
-          $typeahead.$element && $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
+          if ($typeahead.$element) $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
           if (options.keyboard) {
-            element && element.off('keydown', $typeahead.$onKeyDown);
+            if (element) element.off('keydown', $typeahead.$onKeyDown);
           }
-          if (!options.autoSelect)
+          if (!options.autoSelect) {
             $typeahead.activate(-1);
+          }
           hide();
         };
 
@@ -171,7 +169,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       // Helper functions
 
       function safeDigest(scope) {
+        /* eslint-disable no-unused-expressions */
         scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
+        /* eslint-enable no-unused-expressions */
       }
 
       TypeaheadFactory.defaults = defaults;
@@ -187,9 +187,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         return array.then(function (results) {
           return $filter('filter')(results, expression, comparator);
         });
-      } else {
-        return $filter('filter')(array, expression, comparator);
       }
+      return $filter('filter')(array, expression, comparator);
     };
   })
 
@@ -290,7 +289,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             return element.val('');
           }
           var index = typeahead.$getIndex(controller.$modelValue);
-          var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
+          var selected = index !== -1 ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
           var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
           element.val(options.trimValue === false ? value : value.trim());

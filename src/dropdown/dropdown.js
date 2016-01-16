@@ -28,7 +28,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         // Common vars
         var options = angular.extend({}, defaults, config);
-        var scope = $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+        /* var scope = */$dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
 
         $dropdown = $tooltip(element, options);
         var parentEl = element.parent();
@@ -64,18 +64,18 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
           $timeout(function () {
-            options.keyboard && $dropdown.$element && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+            if (options.keyboard && $dropdown.$element) $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
             bodyEl.on('click', onBodyClick);
           }, 0, false);
-          parentEl.hasClass('dropdown') && parentEl.addClass('open');
+          if (parentEl.hasClass('dropdown')) parentEl.addClass('open');
         };
 
         var hide = $dropdown.hide;
         $dropdown.hide = function () {
           if (!$dropdown.$isShown) return;
-          options.keyboard && $dropdown.$element && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+          if (options.keyboard && $dropdown.$element) $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
           bodyEl.off('click', onBodyClick);
-          parentEl.hasClass('dropdown') && parentEl.removeClass('open');
+          if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
           hide();
         };
 
@@ -134,24 +134,31 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           // use string regex match boolean attr falsy values, leave truthy values be
           var falseValueRegExp = /^(false|0|)$/i;
           angular.forEach(['html', 'container'], function (key) {
-            if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
-              options[key] = false;
+            if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
           });
 
           // Support scope as an object
-          attr.bsDropdown && scope.$watch(attr.bsDropdown, function (newValue, oldValue) {
-            scope.content = newValue;
-          }, true);
-
-          // Visibility binding support
-          attr.bsShow && scope.$watch(attr.bsShow, function (newValue, oldValue) {
-            if (!dropdown || !angular.isDefined(newValue)) return;
-            if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
-            newValue === true ? dropdown.show() : dropdown.hide();
-          });
+          if (attr.bsDropdown) {
+            scope.$watch(attr.bsDropdown, function (newValue, oldValue) {
+              scope.content = newValue;
+            }, true);
+          }
 
           // Initialize dropdown
           var dropdown = $dropdown(element, options);
+
+          // Visibility binding support
+          if (attr.bsShow) {
+            scope.$watch(attr.bsShow, function (newValue, oldValue) {
+              if (!dropdown || !angular.isDefined(newValue)) return;
+              if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
+              if (newValue === true) {
+                dropdown.show();
+              } else {
+                dropdown.hide();
+              }
+            });
+          }
 
           // Garbage collection
           scope.$on('$destroy', function () {
