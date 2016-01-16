@@ -23,7 +23,8 @@ before_script:
   - date --rfc-2822
 
 script:
-  - $(npm bin)/gulp jshint karma:travis
+  - npm run test-eslint
+  - $(npm bin)/gulp karma:travis
   - $(npm bin)/gulp karma:travis~1.3.0
   - $(npm bin)/gulp karma:travis~1.2.0
 

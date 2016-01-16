@@ -1,24 +1,15 @@
 'use strict';
 
 var gutil = require('gulp-util');
-var jshint = require('gulp-jshint');
-var stylish = require('jshint-stylish');
 var path = require('path');
 var Server = require('karma').Server;
 var reporter = require('./helpers/reporter');
 
-module.exports = function(gulp, config) {
-
-  gulp.task('jshint', function() {
-    var paths = config.paths;
-    return gulp.src(paths.scripts, {cwd: paths.cwd})
-      .pipe(jshint())
-      .pipe(jshint.reporter(stylish));
-  });
+module.exports = function (gulp, config) {
 
   var testTimezone = '';
   var hasWatchFlag = process.argv.indexOf('-w') !== -1;
-  gulp.task('karma:unit', gulp.series('ng:test/templates', function(done) {
+  gulp.task('karma:unit', gulp.series('ng:test/templates', function (done) {
     // if testTimezone has value, set the environment timezone
     // before starting karma, so PhantomJS picks up the
     // timezone setting
@@ -32,7 +23,7 @@ module.exports = function(gulp, config) {
       reporters: [hasWatchFlag ? 'progress' : 'dots'],
       autoWatch: hasWatchFlag ? true : false,
       singleRun: hasWatchFlag ? false : true
-    }, function(code) {
+    }, function (code) {
       gutil.log('Karma has exited with ' + code);
       done();
     }).start();
@@ -44,14 +35,14 @@ module.exports = function(gulp, config) {
       browsers: ['PhantomJS'],
       reporters: ['dots', 'coverage'],
       singleRun: true
-    }, function(code) {
+    }, function (code) {
       gutil.log('Karma has exited with ' + code);
       var token = process.env.CODE_CLIMATE_TOKEN;
       if (!token) {
         done();
         return;
       }
-      gulp.src('test/coverage/**/lcov.info', { read: false })
+      gulp.src('test/coverage/**/lcov.info', {read: false})
         .pipe(reporter({token: token}))
         .on('end', done);
     }).start();
@@ -62,7 +53,7 @@ module.exports = function(gulp, config) {
       browsers: ['PhantomJS'],
       reporters: ['dots'],
       singleRun: true
-    }, function(code) {
+    }, function (code) {
       gutil.log('Karma has exited with ' + code);
       done();
     }).start();
@@ -73,20 +64,20 @@ module.exports = function(gulp, config) {
       browsers: ['PhantomJS'],
       reporters: ['dots'],
       singleRun: true
-    }, function(code) {
+    }, function (code) {
       gutil.log('Karma has exited with ' + code);
       done();
     }).start();
   }));
 
-  gulp.task('test', gulp.series('ng:test/templates', gulp.parallel('jshint', 'karma:unit')));
-  gulp.task('test:timezone', function() {
+  gulp.task('test', gulp.series('ng:test/templates', gulp.parallel('karma:unit')));
+  gulp.task('test:timezone', function () {
     // parse command line argument for optional timezone
     // invoke like this:
     //     gulp test:timezone --Europe/Paris
     var timezone = process.argv[3] || '';
     testTimezone = timezone.replace(/-/g, '');
-    return gulp.series('ng:test/templates', gulp.parallel('jshint', 'karma:unit'));
+    return gulp.series('ng:test/templates', gulp.parallel('karma:unit'));
   });
 
 };
