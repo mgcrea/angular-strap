@@ -17,6 +17,7 @@ module.exports = function(gulp, config) {
   });
 
   var testTimezone = '';
+  var hasWatchFlag = process.argv.indexOf('-w') !== -1;
   gulp.task('karma:unit', gulp.series('ng:test/templates', function(done) {
     // if testTimezone has value, set the environment timezone
     // before starting karma, so PhantomJS picks up the
@@ -28,20 +29,9 @@ module.exports = function(gulp, config) {
     new Server({
       configFile: path.join(config.dirname, 'test/karma.conf.js'),
       browsers: ['PhantomJS'],
-      reporters: ['dots'],
-      singleRun: true
-    }, function(code) {
-      gutil.log('Karma has exited with ' + code);
-      done();
-    }).start();
-  }));
-  gulp.task('karma:server', gulp.series('ng:test/templates', function karmaServer(done) {
-    new Server({
-      configFile: path.join(config.dirname, 'test/karma.conf.js'),
-      browsers: ['PhantomJS'],
-      reporters: ['progress'],
-      autoWatch: true,
-      singleRun: false
+      reporters: [hasWatchFlag ? 'progress' : 'dots'],
+      autoWatch: hasWatchFlag ? true : false,
+      singleRun: hasWatchFlag ? false : true
     }, function(code) {
       gutil.log('Karma has exited with ' + code);
       done();
@@ -98,6 +88,5 @@ module.exports = function(gulp, config) {
     testTimezone = timezone.replace(/-/g, '');
     return gulp.series('ng:test/templates', gulp.parallel('jshint', 'karma:unit'));
   });
-  gulp.task('test:server', gulp.series('ng:test/templates', 'karma:server'));
 
 };

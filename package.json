@@ -52,6 +52,7 @@
     "undertaker-lib-tasks": "^0.5.1"
   },
   "scripts": {
-    "test": "$(npm bin)/gulp jshint karma:unit"
+    "test": "gulp jshint karma:unit",
+    "test:watch": "npm run test -- -w"
   }
 }
