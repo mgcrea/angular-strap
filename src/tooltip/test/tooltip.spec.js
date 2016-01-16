@@ -109,31 +109,31 @@ describe('tooltip', function() {
       element: '<a data-placement="left-bottom" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-auto': {
-      element: '<a data-placement="auto" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
+      element: '<a data-placement="auto" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-auto-top': {
-      element: '<a data-placement="auto top" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
+      element: '<a data-placement="auto top" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-auto-right': {
-      element: '<a data-placement="auto right" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
+      element: '<a data-placement="auto right" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-auto-bottom': {
-      element: '<a data-placement="auto bottom" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
+      element: '<a data-placement="auto bottom" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-auto-left': {
-      element: '<a data-placement="auto left" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
+      element: '<a data-placement="auto left" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-auto-exotic-top-left': {
-      element: '<a data-placement="auto top-left" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
+      element: '<a data-placement="auto top-left" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-auto-exotic-top-right': {
-      element: '<a data-placement="auto top-right" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
+      element: '<a data-placement="auto top-right" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-auto-exotic-bottom-left': {
-      element: '<a data-placement="auto bottom-left" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
+      element: '<a data-placement="auto bottom-left" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-auto-exotic-bottom-right': {
-      element: '<a data-placement="auto bottom-right" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
+      element: '<a data-placement="auto bottom-right" bs-tooltip="tooltip" data-viewport="null">hover me</a>'
     },
     'options-placement-viewport-top': {
       element: '<a data-placement="top" bs-tooltip="tooltip" data-viewport="\'#sandbox\'">hover me</a>'
