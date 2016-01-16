@@ -687,7 +687,7 @@ describe('modal', function() {
 
         angular.element(elm2[0]).triggerHandler('click');
         expect(bodyEl.find('.modal-backdrop').length).toBe(2);
-        var backdrop2 = bodyEl.find('.modal-backdrop')[0];
+        var backdrop2 = bodyEl.find('.modal-backdrop')[angular.version.minor <= 2 ? 1 : 0];
         var modal2 = bodyEl.find('.modal')[1];
 
         expect(angular.element(backdrop1).css('z-index')).toBe('1040');

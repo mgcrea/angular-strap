@@ -269,7 +269,7 @@ describe('aside', function () {
 
         angular.element(elm2[0]).triggerHandler('click');
         expect(bodyEl.find('.aside-backdrop').length).toBe(2);
-        var backdrop2 = bodyEl.find('.aside-backdrop')[0];
+        var backdrop2 = bodyEl.find('.aside-backdrop')[angular.version.minor <= 2 ? 1 : 0];
         var aside2 = bodyEl.find('.aside')[1];
 
         expect(angular.element(backdrop1).css('z-index')).toBe('1040');

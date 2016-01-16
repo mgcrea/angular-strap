@@ -139,11 +139,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           modalElement = $modal.$element = compileData.link(modalScope, function (clonedElement, scope) {});
 
           if (options.backdrop) {
-              // set z-index
+            // set z-index
             modalElement.css({'z-index': dialogBaseZindex + (backdropCount * 20)});
             backdropElement.css({'z-index': backdropBaseZindex + (backdropCount * 20)});
 
-              // increment number of backdrops
+            // increment number of backdrops
             backdropCount++;
           }
 
@@ -206,7 +206,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           if (!$modal.$isShown) return;
 
           if (options.backdrop) {
-              // decrement number of modals
+            // decrement number of modals
             backdropCount--;
           }
 
