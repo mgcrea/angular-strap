@@ -7,6 +7,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
     var defaults = this.defaults = {
       animation: 'am-fade',
       backdropAnimation: 'am-fade',
+      extraClass: false,
       prefixClass: 'modal',
       prefixEvent: 'modal',
       placement: 'top',
@@ -18,8 +19,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       backdrop: true,
       keyboard: true,
       html: false,
-      show: true,
-      modalClass: false
+      show: true
     };
 
     this.$get = function($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
@@ -78,7 +78,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         // Fetch, compile then initialize modal
         var compileData, modalElement, modalScope;
         var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
-        backdropElement.css({position:'fixed', top:'0px', left:'0px', bottom:'0px', right:'0px'});
+        backdropElement.css({position: 'fixed', top: '0px', left: '0px', bottom: '0px', right: '0px'});
         promise.then(function(data) {
           compileData = data;
           $modal.init();
@@ -152,8 +152,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           // Set the initial positioning.
           modalElement.css({display: 'block'}).addClass(options.placement);
 
-          if(options.modalClass) {
-            modalElement.addClass(options.modalClass);
+          // Options: extraClass
+          if(options.extraClass) {
+            modalElement.addClass(options.extraClass);
           }
 
           // Options: animation
@@ -348,6 +349,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'modalClass'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
+
+        // Options: alias modalClass to extraClass
+        if (options.modalClass) {
+          options.extraClass = options.modalClass;
+        }
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
