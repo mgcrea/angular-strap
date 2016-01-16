@@ -37,6 +37,9 @@ module.exports = function (gulp, config) {
       singleRun: true
     }, function (code) {
       gutil.log('Karma has exited with ' + code);
+      if (code) {
+        process.exit(code);
+      }
       var token = process.env.CODE_CLIMATE_TOKEN;
       if (!token) {
         done();
@@ -55,6 +58,9 @@ module.exports = function (gulp, config) {
       singleRun: true
     }, function (code) {
       gutil.log('Karma has exited with ' + code);
+      if (code) {
+        process.exit(code);
+      }
       done();
     }).start();
   }));
@@ -66,6 +72,9 @@ module.exports = function (gulp, config) {
       singleRun: true
     }, function (code) {
       gutil.log('Karma has exited with ' + code);
+      if (code) {
+        process.exit(code);
+      }
       done();
     }).start();
   }));
