@@ -34,7 +34,8 @@ module.exports = function (gulp, config) {
       configFile: path.join(config.dirname, 'test/karma.conf.js'),
       browsers: ['PhantomJS'],
       reporters: ['dots', 'coverage'],
-      singleRun: true
+      autoWatch: hasWatchFlag ? true : false,
+      singleRun: hasWatchFlag ? false : true
     }, function (code) {
       gutil.log('Karma has exited with ' + code);
       if (code) {
@@ -55,7 +56,8 @@ module.exports = function (gulp, config) {
       configFile: path.join(config.dirname, 'test/~1.2.0/karma.conf.js'),
       browsers: ['PhantomJS'],
       reporters: ['dots'],
-      singleRun: true
+      autoWatch: hasWatchFlag ? true : false,
+      singleRun: hasWatchFlag ? false : true
     }, function (code) {
       gutil.log('Karma has exited with ' + code);
       if (code) {
@@ -69,7 +71,8 @@ module.exports = function (gulp, config) {
       configFile: path.join(config.dirname, 'test/~1.3.0/karma.conf.js'),
       browsers: ['PhantomJS'],
       reporters: ['dots'],
-      singleRun: true
+      autoWatch: hasWatchFlag ? true : false,
+      singleRun: hasWatchFlag ? false : true
     }, function (code) {
       gutil.log('Karma has exited with ' + code);
       if (code) {
