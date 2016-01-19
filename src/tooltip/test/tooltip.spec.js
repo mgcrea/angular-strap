@@ -156,6 +156,9 @@ describe('tooltip', function() {
     'options-trigger': {
       element: '<a data-trigger="click" bs-tooltip="tooltip">click me</a>'
     },
+    'options-trigger-contextmenu': {
+      element: '<a data-trigger="contextmenu" bs-tooltip="tooltip">right-click me</a>'
+    },
     'options-html': {
       scope: {tooltip: {title: 'title<br>next'}},
       element: '<a data-html="{{html}}" bs-tooltip="tooltip">hover me</a>'
@@ -809,7 +812,6 @@ describe('tooltip', function() {
     });
 
     describe('trigger', function() {
-
       it('should support an alternative trigger', function() {
         var elm = compileDirective('options-trigger');
         expect(sandboxEl.children('.tooltip').length).toBe(0);
@@ -819,6 +821,14 @@ describe('tooltip', function() {
         expect(sandboxEl.children('.tooltip').length).toBe(0);
       });
 
+      it('should support a contextmenu trigger', function() {
+        var elm = compileDirective('options-trigger-contextmenu');
+        expect(sandboxEl.children('.tooltip').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('contextmenu');
+        expect(sandboxEl.children('.tooltip').length).toBe(1);
+        angular.element(elm[0]).triggerHandler('contextmenu');
+        expect(sandboxEl.children('.tooltip').length).toBe(0);
+      });
     });
 
     describe('html', function() {
