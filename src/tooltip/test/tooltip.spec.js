@@ -827,6 +827,8 @@ describe('tooltip', function() {
         expect(sandboxEl.children('.tooltip').length).toBe(0);
         angular.element(elm[0]).triggerHandler('contextmenu');
         expect(sandboxEl.children('.tooltip').length).toBe(1);
+        angular.element(elm[0]).triggerHandler('contextmenu');
+        expect(sandboxEl.children('.tooltip').length).toBe(0);
       });
 
     });

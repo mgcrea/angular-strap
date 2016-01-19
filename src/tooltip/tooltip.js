@@ -309,7 +309,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           }
         }
 
-        $tooltip.toggle = function () {
+        $tooltip.toggle = function (evt) {
+          if (evt) { evt.preventDefault(); }
           $tooltip.$isShown ? $tooltip.leave() : $tooltip.enter();
         };
 
@@ -402,7 +403,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         function bindTriggerEvents() {
           var triggers = options.trigger.split(' ');
           angular.forEach(triggers, function (trigger) {
-            if(trigger === 'click' || trigger === 'contextmenu') {
+            if (trigger === 'click' || trigger === 'contextmenu') {
               element.on(trigger, $tooltip.toggle);
             } else if (trigger !== 'manual') {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
