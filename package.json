@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Bootstrap",
-  "version": "2.3.1",
+  "version": "2.3.7",
   "keywords": [
     "angular",
     "bootstrap"
@@ -27,26 +27,35 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "del": "^1.2.1",
-    "factory-angular-channels": "^0.8.2",
-    "gulp": "gulpjs/gulp#4.0",
-    "gulp-jshint": "^1.11.2",
-    "gulp-util": "^3.0.6",
-    "jasmine-core": "^2.3.4",
-    "jshint-stylish": "^2.0.1",
-    "karma": "^0.13.9",
-    "karma-chrome-launcher": "^0.2.0",
-    "karma-coverage": "^0.5.0",
+    "codeclimate-test-reporter": "^0.2.0",
+    "del": "^2.2.0",
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb": "^3.1.0",
+    "eslint-plugin-html": "^1.2.0",
+    "factory-angular-channels": "^0.9.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-ng-annotate": "^1.1.0",
+    "gulp-pre": "^4.0.0-alpha.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1",
+    "gulp-util": "^3.0.7",
+    "jasmine-core": "^2.4.1",
+    "jshint-stylish": "^2.1.0",
+    "karma": "^0.13.19",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-coverage": "^0.5.3",
     "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^0.2.1",
-    "karma-sauce-launcher": "^0.2.14",
-    "ng-factory": "^1.0",
-    "undertaker-lib-tasks": "^0.4.0"
-  },
-  "engines": {
-    "node": "^0.10"
+    "karma-phantomjs-launcher": "^0.2.3",
+    "karma-sauce-launcher": "^0.3.0",
+    "ng-factory": "^1.1.0",
+    "phantomjs": "^1.9.19",
+    "through2": "^2.0.0",
+    "undertaker-lib-tasks": "^0.5.1"
   },
   "scripts": {
-    "test": "$(npm bin)/gulp jshint karma:unit"
+    "start": "gulp serve",
+    "test": "npm run test-eslint && gulp karma:unit",
+    "test-eslint": "eslint src/*/*.js",
+    "test:watch": "npm run test -- -w"
   }
 }

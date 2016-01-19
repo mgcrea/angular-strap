@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.1 - 2015-07-19
+ * @version v2.3.7 - 2016-01-16
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -41,6 +41,7 @@ angular.module('mgcrea.ngStrap.popover', [ 'mgcrea.ngStrap.tooltip' ]).provider(
     restrict: 'EAC',
     scope: true,
     link: function postLink(scope, element, attr) {
+      var popover;
       var options = {
         scope: scope
       };
@@ -53,36 +54,56 @@ angular.module('mgcrea.ngStrap.popover', [ 'mgcrea.ngStrap.tooltip' ]).provider(
       });
       var dataTarget = element.attr('data-target');
       if (angular.isDefined(dataTarget)) {
-        if (falseValueRegExp.test(dataTarget)) options.target = false; else options.target = dataTarget;
+        if (falseValueRegExp.test(dataTarget)) {
+          options.target = false;
+        } else {
+          options.target = dataTarget;
+        }
       }
       angular.forEach([ 'title', 'content' ], function(key) {
-        attr[key] && attr.$observe(key, function(newValue, oldValue) {
-          scope[key] = $sce.trustAsHtml(newValue);
-          angular.isDefined(oldValue) && requestAnimationFrame(function() {
-            popover && popover.$applyPlacement();
+        if (attr[key]) {
+          attr.$observe(key, function(newValue, oldValue) {
+            scope[key] = $sce.trustAsHtml(newValue);
+            if (angular.isDefined(oldValue)) {
+              requestAnimationFrame(function() {
+                if (popover) popover.$applyPlacement();
+              });
+            }
           });
-        });
-      });
-      attr.bsPopover && scope.$watch(attr.bsPopover, function(newValue, oldValue) {
-        if (angular.isObject(newValue)) {
-          angular.extend(scope, newValue);
-        } else {
-          scope.content = newValue;
         }
-        angular.isDefined(oldValue) && requestAnimationFrame(function() {
-          popover && popover.$applyPlacement();
+      });
+      if (attr.bsPopover) {
+        scope.$watch(attr.bsPopover, function(newValue, oldValue) {
+          if (angular.isObject(newValue)) {
+            angular.extend(scope, newValue);
+          } else {
+            scope.content = newValue;
+          }
+          if (angular.isDefined(oldValue)) {
+            requestAnimationFrame(function() {
+              if (popover) popover.$applyPlacement();
+            });
+          }
+        }, true);
+      }
+      if (attr.bsShow) {
+        scope.$watch(attr.bsShow, function(newValue, oldValue) {
+          if (!popover || !angular.isDefined(newValue)) return;
+          if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
+          if (newValue === true) {
+            popover.show();
+          } else {
+            popover.hide();
+          }
         });
-      }, true);
-      attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
-        if (!popover || !angular.isDefined(newValue)) return;
-        if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
-        newValue === true ? popover.show() : popover.hide();
-      });
-      attr.viewport && scope.$watch(attr.viewport, function(newValue) {
-        if (!popover || !angular.isDefined(newValue)) return;
-        popover.setViewport(newValue);
-      });
-      var popover = $popover(element, options);
+      }
+      if (attr.viewport) {
+        scope.$watch(attr.viewport, function(newValue) {
+          if (!popover || !angular.isDefined(newValue)) return;
+          popover.setViewport(newValue);
+        });
+      }
+      popover = $popover(element, options);
       scope.$on('$destroy', function() {
         if (popover) popover.destroy();
         options = null;

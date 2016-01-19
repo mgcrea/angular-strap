@@ -2,7 +2,7 @@
 
 angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions'])
 
-  .provider('$select', function() {
+  .provider('$select', function () {
 
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -27,10 +27,10 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
       iconCheckmark: 'glyphicon glyphicon-ok'
     };
 
-    this.$get = function($window, $document, $rootScope, $tooltip, $timeout) {
+    this.$get = function ($window, $document, $rootScope, $tooltip, $timeout) {
 
-      var bodyEl = angular.element($window.document.body);
-      var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
+      // var bodyEl = angular.element($window.document.body);
+      var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
       var isTouch = ('createTouch' in $window.document) && isNative;
 
       function SelectFactory(element, controller, config) {
@@ -46,8 +46,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         scope.$matches = [];
         if (options.multiple) {
           scope.$activeIndex = [];
-        }
-        else {
+        } else {
           scope.$activeIndex = -1;
         }
         scope.$isMultiple = options.multiple;
@@ -56,23 +55,23 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         scope.$allText = options.allText;
         scope.$noneText = options.noneText;
 
-        scope.$activate = function(index) {
-          scope.$$postDigest(function() {
+        scope.$activate = function (index) {
+          scope.$$postDigest(function () {
             $select.activate(index);
           });
         };
 
-        scope.$select = function(index, evt) {
-          scope.$$postDigest(function() {
+        scope.$select = function (index, evt) {
+          scope.$$postDigest(function () {
             $select.select(index);
           });
         };
 
-        scope.$isVisible = function() {
+        scope.$isVisible = function () {
           return $select.$isVisible();
         };
 
-        scope.$isActive = function(index) {
+        scope.$isActive = function (index) {
           return $select.$isActive(index);
         };
 
@@ -94,27 +93,31 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Public methods
 
-        $select.update = function(matches) {
+        $select.update = function (matches) {
           scope.$matches = matches;
           $select.$updateActiveIndex();
         };
 
-        $select.activate = function(index) {
-          if(options.multiple) {
-            $select.$isActive(index) ? scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1) : scope.$activeIndex.push(index);
-            if(options.sort) scope.$activeIndex.sort(function(a, b) { return a - b; }); // use numeric sort instead of default sort
+        $select.activate = function (index) {
+          if (options.multiple) {
+            if ($select.$isActive(index)) {
+              scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1);
+            } else {
+              scope.$activeIndex.push(index);
+            }
+            if (options.sort) scope.$activeIndex.sort(function (a, b) { return a - b; }); // use numeric sort instead of default sort
           } else {
             scope.$activeIndex = index;
           }
           return scope.$activeIndex;
         };
 
-        $select.select = function(index) {
+        $select.select = function (index) {
           var value = scope.$matches[index].value;
-          scope.$apply(function() {
+          scope.$apply(function () {
             $select.activate(index);
-            if(options.multiple) {
-              controller.$setViewValue(scope.$activeIndex.map(function(index) {
+            if (options.multiple) {
+              controller.$setViewValue(scope.$activeIndex.map(function (index) {
                 if (angular.isUndefined(scope.$matches[index])) {
                   return null;
                 }
@@ -132,63 +135,65 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Protected methods
 
-        $select.$updateActiveIndex = function() {
-          if(controller.$modelValue && scope.$matches.length) {
-            if(options.multiple && angular.isArray(controller.$modelValue)) {
-              scope.$activeIndex = controller.$modelValue.map(function(value) {
+        $select.$updateActiveIndex = function () {
+          if (options.multiple) {
+            if (angular.isArray(controller.$modelValue)) {
+              scope.$activeIndex = controller.$modelValue.map(function (value) {
                 return $select.$getIndex(value);
               });
             } else {
-              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
+              scope.$activeIndex = [];
             }
-          } else if(scope.$activeIndex >= scope.$matches.length) {
-            scope.$activeIndex = options.multiple ? [] : 0;
-          } else if(!controller.$modelValue && !options.multiple) {
-            scope.$activeIndex = -1;
+          } else {
+            if (angular.isDefined(controller.$modelValue) && scope.$matches.length) {
+              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
+            } else {
+              scope.$activeIndex = -1;
+            }
           }
         };
 
-        $select.$isVisible = function() {
-          if(!options.minLength || !controller) {
+        $select.$isVisible = function () {
+          if (!options.minLength || !controller) {
             return scope.$matches.length;
           }
           // minLength support
           return scope.$matches.length && controller.$viewValue.length >= options.minLength;
         };
 
-        $select.$isActive = function(index) {
-          if(options.multiple) {
+        $select.$isActive = function (index) {
+          if (options.multiple) {
             return scope.$activeIndex.indexOf(index) !== -1;
-          } else {
-            return scope.$activeIndex === index;
           }
+          return scope.$activeIndex === index;
         };
 
-        $select.$getIndex = function(value) {
-          var l = scope.$matches.length, i = l;
-          if(!l) return;
-          for(i = l; i--;) {
-            if(scope.$matches[i].value === value) break;
+        $select.$getIndex = function (value) {
+          var index;
+          for (index = scope.$matches.length; index--;) {
+            if (angular.equals(scope.$matches[index].value, value)) break;
           }
-          if(i < 0) return;
-          return i;
+          return index;
         };
 
-        $select.$onMouseDown = function(evt) {
+        $select.$onMouseDown = function (evt) {
           // Prevent blur on mousedown on .dropdown-menu
           evt.preventDefault();
           evt.stopPropagation();
           // Emulate click for mobile devices
-          if(isTouch) {
+          if (isTouch) {
             var targetEl = angular.element(evt.target);
             targetEl.triggerHandler('click');
           }
         };
 
-        $select.$onKeyDown = function(evt) {
+        $select.$onKeyDown = function (evt) {
           if (!/(9|13|38|40)/.test(evt.keyCode)) return;
-          evt.preventDefault();
-          evt.stopPropagation();
+          // Let tab propagate
+          if (evt.keyCode !== 9) {
+            evt.preventDefault();
+            evt.stopPropagation();
+          }
 
           // release focus on tab
           if (options.multiple && evt.keyCode === 9) {
@@ -196,45 +201,58 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           }
 
           // Select with enter
-          if(!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
+          if (!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
             return $select.select(scope.$activeIndex);
           }
 
           if (!options.multiple) {
             // Navigate with keyboard
-            if(evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--;
-            else if(evt.keyCode === 38 && scope.$activeIndex < 0) scope.$activeIndex = scope.$matches.length - 1;
-            else if(evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
-            else if(angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
+            if (evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--;
+            else if (evt.keyCode === 38 && scope.$activeIndex < 0) scope.$activeIndex = scope.$matches.length - 1;
+            else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
+            else if (angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
             scope.$digest();
+          }
+        };
+
+        $select.$isIE = function () {
+          var ua = $window.navigator.userAgent;
+          return ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0 || ua.indexOf('Edge/') > 0;
+        };
+
+        $select.$selectScrollFix = function (e) {
+          if ($document[0].activeElement.tagName === 'UL') {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            e.target.focus();
           }
         };
 
         // Overrides
 
         var _show = $select.show;
-        $select.show = function() {
+        $select.show = function () {
           _show();
-          if(options.multiple) {
+          if (options.multiple) {
             $select.$element.addClass('select-multiple');
           }
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
-          $timeout(function() {
+          $timeout(function () {
             $select.$element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
-            if(options.keyboard) {
+            if (options.keyboard) {
               element.on('keydown', $select.$onKeyDown);
             }
           }, 0, false);
         };
 
         var _hide = $select.hide;
-        $select.hide = function() {
-          if(!options.multiple && !controller.$modelValue) {
+        $select.hide = function () {
+          if (!options.multiple && angular.isUndefined(controller.$modelValue)) {
             scope.$activeIndex = -1;
           }
           $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
-          if(options.keyboard) {
+          if (options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
           }
           _hide(true);
@@ -251,7 +269,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
   })
 
-  .directive('bsSelect', function($window, $parse, $q, $select, $parseOptions) {
+  .directive('bsSelect', function ($window, $parse, $q, $select, $parseOptions) {
 
     var defaults = $select.defaults;
 
@@ -262,29 +280,31 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Directive options
         var options = {scope: scope, placeholder: defaults.placeholder};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent'], function(key) {
-          if(angular.isDefined(attr[key])) options[key] = attr[key];
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent'], function (key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach(['html', 'container', 'allNoneButtons', 'sort'], function(key) {
-          if(angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
+        angular.forEach(['html', 'container', 'allNoneButtons', 'sort'], function (key) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
+          }
         });
 
         // Only parse data-multiple. Angular sets existence attributes to true (multiple/required/etc), they apply this
         // to data-multiple as well for some reason, so we'll parse this ourselves and disregard multiple
         var dataMultiple = element.attr('data-multiple');
-        if(angular.isDefined(dataMultiple)) {
-          if(falseValueRegExp.test(dataMultiple))
+        if (angular.isDefined(dataMultiple)) {
+          if (falseValueRegExp.test(dataMultiple)) {
             options.multiple = false;
-          else
+          } else {
             options.multiple = dataMultiple;
+          }
         }
 
         // Add support for select markup
-        if(element[0].nodeName.toLowerCase() === 'select') {
+        if (element[0].nodeName.toLowerCase() === 'select') {
           var inputEl = element;
           inputEl.css('display', 'none');
           element = angular.element('<button type="button" class="btn btn-default"></button>');
@@ -297,19 +317,23 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         // Initialize select
         var select = $select(element, controller, options);
 
+        if (select.$isIE()) {
+          element[0].addEventListener('blur', select.$selectScrollFix);
+        }
+
         // Watch bsOptions values before filtering for changes
         var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
-        scope.$watchCollection(watchedOptions, function(newValue, oldValue) {
+        scope.$watch(watchedOptions, function (newValue, oldValue) {
           // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
           parsedOptions.valuesFn(scope, controller)
-          .then(function(values) {
+          .then(function (values) {
             select.update(values);
             controller.$render();
           });
-        });
+        }, true);
 
         // Watch model for changes
-        scope.$watch(attr.ngModel, function(newValue, oldValue) {
+        scope.$watch(attr.ngModel, function (newValue, oldValue) {
           // console.warn('scope.$watch(%s)', attr.ngModel, newValue, oldValue);
           select.$updateActiveIndex();
           controller.$render();
@@ -318,32 +342,33 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         // Model rendering in view
         controller.$render = function () {
           // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
-          var selected, index;
-          if(options.multiple && angular.isArray(controller.$modelValue)) {
-            selected = controller.$modelValue.map(function(value) {
+          var selected;
+          var index;
+          if (options.multiple && angular.isArray(controller.$modelValue)) {
+            selected = controller.$modelValue.map(function (value) {
               index = select.$getIndex(value);
-              return angular.isDefined(index) ? select.$scope.$matches[index].label : false;
+              return index !== -1 ? select.$scope.$matches[index].label : false;
             }).filter(angular.isDefined);
-            if(selected.length > (options.maxLength || defaults.maxLength)) {
+            if (selected.length > (options.maxLength || defaults.maxLength)) {
               selected = selected.length + ' ' + (options.maxLengthHtml || defaults.maxLengthHtml);
             } else {
               selected = selected.join(', ');
             }
           } else {
             index = select.$getIndex(controller.$modelValue);
-            selected = angular.isDefined(index) ? select.$scope.$matches[index].label : false;
+            selected = index !== -1 ? select.$scope.$matches[index].label : false;
           }
           element.html((selected ? selected : options.placeholder) + (options.caretHtml ? options.caretHtml : defaults.caretHtml));
         };
 
-        if(options.multiple){
-          controller.$isEmpty = function(value){
+        if (options.multiple) {
+          controller.$isEmpty = function (value) {
             return !value || value.length === 0;
           };
         }
 
         // Garbage collection
-        scope.$on('$destroy', function() {
+        scope.$on('$destroy', function () {
           if (select) select.destroy();
           options = null;
           select = null;

@@ -76,7 +76,9 @@ $ bower install
 $ cd docs
 $ bower install
 $ cd ..
-$ $(npm bin)/gulp test
+$ npm test
+# or
+$ npm run test:watch
 ```
 
 You can build the latest version using `gulp`.

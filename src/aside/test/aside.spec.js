@@ -256,6 +256,28 @@ describe('aside', function () {
         expect(bodyEl.find('.aside-backdrop').length).toBe(0);
       });
 
+      it('should show backdrop above a previous aside dialog using the z-index value', function() {
+        var elm1 = compileDirective('default');
+        var elm2 = compileDirective('default');
+
+        expect(bodyEl.find('.aside-backdrop').length).toBe(0);
+
+        angular.element(elm1[0]).triggerHandler('click');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(1);
+        var backdrop1 = bodyEl.find('.aside-backdrop')[0];
+        var aside1 = bodyEl.find('.aside')[0];
+
+        angular.element(elm2[0]).triggerHandler('click');
+        expect(bodyEl.find('.aside-backdrop').length).toBe(2);
+        var backdrop2 = bodyEl.find('.aside-backdrop')[angular.version.minor <= 2 ? 1 : 0];
+        var aside2 = bodyEl.find('.aside')[1];
+
+        expect(angular.element(backdrop1).css('z-index')).toBe('1040');
+        expect(angular.element(aside1).css('z-index')).toBe('1050');
+        expect(angular.element(backdrop2).css('z-index')).toBe('1060');
+        expect(angular.element(aside2).css('z-index')).toBe('1070');
+      });
+
     });
 
     describe('keyboard', function() {
