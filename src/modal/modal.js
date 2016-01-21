@@ -166,7 +166,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
 
           // Options: size
-          if(options.size && validSizes[options.size]) {
+          if (options.size && validSizes[options.size]) {
             angular.element(findElement('.modal-dialog', modalElement[0])).addClass(validSizes[options.size]);
           }
 
