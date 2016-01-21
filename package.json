@@ -27,7 +27,7 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "codeclimate-test-reporter": "^0.2.0",
+    "codeclimate-test-reporter": "^0.3.0",
     "del": "^2.2.0",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^3.1.0",
