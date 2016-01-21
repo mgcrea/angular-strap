@@ -97,7 +97,13 @@ describe('modal', function() {
     },
     'options-modalClass': {
       element: '<a bs-modal="modal" data-modal-class="my-custom-class">click me</a>'
-    }
+    },
+    'options-size-lg': {
+      element: '<a bs-modal="modal" data-size="lg">click me</a>'
+    },
+    'options-size-invalid': {
+      element: '<a bs-modal="modal" data-size="md">click me</a>'
+    },
   };
 
   function compileDirective(template, locals) {
@@ -710,6 +716,27 @@ describe('modal', function() {
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.children('.modal')).not.toHaveClass('my-custom-class');
       });
+    });
+
+    describe('size', function() {
+      it('sets size class when specified', function() {
+        var elm = compileDirective('options-size-lg');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-dialog')).toHaveClass('modal-lg');
+      });
+
+      it('does not set size class when not specified', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-dialog')).not.toHaveClass('modal-lg');
+      });
+
+      it('does not set size class when invalid size is specified', function() {
+        var elm = compileDirective('options-size-invalid');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-dialog')).not.toHaveClass('modal-lg');
+      });
+
     });
 
   });
