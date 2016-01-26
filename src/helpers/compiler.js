@@ -106,13 +106,25 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
       throw new Error('Missing `template` / `templateUrl` option.');
     }
 
+    if (options.titleTemplate) {
+      resolve.$template = $q.all([resolve.$template, fetchTemplate(options.titleTemplate)])
+        .then(function (templates) {
+          var templateEl = angular.element(templates[0]);
+          findElement('[ng-bind="title"]', templateEl[0])
+            .removeAttr('ng-bind')
+            .html(templates[1]);
+          return templateEl[0].outerHTML;
+        });
+    }
+
     if (options.contentTemplate) {
       // TODO(mgcrea): deprecate?
       resolve.$template = $q.all([resolve.$template, fetchTemplate(options.contentTemplate)])
         .then(function (templates) {
           var templateEl = angular.element(templates[0]);
-          var contentEl = findElement('[ng-bind="content"], [ng-bind="title"]', templateEl[0])
-            .removeAttr('ng-bind').html(templates[1]);
+          var contentEl = findElement('[ng-bind="content"]', templateEl[0])
+            .removeAttr('ng-bind')
+            .html(templates[1]);
           // Drop the default footer as you probably don't want it if you use a custom contentTemplate
           if (!options.templateUrl) contentEl.next().remove();
           return templateEl[0].outerHTML;

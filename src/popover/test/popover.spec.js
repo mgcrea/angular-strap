@@ -93,6 +93,10 @@ describe('popover', function () {
     'bsShow-binding': {
       scope: {isVisible: false, popover: {title: 'Title', content: 'Hello Popover!'}},
       element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover bs-show="isVisible"></a>'
+    },
+    'options-contentTemplate': {
+      scope: {foo: 'bar'},
+      element: '<a class="btn" title="foo-title" data-content-template="custom" bs-popover bs-show="isVisible"></a>'
     }
   };
 
@@ -317,7 +321,7 @@ describe('popover', function () {
         expect(sandboxEl.find('.popover-content').html()).toBe(scope.popover.content);
       });
 
-      it('should NOT correctly compile inner content when truthy', function() {
+      it('should NOT correctly compile inner content when falsy', function() {
         var elm = compileDirective('options-html', {html: 'false'});
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.find('.popover-title').html()).not.toBe(scope.popover.title);
@@ -389,6 +393,19 @@ describe('popover', function () {
         angular.element(elm[0]).triggerHandler('click');
         expect(angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click'));
         expect(scope.popover.counter).toBe(2);
+      });
+
+    });
+
+
+    describe('contentTemplate', function () {
+
+      it('should support custom content templates', function() {
+        $templateCache.put('custom', '{{foo}}: some content inside the template');
+        var elm = compileDirective('options-contentTemplate');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.popover-title').text()).toBe('foo-title');
+        expect(sandboxEl.find('.popover-content').text()).toBe('bar: some content inside the template');
       });
 
     });

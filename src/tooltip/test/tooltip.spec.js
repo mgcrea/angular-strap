@@ -170,9 +170,9 @@ describe('tooltip', function() {
       scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{tooltip.title}}" data-template-url="custom" bs-tooltip>hover me</a>'
     },
-    'options-contentTemplate': {
+    'options-titleTemplate': {
       scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},
-      element: '<a title="{{tooltip.title}}" data-content-template="custom" bs-tooltip>hover me</a>'
+      element: '<a title="{{tooltip.title}}" data-title-template="custom" bs-tooltip>hover me</a>'
     },
     'bsShow-attr': {
       scope: {tooltip: {title: 'Hello Tooltip!'}},
@@ -913,11 +913,11 @@ describe('tooltip', function() {
 
     });
 
-    describe('contentTemplate', function() {
+    describe('titleTemplate', function() {
 
-      it('should support custom contentTemplate', function() {
+      it('should support custom titleTemplate', function() {
         $templateCache.put('custom', 'foo: {{title}}');
-        var elm = compileDirective('options-contentTemplate');
+        var elm = compileDirective('options-titleTemplate');
         angular.element(elm[0]).triggerHandler('mouseenter');
          expect(sandboxEl.find('.tooltip-inner').text()).toBe('foo: ' + scope.tooltip.title);
       });
