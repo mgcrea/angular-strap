@@ -116,7 +116,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           while (nextSibling && nextSibling.nodeType !== 1) {
             nextSibling = nextSibling.nextSibling;
           }
-          if (nextSibling && nextSibling.classList.contains('dropdown-menu')) {
+          if (nextSibling && nextSibling.className.split(' ').indexOf('dropdown-menu') >= 0) {
             tAttrs.template = nextSibling.outerHTML;
             tAttrs.templateUrl = undefined;
             nextSibling.parentNode.removeChild(nextSibling);
