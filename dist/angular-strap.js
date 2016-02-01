@@ -3948,7 +3948,7 @@
         var activeElement = isInput ? element.parent() : element;
         var value;
         attr.$observe('value', function(v) {
-          value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
+          value = (typeof v === 'boolean') ? v : (constantValueRegExp.test(v) ? scope.$eval(v) : v);
           controller.$render();
         });
         controller.$render = function() {
