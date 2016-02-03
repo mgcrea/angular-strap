@@ -63,6 +63,18 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           <input type="text" size="8" class="form-control" ng-model="sharedDate" data-time-format="h:mm:ss a" data-autoclose="1" placeholder="Time" bs-timepicker>
         </div>
       </div>
+      <hr>
+
+      <!-- Datetime with custom timezone example -->
+      <div class="form-group">
+        <label class="control-label"><i class="fa fa-calendar"></i> Datetime picker with custom timezone(+05:00)</label><br>
+        <div class="form-group">
+          <input type="text" size="10" class="form-control" ng-model="sharedDate" data-autoclose="1" placeholder="Date" bs-datepicker>
+        </div>
+        <div class="form-group">
+          <input type="text" size="8" class="form-control" ng-model="sharedDate" data-time-format="h:mm:ss" timezone="+05:00" data-autoclose="1" placeholder="Time" bs-timepicker>
+        </div>
+      </div>
 
     </form>
   </div>
@@ -161,6 +173,14 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           <td>'shortTime'</td>
           <td>
             <p>Rendering format of your time, leverages <a href="http://docs.angularjs.org/api/ng.filter:date">ng.filter:date</a>.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>timezone</td>
+          <td>string</td>
+          <td>null</td>
+          <td>
+            <p>Custom timezone. By default: null(your local timezone). As example: '+05:00'</p>
           </td>
         </tr>
         <tr>
