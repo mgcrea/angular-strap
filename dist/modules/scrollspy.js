@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.7 - 2016-02-03
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -137,7 +137,7 @@ angular.module('mgcrea.ngStrap.scrollspy', [ 'mgcrea.ngStrap.helpers.debounce', 
             break;
           }
         }
-        trackedElements = trackedElements.splice(toDelete, 1);
+        trackedElements.splice(toDelete, 1);
       };
       $scrollspy.activate = function(i) {
         trackedElements[i].addClass('active');

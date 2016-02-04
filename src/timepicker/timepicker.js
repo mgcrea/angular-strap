@@ -75,6 +75,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         };
 
         var format = $dateFormatter.getDatetimeFormat(options.timeFormat, lang);
+        var timezone = options.timezone;
 
         var hoursFormat = $dateFormatter.hoursFormat(format);
         var timeSeparator = $dateFormatter.timeSeparator(format);
@@ -154,7 +155,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             hour = new Date(1970, 0, 1, viewDate.hour - (midIndex - i) * options.hourStep);
             hours.push({
               date: hour,
-              label: formatDate(hour, hoursFormat),
+              label: formatDate(hour, hoursFormat, timezone),
               selected: $timepicker.$date && $timepicker.$isSelected(hour, 0),
               disabled: $timepicker.$isDisabled(hour, 0)
             });
@@ -165,7 +166,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             minute = new Date(1970, 0, 1, 0, viewDate.minute - (midIndex - i) * options.minuteStep);
             minutes.push({
               date: minute,
-              label: formatDate(minute, minutesFormat),
+              label: formatDate(minute, minutesFormat, timezone),
               selected: $timepicker.$date && $timepicker.$isSelected(minute, 1),
               disabled: $timepicker.$isDisabled(minute, 1)
             });
@@ -176,7 +177,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             second = new Date(1970, 0, 1, 0, 0, viewDate.second - (midIndex - i) * options.secondStep);
             seconds.push({
               date: second,
-              label: formatDate(second, secondsFormat),
+              label: formatDate(second, secondsFormat, timezone),
               selected: $timepicker.$date && $timepicker.$isSelected(second, 2),
               disabled: $timepicker.$isDisabled(second, 2)
             });
@@ -293,11 +294,11 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           // Navigate with keyboard
           var newDate = new Date($timepicker.$date);
           var hours = newDate.getHours();
-          var hoursLength = formatDate(newDate, hoursFormat).length;
+          var hoursLength = formatDate(newDate, hoursFormat, timezone).length;
           var minutes = newDate.getMinutes();
-          var minutesLength = formatDate(newDate, minutesFormat).length;
+          var minutesLength = formatDate(newDate, minutesFormat, timezone).length;
           var seconds = newDate.getSeconds();
-          var secondsLength = formatDate(newDate, secondsFormat).length;
+          var secondsLength = formatDate(newDate, secondsFormat, timezone).length;
           var sepLength = 1;
           var lateralMove = /(37|39)/.test(evt.keyCode);
           var count = 2 + showSeconds * 1 + showAM * 1;
@@ -318,17 +319,17 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           if (selectedIndex === 0) {
             newDate.setHours(hours + incr * parseInt(options.hourStep, 10));
             // re-calculate hours length because we have changed hours value
-            hoursLength = formatDate(newDate, hoursFormat).length;
+            hoursLength = formatDate(newDate, hoursFormat, timezone).length;
             selectRange = [0, hoursLength];
           } else if (selectedIndex === 1) {
             newDate.setMinutes(minutes + incr * parseInt(options.minuteStep, 10));
             // re-calculate minutes length because we have changes minutes value
-            minutesLength = formatDate(newDate, minutesFormat).length;
+            minutesLength = formatDate(newDate, minutesFormat, timezone).length;
             selectRange = [hoursLength + sepLength, minutesLength];
           } else if (isSeconds) {
             newDate.setSeconds(seconds + incr * parseInt(options.secondStep, 10));
             // re-calculate seconds length because we have changes seconds value
-            secondsLength = formatDate(newDate, secondsFormat).length;
+            secondsLength = formatDate(newDate, secondsFormat, timezone).length;
             selectRange = [hoursLength + sepLength + minutesLength + sepLength, secondsLength];
           } else if (isMeridian) {
             if (!lateralMove) $timepicker.switchMeridian();
@@ -533,7 +534,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
           if (options.timeType === 'string') {
             date = dateParser.timezoneOffsetAdjust(parsedTime, options.timezone, true);
-            return formatDate(date, options.modelTimeFormat || options.timeFormat);
+            return formatDate(date, options.modelTimeFormat || options.timeFormat, options.timezone);
           }
           date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
           if (options.timeType === 'number') {
@@ -574,7 +575,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         };
 
         function getTimeFormattedString() {
-          return !controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : formatDate(controller.$dateValue, options.timeFormat);
+          return !controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : formatDate(controller.$dateValue, options.timeFormat, options.timezone);
         }
 
         // Garbage collection

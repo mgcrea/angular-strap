@@ -1,13 +1,12 @@
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.7 - 2016-02-03
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 (function(window, document, undefined) {
   'use strict';
-  bsCompilerService.$inject = [ '$q', '$http', '$injector', '$compile', '$controller', '$templateCache' ];
   angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions' ]).provider('$typeahead', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -226,7 +225,7 @@
       placement: 'top',
       templateUrl: 'tooltip/tooltip.tpl.html',
       template: '',
-      contentTemplate: false,
+      titleTemplate: false,
       trigger: 'hover focus',
       keyboard: false,
       html: false,
@@ -438,7 +437,10 @@
             destroyTipElement();
           }
         }
-        $tooltip.toggle = function() {
+        $tooltip.toggle = function(evt) {
+          if (evt) {
+            evt.preventDefault();
+          }
           if ($tooltip.$isShown) {
             $tooltip.leave();
           } else {
@@ -509,8 +511,8 @@
         function bindTriggerEvents() {
           var triggers = options.trigger.split(' ');
           angular.forEach(triggers, function(trigger) {
-            if (trigger === 'click') {
-              element.on('click', $tooltip.toggle);
+            if (trigger === 'click' || trigger === 'contextmenu') {
+              element.on(trigger, $tooltip.toggle);
             } else if (trigger !== 'manual') {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
@@ -524,8 +526,8 @@
           var triggers = options.trigger.split(' ');
           for (var i = triggers.length; i--; ) {
             var trigger = triggers[i];
-            if (trigger === 'click') {
-              element.off('click', $tooltip.toggle);
+            if (trigger === 'click' || trigger === 'contextmenu') {
+              element.off(trigger, $tooltip.toggle);
             } else if (trigger !== 'manual') {
               element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
@@ -767,7 +769,7 @@
         var options = {
           scope: scope
         };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'titleTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
@@ -907,6 +909,7 @@
           millisecond: startDate.getMilliseconds()
         };
         var format = $dateFormatter.getDatetimeFormat(options.timeFormat, lang);
+        var timezone = options.timezone;
         var hoursFormat = $dateFormatter.hoursFormat(format);
         var timeSeparator = $dateFormatter.timeSeparator(format);
         var minutesFormat = $dateFormatter.minutesFormat(format);
@@ -968,7 +971,7 @@
             hour = new Date(1970, 0, 1, viewDate.hour - (midIndex - i) * options.hourStep);
             hours.push({
               date: hour,
-              label: formatDate(hour, hoursFormat),
+              label: formatDate(hour, hoursFormat, timezone),
               selected: $timepicker.$date && $timepicker.$isSelected(hour, 0),
               disabled: $timepicker.$isDisabled(hour, 0)
             });
@@ -979,7 +982,7 @@
             minute = new Date(1970, 0, 1, 0, viewDate.minute - (midIndex - i) * options.minuteStep);
             minutes.push({
               date: minute,
-              label: formatDate(minute, minutesFormat),
+              label: formatDate(minute, minutesFormat, timezone),
               selected: $timepicker.$date && $timepicker.$isSelected(minute, 1),
               disabled: $timepicker.$isDisabled(minute, 1)
             });
@@ -990,7 +993,7 @@
             second = new Date(1970, 0, 1, 0, 0, viewDate.second - (midIndex - i) * options.secondStep);
             seconds.push({
               date: second,
-              label: formatDate(second, secondsFormat),
+              label: formatDate(second, secondsFormat, timezone),
               selected: $timepicker.$date && $timepicker.$isSelected(second, 2),
               disabled: $timepicker.$isDisabled(second, 2)
             });
@@ -1092,11 +1095,11 @@
           }
           var newDate = new Date($timepicker.$date);
           var hours = newDate.getHours();
-          var hoursLength = formatDate(newDate, hoursFormat).length;
+          var hoursLength = formatDate(newDate, hoursFormat, timezone).length;
           var minutes = newDate.getMinutes();
-          var minutesLength = formatDate(newDate, minutesFormat).length;
+          var minutesLength = formatDate(newDate, minutesFormat, timezone).length;
           var seconds = newDate.getSeconds();
-          var secondsLength = formatDate(newDate, secondsFormat).length;
+          var secondsLength = formatDate(newDate, secondsFormat, timezone).length;
           var sepLength = 1;
           var lateralMove = /(37|39)/.test(evt.keyCode);
           var count = 2 + showSeconds * 1 + showAM * 1;
@@ -1111,15 +1114,15 @@
           var isMeridian = selectedIndex === 2 && !showSeconds || selectedIndex === 3 && showSeconds;
           if (selectedIndex === 0) {
             newDate.setHours(hours + incr * parseInt(options.hourStep, 10));
-            hoursLength = formatDate(newDate, hoursFormat).length;
+            hoursLength = formatDate(newDate, hoursFormat, timezone).length;
             selectRange = [ 0, hoursLength ];
           } else if (selectedIndex === 1) {
             newDate.setMinutes(minutes + incr * parseInt(options.minuteStep, 10));
-            minutesLength = formatDate(newDate, minutesFormat).length;
+            minutesLength = formatDate(newDate, minutesFormat, timezone).length;
             selectRange = [ hoursLength + sepLength, minutesLength ];
           } else if (isSeconds) {
             newDate.setSeconds(seconds + incr * parseInt(options.secondStep, 10));
-            secondsLength = formatDate(newDate, secondsFormat).length;
+            secondsLength = formatDate(newDate, secondsFormat, timezone).length;
             selectRange = [ hoursLength + sepLength + minutesLength + sepLength, secondsLength ];
           } else if (isMeridian) {
             if (!lateralMove) $timepicker.switchMeridian();
@@ -1272,7 +1275,7 @@
           validateAgainstMinMaxTime(parsedTime);
           if (options.timeType === 'string') {
             date = dateParser.timezoneOffsetAdjust(parsedTime, options.timezone, true);
-            return formatDate(date, options.modelTimeFormat || options.timeFormat);
+            return formatDate(date, options.modelTimeFormat || options.timeFormat, options.timezone);
           }
           date = dateParser.timezoneOffsetAdjust(controller.$dateValue, options.timezone, true);
           if (options.timeType === 'number') {
@@ -1304,7 +1307,7 @@
           element.val(getTimeFormattedString());
         };
         function getTimeFormattedString() {
-          return !controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : formatDate(controller.$dateValue, options.timeFormat);
+          return !controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : formatDate(controller.$dateValue, options.timeFormat, options.timezone);
         }
         scope.$on('$destroy', function() {
           if (timepicker) timepicker.destroy();
@@ -1732,111 +1735,6 @@
       }
     };
   } ]);
-  angular.module('mgcrea.ngStrap.popover', [ 'mgcrea.ngStrap.tooltip' ]).provider('$popover', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      customClass: '',
-      container: false,
-      target: false,
-      placement: 'right',
-      templateUrl: 'popover/popover.tpl.html',
-      contentTemplate: false,
-      trigger: 'click',
-      keyboard: true,
-      html: false,
-      title: '',
-      content: '',
-      delay: 0,
-      autoClose: false
-    };
-    this.$get = [ '$tooltip', function($tooltip) {
-      function PopoverFactory(element, config) {
-        var options = angular.extend({}, defaults, config);
-        var $popover = $tooltip(element, options);
-        if (options.content) {
-          $popover.$scope.content = options.content;
-        }
-        return $popover;
-      }
-      return PopoverFactory;
-    } ];
-  }).directive('bsPopover', [ '$window', '$sce', '$popover', function($window, $sce, $popover) {
-    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
-    return {
-      restrict: 'EAC',
-      scope: true,
-      link: function postLink(scope, element, attr) {
-        var popover;
-        var options = {
-          scope: scope
-        };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'customClass', 'autoClose', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
-        });
-        var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'html', 'container', 'autoClose' ], function(key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
-        });
-        var dataTarget = element.attr('data-target');
-        if (angular.isDefined(dataTarget)) {
-          if (falseValueRegExp.test(dataTarget)) {
-            options.target = false;
-          } else {
-            options.target = dataTarget;
-          }
-        }
-        angular.forEach([ 'title', 'content' ], function(key) {
-          if (attr[key]) {
-            attr.$observe(key, function(newValue, oldValue) {
-              scope[key] = $sce.trustAsHtml(newValue);
-              if (angular.isDefined(oldValue)) {
-                requestAnimationFrame(function() {
-                  if (popover) popover.$applyPlacement();
-                });
-              }
-            });
-          }
-        });
-        if (attr.bsPopover) {
-          scope.$watch(attr.bsPopover, function(newValue, oldValue) {
-            if (angular.isObject(newValue)) {
-              angular.extend(scope, newValue);
-            } else {
-              scope.content = newValue;
-            }
-            if (angular.isDefined(oldValue)) {
-              requestAnimationFrame(function() {
-                if (popover) popover.$applyPlacement();
-              });
-            }
-          }, true);
-        }
-        if (attr.bsShow) {
-          scope.$watch(attr.bsShow, function(newValue, oldValue) {
-            if (!popover || !angular.isDefined(newValue)) return;
-            if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
-            if (newValue === true) {
-              popover.show();
-            } else {
-              popover.hide();
-            }
-          });
-        }
-        if (attr.viewport) {
-          scope.$watch(attr.viewport, function(newValue) {
-            if (!popover || !angular.isDefined(newValue)) return;
-            popover.setViewport(newValue);
-          });
-        }
-        popover = $popover(element, options);
-        scope.$on('$destroy', function() {
-          if (popover) popover.destroy();
-          options = null;
-          popover = null;
-        });
-      }
-    };
-  } ]);
   angular.module('mgcrea.ngStrap.scrollspy', [ 'mgcrea.ngStrap.helpers.debounce', 'mgcrea.ngStrap.helpers.dimensions' ]).provider('$scrollspy', function() {
     var spies = this.$$spies = {};
     var defaults = this.defaults = {
@@ -1967,7 +1865,7 @@
               break;
             }
           }
-          trackedElements = trackedElements.splice(toDelete, 1);
+          trackedElements.splice(toDelete, 1);
         };
         $scrollspy.activate = function(i) {
           trackedElements[i].addClass('active');
@@ -2007,6 +1905,111 @@
         angular.forEach(children, function(child) {
           var childEl = angular.element(child);
           childEl.parent().attr('bs-scrollspy', '').attr('data-target', childEl.attr('href'));
+        });
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.popover', [ 'mgcrea.ngStrap.tooltip' ]).provider('$popover', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      customClass: '',
+      container: false,
+      target: false,
+      placement: 'right',
+      templateUrl: 'popover/popover.tpl.html',
+      contentTemplate: false,
+      trigger: 'click',
+      keyboard: true,
+      html: false,
+      title: '',
+      content: '',
+      delay: 0,
+      autoClose: false
+    };
+    this.$get = [ '$tooltip', function($tooltip) {
+      function PopoverFactory(element, config) {
+        var options = angular.extend({}, defaults, config);
+        var $popover = $tooltip(element, options);
+        if (options.content) {
+          $popover.$scope.content = options.content;
+        }
+        return $popover;
+      }
+      return PopoverFactory;
+    } ];
+  }).directive('bsPopover', [ '$window', '$sce', '$popover', function($window, $sce, $popover) {
+    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+    return {
+      restrict: 'EAC',
+      scope: true,
+      link: function postLink(scope, element, attr) {
+        var popover;
+        var options = {
+          scope: scope
+        };
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'customClass', 'autoClose', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach([ 'html', 'container', 'autoClose' ], function(key) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+        var dataTarget = element.attr('data-target');
+        if (angular.isDefined(dataTarget)) {
+          if (falseValueRegExp.test(dataTarget)) {
+            options.target = false;
+          } else {
+            options.target = dataTarget;
+          }
+        }
+        angular.forEach([ 'title', 'content' ], function(key) {
+          if (attr[key]) {
+            attr.$observe(key, function(newValue, oldValue) {
+              scope[key] = $sce.trustAsHtml(newValue);
+              if (angular.isDefined(oldValue)) {
+                requestAnimationFrame(function() {
+                  if (popover) popover.$applyPlacement();
+                });
+              }
+            });
+          }
+        });
+        if (attr.bsPopover) {
+          scope.$watch(attr.bsPopover, function(newValue, oldValue) {
+            if (angular.isObject(newValue)) {
+              angular.extend(scope, newValue);
+            } else {
+              scope.content = newValue;
+            }
+            if (angular.isDefined(oldValue)) {
+              requestAnimationFrame(function() {
+                if (popover) popover.$applyPlacement();
+              });
+            }
+          }, true);
+        }
+        if (attr.bsShow) {
+          scope.$watch(attr.bsShow, function(newValue, oldValue) {
+            if (!popover || !angular.isDefined(newValue)) return;
+            if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
+            if (newValue === true) {
+              popover.show();
+            } else {
+              popover.hide();
+            }
+          });
+        }
+        if (attr.viewport) {
+          scope.$watch(attr.viewport, function(newValue) {
+            if (!popover || !angular.isDefined(newValue)) return;
+            popover.setViewport(newValue);
+          });
+        }
+        popover = $popover(element, options);
+        scope.$on('$destroy', function() {
+          if (popover) popover.destroy();
+          options = null;
+          popover = null;
         });
       }
     };
@@ -2937,10 +2940,17 @@
       } else {
         throw new Error('Missing `template` / `templateUrl` option.');
       }
+      if (options.titleTemplate) {
+        resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.titleTemplate) ]).then(function(templates) {
+          var templateEl = angular.element(templates[0]);
+          findElement('[ng-bind="title"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+          return templateEl[0].outerHTML;
+        });
+      }
       if (options.contentTemplate) {
         resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.contentTemplate) ]).then(function(templates) {
           var templateEl = angular.element(templates[0]);
-          var contentEl = findElement('[ng-bind="content"], [ng-bind="title"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+          var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
           if (!options.templateUrl) contentEl.next().remove();
           return templateEl[0].outerHTML;
         });
@@ -2987,6 +2997,7 @@
       });
     }
   }
+  bsCompilerService.$inject = [ '$q', '$http', '$injector', '$compile', '$controller', '$templateCache' ];
   angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider('$dropdown', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
