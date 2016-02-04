@@ -780,6 +780,12 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           }
         });
 
+        attr.$observe('disabled', function (newValue) {
+          if (newValue && tooltip.$isShown) {
+            tooltip.hide();
+          }
+        });
+
         // Support scope as an object
         if (attr.bsTooltip) {
           scope.$watch(attr.bsTooltip, function (newValue, oldValue) {

@@ -200,6 +200,10 @@ describe('tooltip', function() {
     'bsTooltip-noValue': {
       scope: {title: 'Inherited Title'},
       element: '<a bs-tooltip>hover me</a>'
+    },
+    'bsTooltip-ngDisabled': {
+      scope: {tooltip: {title: 'Hello Tooltip!'}, isDisabled: false},
+      element: '<a title="{{tooltip.title}}" bs-tooltip ng-disabled="isDisabled">hover me</a>'
     }
   };
 
@@ -261,6 +265,17 @@ describe('tooltip', function() {
       expect(sandboxEl.children('.tooltip').length).toBe(1);
       angular.element(elm[0]).triggerHandler('click');
       expect(sandboxEl.children('.tooltip').length).toBe(1);
+    });
+
+    it('should close when element becomes disabled', function() {
+      var elm = compileDirective('bsTooltip-ngDisabled');
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.flush();
+      expect(sandboxEl.children('.tooltip').length).toBe(1);
+      scope.isDisabled = true;
+      scope.$digest();
+      expect(sandboxEl.children('.tooltip').length).toBe(0);
     });
 
   });
