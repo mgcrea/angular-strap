@@ -16,7 +16,7 @@ angular.module('mgcrea.ngStrap.navbar', [])
 
   })
 
-  .directive('bsNavbar', function ($window, $location, $navbar) {
+  .directive('bsNavbar', function ($window, $location, $rootScope, $navbar) {
 
     var defaults = $navbar.defaults;
 
@@ -25,20 +25,20 @@ angular.module('mgcrea.ngStrap.navbar', [])
       link: function postLink(scope, element, attr, controller) {
 
         // Directive options
-        var options = angular.copy(defaults);
-        angular.forEach(Object.keys(defaults), function (key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
+        var options = {};
+        angular.extend(options, defaults);
+
+        // Fire once, then listen for location change
+        evaluatePath(options);
+        $rootScope.$on('$locationChangeSuccess', function () {
+            evaluatePath(options);
         });
 
-        // Watch for the $location
-        scope.$watch(function () {
+        ////////////////////
 
-          return $location.path();
-
-        }, function (newValue, oldValue) {
-
+        function evaluatePath(options) {
+          var path = $location.path();
           var liElements = element[0].querySelectorAll('li[' + options.routeAttr + ']');
-
           angular.forEach(liElements, function (li) {
 
             var liElement = angular.element(li);
@@ -48,7 +48,7 @@ angular.module('mgcrea.ngStrap.navbar', [])
             }
             var regexp = new RegExp(pattern, 'i');
 
-            if (regexp.test(newValue)) {
+            if (regexp.test(path)) {
               liElement.addClass(options.activeClass);
             } else {
               liElement.removeClass(options.activeClass);
@@ -56,7 +56,7 @@ angular.module('mgcrea.ngStrap.navbar', [])
 
           });
 
-        });
+        }
 
       }
 
