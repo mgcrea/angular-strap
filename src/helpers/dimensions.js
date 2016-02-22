@@ -162,7 +162,7 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
      * @required-by fn.position
      * @param element
      */
-    function offsetParentElement(element) {
+    function offsetParentElement (element) {
       var docElement = element.ownerDocument;
       var offsetParent = element.offsetParent || docElement;
       if (nodeName(offsetParent, '#document')) return docElement.documentElement;

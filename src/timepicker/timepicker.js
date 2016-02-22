@@ -43,7 +43,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         defaults.lang = $dateFormatter.getDefaultLocale();
       }
 
-      function timepickerFactory(element, controller, config) {
+      function timepickerFactory (element, controller, config) {
 
         var $timepicker = $tooltip(element, angular.extend({}, defaults, config));
         var parentScope = config.scope;
@@ -55,7 +55,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           return $dateFormatter.formatDate(date, format, lang, timezone);
         };
 
-        function floorMinutes(time) {
+        function floorMinutes (time) {
           // coeff used to floor current time to nearest minuteStep interval
           var coeff = 1000 * 60 * options.minuteStep;
           return new Date(Math.floor(time.getTime() / coeff) * coeff);
@@ -341,7 +341,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         // Private
 
-        function createSelection(start, length) {
+        function createSelection (start, length) {
           var end = start + length;
           if (element[0].createTextRange) {
             var selRange = element[0].createTextRange();
@@ -357,7 +357,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           }
         }
 
-        function focusElement() {
+        function focusElement () {
           element[0].focus();
         }
 
@@ -429,7 +429,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
     return {
       restrict: 'EAC',
       require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
+      link: function postLink (scope, element, attr, controller) {
 
         // Directive options
         var options = {
@@ -495,7 +495,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           timepicker.update(controller.$dateValue);
         }, true);
 
-        function validateAgainstMinMaxTime(parsedTime) {
+        function validateAgainstMinMaxTime (parsedTime) {
           if (!angular.isDate(parsedTime)) return;
           var isMinValid = isNaN(options.minTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) >= options.minTime;
           var isMaxValid = isNaN(options.maxTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) <= options.maxTime;
@@ -573,7 +573,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           element.val(getTimeFormattedString());
         };
 
-        function getTimeFormattedString() {
+        function getTimeFormattedString () {
           return !controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : formatDate(controller.$dateValue, options.timeFormat);
         }
 

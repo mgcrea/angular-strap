@@ -21,7 +21,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
 
     this.$get = function ($modal) {
 
-      function AsideFactory(config) {
+      function AsideFactory (config) {
 
         var $aside = {};
 
@@ -45,7 +45,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
     return {
       restrict: 'EAC',
       scope: true,
-      link: function postLink(scope, element, attr, transclusion) {
+      link: function postLink (scope, element, attr, transclusion) {
         // Directive options
         var options = {scope: scope, element: element, show: false};
         angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation'], function (key) {

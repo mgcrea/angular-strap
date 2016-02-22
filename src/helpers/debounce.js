@@ -14,7 +14,7 @@ angular.module('mgcrea.ngStrap.helpers.debounce', [])
       if (timeout) {
         $timeout.cancel(timeout);
       }
-      timeout = $timeout(function later() {
+      timeout = $timeout(function later () {
         timeout = null;
         if (!immediate) {
           func.apply(context, args);
@@ -42,7 +42,7 @@ angular.module('mgcrea.ngStrap.helpers.debounce', [])
         if (options.leading !== false) {
           func.apply(context, args);
         }
-        timeout = $timeout(function later() {
+        timeout = $timeout(function later () {
           timeout = null;
           if (options.trailing !== false) {
             func.apply(context, args);

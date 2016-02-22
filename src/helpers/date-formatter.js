@@ -23,7 +23,7 @@ angular.module('mgcrea.ngStrap.helpers.dateFormatter', [])
       return $locale.DATETIME_FORMATS.SHORTDAY;
     };
 
-    function splitTimeFormat(format) {
+    function splitTimeFormat (format) {
       return /(h+)([:\.])?(m+)([:\.])?(s*)[ ]?(a?)/i.exec(format).slice(1);
     }
 

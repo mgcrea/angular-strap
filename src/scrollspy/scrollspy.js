@@ -21,11 +21,11 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
 
       // Helper functions
 
-      function nodeName(element, name) {
+      function nodeName (element, name) {
         return element[0].nodeName && element[0].nodeName.toLowerCase() === name.toLowerCase();
       }
 
-      function ScrollSpyFactory(config) {
+      function ScrollSpyFactory (config) {
 
         // Common vars
         var options = angular.extend({}, defaults, config);
@@ -215,7 +215,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
 
     return {
       restrict: 'EAC',
-      link: function postLink(scope, element, attr) {
+      link: function postLink (scope, element, attr) {
 
         var options = {scope: scope};
         angular.forEach(['offset', 'target'], function (key) {
@@ -244,7 +244,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
 
     return {
       restrict: 'A',
-      compile: function postLink(element, attr) {
+      compile: function postLink (element, attr) {
         var children = element[0].querySelectorAll('li > a[href]');
         angular.forEach(children, function (child) {
           var childEl = angular.element(child);

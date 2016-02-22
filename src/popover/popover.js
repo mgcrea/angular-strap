@@ -26,7 +26,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
     this.$get = function ($tooltip) {
 
-      function PopoverFactory(element, config) {
+      function PopoverFactory (element, config) {
 
         // Common vars
         var options = angular.extend({}, defaults, config);
@@ -55,7 +55,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
     return {
       restrict: 'EAC',
       scope: true,
-      link: function postLink(scope, element, attr) {
+      link: function postLink (scope, element, attr) {
 
         var popover;
         // Directive options

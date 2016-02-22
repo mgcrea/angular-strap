@@ -25,7 +25,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
     this.$get = function ($window, $rootScope, $tooltip, $$rAF, $timeout) {
 
-      function TypeaheadFactory(element, controller, config) {
+      function TypeaheadFactory (element, controller, config) {
 
         var $typeahead = {};
 
@@ -168,7 +168,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
       // Helper functions
 
-      function safeDigest(scope) {
+      function safeDigest (scope) {
         /* eslint-disable no-unused-expressions */
         scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
         /* eslint-enable no-unused-expressions */
@@ -199,7 +199,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
     return {
       restrict: 'EAC',
       require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
+      link: function postLink (scope, element, attr, controller) {
 
         // Directive options
         var options = {

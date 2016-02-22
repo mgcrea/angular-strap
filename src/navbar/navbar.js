@@ -22,7 +22,7 @@ angular.module('mgcrea.ngStrap.navbar', [])
 
     return {
       restrict: 'A',
-      link: function postLink(scope, element, attr, controller) {
+      link: function postLink (scope, element, attr, controller) {
 
         // Directive options
         var options = angular.copy(defaults);

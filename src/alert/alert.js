@@ -27,7 +27,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
     this.$get = function ($modal, $timeout) {
 
-      function AlertFactory(config) {
+      function AlertFactory (config) {
 
         var $alert = {};
 
@@ -68,7 +68,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
     return {
       restrict: 'EAC',
       scope: true,
-      link: function postLink(scope, element, attr, transclusion) {
+      link: function postLink (scope, element, attr, transclusion) {
 
         // Directive options
         var options = {scope: scope, element: element, show: false};

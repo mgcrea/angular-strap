@@ -14,7 +14,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
       var bodyEl = angular.element($window.document.body);
       var windowEl = angular.element($window);
 
-      function AffixFactory(element, config) {
+      function AffixFactory (element, config) {
 
         var $affix = {};
 
@@ -179,7 +179,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
         // Private methods
 
-        function getRequiredAffixClass(_unpin, position, elementHeight) {
+        function getRequiredAffixClass (_unpin, position, elementHeight) {
           var scrollTop = getScrollTop();
           var scrollHeight = getScrollHeight();
 
@@ -193,11 +193,11 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
           return 'middle';
         }
 
-        function getScrollTop() {
+        function getScrollTop () {
           return targetEl[0] === $window ? $window.pageYOffset : targetEl[0].scrollTop;
         }
 
-        function getScrollHeight() {
+        function getScrollHeight () {
           return targetEl[0] === $window ? $window.document.body.scrollHeight : targetEl[0].scrollHeight;
         }
 
@@ -217,7 +217,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
     return {
       restrict: 'EAC',
       require: '^?bsAffixTarget',
-      link: function postLink(scope, element, attr, affixTarget) {
+      link: function postLink (scope, element, attr, affixTarget) {
 
         var options = {scope: scope, target: affixTarget ? affixTarget.$element : angular.element($window)};
         angular.forEach(['offsetTop', 'offsetBottom', 'offsetParent', 'offsetUnpin', 'inlineStyles'], function (key) {

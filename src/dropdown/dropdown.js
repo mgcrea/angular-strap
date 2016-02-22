@@ -22,7 +22,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
       var bodyEl = angular.element($window.document.body);
       var matchesSelector = Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector;
 
-      function DropdownFactory(element, config) {
+      function DropdownFactory (element, config) {
 
         var $dropdown = {};
 
@@ -87,7 +87,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         // Private functions
 
-        function onBodyClick(evt) {
+        function onBodyClick (evt) {
           if (evt.target === element[0]) return;
           return evt.target !== element[0] && $dropdown.hide();
         }
@@ -123,7 +123,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           }
         }
 
-        return function postLink(scope, element, attr) {
+        return function postLink (scope, element, attr) {
 
           // Directive options
           var options = {scope: scope};

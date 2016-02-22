@@ -88,7 +88,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
         return self.$targets.$active.length === 1 ? self.$targets.$active[0] : -1;
       };
 
-      function fixActiveItemIndexes(index) {
+      function fixActiveItemIndexes (index) {
         // item with index was removed, so we
         // need to adjust other items index values
         var activeIndexes = self.$targets.$active;
@@ -105,19 +105,19 @@ angular.module('mgcrea.ngStrap.collapse', [])
         }
       }
 
-      function isActive(value) {
+      function isActive (value) {
         var activeItems = self.$targets.$active;
         return activeItems.indexOf(value) === -1 ? false : true;
       }
 
-      function deactivateItem(value) {
+      function deactivateItem (value) {
         var index = self.$targets.$active.indexOf(value);
         if (index !== -1) {
           self.$targets.$active.splice(index, 1);
         }
       }
 
-      function activateItem(value) {
+      function activateItem (value) {
         if (!self.$options.allowMultiple) {
           // remove current selected item
           self.$targets.$active.splice(0, 1);
@@ -144,7 +144,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
     return {
       require: ['?ngModel', 'bsCollapse'],
       controller: ['$scope', '$element', '$attrs', $collapse.controller],
-      link: function postLink(scope, element, attrs, controllers) {
+      link: function postLink (scope, element, attrs, controllers) {
 
         var ngModelCtrl = controllers[0];
         var bsCollapseCtrl = controllers[1];
@@ -190,7 +190,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
     return {
       require: ['^?ngModel', '^bsCollapse'],
-      link: function postLink(scope, element, attrs, controllers) {
+      link: function postLink (scope, element, attrs, controllers) {
 
         // var ngModelCtrl = controllers[0];
         var bsCollapseCtrl = controllers[1];
@@ -224,7 +224,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
     return {
       require: ['^?ngModel', '^bsCollapse'],
       // scope: true,
-      link: function postLink(scope, element, attrs, controllers) {
+      link: function postLink (scope, element, attrs, controllers) {
 
         // var ngModelCtrl = controllers[0];
         var bsCollapseCtrl = controllers[1];
@@ -245,7 +245,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
           bsCollapseCtrl.$unregisterTarget(element);
         });
 
-        function render() {
+        function render () {
           var index = bsCollapseCtrl.$targets.indexOf(element);
           var active = bsCollapseCtrl.$activeIndexes();
           var action = 'removeClass';

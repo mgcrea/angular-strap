@@ -10,7 +10,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
 
     this.$get = function ($parse, $q) {
 
-      function ParseOptionsFactory(attr, config) {
+      function ParseOptionsFactory (attr, config) {
 
         var $parseOptions = {};
 
@@ -58,7 +58,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
 
         // Private functions
 
-        function parseValues(values, scope) {
+        function parseValues (values, scope) {
           return values.map(function (match, index) {
             var locals = {};
             var label;

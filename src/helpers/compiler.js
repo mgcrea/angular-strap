@@ -6,7 +6,7 @@
 angular.module('mgcrea.ngStrap.core', [])
   .service('$bsCompiler', bsCompilerService);
 
-function bsCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
+function bsCompilerService ($q, $http, $injector, $compile, $controller, $templateCache) {
 
   /*
    * @ngdoc service
@@ -146,7 +146,7 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
       return {
         locals: locals,
         element: element,
-        link: function link(scope) {
+        link: function link (scope) {
           locals.$scope = scope;
 
           // Instantiate controller if it exists, because we have scope
@@ -173,12 +173,12 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
 
   };
 
-  function findElement(query, element) {
+  function findElement (query, element) {
     return angular.element((element || document).querySelectorAll(query));
   }
 
   var fetchPromises = {};
-  function fetchTemplate(template) {
+  function fetchTemplate (template) {
     if (fetchPromises[template]) return fetchPromises[template];
     return (fetchPromises[template] = $http.get(template, {cache: $templateCache})
       .then(function (res) {

@@ -48,7 +48,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
       var isTouch = ('createTouch' in $window.document) && isNative;
       if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
 
-      function DatepickerFactory(element, controller, config) {
+      function DatepickerFactory (element, controller, config) {
 
         var $datepicker = $tooltip(element, angular.extend({}, defaults, config));
         var parentScope = config.scope;
@@ -188,11 +188,11 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         // Private
 
-        function updateSelected(el) {
+        function updateSelected (el) {
           el.selected = $datepicker.$isSelected(el.date);
         }
 
-        function focusElement() {
+        function focusElement () {
           element[0].focus();
         }
 
@@ -265,7 +265,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
     return {
       restrict: 'EAC',
       require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
+      link: function postLink (scope, element, attr, controller) {
 
         // Directive options
         var options = {scope: scope};
@@ -336,7 +336,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         // Normalize undefined/null/empty array,
         // so that we don't treat changing from undefined->null as a change.
-        function normalizeDateRanges(ranges) {
+        function normalizeDateRanges (ranges) {
           if (!ranges || !ranges.length) return null;
           return ranges;
         }
@@ -352,7 +352,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
           });
         }
 
-        function validateAgainstMinMaxDate(parsedDate) {
+        function validateAgainstMinMaxDate (parsedDate) {
           if (!angular.isDate(parsedDate)) return;
           var isMinValid = isNaN(datepicker.$options.minDate) || parsedDate.getTime() >= datepicker.$options.minDate;
           var isMaxValid = isNaN(datepicker.$options.maxDate) || parsedDate.getTime() <= datepicker.$options.maxDate;
@@ -430,7 +430,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
           element.val(getDateFormattedString());
         };
 
-        function getDateFormattedString() {
+        function getDateFormattedString () {
           return !controller.$dateValue || isNaN(controller.$dateValue.getTime()) ? '' : formatDate(controller.$dateValue, options.dateFormat);
         }
 
@@ -454,7 +454,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
     // };
 
     // Split array into smaller arrays
-    function split(arr, size) {
+    function split (arr, size) {
       var arrays = [];
       while (arr.length > 0) {
         arrays.push(arr.splice(0, size));
@@ -463,7 +463,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
     }
 
     // Modulus operator
-    function mod(n, m) {
+    function mod (n, m) {
       return ((n % m) + m) % m;
     }
 

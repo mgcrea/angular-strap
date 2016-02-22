@@ -103,7 +103,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       templateUrl: function (element, attr) {
         return attr.template || defaults.template;
       },
-      link: function postLink(scope, element, attrs, controllers) {
+      link: function postLink (scope, element, attrs, controllers) {
 
         var ngModelCtrl = controllers[0];
         var bsTabsCtrl = controllers[1];
@@ -151,7 +151,7 @@ angular.module('mgcrea.ngStrap.tab', [])
     return {
       require: ['^?ngModel', '^bsTabs'],
       scope: true,
-      link: function postLink(scope, element, attrs, controllers) {
+      link: function postLink (scope, element, attrs, controllers) {
 
         // var ngModelCtrl = controllers[0];
         var bsTabsCtrl = controllers[1];
@@ -184,7 +184,7 @@ angular.module('mgcrea.ngStrap.tab', [])
           bsTabsCtrl.$remove(scope);
         });
 
-        function render() {
+        function render () {
           var index = bsTabsCtrl.$panes.indexOf(scope);
           $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
         }
