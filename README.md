@@ -8,7 +8,7 @@ AngularStrap is a set of native directives that enables seamless integration of 
 
 - With no external dependency except the [Bootstrap CSS Styles](https://github.com/twbs/bootstrap/blob/master/dist/css/bootstrap.css), AngularStrap is lighter and faster than ever as it does leverage the power of ngAnimate from AngularJS 1.2+!
 
-- AngularStrap is [tested](https://travis-ci.org/mgcrea/angular-strap) against the latest patch release of the 1.2, 1.3 and 1.4 branches.
+- AngularStrap is [tested](https://travis-ci.org/mgcrea/angular-strap) against the latest patch release of the 1.2, 1.3, 1.4 and 1.5 branches.
 
 - If you don't want to use `ngAnimate`, you will have to include a tiny [ngAnimate mock](https://github.com/mgcrea/angular-strap/wiki/ngAnimate-mock).
 
