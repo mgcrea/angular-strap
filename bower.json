@@ -37,18 +37,18 @@
     "angular": "^1.2.21"
   },
   "devDependencies": {
-    "angular-animate": "~1.4",
-    "angular-i18n": "~1.4",
-    "angular-mocks": "~1.4",
-    "angular-motion": "^0.3.3",
-    "angular-route": "~1.4",
-    "angular-sanitize": "~1.4",
-    "angular-scenario": "~1.4",
-    "bootstrap": "^3.2.0",
-    "bootstrap-additions": "^0.2.3",
-    "fastclick": "^1.0.3",
-    "font-awesome": "^4.1.0",
-    "highlightjs": "^8.0.0",
-    "jquery": "^2.1.1"
+    "angular-animate": "~1.5",
+    "angular-i18n": "~1.5",
+    "angular-mocks": "~1.5",
+    "angular-motion": "^0.4.3",
+    "angular-route": "~1.5",
+    "angular-sanitize": "~1.5",
+    "angular-scenario": "~1.5",
+    "bootstrap": "^3.3.6",
+    "bootstrap-additions": "^0.3.1",
+    "fastclick": "^1.0.6",
+    "font-awesome": "^4.5.0",
+    "highlightjs": "^9.1.0",
+    "jquery": "^2.2.0"
   }
 }

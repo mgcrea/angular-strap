@@ -29,7 +29,7 @@ module.exports = function (gulp, config) {
     }).start();
   }));
   // codeclimate-test-reporter
-  gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis(done) {
+  gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis (done) {
     new Server({
       configFile: path.join(config.dirname, 'test/karma.conf.js'),
       browsers: ['PhantomJS'],
@@ -51,36 +51,10 @@ module.exports = function (gulp, config) {
         .on('end', done);
     }).start();
   }));
-  gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', function karmaTravis120(done) {
-    new Server({
-      configFile: path.join(config.dirname, 'test/~1.2.0/karma.conf.js'),
-      browsers: ['PhantomJS'],
-      reporters: ['dots'],
-      autoWatch: hasWatchFlag ? true : false,
-      singleRun: hasWatchFlag ? false : true
-    }, function (code) {
-      gutil.log('Karma has exited with ' + code);
-      if (code) {
-        process.exit(code);
-      }
-      done();
-    }).start();
-  }));
-  gulp.task('karma:travis~1.3.0', gulp.series('ng:test/templates', function karmaTravis130(done) {
-    new Server({
-      configFile: path.join(config.dirname, 'test/~1.3.0/karma.conf.js'),
-      browsers: ['PhantomJS'],
-      reporters: ['dots'],
-      autoWatch: hasWatchFlag ? true : false,
-      singleRun: hasWatchFlag ? false : true
-    }, function (code) {
-      gutil.log('Karma has exited with ' + code);
-      if (code) {
-        process.exit(code);
-      }
-      done();
-    }).start();
-  }));
+
+  gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', testAngularVersion('~1.2.0')));
+  gulp.task('karma:travis~1.3.0', gulp.series('ng:test/templates', testAngularVersion('~1.3.0')));
+  gulp.task('karma:travis~1.4.0', gulp.series('ng:test/templates', testAngularVersion('~1.4.0')));
 
   gulp.task('test', gulp.series('ng:test/templates', gulp.parallel('karma:unit')));
   gulp.task('test:timezone', function () {
@@ -91,5 +65,23 @@ module.exports = function (gulp, config) {
     testTimezone = timezone.replace(/-/g, '');
     return gulp.series('ng:test/templates', gulp.parallel('karma:unit'));
   });
+
+  function testAngularVersion (version) {
+    return function (done) {
+      new Server({
+        configFile: path.join(config.dirname, 'test/' + version + '/karma.conf.js'),
+        browsers: ['PhantomJS'],
+        reporters: ['dots'],
+        autoWatch: hasWatchFlag ? true : false,
+        singleRun: hasWatchFlag ? false : true
+      }, function (code) {
+        gutil.log('Karma has exited with ' + code);
+        if (code) {
+          process.exit(code);
+        }
+        done();
+      }).start();
+    };
+  }
 
 };
