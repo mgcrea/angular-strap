@@ -107,7 +107,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
       function isActive (value) {
         var activeItems = self.$targets.$active;
-        return activeItems.indexOf(value) === -1 ? false : true;
+        return activeItems.indexOf(value) !== -1;
       }
 
       function deactivateItem (value) {

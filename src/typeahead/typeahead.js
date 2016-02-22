@@ -124,12 +124,14 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           // Select with enter
           if (evt.keyCode === 13 && scope.$matches.length) {
             $typeahead.select(scope.$activeIndex);
-          }
-
           // Navigate with keyboard
-          else if (evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--;
-          else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
-          else if (angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
+          } else if (evt.keyCode === 38 && scope.$activeIndex > 0) {
+            scope.$activeIndex--;
+          } else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) {
+            scope.$activeIndex++;
+          } else if (angular.isUndefined(scope.$activeIndex)) {
+            scope.$activeIndex = 0;
+          }
           scope.$digest();
         };
 

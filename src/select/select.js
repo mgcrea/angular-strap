@@ -358,7 +358,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             index = select.$getIndex(controller.$modelValue);
             selected = index !== -1 ? select.$scope.$matches[index].label : false;
           }
-          element.html((selected ? selected : options.placeholder) + (options.caretHtml ? options.caretHtml : defaults.caretHtml));
+          element.html((selected || options.placeholder) + (options.caretHtml || defaults.caretHtml));
         };
 
         if (options.multiple) {
