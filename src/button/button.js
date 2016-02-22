@@ -144,7 +144,11 @@ angular.module('mgcrea.ngStrap.button', [])
 
         var value;
         attr.$observe('value', function (v) {
-          value = (typeof v === 'boolean') ? v : (constantValueRegExp.test(v) ? scope.$eval(v) : v);
+          if (typeof v !== 'boolean' && constantValueRegExp.test(v)) {
+            value = scope.$eval(v);
+          } else {
+            value = v;
+          }
           controller.$render();
         });
 
