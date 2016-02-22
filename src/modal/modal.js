@@ -19,7 +19,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       backdrop: true,
       keyboard: true,
       html: false,
-      show: true
+      show: true,
+      size: null
     };
 
     this.$get = function ($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
@@ -31,6 +32,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       var backdropCount = 0;
       var dialogBaseZindex = 1050;
       var backdropBaseZindex = 1040;
+
+      var validSizes = {
+        lg: 'modal-lg',
+        sm: 'modal-sm'
+      };
 
       function ModalFactory(config) {
 
@@ -157,6 +163,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           // Options: customClass
           if (options.customClass) {
             modalElement.addClass(options.customClass);
+          }
+
+          // Options: size
+          if (options.size && validSizes[options.size]) {
+            angular.element(findElement('.modal-dialog', modalElement[0])).addClass(validSizes[options.size]);
           }
 
           // Options: animation
@@ -356,7 +367,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass'], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass', 'size'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
