@@ -203,6 +203,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       require: 'ngModel',
       link: function postLink (scope, element, attr, controller) {
 
+        // Fixes firefox bug when using objects in model with typeahead
+        // Yes this breaks any other directive using a 'change' event on this input,
+        // but if it is using the 'change' event why is it used with typeahead?
+        element.off('change');
+
         // Directive options
         var options = {
           scope: scope
