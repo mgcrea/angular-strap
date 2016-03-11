@@ -173,10 +173,10 @@ describe('typeahead', function () {
       angular.element(elm[0]).triggerHandler('focus');
       elm.val(scope.states[0].substr(0, 2));
       expect(elm.val()).toBe(scope.states[0].substr(0, 2));
-      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('input');
       elm.val(elm.val() + scope.states[0].substr(2, 4));
       expect(elm.val()).toBe(scope.states[0].substr(0, 2 + 4));
-      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('input');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(1);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.states[0]);
     });
@@ -194,11 +194,11 @@ describe('typeahead', function () {
       angular.element(elm[0]).triggerHandler('focus');
       elm.val(scope.codes[0].substr(0, 5)); // 00000
       expect(elm.val()).toBe(scope.codes[0].substr(0, 5));
-      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('input');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(2); // 000000 & 000001
       elm.val(scope.codes[0].substr(0, 6)); // 000000
       expect(elm.val()).toBe(scope.codes[0].substr(0, 6));
-      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('input');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(1); // 000000
     });
 
@@ -222,7 +222,7 @@ describe('typeahead', function () {
       angular.element(elm[0]).triggerHandler('focus');
       elm.val(scope.codes[0].substr(0, 3)); // 001
       expect(elm.val()).toBe(scope.codes[0].substr(0, 3));
-      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('input');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(2); // 001000, 002001
     });
 
@@ -234,7 +234,7 @@ describe('typeahead', function () {
       angular.element(elm[0]).triggerHandler('focus');
       elm.val(scope.codes[0].substr(0, 3)); // 001
       expect(elm.val()).toBe(scope.codes[0].substr(0, 3));
-      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('input');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(1); // Our comparator should only match the beginning - 001000
     });
 
@@ -262,7 +262,7 @@ describe('typeahead', function () {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[1].fr_FR);
       elm.val('');
-      angular.element(elm[0]).triggerHandler('change');
+      angular.element(elm[0]).triggerHandler('input');
       angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
       expect(scope.selectedIcon).toBe(scope.icons[0]);
       expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[0].fr_FR).text().trim());
@@ -317,7 +317,7 @@ describe('typeahead', function () {
       expect(elm.attr('autocomplete')).toBe('thisShouldNotChange');
     });
   });
-  
+
   describe('ngModel', function () {
 
     it('should correctly render ', function() {
