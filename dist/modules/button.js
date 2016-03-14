@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.7 - 2016-03-14
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -107,7 +107,11 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
       var activeElement = isInput ? element.parent() : element;
       var value;
       attr.$observe('value', function(v) {
-        value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
+        if (typeof v !== 'boolean' && constantValueRegExp.test(v)) {
+          value = scope.$eval(v);
+        } else {
+          value = v;
+        }
         controller.$render();
       });
       controller.$render = function() {

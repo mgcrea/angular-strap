@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.7 - 2016-03-14
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -283,7 +283,7 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
           index = select.$getIndex(controller.$modelValue);
           selected = index !== -1 ? select.$scope.$matches[index].label : false;
         }
-        element.html((selected ? selected : options.placeholder) + (options.caretHtml ? options.caretHtml : defaults.caretHtml));
+        element.html((selected || options.placeholder) + (options.caretHtml || defaults.caretHtml));
       };
       if (options.multiple) {
         controller.$isEmpty = function(value) {
