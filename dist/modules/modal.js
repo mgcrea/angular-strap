@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.7 - 2016-03-14
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -23,7 +23,8 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
     backdrop: true,
     keyboard: true,
     html: false,
-    show: true
+    show: true,
+    size: null
   };
   this.$get = [ '$window', '$rootScope', '$bsCompiler', '$animate', '$timeout', '$sce', 'dimensions', function($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
     var forEach = angular.forEach;
@@ -32,6 +33,10 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
     var backdropCount = 0;
     var dialogBaseZindex = 1050;
     var backdropBaseZindex = 1040;
+    var validSizes = {
+      lg: 'modal-lg',
+      sm: 'modal-sm'
+    };
     function ModalFactory(config) {
       var $modal = {};
       var options = $modal.$options = angular.extend({}, defaults, config);
@@ -126,6 +131,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         }).addClass(options.placement);
         if (options.customClass) {
           modalElement.addClass(options.customClass);
+        }
+        if (options.size && validSizes[options.size]) {
+          angular.element(findElement('.modal-dialog', modalElement[0])).addClass(validSizes[options.size]);
         }
         if (options.animation) {
           if (options.backdrop) {
@@ -270,7 +278,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         element: element,
         show: false
       };
-      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass', 'size' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       if (options.modalClass) {

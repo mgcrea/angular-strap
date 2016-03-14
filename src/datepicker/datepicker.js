@@ -555,9 +555,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
             var newDate;
 
             if (evt.keyCode === 37) newDate = new Date(actualTime - 1 * 864e5);
-              else if (evt.keyCode === 38) newDate = new Date(actualTime - 7 * 864e5);
-              else if (evt.keyCode === 39) newDate = new Date(actualTime + 1 * 864e5);
-              else if (evt.keyCode === 40) newDate = new Date(actualTime + 7 * 864e5);
+            else if (evt.keyCode === 38) newDate = new Date(actualTime - 7 * 864e5);
+            else if (evt.keyCode === 39) newDate = new Date(actualTime + 1 * 864e5);
+            else if (evt.keyCode === 40) newDate = new Date(actualTime + 7 * 864e5);
 
             if (!this.isDisabled(newDate)) picker.select(newDate, true);
           }
@@ -603,9 +603,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
             var newDate = new Date(picker.$date);
 
             if (evt.keyCode === 37) newDate.setMonth(actualMonth - 1);
-              else if (evt.keyCode === 38) newDate.setMonth(actualMonth - 4);
-              else if (evt.keyCode === 39) newDate.setMonth(actualMonth + 1);
-              else if (evt.keyCode === 40) newDate.setMonth(actualMonth + 4);
+            else if (evt.keyCode === 38) newDate.setMonth(actualMonth - 4);
+            else if (evt.keyCode === 39) newDate.setMonth(actualMonth + 1);
+            else if (evt.keyCode === 40) newDate.setMonth(actualMonth + 4);
 
             if (!this.isDisabled(newDate)) picker.select(newDate, true);
           }
@@ -651,9 +651,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
             var newDate = new Date(picker.$date);
 
             if (evt.keyCode === 37) newDate.setYear(actualYear - 1);
-              else if (evt.keyCode === 38) newDate.setYear(actualYear - 4);
-              else if (evt.keyCode === 39) newDate.setYear(actualYear + 1);
-              else if (evt.keyCode === 40) newDate.setYear(actualYear + 4);
+            else if (evt.keyCode === 38) newDate.setYear(actualYear - 4);
+            else if (evt.keyCode === 39) newDate.setYear(actualYear + 1);
+            else if (evt.keyCode === 40) newDate.setYear(actualYear + 4);
 
             if (!this.isDisabled(newDate)) picker.select(newDate, true);
           }

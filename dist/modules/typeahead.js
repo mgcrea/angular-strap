@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.7 - 2016-03-14
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -96,7 +96,13 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         }
         if (evt.keyCode === 13 && scope.$matches.length) {
           $typeahead.select(scope.$activeIndex);
-        } else if (evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--; else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++; else if (angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
+        } else if (evt.keyCode === 38 && scope.$activeIndex > 0) {
+          scope.$activeIndex--;
+        } else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) {
+          scope.$activeIndex++;
+        } else if (angular.isUndefined(scope.$activeIndex)) {
+          scope.$activeIndex = 0;
+        }
         scope.$digest();
       };
       var show = $typeahead.show;
@@ -145,6 +151,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
     restrict: 'EAC',
     require: 'ngModel',
     link: function postLink(scope, element, attr, controller) {
+      element.off('change');
       var options = {
         scope: scope
       };

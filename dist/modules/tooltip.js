@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.7 - 2016-03-14
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -18,7 +18,7 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
     placement: 'top',
     templateUrl: 'tooltip/tooltip.tpl.html',
     template: '',
-    contentTemplate: false,
+    titleTemplate: false,
     trigger: 'hover focus',
     keyboard: false,
     html: false,
@@ -230,7 +230,10 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
           destroyTipElement();
         }
       }
-      $tooltip.toggle = function() {
+      $tooltip.toggle = function(evt) {
+        if (evt) {
+          evt.preventDefault();
+        }
         if ($tooltip.$isShown) {
           $tooltip.leave();
         } else {
@@ -301,8 +304,8 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
       function bindTriggerEvents() {
         var triggers = options.trigger.split(' ');
         angular.forEach(triggers, function(trigger) {
-          if (trigger === 'click') {
-            element.on('click', $tooltip.toggle);
+          if (trigger === 'click' || trigger === 'contextmenu') {
+            element.on(trigger, $tooltip.toggle);
           } else if (trigger !== 'manual') {
             element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
             element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
@@ -316,8 +319,8 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         var triggers = options.trigger.split(' ');
         for (var i = triggers.length; i--; ) {
           var trigger = triggers[i];
-          if (trigger === 'click') {
-            element.off('click', $tooltip.toggle);
+          if (trigger === 'click' || trigger === 'contextmenu') {
+            element.off(trigger, $tooltip.toggle);
           } else if (trigger !== 'manual') {
             element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
             element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
@@ -559,7 +562,7 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
       var options = {
         scope: scope
       };
-      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'titleTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;
@@ -588,6 +591,11 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
               if (tooltip) tooltip.$applyPlacement();
             });
           }
+        }
+      });
+      attr.$observe('disabled', function(newValue) {
+        if (newValue && tooltip.$isShown) {
+          tooltip.hide();
         }
       });
       if (attr.bsTooltip) {
