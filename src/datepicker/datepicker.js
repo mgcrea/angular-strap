@@ -463,6 +463,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         // viewValue -> element
         controller.$render = function () {
           // console.warn('$render("%s"): viewValue=%o', element.attr('ng-model'), controller.$viewValue);
+          if (angular.isDate(controller.$viewValue)) { controller.$dateValue = controller.$viewValue; }
           element.val(getDateFormattedString());
         };
 
