@@ -206,7 +206,7 @@ describe('timepicker', function() {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(6) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
     });
 
     it('should correctly update the model when the view is updated', function() {
@@ -262,7 +262,7 @@ describe('timepicker', function() {
       var elm = compileDirective('default', {selectedTime: undefined});
       expect(elm.val()).toBe('');
       angular.element(elm[0]).triggerHandler('focus');
-      var amButton = angular.element(sandboxEl.find('.dropdown-menu tbody td:eq(6) button:eq(0)')[0]);
+      var amButton = angular.element(sandboxEl.find('.dropdown-menu tbody td:eq(4) button:eq(0)')[0]);
       spyOn(scope.$$childHead, '$switchMeridian');
       amButton.triggerHandler('click');
       // expect not to throw exception
@@ -311,7 +311,7 @@ describe('timepicker', function() {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(6) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
 
     });
 
@@ -654,7 +654,7 @@ describe('timepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu thead .btn').length).toBe(2);
         expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 2);
-        expect(sandboxEl.find('.dropdown-menu tfoot .btn').length).toBe(2);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:first td').length).toBe(3);
       });
 
       it('should show seconds', function() {
