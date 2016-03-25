@@ -29,7 +29,7 @@ script:
   - $(npm bin)/gulp karma:travis~1.2.0
 
 after_script:
-  - cat test/coverage/*/lcov.info | codeclimate
+  - cat test/coverage/*/lcov.info | codeclimate-test-reporter
 
 addons:
   code_climate:
