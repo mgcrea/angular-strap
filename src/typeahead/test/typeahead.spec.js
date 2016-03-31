@@ -330,8 +330,13 @@ describe('typeahead', function () {
 
   describe('ngModel', function () {
 
-    it('should correctly render ', function() {
+    it('should correctly render', function() {
       var elm = compileDirective('by-id');
+      expect(elm.val()).toBe(scope.icons[scope.selectedIcon].value);
+    });
+
+    it('should correctly render a model set to falsy value', function() {
+      var elm = compileDirective('by-id', {selectedIcon: 0});
       expect(elm.val()).toBe(scope.icons[scope.selectedIcon].value);
     });
 

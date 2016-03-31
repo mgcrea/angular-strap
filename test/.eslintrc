@@ -1,24 +1,19 @@
 {
-  "extends": "airbnb/legacy",
+  "extends": "mgcrea/legacy",
   "env": {
     "browser": false,
     "jasmine": true,
     "node": true
   },
   "rules": {
-    "comma-dangle": [2, "never"],
-    "func-names": 0,
-    "id-length": 0,
-    "max-len": 0,
-    "no-param-reassign": [2, {"props": false}],
-    "no-unused-vars": [2, {"args": "none"}],
-    "no-use-before-define": [2, "nofunc"],
-    "object-curly-spacing": [2, "never"],
+    "consistent-return": 1,
     "padded-blocks": 0,
-    "strict": [2, "global"],
-    "vars-on-top": 0
+    "no-param-reassign": 1,
+    "no-shadow": 1,
+    "space-before-function-paren": [2, "always"]
   },
   "globals": {
-    "angular": 1
+    "angular": 1,
+    "$": 1
   }
 }
