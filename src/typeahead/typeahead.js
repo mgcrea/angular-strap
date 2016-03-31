@@ -232,8 +232,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         var bsOptions = attr.bsOptions;
         if (filter) {
-            bsOptions += ' | ' + filter + ':$viewValue';
-            if (comparator) bsOptions += ':' + comparator;
+          bsOptions += ' | ' + filter + ':$viewValue';
+          if (comparator) bsOptions += ':' + comparator;
         }
         if (limit) bsOptions += ' | limitTo:' + limit;
         var parsedOptions = $parseOptions(bsOptions);
