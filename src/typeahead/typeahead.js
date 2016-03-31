@@ -218,7 +218,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach(['html', 'container', 'trimValue'], function (key) {
+        angular.forEach(['html', 'container', 'trimValue', 'filter'], function (key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
 
@@ -226,13 +226,15 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         if (!element.attr('autocomplete')) element.attr('autocomplete', 'off');
 
         // Build proper bsOptions
-        var filter = options.filter || defaults.filter;
+        var filter = angular.isDefined(options.filter) ? options.filter : defaults.filter;
         var limit = options.limit || defaults.limit;
         var comparator = options.comparator || defaults.comparator;
 
         var bsOptions = attr.bsOptions;
-        if (filter) bsOptions += ' | ' + filter + ':$viewValue';
-        if (comparator) bsOptions += ':' + comparator;
+        if (filter) {
+            bsOptions += ' | ' + filter + ':$viewValue';
+            if (comparator) bsOptions += ':' + comparator;
+        }
         if (limit) bsOptions += ' | limitTo:' + limit;
         var parsedOptions = $parseOptions(bsOptions);
 
