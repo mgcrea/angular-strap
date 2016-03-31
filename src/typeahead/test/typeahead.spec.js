@@ -19,13 +19,13 @@ describe('typeahead', function () {
     $animate = $injector.get('$animate');
     $timeout = $injector.get('$timeout');
     var flush = $animate.flush || $animate.triggerCallbacks;
-    $animate.flush = function() {
-      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    $animate.flush = function () {
+      flush.call($animate); if (!$animate.triggerCallbacks) $timeout.flush();
     };
     $$rAF = _$$rAF_;
   }));
 
-  afterEach(function() {
+  afterEach(function () {
     scope.$destroy();
     sandboxEl.remove();
   });
@@ -87,7 +87,7 @@ describe('typeahead', function () {
       element: '<input type="text" class="form-control" ng-model="selectedIcon" data-html="1" bs-options="icon as icon[\'fr_FR\'] for icon in icons" bs-typeahead>'
     },
     'markup-renew-items': {
-      scope: {selectedIcon: {}, icons: function(){return [{alt: 'Gear'}, {alt: 'Globe'}, {alt: 'Heart'}, {alt: 'Camera'}];}},
+      scope: {selectedIcon: {}, icons: function () {return [{alt: 'Gear'}, {alt: 'Globe'}, {alt: 'Heart'}, {alt: 'Camera'}];}},
       element: '<input type="text" class="form-control" ng-model="selectedIcon" bs-options="icon as icon.alt for icon in icons()" bs-typeahead>'
     },
     'options-animation': {
@@ -124,17 +124,17 @@ describe('typeahead', function () {
     }
   };
 
-  function compileDirective(template, locals, hook) {
+  function compileDirective (template, locals, hook) {
     template = templates[template];
     angular.extend(scope, template.scope || templates['default'].scope, locals);
     var element = $(template.element).appendTo(sandboxEl);
-    if(angular.isFunction(hook)) hook(scope);
+    if (angular.isFunction(hook)) hook(scope);
     element = $compile(element)(scope);
     scope.$digest();
     return jQuery(element[0]);
   }
 
-  function triggerKeyDown(elm, keyCode) {
+  function triggerKeyDown (elm, keyCode) {
     var evt = $.Event('keydown');
     evt.which = evt.keyCode = keyCode;
     angular.element(elm[0]).triggerHandler(evt);
@@ -144,14 +144,14 @@ describe('typeahead', function () {
 
   describe('with default template', function () {
 
-    it('should open on focus', function() {
+    it('should open on focus', function () {
       var elm = compileDirective('default');
       expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.children('.dropdown-menu').length).toBe(1);
     });
 
-    it('should close on blur', function() {
+    it('should close on blur', function () {
       var elm = compileDirective('default');
       expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
       angular.element(elm[0]).triggerHandler('focus');
@@ -159,7 +159,7 @@ describe('typeahead', function () {
       expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
     });
 
-    it('should correctly compile inner content', function() {
+    it('should correctly compile inner content', function () {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
@@ -167,12 +167,12 @@ describe('typeahead', function () {
       expect(elm.val()).toBe('');
     });
 
-    it('should correctly set the default value', function() {
+    it('should correctly set the default value', function () {
       var elm = compileDirective('default-value');
       expect(elm.val()).toBe(scope.states[1]);
     });
 
-    it('should correctly filter the dropdown list when input changes', function() {
+    it('should correctly filter the dropdown list when input changes', function () {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
       elm.val(scope.states[0].substr(0, 2));
@@ -185,7 +185,7 @@ describe('typeahead', function () {
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.states[0]);
     });
 
-    it('should correctly select a value', function() {
+    it('should correctly select a value', function () {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
@@ -206,12 +206,12 @@ describe('typeahead', function () {
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(1); // 000000
     });
 
-    it('should correctly support a promise', function() {
-      scope.getAsyncStates = function() {
+    it('should correctly support a promise', function () {
+      scope.getAsyncStates = function () {
         var deferred = $q.defer();
         deferred.resolve(['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']);
         return deferred.promise;
-      }
+      };
       var elm = compileDirective('default-with-promise');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
@@ -248,14 +248,14 @@ describe('typeahead', function () {
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(1); // Our comparator should only match the beginning - 001000
     });
 
-    it('should support ngRepeat markup', function() {
+    it('should support ngRepeat markup', function () {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-typeahead]:eq(0)')).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text()).toBe(scope.states[0]);
     });
 
-    it('should support objectValue markup', function() {
+    it('should support objectValue markup', function () {
       var elm = compileDirective('markup-objectValue');
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[0].label);
@@ -264,7 +264,7 @@ describe('typeahead', function () {
       expect(elm.val()).toBe(jQuery('div').html(scope.icons[0].label).text().trim());
     });
 
-    it('should support custom objectValue markup', function() {
+    it('should support custom objectValue markup', function () {
       var elm = compileDirective('markup-objectValue-custom');
       scope.selectedIcon = scope.icons[1];
       scope.$digest();
@@ -278,7 +278,7 @@ describe('typeahead', function () {
       expect(elm.val()).toBe(jQuery('<div></div>').html(scope.icons[0].fr_FR).text().trim());
     });
 
-    it('should support custom label with renewed source', function() {
+    it('should support custom label with renewed source', function () {
       var elem = compileDirective('markup-renew-items');
       var target = scope.icons()[0];
 
@@ -298,8 +298,8 @@ describe('typeahead', function () {
       expect(elem.val()).toBe(target.alt);
     });
 
-    it('should support numeric values', function() {
-      var elm = compileDirective('default', { states: [1, 2, 3] });
+    it('should support numeric values', function () {
+      var elm = compileDirective('default', {states: [1, 2, 3]});
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe('1');
       angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
@@ -308,12 +308,12 @@ describe('typeahead', function () {
     });
 
     it('should use the model value if the display value cannot be determined', function () {
-      var elm = compileDirective('markup-objectValue', {}, function(scope) { scope.selectedIcon = 'Ge' });
+      var elm = compileDirective('markup-objectValue', {}, function (scope) { scope.selectedIcon = 'Ge'; });
       expect(elm.val()).toBe('Ge'); // display value will be undefined, use model value for display
     });
 
     it('should use \'\' if the  model is an object and the display value cannot be determined', function () {
-      var elm = compileDirective('markup-objectValue', {}, function(scope) { scope.selectedIcon = {} });
+      var elm = compileDirective('markup-objectValue', {}, function (scope) { scope.selectedIcon = {}; });
       expect(elm.val()).toBe('');
     });
 
@@ -330,12 +330,12 @@ describe('typeahead', function () {
 
   describe('ngModel', function () {
 
-    it('should correctly render', function() {
+    it('should correctly render', function () {
       var elm = compileDirective('by-id');
       expect(elm.val()).toBe(scope.icons[scope.selectedIcon].value);
     });
 
-    it('should correctly render a model set to falsy value', function() {
+    it('should correctly render a model set to falsy value', function () {
       var elm = compileDirective('by-id', {selectedIcon: 0});
       expect(elm.val()).toBe(scope.icons[scope.selectedIcon].value);
     });
@@ -344,7 +344,7 @@ describe('typeahead', function () {
 
   describe('bsOptions', function () {
 
-    it('should correctly watch for changes', function() {
+    it('should correctly watch for changes', function () {
       var elm = compileDirective('watch-options');
       scope.states.shift();
       scope.$digest();
@@ -358,13 +358,13 @@ describe('typeahead', function () {
 
     describe('animation', function () {
 
-      it('should default to `am-fade` animation', function() {
+      it('should default to `am-fade` animation', function () {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.children('.dropdown-menu').hasClass('am-fade')).toBeTruthy();
       });
 
-      it('should support custom animation', function() {
+      it('should support custom animation', function () {
         var elm = compileDirective('options-animation');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.children('.dropdown-menu').hasClass('am-flip-x')).toBeTruthy();
@@ -374,28 +374,28 @@ describe('typeahead', function () {
 
     describe('placement', function () {
       var $$rAF,
-          $timeout;
+        $timeout;
 
       beforeEach(inject(function (_$$rAF_, _$timeout_) {
         $$rAF = _$$rAF_;
         $timeout = _$timeout_;
       }));
 
-      it('should default to `top` placement', function() {
+      it('should default to `top` placement', function () {
         var elm = compileDirective('default');
         angular.element(elm[0]).triggerHandler('focus');
         $$rAF.flush();
         expect(sandboxEl.children('.dropdown-menu').hasClass('bottom-left')).toBeTruthy();
       });
 
-      it('should support placement', function() {
+      it('should support placement', function () {
         var elm = compileDirective('options-placement');
         angular.element(elm[0]).triggerHandler('focus');
         $$rAF.flush();
         expect(sandboxEl.children('.dropdown-menu').hasClass('bottom')).toBeTruthy();
       });
 
-      it('should support exotic-placement', function() {
+      it('should support exotic-placement', function () {
         var elm = compileDirective('options-placement-exotic');
         angular.element(elm[0]).triggerHandler('focus');
         $$rAF.flush();
@@ -403,7 +403,7 @@ describe('typeahead', function () {
       });
 
       it('should re-apply placement when the results change', function () {
-        var typeahead = $typeahead($('<input>'), null, { placement: 'top' });
+        var typeahead = $typeahead($('<input>'), null, {placement: 'top'});
         spyOn(typeahead, '$applyPlacement');
         typeahead.update([]);
 
@@ -412,7 +412,7 @@ describe('typeahead', function () {
       });
 
       it('should not re-apply placement when the results change if the placement is bottom', function () {
-        var typeahead = $typeahead($('<input>'), null, { placement: 'bottom' });
+        var typeahead = $typeahead($('<input>'), null, {placement: 'bottom'});
         spyOn(typeahead, '$applyPlacement');
         typeahead.update([]);
 
@@ -421,7 +421,7 @@ describe('typeahead', function () {
       });
 
       it('should not re-apply placement when the results change if the placement is bottom-left', function () {
-        var typeahead = $typeahead($('<input>'), null, { placement: 'bottom-left' });
+        var typeahead = $typeahead($('<input>'), null, {placement: 'bottom-left'});
         spyOn(typeahead, '$applyPlacement');
         typeahead.update([]);
 
@@ -430,7 +430,7 @@ describe('typeahead', function () {
       });
 
       it('should not re-apply placement when the results change if the placement is bottom-right', function () {
-        var typeahead = $typeahead($('<input>'), null, { placement: 'bottom-right' });
+        var typeahead = $typeahead($('<input>'), null, {placement: 'bottom-right'});
         spyOn(typeahead, '$applyPlacement');
         typeahead.update([]);
 
@@ -441,7 +441,7 @@ describe('typeahead', function () {
 
     describe('trigger', function () {
 
-      it('should support an alternative trigger', function() {
+      it('should support an alternative trigger', function () {
         var elm = compileDirective('options-trigger');
         expect(sandboxEl.children('.dropdown-menu').length).toBe(0);
         angular.element(elm[0]).triggerHandler('mouseenter');
@@ -454,14 +454,14 @@ describe('typeahead', function () {
 
     describe('html', function () {
 
-      it('should correctly compile inner content when truthy', function() {
+      it('should correctly compile inner content when truthy', function () {
         var elm = compileDirective('options-html', {html: 'true'});
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
         expect(sandboxEl.find('.dropdown-menu li:eq(0) a').html()).toBe(scope.icons[0].label);
       });
 
-      it('should NOT compile inner content when falsy', function() {
+      it('should NOT compile inner content when falsy', function () {
         var elm = compileDirective('options-html', {html: 'false'});
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
@@ -470,9 +470,9 @@ describe('typeahead', function () {
 
     });
 
-    describe('container', function() {
+    describe('container', function () {
 
-      it('should put typeahead in a container when specified', function() {
+      it('should put typeahead in a container when specified', function () {
         var testElm = $('<div id="testElm"></div>');
         sandboxEl.append(testElm);
         var elm = compileDirective('options-container', angular.extend({}, templates.default.scope, {container: '#testElm'}));
@@ -480,7 +480,7 @@ describe('typeahead', function () {
         expect(testElm.find('ul.typeahead').length).toBe(1);
       });
 
-      it('should put typeahead in sandbox when container is falsy', function() {
+      it('should put typeahead in sandbox when container is falsy', function () {
         var elm = compileDirective('options-container', angular.extend({}, templates.default.scope, {container: 'false'}));
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('ul.typeahead').length).toBe(1);
@@ -490,14 +490,14 @@ describe('typeahead', function () {
 
     describe('template', function () {
 
-      it('should support custom template', function() {
+      it('should support custom template', function () {
         $templateCache.put('custom', '<div class="dropdown-menu"><div class="dropdown-inner">foo: {{states.length}}</div></div>');
         var elm = compileDirective('options-template');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-inner').text()).toBe('foo: ' + scope.states.length);
       });
 
-      it('should support template with ngRepeat', function() {
+      it('should support template with ngRepeat', function () {
         $templateCache.put('custom', '<div class="dropdown-menu"><div class="dropdown-inner"><ul><li ng-repeat="state in states">{{state}}</li></ul></div></div>');
         var elm = compileDirective('options-template');
         angular.element(elm[0]).triggerHandler('focus');
@@ -508,7 +508,7 @@ describe('typeahead', function () {
         expect(sandboxEl.find('.dropdown-inner').text()).toBe(scope.states.join(''));
       });
 
-      it('should support template with ngClick', function() {
+      it('should support template with ngClick', function () {
         $templateCache.put('custom', '<div class="dropdown-menu"><div class="dropdown-inner"><a class="btn" ng-click="dropdown.counter=dropdown.counter+1">click me</a></div></div>');
         var elm = compileDirective('options-template');
         scope.dropdown = {counter: 0};
@@ -526,14 +526,14 @@ describe('typeahead', function () {
 
     describe('trimValue', function () {
 
-      it('should correctly trim model value when truthy', function() {
+      it('should correctly trim model value when truthy', function () {
         var elm = compileDirective('options-trimValue', {trimValue: 'true'});
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
         expect(elm.val()).toBe(scope.states[0].trim());
       });
 
-      it('should NOT trim model value when falsy', function() {
+      it('should NOT trim model value when falsy', function () {
         var elm = compileDirective('options-trimValue', {trimValue: 'false'});
         angular.element(elm[0]).triggerHandler('focus');
         angular.element(sandboxEl.find('.dropdown-menu li:eq(0) a').get(0)).triggerHandler('click');
@@ -544,16 +544,16 @@ describe('typeahead', function () {
 
   });
 
-  describe('minLength', function() {
+  describe('minLength', function () {
 
-    it('should not throw when ngModel.$viewValue is undefined', function() {
-      var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
+    it('should not throw when ngModel.$viewValue is undefined', function () {
+      var elm = compileDirective('options-minLength', {}, function (scope) { delete scope.selectedState; });
       scope.$digest();
       expect(scope.$$childHead.$isVisible).not.toThrow();
     });
 
-    it('should should show options on focus when minLength is 0', function() {
-      var elm = compileDirective('options-minLength', {}, function(scope) { delete scope.selectedState; });
+    it('should should show options on focus when minLength is 0', function () {
+      var elm = compileDirective('options-minLength', {}, function (scope) { delete scope.selectedState; });
       angular.element(elm[0]).triggerHandler('focus');
       scope.$digest();
       expect(sandboxEl.find('.dropdown-menu li').length).toBe($typeahead.defaults.limit);
@@ -562,15 +562,15 @@ describe('typeahead', function () {
 
   });
 
-  describe('autoSelect', function() {
+  describe('autoSelect', function () {
 
-    it('should not auto-select the first match upon meeting minLength', function() {
+    it('should not auto-select the first match upon meeting minLength', function () {
       var elm = compileDirective('options-minLength', {});
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').hasClass('active')).not.toBeTruthy();
     });
 
-    it('should auto-select the first match upon meeting minLength', function() {
+    it('should auto-select the first match upon meeting minLength', function () {
       var elm = compileDirective('options-autoSelect', {});
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').hasClass('active')).toBeTruthy();
@@ -578,13 +578,13 @@ describe('typeahead', function () {
 
   });
 
-  describe('select event', function() {
+  describe('select event', function () {
 
-    it('should dispatch .select event when item is selected', function() {
+    it('should dispatch .select event when item is selected', function () {
       var elm = compileDirective('default');
 
       var selected = null;
-      scope.$on('$typeahead.select', function(evt, value, index, typeahead) {
+      scope.$on('$typeahead.select', function (evt, value, index, typeahead) {
         selected = index;
       });
 
@@ -594,11 +594,11 @@ describe('typeahead', function () {
       expect(selected).toBe(1);
     });
 
-    it('should call .select event with typeahead element instance id', function() {
+    it('should call .select event with typeahead element instance id', function () {
       var elm = compileDirective('default-with-id');
 
       var id = '';
-      scope.$on('$typeahead.select', function(evt, value, index, typeahead) {
+      scope.$on('$typeahead.select', function (evt, value, index, typeahead) {
         id = typeahead.$id;
       });
 
@@ -610,8 +610,8 @@ describe('typeahead', function () {
   });
 
   describe('prefix', function () {
-    it('should dispatch namespaced events from provider', function() {
-      var fauxController = { $setViewValue : angular.noop, $render : angular.noop};
+    it('should dispatch namespaced events from provider', function () {
+      var fauxController = {$setViewValue : angular.noop, $render : angular.noop};
       var myTypeahead = $typeahead(sandboxEl, fauxController, {prefixEvent: 'datepicker'});
       var emit = spyOn(myTypeahead.$scope, '$emit');
       scope.$digest();
@@ -629,23 +629,23 @@ describe('typeahead', function () {
       expect(emit).toHaveBeenCalledWith('datepicker.select', option.value, 0, myTypeahead);
     });
 
-    it('should dispatch namespaced events from directive', function() {
+    it('should dispatch namespaced events from directive', function () {
       var elm = compileDirective('default-with-namespace');
 
       var select, showBefore, show, hideBefore, hide;
-      scope.$on('datepicker.select', function() {
+      scope.$on('datepicker.select', function () {
         select = true;
       });
-      scope.$on('datepicker.show.before', function() {
+      scope.$on('datepicker.show.before', function () {
         showBefore = true;
       });
-      scope.$on('datepicker.show', function() {
+      scope.$on('datepicker.show', function () {
         show = true;
       });
-      scope.$on('datepicker.hide.before', function() {
+      scope.$on('datepicker.hide.before', function () {
         hideBefore = true;
       });
-      scope.$on('datepicker.hide', function() {
+      scope.$on('datepicker.hide', function () {
         hide = true;
       });
 
