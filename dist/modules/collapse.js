@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.8 - 2016-03-31
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -83,7 +83,7 @@ angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
     }
     function isActive(value) {
       var activeItems = self.$targets.$active;
-      return activeItems.indexOf(value) === -1 ? false : true;
+      return activeItems.indexOf(value) !== -1;
     }
     function deactivateItem(value) {
       var index = self.$targets.$active.indexOf(value);
