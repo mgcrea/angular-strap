@@ -283,7 +283,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
           // If there's no display value, attempt to use the modelValue.
           // If the model is an object not much we can do
-          if (modelValue && typeof modelValue !== 'object') {
+          if (angular.isDefined(modelValue) && typeof modelValue !== 'object') {
             return modelValue;
           }
           return '';
