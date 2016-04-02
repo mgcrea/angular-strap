@@ -206,6 +206,22 @@ describe('typeahead', function () {
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(1); // 000000
     });
 
+    it('should correctly handle focus selection position', function () {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val(scope.states[0].substr(0, 2));
+      angular.element(elm[0]).triggerHandler('input');
+      elm.val(elm.val() + scope.states[0].substr(2, 4));
+      expect(elm[0].selectionStart).toBe(6);
+      expect(elm[0].selectionEnd).toBe(6);
+      angular.element(elm[0]).triggerHandler('blur');
+      angular.element(elm[0]).triggerHandler('focus');
+      elm[0].setSelectionRange(0, 0);
+      angular.element(elm[0]).triggerHandler('input');
+      expect(elm[0].selectionStart).toBe(0);
+      expect(elm[0].selectionEnd).toBe(0);
+    });
+
     it('should correctly support a promise', function () {
       scope.getAsyncStates = function () {
         var deferred = $q.defer();

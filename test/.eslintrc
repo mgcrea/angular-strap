@@ -14,6 +14,7 @@
   },
   "globals": {
     "angular": 1,
+    "jQuery": 1,
     "$": 1
   }
 }
