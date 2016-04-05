@@ -86,6 +86,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if (parentScope) parentScope.$digest();
           // Emit event
           scope.$emit(options.prefixEvent + '.select', value, index, $typeahead);
+          if (angular.isDefined(options.onSelect) && angular.isFunction(options.onSelect)) {
+            options.onSelect(value, index, $typeahead);
+          }
         };
 
         // Protected methods
@@ -220,6 +223,14 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach(['html', 'container', 'trimValue', 'filter'], function (key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+
+        // bind functions from the attrs to the show, hide and select events
+        angular.forEach(['onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onSelect'], function (key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
         });
 
         // Disable browser autocompletion

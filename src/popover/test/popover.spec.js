@@ -97,6 +97,9 @@ describe('popover', function () {
     'options-contentTemplate': {
       scope: {foo: 'bar'},
       element: '<a class="btn" title="foo-title" data-content-template="custom" bs-popover bs-show="isVisible"></a>'
+    },
+    'options-events': {
+      element: '<a bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" bs-popover="popover">click me</a>'
     }
   };
 
@@ -485,6 +488,78 @@ describe('popover', function () {
       });
 
 
+    });
+
+    describe('onBeforeShow', function() {
+
+      it('should invoke beforeShow event callback', function() {
+        var beforeShow = false;
+
+        function onBeforeShow(select) {
+          beforeShow = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeShow: onBeforeShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeShow).toBe(true);
+      });
+    });
+
+    describe('onShow', function() {
+
+      it('should invoke show event callback', function() {
+        var show = false;
+
+        function onShow(select) {
+          show = true;
+        }
+
+        var elm = compileDirective('options-events', {onShow: onShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(show).toBe(true);
+      });
+    });
+
+    describe('onBeforeHide', function() {
+
+      it('should invoke beforeHide event callback', function() {
+        var beforeHide = false;
+
+        function onBeforeHide(select) {
+          beforeHide = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeHide: onBeforeHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeHide).toBe(true);
+      });
+    });
+
+    describe('onHide', function() {
+
+      it('should invoke show event callback', function() {
+        var hide = false;
+
+        function onHide(select) {
+          hide = true;
+        }
+
+        var elm = compileDirective('options-events', {onHide: onHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(hide).toBe(true);
+      });
     });
 
     describe('prefix', function () {

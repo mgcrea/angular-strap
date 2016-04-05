@@ -175,6 +175,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           if (!options.bsEnabled || $tooltip.$isShown) return;
 
           scope.$emit(options.prefixEvent + '.show.before', $tooltip);
+          if (angular.isDefined(options.onBeforeShow) && angular.isFunction(options.onBeforeShow)) {
+            options.onBeforeShow($tooltip);
+          }
           var parent;
           var after;
           if (options.container) {
@@ -253,6 +256,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
 
         function enterAnimateCallback () {
           scope.$emit(options.prefixEvent + '.show', $tooltip);
+          if (angular.isDefined(options.onShow) && angular.isFunction(options.onShow)) {
+            options.onShow($tooltip);
+          }
         }
 
         $tooltip.leave = function () {
@@ -276,6 +282,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
 
           if (!$tooltip.$isShown) return;
           scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
+          if (angular.isDefined(options.onBeforeHide) && angular.isFunction(options.onBeforeHide)) {
+            options.onBeforeHide($tooltip);
+          }
 
           // store blur value for leaveAnimateCallback to use
           _blur = blur;
@@ -307,6 +316,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
 
         function leaveAnimateCallback () {
           scope.$emit(options.prefixEvent + '.hide', $tooltip);
+          if (angular.isDefined(options.onHide) && angular.isFunction(options.onHide)) {
+            options.onHide($tooltip);
+          }
 
           // check if current tipElement still references
           // the same element when hide was called
@@ -730,7 +742,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
 
   })
 
-  .directive('bsTooltip', function ($window, $location, $sce, $tooltip, $$rAF) {
+  .directive('bsTooltip', function ($window, $location, $sce, $parse, $tooltip, $$rAF) {
 
     return {
       restrict: 'EAC',
@@ -749,6 +761,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         angular.forEach(['html', 'container'], function (key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
+          }
+        });
+
+        // bind functions from the attrs to the show and hide events
+        angular.forEach(['onBeforeShow', 'onShow', 'onBeforeHide', 'onHide'], function (key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
           }
         });
 

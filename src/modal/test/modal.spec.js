@@ -104,6 +104,9 @@ describe('modal', function() {
     'options-size-invalid': {
       element: '<a bs-modal="modal" data-size="md">click me</a>'
     },
+    'options-events': {
+      element: '<a bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" bs-modal="modal">click me</a>'
+    }
   };
 
   function compileDirective(template, locals) {
@@ -737,6 +740,78 @@ describe('modal', function() {
         expect(sandboxEl.find('.modal-dialog')).not.toHaveClass('modal-lg');
       });
 
+    });
+
+    describe('onBeforeShow', function() {
+
+      it('should invoke beforeShow event callback', function() {
+        var beforeShow = false;
+
+        function onBeforeShow(select) {
+          beforeShow = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeShow: onBeforeShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeShow).toBe(true);
+      });
+    });
+
+    describe('onShow', function() {
+
+      it('should invoke show event callback', function() {
+        var show = false;
+
+        function onShow(select) {
+          show = true;
+        }
+
+        var elm = compileDirective('options-events', {onShow: onShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(show).toBe(true);
+      });
+    });
+
+    describe('onBeforeHide', function() {
+
+      it('should invoke beforeHide event callback', function() {
+        var beforeHide = false;
+
+        function onBeforeHide(select) {
+          beforeHide = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeHide: onBeforeHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeHide).toBe(true);
+      });
+    });
+
+    describe('onHide', function() {
+
+      it('should invoke show event callback', function() {
+        var hide = false;
+
+        function onHide(select) {
+          hide = true;
+        }
+
+        var elm = compileDirective('options-events', {onHide: onHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(hide).toBe(true);
+      });
     });
 
   });

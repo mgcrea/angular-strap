@@ -119,6 +119,10 @@ describe('select', function () {
     'options-container': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button type="button" data-container="{{container}}" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+    },
+    'options-events': {
+      scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" bs-on-select="onSelect" bs-select></button>'
     }
   };
 
@@ -233,10 +237,10 @@ describe('select', function () {
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
       expect(sandboxEl.find('.dropdown-menu li:eq(0)').text().trim()).toBe(scope.icons[0].label);
     });
-    
+
     it('should correctly watch for changes for elements in arrays', function() {
       var elm = compileDirective('default');
-      scope.icons[0].label = scope.icons[0].label + "s" 
+      scope.icons[0].label = scope.icons[0].label + "s"
       scope.$digest();
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li').length).toBe(scope.icons.length);
@@ -605,6 +609,96 @@ describe('select', function () {
 
   });
 
+  describe('onBeforeShow', function() {
+
+    it('should invoke beforeShow event callback', function() {
+      var beforeShow = false;
+
+      function onBeforeShow(select) {
+        beforeShow = true;
+      }
+
+      var elm = compileDirective('options-events', angular.extend({onBeforeShow: onBeforeShow}, templates['options-events'].scope));
+
+      angular.element(elm[0]).triggerHandler('focus');
+
+      expect(beforeShow).toBe(true);
+    });
+  });
+
+  describe('onShow', function() {
+
+    it('should invoke show event callback', function() {
+      var show = false;
+
+      function onShow(select) {
+        show = true;
+      }
+
+      var elm = compileDirective('options-events', angular.extend({onShow: onShow}, templates['options-events'].scope));
+
+      angular.element(elm[0]).triggerHandler('focus');
+      $animate.flush();
+
+      expect(show).toBe(true);
+    });
+  });
+
+  describe('onBeforeHide', function() {
+
+    it('should invoke beforeHide event callback', function() {
+      var beforeHide = false;
+
+      function onBeforeHide(select) {
+        beforeHide = true;
+      }
+
+      var elm = compileDirective('options-events', angular.extend({onBeforeHide: onBeforeHide}, templates['options-events'].scope));
+
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(elm[0]).triggerHandler('blur');
+
+      expect(beforeHide).toBe(true);
+    });
+  });
+
+  describe('onHide', function() {
+
+    it('should invoke show event callback', function() {
+      var hide = false;
+
+      function onHide(select) {
+        hide = true;
+      }
+
+      var elm = compileDirective('options-events', angular.extend({onHide: onHide}, templates['options-events'].scope));
+
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(elm[0]).triggerHandler('blur');
+      $animate.flush();
+
+      expect(hide).toBe(true);
+    });
+  });
+
+  describe('onSelect', function() {
+
+    it('should invoke the onSelect callback', function () {
+      var selected = null;
+
+      function onSelect(value, index, select) {
+        selected = index;
+      }
+
+      var elm = compileDirective('options-events', angular.extend({onSelect: onSelect}, templates['options-events'].scope));
+
+      angular.element(elm[0]).triggerHandler('focus');
+      angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a').get(0)).triggerHandler('click');
+
+      expect(selected).toBe(1);
+    });
+  });
+
   describe('select event', function() {
 
     it('should dispatch .select event when item is selected', function() {
@@ -652,5 +746,4 @@ describe('select', function () {
       expect(id).toBe('select1');
     });
   });
-
 });

@@ -174,6 +174,10 @@ describe('tooltip', function() {
       scope: {tooltip: {title: 'Hello Tooltip!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{tooltip.title}}" data-title-template="custom" bs-tooltip>hover me</a>'
     },
+    'options-events': {
+      scope: {onShow: function(tooltip) {}, onBeforeShow: function(tooltip) {}, onHide: function(tooltip) {}, onBeforeHide: function(tooltip) {}},
+      element: '<a data-bs-on-show="onShow" data-bs-on-before-show="onBeforeShow" data-bs-on-hide="onHide" data-bs-on-before-hide="onBeforeHide" bs-tooltip>hover me</a>'
+    },
     'bsShow-attr': {
       scope: {tooltip: {title: 'Hello Tooltip!'}},
       element: '<a title="{{tooltip.title}}" bs-tooltip bs-show="true">hover me</a>'
@@ -628,6 +632,23 @@ describe('tooltip', function() {
       expect(emit).toHaveBeenCalledWith('tooltip.show', myTooltip);
     });
 
+    it('should invoke show and beforeShow event callbacks', function() {
+      var myTooltip = $tooltip(sandboxEl, {
+        onShow: function(tooltip) {},
+        onBeforeShow: function(tooltip) {}
+      });
+      var onBeforeShow = spyOn(myTooltip.$options, 'onBeforeShow');
+      var onShow = spyOn(myTooltip.$options, 'onShow');
+      myTooltip.$scope.$digest();
+      myTooltip.show();
+
+      expect(onBeforeShow).toHaveBeenCalledWith(myTooltip);
+      // show only fires AFTER the animation is complete
+      expect(onShow).not.toHaveBeenCalledWith(myTooltip);
+      $animate.flush();
+      expect(onShow).toHaveBeenCalledWith(myTooltip);
+    });
+
     it('should dispatch hide and hide.before events', function() {
       var myTooltip = $tooltip(sandboxEl, templates['default'].scope.tooltip);
       scope.$digest();
@@ -641,6 +662,96 @@ describe('tooltip', function() {
       expect(emit).not.toHaveBeenCalledWith('tooltip.hide', myTooltip);
       $animate.flush();
       expect(emit).toHaveBeenCalledWith('tooltip.hide', myTooltip);
+    });
+
+    it('should invoke hide and beforeHide event callbacks', function() {
+      var myTooltip = $tooltip(sandboxEl, {
+        onHide: function(tooltip) {},
+        onBeforeHide: function(tooltip) {}
+      });
+      var onBeforeHide = spyOn(myTooltip.$options, 'onBeforeHide');
+      var onHide = spyOn(myTooltip.$options, 'onHide');
+      myTooltip.$scope.$digest();
+      myTooltip.show();
+      myTooltip.hide();
+
+      expect(onBeforeHide).toHaveBeenCalledWith(myTooltip);
+      // show only fires AFTER the animation is complete
+      expect(onHide).not.toHaveBeenCalledWith(myTooltip);
+      $animate.flush();
+      expect(onHide).toHaveBeenCalledWith(myTooltip);
+    });
+
+    describe('onBeforeShow', function() {
+
+      it('should invoke beforeShow event callback', function() {
+        var beforeShow = false;
+
+        function onBeforeShow(select) {
+          beforeShow = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeShow: onBeforeShow});
+
+        angular.element(elm[0]).triggerHandler('mouseenter');
+
+        expect(beforeShow).toBe(true);
+      });
+    });
+
+    describe('onShow', function() {
+
+      it('should invoke show event callback', function() {
+        var show = false;
+
+        function onShow(select) {
+          show = true;
+        }
+
+        var elm = compileDirective('options-events', {onShow: onShow});
+
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        $animate.flush();
+
+        expect(show).toBe(true);
+      });
+    });
+
+    describe('onBeforeHide', function() {
+
+      it('should invoke beforeHide event callback', function() {
+        var beforeHide = false;
+
+        function onBeforeHide(select) {
+          beforeHide = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeHide: onBeforeHide});
+
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        angular.element(elm[0]).triggerHandler('blur');
+
+        expect(beforeHide).toBe(true);
+      });
+    });
+
+    describe('onHide', function() {
+
+      it('should invoke show event callback', function() {
+        var hide = false;
+
+        function onHide(select) {
+          hide = true;
+        }
+
+        var elm = compileDirective('options-events', {onHide: onHide});
+
+        angular.element(elm[0]).triggerHandler('mouseenter');
+        angular.element(elm[0]).triggerHandler('blur');
+        $animate.flush();
+
+        expect(hide).toBe(true);
+      });
     });
 
     it('should namespace show/hide events using the prefixEvent', function() {

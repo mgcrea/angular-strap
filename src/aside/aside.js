@@ -58,6 +58,14 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
 
+        // bind functions from the attrs to the show and hide events
+        angular.forEach(['onBeforeShow', 'onShow', 'onBeforeHide', 'onHide'], function (key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
+        });
+
         // Support scope as data-attrs
         angular.forEach(['title', 'content'], function (key) {
           if (attr[key]) {

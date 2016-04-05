@@ -3,18 +3,26 @@
 describe('alert', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $compile, $templateCache, $alert, scope;
+  var $compile, $templateCache, $animate, $timeout, $alert, scope;
 
   beforeEach(module('ngSanitize'));
+  beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
   beforeEach(module('mgcrea.ngStrap.modal', 'mgcrea.ngStrap.alert'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$alert_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$alert_, _$animate_, _$timeout_) {
     scope = _$rootScope_.$new();
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $alert = _$alert_;
+    $animate = _$animate_;
+    $timeout = _$timeout_;
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
   }));
 
   afterEach(function() {
@@ -62,6 +70,9 @@ describe('alert', function() {
     'options-template': {
       scope: {alert: {title: 'Title', content: 'Hello alert!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a data-template-url="custom" bs-alert="alert">click me</a>'
+    },
+    'options-events': {
+      element: '<a bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" bs-alert="alert">click me</a>'
     }
   };
 
@@ -326,6 +337,78 @@ describe('alert', function() {
       })
 
     })
+
+    describe('onBeforeShow', function() {
+
+      it('should invoke beforeShow event callback', function() {
+        var beforeShow = false;
+
+        function onBeforeShow(select) {
+          beforeShow = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeShow: onBeforeShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeShow).toBe(true);
+      });
+    });
+
+    describe('onShow', function() {
+
+      it('should invoke show event callback', function() {
+        var show = false;
+
+        function onShow(select) {
+          show = true;
+        }
+
+        var elm = compileDirective('options-events', {onShow: onShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(show).toBe(true);
+      });
+    });
+
+    describe('onBeforeHide', function() {
+
+      it('should invoke beforeHide event callback', function() {
+        var beforeHide = false;
+
+        function onBeforeHide(select) {
+          beforeHide = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeHide: onBeforeHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeHide).toBe(true);
+      });
+    });
+
+    describe('onHide', function() {
+
+      it('should invoke show event callback', function() {
+        var hide = false;
+
+        function onHide(select) {
+          hide = true;
+        }
+
+        var elm = compileDirective('options-events', {onHide: onHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(hide).toBe(true);
+      });
+    });
 
   });
 

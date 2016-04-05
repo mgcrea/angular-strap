@@ -157,6 +157,9 @@ describe('timepicker', function() {
     'options-container': {
       scope: {selectedTime: new Date()},
       element: '<input type="text" data-container="{{container}}" ng-model="selectedTime" bs-timepicker>'
+    },
+    'options-events': {
+      element: '<input type="text" bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" ng-model="selectedTime" bs-timepicker>'
     }
   };
 
@@ -645,6 +648,78 @@ describe('timepicker', function() {
         expect(scope.dropdown.counter).toBe(2);
       });
 
+    });
+
+    describe('onBeforeShow', function() {
+
+      it('should invoke beforeShow event callback', function() {
+        var beforeShow = false;
+
+        function onBeforeShow(select) {
+          beforeShow = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeShow: onBeforeShow});
+
+        angular.element(elm[0]).triggerHandler('focus');
+
+        expect(beforeShow).toBe(true);
+      });
+    });
+
+    describe('onShow', function() {
+
+      it('should invoke show event callback', function() {
+        var show = false;
+
+        function onShow(select) {
+          show = true;
+        }
+
+        var elm = compileDirective('options-events', {onShow: onShow});
+
+        angular.element(elm[0]).triggerHandler('focus');
+        $animate.flush();
+
+        expect(show).toBe(true);
+      });
+    });
+
+    describe('onBeforeHide', function() {
+
+      it('should invoke beforeHide event callback', function() {
+        var beforeHide = false;
+
+        function onBeforeHide(select) {
+          beforeHide = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeHide: onBeforeHide});
+
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(elm[0]).triggerHandler('blur');
+
+        expect(beforeHide).toBe(true);
+      });
+    });
+
+    describe('onHide', function() {
+
+      it('should invoke show event callback', function() {
+        var hide = false;
+
+        function onHide(select) {
+          hide = true;
+        }
+
+        var elm = compileDirective('options-events', {onHide: onHide});
+
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(elm[0]).triggerHandler('blur');
+        $animate.flush();
+
+        expect(hide).toBe(true);
+      });
     });
 
     describe('seconds display', function() {
