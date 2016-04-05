@@ -137,6 +137,14 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
             if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
           });
 
+          // bind functions from the attrs to the show and hide events
+          angular.forEach(['onBeforeShow', 'onShow', 'onBeforeHide', 'onHide'], function (key) {
+            var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+            if (angular.isDefined(attr[bsKey])) {
+              options[key] = scope.$eval(attr[bsKey]);
+            }
+          });
+
           // Support scope as an object
           if (attr.bsDropdown) {
             scope.$watch(attr.bsDropdown, function (newValue, oldValue) {
