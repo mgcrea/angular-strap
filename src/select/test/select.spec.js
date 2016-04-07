@@ -203,6 +203,15 @@ describe('select', function () {
       expect(sandboxEl.find('.dropdown-menu li:eq(0)')).toHaveClass('active');
     });
 
+    it('should not attempt to select an item when there is none highlighted and tab is pressed', function() {
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      expect(sandboxEl.find('.active').length).toBe(0);
+      $timeout.flush();
+      triggerKeyDown( elm, 9 );
+      expect(sandboxEl.find('.active').length).toBe(0);
+    });
+
   });
 
   describe('when model has no initial selection', function() {
