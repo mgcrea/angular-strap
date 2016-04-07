@@ -113,6 +113,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         };
 
         $select.select = function (index) {
+          if (angular.isUndefined(index) || index < 0 || index >= scope.$matches.length) { return; }
           var value = scope.$matches[index].value;
           scope.$apply(function () {
             $select.activate(index);
