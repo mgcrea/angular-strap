@@ -79,7 +79,12 @@ angular.module('mgcrea.ngStrap.tab', [])
       self.$isActive = $scope.$isActive = function ($pane, $index) {
         return self.$panes.$active === $pane.name || self.$panes.$active === $index;
       };
-
+        
+      self.$onKeyPress = $scope.$onKeyPress = function (e, index) {
+        if (e.keyCode === 32 || e.charCode === 32 || e.keyCode === 13 || e.charCode === 13) {
+            self.$setActive(index);
+        }
+      };
     };
 
     this.$get = function () {
