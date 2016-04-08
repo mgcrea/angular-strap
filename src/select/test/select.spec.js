@@ -47,6 +47,10 @@ describe('select', function () {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
       element: '<button id="select1" type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
     },
+    'default-toggle': {
+      scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
+      element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" data-toggle="true" bs-select></button>'
+    },
     'markup-ngRepeat': {
       element: '<ul><li ng-repeat="i in [1, 2, 3]"><button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button></li></ul>'
     },
@@ -753,6 +757,28 @@ describe('select', function () {
       angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
 
       expect(id).toBe('select1');
+    });
+  });
+
+  describe('toggle', function () {
+
+    it('should allow user to toggle a selection', function() {
+        var elm = compileDirective('default-toggle');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcon).toBe(scope.icons[1].value);
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcon).toBe(undefined);
+    });
+
+    it('should not allow user to toggle a selection', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcon).toBe(scope.icons[1].value);
+        angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
+        expect(scope.selectedIcon).toBe(scope.icons[1].value);
     });
   });
 });
