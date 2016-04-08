@@ -222,11 +222,6 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         $modal.hide = function () {
           if (!$modal.$isShown) return;
 
-          if (options.backdrop) {
-            // decrement number of modals
-            backdropCount--;
-          }
-
           if (scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
             return;
           }
@@ -243,6 +238,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
 
           if (options.backdrop) {
+            // decrement number of backdrops
+            backdropCount--;
             $animate.leave(backdropElement);
           }
           $modal.$isShown = scope.$isShown = false;
