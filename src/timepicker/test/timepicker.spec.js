@@ -1208,8 +1208,8 @@ describe('timepicker', function() {
       it('should change ngModel value when set to picker', function() {
         var elm = compileDirective('options-arrowBehavior', {arrowBehavior: 'picker'});
 
-        // we are going to increment time by 1 hour
-        var testTime = new Date(scope.selectedTime.getTime() + (1 * 60 * 60 * 1000));
+        // we are going to decrement time by 1 hour
+        var testTime = new Date(scope.selectedTime.getTime() - (1 * 60 * 60 * 1000));
 
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
@@ -1220,8 +1220,8 @@ describe('timepicker', function() {
       it('should change ngModel value when set to picker with an empty model', function() {
         var elm = compileDirective('options-arrowBehavior', {arrowBehavior: 'picker', selectedTime: '', timeType: 'string'});
 
-        // we are going to increment time by 1 hour
-        var testTime = new Date(Date.now() + (1 * 60 * 60 * 1000));
+        // we are going to decrement time by 1 hour
+        var testTime = new Date(Date.now() - (1 * 60 * 60 * 1000));
 
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));

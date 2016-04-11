@@ -235,11 +235,11 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           var minutes = newDate.getMinutes();
           var seconds = newDate.getSeconds();
           if (index === 0) {
-            newDate.setHours(hours - (parseInt(options.hourStep, 10) * value));
+            newDate.setHours(hours + (parseInt(options.hourStep, 10) * value));
           } else if (index === 1) {
-            newDate.setMinutes(minutes - (parseInt(options.minuteStep, 10) * value));
+            newDate.setMinutes(minutes + (parseInt(options.minuteStep, 10) * value));
           } else if (index === 2) {
-            newDate.setSeconds(seconds - (parseInt(options.secondStep, 10) * value));
+            newDate.setSeconds(seconds + (parseInt(options.secondStep, 10) * value));
           }
           $timepicker.select(newDate, index, true);
         };
