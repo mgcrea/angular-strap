@@ -282,6 +282,26 @@ describe('tooltip', function() {
       expect(sandboxEl.children('.tooltip').length).toBe(0);
     });
 
+    it('should NOT stopPropagation on mousedown if mouseDownStopPropagation is false', function() {
+      var elm = compileDirective('markup-button');
+      var myTooltip = $tooltip(elm, {mouseDownStopPropagation: false, trigger: 'focus'});
+      scope.$digest();
+      var evt = jQuery.Event('mousedown');
+      spyOn(evt, 'stopPropagation');
+      myTooltip.$onFocusElementMouseDown(evt);
+      expect(evt.stopPropagation).not.toHaveBeenCalled();
+    });
+
+    it('should NOT preventDefault on mousedown if mouseDownPreventDefault is false', function() {
+      var elm = compileDirective('markup-button');
+      var myTooltip = $tooltip(elm, {mouseDownPreventDefault: false, trigger: 'focus'});
+      scope.$digest();
+      var evt = jQuery.Event('mousedown');
+      spyOn(evt, 'preventDefault');
+      myTooltip.$onFocusElementMouseDown(evt);
+      expect(evt.preventDefault).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('resource allocation', function() {
