@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.8 - 2016-03-31
+ * @version v2.3.8 - 2016-04-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -28,7 +28,8 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
     noneText: 'None',
     maxLength: 3,
     maxLengthHtml: 'selected',
-    iconCheckmark: 'glyphicon glyphicon-ok'
+    iconCheckmark: 'glyphicon glyphicon-ok',
+    toggle: false
   };
   this.$get = [ '$window', '$document', '$rootScope', '$tooltip', '$timeout', function($window, $document, $rootScope, $tooltip, $timeout) {
     var isNative = /(ip[ao]d|iphone|android)/gi.test($window.navigator.userAgent);
@@ -99,6 +100,9 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
         return scope.$activeIndex;
       };
       $select.select = function(index) {
+        if (angular.isUndefined(index) || index < 0 || index >= scope.$matches.length) {
+          return;
+        }
         var value = scope.$matches[index].value;
         scope.$apply(function() {
           $select.activate(index);
@@ -110,11 +114,18 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
               return scope.$matches[index].value;
             }));
           } else {
-            controller.$setViewValue(value);
+            if (options.toggle) {
+              controller.$setViewValue(value === controller.$modelValue ? undefined : value);
+            } else {
+              controller.$setViewValue(value);
+            }
             $select.hide();
           }
         });
         scope.$emit(options.prefixEvent + '.select', value, index, $select);
+        if (angular.isDefined(options.onSelect) && angular.isFunction(options.onSelect)) {
+          options.onSelect(value, index, $select);
+        }
       };
       $select.$updateActiveIndex = function() {
         if (options.multiple) {
@@ -227,13 +238,19 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
         scope: scope,
         placeholder: defaults.placeholder
       };
-      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent', 'toggle' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'html', 'container', 'allNoneButtons', 'sort' ], function(key) {
         if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
           options[key] = false;
+        }
+      });
+      angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onSelect' ], function(key) {
+        var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+        if (angular.isDefined(attr[bsKey])) {
+          options[key] = scope.$eval(attr[bsKey]);
         }
       });
       var dataMultiple = element.attr('data-multiple');

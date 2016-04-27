@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.8 - 2016-03-31
+ * @version v2.3.8 - 2016-04-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -126,6 +126,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         if (scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
           return;
         }
+        if (angular.isDefined(options.onBeforeShow) && angular.isFunction(options.onBeforeShow)) {
+          options.onBeforeShow($modal);
+        }
         modalElement.css({
           display: 'block'
         }).addClass(options.placement);
@@ -164,6 +167,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
       };
       function enterAnimateCallback() {
         scope.$emit(options.prefixEvent + '.show', $modal);
+        if (angular.isDefined(options.onShow) && angular.isFunction(options.onShow)) {
+          options.onShow($modal);
+        }
       }
       $modal.hide = function() {
         if (!$modal.$isShown) return;
@@ -172,6 +178,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         }
         if (scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
           return;
+        }
+        if (angular.isDefined(options.onBeforeHide) && angular.isFunction(options.onBeforeHide)) {
+          options.onBeforeHide($modal);
         }
         if (angular.version.minor <= 2) {
           $animate.leave(modalElement, leaveAnimateCallback);
@@ -188,6 +197,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
       };
       function leaveAnimateCallback() {
         scope.$emit(options.prefixEvent + '.hide', $modal);
+        if (angular.isDefined(options.onHide) && angular.isFunction(options.onHide)) {
+          options.onHide($modal);
+        }
         bodyElement.removeClass(options.prefixClass + '-open');
         if (options.animation) {
           bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
@@ -268,7 +280,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
     }
     return ModalFactory;
   } ];
-}).directive('bsModal', [ '$window', '$sce', '$modal', function($window, $sce, $modal) {
+}).directive('bsModal', [ '$window', '$sce', '$parse', '$modal', function($window, $sce, $parse, $modal) {
   return {
     restrict: 'EAC',
     scope: true,
@@ -287,6 +299,12 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'backdrop', 'keyboard', 'html', 'container' ], function(key) {
         if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+      });
+      angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+        var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+        if (angular.isDefined(attr[bsKey])) {
+          options[key] = scope.$eval(attr[bsKey]);
+        }
       });
       angular.forEach([ 'title', 'content' ], function(key) {
         if (attr[key]) {
