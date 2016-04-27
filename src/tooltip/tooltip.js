@@ -24,6 +24,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
       delay: 0,
       autoClose: false,
       bsEnabled: true,
+      mouseDownPreventDefault: true,
+      mouseDownStopPropagation: true,
       viewport: {
         selector: 'body',
         padding: 0
@@ -421,8 +423,8 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         };
 
         $tooltip.$onFocusElementMouseDown = function (evt) {
-          evt.preventDefault();
-          evt.stopPropagation();
+          if (options.mouseDownPreventDefault) { evt.preventDefault(); }
+          if (options.mouseDownStopPropagation) { evt.stopPropagation(); }
           // Some browsers do not auto-focus buttons (eg. Safari)
           if ($tooltip.$isShown) {
             element[0].blur();
