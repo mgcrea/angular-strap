@@ -107,29 +107,29 @@ describe('alert', function() {
     it('should correctly compile inner content', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('click');
-      expect(sandboxEl.find('.alert > strong').html()).toBe(scope.alert.title);
-      expect(sandboxEl.find('.alert > span').html()).toBe(scope.alert.content);
+      expect(sandboxEl.find('.alert strong').html()).toBe(scope.alert.title);
+      expect(sandboxEl.find('.alert').html()).toContain(scope.alert.content);
     });
 
     it('should support scope as object', function() {
       var elm = compileDirective('markup-scope');
       angular.element(elm[0]).triggerHandler('click');
-      expect(sandboxEl.find('.alert > strong').html()).toBe(scope.alert.title);
-      expect(sandboxEl.find('.alert > span').html()).toBe(scope.alert.content);
+      expect(sandboxEl.find('.alert strong').html()).toBe(scope.alert.title);
+      expect(sandboxEl.find('.alert').html()).toContain(scope.alert.content);
     });
 
     it('should support ngRepeat markup inside', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-alert]')).triggerHandler('click');
-      expect(sandboxEl.find('.alert > strong').html()).toBe(scope.items[0].alert.title);
-      expect(sandboxEl.find('.alert > span').html()).toBe(scope.items[0].alert.content);
+      expect(sandboxEl.find('.alert strong').html()).toBe(scope.items[0].alert.title);
+      expect(sandboxEl.find('.alert').html()).toContain(scope.items[0].alert.content);
     });
 
     it('should overwrite inherited title when no value specified', function() {
       var elm = compileDirective('default-no-title');
       angular.element(elm[0]).triggerHandler('click');
-      expect(sandboxEl.find('.alert > strong').html()).toBe('');
-      expect(sandboxEl.find('.alert > span').html()).toBe(scope.alert.content);
+      expect(sandboxEl.find('.alert strong').html()).toBeUndefined();
+      expect(sandboxEl.find('.alert').html()).toContain(scope.alert.content);
     });
 
   });

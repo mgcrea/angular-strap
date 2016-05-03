@@ -1,8 +1,6 @@
 'use strict';
 
 // @BUG: following snippet won't compile correctly
-// @TODO: submit issue to core
-// '<span ng-if="title"><strong ng-bind="title"></strong>&nbsp;</span><span ng-bind-html="content"></span>' +
 
 angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
 
