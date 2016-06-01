@@ -6,6 +6,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
     var defaults = this.defaults = {
       animation: 'am-fade',
+      defaultDate: 'auto',
       // uncommenting the following line will break backwards compatability
       // prefixEvent: 'timepicker',
       prefixClass: 'timepicker',
@@ -118,7 +119,10 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         $timepicker.select = function (date, index, keep) {
           // console.warn('$timepicker.select', date, scope.$mode);
-          if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) controller.$dateValue = new Date(1970, 0, 1);
+          if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) {
+            controller.$dateValue = options.defaultDate === 'today' ? new Date() : new Date(1970, 0, 1);
+          }
+
           if (!angular.isDate(date)) date = new Date(date);
           if (index === 0) controller.$dateValue.setHours(date.getHours());
           else if (index === 1) controller.$dateValue.setMinutes(date.getMinutes());
@@ -435,7 +439,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         var options = {
           scope: scope
         };
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent'], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent', 'defaultDate'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
