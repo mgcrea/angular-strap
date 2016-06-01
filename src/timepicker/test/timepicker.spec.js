@@ -160,7 +160,11 @@ describe('timepicker', function() {
     },
     'options-events': {
       element: '<input type="text" bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" ng-model="selectedTime" bs-timepicker>'
-    }
+    },
+    'options-defaultDate-today': {
+      scope: {selectedTime: null, defaultDate: 'today'},
+      element: '<input type="text" ng-model="selectedTime" default-date="today" bs-timepicker>'
+    },
   };
 
   function compileDirective(template, locals) {
@@ -1351,6 +1355,49 @@ describe('timepicker', function() {
         expect(hide).toBe(true);
       });
 
+    });
+
+    describe('defaultDate', function () {
+      it('should support a automatically filled date with current year, month and day', function() {
+        var localScope = templates['default'].scope
+
+        for (var key in scope) {
+          localScope[key] = scope[key]
+        }
+
+        var element = templates['default'].element
+
+        var elem = $(element).appendTo(sandboxEl);
+
+        var myTimepicker = $timepicker(elem, {
+          $dateValue: null,
+          $setViewValue: function() {},
+          $render: function() {}
+        }, {
+          scope: localScope
+        });
+
+        localScope.$digest();
+        myTimepicker.show();
+
+        var currentDate = new Date();
+
+        myTimepicker.select(currentDate, 0)
+        myTimepicker.select(currentDate, 1)
+        myTimepicker.select(currentDate, 2)
+
+        var year = localScope.selectedTime.getYear();
+        var month = localScope.selectedTime.getMonth();
+        var day = localScope.selectedTime.getDate();
+
+        var currentYear = currentDate.getYear();
+        var currentMonth = currentDate.getMonth();
+        var currentDay = currentDate.getDate();
+
+        expect(year).toBe(currentYear);
+        expect(month).toBe(currentMonth);
+        expect(day).toBe(currentDay);
+      });
     });
 
   });
