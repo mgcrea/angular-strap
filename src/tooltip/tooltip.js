@@ -520,7 +520,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           // IE8 has issues with angular.extend and using elRect directly.
           // By coping the values of elRect into a new object, we can continue to use extend
           /* eslint-disable guard-for-in */
-          for (var p in elRect) {
+          for (var p in elRect) { // eslint-disable-line
             // DO NOT use hasOwnProperty when inspecting the return of getBoundingClientRect.
             rect[p] = elRect[p];
           }
