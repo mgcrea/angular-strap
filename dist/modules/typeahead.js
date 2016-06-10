@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.8 - 2016-03-31
+ * @version v2.3.9 - 2016-06-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -70,6 +70,9 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         scope.$resetMatches();
         if (parentScope) parentScope.$digest();
         scope.$emit(options.prefixEvent + '.select', value, index, $typeahead);
+        if (angular.isDefined(options.onSelect) && angular.isFunction(options.onSelect)) {
+          options.onSelect(value, index, $typeahead);
+        }
       };
       $typeahead.$isVisible = function() {
         if (!options.minLength || !controller) {
@@ -162,6 +165,12 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       angular.forEach([ 'html', 'container', 'trimValue', 'filter' ], function(key) {
         if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
       });
+      angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onSelect' ], function(key) {
+        var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+        if (angular.isDefined(attr[bsKey])) {
+          options[key] = scope.$eval(attr[bsKey]);
+        }
+      });
       if (!element.attr('autocomplete')) element.attr('autocomplete', 'off');
       var filter = angular.isDefined(options.filter) ? options.filter : defaults.filter;
       var limit = options.limit || defaults.limit;
@@ -213,7 +222,10 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         var selected = index !== -1 ? typeahead.$scope.$matches[index].label : controller.$viewValue;
         selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
         var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
+        var ss = element[0].selectionStart;
+        var sd = element[0].selectionEnd;
         element.val(options.trimValue === false ? value : value.trim());
+        element[0].setSelectionRange(ss, sd);
       };
       scope.$on('$destroy', function() {
         if (typeahead) typeahead.destroy();
