@@ -93,7 +93,7 @@ angular.module('mgcrea.ngStrap.button', [])
           scope.$apply(function () {
             // console.warn('!click', element.attr('ng-model'), 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue, 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue);
             if (!isInput) {
-              controller.$setViewValue(!activeElement.hasClass('active'));
+              controller.$setViewValue(!activeElement.hasClass(options.activeClass));
             }
             if (!hasExoticValues) {
               controller.$render();

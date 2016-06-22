@@ -8,6 +8,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
     var spies = this.$$spies = {};
 
     var defaults = this.defaults = {
+      activeClass: 'active',
       debounce: 150,
       throttle: 100,
       offset: 100
@@ -138,16 +139,16 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
           if (activeTarget) {
             var activeElement = $scrollspy.$getTrackedElement(activeTarget);
             if (activeElement) {
-              activeElement.source.removeClass('active');
+              activeElement.source.removeClass(options.activeClass);
               if (nodeName(activeElement.source, 'li') && nodeName(activeElement.source.parent().parent(), 'li')) {
-                activeElement.source.parent().parent().removeClass('active');
+                activeElement.source.parent().parent().removeClass(options.activeClass);
               }
             }
           }
           activeTarget = element.target;
-          element.source.addClass('active');
+          element.source.addClass(options.activeClass);
           if (nodeName(element.source, 'li') && nodeName(element.source.parent().parent(), 'li')) {
-            element.source.parent().parent().addClass('active');
+            element.source.parent().parent().addClass(options.activeClass);
           }
         };
 
@@ -195,7 +196,7 @@ angular.module('mgcrea.ngStrap.scrollspy', ['mgcrea.ngStrap.helpers.debounce', '
         };
 
         $scrollspy.activate = function (i) {
-          trackedElements[i].addClass('active');
+          trackedElements[i].addClass(options.activeClass);
         };
 
         // Initialize plugin
