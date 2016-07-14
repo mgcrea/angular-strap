@@ -248,7 +248,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
           $timeout(function () {
-            $select.$element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
+            $select.$element.on('mousedown', $select.$onMouseDown);
             if (options.keyboard) {
               element.on('keydown', $select.$onKeyDown);
             }
@@ -260,7 +260,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           if (!options.multiple && angular.isUndefined(controller.$modelValue)) {
             scope.$activeIndex = -1;
           }
-          $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
+          $select.$element.off('mousedown', $select.$onMouseDown);
           if (options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
           }
