@@ -33,7 +33,8 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
       roundDisplay: false,
       iconUp: 'glyphicon glyphicon-chevron-up',
       iconDown: 'glyphicon glyphicon-chevron-down',
-      arrowBehavior: 'pager'
+      arrowBehavior: 'pager',
+      reversePickerBehavior: false
     };
 
     this.$get = function ($window, $document, $rootScope, $sce, $dateFormatter, $tooltip, $timeout) {
@@ -239,11 +240,23 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           var minutes = newDate.getMinutes();
           var seconds = newDate.getSeconds();
           if (index === 0) {
-            newDate.setHours(hours + (parseInt(options.hourStep, 10) * value));
+            if (options.reversePickerBehavior) {
+              newDate.setHours(hours - (parseInt(options.hourStep, 10) * value));
+            } else {
+              newDate.setHours(hours + (parseInt(options.hourStep, 10) * value));
+            }
           } else if (index === 1) {
-            newDate.setMinutes(minutes + (parseInt(options.minuteStep, 10) * value));
+            if (options.reversePickerBehavior) {
+              newDate.setMinutes(minutes - (parseInt(options.minuteStep, 10) * value));
+            } else {
+              newDate.setMinutes(minutes + (parseInt(options.minuteStep, 10) * value));
+            }
           } else if (index === 2) {
-            newDate.setSeconds(seconds + (parseInt(options.secondStep, 10) * value));
+            if (options.reversePickerBehavior) {
+              newDate.setSeconds(seconds - (parseInt(options.secondStep, 10) * value));
+            } else {
+              newDate.setSeconds(seconds + (parseInt(options.secondStep, 10) * value));
+            }
           }
           $timepicker.select(newDate, index, true);
         };
@@ -439,13 +452,13 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         var options = {
           scope: scope
         };
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent', 'defaultDate'], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'reversePickerBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent', 'defaultDate'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach(['html', 'container', 'autoclose', 'useNative', 'roundDisplay'], function (key) {
+        angular.forEach(['html', 'container', 'autoclose', 'useNative', 'roundDisplay', 'reversePickerBehavior'], function (key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
           }
