@@ -48,7 +48,7 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
         <label class="control-label"><i class="fa fa-clock-o"></i> Time picker with arrows</label><br>
         <div class="form-group">
         <input type="text" class="form-control" size="8" ng-model="time" name="time" bs-timepicker
-            data-time-format="HH:mm" data-length="1" data-minute-step="1" data-arrow-behavior="picker">
+            data-time-format="HH:mm" data-length="1" data-minute-step="1" data-arrow-behavior="picker" data-reverse-picker-behavior="true">
         </div>
       </div>
       <hr>
@@ -306,6 +306,14 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           <td>'pager'</td>
           <td>
             <p>Sets the behavior of the arrow buttons in the picker. 'pager' to move the displayed hour/minute options, 'picker' to change the current time hours/minutes value.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>reversePickerBehavior</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>When using the 'picker' arrow behavior, this specifies whether the 'up' arrow will increment or decrement the time. When false, the 'up' arrow will decrement.</p>
           </td>
         </tr>
       </tbody>
