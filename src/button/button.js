@@ -73,15 +73,15 @@ angular.module('mgcrea.ngStrap.button', [])
             return angular.equals(modelValue, trueValue);
           });
           // Fix rendering for exotic values
-          scope.$watch(attr.ngModel, function (newValue, oldValue) {
-            controller.$render();
-          });
+          // scope.$watch(attr.ngModel, function (newValue, oldValue) {
+          //   controller.$render();
+          // });
         }
 
         // model -> view
         controller.$render = function () {
           // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
-          var isActive = angular.equals(controller.$modelValue, trueValue);
+          var isActive = !!controller.$viewValue;
           $$rAF(function () {
             if (isInput) element[0].checked = isActive;
             activeElement.toggleClass(options.activeClass, isActive);
@@ -95,9 +95,9 @@ angular.module('mgcrea.ngStrap.button', [])
             if (!isInput) {
               controller.$setViewValue(!activeElement.hasClass('active'));
             }
-            if (!hasExoticValues) {
+            // if (!hasExoticValues) {
               controller.$render();
-            }
+            // }
           });
         });
 
@@ -155,7 +155,7 @@ angular.module('mgcrea.ngStrap.button', [])
         // model -> view
         controller.$render = function () {
           // console.warn('$render', element.attr('value'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
-          var isActive = angular.equals(controller.$modelValue, value);
+          var isActive = angular.equals(controller.$viewValue, value);
           $$rAF(function () {
             if (isInput) element[0].checked = isActive;
             activeElement.toggleClass(options.activeClass, isActive);
