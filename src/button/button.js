@@ -72,10 +72,6 @@ angular.module('mgcrea.ngStrap.button', [])
              // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
             return angular.equals(modelValue, trueValue);
           });
-          // Fix rendering for exotic values
-          // scope.$watch(attr.ngModel, function (newValue, oldValue) {
-          //   controller.$render();
-          // });
         }
 
         // model -> view
@@ -95,9 +91,7 @@ angular.module('mgcrea.ngStrap.button', [])
             if (!isInput) {
               controller.$setViewValue(!activeElement.hasClass('active'));
             }
-            // if (!hasExoticValues) {
-              controller.$render();
-            // }
+            controller.$render();
           });
         });
 
