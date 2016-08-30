@@ -546,7 +546,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
             var firstDayOfMonthOffset = firstDayOfMonth.getTimezoneOffset();
             var firstDate = new Date(+firstDayOfMonth - mod(firstDayOfMonth.getDay() - options.startWeek, 7) * 864e5);
             var firstDateOffset = firstDate.getTimezoneOffset();
-            var today = dateParser.timezoneOffsetAdjust(new Date(), options.timezone).toDateString();
+            var today = dateParser.timezoneOffsetAdjust(new Date()).toDateString();
               // Handle daylight time switch
             if (firstDateOffset !== firstDayOfMonthOffset) firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60e3);
             var days = [];
