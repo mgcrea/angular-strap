@@ -20,7 +20,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       keyboard: true,
       html: false,
       show: true,
-      size: null
+      size: null,
+      zIndex: null
     };
 
     this.$get = function ($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
@@ -49,6 +50,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         if (!options.element && !options.container) {
           options.container = 'body';
+        }
+
+        if (options.zIndex) {
+          dialogBaseZindex = parseInt(options.zIndex, 10);
+          backdropBaseZindex = dialogBaseZindex - 10;
         }
 
         // Store $id to identify the triggering element in events
@@ -376,7 +382,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Directive options
         var options = {scope: scope, element: element, show: false};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass', 'size'], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass', 'size', 'zIndex'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
