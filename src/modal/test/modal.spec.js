@@ -106,7 +106,10 @@ describe('modal', function() {
     },
     'options-events': {
       element: '<a bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" bs-modal="modal">click me</a>'
-    }
+    },
+    'options-z-index': {
+      element: '<a bs-modal="modal" data-z-index="{{zIndex}}">click me</a>'
+    },
   };
 
   function compileDirective(template, locals) {
@@ -738,6 +741,28 @@ describe('modal', function() {
         var elm = compileDirective('options-size-invalid');
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.find('.modal-dialog')).not.toHaveClass('modal-lg');
+      });
+
+    });
+
+    describe('zIndex', function() {
+
+      it('does not interfere with the default values', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('click');
+        var modal = bodyEl.find('.modal')[0];
+        var backdrop = bodyEl.find('.modal-backdrop')[0];
+        expect(angular.element(modal).css('z-index')).toBe('1050');
+        expect(angular.element(backdrop).css('z-index')).toBe('1040');
+      });
+
+      it('sets a custom z-index on a modal and decrements the backdrop z-index by 10', function() {
+        var elm = compileDirective('options-z-index', {zIndex: 2000});
+        angular.element(elm[0]).triggerHandler('click');
+        var modal = bodyEl.find('.modal')[0];
+        var backdrop = bodyEl.find('.modal-backdrop')[0];
+        expect(angular.element(modal).css('z-index')).toBe('2000');
+        expect(angular.element(backdrop).css('z-index')).toBe('1990');
       });
 
     });
