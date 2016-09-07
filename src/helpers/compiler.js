@@ -79,8 +79,8 @@ function bsCompilerService ($q, $http, $injector, $compile, $controller, $templa
     var template = options.template || '';
     var controller = options.controller;
     var controllerAs = options.controllerAs;
-    var resolve = angular.copy(options.resolve || {});
-    var locals = angular.copy(options.locals || {});
+    var resolve = options.resolve || {};
+    var locals = options.locals || {};
     var transformTemplate = options.transformTemplate || angular.identity;
     var bindToController = options.bindToController;
 
