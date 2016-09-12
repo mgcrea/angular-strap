@@ -767,6 +767,28 @@ describe('modal', function() {
 
     });
 
+    describe('stackableModals', function() {
+
+      it('remove class modal-open from body only when the last modal is closed', function() {
+        var elm1 = compileDirective('default');
+        var elm2 = compileDirective('default');
+        // open modal 1
+        angular.element(elm1[0]).triggerHandler('click');
+        expect(sandboxEl.children('.modal').length).toBe(1);
+        // open modal 2
+        angular.element(elm2[0]).triggerHandler('click');
+        expect(sandboxEl.children('.modal').length).toBe(2);
+        // close modal 2
+        angular.element(elm2[0]).triggerHandler('click');
+        $animate.flush(); // hide only fires AFTER the animation is complete
+        expect(bodyEl.hasClass('modal-open')).toBeTruthy();
+        // close modal 1
+        angular.element(elm1[0]).triggerHandler('click');
+        $animate.flush(); // hide only fires AFTER the animation is complete
+        expect(bodyEl.hasClass('modal-open')).toBeFalsy();
+      });
+    });
+
     describe('onBeforeShow', function() {
 
       it('should invoke beforeShow event callback', function() {
