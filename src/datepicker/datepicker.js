@@ -9,6 +9,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
     var defaults = this.defaults = {
       animation: 'am-fade',
+      defaultTime: 'auto',
       // Uncommenting the following line will break backwards compatability
       // prefixEvent: 'datepicker',
       prefixClass: 'datepicker',
@@ -44,7 +45,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
       iconRight: 'glyphicon glyphicon-chevron-right'
     };
 
-    this.$get = function ($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
+    this.$get = function ($window, $document, $rootScope, $sce, $dateFormatter, $dateParser, datepickerViews, $tooltip, $timeout) {
 
       var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
       var isTouch = ('createTouch' in $window.document) && isNative;
@@ -56,6 +57,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         var parentScope = config.scope;
         var options = $datepicker.$options;
         var scope = $datepicker.$scope;
+        var dateParser = $dateParser({ format: options.dateFormat, lang: options.lang, strict: options.strictFormat });
         if (options.startView) options.startView -= options.minView;
 
         // View vars
@@ -121,7 +123,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
           // console.warn('$datepicker.select', date, scope.$mode);
           if (angular.isDate(date)) {
             if (!angular.isDate(controller.$dateValue) || isNaN(controller.$dateValue.getTime())) {
-              controller.$dateValue = new Date(date);
+              var targetDate = dateParser.timezoneOffsetAdjust(new Date(date.toISOString().slice(0, 10) + 'T' + options.defaultTime), 'UTC');
+              controller.$dateValue = isNaN(targetDate) ? new Date(date) : targetDate;
             }
           } else {
             controller.$dateValue = null;
@@ -295,7 +298,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent', 'hasToday', 'hasClear'], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent', 'hasToday', 'hasClear', 'defaultTime'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
