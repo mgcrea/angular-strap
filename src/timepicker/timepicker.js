@@ -120,7 +120,22 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         $timepicker.select = function (date, index, keep) {
           // console.warn('$timepicker.select', date, scope.$mode);
           if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) {
-            controller.$dateValue = options.defaultDate === 'today' ? new Date() : new Date(1970, 0, 1);
+            var defaultDate = new Date(options.defaultDate);
+            if (!isNaN(defaultDate)) {
+              controller.$dateValue = defaultDate;
+            } else if (options.defaultDate === 'today') {
+              controller.$dateValue = new Date();
+            } else if (options.defaultDate === 'tomorrow') {
+              var tomorrow = new Date();
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              controller.$dateValue = tomorrow;
+            } else if (options.defaultDate === 'yesterday') {
+              var yesterday = new Date();
+              yesterday.setDate(yesterday.getDate() - 1);
+              controller.$dateValue = yesterday;
+            } else {
+              controller.$dateValue = new Date(1970, 0, 1);
+            }
           }
 
           if (!angular.isDate(date)) date = new Date(date);
