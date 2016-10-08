@@ -57,7 +57,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         var parentScope = config.scope;
         var options = $datepicker.$options;
         var scope = $datepicker.$scope;
-        var dateParser = $dateParser({ format: options.dateFormat, lang: options.lang, strict: options.strictFormat });
+        var dateParser = $dateParser({format: options.dateFormat, lang: options.lang, strict: options.strictFormat});
         if (options.startView) options.startView -= options.minView;
 
         // View vars
