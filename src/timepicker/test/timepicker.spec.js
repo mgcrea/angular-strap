@@ -165,6 +165,10 @@ describe('timepicker', function() {
       scope: {selectedTime: null, defaultDate: 'today'},
       element: '<input type="text" ng-model="selectedTime" default-date="today" bs-timepicker>'
     },
+    'options-defaultDate-fixed': {
+      scope: {selectedTime: null, defaultDate: '2010-10-10'},
+      element: '<input type="text" ng-model="selectedTime" default-date="2010-10-10" bs-timepicker>'
+    }
   };
 
   function compileDirective(template, locals) {
@@ -1397,6 +1401,47 @@ describe('timepicker', function() {
         expect(year).toBe(currentYear);
         expect(month).toBe(currentMonth);
         expect(day).toBe(currentDay);
+      });
+
+      it('should support a automatically filled date (YYYY-MM-DD) 2010-10-10', function() {
+        var localScope = templates['default'].scope
+
+        for (var key in scope) {
+          localScope[key] = scope[key]
+        }
+
+        var element = templates['default'].element
+
+        var elem = $(element).appendTo(sandboxEl);
+
+        var myTimepicker = $timepicker(elem, {
+          $dateValue: null,
+          $setViewValue: function() {},
+          $render: function() {}
+        }, {
+          scope: localScope
+        });
+
+        localScope.$digest();
+        myTimepicker.show();
+
+        var fixedDate = new Date('2010-10-10');
+
+        myTimepicker.select(fixedDate, 0)
+        myTimepicker.select(fixedDate, 1)
+        myTimepicker.select(fixedDate, 2)
+
+        var year = localScope.selectedTime.getYear();
+        var month = localScope.selectedTime.getMonth();
+        var day = localScope.selectedTime.getDate();
+
+        var fixedYear = fixedDate.getYear();
+        var fixedMonth = fixedDate.getMonth();
+        var fixedDay = fixedDate.getDate();
+
+        expect(year).toBe(fixedYear);
+        expect(month).toBe(fixedMonth);
+        expect(day).toBe(fixedDay);
       });
     });
 
