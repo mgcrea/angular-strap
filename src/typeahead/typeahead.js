@@ -126,9 +126,8 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             // active entry overlaps top border
             if (clientBottom >= highWatermark && clientTop < highWatermark) {
               container.scrollTop = Math.max(0, container.scrollTop - container.clientHeight);
-            }
-            // top of active element is invisible because it's below the bottom of the visible container window
-            else if (clientBottom > lowWatermark) {
+            } else if (clientBottom > lowWatermark) {
+              // top of active element is invisible because it's below the bottom of the visible container window
               container.scrollTop = clientTop;
             }
           }
