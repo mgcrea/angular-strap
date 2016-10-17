@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.9 - 2016-06-10
+ * @version v2.3.10 - 2016-10-17
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -58,12 +58,9 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
         controller.$formatters.push(function(modelValue) {
           return angular.equals(modelValue, trueValue);
         });
-        scope.$watch(attr.ngModel, function(newValue, oldValue) {
-          controller.$render();
-        });
       }
       controller.$render = function() {
-        var isActive = angular.equals(controller.$modelValue, trueValue);
+        var isActive = !!controller.$viewValue;
         $$rAF(function() {
           if (isInput) element[0].checked = isActive;
           activeElement.toggleClass(options.activeClass, isActive);
@@ -74,9 +71,7 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
           if (!isInput) {
             controller.$setViewValue(!activeElement.hasClass('active'));
           }
-          if (!hasExoticValues) {
-            controller.$render();
-          }
+          controller.$render();
         });
       });
     }
@@ -115,7 +110,7 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
         controller.$render();
       });
       controller.$render = function() {
-        var isActive = angular.equals(controller.$modelValue, value);
+        var isActive = angular.equals(controller.$viewValue, value);
         $$rAF(function() {
           if (isInput) element[0].checked = isActive;
           activeElement.toggleClass(options.activeClass, isActive);

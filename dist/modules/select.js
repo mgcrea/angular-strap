@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.9 - 2016-06-10
+ * @version v2.3.10 - 2016-10-17
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -168,7 +168,21 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
         evt.stopPropagation();
         if (isTouch) {
           var targetEl = angular.element(evt.target);
-          targetEl.triggerHandler('click');
+          var anchor;
+          if (evt.target.nodeName !== 'A') {
+            var anchorCandidate = targetEl.parent();
+            while (!anchor && anchorCandidate.length > 0) {
+              if (anchorCandidate[0].nodeName === 'A') {
+                anchor = anchorCandidate;
+              }
+              anchorCandidate = anchorCandidate.parent();
+            }
+          }
+          if (anchor) {
+            angular.element(anchor).triggerHandler('click');
+          } else {
+            targetEl.triggerHandler('click');
+          }
         }
       };
       $select.$onKeyDown = function(evt) {

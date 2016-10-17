@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.9 - 2016-06-10
+ * @version v2.3.10 - 2016-10-17
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -24,7 +24,8 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
     keyboard: true,
     html: false,
     show: true,
-    size: null
+    size: null,
+    zIndex: null
   };
   this.$get = [ '$window', '$rootScope', '$bsCompiler', '$animate', '$timeout', '$sce', 'dimensions', function($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
     var forEach = angular.forEach;
@@ -44,6 +45,10 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
       var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
       if (!options.element && !options.container) {
         options.container = 'body';
+      }
+      if (options.zIndex) {
+        dialogBaseZindex = parseInt(options.zIndex, 10);
+        backdropBaseZindex = dialogBaseZindex - 10;
       }
       $modal.$id = options.id || options.element && options.element.attr('id') || '';
       forEach([ 'title', 'content' ], function(key) {
@@ -198,7 +203,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         if (angular.isDefined(options.onHide) && angular.isFunction(options.onHide)) {
           options.onHide($modal);
         }
-        bodyElement.removeClass(options.prefixClass + '-open');
+        if (findElement('.modal').length <= 0) {
+          bodyElement.removeClass(options.prefixClass + '-open');
+        }
         if (options.animation) {
           bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
         }
@@ -288,7 +295,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         element: element,
         show: false
       };
-      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass', 'size' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass', 'size', 'zIndex' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       if (options.modalClass) {
