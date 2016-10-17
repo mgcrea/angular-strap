@@ -2,7 +2,7 @@
 
 describe('select', function () {
 
-  var $compile, $templateCache, $select, scope, sandboxEl, $timeout, $animate;
+  var $compile, $templateCache, $select, scope, sandboxEl, $timeout, $animate, $window;
 
   beforeEach(module('ngSanitize'));
   beforeEach(module('mgcrea.ngStrap.select'));
@@ -17,6 +17,7 @@ describe('select', function () {
     $select = _$select_;
     $animate = $injector.get('$animate');
     $timeout = $injector.get('$timeout');
+    $window = $injector.get('$window');
     var flush = $animate.flush || $animate.triggerCallbacks;
     $animate.flush = function() {
       flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
@@ -781,4 +782,28 @@ describe('select', function () {
         expect(scope.selectedIcon).toBe(scope.icons[1].value);
     });
   });
+
+  describe('on touch devices', function() {
+
+    var isTouch;
+
+    beforeEach(function() {
+      var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
+      isTouch = ('createTouch' in $window.document) && isNative;
+    });
+
+    it('should select entry on touchstart on span', function() {
+      if (!isTouch) {
+        return;
+      }
+      var elm = compileDirective('default');
+      angular.element(elm[0]).triggerHandler('focus');
+      $timeout.flush();
+      var touchEvent = document.createEvent('TouchEvent');
+      touchEvent.initEvent('touchstart', true, true);
+      sandboxEl.find('.dropdown-menu li:eq(1) a span')[0].dispatchEvent(touchEvent);
+      expect(scope.selectedIcon).toBe(scope.icons[1].value);
+    });
+  })
+
 });
