@@ -9,6 +9,7 @@
     <a style="cursor: default;" role="menuitem" tabindex="-1" ng-click="$select($index, $event)">
       <i class="{{$iconCheckmark}} pull-right" ng-if="$isMultiple && $isActive($index)"></i>
       <span ng-bind="match.label"></span>
+      <i class="{{$iconCheckmark}} pull-right" ng-if="$isMultiple && $isActive($index)"></i>
     </a>
   </li>
 </ul>
