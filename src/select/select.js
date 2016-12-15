@@ -237,6 +237,22 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
             else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++;
             else if (angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
             scope.$digest();
+
+			// scroll to active list item
+            $timeout(function () {
+              var ddlMenuContainer = angular.element('ul.select.dropdown-menu:last-of-type').get(0);
+              var activeListItem = angular.element(ddlMenuContainer).find('li.active:first');
+              var listItemHeight = activeListItem.height();
+              var itemPosition = ddlMenuContainer.scrollTop + activeListItem.position().top;
+              var menuHeight = angular.element(ddlMenuContainer).height();
+
+              if (itemPosition < ddlMenuContainer.scrollTop) {
+                  ddlMenuContainer.scrollTop = itemPosition;
+              }
+              else if ((itemPosition + listItemHeight) > (ddlMenuContainer.scrollTop + menuHeight)) {
+                  ddlMenuContainer.scrollTop += (itemPosition + listItemHeight) - (ddlMenuContainer.scrollTop + menuHeight);
+              }
+            });
           }
         };
 
