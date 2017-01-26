@@ -278,7 +278,7 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
       if (element[0].nodeName.toLowerCase() === 'select') {
         var inputEl = element;
         inputEl.css('display', 'none');
-        element = angular.element('<button type="button" class="btn btn-default"></button>');
+        element = angular.element('<button type="button" class="btn btn-default" aria-haspopup="true"></button>');
         inputEl.after(element);
       }
       var parsedOptions = $parseOptions(attr.bsOptions);

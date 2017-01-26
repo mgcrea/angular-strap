@@ -347,7 +347,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         };
 
         $tooltip.focus = function () {
-          tipElement[0].focus();
+          if (tipElement && tipElement[0]) {
+            tipElement[0].focus();
+          }
         };
 
         $tooltip.setEnabled = function (isEnabled) {

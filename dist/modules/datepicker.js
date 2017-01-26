@@ -362,7 +362,11 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         } else {
           date = new Date(modelValue);
         }
-        controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+        if (options.timezone === 'UTC') {
+          controller.$dateValue = date;
+        } else {
+          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+        }
         return getDateFormattedString();
       });
       controller.$render = function() {

@@ -30,6 +30,10 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       $dropdown = $tooltip(element, options);
       var parentEl = element.parent();
       $dropdown.$onKeyDown = function(evt) {
+        if (/(9)/.test(evt.keyCode)) {
+          $dropdown.hide();
+          return;
+        }
         if (!/(38|40)/.test(evt.keyCode)) return;
         evt.preventDefault();
         evt.stopPropagation();
