@@ -72,7 +72,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         // Scope methods
 
-        scope.$select = function (date) {
+        scope.$select = function (date, disabled) {
+          if (disabled) return;
           $datepicker.select(date);
         };
         scope.$selectPane = function (value) {

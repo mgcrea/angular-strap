@@ -771,7 +771,38 @@ describe('typeahead', function () {
       expect(hide).toBe(true);
     });
 
+
   });
 
+  xdescribe('keydown', function() {
+
+    it('should not update the typeahead scrollTop', function() {
+      var elm = compileDirective('default'), container;
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val(scope.states[0].substr(0, 1));
+
+      triggerKeyDown (elm, 40);
+      $animate.flush();
+      container = sandboxEl.find('.dropdown-menu')[0];
+      expect(container.scrollTop).toBe(0);
+    });
+
+    it('should update the typeahead containers scrollTop property', function() {
+      var elm = compileDirective('default'), container;
+      angular.element(elm[0]).triggerHandler('focus');
+      elm.val('r');
+      angular.element(elm[0]).triggerHandler('input');
+      $animate.flush();
+
+      triggerKeyDown (elm, 40);
+      triggerKeyDown (elm, 40);
+      triggerKeyDown (elm, 40);
+      triggerKeyDown (elm, 40);
+      triggerKeyDown (elm, 40);
+
+      container = sandboxEl.find('.typeahead.dropdown-menu')[0];
+      expect(container.scrollTop).toBe(container.clientHeight);
+    });
+  });
 
 });
