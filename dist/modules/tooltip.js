@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.10 - 2016-10-17
+ * @version v2.3.11 - 2017-01-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -219,10 +219,12 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
         }
         _blur = blur;
         _tipToHide = tipElement;
-        if (angular.version.minor <= 2) {
-          $animate.leave(tipElement, leaveAnimateCallback);
-        } else {
-          $animate.leave(tipElement).then(leaveAnimateCallback);
+        if (tipElement !== null) {
+          if (angular.version.minor <= 2) {
+            $animate.leave(tipElement, leaveAnimateCallback);
+          } else {
+            $animate.leave(tipElement).then(leaveAnimateCallback);
+          }
         }
         $tooltip.$isShown = scope.$isShown = false;
         safeDigest(scope);
