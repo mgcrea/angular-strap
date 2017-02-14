@@ -338,7 +338,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         }
 
         $tooltip.toggle = function (evt) {
-          if (evt) { evt.preventDefault(); }
+          if (evt) {
+            if (evt.preventDefault) {
+              evt.preventDefault();
+            }
+          }
           if ($tooltip.$isShown) {
             $tooltip.leave();
           } else {
