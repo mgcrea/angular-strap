@@ -162,16 +162,18 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         // Overrides
 
         var show = $typeahead.show;
+        var _eventsBound = false;
         $typeahead.show = function () {
           show();
           // use timeout to hookup the events to prevent
           // event bubbling from being processed immediately.
           $timeout(function () {
-            if ($typeahead.$element) {
+            if ($typeahead.$element && !_eventsBound) {
               $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
               if (options.keyboard) {
                 if (element) element.on('keydown', $typeahead.$onKeyDown);
               }
+              _eventsBound = true;
             }
           }, 0, false);
         };
@@ -186,6 +188,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             $typeahead.activate(-1);
           }
           hide();
+          _eventsBound = false;
         };
 
         return $typeahead;
