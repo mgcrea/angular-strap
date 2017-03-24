@@ -8,6 +8,7 @@ env:
     - SAUCE_USERNAME=mgcrea
     - SAUCE_ACCESS_KEY=ad4bb656-dfad-4a10-8c10-0a0d8b5a1ead
     - CODE_CLIMATE_TOKEN=b5ed978a0e88f95b003a668583ae70815e18cd71019d526023b5e9c7703ec076
+    - CXX=g++-4.8
 
 before_script:
   - export DISPLAY=:99.0
@@ -33,5 +34,10 @@ after_script:
   - cat test/coverage/*/lcov.info | codeclimate-test-reporter
 
 addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
   code_climate:
     repo_token: b5ed978a0e88f95b003a668583ae70815e18cd71019d526023b5e9c7703ec076
