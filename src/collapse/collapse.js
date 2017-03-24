@@ -206,14 +206,23 @@ angular.module('mgcrea.ngStrap.collapse', [])
           bsCollapseCtrl.$unregisterToggle(element);
         });
 
-        element.on('click', function () {
+        var actionEventHandler = function () {
           if (!attrs.disabled) {
             var index = attrs.bsCollapseToggle && attrs.bsCollapseToggle !== 'bs-collapse-toggle' ? attrs.bsCollapseToggle : bsCollapseCtrl.$toggles.indexOf(element);
             bsCollapseCtrl.$setActive(index * 1);
             scope.$apply();
           }
-        });
+        };
 
+        element.on('click', actionEventHandler);
+        element.bind('keydown keypress', function (e) {
+          if (e.which === 13) {
+            actionEventHandler();
+            e.preventDefault();
+          } else if (e.which !== 16 && e.which !== 9) {
+            e.preventDefault();
+          }
+        });
       }
     };
 

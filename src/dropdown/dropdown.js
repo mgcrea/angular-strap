@@ -28,7 +28,8 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         // Common vars
         var options = angular.extend({}, defaults, config);
-        /* var scope = */$dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+        /* var scope = */
+        $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
 
         $dropdown = $tooltip(element, options);
         var parentEl = element.parent();
@@ -36,6 +37,10 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         // Protected methods
 
         $dropdown.$onKeyDown = function (evt) {
+          if (/(9)/.test(evt.keyCode)) {
+            $dropdown.hide();
+            return;
+          }
           if (!/(38|40)/.test(evt.keyCode)) return;
           evt.preventDefault();
           evt.stopPropagation();
@@ -126,7 +131,9 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         return function postLink (scope, element, attr) {
 
           // Directive options
-          var options = {scope: scope};
+          var options = {
+            scope: scope
+          };
           angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id', 'autoClose'], function (key) {
             if (angular.isDefined(tAttrs[key])) options[key] = tAttrs[key];
           });
