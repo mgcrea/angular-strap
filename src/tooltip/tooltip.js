@@ -484,24 +484,27 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         }
 
         var _autoCloseEventsBinded = false;
-        function bindAutoCloseEvents () {
+        var autoCloseEventTrigger = isTouch ? 'touchend' : 'click';
+        function bindAutoCloseEvents() {
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
-          $timeout(function () {
-            // Stop propagation when clicking inside tooltip
-            tipElement.on('click', stopEventPropagation);
-
+          $timeout(function() {
+            if (tipElement) {
+              // Stop propagation when clicking inside tooltip
+              tipElement.on(autoCloseEventTrigger, stopEventPropagation);
+            }
             // Hide when clicking outside tooltip
-            $body.on('click', $tooltip.hide);
-
+            $body.on(autoCloseEventTrigger, $tooltip.hide);
             _autoCloseEventsBinded = true;
           }, 0, false);
         }
 
-        function unbindAutoCloseEvents () {
+        function unbindAutoCloseEvents() {
           if (_autoCloseEventsBinded) {
-            tipElement.off('click', stopEventPropagation);
-            $body.off('click', $tooltip.hide);
+            if (tipElement) {
+              tipElement.off(autoCloseEventTrigger, stopEventPropagation);
+            }
+            $body.off(autoCloseEventTrigger, $tooltip.hide);
             _autoCloseEventsBinded = false;
           }
         }
