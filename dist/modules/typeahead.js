@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2017-03-25
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -124,14 +124,16 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         scope.$digest();
       };
       var show = $typeahead.show;
+      var _eventsBound = false;
       $typeahead.show = function() {
         show();
         $timeout(function() {
-          if ($typeahead.$element) {
+          if ($typeahead.$element && !_eventsBound) {
             $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
             if (options.keyboard) {
               if (element) element.on('keydown', $typeahead.$onKeyDown);
             }
+            _eventsBound = true;
           }
         }, 0, false);
       };
@@ -145,6 +147,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
           $typeahead.activate(-1);
         }
         hide();
+        _eventsBound = false;
       };
       return $typeahead;
     }
