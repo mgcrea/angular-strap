@@ -163,6 +163,9 @@ describe('datepicker', function() {
     'options-autoclose': {
       element: '<input type="text" ng-model="selectedDate" data-autoclose="{{autoclose}}" bs-datepicker>'
     },
+    'options-autoclose-click': {
+      element: '<input type="text" ng-model="selectedDate" data-autoclose="{{autoclose}}" bs-datepicker trigger="click">'
+    },
     'options-autoclose-hasToday': {
       element: '<input type="text" ng-model="selectedDate" data-autoclose="{{autoclose}}" data-has-today="true" bs-datepicker>'
     },
@@ -838,6 +841,27 @@ describe('datepicker', function() {
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).not.toBe(0);
       });
 
+      it('should close with the click trigger and focus was changed to another part of the DOM with click', function () {
+        var elm = compileDirective('options-autoclose-click', {autoclose: "true"});
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
+        // Simulate clicking on the body somewhere.
+        $(sandboxEl).click();
+        // no more datepicker shown, correct?
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+      });
+
+      it('should NOT close with the click trigger and focus was changed to another part of the DOM with click', function () {
+        var elm = compileDirective('options-autoclose-click', {autoclose: "false"});
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
+        // Simulate clicking on the body somewhere.
+        $(sandboxEl).click();
+        // no more datepicker shown, correct?
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).not.toBe(0);
+      });
     });
 
     describe('placement', function() {

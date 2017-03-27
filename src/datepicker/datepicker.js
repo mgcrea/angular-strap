@@ -316,6 +316,9 @@ angular.module('mgcrea.ngStrap.datepicker', [
           }
         });
 
+        // The tooltip class uses 'autoClose' vs. 'autoclose' here. Reassign as necessary.
+        if (options.autoclose !== undefined) options.autoClose = options.autoclose;
+
         // Initialize datepicker
         var datepicker = $datepicker(element, controller, options);
         options = datepicker.$options;
