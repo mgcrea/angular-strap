@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-03-25
+ * @version v2.3.12 - 2017-03-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -238,6 +238,9 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         }
         var index = typeahead.$getIndex(controller.$modelValue);
         var selected = index !== -1 ? typeahead.$scope.$matches[index].label : controller.$viewValue;
+        if (selected && selected.constructor.name == 'TrustedValueHolderType') {
+          selected = selected.toString();
+        }
         selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
         var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
         var ss = element[0].selectionStart;
