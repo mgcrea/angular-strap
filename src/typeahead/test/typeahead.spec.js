@@ -347,6 +347,15 @@ describe('typeahead', function () {
       expect(elm.attr('autocomplete')).toBe('thisShouldNotChange');
     });
   });
+  
+  describe('ngModel', function () {
+
+    it('should correctly render ', function() {
+      var elm = compileDirective('by-id');
+      expect(elm.val()).toBe(scope.icons[scope.selectedIcon].value);
+    });
+
+  });
 
   describe('ngModel', function () {
 
