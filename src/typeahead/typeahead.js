@@ -334,6 +334,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           }
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = index !== -1 ? typeahead.$scope.$matches[index].label : controller.$viewValue;
+          if (selected && selected.constructor.name == 'TrustedValueHolderType') {
+            selected = selected.toString();
+          }
           selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
           var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
           var ss = element[0].selectionStart;
