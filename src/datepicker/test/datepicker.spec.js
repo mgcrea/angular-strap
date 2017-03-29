@@ -291,7 +291,7 @@ describe('datepicker', function() {
     it('should correctly select a new date', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('focus');
-      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(15)')[0]).triggerHandler('click');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(15)')[0]).parent().triggerHandler('click');
       expect(elm.val()).toBe((today.getMonth() + 1) + '/15/' + (today.getFullYear() + '').substr(2));
     });
 
@@ -303,7 +303,7 @@ describe('datepicker', function() {
       angular.element(sandboxEl.find('.dropdown-menu thead button:eq(2)')[0]).triggerHandler('click');
 
       // select the first day of the month
-      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(01)')[0]).triggerHandler('click');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(01)')[0]).parent().triggerHandler('click');
       expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(1);
 
       var nextMonthAndYear = new Date(today.getFullYear(), today.getMonth() +1 , 1);
@@ -476,7 +476,7 @@ describe('datepicker', function() {
       var elm = compileDirective('markup-ngChange');
       angular.element(elm[0]).triggerHandler('focus');
       var spy = spyOn(scope, 'onChange').and.callThrough();
-      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:eq(1)')[0]).triggerHandler('click');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:eq(1)')[0]).parent().triggerHandler('click');
       expect(spy).toHaveBeenCalled();
     });
 
@@ -788,7 +788,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-autoclose', {autoclose: "true"});
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).parent().triggerHandler('click');
         $timeout.flush();
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
       });
@@ -797,7 +797,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-autoclose', {autoclose: "false"});
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:first')).parent().triggerHandler('click');
         $timeout.flush();
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).not.toBe(0);
       });
@@ -806,7 +806,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-autoclose-hasToday', {autoclose: "true"});
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tfoot .btn.today')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tfoot button.today')).triggerHandler('click');
         $timeout.flush();
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
       });
@@ -815,7 +815,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-autoclose-hasToday', {autoclose: "false"});
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tfoot .btn.today')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tfoot button.today')).triggerHandler('click');
         $timeout.flush();
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).not.toBe(0);
       });
@@ -838,6 +838,27 @@ describe('datepicker', function() {
         expect(sandboxEl.children('.dropdown-menu.datepicker').length).not.toBe(0);
       });
 
+      xit('should close with the click trigger and focus was changed to another part of the DOM with click', function () {
+        var elm = compileDirective('options-autoclose-click', {autoclose: "true"});
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
+        // Simulate clicking on the body somewhere.
+        $(sandboxEl).click();
+        // no more datepicker shown, correct?
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+      });
+
+      it('should NOT close with the click trigger and focus was changed to another part of the DOM with click', function () {
+        var elm = compileDirective('options-autoclose-click', {autoclose: "false"});
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('click');
+        $timeout.flush();
+        // Simulate clicking on the body somewhere.
+        $(sandboxEl).click();
+        // no more datepicker shown, correct?
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).not.toBe(0);
+      });
     });
 
     describe('placement', function() {
@@ -924,7 +945,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-typeStringDateFormat');
         expect(elm.val()).toBe('22/02/1986');
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).parent().triggerHandler('click');
         expect(elm.val()).toBe('16/02/1986');
       });
 
@@ -932,7 +953,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-typeStringDateFormatAlternative');
         expect(elm.val()).toBe('2014-04-11');
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).parent().triggerHandler('click');
         expect(elm.val()).toBe('2014-04-16');
       });
 
@@ -940,7 +961,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-typeNumberDateFormat');
         expect(elm.val()).toBe('3/22/86');
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).parent().triggerHandler('click');
         expect(elm.val()).toBe('3/16/86');
       });
 
@@ -948,7 +969,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-typeUnixDateFormat');
         expect(elm.val()).toBe('3/22/86');
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).parent().triggerHandler('click');
         expect(elm.val()).toBe('3/16/86');
       });
 
@@ -956,7 +977,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-typeIsoDateFormat');
         expect(elm.val()).toBe('12/26/14');
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(16)')).parent().triggerHandler('click');
         expect(elm.val()).toBe('12/16/14');
       });
 
@@ -968,7 +989,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-dateFormat');
         expect(elm.val()).toBe('1986-02-22');
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).parent().triggerHandler('click');
         expect(elm.val()).toBe('1986-02-24');
       });
 
@@ -976,7 +997,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-dateFormat-alt');
         expect(elm.val()).toBe('Saturday February 22, 1986');
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).parent().triggerHandler('click');
         expect(elm.val()).toBe('Monday February 24, 1986');
       });
 
@@ -984,7 +1005,7 @@ describe('datepicker', function() {
         var elm = compileDirective('options-named-dateFormat');
         expect(elm.val()).toBe('Feb 22, 1986');
         angular.element(elm[0]).triggerHandler('focus');
-        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+        angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).parent().triggerHandler('click');
         expect(elm.val()).toBe('Feb 24, 1986');
       });
 
@@ -1013,7 +1034,7 @@ describe('datepicker', function() {
           expect(elm.val()).toBe(dateFilter(dates[i], 'yyyy-MM-dd', 'UTC'));
           expect(scope.selectedDate.toDateString()).toBe(dates[i].toDateString());
           angular.element(elm[0]).triggerHandler('focus');
-          angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(15)')).triggerHandler('click');
+          angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(15)')).parent().triggerHandler('click');
           expect(elm.val()).toBe(dateFilter(dates[i], 'yyyy-MM-\'15\'', 'UTC'));
         });
       }
@@ -1038,35 +1059,35 @@ describe('datepicker', function() {
       it('should support a dynamic minDate', function() {
         var elm = compileDirective('options-minDate');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(19)').is(':disabled')).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(19)').parent().attr('disabled')).toBe('disabled');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
         scope.minDate = '02/12/86';
         scope.$digest();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(11)').is(':disabled')).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(12)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(11)').parent().attr('disabled')).toBe('disabled');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(12)').parent().attr('disabled')).toBeUndefined();
       });
 
       it('should support today as minDate', function() {
         var elm = compileDirective('options-minDate-today');
         angular.element(elm[0]).triggerHandler('focus');
         var todayDate = today.getDate();
-        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').length).toBe(1);
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody td[disabled]').length > 0).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(' + todayDate + ').btn-primary').length).toBe(1);
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(' + todayDate + ').btn-primary').parent().attr('disabled')).toBeUndefined();
       });
 
       it('should support number as minDate', function() {
         var elm = compileDirective('options-minDate-number');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(19)').is(':disabled')).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(19)').parent().attr('disabled')).toBe('disabled');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
       });
 
       it('should support Date object as minDate', function() {
         var elm = compileDirective('options-minDate-date');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(19)').is(':disabled')).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(19)').parent().attr('disabled')).toBe('disabled');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
       });
 
       it('should trigger validation when minDate changes', function() {
@@ -1083,12 +1104,12 @@ describe('datepicker', function() {
       it('should reset minDate to -Infinity when set empty string', function() {
         var elm = compileDirective('options-minDate');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(19)').is(':disabled')).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(19)').parent().attr('disabled')).toBe('disabled');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
         scope.minDate = '';
         scope.$digest();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(19)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(19)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
       });
 
     });
@@ -1098,36 +1119,36 @@ describe('datepicker', function() {
       it('should support a dynamic maxDate', function() {
         var elm = compileDirective('options-maxDate');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBe('disabled');
         scope.maxDate = '02/12/86';
         scope.$digest();
         // @TODO fixme
-        // expect(sandboxEl.find('.dropdown-menu tbody button:contains(12)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(13)').is(':disabled')).toBeTruthy();
+        // expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(12)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(13)').parent().attr('disabled')).toBe('disabled');
       });
 
       it('should support today as maxDate', function() {
         var elm = compileDirective('options-maxDate-today');
         angular.element(elm[0]).triggerHandler('focus');
         var todayDate = today.getDate();
-        expect(sandboxEl.find('.dropdown-menu tbody button[disabled]').length > 0).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').length).toBe(1);
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(' + todayDate + ').btn-primary').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody td[disabled]').length > 0).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(' + todayDate + ').btn-primary').length).toBe(1);
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(' + todayDate + ').btn-primary').parent().attr('disabled')).toBeUndefined();
       });
 
       it('should support number as maxDate', function() {
         var elm = compileDirective('options-maxDate-number');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBe('disabled');
       });
 
       it('should support Date object as maxDate', function() {
         var elm = compileDirective('options-maxDate-date');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBe('disabled');
       });
 
       it('should trigger validation when maxDate changes', function() {
@@ -1144,12 +1165,12 @@ describe('datepicker', function() {
       it('should reset maxDate to +Infinity when set empty string', function() {
         var elm = compileDirective('options-maxDate');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBe('disabled');
         scope.maxDate = '';
         scope.$digest();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBeUndefined();
       });
 
     });
@@ -1160,14 +1181,14 @@ describe('datepicker', function() {
         var elm = compileDirective('options-startWeek');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu thead tr:eq(1) th:eq(0)').text()).toBe('Mon');
-        expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('27');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:eq(0)').text()).toBe('27');
       });
 
       it('should support a negative gap induced by startWeek', function() {
         var elm = compileDirective('options-startWeek-bis');
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu thead tr:eq(1) th:eq(0)').text()).toBe('Sat');
-        expect(sandboxEl.find('.dropdown-menu tbody button:eq(0)').text()).toBe('28');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:eq(0)').text()).toBe('28');
       });
 
     });
@@ -1284,7 +1305,7 @@ describe('datepicker', function() {
 
       // Should correctly set the model value if set via the datepicker
       angular.element(elm[0]).triggerHandler('focus');
-      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).parent().triggerHandler('click');
       expect(elm.val()).toBe('24/12/2014');
       expect(scope.selectedDate).toBe('2014-12-24');
 
@@ -1304,7 +1325,7 @@ describe('datepicker', function() {
 
       // Should correctly set the model value if set via the datepicker
       angular.element(elm[0]).triggerHandler('focus');
-      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).triggerHandler('click');
+      angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)')).parent().triggerHandler('click');
       expect(elm.val()).toBe('12/24/14');
       expect(scope.selectedDate).toBe('December 24, 2014');
 
@@ -1322,25 +1343,25 @@ describe('datepicker', function() {
       it('should enable all days of the week by default', function() {
         var elm = compileDirective('options-daysOfWeekDisabled');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(21)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(22)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(23)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)').parent().attr('disabled')).toBeUndefined();
       });
 
       it('should allow disabling some days of the week', function() {
         var elm = compileDirective('options-daysOfWeekDisabled-bis');
         angular.element(elm[0]).triggerHandler('focus');
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeTruthy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
-        expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeTruthy();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBe('disabled');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(21)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(22)').parent().attr('disabled')).toBe('disabled');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(23)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBe('disabled');
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBeUndefined();
+        expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)').parent().attr('disabled')).toBe('disabled');
       });
 
     });
@@ -1353,13 +1374,13 @@ describe('datepicker', function() {
       };
       var elem = compileDirective('options-disabledDates', disabledScopeProperty);
       angular.element(elem[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(21)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(22)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(23)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)').parent().attr('disabled')).toBeUndefined();
     });
 
     it('should disable a single date range', function() {
@@ -1370,13 +1391,13 @@ describe('datepicker', function() {
       };
       var elem = compileDirective('options-disabledDates', disabledScopeProperty);
       angular.element(elem[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(21)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(22)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(23)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)').parent().attr('disabled')).toBeUndefined();
     });
 
     it('should disable multiple sorted date ranges', function() {
@@ -1388,13 +1409,13 @@ describe('datepicker', function() {
       };
       var elem = compileDirective('options-disabledDates', disabledScopeProperty);
       angular.element(elem[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(21)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(22)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(23)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)').parent().attr('disabled')).toBeUndefined();
     });
 
     it('should disable multiple sorted date ranges out of order', function() {
@@ -1406,13 +1427,13 @@ describe('datepicker', function() {
       };
       var elem = compileDirective('options-disabledDates', disabledScopeProperty);
       angular.element(elem[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(21)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(22)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(23)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)').parent().attr('disabled')).toBeUndefined();
     });
 
     it('should work combined with minDate/maxDate', function() {
@@ -1423,13 +1444,13 @@ describe('datepicker', function() {
       };
       var elem = compileDirective('options-disabledDates-minmax', disabledScopeProperty);
       angular.element(elem[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeTruthy();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(21)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(22)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(23)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)').parent().attr('disabled')).toBe('disabled');
     });
 
     it('should work combined with daysOfWeekDisabled', function() {
@@ -1440,13 +1461,13 @@ describe('datepicker', function() {
       };
       var elem = compileDirective('options-disabledDates-daysOfWeek', disabledScopeProperty);
       angular.element(elem[0]).triggerHandler('focus');
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(20)').is(':disabled')).toBeTruthy(); // July 25, 2014 is a Sunday, disabled
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(21)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(22)').is(':disabled')).toBeTruthy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(23)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(24)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(25)').is(':disabled')).toBeFalsy();
-      expect(sandboxEl.find('.dropdown-menu tbody button:contains(26)').is(':disabled')).toBeFalsy();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(20)').parent().attr('disabled')).toBe('disabled'); // July 25, 2014 is a Sunday, disabled
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(21)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(22)').parent().attr('disabled')).toBe('disabled');
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(23)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(24)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(25)').parent().attr('disabled')).toBeUndefined();
+      expect(sandboxEl.find('.dropdown-menu tbody .btn:contains(26)').parent().attr('disabled')).toBeUndefined();
     });
 
   });

@@ -3,8 +3,8 @@ node('master') {
 
   stage('Install Dependencies') {
 
-    sh 'npm install'
-    sh 'bower install'
+  sh 'npm install'
+  sh 'bower install'
   }
 
   stage('Build') {
@@ -14,7 +14,7 @@ node('master') {
 
   stage('Test') {
 
-    sh 'npm run lint'
+  sh 'npm run lint'
     sh '$(npm bin)/gulp karma:unit'
   }
 

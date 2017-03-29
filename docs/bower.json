@@ -7,7 +7,7 @@
     "angular-motion": "^0.4.4",
     "angular-route": "~1.5",
     "bootstrap": "~3.3.6",
-    "bootstrap-additions": "^0.3.1",
+    "bootstrap-additions": "SumTotalSystems/bootstrap-additions#sumt-master",
     "fastclick": "~1.0.6",
     "font-awesome": "~4.5.0",
     "highlightjs": "~9.2.0"

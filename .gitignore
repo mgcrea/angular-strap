@@ -14,3 +14,4 @@ node_modules/
 !dist/
 *.nupkg
 /npm-debug.log
+*.orig
