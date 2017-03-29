@@ -441,6 +441,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           angular.forEach(triggers, function (trigger) {
             if (trigger === 'click' || trigger === 'contextmenu') {
               element.on(trigger, $tooltip.toggle);
+              // element.on('blur', $tooltip.leave);
             } else if (trigger !== 'manual') {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);

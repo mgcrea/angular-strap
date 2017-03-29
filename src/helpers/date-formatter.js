@@ -23,6 +23,10 @@ angular.module('mgcrea.ngStrap.helpers.dateFormatter', [])
       return $locale.DATETIME_FORMATS.SHORTDAY;
     };
 
+    this.weekdays = function (lang) {
+      return $locale.DATETIME_FORMATS.DAY;
+    };
+
     function splitTimeFormat (format) {
       return /(h+)([:\.])?(m+)([:\.])?(s*)[ ]?(a?)/i.exec(format).slice(1);
     }

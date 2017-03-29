@@ -13,3 +13,5 @@ node_modules/
 !.gitignore
 !dist/
 *.nupkg
+/npm-debug.log
+*.orig

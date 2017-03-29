@@ -112,7 +112,8 @@ module.exports = function(config) {
       'karma-phantomjs-launcher',
       'karma-chrome-launcher',
       'karma-sauce-launcher',
-      'karma-coverage'
+      'karma-coverage',
+      'karma-jasmine-html-reporter'
     ],
 
     // Coverage reporter generates the coverage
