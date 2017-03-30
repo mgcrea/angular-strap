@@ -160,6 +160,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         // Overrides
+        var keyDownHandler;
 
         var show = $typeahead.show;
         $typeahead.show = function () {
@@ -170,7 +171,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             if ($typeahead.$element) {
               $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
               if (options.keyboard) {
-                if (element) element.on('keydown', $typeahead.$onKeyDown);
+                if (element && !keyDownHandler) {
+                  keyDownHandler = element.on('keydown', $typeahead.$onKeyDown);
+                }
               }
             }
           }, 0, false);
@@ -180,7 +183,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.hide = function () {
           if ($typeahead.$element) $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
           if (options.keyboard) {
-            if (element) element.off('keydown', $typeahead.$onKeyDown);
+            if (element && !keyDownHandler) {
+              element.off('keydown', $typeahead.$onKeyDown);
+              keyDownHandler = null;
+            }
           }
           if (!options.autoSelect) {
             $typeahead.activate(-1);
