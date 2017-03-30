@@ -103,6 +103,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         $datepicker.update = function (date) {
           // console.warn('$datepicker.update() newValue=%o', date);
           if (angular.isDate(date) && !isNaN(date.getTime())) {
+            controller.$setValidity('date', true);
             $datepicker.$date = date;
             $picker.update.call($picker, date);
           }

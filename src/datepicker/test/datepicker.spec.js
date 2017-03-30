@@ -1324,6 +1324,20 @@ describe('datepicker', function() {
       expect(scope.selectedDate).toBe('November 20, 2014');
     });
 
+   it('should trigger validation when scope value is set without datePicker', function() {
+      var elm = compileDirective('options-modelDateFormat');
+      // Should have the predefined value
+      expect(elm.val()).toBe('01/12/2014');
+      // Should correctly set the model value if set via the datepicker
+      elm.val('bonita');
+      angular.element(elm[0]).triggerHandler('change');
+
+      expect(angular.element(elm[0]).hasClass('ng-invalid')).toBeTruthy();
+      scope.selectedDate = '28/03/1991';
+      scope.$digest();
+
+      expect(angular.element(elm[0]).hasClass('ng-valid')).toBeTruthy();
+    });
   });
 
   describe('daysOfWeekDisabled', function() {
