@@ -154,6 +154,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           // Remove element
           destroyTipElement();
 
+          //cancel pending callbacks
+          clearTimeout(timeout);
+
           // Destroy scope
           scope.$destroy();
 
