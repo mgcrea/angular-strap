@@ -116,6 +116,10 @@ describe('datepicker', function() {
       scope: {selectedDate: new Date(1986, 1, 22)},
       element: '<input type="text" ng-model="selectedDate" data-date-format="mediumDate" bs-datepicker>'
     },
+    'options-interpolated-dateFormat': {
+      scope: {dateFormat: 'yyyy-MM-dd', selectedDate: '2014-12-01' },
+      element: '<input type="text" ng-model="selectedDate" data-date-format="{{dateFormat}}" bs-datepicker>'
+    },
     'options-minDate': {
       scope: {selectedDate: new Date(1986, 1, 22), minDate: '02/20/86'},
       element: '<input type="text" ng-model="selectedDate" data-min-date="{{minDate}}" bs-datepicker>'
@@ -988,6 +992,13 @@ describe('datepicker', function() {
         expect(elm.val()).toBe('Feb 24, 1986');
       });
 
+      it('should refresh view value when it change', function() {
+        var elm = compileDirective('options-interpolated-dateFormat');
+        expect(elm.val()).toBe('2014-12-01');
+        scope.dateFormat = 'dd/MM/yyyy';
+        scope.$apply();
+        expect(elm.val()).toBe('01/12/2014');
+      });
     });
 
     describe('timezone', function () {
@@ -1315,6 +1326,20 @@ describe('datepicker', function() {
       expect(scope.selectedDate).toBe('November 20, 2014');
     });
 
+   it('should trigger validation when scope value is set without datePicker', function() {
+      var elm = compileDirective('options-modelDateFormat');
+      // Should have the predefined value
+      expect(elm.val()).toBe('01/12/2014');
+      // Should correctly set the model value if set via the datepicker
+      elm.val('bonita');
+      angular.element(elm[0]).triggerHandler('change');
+
+      expect(angular.element(elm[0]).hasClass('ng-invalid')).toBeTruthy();
+      scope.selectedDate = '28/03/1991';
+      scope.$digest();
+
+      expect(angular.element(elm[0]).hasClass('ng-valid')).toBeTruthy();
+    });
   });
 
   describe('daysOfWeekDisabled', function() {

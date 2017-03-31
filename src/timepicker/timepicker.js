@@ -104,6 +104,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         $timepicker.update = function (date) {
           // console.warn('$timepicker.update() newValue=%o', date);
           if (angular.isDate(date) && !isNaN(date.getTime())) {
+            controller.$setValidity('date',true);
             $timepicker.$date = date;
             angular.extend(viewDate, {
               hour: date.getHours(),

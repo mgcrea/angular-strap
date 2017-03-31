@@ -104,6 +104,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         $datepicker.update = function (date) {
           // console.warn('$datepicker.update() newValue=%o', date);
           if (angular.isDate(date) && !isNaN(date.getTime())) {
+            controller.$setValidity('date', true);
             $datepicker.$date = date;
             $picker.update.call($picker, date);
           }
@@ -361,6 +362,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
         if (angular.isDefined(attr.dateFormat)) {
           attr.$observe('dateFormat', function (newValue) {
             datepicker.$options.dateFormat = newValue;
+          dateParser = $dateParser({format: newValue, lang: lang, strict: options.strictFormat});
+          controller.$render();
           });
         }
 
@@ -462,6 +465,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
         // viewValue -> element
         controller.$render = function () {
           // console.warn('$render("%s"): viewValue=%o', element.attr('ng-model'), controller.$viewValue);
+          if (angular.isDate(controller.$viewValue)) { controller.$dateValue = controller.$viewValue; }
           element.val(getDateFormattedString());
         };
 
@@ -544,7 +548,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
             var firstDayOfMonthOffset = firstDayOfMonth.getTimezoneOffset();
             var firstDate = new Date(+firstDayOfMonth - mod(firstDayOfMonth.getDay() - options.startWeek, 7) * 864e5);
             var firstDateOffset = firstDate.getTimezoneOffset();
-            var today = dateParser.timezoneOffsetAdjust(new Date(), options.timezone).toDateString();
+            var today = dateParser.timezoneOffsetAdjust(new Date()).toDateString();
               // Handle daylight time switch
             if (firstDateOffset !== firstDayOfMonthOffset) firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60e3);
             var days = [];

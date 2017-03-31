@@ -1192,6 +1192,19 @@ describe('timepicker', function() {
 
       });
 
+      it('should trigger validation when scope value is set without timePicker', function() {
+        var elm = compileDirective('options-modelTimeFormat');
+        // Should have the predefined value
+        expect(elm.val()).toBe('12:20');
+        elm.val('bonita');
+        angular.element(elm[0]).triggerHandler('change');
+
+        expect(angular.element(elm[0]).hasClass('ng-invalid')).toBeTruthy();
+        scope.selectedTime = '18:20:10';
+        scope.$digest();
+
+        expect(angular.element(elm[0]).hasClass('ng-valid')).toBeTruthy();
+      });
     });
 
     describe('arrowBehavior', function() {
