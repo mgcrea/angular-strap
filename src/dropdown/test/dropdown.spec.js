@@ -92,6 +92,9 @@ describe('dropdown', function() {
     'options-events': {
       scope: {dropdown: [{text: 'bar', href: '#foo'}]},
       element: '<a bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" bs-dropdown="dropdown">click me</a>'
+    },
+    '508': {
+      element: '<button bs-dropdown><span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#anotherAction"><i class="fa fa-download"></i>&nbsp;Some action</a></li><li><a href="#" ng-click="$alert(\'Holy guacamole\')"><i class="fa fa-globe"></i>&nbsp;Display an alert</a></li><li class="divider"></li><li ng-repeat="i in [\'Foo\', \'Bar\', \'Baz\']"><a ng-href="#action{{i}}"><i class="fa fa-chevron-right"></i>&nbsp;{{i}}</a></li></ul>'
     }
   };
 
@@ -545,4 +548,84 @@ describe('dropdown', function() {
     });
   });
 
+  describe('508', function () {
+    it('should apply assistive attributes to the button', function () {
+      var ele = compileDirective('508');
+
+      ele = angular.element(ele);
+
+      expect(ele.attr('role')).toMatch(/button/gi);
+      expect(ele.attr('aria-haspopup')).toMatch(/true/gi);
+      expect(ele.attr('data-toggle')).toMatch(/dropdown/gi);
+      expect(ele.attr('aria-expanded')).toMatch(/false/gi);
+    });
+
+    it('should apply assistive attributes to the dropdown-menu', function () {
+      var elm = compileDirective('508');
+
+      angular.element(elm[0]).triggerHandler('click');
+      $animate.flush();
+
+      expect(elm.attr('aria-expanded')).toMatch(/true/gi);
+
+      var menu = jQuery('#sandbox ul');
+
+      expect(menu.attr('aria-hidden')).toMatch(/false/gi);
+      expect(menu.attr('role')).toMatch(/menu/gi);
+      expect(menu.attr('tabindex')).toMatch(/-1/gi);
+    });
+
+    it('should apply assistive attributes to the menu\'s LI elements', function () {
+      var elm = compileDirective('508');
+
+      angular.element(elm[0]).triggerHandler('click');
+      $animate.flush();
+
+      var liElm = jQuery('#sandbox ul.dropdown-menu li:not(.divider)');
+      for (var i = 0; i < liElm.length; i++) {
+        expect(liElm.attr('role')).toMatch(/presentation/gi);
+      }
+
+      liElm = jQuery('#sandbox ul.dropdown-menu li.divider');
+      for (var i = 0; i < liElm.length; i++) {
+        expect(liElm.attr('role')).toMatch(/seperator/gi);
+      }
+    });
+
+    it('should apply assistive attributes to the menu\'s anchor elements', function () {
+      var elm = compileDirective('508');
+
+      angular.element(elm[0]).triggerHandler('click');
+      $animate.flush();
+
+      var liElm = jQuery('#sandbox ul.dropdown-menu li:not(.divider) a');
+      for (var i = 0; i < liElm.length; i++) {
+        expect(liElm.attr('role')).toMatch(/menuitem/gi);
+      }
+    });
+
+    it('should focus the first element of the menu when opened', function () {
+      var elm = compileDirective('508');
+
+      angular.element(elm[0]).triggerHandler('click');
+      $animate.flush();
+
+      // the button should not be the active element
+      expect(jQuery('#sandbox button')[0]).not.toBe(document.activeElement);
+
+      // the anchor of the first li should be the active element
+      expect(jQuery('#sandbox ul.dropdown-menu li:first a')[0]).toBe(document.activeElement);
+    });
+
+    it('should focus the opener element when hidden', function () {
+      var elm = compileDirective('508');
+
+      angular.element(elm[0]).triggerHandler('click');
+      angular.element(elm[0]).triggerHandler('click');
+      $animate.flush();
+
+      // the dropdown is hidden so the focus should be returned to the button
+      expect(jQuery('#sandbox button')[0]).toBe(document.activeElement);
+    });
+  });
 });

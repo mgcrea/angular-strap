@@ -34,10 +34,17 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         $dropdown = $tooltip(element, options);
         var parentEl = element.parent();
 
+        if (element && element[0] && element[0].tagName.toUpperCase() === 'BUTTON') {
+          element.attr('aria-haspopup', 'true');
+          element.attr('data-toggle', 'dropdown');
+          element.attr('aria-expanded', 'false');
+          element.attr('role', 'button');
+        }
+
         // Protected methods
 
         $dropdown.$onKeyDown = function (evt) {
-          if (/(9)/.test(evt.keyCode)) {
+          if (/(9)/.test(evt.keyCode) && !options.keyboard) {
             $dropdown.hide();
             return;
           }
@@ -61,6 +68,25 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         };
 
+        $dropdown.$onBlur = function (evt) {
+          // find out if the related target's parents contain the datepicker's $element
+          var inMenu = false;
+          var parent = angular.element(evt.relatedTarget);
+          while (parent !== undefined && parent.length && parent[0] !== $window.document.body) {
+            parent = parent.parent();
+            if (parent !== undefined && parent[0] === $dropdown.$element[0]) {
+              inMenu = true;
+              break;
+            } else {
+              inMenu = false;
+            }
+          }
+
+          if (!inMenu) {
+            $dropdown.hide();
+          }
+        };
+
         // Overrides
 
         var show = $dropdown.show;
@@ -69,8 +95,32 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
           $timeout(function () {
-            if (options.keyboard && $dropdown.$element) $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+            // Set assistive technology properties
+            element.attr('aria-expanded', 'true');
+            if ($dropdown.$element) {
+              $dropdown.$element.attr('aria-hidden', 'false');
+              $dropdown.$element.attr('role', 'menu');
+              $dropdown.$element.attr('tabindex', '-1');
+            }
+            if (options.keyboard && $dropdown.$element) {
+              $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+              $dropdown.$element.find('a').on('blur', $dropdown.$onBlur);
+            }
+
             bodyEl.on('click', onBodyClick);
+
+            if ($dropdown.$element) {
+              var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider)'));
+              items.attr('role', 'presentation');
+
+              angular.element($dropdown.$element[0].querySelectorAll('li.divider')).attr('role', 'seperator');
+
+              items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
+              items.attr('role', 'menuitem');
+              if (items.length && options.keyboard) {
+                items[0].focus();
+              }
+            }
           }, 0, false);
           if (parentEl.hasClass('dropdown')) parentEl.addClass('open');
         };
@@ -78,10 +128,23 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         var hide = $dropdown.hide;
         $dropdown.hide = function () {
           if (!$dropdown.$isShown) return;
-          if (options.keyboard && $dropdown.$element) $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+
+          element.attr('aria-expanded', 'true');
+          $dropdown.$element.attr('aria-hidden', 'true');
+
+          if (options.keyboard && $dropdown.$element) {
+            $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+            $dropdown.$element.find('a').off('blur', $dropdown.$onBlur);
+          }
+
           bodyEl.off('click', onBodyClick);
           if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
           hide();
+          $timeout(function () {
+            if (element && element[0] && options.keyboard) {
+              element[0].focus();
+            }
+          }, 0, false);
         };
 
         var destroy = $dropdown.destroy;

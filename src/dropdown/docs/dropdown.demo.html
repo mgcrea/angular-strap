@@ -16,12 +16,14 @@
     <p>Dropdowns require the <a href="#tooltips">tooltip plugin</a> to be included.</p>
   </div>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="dropdown/docs/dropdown.demo.html" data-content-js-url="dropdown/docs/dropdown.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="dropdown/docs/dropdown.demo.html"
+      data-content-js-url="dropdown/docs/dropdown.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
   <pre class="bs-example-scope">$scope.dropdown = {{dropdown | json}};</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
     <!-- Button to trigger a default dropdown from an array ($scope.dropdown) [{text:'foo', href:'', click:''}, ...] -->
-    <button type="button" class="btn btn-lg btn-primary" data-animation="am-flip-x" bs-dropdown="dropdown" aria-haspopup="true" aria-expanded="false">Click to toggle dropdown
+    <button type="button" class="btn btn-lg btn-primary" data-animation="am-flip-x" bs-dropdown="dropdown" aria-haspopup="true"
+      aria-expanded="false">Click to toggle dropdown
       <br />
       <small>(using an object)</small>
     </button>
@@ -39,6 +41,22 @@
 
   </div>
 
+  <h3>Live Demo <small>Bootstrap Split-Button</small></h3>
+  <div class="bs-example" append-source>
+    <div class="btn-group">
+      <button role="button" type="button" class="btn btn-primary">Default Action</button>
+      <button role="button" aria-haspopup="true" aria-expanded="false" class="btn btn-primary dropdown-toggle" bs-dropdown>
+      <span class="caret"></span>
+    </button>
+      <ul class="dropdown-menu">
+        <li><a href="#anotherAction"><i class="fa fa-download"></i>&nbsp;Some action</a></li>
+        <li><a href="#" ng-click="$alert('Holy guacamole')"><i class="fa fa-globe"></i>&nbsp;Display an alert</a></li>
+        <li class="divider"></li>
+        <li ng-repeat="i in ['Foo', 'Bar', 'Baz']"><a ng-href="#action{{i}}"><i class="fa fa-chevron-right"></i>&nbsp;{{i}}</a></li>
+      </ul>
+    </div>
+  </div>
+
   <h2 id="dropdowns-usage">Usage</h2>
   <p>Append a <code>bs-dropdown</code>attribute to any element to enable the directive.</p>
   <div class="callout callout-info">
@@ -54,12 +72,15 @@
   </div>
 
   <h3>Options</h3>
-  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
-  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-dropdown</code> attribute</p>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes,
+    append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a>    to evaluate as an object directly on the <code>bs-dropdown</code> attribute</p>
   <div class="callout callout-info">
     <h4>This module supports exotic placement options!</h4>
     <p>You can position your dropdown in corners (such as <code>bottom-left</code>) or any other combination two.</p>
-    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
+    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code>      from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project
+      being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css"
+        target="_blank">development snapshot</a> compiled for theses docs.</p>
   </div>
   <div class="table-responsive">
     <table class="table table-bordered table-striped">
@@ -83,8 +104,8 @@
           <td>string</td>
           <td>'bottom-left'</td>
           <td>
-            how to position the dropdown - top | bottom | left | right | auto, or any combination like bottom-left or auto bottom-left.<br>
-            When "auto" is specified, it will dynamically reorient the dropdown. For example, if placement is "auto left", the dropdown will display to the left when possible, otherwise it will display right.
+            how to position the dropdown - top | bottom | left | right | auto, or any combination like bottom-left or auto bottom-left.<br>            When "auto" is specified, it will dynamically reorient the dropdown. For example, if placement is "auto left",
+            the dropdown will display to the left when possible, otherwise it will display right.
           </td>
         </tr>
         <tr>
@@ -117,7 +138,9 @@
           <td>false</td>
           <td>
             <p>Appends the dropdown to a specific element. Example:
-              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the dropdown in the flow of the document near the triggering element -&nbsp;which will prevent the dropdown from floating away from the triggering element during a window resize.</p>
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the dropdown
+              in the flow of the document near the triggering element -&nbsp;which will prevent the dropdown from floating
+              away from the triggering element during a window resize.</p>
           </td>
         </tr>
         <tr>
@@ -134,7 +157,8 @@
           <td>'dropdown/dropdown.tpl.html'</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
-            <p>It should be a <code>div.dropdown-menu</code> element following Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/dropdown/dropdown.tpl.html" target="_blank">like this</a>).</p>
+            <p>It should be a <code>div.dropdown-menu</code> element following Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/dropdown/dropdown.tpl.html"
+                target="_blank">like this</a>).</p>
           </td>
         </tr>
         <tr>
