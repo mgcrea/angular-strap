@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2017-03-30
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -123,6 +123,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         $typeahead.$$updateScrollTop($typeahead.$element[0], scope.$activeIndex);
         scope.$digest();
       };
+      var keyDownHandler;
       var show = $typeahead.show;
       $typeahead.show = function() {
         show();
@@ -130,7 +131,9 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
           if ($typeahead.$element) {
             $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
             if (options.keyboard) {
-              if (element) element.on('keydown', $typeahead.$onKeyDown);
+              if (element && !keyDownHandler) {
+                keyDownHandler = element.on('keydown', $typeahead.$onKeyDown);
+              }
             }
           }
         }, 0, false);
@@ -139,7 +142,10 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       $typeahead.hide = function() {
         if ($typeahead.$element) $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
         if (options.keyboard) {
-          if (element) element.off('keydown', $typeahead.$onKeyDown);
+          if (element && keyDownHandler) {
+            element.off('keydown', $typeahead.$onKeyDown);
+            keyDownHandler = null;
+          }
         }
         if (!options.autoSelect) {
           $typeahead.activate(-1);

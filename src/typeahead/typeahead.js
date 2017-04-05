@@ -145,11 +145,19 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           // Select with enter
           if (evt.keyCode === 13 && scope.$matches.length) {
             $typeahead.select(scope.$activeIndex);
-          // Navigate with keyboard
-          } else if (evt.keyCode === 38 && scope.$activeIndex > 0) {
-            scope.$activeIndex--;
-          } else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) {
-            scope.$activeIndex++;
+            // Navigate with keyboard
+          } else if (evt.keyCode === 38) {
+            if (scope.$activeIndex > 0) {
+              scope.$activeIndex--;
+            } else {
+              scope.$activeIndex = scope.$matches.length - 1;
+            }
+          } else if (evt.keyCode === 40) {
+            if (scope.$activeIndex < scope.$matches.length - 1) {
+              scope.$activeIndex++;
+            } else {
+              scope.$activeIndex = 0;
+            }
           } else if (angular.isUndefined(scope.$activeIndex)) {
             scope.$activeIndex = 0;
           }
@@ -160,6 +168,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         // Overrides
+        var keyDownHandler;
 
         var show = $typeahead.show;
         $typeahead.show = function () {
@@ -170,7 +179,9 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             if ($typeahead.$element) {
               $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
               if (options.keyboard) {
-                if (element) element.on('keydown', $typeahead.$onKeyDown);
+                if (element && !keyDownHandler) {
+                  keyDownHandler = element.on('keydown', $typeahead.$onKeyDown);
+                }
               }
             }
           }, 0, false);
@@ -180,7 +191,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.hide = function () {
           if ($typeahead.$element) $typeahead.$element.off('mousedown', $typeahead.$onMouseDown);
           if (options.keyboard) {
-            if (element) element.off('keydown', $typeahead.$onKeyDown);
+            if (element && keyDownHandler) {
+              element.off('keydown', $typeahead.$onKeyDown);
+              keyDownHandler = null;
+            }
           }
           if (!options.autoSelect) {
             $typeahead.activate(-1);
