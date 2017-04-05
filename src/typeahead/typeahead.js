@@ -136,8 +136,6 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.$onKeyDown = function (evt) {
           if (!/(38|40|13)/.test(evt.keyCode)) return;
 
-          console.log('keydown being called!', evt);
-
           // Let ngSubmit pass if the typeahead tip is hidden or no option is selected
           if ($typeahead.$isVisible() && !(evt.keyCode === 13 && scope.$activeIndex === -1)) {
             evt.preventDefault();
