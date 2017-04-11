@@ -68,7 +68,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         };
 
-        $dropdown.$onBlur = function (evt) {
+        $dropdown.$onFocusOut = function (evt) {
           // find out if the related target's parents contain the datepicker's $element
           var inMenu = false;
           var parent = angular.element(evt.relatedTarget);
@@ -84,6 +84,9 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
           if (!inMenu) {
             $dropdown.hide();
+          } else {
+            evt.preventDefault();
+            evt.stopPropagation();
           }
         };
 
@@ -104,7 +107,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
             }
             if (options.keyboard && $dropdown.$element) {
               $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
-              $dropdown.$element.find('a').on('blur', $dropdown.$onBlur);
+              $dropdown.$element.on('focusout', $dropdown.$onFocusOut);
             }
 
             bodyEl.on('click', onBodyClick);
@@ -134,7 +137,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
           if (options.keyboard && $dropdown.$element) {
             $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
-            $dropdown.$element.find('a').off('blur', $dropdown.$onBlur);
+            $dropdown.$element.off('focusout', $dropdown.$onFocusOut);
           }
 
           bodyEl.off('click', onBodyClick);
