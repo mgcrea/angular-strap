@@ -110,6 +110,10 @@ describe('modal', function() {
     'options-z-index': {
       element: '<a bs-modal="modal" data-z-index="{{zIndex}}">click me</a>'
     },
+    '508': {
+      scope: {modal: {title: 'Title', content: 'Hello Modal!'}},
+      element: '<button type="button" class="btn btn-primary" bs-modal="modal" keyboard="true" backdrop="static">Click Me</button>'
+    }
   };
 
   function compileDirective(template, locals) {
@@ -863,4 +867,109 @@ describe('modal', function() {
 
   });
 
+  fdescribe('508', function () {
+    it('should set aria-hidden false on modal when shown', function () {
+      var elm = compileDirective('508', {});
+      expect(bodyEl.find('.modal').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      var modal = bodyEl.find('.modal');
+      expect(modal.length).toBe(1);
+      
+      $animate.flush();
+
+      expect(jQuery(modal).attr('aria-hidden')).toBe('false');
+    });
+
+    it('should set aria-hidden true on body when shown', function () {
+      var elm = compileDirective('508', {});
+      expect(bodyEl.find('.modal').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      var modal = bodyEl.find('.modal');
+      expect(modal.length).toBe(1);
+
+      $animate.flush();
+
+      expect(jQuery(bodyEl).attr('aria-hidden')).toBe('true');
+    });
+
+    it('should focus the modal on open', function () {
+      var elm = compileDirective('508', {});
+      expect(bodyEl.find('.modal').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      var modal = bodyEl.find('.modal');
+      expect(modal.length).toBe(1);
+
+      spyOn(modal[0], 'focus')
+
+      $animate.flush();
+
+      expect(modal[0].focus).toHaveBeenCalled();
+    });
+
+    it('should focus the button when closed', function () {
+      var elm = compileDirective('508', {});
+      expect(bodyEl.find('.modal').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      var modal = bodyEl.find('.modal');
+      expect(modal.length).toBe(1);
+
+      $animate.flush();
+
+      spyOn(elm[0], 'focus');
+
+      jQuery('.modal BUTTON.btn.btn-default').triggerHandler('click');
+      modal = bodyEl.find('.modal');
+      expect(modal.length).toBe(0);
+
+      expect(elm[0].focus).toHaveBeenCalled();
+    });
+
+    it('should keep focus in the modal when the tab is triggered from the focused close button', function () {
+      var elm = compileDirective('508', {});
+      expect(bodyEl.find('.modal').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      var modal = bodyEl.find('.modal');
+      expect(modal.length).toBe(1);
+
+      $animate.flush();
+
+      jQuery('.modal BUTTON.btn.btn-default')[0].focus();
+
+      var evt = jQuery.Event( 'keydown', { keyCode: 9, which: 9 } );
+
+      var close = jQuery('.modal BUTTON.close');
+
+      spyOn(close[0], 'focus');
+
+      modal.triggerHandler(evt);
+
+      scope.$digest();
+
+      expect(close[0].focus).toHaveBeenCalled();
+    });
+
+    it('should keep focus in the modal when shift+tab is triggered from the focused close button', function () {
+      var elm = compileDirective('508', {});
+      expect(bodyEl.find('.modal').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('click');
+      var modal = bodyEl.find('.modal');
+      expect(modal.length).toBe(1);
+
+      $animate.flush();
+
+      jQuery('.modal BUTTON.close')[0].focus();
+
+      var evt = jQuery.Event( 'keydown', { keyCode: 9, which: 9, shiftKey: true } );
+
+      var close = jQuery('.modal BUTTON.btn.btn-default');
+
+      spyOn(close[0], 'focus');
+
+      modal.triggerHandler(evt);
+
+      scope.$digest();
+
+      expect(close[0].focus).toHaveBeenCalled();
+    });
+  });
 });
