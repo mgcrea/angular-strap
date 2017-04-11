@@ -223,6 +223,10 @@ describe('datepicker', function() {
     'options-hasClear': {
       scope: {selectedDate: new Date()},
       element: '<input type="text" ng-model="selectedDate" data-has-clear="true" data-min-date="{{minDate}}" data-date-format="yyyy-MM-dd" bs-datepicker>'
+    },
+    'options-allowReadonly': {
+      scope: {selectedDate: new Date()},
+      element: '<input type="text" ng-model="selectedDate" allow-readonly="true" bs-datepicker>'
     }
   };
 
@@ -1271,6 +1275,18 @@ describe('datepicker', function() {
       });
 
     })
+
+    describe('allowReadonly', function() {
+
+      it('should open for readonly input with allowReadonly true', function() {
+        var elm = compileDirective('options-allowReadonly');
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(0);
+        angular.element(elm[0]).triggerHandler('focus');
+        expect(sandboxEl.children('.dropdown-menu.datepicker').length).toBe(1);        
+      });
+
+    });
+
 
   });
 
