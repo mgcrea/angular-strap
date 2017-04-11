@@ -62,6 +62,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         // element id if defined
         $modal.$id = options.id || options.element && options.element.attr('id') || '';
 
+        $modal.returnFocus = function () {
+
+        };
+
         // Support scope as string options
         forEach(['title', 'content'], function (key) {
           if (options[key]) scope[key] = $sce.trustAsHtml(options[key]);
@@ -209,6 +213,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           });
 
           bodyElement.addClass(options.prefixClass + '-open');
+          // Add assistive attributes to the body to prevent the screen reader from reading it with the virtual keys
+          bodyElement.attr('aria-hidden', 'true');
+          
           if (options.animation) {
             bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
           }
@@ -223,6 +230,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           if (angular.isDefined(options.onShow) && angular.isFunction(options.onShow)) {
             options.onShow($modal);
           }
+
+          modalElement.attr('aria-hidden', 'false');
+          modalElement[0].focus();
         }
 
         $modal.hide = function () {
@@ -234,6 +244,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           if (angular.isDefined(options.onBeforeHide) && angular.isFunction(options.onBeforeHide)) {
             options.onBeforeHide($modal);
           }
+
+          modalElement.attr('aria-hidden', 'true');
+
+          if ($modal.returnFocus && typeof $modal.returnFocus === 'function') $modal.returnFocus();
 
           // Support v1.2+ $animate
           // https://github.com/angular/angular.js/issues/11713
@@ -263,9 +277,37 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
           if (findElement('.modal').length <= 0) {
             bodyElement.removeClass(options.prefixClass + '-open');
+            bodyElement.attr('aria-hidden', 'false');
           }
           if (options.animation) {
             bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
+          }
+        }
+
+        function findFocusableElements () {
+          // Add all elements we want to include in our selection
+          var focusableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+          if (document.activeElement) {
+            var focusable = Array.prototype.filter.call(modalElement[0].querySelectorAll(focusableElements),
+              function (element) {
+                // Check for visibility while always include the current activeElement
+                return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
+              });
+
+            return focusable;
+          }
+        }
+
+        function findNextFocusableElement (inReverse) {
+          if (document.activeElement) {
+            var focusable = findFocusableElements();
+            if (focusable === undefined) return;
+            if (inReverse) {
+              focusable = Array.prototype.reverse.call(focusable);
+            }
+
+            var index = focusable.indexOf(document.activeElement);
+            return focusable[index + 1];
           }
         }
 
@@ -285,11 +327,31 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         $modal.$onKeyUp = function (evt) {
 
+          // Escape was pressed on an open modal. Hide it.
           if (evt.which === 27 && $modal.$isShown) {
             $modal.hide();
             evt.stopPropagation();
           }
+        };
 
+        $modal.$onKeyDown = function (evt) {
+          if (options.keyboard) {
+            if (evt.keyCode === 9) {
+              
+              var nextFocusable = findNextFocusableElement(evt.shiftKey);
+              if (nextFocusable === undefined) {
+                if (evt.preventDefault) evt.preventDefault();
+                if (evt.stopPropagation) evt.stopPropagation();
+
+                var focusable = findFocusableElements();
+                if (evt.shiftKey) {
+                  focusable[focusable.length - 1].focus();
+                } else {
+                  focusable[0].focus();
+                }
+              }
+            }
+          }
         };
 
         function bindBackdropEvents () {
@@ -311,12 +373,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         function bindKeyboardEvents () {
           if (options.keyboard) {
             modalElement.on('keyup', $modal.$onKeyUp);
+            modalElement.on('keydown', $modal.$onKeyDown);
           }
         }
 
         function unbindKeyboardEvents () {
           if (options.keyboard) {
             modalElement.off('keyup', $modal.$onKeyUp);
+            modalElement.off('keydown', $modal.$onKeyDown);
           }
         }
 
@@ -429,6 +493,12 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Initialize modal
         var modal = $modal(options);
+
+        if (options.keyboard) {
+          modal.returnFocus = function () {
+            element[0].focus();
+          };
+        }
 
         // Trigger
         element.on(attr.trigger || 'click', modal.toggle);

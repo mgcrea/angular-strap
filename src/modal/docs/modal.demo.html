@@ -10,7 +10,8 @@
   <h2 id="modals-examples">Examples</h2>
   <p>Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults.</p>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="modal/docs/modal.demo.html" data-content-js-url="modal/docs/modal.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
+  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="modal/docs/modal.demo.html"
+      data-content-js-url="modal/docs/modal.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip>clog.info</a></h3>
   <pre class="bs-example-scope">$scope.modal = {{modal | json}};</pre>
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
@@ -21,7 +22,8 @@
     </button>
 
     <!-- You can use a custom html template with the `data-template` attr -->
-    <button type="button" class="btn btn-lg btn-danger" data-animation="am-fade-and-slide-top" data-template-url="modal/docs/modal.demo.tpl.html" bs-modal="modal">Custom Modal
+    <button type="button" class="btn btn-lg btn-danger" data-animation="am-fade-and-slide-top" data-template-url="modal/docs/modal.demo.tpl.html"
+      bs-modal="modal">Custom Modal
       <br />
       <small>(using data-template)</small>
     </button>
@@ -33,6 +35,20 @@
     </button>
 
 
+  </div>
+
+  <h3>508 Usage</h3>
+  <p>
+    For modal dialogs to be 508 and screen reader compliant please use the following examples. The <code>backdrop</code>    must be set to <em>static</em> and
+    <code>keyboard</code> must be set to a truthy value. Please be aware that the directive use-case handles returning focus
+    to the item which opens the modal dialog. In scenarios where the <code>$modal</code> service is used it will be up to
+    the implementation to return focus to the element which initiated the action to open the dialog.
+  </p>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+    <button type="button" class="btn btn-primary" data-template-url="modal/docs/modal.demo.tpl.html" bs-modal="modal" keyboard="true"
+      backdrop="static">
+      Custom 508 Modal
+    </button>
   </div>
 
   <div class="callout callout-info">
@@ -87,8 +103,9 @@
 
 
   <h3>Options</h3>
-  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
-  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a> to evaluate as an object directly on the <code>bs-modal</code> attribute</p>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes,
+    append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>For directives, you can naturally inherit the contextual <code>$scope</code> or leverage a custom one with an <a href="http://docs.angularjs.org/guide/expression">AngularJS expression</a>    to evaluate as an object directly on the <code>bs-modal</code> attribute</p>
   <div class="table-responsive">
     <table class="table table-bordered table-striped">
       <thead>
@@ -141,7 +158,8 @@
           <td>boolean or the string <code>'static'</code>
           </td>
           <td>true</td>
-          <td>Includes a modal-backdrop element. Alternatively, specify <code>static</code>for a backdrop which doesn't close the modal on click.</td>
+          <td>Includes a modal-backdrop element. Alternatively, specify <code>static</code>for a backdrop which doesn't close
+            the modal on click.</td>
         </tr>
         <tr>
           <td>keyboard</td>
@@ -160,7 +178,9 @@
           <td>string | false</td>
           <td>false</td>
           <td>
-            <p>Appends the popover to a specific element. Example: <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
+            <p>Appends the popover to a specific element. Example: <code>container: 'body'</code>. This option is particularly
+              useful in that it allows you to position the popover in the flow of the document near the triggering element
+              -&nbsp;which will prevent the popover from floating away from the triggering element during a window resize.</p>
           </td>
         </tr>
         <tr>
@@ -168,7 +188,8 @@
           <td>string|function</td>
           <td>false</td>
           <td>
-            <p>Controller fn that should be associated with newly created scope or the name of a registered controller if passed as a string.</p>
+            <p>Controller fn that should be associated with newly created scope or the name of a registered controller if passed
+              as a string.</p>
           </td>
         </tr>
         <tr>
@@ -184,7 +205,8 @@
           <td>object</td>
           <td>false</td>
           <td>
-            <p>Object containing dependencies that will be injected into the controller's constructor when all the dependencies have resolved. The controller won't load if the promise is rejected.</p>
+            <p>Object containing dependencies that will be injected into the controller's constructor when all the dependencies
+              have resolved. The controller won't load if the promise is rejected.</p>
           </td>
         </tr>
         <tr>
@@ -192,7 +214,8 @@
           <td>object</td>
           <td>false</td>
           <td>
-            <p>Object containing dependencies that will be injected into the controller's constructor. Similar to resolve but expects literal values instead of promises.</p>
+            <p>Object containing dependencies that will be injected into the controller's constructor. Similar to resolve but
+              expects literal values instead of promises.</p>
           </td>
         </tr>
         <tr>
@@ -209,7 +232,8 @@
           <td>'modal/modal.tpl.html'</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
-            <p>It should be a <code>div.modal</code> element following Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/modal/modal.tpl.html" target="_blank">like this</a>).</p>
+            <p>It should be a <code>div.modal</code> element following Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/modal/modal.tpl.html"
+                target="_blank">like this</a>).</p>
           </td>
         </tr>
         <tr>
@@ -217,7 +241,8 @@
           <td>path</td>
           <td>false</td>
           <td>
-            <p>If provided, fetches the partial and includes it as the inner content, can be either a remote URL or a cached template id.</p>
+            <p>If provided, fetches the partial and includes it as the inner content, can be either a remote URL or a cached
+              template id.</p>
           </td>
         </tr>
         <tr>
@@ -225,7 +250,8 @@
           <td>string</td>
           <td>'modal'</td>
           <td>
-            <p>If provided, prefixes the events '.hide.before' '.hide' '.show.before' and '.show' with the passed in value. With the default value these events are 'modal.hide.before' 'modal.hide' 'modal.show.before' and 'modal.show'</p>
+            <p>If provided, prefixes the events '.hide.before' '.hide' '.show.before' and '.show' with the passed in value.
+              With the default value these events are 'modal.hide.before' 'modal.hide' 'modal.show.before' and 'modal.show'</p>
           </td>
         </tr>
         <tr>
@@ -273,7 +299,7 @@
           <td>number</td>
           <td>1050</td>
           <td>
-             CSS z-index value for the modal.
+            CSS z-index value for the modal.
           </td>
         </tr>
       </tbody>
