@@ -867,14 +867,14 @@ describe('modal', function() {
 
   });
 
-  fdescribe('508', function () {
+  describe('508', function () {
     it('should set aria-hidden false on modal when shown', function () {
       var elm = compileDirective('508', {});
       expect(bodyEl.find('.modal').length).toBe(0);
       angular.element(elm[0]).triggerHandler('click');
       var modal = bodyEl.find('.modal');
       expect(modal.length).toBe(1);
-      
+
       $animate.flush();
 
       expect(jQuery(modal).attr('aria-hidden')).toBe('false');
