@@ -115,7 +115,7 @@ describe('collapse', function () {
     it ('should not open or close panels that are disabled', function () {
       var elm = compileDirective('default-disabled-attr');
       expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
-      //the second toggle link is disabled 
+      //the second toggle link is disabled
       sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
       expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
       expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
@@ -168,7 +168,7 @@ describe('collapse', function () {
 
   });
 
-  describe('data-binding', function() {
+  describe('data-binding', function () {
 
     it('should correctly apply model changes to the view', function() {
       var elm = compileDirective('binding-ngModel');
@@ -346,4 +346,25 @@ describe('collapse', function () {
 
   });
 
+  describe('508', function () {
+    it('should apply the assistive attributes to the toggles and targets', function () {
+      var elm = compileDirective('default');
+      expect(sandboxEl.find('[bs-collapse-toggle]:eq(0)').attr('aria-expanded')).toBe('true');
+      expect(sandboxEl.find('[bs-collapse-toggle]:eq(1)').attr('aria-expanded')).toBe('false');
+
+      expect(sandboxEl.find('[bs-collapse-target]:eq(0)').attr('aria-hidden')).toBe('false');
+      expect(sandboxEl.find('[bs-collapse-target]:eq(1)').attr('aria-hidden')).toBe('true');
+    });
+
+    it('should update the assistive attributes on click', function () {
+      var elm = compileDirective('default');
+      sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+
+      expect(sandboxEl.find('[bs-collapse-toggle]:eq(0)').attr('aria-expanded')).toBe('false');
+      expect(sandboxEl.find('[bs-collapse-toggle]:eq(1)').attr('aria-expanded')).toBe('true');
+
+      expect(sandboxEl.find('[bs-collapse-target]:eq(0)').attr('aria-hidden')).toBe('true');
+      expect(sandboxEl.find('[bs-collapse-target]:eq(1)').attr('aria-hidden')).toBe('false');
+    });
+  });
 });
