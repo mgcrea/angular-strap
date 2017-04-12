@@ -215,7 +215,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           bodyElement.addClass(options.prefixClass + '-open');
           // Add assistive attributes to the body to prevent the screen reader from reading it with the virtual keys
           bodyElement.attr('aria-hidden', 'true');
-          
+
           if (options.animation) {
             bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
           }
@@ -337,7 +337,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         $modal.$onKeyDown = function (evt) {
           if (options.keyboard) {
             if (evt.keyCode === 9) {
-              
+
               var nextFocusable = findNextFocusableElement(evt.shiftKey);
               if (nextFocusable === undefined) {
                 if (evt.preventDefault) evt.preventDefault();
