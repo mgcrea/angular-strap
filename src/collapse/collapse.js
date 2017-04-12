@@ -36,9 +36,25 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
       self.$registerToggle = function (element) {
         self.$toggles.push(element);
+        element.attr('aria-expanded', 'false');
       };
       self.$registerTarget = function (element) {
         self.$targets.push(element);
+
+        var i = 0;
+        if (self.$targets) {
+          for (i = 0; i < self.$targets.length; i++) {
+            self.$targets[i].attr('aria-hidden', 'true');
+          }
+          for (i = 0; i < self.$targets.$active.length; i++) {
+            if (self.$targets[self.$targets.$active[i]]) {
+              self.$targets[self.$targets.$active[i]].attr('aria-hidden', 'false');
+            }
+            if (self.$toggles[self.$targets.$active[i]]) {
+              self.$toggles[self.$targets.$active[i]].attr('aria-expanded', 'true');
+            }
+          }
+        }
       };
 
       self.$unregisterToggle = function (element) {
@@ -113,6 +129,8 @@ angular.module('mgcrea.ngStrap.collapse', [])
       function deactivateItem (value) {
         var index = self.$targets.$active.indexOf(value);
         if (index !== -1) {
+          self.$targets[self.$targets.$active[index]].attr('aria-hidden', 'true');
+          self.$toggles[self.$targets.$active[index]].attr('aria-expanded', 'false');
           self.$targets.$active.splice(index, 1);
         }
       }
@@ -120,11 +138,24 @@ angular.module('mgcrea.ngStrap.collapse', [])
       function activateItem (value) {
         if (!self.$options.allowMultiple) {
           // remove current selected item
+          if (self.$targets[self.$targets.$active[0]] !== undefined) {
+            self.$targets[self.$targets.$active[0]].attr('aria-hidden', 'true');
+          }
+          if (self.$toggles[self.$targets.$active[0]]) {
+            self.$toggles[self.$targets.$active[0]].attr('aria-expanded', 'false');
+          }
           self.$targets.$active.splice(0, 1);
         }
 
         if (self.$targets.$active.indexOf(value) === -1) {
           self.$targets.$active.push(value);
+
+          if (self.$targets[self.$targets.$active[self.$targets.$active.length - 1]] !== undefined) {
+            self.$targets[self.$targets.$active[self.$targets.$active.length - 1]].attr('aria-hidden', 'false');
+          }
+          if (self.$toggles[self.$targets.$active[self.$targets.$active.length - 1]] !== undefined) {
+            self.$toggles[self.$targets.$active[self.$targets.$active.length - 1]].attr('aria-expanded', 'true');
+          }
         }
       }
 
@@ -216,7 +247,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
         element.on('click', actionEventHandler);
         element.bind('keydown keypress', function (e) {
-          if (e.which === 13) {
+          if (e.which === 13 || e.which === 32) {
             actionEventHandler();
             e.preventDefault();
           } else if (e.which !== 16 && e.which !== 9) {
