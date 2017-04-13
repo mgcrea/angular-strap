@@ -250,7 +250,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
           $modal.$isShown = scope.$isShown = false;
           safeDigest(scope);
-
+          
+          //Trigger onHide
+          if (typeof (options.onHide) === 'function') options.onHide();
+          
           // Unbind events
           unbindBackdropEvents();
           unbindKeyboardEvents();
