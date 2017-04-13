@@ -30,6 +30,7 @@
         <td ng-attr-id="{{el.id || undefined}}"
             role="gridcell"
             class="text-center"
+            ng-class="{ 'disabled': el.disabled }"
             ng-repeat="(j, el) in row"
             ng-attr-headers="{{id || undefined}}_row_{{i}}"
             aria-selected="{{el.selected}}"
@@ -40,7 +41,7 @@
             data-value="{{el.value}}"
             ng-disabled="el.disabled"
             ng-focus="$focused(el.id)"
-            ng-click="$select(el.date)"
+            ng-click="$select(el.date, el.disabled)"
             ng-keydown="$onKeyDown($event, el)">
           <span class="btn btn-default" ng-class="{'btn-primary': el.selected, 'btn-info btn-today': el.isToday && !el.selected}">
             <span ng-class="{'text-muted': el.muted}" ng-bind="el.label"></span>
