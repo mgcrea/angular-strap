@@ -8,19 +8,19 @@
     <thead role="presentation">
       <tr class="text-center" role="row">
         <th scope="col" role="columnheader">
-          <button ng-attr-tabindex="{{focusOnOpen ? '0' : '-1'}}" type="button" class="btn btn-default pull-left" ng-click="$selectPane(-1)" ng-blur="$blurred($event)" ng-attr-aria-label="{{$previousLabel || undefined}}" ng-attr-title="{{$previousLabel || undefined}}">
-          <i class="{{$iconLeft}}"></i>
-        </button>
+          <button tabindex="0" ng-attr-tabindex="{{focusOnOpen ? '0' : '-1'}}" type="button" class="btn btn-default pull-left" ng-click="$selectPane(-1)" ng-blur="$blurred($event)" ng-attr-aria-label="{{$previousLabel || undefined}}" ng-attr-title="{{$previousLabel || undefined}}">
+            <i class="{{$iconLeft}}"></i>
+          </button>
         </th>
         <th colspan="{{ rows[0].length - 2 }}">
-          <button ng-attr-tabindex="{{focusOnOpen ? '0' : '-1'}}" type="button" class="btn btn-default btn-block text-strong" ng-click="$toggleMode()" ng-blur="$blurred($event)" ng-attr-title="{{$modeLabel || undefined }}">
-          <strong style="text-transform: capitalize;" ng-bind="title"></strong>
-        </button>
+          <button tabindex="0" ng-attr-tabindex="{{focusOnOpen ? '0' : '-1'}}" type="button" class="btn btn-default btn-block text-strong" ng-click="$toggleMode()" ng-blur="$blurred($event)" ng-attr-title="{{$modeLabel || undefined }}">
+            <strong style="text-transform: capitalize;" ng-bind="title"></strong>
+          </button>
         </th>
-        <th>
-          <button ng-attr-tabindex="{{focusOnOpen ? '0' : '-1'}}" type="button" class="btn btn-default pull-right" ng-click="$selectPane(+1)" ng-blur="$blurred($event)" ng-attr-aria-label="{{$nextLabel || undefined}}" ng-attr-title="{{$nextLabel || undefined}}">
-          <i class="{{$iconRight}}"></i>
-        </button>
+        <th scope="col" role="columnheader">
+          <button tabindex="0" ng-attr-tabindex="{{focusOnOpen ? '0' : '-1'}}" type="button" class="btn btn-default pull-right" ng-click="$selectPane(+1)" ng-blur="$blurred($event)" ng-attr-aria-label="{{$nextLabel || undefined}}" ng-attr-title="{{$nextLabel || undefined}}">
+            <i class="{{$iconRight}}"></i>
+          </button>
         </th>
       </tr>
       <tr ng-if="showLabels" ng-bind-html="labels"></tr>
@@ -40,7 +40,6 @@
             data-value="{{el.value}}"
             ng-disabled="el.disabled"
             ng-focus="$focused(el)"
-            ng-blur="$blurred($event, el)"
             ng-click="$select(el.date)"
             ng-keydown="$onKeyDown($event, el)">
           <span class="btn btn-default" ng-class="{'btn-primary': el.selected, 'btn-info btn-today': el.isToday && !el.selected}">
