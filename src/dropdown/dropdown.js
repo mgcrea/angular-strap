@@ -44,8 +44,8 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         // Protected methods
 
         $dropdown.$onKeyDown = function (evt) {
-          if (/(9)/.test(evt.keyCode) && !options.keyboard) {
-            $dropdown.hide();
+          if ((/(9)/.test(evt.keyCode) && !options.keyboard) || /27/.test(evt.keyCode)) {
+            $dropdown.hide(/27/.test(evt.keyCode));
             return;
           }
           if (!/(38|40)/.test(evt.keyCode)) return;
@@ -129,7 +129,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         };
 
         var hide = $dropdown.hide;
-        $dropdown.hide = function () {
+        $dropdown.hide = function (returnFocus) {
           if (!$dropdown.$isShown) return;
 
           element.attr('aria-expanded', 'true');
@@ -143,11 +143,13 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           bodyEl.off('click', onBodyClick);
           if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
           hide();
-          $timeout(function () {
-            if (element && element[0] && options.keyboard) {
-              element[0].focus();
-            }
-          }, 0, false);
+          if (returnFocus) {
+            $timeout(function () {
+              if (element && element[0]) {
+                element[0].focus();
+              }
+            }, 0, false);
+          }
         };
 
         var destroy = $dropdown.destroy;
