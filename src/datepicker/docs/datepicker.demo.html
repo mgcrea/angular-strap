@@ -88,18 +88,18 @@ $scope.toDate = {{toDate}}; // &lt;- {{ getType('toDate') }}
       <div class="form-group">
         <label class="control-label" for="start_date">Start Date</label>
         <div class="input-group">
-          <input id="start_date" title="Start Date" type="text" class="form-control" ng-model="startingDate"  bs-datepicker-display />
+          <input id="start_date" title="Start Date" type="text" class="form-control" ng-model="startingDate" data-max-date="{{toDate}}"  bs-datepicker-display />
           <span class="input-group-btn">
-            <button id="start_date_picker" class="btn btn-default" type="button" title="Start Date" role="button" bs-datepicker ng-model="startingDate" trigger="click" focus-on-open="true" label-next="Next" label-previous="Previous" label-month="Select to change the month." label-year="Select to change years." label-days="Select to change day."><i class="fa fa-calendar"></i></button>
+            <button id="start_date_picker" class="btn btn-default" type="button" title="Start Date" role="button" bs-datepicker data-max-date="{{toDate}}" ng-model="startingDate" trigger="click" focus-on-open="true" label-next="Next" label-previous="Previous" label-month="Select to change the month." label-year="Select to change years." label-days="Select to change day."><i class="fa fa-calendar"></i></button>
           </span>
         </div>
       </div>
       <div class="form-group">
         <label class="control-label" for="end_date">End Date</label>
         <div class="input-group">
-          <input id="end_date" type="text" class="form-control" ng-model="toDate" bs-datepicker-display>
+          <input id="end_date" type="text" class="form-control" ng-model="toDate" data-min-date="{{startingDate}}" bs-datepicker-display>
           <span class="input-group-btn">
-            <button class="btn btn-default" type="button" bs-datepicker ng-model="toDate" trigger="click" data-autoclose="1"><i class="fa fa-calendar"></i></button>
+            <button class="btn btn-default" type="button" bs-datepicker ng-model="toDate" data-min-date="{{startingDate}}" trigger="click" data-autoclose="1"><i class="fa fa-calendar"></i></button>
           </span>
         </div>
       </div>

@@ -754,7 +754,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
           } else if (options.dateType === 'iso') {
             return date.toISOString();
           }
-          return new Date(date);
+
+          return date === null ? null : new Date(date);
         });
 
         // modelValue -> $formatters -> viewValue
