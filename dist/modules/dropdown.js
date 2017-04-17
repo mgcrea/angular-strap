@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2017-04-17
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -29,7 +29,17 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
       $dropdown = $tooltip(element, options);
       var parentEl = element.parent();
+      if (element && element[0] && element[0].tagName.toUpperCase() === 'BUTTON') {
+        element.attr('aria-haspopup', 'true');
+        element.attr('data-toggle', 'dropdown');
+        element.attr('aria-expanded', 'false');
+        element.attr('role', 'button');
+      }
       $dropdown.$onKeyDown = function(evt) {
+        if (/(9)/.test(evt.keyCode) && !options.keyboard || /27/.test(evt.keyCode)) {
+          $dropdown.hide(/27/.test(evt.keyCode));
+          return;
+        }
         if (!/(38|40)/.test(evt.keyCode)) return;
         evt.preventDefault();
         evt.stopPropagation();
@@ -42,22 +52,72 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (angular.isUndefined(index)) index = 0;
         items.eq(index)[0].focus();
       };
+      $dropdown.$onFocusOut = function(evt) {
+        var inMenu = false;
+        var parent = angular.element(evt.relatedTarget);
+        while (parent !== undefined && parent.length && parent[0] !== $window.document.body) {
+          parent = parent.parent();
+          if (parent !== undefined && parent[0] === $dropdown.$element[0]) {
+            inMenu = true;
+            break;
+          } else {
+            inMenu = false;
+          }
+        }
+        if (!inMenu) {
+          $dropdown.hide();
+        } else {
+          evt.preventDefault();
+          evt.stopPropagation();
+        }
+      };
       var show = $dropdown.show;
       $dropdown.show = function() {
         show();
         $timeout(function() {
-          if (options.keyboard && $dropdown.$element) $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+          element.attr('aria-expanded', 'true');
+          if ($dropdown.$element) {
+            $dropdown.$element.attr('aria-hidden', 'false');
+            $dropdown.$element.attr('role', 'menu');
+            $dropdown.$element.attr('tabindex', '-1');
+          }
+          if (options.keyboard && $dropdown.$element) {
+            $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+            $dropdown.$element.on('focusout', $dropdown.$onFocusOut);
+          }
           bodyEl.on('click', onBodyClick);
+          if ($dropdown.$element) {
+            var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider)'));
+            items.attr('role', 'presentation');
+            angular.element($dropdown.$element[0].querySelectorAll('li.divider')).attr('role', 'seperator');
+            items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
+            items.attr('role', 'menuitem');
+            if (items.length && options.keyboard) {
+              items[0].focus();
+            }
+          }
         }, 0, false);
         if (parentEl.hasClass('dropdown')) parentEl.addClass('open');
       };
       var hide = $dropdown.hide;
-      $dropdown.hide = function() {
+      $dropdown.hide = function(returnFocus) {
         if (!$dropdown.$isShown) return;
-        if (options.keyboard && $dropdown.$element) $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+        element.attr('aria-expanded', 'true');
+        $dropdown.$element.attr('aria-hidden', 'true');
+        if (options.keyboard && $dropdown.$element) {
+          $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+          $dropdown.$element.off('focusout', $dropdown.$onFocusOut);
+        }
         bodyEl.off('click', onBodyClick);
         if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
         hide();
+        if (returnFocus) {
+          $timeout(function() {
+            if (element && element[0]) {
+              element[0].focus();
+            }
+          }, 0, false);
+        }
       };
       var destroy = $dropdown.destroy;
       $dropdown.destroy = function() {

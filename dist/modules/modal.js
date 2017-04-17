@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2017-04-17
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -51,6 +51,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         backdropBaseZindex = dialogBaseZindex - 10;
       }
       $modal.$id = options.id || options.element && options.element.attr('id') || '';
+      $modal.returnFocus = function() {};
       forEach([ 'title', 'content' ], function(key) {
         if (options[key]) scope[key] = $sce.trustAsHtml(options[key]);
       });
@@ -164,6 +165,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
           el.focus();
         });
         bodyElement.addClass(options.prefixClass + '-open');
+        bodyElement.attr('aria-hidden', 'true');
         if (options.animation) {
           bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
         }
@@ -175,6 +177,8 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         if (angular.isDefined(options.onShow) && angular.isFunction(options.onShow)) {
           options.onShow($modal);
         }
+        modalElement.attr('aria-hidden', 'false');
+        modalElement[0].focus();
       }
       $modal.hide = function() {
         if (!$modal.$isShown) return;
@@ -184,6 +188,8 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         if (angular.isDefined(options.onBeforeHide) && angular.isFunction(options.onBeforeHide)) {
           options.onBeforeHide($modal);
         }
+        modalElement.attr('aria-hidden', 'true');
+        if ($modal.returnFocus && typeof $modal.returnFocus === 'function') $modal.returnFocus();
         if (angular.version.minor <= 2) {
           $animate.leave(modalElement, leaveAnimateCallback);
         } else {
@@ -205,9 +211,30 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         }
         if (findElement('.modal').length <= 0) {
           bodyElement.removeClass(options.prefixClass + '-open');
+          bodyElement.attr('aria-hidden', 'false');
         }
         if (options.animation) {
           bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
+        }
+      }
+      function findFocusableElements() {
+        var focusableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+        if (document.activeElement) {
+          var focusable = Array.prototype.filter.call(modalElement[0].querySelectorAll(focusableElements), function(element) {
+            return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
+          });
+          return focusable;
+        }
+      }
+      function findNextFocusableElement(inReverse) {
+        if (document.activeElement) {
+          var focusable = findFocusableElements();
+          if (focusable === undefined) return;
+          if (inReverse) {
+            focusable = Array.prototype.reverse.call(focusable);
+          }
+          var index = focusable.indexOf(document.activeElement);
+          return focusable[index + 1];
         }
       }
       $modal.toggle = function() {
@@ -224,6 +251,23 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         if (evt.which === 27 && $modal.$isShown) {
           $modal.hide();
           evt.stopPropagation();
+        }
+      };
+      $modal.$onKeyDown = function(evt) {
+        if (options.keyboard) {
+          if (evt.keyCode === 9) {
+            var nextFocusable = findNextFocusableElement(evt.shiftKey);
+            if (nextFocusable === undefined) {
+              if (evt.preventDefault) evt.preventDefault();
+              if (evt.stopPropagation) evt.stopPropagation();
+              var focusable = findFocusableElements();
+              if (evt.shiftKey) {
+                focusable[focusable.length - 1].focus();
+              } else {
+                focusable[0].focus();
+              }
+            }
+          }
         }
       };
       function bindBackdropEvents() {
@@ -243,11 +287,13 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
       function bindKeyboardEvents() {
         if (options.keyboard) {
           modalElement.on('keyup', $modal.$onKeyUp);
+          modalElement.on('keydown', $modal.$onKeyDown);
         }
       }
       function unbindKeyboardEvents() {
         if (options.keyboard) {
           modalElement.off('keyup', $modal.$onKeyUp);
+          modalElement.off('keydown', $modal.$onKeyDown);
         }
       }
       function hideOnBackdropClick(evt) {
@@ -328,6 +374,11 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         }, true);
       }
       var modal = $modal(options);
+      if (options.keyboard) {
+        modal.returnFocus = function() {
+          element[0].focus();
+        };
+      }
       element.on(attr.trigger || 'click', modal.toggle);
       scope.$on('$destroy', function() {
         if (modal) modal.destroy();

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2017-04-17
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -16,6 +16,9 @@ angular.module('mgcrea.ngStrap.helpers.dateFormatter', []).service('$dateFormatt
   };
   this.weekdaysShort = function(lang) {
     return $locale.DATETIME_FORMATS.SHORTDAY;
+  };
+  this.weekdays = function(lang) {
+    return $locale.DATETIME_FORMATS.DAY;
   };
   function splitTimeFormat(format) {
     return /(h+)([:\.])?(m+)([:\.])?(s*)[ ]?(a?)/i.exec(format).slice(1);

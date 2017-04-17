@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2017-04-17
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -32,9 +32,24 @@ angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
     self.$viewChangeListeners = [];
     self.$registerToggle = function(element) {
       self.$toggles.push(element);
+      element.attr('aria-expanded', 'false');
     };
     self.$registerTarget = function(element) {
       self.$targets.push(element);
+      var i = 0;
+      if (self.$targets) {
+        for (i = 0; i < self.$targets.length; i++) {
+          self.$targets[i].attr('aria-hidden', 'true');
+        }
+        for (i = 0; i < self.$targets.$active.length; i++) {
+          if (self.$targets[self.$targets.$active[i]]) {
+            self.$targets[self.$targets.$active[i]].attr('aria-hidden', 'false');
+          }
+          if (self.$toggles[self.$targets.$active[i]]) {
+            self.$toggles[self.$targets.$active[i]].attr('aria-expanded', 'true');
+          }
+        }
+      }
     };
     self.$unregisterToggle = function(element) {
       var index = self.$toggles.indexOf(element);
@@ -88,15 +103,29 @@ angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
     function deactivateItem(value) {
       var index = self.$targets.$active.indexOf(value);
       if (index !== -1) {
+        self.$targets[self.$targets.$active[index]].attr('aria-hidden', 'true');
+        self.$toggles[self.$targets.$active[index]].attr('aria-expanded', 'false');
         self.$targets.$active.splice(index, 1);
       }
     }
     function activateItem(value) {
       if (!self.$options.allowMultiple) {
+        if (self.$targets[self.$targets.$active[0]] !== undefined) {
+          self.$targets[self.$targets.$active[0]].attr('aria-hidden', 'true');
+        }
+        if (self.$toggles[self.$targets.$active[0]]) {
+          self.$toggles[self.$targets.$active[0]].attr('aria-expanded', 'false');
+        }
         self.$targets.$active.splice(0, 1);
       }
       if (self.$targets.$active.indexOf(value) === -1) {
         self.$targets.$active.push(value);
+        if (self.$targets[self.$targets.$active[self.$targets.$active.length - 1]] !== undefined) {
+          self.$targets[self.$targets.$active[self.$targets.$active.length - 1]].attr('aria-hidden', 'false');
+        }
+        if (self.$toggles[self.$targets.$active[self.$targets.$active.length - 1]] !== undefined) {
+          self.$toggles[self.$targets.$active[self.$targets.$active.length - 1]].attr('aria-expanded', 'true');
+        }
       }
     }
   };
@@ -145,11 +174,20 @@ angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
       scope.$on('$destroy', function() {
         bsCollapseCtrl.$unregisterToggle(element);
       });
-      element.on('click', function() {
+      var actionEventHandler = function() {
         if (!attrs.disabled) {
           var index = attrs.bsCollapseToggle && attrs.bsCollapseToggle !== 'bs-collapse-toggle' ? attrs.bsCollapseToggle : bsCollapseCtrl.$toggles.indexOf(element);
           bsCollapseCtrl.$setActive(index * 1);
           scope.$apply();
+        }
+      };
+      element.on('click', actionEventHandler);
+      element.bind('keydown keypress', function(e) {
+        if (e.which === 13 || e.which === 32) {
+          actionEventHandler();
+          e.preventDefault();
+        } else if (e.which !== 16 && e.which !== 9) {
+          e.preventDefault();
         }
       });
     }
