@@ -1,6 +1,7 @@
 <div ng-attr-id="{{dropdownId || undefined}}" class="dropdown-menu datepicker" ng-class="'datepicker-mode-' + $mode" style="max-width: 320px;"
      aria-hidden="false"
-     aria-controls="date">
+     aria-controls="date"
+     ng-focus-out="$onFocusOut($event)">
   <table ng-attr-aria-activedescendant="{{selectedDayId || undefined}}"
          role="grid"
          style="table-layout: fixed; height: 100%; width: 100%;"
