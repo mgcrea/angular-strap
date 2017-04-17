@@ -4,6 +4,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
   'mgcrea.ngStrap.helpers.dateParser',
   'mgcrea.ngStrap.helpers.dateFormatter',
   'mgcrea.ngStrap.helpers.focusElement',
+  'mgcrea.ngStrap.helpers.ngFocusOut',
   'mgcrea.ngStrap.tooltip'])
   .provider('$datepicker', function () {
 
@@ -175,6 +176,32 @@ angular.module('mgcrea.ngStrap.datepicker', [
             $picker.onKeyDown(evt);
           }
         };
+        scope.$onFocusOut = function (evt) {
+          // find out if the related target's parents contain the datepicker's $element
+          var inTable = false;
+          var parent = angular.element(evt.relatedTarget);
+          while (parent !== undefined && parent.length && parent[0] !== $window.document.body) {
+            parent = parent.parent();
+            if (parent !== undefined && parent[0] === $datepicker.$element[0]) {
+              inTable = true;
+              break;
+            } else {
+              inTable = false;
+            }
+          }
+
+          // In Chrome there is an issue when moving from month to month, year to year, etc.
+          //
+
+          if (!inTable && !evt.relatedTarget) {
+            // hmm
+          } else if (!inTable) {
+            $datepicker.hide();
+          } else {
+            evt.stopPropagation();
+            evt.preventDefault();
+          }
+        };
 
         // Public methods
 
@@ -306,27 +333,32 @@ angular.module('mgcrea.ngStrap.datepicker', [
           }
         };
 
-        $datepicker.$onFocusOut = function (evt) {
-          // find out if the related target's parents contain the datepicker's $element
-          var inTable = false;
-          var parent = angular.element(evt.relatedTarget);
-          while (parent !== undefined && parent.length && parent[0] !== $window.document.body) {
-            parent = parent.parent();
-            if (parent !== undefined && parent[0] === $datepicker.$element[0]) {
-              inTable = true;
-              break;
-            } else {
-              inTable = false;
-            }
-          }
+        // $datepicker.$onFocusOut = function (evt) {
+        //   // find out if the related target's parents contain the datepicker's $element
+        //   var inTable = false;
+        //   var parent = angular.element(evt.relatedTarget);
+        //   while (parent !== undefined && parent.length && parent[0] !== $window.document.body) {
+        //     parent = parent.parent();
+        //     if (parent !== undefined && parent[0] === $datepicker.$element[0]) {
+        //       inTable = true;
+        //       break;
+        //     } else {
+        //       inTable = false;
+        //     }
+        //   }
 
-          if (!inTable) {
-            $datepicker.hide();
-          } else {
-            evt.stopPropagation();
-            evt.preventDefault();
-          }
-        };
+        //   // In Chrome there is an issue when moving from month to month, year to year, etc.
+        //   //
+
+        //   if (!inTable && !evt.relatedTarget) {
+        //     // hmm
+        //   } else if (!inTable) {
+        //     $datepicker.hide();
+        //   } else {
+        //     evt.stopPropagation();
+        //     evt.preventDefault();
+        //   }
+        // };
 
         // Private
 
@@ -411,7 +443,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
               if (options.focusOnOpen) {
                 // Focus the table element.
                 // $datepicker.$element.find('table')[0].focus();
-                $datepicker.$element.on('focusout', $datepicker.$onFocusOut);
+                // $datepicker.$element.on('focusout', $datepicker.$onFocusOut);
               } else {
                 element.on('keydown', $datepicker.$onKeyDown);
               }
@@ -446,7 +478,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
             $datepicker.$element.off('keydown', $datepicker.$onKeyDown);
           }
           if (options.focusOnOpen) {
-            $datepicker.$element.off('focusout', $datepicker.$onFocusOut);
+            // $datepicker.$element.off('focusout', $datepicker.$onFocusOut);
             element[0].focus();
           }
           // Call the tooltip's hide function.
