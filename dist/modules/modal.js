@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-04-17
+ * @version v2.3.12 - 2017-04-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -165,7 +165,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
           el.focus();
         });
         bodyElement.addClass(options.prefixClass + '-open');
-        bodyElement.attr('aria-hidden', 'true');
+        if (options.backdrop) {
+          bodyElement.attr('aria-hidden', 'true');
+        }
         if (options.animation) {
           bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
         }
@@ -211,7 +213,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         }
         if (findElement('.modal').length <= 0) {
           bodyElement.removeClass(options.prefixClass + '-open');
-          bodyElement.attr('aria-hidden', 'false');
+          if (options.backdrop) {
+            bodyElement.attr('aria-hidden', 'false');
+          }
         }
         if (options.animation) {
           bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
