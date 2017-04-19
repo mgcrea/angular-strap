@@ -21,7 +21,7 @@ angular.module('mgcrea.ngStrap.tab', [])
 
       // Attributes options
       self.$options = angular.copy(defaults);
-      angular.forEach(['animation', 'navClass', 'activeClass'], function (key) {
+      angular.forEach(['animation', 'navClass', 'activeClass', 'id'], function (key) {
         if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
@@ -40,7 +40,13 @@ angular.module('mgcrea.ngStrap.tab', [])
         if (angular.isUndefined(self.$panes.$active)) {
           $scope.$setActive(pane.name || 0);
         }
+
         self.$panes.push(pane);
+
+        self.$panes.forEach(function (tabPane, index) {
+          // Set an id value for the pane so that it can be used in the template
+          tabPane.$describedBy = self.$options.id === undefined ? undefined : self.$options.id + '_$tab_' + index;
+        });
       };
 
       self.$remove = function (pane) {
@@ -196,6 +202,9 @@ angular.module('mgcrea.ngStrap.tab', [])
         // Add base class
         element.addClass('tab-pane');
 
+        // Set up the assistive attributes
+        element.attr('role', 'tabpanel');
+
         // Observe title attribute for change
         attrs.$observe('title', function (newValue, oldValue) {
           scope.title = $sce.trustAsHtml(newValue);
@@ -203,6 +212,8 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         // Save tab name into scope
         scope.name = attrs.name;
+        // Save tab id into scope
+        scope.id = attrs.id;
 
         // Add animation class
         if (bsTabsCtrl.$options.animation) {
@@ -215,6 +226,12 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         // Push pane to parent bsTabs controller
         bsTabsCtrl.$push(scope);
+
+        // Once the push has occured when can then update the element with some properties.
+        // Update the aria-describedby attribute
+        if (scope.$describedBy !== undefined) {
+          element.attr('aria-describedby', scope.$describedBy);
+        }
 
         // remove pane from tab controller when pane is destroyed
         scope.$on('$destroy', function () {
