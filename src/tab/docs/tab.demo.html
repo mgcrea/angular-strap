@@ -27,7 +27,7 @@ $scope.tabs.activeTab = "{{ tabs.activeTab }}";
       </div>
     </div>
   </div>
-  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+  <div class="bs-example" append-source>
     <!-- control a tab with bsActivePane binding -->
     <div class="btn-group" ng-model="tabs.activeTab" bs-radio-group>
       <label class="btn btn-default" ng-repeat="tab in tabs">
@@ -35,6 +35,25 @@ $scope.tabs.activeTab = "{{ tabs.activeTab }}";
       </label>
     </div>
     <div class="btn btn-default" ng-click="pushTab()">Add new tab</div>
+  </div>
+  <div class="bs-example" style="padding-bottom: 24px;" append-source>
+    <div id="tabs_example" bs-tabs>
+      <div bs-pane id="tabs_home" title="Home">
+        Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica.
+      </div>
+
+      <div bs-pane id="tabs_profile" title="Profile">
+        Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.
+      </div>
+
+      <div bs-pane id="tabs_about" title="About" disabled="true">
+        Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.
+      </div>
+
+      <div bs-pane id="tabs_contact" title="Contact">
+        Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid.
+      </div>
+    </div>
   </div>
 
   <h2 id="tabs-usage">Usage</h2>

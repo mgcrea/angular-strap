@@ -16,18 +16,57 @@ angular.module('mgcrea.ngStrap.tab', [])
       if (!_tabsHash[key]) _tabsHash[key] = control;
     };
 
-    var controller = this.controller = function ($scope, $element, $attrs) {
+    var controller = this.controller = function ($scope, $element, $attrs, $timeout) {
       var self = this;
 
       // Attributes options
       self.$options = angular.copy(defaults);
-      angular.forEach(['animation', 'navClass', 'activeClass'], function (key) {
+      angular.forEach(['animation', 'navClass', 'activeClass', 'id'], function (key) {
         if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
       // Publish options on scope
       $scope.$navClass = self.$options.navClass;
       $scope.$activeClass = self.$options.activeClass;
+
+      $scope.$onClick = function $onClick (evt, pane, index) {
+        if (!pane.disabled) {
+          self.$setActive(pane.name || index);
+          focusCurrentTab();
+        }
+
+        evt.preventDefault();
+        evt.stopPropagation();
+      };
+
+      function navigatePane (index, toLeft) {
+        var newIndex = 0;
+
+        if (toLeft) {
+          // Moving to the left
+          newIndex = index - 1 < 0 ? (self.$panes.length - 1) : (index - 1);
+        } else {
+          // Moving to the right
+          newIndex = (index + 1) >= self.$panes.length ? 0 : (index + 1);
+        }
+
+        if (self.$panes[newIndex].disabled) {
+          navigatePane(newIndex, toLeft);
+        } else {
+          self.$setActive(self.$panes[newIndex].name || newIndex);
+          focusCurrentTab();
+        }
+      }
+
+      function focusCurrentTab () {
+        $timeout(function () {
+          var activeAs = angular.element($element[0].querySelectorAll('li.' + self.$options.activeClass));
+
+          if (activeAs.length > 0 && activeAs[0]) {
+            activeAs[0].focus();
+          }
+        }, 100);
+      }
 
       self.$panes = $scope.$panes = [];
 
@@ -40,7 +79,14 @@ angular.module('mgcrea.ngStrap.tab', [])
         if (angular.isUndefined(self.$panes.$active)) {
           $scope.$setActive(pane.name || 0);
         }
+
         self.$panes.push(pane);
+
+        self.$panes.forEach(function (tabPane, index) {
+          // Set an id value for the pane so that it can be used in the template
+          tabPane.$describedBy = self.$options.id === undefined ? undefined : self.$options.id + '_$tab_' + index;
+          tabPane.$labeledBy = self.$options.id === undefined ? undefined : self.$options.id + '_$tab_' + index + '_a';
+        });
       };
 
       self.$remove = function (pane) {
@@ -87,11 +133,15 @@ angular.module('mgcrea.ngStrap.tab', [])
 
       self.$onKeyPress = $scope.$onKeyPress = function (e, name, index) {
         if (e.keyCode === 32 || e.charCode === 32 || e.keyCode === 13 || e.charCode === 13) {
+          // If space or enter was pressed
           self.$setActive(name);
-        } else if ((e.keyCode === 37 || e.charCode === 37) && index !== 0) {
-          self.$setActive(self.$panes[index - 1].name || index - 1);
-        } else if ((e.keyCode === 39 || e.charCode === 39) && index !== self.$panes.length - 1) {
-          self.$setActive(self.$panes[index + 1].name || index + 1);
+
+          e.preventDefault();
+          e.stopPropagation();
+
+        } else if (e.keyCode === 37 || e.charCode === 37 || e.keyCode === 39 || e.charCode === 39) {
+          // If the left of right arrow key was pressed.
+          navigatePane(index, (e.keyCode === 37 || e.charCode === 37));
         }
       };
     };
@@ -115,7 +165,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       require: ['?ngModel', 'bsTabs'],
       transclude: true,
       scope: true,
-      controller: ['$scope', '$element', '$attrs', $tab.controller],
+      controller: ['$scope', '$element', '$attrs', '$timeout', $tab.controller],
       templateUrl: function (element, attr) {
         return attr.template || defaults.template;
       },
@@ -145,7 +195,6 @@ angular.module('mgcrea.ngStrap.tab', [])
             bsTabsCtrl.$setActive(modelValue);
             return modelValue;
           });
-
         }
 
         bsTabsCtrl.$activePaneChangeListeners.push(function () {
@@ -196,6 +245,9 @@ angular.module('mgcrea.ngStrap.tab', [])
         // Add base class
         element.addClass('tab-pane');
 
+        // Set up the assistive attributes
+        element.attr('role', 'tabpanel');
+
         // Observe title attribute for change
         attrs.$observe('title', function (newValue, oldValue) {
           scope.title = $sce.trustAsHtml(newValue);
@@ -203,6 +255,10 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         // Save tab name into scope
         scope.name = attrs.name;
+        // Save tab id into scope
+        scope.id = attrs.id;
+
+        scope.name = scope.name || scope.id;
 
         // Add animation class
         if (bsTabsCtrl.$options.animation) {
@@ -216,6 +272,12 @@ angular.module('mgcrea.ngStrap.tab', [])
         // Push pane to parent bsTabs controller
         bsTabsCtrl.$push(scope);
 
+        // Once the push has occured when can then update the element with some properties.
+        // Update the aria-describedby attribute
+        if (scope.$describedBy !== undefined) {
+          element.attr('aria-describedby', scope.$describedBy);
+        }
+
         // remove pane from tab controller when pane is destroyed
         scope.$on('$destroy', function () {
           bsTabsCtrl.$remove(scope);
@@ -223,6 +285,7 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         function render () {
           var index = bsTabsCtrl.$panes.indexOf(scope);
+
           $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
         }
 
