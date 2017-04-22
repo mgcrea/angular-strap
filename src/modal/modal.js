@@ -213,11 +213,6 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           });
 
           bodyElement.addClass(options.prefixClass + '-open');
-          // Add assistive attributes to the body to prevent the screen reader from reading it with the virtual keys
-          // Only do this if the backdrop option is set.
-          if (options.backdrop) {
-            bodyElement.attr('aria-hidden', 'true');
-          }
 
           if (options.animation) {
             bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
@@ -280,9 +275,6 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
           if (findElement('.modal').length <= 0) {
             bodyElement.removeClass(options.prefixClass + '-open');
-            if (options.backdrop) {
-              bodyElement.attr('aria-hidden', 'false');
-            }
           }
           if (options.animation) {
             bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
