@@ -366,17 +366,17 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         }, true);
 
         // Watch model for changes
-        scope.$watch(attr.ngModel, function (newValue, oldValue) {
-          // console.warn('scope.$watch(%s)', attr.ngModel, newValue, oldValue);
-          select.$updateActiveIndex();
+        controller.$viewChangeListeners.push(function () {
+          // console.warn('controller.$viewChangeListeners', 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
           controller.$render();
-        }, true);
+        });
 
         // Model rendering in view
         controller.$render = function () {
           // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
           var selected;
           var index;
+          select.$updateActiveIndex();
           if (options.multiple && angular.isArray(controller.$modelValue)) {
             selected = controller.$modelValue.map(function (value) {
               index = select.$getIndex(value);
