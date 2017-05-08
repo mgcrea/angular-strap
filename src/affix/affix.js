@@ -12,7 +12,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
     this.$get = function ($window, debounce, dimensions) {
 
-      var document = angular.element($window.document);
+      var documentEl = angular.element($window.document);
       var windowEl = angular.element($window);
 
       function AffixFactory (element, config) {
