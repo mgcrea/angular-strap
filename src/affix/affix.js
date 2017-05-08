@@ -12,7 +12,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
 
     this.$get = function ($window, debounce, dimensions) {
 
-      var bodyEl = angular.element($window.document.body);
+      var document = angular.element($window.document);
       var windowEl = angular.element($window);
 
       function AffixFactory (element, config) {
@@ -116,7 +116,7 @@ angular.module('mgcrea.ngStrap.affix', ['mgcrea.ngStrap.helpers.dimensions', 'mg
             }
             if (options.inlineStyles) {
               element.css('position', (options.offsetParent) ? '' : 'relative');
-              element.css('top', (options.offsetParent) ? '' : ((bodyEl[0].offsetHeight - offsetBottom - elementHeight - initialOffsetTop) + 'px'));
+              element.css('top', (options.offsetParent) ? '' : ((documentEl.height() - offsetBottom - elementHeight - initialOffsetTop) + 'px'));
             }
           } else { // affix === 'middle'
             unpin = null;
