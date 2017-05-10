@@ -21,7 +21,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       html: false,
       show: true,
       size: null,
-      zIndex: null
+      zIndex: null,
+      containerElement: null
     };
 
     this.$get = function ($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
@@ -29,6 +30,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       var forEach = angular.forEach;
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
+
+      var defaultContainerElement = "#layoutContainer";
+
+      var layoutHideElement = angular.element(defaultContainerElement);
 
       var backdropCount = 0;
       var dialogBaseZindex = 1050;
@@ -39,15 +44,19 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         sm: 'modal-sm'
       };
 
-      function ModalFactory (config) {
+      function ModalFactory(config) {
 
         var $modal = {};
 
         // Common vars
         var options = $modal.$options = angular.extend({}, defaults, config);
+
         var promise = $modal.$promise = $bsCompiler.compile(options);
         var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
 
+        if (options.containerElement) {
+          layoutHideElement = angular.element(options.containerElement);
+        }
         if (!options.element && !options.container) {
           options.container = 'body';
         }
@@ -95,7 +104,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         var modalElement;
         var modalScope;
         var backdropElement = angular.element('<div class="' + options.prefixClass + '-backdrop"/>');
-        backdropElement.css({position: 'fixed', top: '0px', left: '0px', bottom: '0px', right: '0px'});
+        backdropElement.css({ position: 'fixed', top: '0px', left: '0px', bottom: '0px', right: '0px' });
         promise.then(function (data) {
           compileData = data;
           $modal.init();
@@ -152,12 +161,12 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           // when destroying the modal element
           modalScope = $modal.$scope.$new();
           // Fetch a cloned element linked from template (noop callback is required)
-          modalElement = $modal.$element = compileData.link(modalScope, function (clonedElement, scope) {});
+          modalElement = $modal.$element = compileData.link(modalScope, function (clonedElement, scope) { });
 
           if (options.backdrop) {
             // set z-index
-            modalElement.css({'z-index': dialogBaseZindex + (backdropCount * 20)});
-            backdropElement.css({'z-index': backdropBaseZindex + (backdropCount * 20)});
+            modalElement.css({ 'z-index': dialogBaseZindex + (backdropCount * 20) });
+            backdropElement.css({ 'z-index': backdropBaseZindex + (backdropCount * 20) });
 
             // increment number of backdrops
             backdropCount++;
@@ -171,7 +180,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
 
           // Set the initial positioning.
-          modalElement.css({display: 'block'}).addClass(options.placement);
+          modalElement.css({ display: 'block' }).addClass(options.placement);
 
           // Options: customClass
           if (options.customClass) {
@@ -214,6 +223,8 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
           bodyElement.addClass(options.prefixClass + '-open');
 
+          layoutHideElement.attr('aria-hidden', 'true');
+
           if (options.animation) {
             bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
           }
@@ -223,14 +234,23 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           bindKeyboardEvents();
         };
 
-        function enterAnimateCallback () {
+        function enterAnimateCallback() {
           scope.$emit(options.prefixEvent + '.show', $modal);
           if (angular.isDefined(options.onShow) && angular.isFunction(options.onShow)) {
             options.onShow($modal);
           }
 
           modalElement.attr('aria-hidden', 'false');
-          modalElement[0].focus();
+
+		  var focusableElement = angular.element(findElement('.modal'));
+		  
+		  if (focusableElement.length > 0)
+		  {
+			focusableElement.attr('tabindex', '0');
+            setTimeout(function () {
+              focusableElement.focus();
+            }, 500);
+		  }
         }
 
         $modal.hide = function () {
@@ -268,20 +288,21 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           unbindKeyboardEvents();
         };
 
-        function leaveAnimateCallback () {
+        function leaveAnimateCallback() {
           scope.$emit(options.prefixEvent + '.hide', $modal);
           if (angular.isDefined(options.onHide) && angular.isFunction(options.onHide)) {
             options.onHide($modal);
           }
           if (findElement('.modal').length <= 0) {
             bodyElement.removeClass(options.prefixClass + '-open');
+            layoutHideElement.attr('aria-hidden', 'false');
           }
           if (options.animation) {
             bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
           }
         }
 
-        function findFocusableElements () {
+        function findFocusableElements() {
           // Add all elements we want to include in our selection
           var focusableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
           if (document.activeElement) {
@@ -295,7 +316,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
         }
 
-        function findNextFocusableElement (inReverse) {
+        function findNextFocusableElement(inReverse) {
           if (document.activeElement) {
             var focusable = findFocusableElements();
             if (focusable === undefined) return;
@@ -351,7 +372,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
         };
 
-        function bindBackdropEvents () {
+        function bindBackdropEvents() {
           if (options.backdrop) {
             modalElement.on('click', hideOnBackdropClick);
             backdropElement.on('click', hideOnBackdropClick);
@@ -359,7 +380,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
         }
 
-        function unbindBackdropEvents () {
+        function unbindBackdropEvents() {
           if (options.backdrop) {
             modalElement.off('click', hideOnBackdropClick);
             backdropElement.off('click', hideOnBackdropClick);
@@ -367,14 +388,14 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
         }
 
-        function bindKeyboardEvents () {
+        function bindKeyboardEvents() {
           if (options.keyboard) {
             modalElement.on('keyup', $modal.$onKeyUp);
             modalElement.on('keydown', $modal.$onKeyDown);
           }
         }
 
-        function unbindKeyboardEvents () {
+        function unbindKeyboardEvents() {
           if (options.keyboard) {
             modalElement.off('keyup', $modal.$onKeyUp);
             modalElement.off('keydown', $modal.$onKeyDown);
@@ -383,7 +404,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         // Private helpers
 
-        function hideOnBackdropClick (evt) {
+        function hideOnBackdropClick(evt) {
           if (evt.target !== evt.currentTarget) return;
           if (options.backdrop === 'static') {
             $modal.focus();
@@ -392,11 +413,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
         }
 
-        function preventEventDefault (evt) {
+        function preventEventDefault(evt) {
           evt.preventDefault();
         }
 
-        function destroyModalElement () {
+        function destroyModalElement() {
           if ($modal.$isShown && modalElement !== null) {
             // un-bind events
             unbindBackdropEvents();
@@ -420,13 +441,13 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
       // Helper functions
 
-      function safeDigest (scope) {
+      function safeDigest(scope) {
         /* eslint-disable no-unused-expressions */
         scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
         /* eslint-enable no-unused-expressions */
       }
 
-      function findElement (query, element) {
+      function findElement(query, element) {
         return angular.element((element || document).querySelectorAll(query));
       }
 
@@ -441,10 +462,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
     return {
       restrict: 'EAC',
       scope: true,
-      link: function postLink (scope, element, attr, transclusion) {
+      link: function postLink(scope, element, attr, transclusion) {
 
         // Directive options
-        var options = {scope: scope, element: element, show: false};
+        var options = { scope: scope, element: element, show: false };
         angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass', 'size', 'zIndex'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
