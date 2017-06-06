@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-04-19
+ * @version v2.3.12 - 2017-06-06
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -25,12 +25,15 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
     html: false,
     show: true,
     size: null,
-    zIndex: null
+    zIndex: null,
+    containerElement: null
   };
   this.$get = [ '$window', '$rootScope', '$bsCompiler', '$animate', '$timeout', '$sce', 'dimensions', function($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
     var forEach = angular.forEach;
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
     var bodyElement = angular.element($window.document.body);
+    var defaultContainerElement = '#layoutContainer';
+    var layoutHideElement = angular.element(defaultContainerElement);
     var backdropCount = 0;
     var dialogBaseZindex = 1050;
     var backdropBaseZindex = 1040;
@@ -43,6 +46,9 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
       var options = $modal.$options = angular.extend({}, defaults, config);
       var promise = $modal.$promise = $bsCompiler.compile(options);
       var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+      if (options.containerElement) {
+        layoutHideElement = angular.element(options.containerElement);
+      }
       if (!options.element && !options.container) {
         options.container = 'body';
       }
@@ -165,9 +171,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
           el.focus();
         });
         bodyElement.addClass(options.prefixClass + '-open');
-        if (options.backdrop) {
-          bodyElement.attr('aria-hidden', 'true');
-        }
+        layoutHideElement.attr('aria-hidden', 'true');
         if (options.animation) {
           bodyElement.addClass(options.prefixClass + '-with-' + options.animation);
         }
@@ -180,7 +184,13 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
           options.onShow($modal);
         }
         modalElement.attr('aria-hidden', 'false');
-        modalElement[0].focus();
+        var focusableElement = angular.element(findElement('.modal'));
+        if (focusableElement.length > 0) {
+          focusableElement.attr('tabindex', '0');
+          setTimeout(function() {
+            focusableElement.focus();
+          }, 500);
+        }
       }
       $modal.hide = function() {
         if (!$modal.$isShown) return;
@@ -213,9 +223,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         }
         if (findElement('.modal').length <= 0) {
           bodyElement.removeClass(options.prefixClass + '-open');
-          if (options.backdrop) {
-            bodyElement.attr('aria-hidden', 'false');
-          }
+          layoutHideElement.attr('aria-hidden', 'false');
         }
         if (options.animation) {
           bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
