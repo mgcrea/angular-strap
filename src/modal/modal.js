@@ -304,7 +304,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         function findFocusableElements() {
           // Add all elements we want to include in our selection
-          var focusableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+          var focusableElements = 'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
           if (document.activeElement) {
             var focusable = Array.prototype.filter.call(modalElement[0].querySelectorAll(focusableElements),
               function (element) {
