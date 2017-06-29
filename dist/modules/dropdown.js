@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-06-06
+ * @version v2.3.12 - 2017-06-29
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -110,14 +110,16 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         }
         bodyEl.off('click', onBodyClick);
         if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
-        hide();
-        if (returnFocus) {
-          $timeout(function() {
-            if (element && element[0]) {
-              element[0].focus();
-            }
-          }, 0, false);
-        }
+        $timeout(function() {
+          hide();
+          if (returnFocus) {
+            $timeout(function() {
+              if (element && element[0]) {
+                element[0].focus();
+              }
+            }, 0, false);
+          }
+        }, 200);
       };
       var destroy = $dropdown.destroy;
       $dropdown.destroy = function() {
