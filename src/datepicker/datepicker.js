@@ -682,7 +682,12 @@ angular.module('mgcrea.ngStrap.datepicker', [
           //   var today = new Date();
           //   date = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
           // }
-          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+          // do not adjust date if timezone is UTC
+          if (options.timezone === 'UTC') {
+            controller.$dateValue = date;
+          } else {
+            controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+          }
           return getDateFormattedString();
         });
 
