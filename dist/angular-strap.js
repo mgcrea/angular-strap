@@ -421,14 +421,16 @@
           }
           safeDigest(scope);
           $$rAF(function() {
-            if (tipElement) tipElement.css({
-              visibility: 'visible'
-            });
-            if (options.keyboard) {
-              if (options.trigger !== 'focus') {
-                $tooltip.focus();
+            if (tipElement) {
+              tipElement.css({
+                visibility: 'visible'
+              });
+              if (options.keyboard) {
+                if (options.trigger !== 'focus') {
+                  $tooltip.focus();
+                }
+                bindKeyboardEvents();
               }
-              bindKeyboardEvents();
             }
           });
           if (options.autoClose) {
