@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-08-28
+ * @version v2.3.12 - 2017-09-21
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -8,691 +8,6 @@
 (function(window, document, undefined) {
   'use strict';
   bsCompilerService.$inject = [ '$q', '$http', '$injector', '$compile', '$controller', '$templateCache' ];
-  if (angular.version.minor < 3 && angular.version.dot < 14) {
-    angular.module('ng').factory('$$rAF', [ '$window', '$timeout', function($window, $timeout) {
-      var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame;
-      var cancelAnimationFrame = $window.cancelAnimationFrame || $window.webkitCancelAnimationFrame || $window.mozCancelAnimationFrame || $window.webkitCancelRequestAnimationFrame;
-      var rafSupported = !!requestAnimationFrame;
-      var raf = rafSupported ? function(fn) {
-        var id = requestAnimationFrame(fn);
-        return function() {
-          cancelAnimationFrame(id);
-        };
-      } : function(fn) {
-        var timer = $timeout(fn, 16.66, false);
-        return function() {
-          $timeout.cancel(timer);
-        };
-      };
-      raf.supported = rafSupported;
-      return raf;
-    } ]);
-  }
-  angular.module('mgcrea.ngStrap.helpers.parseOptions', []).provider('$parseOptions', function() {
-    var defaults = this.defaults = {
-      regexp: /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/
-    };
-    this.$get = [ '$parse', '$q', function($parse, $q) {
-      function ParseOptionsFactory(attr, config) {
-        var $parseOptions = {};
-        var options = angular.extend({}, defaults, config);
-        $parseOptions.$values = [];
-        var match;
-        var displayFn;
-        var valueName;
-        var keyName;
-        var groupByFn;
-        var valueFn;
-        var valuesFn;
-        $parseOptions.init = function() {
-          $parseOptions.$match = match = attr.match(options.regexp);
-          displayFn = $parse(match[2] || match[1]);
-          valueName = match[4] || match[6];
-          keyName = match[5];
-          groupByFn = $parse(match[3] || '');
-          valueFn = $parse(match[2] ? match[1] : valueName);
-          valuesFn = $parse(match[7]);
-        };
-        $parseOptions.valuesFn = function(scope, controller) {
-          return $q.when(valuesFn(scope, controller)).then(function(values) {
-            if (!angular.isArray(values)) {
-              values = [];
-            }
-            $parseOptions.$values = values.length ? parseValues(values, scope) : [];
-            return $parseOptions.$values;
-          });
-        };
-        $parseOptions.displayValue = function(modelValue) {
-          var scope = {};
-          scope[valueName] = modelValue;
-          return displayFn(scope);
-        };
-        function parseValues(values, scope) {
-          return values.map(function(match, index) {
-            var locals = {};
-            var label;
-            var value;
-            locals[valueName] = match;
-            label = displayFn(scope, locals);
-            value = valueFn(scope, locals);
-            return {
-              label: label,
-              value: value,
-              index: index
-            };
-          });
-        }
-        $parseOptions.init();
-        return $parseOptions;
-      }
-      return ParseOptionsFactory;
-    } ];
-  });
-  angular.module('mgcrea.ngStrap.helpers.ngFocusOut', []).directive('ngFocusOut', [ '$parse', '$rootScope', function($parse, $rootScope) {
-    return {
-      restrict: 'A',
-      compile: function($element, attr) {
-        var fn = $parse(attr.ngFocusOut);
-        return function link(scope, element) {
-          function ngEventHandler(event) {
-            var callback = function() {
-              fn(scope, {
-                $event: event
-              });
-            };
-            if ($rootScope.$$phase) {
-              scope.$evalAsync(callback);
-            } else {
-              scope.$apply(callback);
-            }
-          }
-          element.on('focusout', ngEventHandler);
-          scope.$on('$destroy', function() {
-            element.off('focusout', ngEventHandler);
-          });
-        };
-      }
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.helpers.focusElement', []).directive('focusElement', [ '$timeout', '$parse', function($timeout, $parse) {
-    return {
-      link: function(scope, element, attrs) {
-        scope.$watch(attrs.focusElement, function(value) {
-          if (value === true) {
-            $timeout(function() {
-              element[0].focus();
-            });
-          }
-        });
-      }
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', function() {
-    var fn = {};
-    var nodeName = fn.nodeName = function(element, name) {
-      return element.nodeName && element.nodeName.toLowerCase() === name.toLowerCase();
-    };
-    fn.css = function(element, prop, extra) {
-      var value;
-      if (element.currentStyle) {
-        value = element.currentStyle[prop];
-      } else if (window.getComputedStyle) {
-        value = window.getComputedStyle(element)[prop];
-      } else {
-        value = element.style[prop];
-      }
-      return extra === true ? parseFloat(value) || 0 : value;
-    };
-    fn.offset = function(element) {
-      var boxRect = element.getBoundingClientRect();
-      var docElement = element.ownerDocument;
-      return {
-        width: boxRect.width || element.offsetWidth,
-        height: boxRect.height || element.offsetHeight,
-        top: boxRect.top + (window.pageYOffset || docElement.documentElement.scrollTop) - (docElement.documentElement.clientTop || 0),
-        left: boxRect.left + (window.pageXOffset || docElement.documentElement.scrollLeft) - (docElement.documentElement.clientLeft || 0)
-      };
-    };
-    fn.setOffset = function(element, options, i) {
-      var curPosition;
-      var curLeft;
-      var curCSSTop;
-      var curTop;
-      var curOffset;
-      var curCSSLeft;
-      var calculatePosition;
-      var position = fn.css(element, 'position');
-      var curElem = angular.element(element);
-      var props = {};
-      if (position === 'static') {
-        element.style.position = 'relative';
-      }
-      curOffset = fn.offset(element);
-      curCSSTop = fn.css(element, 'top');
-      curCSSLeft = fn.css(element, 'left');
-      calculatePosition = (position === 'absolute' || position === 'fixed') && (curCSSTop + curCSSLeft).indexOf('auto') > -1;
-      if (calculatePosition) {
-        curPosition = fn.position(element);
-        curTop = curPosition.top;
-        curLeft = curPosition.left;
-      } else {
-        curTop = parseFloat(curCSSTop) || 0;
-        curLeft = parseFloat(curCSSLeft) || 0;
-      }
-      if (angular.isFunction(options)) {
-        options = options.call(element, i, curOffset);
-      }
-      if (options.top !== null) {
-        props.top = options.top - curOffset.top + curTop;
-      }
-      if (options.left !== null) {
-        props.left = options.left - curOffset.left + curLeft;
-      }
-      if ('using' in options) {
-        options.using.call(curElem, props);
-      } else {
-        curElem.css({
-          top: props.top + 'px',
-          left: props.left + 'px'
-        });
-      }
-    };
-    fn.position = function(element) {
-      var offsetParentRect = {
-        top: 0,
-        left: 0
-      };
-      var offsetParentEl;
-      var offset;
-      if (fn.css(element, 'position') === 'fixed') {
-        offset = element.getBoundingClientRect();
-      } else {
-        offsetParentEl = offsetParentElement(element);
-        offset = fn.offset(element);
-        if (!nodeName(offsetParentEl, 'html')) {
-          offsetParentRect = fn.offset(offsetParentEl);
-        }
-        offsetParentRect.top += fn.css(offsetParentEl, 'borderTopWidth', true);
-        offsetParentRect.left += fn.css(offsetParentEl, 'borderLeftWidth', true);
-      }
-      return {
-        width: element.offsetWidth,
-        height: element.offsetHeight,
-        top: offset.top - offsetParentRect.top - fn.css(element, 'marginTop', true),
-        left: offset.left - offsetParentRect.left - fn.css(element, 'marginLeft', true)
-      };
-    };
-    function offsetParentElement(element) {
-      var docElement = element.ownerDocument;
-      var offsetParent = element.offsetParent || docElement;
-      if (nodeName(offsetParent, '#document')) return docElement.documentElement;
-      while (offsetParent && !nodeName(offsetParent, 'html') && fn.css(offsetParent, 'position') === 'static') {
-        offsetParent = offsetParent.offsetParent;
-      }
-      return offsetParent || docElement.documentElement;
-    }
-    fn.height = function(element, outer) {
-      var value = element.offsetHeight;
-      if (outer) {
-        value += fn.css(element, 'marginTop', true) + fn.css(element, 'marginBottom', true);
-      } else {
-        value -= fn.css(element, 'paddingTop', true) + fn.css(element, 'paddingBottom', true) + fn.css(element, 'borderTopWidth', true) + fn.css(element, 'borderBottomWidth', true);
-      }
-      return value;
-    };
-    fn.width = function(element, outer) {
-      var value = element.offsetWidth;
-      if (outer) {
-        value += fn.css(element, 'marginLeft', true) + fn.css(element, 'marginRight', true);
-      } else {
-        value -= fn.css(element, 'paddingLeft', true) + fn.css(element, 'paddingRight', true) + fn.css(element, 'borderLeftWidth', true) + fn.css(element, 'borderRightWidth', true);
-      }
-      return value;
-    };
-    return fn;
-  });
-  angular.module('mgcrea.ngStrap.helpers.debounce', []).factory('debounce', [ '$timeout', function($timeout) {
-    return function(func, wait, immediate) {
-      var timeout = null;
-      return function() {
-        var context = this;
-        var args = arguments;
-        var callNow = immediate && !timeout;
-        if (timeout) {
-          $timeout.cancel(timeout);
-        }
-        timeout = $timeout(function later() {
-          timeout = null;
-          if (!immediate) {
-            func.apply(context, args);
-          }
-        }, wait, false);
-        if (callNow) {
-          func.apply(context, args);
-        }
-        return timeout;
-      };
-    };
-  } ]).factory('throttle', [ '$timeout', function($timeout) {
-    return function(func, wait, options) {
-      var timeout = null;
-      if (!options) options = {};
-      return function() {
-        var context = this;
-        var args = arguments;
-        if (!timeout) {
-          if (options.leading !== false) {
-            func.apply(context, args);
-          }
-          timeout = $timeout(function later() {
-            timeout = null;
-            if (options.trailing !== false) {
-              func.apply(context, args);
-            }
-          }, wait, false);
-        }
-      };
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', [ '$localeProvider', function($localeProvider) {
-    function ParseDate() {
-      this.year = 1970;
-      this.month = 0;
-      this.day = 1;
-      this.hours = 0;
-      this.minutes = 0;
-      this.seconds = 0;
-      this.milliseconds = 0;
-    }
-    ParseDate.prototype.setMilliseconds = function(value) {
-      this.milliseconds = value;
-    };
-    ParseDate.prototype.setSeconds = function(value) {
-      this.seconds = value;
-    };
-    ParseDate.prototype.setMinutes = function(value) {
-      this.minutes = value;
-    };
-    ParseDate.prototype.setHours = function(value) {
-      this.hours = value;
-    };
-    ParseDate.prototype.getHours = function() {
-      return this.hours;
-    };
-    ParseDate.prototype.setDate = function(value) {
-      this.day = value;
-    };
-    ParseDate.prototype.setMonth = function(value) {
-      this.month = value;
-    };
-    ParseDate.prototype.setFullYear = function(value) {
-      this.year = value;
-    };
-    ParseDate.prototype.fromDate = function(value) {
-      this.year = value.getFullYear();
-      this.month = value.getMonth();
-      this.day = value.getDate();
-      this.hours = value.getHours();
-      this.minutes = value.getMinutes();
-      this.seconds = value.getSeconds();
-      this.milliseconds = value.getMilliseconds();
-      return this;
-    };
-    ParseDate.prototype.toDate = function() {
-      return new Date(this.year, this.month, this.day, this.hours, this.minutes, this.seconds, this.milliseconds);
-    };
-    var proto = ParseDate.prototype;
-    function noop() {}
-    function isNumeric(n) {
-      return !isNaN(parseFloat(n)) && isFinite(n);
-    }
-    function indexOfCaseInsensitive(array, value) {
-      var len = array.length;
-      var str = value.toString().toLowerCase();
-      for (var i = 0; i < len; i++) {
-        if (array[i].toLowerCase() === str) {
-          return i;
-        }
-      }
-      return -1;
-    }
-    var defaults = this.defaults = {
-      format: 'shortDate',
-      strict: false
-    };
-    this.$get = [ '$locale', 'dateFilter', function($locale, dateFilter) {
-      var DateParserFactory = function(config) {
-        var options = angular.extend({}, defaults, config);
-        var $dateParser = {};
-        var regExpMap = {
-          sss: '[0-9]{3}',
-          ss: '[0-5][0-9]',
-          s: options.strict ? '[1-5]?[0-9]' : '[0-9]|[0-5][0-9]',
-          mm: '[0-5][0-9]',
-          m: options.strict ? '[1-5]?[0-9]' : '[0-9]|[0-5][0-9]',
-          HH: '[01][0-9]|2[0-3]',
-          H: options.strict ? '1?[0-9]|2[0-3]' : '[01]?[0-9]|2[0-3]',
-          hh: '[0][1-9]|[1][012]',
-          h: options.strict ? '[1-9]|1[012]' : '0?[1-9]|1[012]',
-          a: 'AM|PM',
-          EEEE: $locale.DATETIME_FORMATS.DAY.join('|'),
-          EEE: $locale.DATETIME_FORMATS.SHORTDAY.join('|'),
-          dd: '0[1-9]|[12][0-9]|3[01]',
-          d: options.strict ? '[1-9]|[1-2][0-9]|3[01]' : '0?[1-9]|[1-2][0-9]|3[01]',
-          MMMM: $locale.DATETIME_FORMATS.MONTH.join('|'),
-          MMM: $locale.DATETIME_FORMATS.SHORTMONTH.join('|'),
-          MM: '0[1-9]|1[012]',
-          M: options.strict ? '[1-9]|1[012]' : '0?[1-9]|1[012]',
-          yyyy: '[1]{1}[0-9]{3}|[2]{1}[0-9]{3}',
-          yy: '[0-9]{2}',
-          y: options.strict ? '-?(0|[1-9][0-9]{0,3})' : '-?0*[0-9]{1,4}'
-        };
-        var setFnMap = {
-          sss: proto.setMilliseconds,
-          ss: proto.setSeconds,
-          s: proto.setSeconds,
-          mm: proto.setMinutes,
-          m: proto.setMinutes,
-          HH: proto.setHours,
-          H: proto.setHours,
-          hh: proto.setHours,
-          h: proto.setHours,
-          EEEE: noop,
-          EEE: noop,
-          dd: proto.setDate,
-          d: proto.setDate,
-          a: function(value) {
-            var hours = this.getHours() % 12;
-            return this.setHours(value.match(/pm/i) ? hours + 12 : hours);
-          },
-          MMMM: function(value) {
-            return this.setMonth(indexOfCaseInsensitive($locale.DATETIME_FORMATS.MONTH, value));
-          },
-          MMM: function(value) {
-            return this.setMonth(indexOfCaseInsensitive($locale.DATETIME_FORMATS.SHORTMONTH, value));
-          },
-          MM: function(value) {
-            return this.setMonth(1 * value - 1);
-          },
-          M: function(value) {
-            return this.setMonth(1 * value - 1);
-          },
-          yyyy: proto.setFullYear,
-          yy: function(value) {
-            return this.setFullYear(2e3 + 1 * value);
-          },
-          y: function(value) {
-            return 1 * value <= 50 && value.length === 2 ? this.setFullYear(2e3 + 1 * value) : this.setFullYear(1 * value);
-          }
-        };
-        var regex;
-        var setMap;
-        $dateParser.init = function() {
-          $dateParser.$format = $locale.DATETIME_FORMATS[options.format] || options.format;
-          regex = regExpForFormat($dateParser.$format);
-          setMap = setMapForFormat($dateParser.$format);
-        };
-        $dateParser.isValid = function(date) {
-          if (angular.isDate(date)) return !isNaN(date.getTime());
-          return regex.test(date);
-        };
-        $dateParser.parse = function(value, baseDate, format, timezone) {
-          if (format) format = $locale.DATETIME_FORMATS[format] || format;
-          if (angular.isDate(value)) value = dateFilter(value, format || $dateParser.$format, timezone);
-          var formatRegex = format ? regExpForFormat(format) : regex;
-          var formatSetMap = format ? setMapForFormat(format) : setMap;
-          var matches = formatRegex.exec(value);
-          if (!matches) return false;
-          var date = baseDate && !isNaN(baseDate.getTime()) ? new ParseDate().fromDate(baseDate) : new ParseDate().fromDate(new Date(1970, 0, 1, 0));
-          for (var i = 0; i < matches.length - 1; i++) {
-            if (formatSetMap[i]) formatSetMap[i].call(date, matches[i + 1]);
-          }
-          var newDate = date.toDate();
-          if (parseInt(date.day, 10) !== newDate.getDate()) {
-            return false;
-          }
-          return newDate;
-        };
-        $dateParser.getDateForAttribute = function(key, value) {
-          var date;
-          if (value === 'today') {
-            var today = new Date();
-            date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), 0, 0, 0, key === 'minDate' ? 0 : -1);
-          } else if (angular.isString(value) && value.match(/^".+"$/)) {
-            date = new Date(value.substr(1, value.length - 2));
-          } else if (isNumeric(value)) {
-            date = new Date(parseInt(value, 10));
-          } else if (angular.isString(value) && value.length === 0) {
-            date = key === 'minDate' ? -Infinity : +Infinity;
-          } else {
-            date = new Date(value);
-          }
-          return date;
-        };
-        $dateParser.getTimeForAttribute = function(key, value) {
-          var time;
-          if (value === 'now') {
-            time = new Date().setFullYear(1970, 0, 1);
-          } else if (angular.isString(value) && value.match(/^".+"$/)) {
-            time = new Date(value.substr(1, value.length - 2)).setFullYear(1970, 0, 1);
-          } else if (isNumeric(value)) {
-            time = new Date(parseInt(value, 10)).setFullYear(1970, 0, 1);
-          } else if (angular.isString(value) && value.length === 0) {
-            time = key === 'minTime' ? -Infinity : +Infinity;
-          } else {
-            time = $dateParser.parse(value, new Date(1970, 0, 1, 0));
-          }
-          return time;
-        };
-        $dateParser.daylightSavingAdjust = function(date) {
-          if (!date) {
-            return null;
-          }
-          date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
-          return date;
-        };
-        $dateParser.timezoneOffsetAdjust = function(date, timezone, undo) {
-          if (!date) {
-            return null;
-          }
-          if (timezone && timezone === 'UTC') {
-            date = new Date(date.getTime());
-            date.setMinutes(date.getMinutes() + (undo ? -1 : 1) * date.getTimezoneOffset());
-          }
-          return date;
-        };
-        function regExpForFormat(format) {
-          var re = buildDateAbstractRegex(format);
-          return buildDateParseRegex(re);
-        }
-        function buildDateAbstractRegex(format) {
-          var escapedFormat = escapeReservedSymbols(format);
-          var escapedLiteralFormat = escapedFormat.replace(/''/g, '\\\'');
-          var literalRegex = /('(?:\\'|.)*?')/;
-          var formatParts = escapedLiteralFormat.split(literalRegex);
-          var dateElements = Object.keys(regExpMap);
-          var dateRegexParts = [];
-          angular.forEach(formatParts, function(part) {
-            if (isFormatStringLiteral(part)) {
-              part = trimLiteralEscapeChars(part);
-            } else {
-              for (var i = 0; i < dateElements.length; i++) {
-                part = part.split(dateElements[i]).join('${' + i + '}');
-              }
-            }
-            dateRegexParts.push(part);
-          });
-          return dateRegexParts.join('');
-        }
-        function escapeReservedSymbols(text) {
-          return text.replace(/\\/g, '[\\\\]').replace(/-/g, '[-]').replace(/\./g, '[.]').replace(/\*/g, '[*]').replace(/\+/g, '[+]').replace(/\?/g, '[?]').replace(/\$/g, '[$]').replace(/\^/g, '[^]').replace(/\//g, '[/]').replace(/\\s/g, '[\\s]');
-        }
-        function isFormatStringLiteral(text) {
-          return /^'.*'$/.test(text);
-        }
-        function trimLiteralEscapeChars(text) {
-          return text.replace(/^'(.*)'$/, '$1');
-        }
-        function buildDateParseRegex(abstractRegex) {
-          var dateElements = Object.keys(regExpMap);
-          var re = abstractRegex;
-          for (var i = 0; i < dateElements.length; i++) {
-            re = re.split('${' + i + '}').join('(' + regExpMap[dateElements[i]] + ')');
-          }
-          return new RegExp('^' + re + '$', [ 'i' ]);
-        }
-        function setMapForFormat(format) {
-          var re = buildDateAbstractRegex(format);
-          return buildDateParseValuesMap(re);
-        }
-        function buildDateParseValuesMap(abstractRegex) {
-          var dateElements = Object.keys(regExpMap);
-          var valuesRegex = new RegExp('\\${(\\d+)}', 'g');
-          var valuesMatch;
-          var keyIndex;
-          var valueKey;
-          var valueFunction;
-          var valuesFunctionMap = [];
-          while ((valuesMatch = valuesRegex.exec(abstractRegex)) !== null) {
-            keyIndex = valuesMatch[1];
-            valueKey = dateElements[keyIndex];
-            valueFunction = setFnMap[valueKey];
-            valuesFunctionMap.push(valueFunction);
-          }
-          return valuesFunctionMap;
-        }
-        $dateParser.init();
-        return $dateParser;
-      };
-      return DateParserFactory;
-    } ];
-  } ]);
-  angular.module('mgcrea.ngStrap.helpers.dateFormatter', []).service('$dateFormatter', [ '$locale', 'dateFilter', function($locale, dateFilter) {
-    this.getDefaultLocale = function() {
-      return $locale.id;
-    };
-    this.getDatetimeFormat = function(format, lang) {
-      return $locale.DATETIME_FORMATS[format] || format;
-    };
-    this.weekdaysShort = function(lang) {
-      return $locale.DATETIME_FORMATS.SHORTDAY;
-    };
-    this.weekdays = function(lang) {
-      return $locale.DATETIME_FORMATS.DAY;
-    };
-    function splitTimeFormat(format) {
-      return /(h+)([:\.])?(m+)([:\.])?(s*)[ ]?(a?)/i.exec(format).slice(1);
-    }
-    this.hoursFormat = function(timeFormat) {
-      return splitTimeFormat(timeFormat)[0];
-    };
-    this.minutesFormat = function(timeFormat) {
-      return splitTimeFormat(timeFormat)[2];
-    };
-    this.secondsFormat = function(timeFormat) {
-      return splitTimeFormat(timeFormat)[4];
-    };
-    this.timeSeparator = function(timeFormat) {
-      return splitTimeFormat(timeFormat)[1];
-    };
-    this.showSeconds = function(timeFormat) {
-      return !!splitTimeFormat(timeFormat)[4];
-    };
-    this.showAM = function(timeFormat) {
-      return !!splitTimeFormat(timeFormat)[5];
-    };
-    this.formatDate = function(date, format, lang, timezone) {
-      return dateFilter(date, format, timezone);
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.core', []).service('$bsCompiler', bsCompilerService);
-  function bsCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
-    this.compile = function(options) {
-      if (options.template && /\.html$/.test(options.template)) {
-        console.warn('Deprecated use of `template` option to pass a file. Please use the `templateUrl` option instead.');
-        options.templateUrl = options.template;
-        options.template = '';
-      }
-      var templateUrl = options.templateUrl;
-      var template = options.template || '';
-      var controller = options.controller;
-      var controllerAs = options.controllerAs;
-      var resolve = options.resolve || {};
-      var locals = options.locals || {};
-      var transformTemplate = options.transformTemplate || angular.identity;
-      var bindToController = options.bindToController;
-      angular.forEach(resolve, function(value, key) {
-        if (angular.isString(value)) {
-          resolve[key] = $injector.get(value);
-        } else {
-          resolve[key] = $injector.invoke(value);
-        }
-      });
-      angular.extend(resolve, locals);
-      if (template) {
-        resolve.$template = $q.when(template);
-      } else if (templateUrl) {
-        resolve.$template = fetchTemplate(templateUrl);
-      } else {
-        throw new Error('Missing `template` / `templateUrl` option.');
-      }
-      if (options.titleTemplate) {
-        resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.titleTemplate) ]).then(function(templates) {
-          var templateEl = angular.element(templates[0]);
-          findElement('[ng-bind="title"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
-          return templateEl[0].outerHTML;
-        });
-      }
-      if (options.contentTemplate) {
-        resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.contentTemplate) ]).then(function(templates) {
-          var templateEl = angular.element(templates[0]);
-          var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
-          if (!options.templateUrl) contentEl.next().remove();
-          return templateEl[0].outerHTML;
-        });
-      }
-      return $q.all(resolve).then(function(locals) {
-        var template = transformTemplate(locals.$template);
-        if (options.html) {
-          template = template.replace(/ng-bind="/gi, 'ng-bind-html="');
-        }
-        var element = angular.element('<div>').html(template.trim()).contents();
-        var linkFn = $compile(element);
-        return {
-          locals: locals,
-          element: element,
-          link: function link(scope) {
-            locals.$scope = scope;
-            if (controller) {
-              var invokeCtrl = $controller(controller, locals, true);
-              if (bindToController) {
-                angular.extend(invokeCtrl.instance, locals);
-              }
-              var ctrl = angular.isObject(invokeCtrl) ? invokeCtrl : invokeCtrl();
-              element.data('$ngControllerController', ctrl);
-              element.children().data('$ngControllerController', ctrl);
-              if (controllerAs) {
-                scope[controllerAs] = ctrl;
-              }
-            }
-            return linkFn.apply(null, arguments);
-          }
-        };
-      });
-    };
-    function findElement(query, element) {
-      return angular.element((element || document).querySelectorAll(query));
-    }
-    var fetchPromises = {};
-    function fetchTemplate(template) {
-      if (fetchPromises[template]) return fetchPromises[template];
-      return fetchPromises[template] = $http.get(template, {
-        cache: $templateCache
-      }).then(function(res) {
-        return res.data;
-      });
-    }
-  }
   angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions' ]).provider('$typeahead', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -1605,202 +920,6 @@
       }
     };
   } ]);
-  angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      template: 'tab/tab.tpl.html',
-      navClass: 'nav-tabs',
-      activeClass: 'active'
-    };
-    var _tabsHash = {};
-    var _addTabControl = function(key, control) {
-      if (!_tabsHash[key]) _tabsHash[key] = control;
-    };
-    var controller = this.controller = function($scope, $element, $attrs, $timeout) {
-      var self = this;
-      self.$options = angular.copy(defaults);
-      angular.forEach([ 'animation', 'navClass', 'activeClass', 'id' ], function(key) {
-        if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
-      });
-      $scope.$navClass = self.$options.navClass;
-      $scope.$activeClass = self.$options.activeClass;
-      $scope.$onClick = function $onClick(evt, pane, index) {
-        if (!pane.disabled) {
-          self.$setActive(pane.name || index);
-          focusCurrentTab();
-        }
-        evt.preventDefault();
-        evt.stopPropagation();
-      };
-      function navigatePane(index, toLeft) {
-        var newIndex = 0;
-        if (toLeft) {
-          newIndex = index - 1 < 0 ? self.$panes.length - 1 : index - 1;
-        } else {
-          newIndex = index + 1 >= self.$panes.length ? 0 : index + 1;
-        }
-        if (self.$panes[newIndex].disabled) {
-          navigatePane(newIndex, toLeft);
-        } else {
-          self.$setActive(self.$panes[newIndex].name || newIndex);
-          focusCurrentTab();
-        }
-      }
-      function focusCurrentTab() {
-        $timeout(function() {
-          var activeAs = angular.element($element[0].querySelectorAll('li.' + self.$options.activeClass));
-          if (activeAs.length > 0 && activeAs[0]) {
-            activeAs[0].focus();
-          }
-        }, 100);
-      }
-      self.$panes = $scope.$panes = [];
-      self.$activePaneChangeListeners = self.$viewChangeListeners = [];
-      self.$push = function(pane) {
-        if (angular.isUndefined(self.$panes.$active)) {
-          $scope.$setActive(pane.name || 0);
-        }
-        self.$panes.push(pane);
-        self.$panes.forEach(function(tabPane, index) {
-          tabPane.$describedBy = self.$options.id === undefined ? undefined : self.$options.id + '_$tab_' + index;
-          tabPane.$labeledBy = self.$options.id === undefined ? undefined : self.$options.id + '_$tab_' + index + '_a';
-        });
-      };
-      self.$remove = function(pane) {
-        var index = self.$panes.indexOf(pane);
-        var active = self.$panes.$active;
-        var activeIndex;
-        if (angular.isString(active)) {
-          activeIndex = self.$panes.map(function(pane) {
-            return pane.name;
-          }).indexOf(active);
-        } else {
-          activeIndex = self.$panes.$active;
-        }
-        self.$panes.splice(index, 1);
-        if (index < activeIndex) {
-          activeIndex--;
-        } else if (index === activeIndex && activeIndex === self.$panes.length) {
-          activeIndex--;
-        }
-        if (activeIndex >= 0 && activeIndex < self.$panes.length) {
-          self.$setActive(self.$panes[activeIndex].name || activeIndex);
-        } else {
-          self.$setActive();
-        }
-      };
-      self.$setActive = $scope.$setActive = function(value) {
-        self.$panes.$active = value;
-        self.$activePaneChangeListeners.forEach(function(fn) {
-          fn();
-        });
-      };
-      self.$isActive = $scope.$isActive = function($pane, $index) {
-        return self.$panes.$active === $pane.name || self.$panes.$active === $index;
-      };
-      self.$onKeyPress = $scope.$onKeyPress = function(e, name, index) {
-        if (e.keyCode === 32 || e.charCode === 32 || e.keyCode === 13 || e.charCode === 13) {
-          self.$setActive(name);
-          e.preventDefault();
-          e.stopPropagation();
-        } else if (e.keyCode === 37 || e.charCode === 37 || e.keyCode === 39 || e.charCode === 39) {
-          navigatePane(index, e.keyCode === 37 || e.charCode === 37);
-        }
-      };
-    };
-    this.$get = function() {
-      var $tab = {};
-      $tab.defaults = defaults;
-      $tab.controller = controller;
-      $tab.addTabControl = _addTabControl;
-      $tab.tabsHash = _tabsHash;
-      return $tab;
-    };
-  }).directive('bsTabs', [ '$window', '$animate', '$tab', '$parse', '$timeout', function($window, $animate, $tab, $parse, $timeout) {
-    var defaults = $tab.defaults;
-    return {
-      require: [ '?ngModel', 'bsTabs' ],
-      transclude: true,
-      scope: true,
-      controller: [ '$scope', '$element', '$attrs', '$timeout', $tab.controller ],
-      templateUrl: function(element, attr) {
-        return attr.template || defaults.template;
-      },
-      link: function postLink(scope, element, attrs, controllers) {
-        var ngModelCtrl = controllers[0];
-        var bsTabsCtrl = controllers[1];
-        if (attrs.tabKey !== '' && attrs.tabKey !== undefined) {
-          $tab.addTabControl(attrs.tabKey, bsTabsCtrl);
-        }
-        if (ngModelCtrl) {
-          bsTabsCtrl.$activePaneChangeListeners.push(function() {
-            ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
-          });
-          ngModelCtrl.$formatters.push(function(modelValue) {
-            bsTabsCtrl.$setActive(modelValue);
-            return modelValue;
-          });
-        }
-        bsTabsCtrl.$activePaneChangeListeners.push(function() {
-          $timeout(function() {
-            var liElements = element.find('li');
-            for (var i = 0; i < liElements.length; i++) {
-              var iElement = angular.element(liElements[i]);
-              if (iElement.hasClass(bsTabsCtrl.$options.activeClass)) {
-                iElement.find('a')[0].focus();
-              }
-            }
-          }, 100);
-        });
-        if (attrs.bsActivePane) {
-          var parsedBsActivePane = $parse(attrs.bsActivePane);
-          bsTabsCtrl.$activePaneChangeListeners.push(function() {
-            parsedBsActivePane.assign(scope, bsTabsCtrl.$panes.$active);
-          });
-          scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
-            bsTabsCtrl.$setActive(newValue);
-          }, true);
-        }
-      }
-    };
-  } ]).directive('bsPane', [ '$window', '$animate', '$sce', function($window, $animate, $sce) {
-    return {
-      require: [ '^?ngModel', '^bsTabs' ],
-      scope: true,
-      link: function postLink(scope, element, attrs, controllers) {
-        var bsTabsCtrl = controllers[1];
-        element.addClass('tab-pane');
-        element.attr('role', 'tabpanel');
-        attrs.$observe('title', function(newValue, oldValue) {
-          scope.title = $sce.trustAsHtml(newValue);
-        });
-        scope.name = attrs.name;
-        scope.id = attrs.id;
-        scope.name = scope.name || scope.id;
-        if (bsTabsCtrl.$options.animation) {
-          element.addClass(bsTabsCtrl.$options.animation);
-        }
-        attrs.$observe('disabled', function(newValue, oldValue) {
-          scope.disabled = scope.$eval(newValue);
-        });
-        bsTabsCtrl.$push(scope);
-        if (scope.$describedBy !== undefined) {
-          element.attr('aria-describedby', scope.$describedBy);
-        }
-        scope.$on('$destroy', function() {
-          bsTabsCtrl.$remove(scope);
-        });
-        function render() {
-          var index = bsTabsCtrl.$panes.indexOf(scope);
-          $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
-        }
-        bsTabsCtrl.$activePaneChangeListeners.push(function() {
-          render();
-        });
-        render();
-      }
-    };
-  } ]);
   angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser', 'mgcrea.ngStrap.helpers.dateFormatter', 'mgcrea.ngStrap.tooltip' ]).provider('$timepicker', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -2272,6 +1391,202 @@
           options = null;
           timepicker = null;
         });
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      template: 'tab/tab.tpl.html',
+      navClass: 'nav-tabs',
+      activeClass: 'active'
+    };
+    var _tabsHash = {};
+    var _addTabControl = function(key, control) {
+      if (!_tabsHash[key]) _tabsHash[key] = control;
+    };
+    var controller = this.controller = function($scope, $element, $attrs, $timeout) {
+      var self = this;
+      self.$options = angular.copy(defaults);
+      angular.forEach([ 'animation', 'navClass', 'activeClass', 'id' ], function(key) {
+        if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
+      });
+      $scope.$navClass = self.$options.navClass;
+      $scope.$activeClass = self.$options.activeClass;
+      $scope.$onClick = function $onClick(evt, pane, index) {
+        if (!pane.disabled) {
+          self.$setActive(pane.name || index);
+          focusCurrentTab();
+        }
+        evt.preventDefault();
+        evt.stopPropagation();
+      };
+      function navigatePane(index, toLeft) {
+        var newIndex = 0;
+        if (toLeft) {
+          newIndex = index - 1 < 0 ? self.$panes.length - 1 : index - 1;
+        } else {
+          newIndex = index + 1 >= self.$panes.length ? 0 : index + 1;
+        }
+        if (self.$panes[newIndex].disabled) {
+          navigatePane(newIndex, toLeft);
+        } else {
+          self.$setActive(self.$panes[newIndex].name || newIndex);
+          focusCurrentTab();
+        }
+      }
+      function focusCurrentTab() {
+        $timeout(function() {
+          var activeAs = angular.element($element[0].querySelectorAll('li.' + self.$options.activeClass));
+          if (activeAs.length > 0 && activeAs[0]) {
+            activeAs[0].focus();
+          }
+        }, 100);
+      }
+      self.$panes = $scope.$panes = [];
+      self.$activePaneChangeListeners = self.$viewChangeListeners = [];
+      self.$push = function(pane) {
+        if (angular.isUndefined(self.$panes.$active)) {
+          $scope.$setActive(pane.name || 0);
+        }
+        self.$panes.push(pane);
+        self.$panes.forEach(function(tabPane, index) {
+          tabPane.$describedBy = self.$options.id === undefined ? undefined : self.$options.id + '_$tab_' + index;
+          tabPane.$labeledBy = self.$options.id === undefined ? undefined : self.$options.id + '_$tab_' + index + '_a';
+        });
+      };
+      self.$remove = function(pane) {
+        var index = self.$panes.indexOf(pane);
+        var active = self.$panes.$active;
+        var activeIndex;
+        if (angular.isString(active)) {
+          activeIndex = self.$panes.map(function(pane) {
+            return pane.name;
+          }).indexOf(active);
+        } else {
+          activeIndex = self.$panes.$active;
+        }
+        self.$panes.splice(index, 1);
+        if (index < activeIndex) {
+          activeIndex--;
+        } else if (index === activeIndex && activeIndex === self.$panes.length) {
+          activeIndex--;
+        }
+        if (activeIndex >= 0 && activeIndex < self.$panes.length) {
+          self.$setActive(self.$panes[activeIndex].name || activeIndex);
+        } else {
+          self.$setActive();
+        }
+      };
+      self.$setActive = $scope.$setActive = function(value) {
+        self.$panes.$active = value;
+        self.$activePaneChangeListeners.forEach(function(fn) {
+          fn();
+        });
+      };
+      self.$isActive = $scope.$isActive = function($pane, $index) {
+        return self.$panes.$active === $pane.name || self.$panes.$active === $index;
+      };
+      self.$onKeyPress = $scope.$onKeyPress = function(e, name, index) {
+        if (e.keyCode === 32 || e.charCode === 32 || e.keyCode === 13 || e.charCode === 13) {
+          self.$setActive(name);
+          e.preventDefault();
+          e.stopPropagation();
+        } else if (e.keyCode === 37 || e.charCode === 37 || e.keyCode === 39 || e.charCode === 39) {
+          navigatePane(index, e.keyCode === 37 || e.charCode === 37);
+        }
+      };
+    };
+    this.$get = function() {
+      var $tab = {};
+      $tab.defaults = defaults;
+      $tab.controller = controller;
+      $tab.addTabControl = _addTabControl;
+      $tab.tabsHash = _tabsHash;
+      return $tab;
+    };
+  }).directive('bsTabs', [ '$window', '$animate', '$tab', '$parse', '$timeout', function($window, $animate, $tab, $parse, $timeout) {
+    var defaults = $tab.defaults;
+    return {
+      require: [ '?ngModel', 'bsTabs' ],
+      transclude: true,
+      scope: true,
+      controller: [ '$scope', '$element', '$attrs', '$timeout', $tab.controller ],
+      templateUrl: function(element, attr) {
+        return attr.template || defaults.template;
+      },
+      link: function postLink(scope, element, attrs, controllers) {
+        var ngModelCtrl = controllers[0];
+        var bsTabsCtrl = controllers[1];
+        if (attrs.tabKey !== '' && attrs.tabKey !== undefined) {
+          $tab.addTabControl(attrs.tabKey, bsTabsCtrl);
+        }
+        if (ngModelCtrl) {
+          bsTabsCtrl.$activePaneChangeListeners.push(function() {
+            ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
+          });
+          ngModelCtrl.$formatters.push(function(modelValue) {
+            bsTabsCtrl.$setActive(modelValue);
+            return modelValue;
+          });
+        }
+        bsTabsCtrl.$activePaneChangeListeners.push(function() {
+          $timeout(function() {
+            var liElements = element.find('li');
+            for (var i = 0; i < liElements.length; i++) {
+              var iElement = angular.element(liElements[i]);
+              if (iElement.hasClass(bsTabsCtrl.$options.activeClass)) {
+                iElement.find('a')[0].focus();
+              }
+            }
+          }, 100);
+        });
+        if (attrs.bsActivePane) {
+          var parsedBsActivePane = $parse(attrs.bsActivePane);
+          bsTabsCtrl.$activePaneChangeListeners.push(function() {
+            parsedBsActivePane.assign(scope, bsTabsCtrl.$panes.$active);
+          });
+          scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
+            bsTabsCtrl.$setActive(newValue);
+          }, true);
+        }
+      }
+    };
+  } ]).directive('bsPane', [ '$window', '$animate', '$sce', function($window, $animate, $sce) {
+    return {
+      require: [ '^?ngModel', '^bsTabs' ],
+      scope: true,
+      link: function postLink(scope, element, attrs, controllers) {
+        var bsTabsCtrl = controllers[1];
+        element.addClass('tab-pane');
+        element.attr('role', 'tabpanel');
+        attrs.$observe('title', function(newValue, oldValue) {
+          scope.title = $sce.trustAsHtml(newValue);
+        });
+        scope.name = attrs.name;
+        scope.id = attrs.id;
+        scope.name = scope.name || scope.id;
+        if (bsTabsCtrl.$options.animation) {
+          element.addClass(bsTabsCtrl.$options.animation);
+        }
+        attrs.$observe('disabled', function(newValue, oldValue) {
+          scope.disabled = scope.$eval(newValue);
+        });
+        bsTabsCtrl.$push(scope);
+        if (scope.$describedBy !== undefined) {
+          element.attr('aria-describedby', scope.$describedBy);
+        }
+        scope.$on('$destroy', function() {
+          bsTabsCtrl.$remove(scope);
+        });
+        function render() {
+          var index = bsTabsCtrl.$panes.indexOf(scope);
+          $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
+        }
+        bsTabsCtrl.$activePaneChangeListeners.push(function() {
+          render();
+        });
+        render();
       }
     };
   } ]);
@@ -3327,6 +2642,691 @@
       }
     };
   } ]);
+  if (angular.version.minor < 3 && angular.version.dot < 14) {
+    angular.module('ng').factory('$$rAF', [ '$window', '$timeout', function($window, $timeout) {
+      var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame;
+      var cancelAnimationFrame = $window.cancelAnimationFrame || $window.webkitCancelAnimationFrame || $window.mozCancelAnimationFrame || $window.webkitCancelRequestAnimationFrame;
+      var rafSupported = !!requestAnimationFrame;
+      var raf = rafSupported ? function(fn) {
+        var id = requestAnimationFrame(fn);
+        return function() {
+          cancelAnimationFrame(id);
+        };
+      } : function(fn) {
+        var timer = $timeout(fn, 16.66, false);
+        return function() {
+          $timeout.cancel(timer);
+        };
+      };
+      raf.supported = rafSupported;
+      return raf;
+    } ]);
+  }
+  angular.module('mgcrea.ngStrap.helpers.parseOptions', []).provider('$parseOptions', function() {
+    var defaults = this.defaults = {
+      regexp: /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/
+    };
+    this.$get = [ '$parse', '$q', function($parse, $q) {
+      function ParseOptionsFactory(attr, config) {
+        var $parseOptions = {};
+        var options = angular.extend({}, defaults, config);
+        $parseOptions.$values = [];
+        var match;
+        var displayFn;
+        var valueName;
+        var keyName;
+        var groupByFn;
+        var valueFn;
+        var valuesFn;
+        $parseOptions.init = function() {
+          $parseOptions.$match = match = attr.match(options.regexp);
+          displayFn = $parse(match[2] || match[1]);
+          valueName = match[4] || match[6];
+          keyName = match[5];
+          groupByFn = $parse(match[3] || '');
+          valueFn = $parse(match[2] ? match[1] : valueName);
+          valuesFn = $parse(match[7]);
+        };
+        $parseOptions.valuesFn = function(scope, controller) {
+          return $q.when(valuesFn(scope, controller)).then(function(values) {
+            if (!angular.isArray(values)) {
+              values = [];
+            }
+            $parseOptions.$values = values.length ? parseValues(values, scope) : [];
+            return $parseOptions.$values;
+          });
+        };
+        $parseOptions.displayValue = function(modelValue) {
+          var scope = {};
+          scope[valueName] = modelValue;
+          return displayFn(scope);
+        };
+        function parseValues(values, scope) {
+          return values.map(function(match, index) {
+            var locals = {};
+            var label;
+            var value;
+            locals[valueName] = match;
+            label = displayFn(scope, locals);
+            value = valueFn(scope, locals);
+            return {
+              label: label,
+              value: value,
+              index: index
+            };
+          });
+        }
+        $parseOptions.init();
+        return $parseOptions;
+      }
+      return ParseOptionsFactory;
+    } ];
+  });
+  angular.module('mgcrea.ngStrap.helpers.ngFocusOut', []).directive('ngFocusOut', [ '$parse', '$rootScope', function($parse, $rootScope) {
+    return {
+      restrict: 'A',
+      compile: function($element, attr) {
+        var fn = $parse(attr.ngFocusOut);
+        return function link(scope, element) {
+          function ngEventHandler(event) {
+            var callback = function() {
+              fn(scope, {
+                $event: event
+              });
+            };
+            if ($rootScope.$$phase) {
+              scope.$evalAsync(callback);
+            } else {
+              scope.$apply(callback);
+            }
+          }
+          element.on('focusout', ngEventHandler);
+          scope.$on('$destroy', function() {
+            element.off('focusout', ngEventHandler);
+          });
+        };
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.helpers.focusElement', []).directive('focusElement', [ '$timeout', '$parse', function($timeout, $parse) {
+    return {
+      link: function(scope, element, attrs) {
+        scope.$watch(attrs.focusElement, function(value) {
+          if (value === true) {
+            $timeout(function() {
+              element[0].focus();
+            });
+          }
+        });
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.helpers.dimensions', []).factory('dimensions', function() {
+    var fn = {};
+    var nodeName = fn.nodeName = function(element, name) {
+      return element.nodeName && element.nodeName.toLowerCase() === name.toLowerCase();
+    };
+    fn.css = function(element, prop, extra) {
+      var value;
+      if (element.currentStyle) {
+        value = element.currentStyle[prop];
+      } else if (window.getComputedStyle) {
+        value = window.getComputedStyle(element)[prop];
+      } else {
+        value = element.style[prop];
+      }
+      return extra === true ? parseFloat(value) || 0 : value;
+    };
+    fn.offset = function(element) {
+      var boxRect = element.getBoundingClientRect();
+      var docElement = element.ownerDocument;
+      return {
+        width: boxRect.width || element.offsetWidth,
+        height: boxRect.height || element.offsetHeight,
+        top: boxRect.top + (window.pageYOffset || docElement.documentElement.scrollTop) - (docElement.documentElement.clientTop || 0),
+        left: boxRect.left + (window.pageXOffset || docElement.documentElement.scrollLeft) - (docElement.documentElement.clientLeft || 0)
+      };
+    };
+    fn.setOffset = function(element, options, i) {
+      var curPosition;
+      var curLeft;
+      var curCSSTop;
+      var curTop;
+      var curOffset;
+      var curCSSLeft;
+      var calculatePosition;
+      var position = fn.css(element, 'position');
+      var curElem = angular.element(element);
+      var props = {};
+      if (position === 'static') {
+        element.style.position = 'relative';
+      }
+      curOffset = fn.offset(element);
+      curCSSTop = fn.css(element, 'top');
+      curCSSLeft = fn.css(element, 'left');
+      calculatePosition = (position === 'absolute' || position === 'fixed') && (curCSSTop + curCSSLeft).indexOf('auto') > -1;
+      if (calculatePosition) {
+        curPosition = fn.position(element);
+        curTop = curPosition.top;
+        curLeft = curPosition.left;
+      } else {
+        curTop = parseFloat(curCSSTop) || 0;
+        curLeft = parseFloat(curCSSLeft) || 0;
+      }
+      if (angular.isFunction(options)) {
+        options = options.call(element, i, curOffset);
+      }
+      if (options.top !== null) {
+        props.top = options.top - curOffset.top + curTop;
+      }
+      if (options.left !== null) {
+        props.left = options.left - curOffset.left + curLeft;
+      }
+      if ('using' in options) {
+        options.using.call(curElem, props);
+      } else {
+        curElem.css({
+          top: props.top + 'px',
+          left: props.left + 'px'
+        });
+      }
+    };
+    fn.position = function(element) {
+      var offsetParentRect = {
+        top: 0,
+        left: 0
+      };
+      var offsetParentEl;
+      var offset;
+      if (fn.css(element, 'position') === 'fixed') {
+        offset = element.getBoundingClientRect();
+      } else {
+        offsetParentEl = offsetParentElement(element);
+        offset = fn.offset(element);
+        if (!nodeName(offsetParentEl, 'html')) {
+          offsetParentRect = fn.offset(offsetParentEl);
+        }
+        offsetParentRect.top += fn.css(offsetParentEl, 'borderTopWidth', true);
+        offsetParentRect.left += fn.css(offsetParentEl, 'borderLeftWidth', true);
+      }
+      return {
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+        top: offset.top - offsetParentRect.top - fn.css(element, 'marginTop', true),
+        left: offset.left - offsetParentRect.left - fn.css(element, 'marginLeft', true)
+      };
+    };
+    function offsetParentElement(element) {
+      var docElement = element.ownerDocument;
+      var offsetParent = element.offsetParent || docElement;
+      if (nodeName(offsetParent, '#document')) return docElement.documentElement;
+      while (offsetParent && !nodeName(offsetParent, 'html') && fn.css(offsetParent, 'position') === 'static') {
+        offsetParent = offsetParent.offsetParent;
+      }
+      return offsetParent || docElement.documentElement;
+    }
+    fn.height = function(element, outer) {
+      var value = element.offsetHeight;
+      if (outer) {
+        value += fn.css(element, 'marginTop', true) + fn.css(element, 'marginBottom', true);
+      } else {
+        value -= fn.css(element, 'paddingTop', true) + fn.css(element, 'paddingBottom', true) + fn.css(element, 'borderTopWidth', true) + fn.css(element, 'borderBottomWidth', true);
+      }
+      return value;
+    };
+    fn.width = function(element, outer) {
+      var value = element.offsetWidth;
+      if (outer) {
+        value += fn.css(element, 'marginLeft', true) + fn.css(element, 'marginRight', true);
+      } else {
+        value -= fn.css(element, 'paddingLeft', true) + fn.css(element, 'paddingRight', true) + fn.css(element, 'borderLeftWidth', true) + fn.css(element, 'borderRightWidth', true);
+      }
+      return value;
+    };
+    return fn;
+  });
+  angular.module('mgcrea.ngStrap.helpers.debounce', []).factory('debounce', [ '$timeout', function($timeout) {
+    return function(func, wait, immediate) {
+      var timeout = null;
+      return function() {
+        var context = this;
+        var args = arguments;
+        var callNow = immediate && !timeout;
+        if (timeout) {
+          $timeout.cancel(timeout);
+        }
+        timeout = $timeout(function later() {
+          timeout = null;
+          if (!immediate) {
+            func.apply(context, args);
+          }
+        }, wait, false);
+        if (callNow) {
+          func.apply(context, args);
+        }
+        return timeout;
+      };
+    };
+  } ]).factory('throttle', [ '$timeout', function($timeout) {
+    return function(func, wait, options) {
+      var timeout = null;
+      if (!options) options = {};
+      return function() {
+        var context = this;
+        var args = arguments;
+        if (!timeout) {
+          if (options.leading !== false) {
+            func.apply(context, args);
+          }
+          timeout = $timeout(function later() {
+            timeout = null;
+            if (options.trailing !== false) {
+              func.apply(context, args);
+            }
+          }, wait, false);
+        }
+      };
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', [ '$localeProvider', function($localeProvider) {
+    function ParseDate() {
+      this.year = 1970;
+      this.month = 0;
+      this.day = 1;
+      this.hours = 0;
+      this.minutes = 0;
+      this.seconds = 0;
+      this.milliseconds = 0;
+    }
+    ParseDate.prototype.setMilliseconds = function(value) {
+      this.milliseconds = value;
+    };
+    ParseDate.prototype.setSeconds = function(value) {
+      this.seconds = value;
+    };
+    ParseDate.prototype.setMinutes = function(value) {
+      this.minutes = value;
+    };
+    ParseDate.prototype.setHours = function(value) {
+      this.hours = value;
+    };
+    ParseDate.prototype.getHours = function() {
+      return this.hours;
+    };
+    ParseDate.prototype.setDate = function(value) {
+      this.day = value;
+    };
+    ParseDate.prototype.setMonth = function(value) {
+      this.month = value;
+    };
+    ParseDate.prototype.setFullYear = function(value) {
+      this.year = value;
+    };
+    ParseDate.prototype.fromDate = function(value) {
+      this.year = value.getFullYear();
+      this.month = value.getMonth();
+      this.day = value.getDate();
+      this.hours = value.getHours();
+      this.minutes = value.getMinutes();
+      this.seconds = value.getSeconds();
+      this.milliseconds = value.getMilliseconds();
+      return this;
+    };
+    ParseDate.prototype.toDate = function() {
+      return new Date(this.year, this.month, this.day, this.hours, this.minutes, this.seconds, this.milliseconds);
+    };
+    var proto = ParseDate.prototype;
+    function noop() {}
+    function isNumeric(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+    function indexOfCaseInsensitive(array, value) {
+      var len = array.length;
+      var str = value.toString().toLowerCase();
+      for (var i = 0; i < len; i++) {
+        if (array[i].toLowerCase() === str) {
+          return i;
+        }
+      }
+      return -1;
+    }
+    var defaults = this.defaults = {
+      format: 'shortDate',
+      strict: false
+    };
+    this.$get = [ '$locale', 'dateFilter', function($locale, dateFilter) {
+      var DateParserFactory = function(config) {
+        var options = angular.extend({}, defaults, config);
+        var $dateParser = {};
+        var regExpMap = {
+          sss: '[0-9]{3}',
+          ss: '[0-5][0-9]',
+          s: options.strict ? '[1-5]?[0-9]' : '[0-9]|[0-5][0-9]',
+          mm: '[0-5][0-9]',
+          m: options.strict ? '[1-5]?[0-9]' : '[0-9]|[0-5][0-9]',
+          HH: '[01][0-9]|2[0-3]',
+          H: options.strict ? '1?[0-9]|2[0-3]' : '[01]?[0-9]|2[0-3]',
+          hh: '[0][1-9]|[1][012]',
+          h: options.strict ? '[1-9]|1[012]' : '0?[1-9]|1[012]',
+          a: 'AM|PM',
+          EEEE: $locale.DATETIME_FORMATS.DAY.join('|'),
+          EEE: $locale.DATETIME_FORMATS.SHORTDAY.join('|'),
+          dd: '0[1-9]|[12][0-9]|3[01]',
+          d: options.strict ? '[1-9]|[1-2][0-9]|3[01]' : '0?[1-9]|[1-2][0-9]|3[01]',
+          MMMM: $locale.DATETIME_FORMATS.MONTH.join('|'),
+          MMM: $locale.DATETIME_FORMATS.SHORTMONTH.join('|'),
+          MM: '0[1-9]|1[012]',
+          M: options.strict ? '[1-9]|1[012]' : '0?[1-9]|1[012]',
+          yyyy: '[1]{1}[0-9]{3}|[2]{1}[0-9]{3}',
+          yy: '[0-9]{2}',
+          y: options.strict ? '-?(0|[1-9][0-9]{0,3})' : '-?0*[0-9]{1,4}'
+        };
+        var setFnMap = {
+          sss: proto.setMilliseconds,
+          ss: proto.setSeconds,
+          s: proto.setSeconds,
+          mm: proto.setMinutes,
+          m: proto.setMinutes,
+          HH: proto.setHours,
+          H: proto.setHours,
+          hh: proto.setHours,
+          h: proto.setHours,
+          EEEE: noop,
+          EEE: noop,
+          dd: proto.setDate,
+          d: proto.setDate,
+          a: function(value) {
+            var hours = this.getHours() % 12;
+            return this.setHours(value.match(/pm/i) ? hours + 12 : hours);
+          },
+          MMMM: function(value) {
+            return this.setMonth(indexOfCaseInsensitive($locale.DATETIME_FORMATS.MONTH, value));
+          },
+          MMM: function(value) {
+            return this.setMonth(indexOfCaseInsensitive($locale.DATETIME_FORMATS.SHORTMONTH, value));
+          },
+          MM: function(value) {
+            return this.setMonth(1 * value - 1);
+          },
+          M: function(value) {
+            return this.setMonth(1 * value - 1);
+          },
+          yyyy: proto.setFullYear,
+          yy: function(value) {
+            return this.setFullYear(2e3 + 1 * value);
+          },
+          y: function(value) {
+            return 1 * value <= 50 && value.length === 2 ? this.setFullYear(2e3 + 1 * value) : this.setFullYear(1 * value);
+          }
+        };
+        var regex;
+        var setMap;
+        $dateParser.init = function() {
+          $dateParser.$format = $locale.DATETIME_FORMATS[options.format] || options.format;
+          regex = regExpForFormat($dateParser.$format);
+          setMap = setMapForFormat($dateParser.$format);
+        };
+        $dateParser.isValid = function(date) {
+          if (angular.isDate(date)) return !isNaN(date.getTime());
+          return regex.test(date);
+        };
+        $dateParser.parse = function(value, baseDate, format, timezone) {
+          if (format) format = $locale.DATETIME_FORMATS[format] || format;
+          if (angular.isDate(value)) value = dateFilter(value, format || $dateParser.$format, timezone);
+          var formatRegex = format ? regExpForFormat(format) : regex;
+          var formatSetMap = format ? setMapForFormat(format) : setMap;
+          var matches = formatRegex.exec(value);
+          if (!matches) return false;
+          var date = baseDate && !isNaN(baseDate.getTime()) ? new ParseDate().fromDate(baseDate) : new ParseDate().fromDate(new Date(1970, 0, 1, 0));
+          for (var i = 0; i < matches.length - 1; i++) {
+            if (formatSetMap[i]) formatSetMap[i].call(date, matches[i + 1]);
+          }
+          var newDate = date.toDate();
+          if (parseInt(date.day, 10) !== newDate.getDate()) {
+            return false;
+          }
+          return newDate;
+        };
+        $dateParser.getDateForAttribute = function(key, value) {
+          var date;
+          if (value === 'today') {
+            var today = new Date();
+            date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), 0, 0, 0, key === 'minDate' ? 0 : -1);
+          } else if (angular.isString(value) && value.match(/^".+"$/)) {
+            date = new Date(value.substr(1, value.length - 2));
+          } else if (isNumeric(value)) {
+            date = new Date(parseInt(value, 10));
+          } else if (angular.isString(value) && value.length === 0) {
+            date = key === 'minDate' ? -Infinity : +Infinity;
+          } else {
+            date = new Date(value);
+          }
+          return date;
+        };
+        $dateParser.getTimeForAttribute = function(key, value) {
+          var time;
+          if (value === 'now') {
+            time = new Date().setFullYear(1970, 0, 1);
+          } else if (angular.isString(value) && value.match(/^".+"$/)) {
+            time = new Date(value.substr(1, value.length - 2)).setFullYear(1970, 0, 1);
+          } else if (isNumeric(value)) {
+            time = new Date(parseInt(value, 10)).setFullYear(1970, 0, 1);
+          } else if (angular.isString(value) && value.length === 0) {
+            time = key === 'minTime' ? -Infinity : +Infinity;
+          } else {
+            time = $dateParser.parse(value, new Date(1970, 0, 1, 0));
+          }
+          return time;
+        };
+        $dateParser.daylightSavingAdjust = function(date) {
+          if (!date) {
+            return null;
+          }
+          date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
+          return date;
+        };
+        $dateParser.timezoneOffsetAdjust = function(date, timezone, undo) {
+          if (!date) {
+            return null;
+          }
+          if (timezone && timezone === 'UTC') {
+            date = new Date(date.getTime());
+            date.setMinutes(date.getMinutes() + (undo ? -1 : 1) * date.getTimezoneOffset());
+          }
+          return date;
+        };
+        function regExpForFormat(format) {
+          var re = buildDateAbstractRegex(format);
+          return buildDateParseRegex(re);
+        }
+        function buildDateAbstractRegex(format) {
+          var escapedFormat = escapeReservedSymbols(format);
+          var escapedLiteralFormat = escapedFormat.replace(/''/g, '\\\'');
+          var literalRegex = /('(?:\\'|.)*?')/;
+          var formatParts = escapedLiteralFormat.split(literalRegex);
+          var dateElements = Object.keys(regExpMap);
+          var dateRegexParts = [];
+          angular.forEach(formatParts, function(part) {
+            if (isFormatStringLiteral(part)) {
+              part = trimLiteralEscapeChars(part);
+            } else {
+              for (var i = 0; i < dateElements.length; i++) {
+                part = part.split(dateElements[i]).join('${' + i + '}');
+              }
+            }
+            dateRegexParts.push(part);
+          });
+          return dateRegexParts.join('');
+        }
+        function escapeReservedSymbols(text) {
+          return text.replace(/\\/g, '[\\\\]').replace(/-/g, '[-]').replace(/\./g, '[.]').replace(/\*/g, '[*]').replace(/\+/g, '[+]').replace(/\?/g, '[?]').replace(/\$/g, '[$]').replace(/\^/g, '[^]').replace(/\//g, '[/]').replace(/\\s/g, '[\\s]');
+        }
+        function isFormatStringLiteral(text) {
+          return /^'.*'$/.test(text);
+        }
+        function trimLiteralEscapeChars(text) {
+          return text.replace(/^'(.*)'$/, '$1');
+        }
+        function buildDateParseRegex(abstractRegex) {
+          var dateElements = Object.keys(regExpMap);
+          var re = abstractRegex;
+          for (var i = 0; i < dateElements.length; i++) {
+            re = re.split('${' + i + '}').join('(' + regExpMap[dateElements[i]] + ')');
+          }
+          return new RegExp('^' + re + '$', [ 'i' ]);
+        }
+        function setMapForFormat(format) {
+          var re = buildDateAbstractRegex(format);
+          return buildDateParseValuesMap(re);
+        }
+        function buildDateParseValuesMap(abstractRegex) {
+          var dateElements = Object.keys(regExpMap);
+          var valuesRegex = new RegExp('\\${(\\d+)}', 'g');
+          var valuesMatch;
+          var keyIndex;
+          var valueKey;
+          var valueFunction;
+          var valuesFunctionMap = [];
+          while ((valuesMatch = valuesRegex.exec(abstractRegex)) !== null) {
+            keyIndex = valuesMatch[1];
+            valueKey = dateElements[keyIndex];
+            valueFunction = setFnMap[valueKey];
+            valuesFunctionMap.push(valueFunction);
+          }
+          return valuesFunctionMap;
+        }
+        $dateParser.init();
+        return $dateParser;
+      };
+      return DateParserFactory;
+    } ];
+  } ]);
+  angular.module('mgcrea.ngStrap.helpers.dateFormatter', []).service('$dateFormatter', [ '$locale', 'dateFilter', function($locale, dateFilter) {
+    this.getDefaultLocale = function() {
+      return $locale.id;
+    };
+    this.getDatetimeFormat = function(format, lang) {
+      return $locale.DATETIME_FORMATS[format] || format;
+    };
+    this.weekdaysShort = function(lang) {
+      return $locale.DATETIME_FORMATS.SHORTDAY;
+    };
+    this.weekdays = function(lang) {
+      return $locale.DATETIME_FORMATS.DAY;
+    };
+    function splitTimeFormat(format) {
+      return /(h+)([:\.])?(m+)([:\.])?(s*)[ ]?(a?)/i.exec(format).slice(1);
+    }
+    this.hoursFormat = function(timeFormat) {
+      return splitTimeFormat(timeFormat)[0];
+    };
+    this.minutesFormat = function(timeFormat) {
+      return splitTimeFormat(timeFormat)[2];
+    };
+    this.secondsFormat = function(timeFormat) {
+      return splitTimeFormat(timeFormat)[4];
+    };
+    this.timeSeparator = function(timeFormat) {
+      return splitTimeFormat(timeFormat)[1];
+    };
+    this.showSeconds = function(timeFormat) {
+      return !!splitTimeFormat(timeFormat)[4];
+    };
+    this.showAM = function(timeFormat) {
+      return !!splitTimeFormat(timeFormat)[5];
+    };
+    this.formatDate = function(date, format, lang, timezone) {
+      return dateFilter(date, format, timezone);
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.core', []).service('$bsCompiler', bsCompilerService);
+  function bsCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
+    this.compile = function(options) {
+      if (options.template && /\.html$/.test(options.template)) {
+        console.warn('Deprecated use of `template` option to pass a file. Please use the `templateUrl` option instead.');
+        options.templateUrl = options.template;
+        options.template = '';
+      }
+      var templateUrl = options.templateUrl;
+      var template = options.template || '';
+      var controller = options.controller;
+      var controllerAs = options.controllerAs;
+      var resolve = options.resolve || {};
+      var locals = options.locals || {};
+      var transformTemplate = options.transformTemplate || angular.identity;
+      var bindToController = options.bindToController;
+      angular.forEach(resolve, function(value, key) {
+        if (angular.isString(value)) {
+          resolve[key] = $injector.get(value);
+        } else {
+          resolve[key] = $injector.invoke(value);
+        }
+      });
+      angular.extend(resolve, locals);
+      if (template) {
+        resolve.$template = $q.when(template);
+      } else if (templateUrl) {
+        resolve.$template = fetchTemplate(templateUrl);
+      } else {
+        throw new Error('Missing `template` / `templateUrl` option.');
+      }
+      if (options.titleTemplate) {
+        resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.titleTemplate) ]).then(function(templates) {
+          var templateEl = angular.element(templates[0]);
+          findElement('[ng-bind="title"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+          return templateEl[0].outerHTML;
+        });
+      }
+      if (options.contentTemplate) {
+        resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.contentTemplate) ]).then(function(templates) {
+          var templateEl = angular.element(templates[0]);
+          var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+          if (!options.templateUrl) contentEl.next().remove();
+          return templateEl[0].outerHTML;
+        });
+      }
+      return $q.all(resolve).then(function(locals) {
+        var template = transformTemplate(locals.$template);
+        if (options.html) {
+          template = template.replace(/ng-bind="/gi, 'ng-bind-html="');
+        }
+        var element = angular.element('<div>').html(template.trim()).contents();
+        var linkFn = $compile(element);
+        return {
+          locals: locals,
+          element: element,
+          link: function link(scope) {
+            locals.$scope = scope;
+            if (controller) {
+              var invokeCtrl = $controller(controller, locals, true);
+              if (bindToController) {
+                angular.extend(invokeCtrl.instance, locals);
+              }
+              var ctrl = angular.isObject(invokeCtrl) ? invokeCtrl : invokeCtrl();
+              element.data('$ngControllerController', ctrl);
+              element.children().data('$ngControllerController', ctrl);
+              if (controllerAs) {
+                scope[controllerAs] = ctrl;
+              }
+            }
+            return linkFn.apply(null, arguments);
+          }
+        };
+      });
+    };
+    function findElement(query, element) {
+      return angular.element((element || document).querySelectorAll(query));
+    }
+    var fetchPromises = {};
+    function fetchTemplate(template) {
+      if (fetchPromises[template]) return fetchPromises[template];
+      return fetchPromises[template] = $http.get(template, {
+        cache: $templateCache
+      }).then(function(res) {
+        return res.data;
+      });
+    }
+  }
   angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider('$dropdown', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -4041,7 +4041,11 @@
           } else {
             date = new Date(modelValue);
           }
-          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+          if (options.timezone === 'UTC') {
+            controller.$dateValue = date;
+          } else {
+            controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+          }
           return getDateFormattedString();
         });
         function getDateFormattedString() {
@@ -4832,96 +4836,6 @@
       }
     };
   } ]);
-  angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$alert', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      prefixClass: 'alert',
-      prefixEvent: 'alert',
-      placement: null,
-      templateUrl: 'alert/alert.tpl.html',
-      container: false,
-      element: null,
-      backdrop: false,
-      keyboard: true,
-      show: true,
-      duration: false,
-      type: false,
-      dismissable: true
-    };
-    this.$get = [ '$modal', '$timeout', function($modal, $timeout) {
-      function AlertFactory(config) {
-        var $alert = {};
-        var options = angular.extend({}, defaults, config);
-        $alert = $modal(options);
-        $alert.$scope.dismissable = !!options.dismissable;
-        if (options.type) {
-          $alert.$scope.type = options.type;
-        }
-        var show = $alert.show;
-        if (options.duration) {
-          $alert.show = function() {
-            show();
-            $timeout(function() {
-              $alert.hide();
-            }, options.duration * 1e3);
-          };
-        }
-        return $alert;
-      }
-      return AlertFactory;
-    } ];
-  }).directive('bsAlert', [ '$window', '$sce', '$alert', function($window, $sce, $alert) {
-    return {
-      restrict: 'EAC',
-      scope: true,
-      link: function postLink(scope, element, attr, transclusion) {
-        var options = {
-          scope: scope,
-          element: element,
-          show: false
-        };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable' ], function(key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
-        });
-        var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'keyboard', 'html', 'container', 'dismissable' ], function(key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
-        });
-        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
-          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
-          if (angular.isDefined(attr[bsKey])) {
-            options[key] = scope.$eval(attr[bsKey]);
-          }
-        });
-        if (!scope.hasOwnProperty('title')) {
-          scope.title = '';
-        }
-        angular.forEach([ 'title', 'content', 'type' ], function(key) {
-          if (attr[key]) {
-            attr.$observe(key, function(newValue, oldValue) {
-              scope[key] = $sce.trustAsHtml(newValue);
-            });
-          }
-        });
-        if (attr.bsAlert) {
-          scope.$watch(attr.bsAlert, function(newValue, oldValue) {
-            if (angular.isObject(newValue)) {
-              angular.extend(scope, newValue);
-            } else {
-              scope.content = newValue;
-            }
-          }, true);
-        }
-        var alert = $alert(options);
-        element.on(attr.trigger || 'click', alert.toggle);
-        scope.$on('$destroy', function() {
-          if (alert) alert.destroy();
-          options = null;
-          alert = null;
-        });
-      }
-    };
-  } ]);
   angular.module('mgcrea.ngStrap.affix', [ 'mgcrea.ngStrap.helpers.dimensions', 'mgcrea.ngStrap.helpers.debounce' ]).provider('$affix', function() {
     var defaults = this.defaults = {
       offsetTop: 'auto',
@@ -5109,5 +5023,95 @@
       } ]
     };
   });
+  angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$alert', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      prefixClass: 'alert',
+      prefixEvent: 'alert',
+      placement: null,
+      templateUrl: 'alert/alert.tpl.html',
+      container: false,
+      element: null,
+      backdrop: false,
+      keyboard: true,
+      show: true,
+      duration: false,
+      type: false,
+      dismissable: true
+    };
+    this.$get = [ '$modal', '$timeout', function($modal, $timeout) {
+      function AlertFactory(config) {
+        var $alert = {};
+        var options = angular.extend({}, defaults, config);
+        $alert = $modal(options);
+        $alert.$scope.dismissable = !!options.dismissable;
+        if (options.type) {
+          $alert.$scope.type = options.type;
+        }
+        var show = $alert.show;
+        if (options.duration) {
+          $alert.show = function() {
+            show();
+            $timeout(function() {
+              $alert.hide();
+            }, options.duration * 1e3);
+          };
+        }
+        return $alert;
+      }
+      return AlertFactory;
+    } ];
+  }).directive('bsAlert', [ '$window', '$sce', '$alert', function($window, $sce, $alert) {
+    return {
+      restrict: 'EAC',
+      scope: true,
+      link: function postLink(scope, element, attr, transclusion) {
+        var options = {
+          scope: scope,
+          element: element,
+          show: false
+        };
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable' ], function(key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach([ 'keyboard', 'html', 'container', 'dismissable' ], function(key) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
+        });
+        if (!scope.hasOwnProperty('title')) {
+          scope.title = '';
+        }
+        angular.forEach([ 'title', 'content', 'type' ], function(key) {
+          if (attr[key]) {
+            attr.$observe(key, function(newValue, oldValue) {
+              scope[key] = $sce.trustAsHtml(newValue);
+            });
+          }
+        });
+        if (attr.bsAlert) {
+          scope.$watch(attr.bsAlert, function(newValue, oldValue) {
+            if (angular.isObject(newValue)) {
+              angular.extend(scope, newValue);
+            } else {
+              scope.content = newValue;
+            }
+          }, true);
+        }
+        var alert = $alert(options);
+        element.on(attr.trigger || 'click', alert.toggle);
+        scope.$on('$destroy', function() {
+          if (alert) alert.destroy();
+          options = null;
+          alert = null;
+        });
+      }
+    };
+  } ]);
   angular.module('mgcrea.ngStrap', [ 'mgcrea.ngStrap.modal', 'mgcrea.ngStrap.aside', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.button', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.timepicker', 'mgcrea.ngStrap.navbar', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.popover', 'mgcrea.ngStrap.dropdown', 'mgcrea.ngStrap.typeahead', 'mgcrea.ngStrap.scrollspy', 'mgcrea.ngStrap.affix', 'mgcrea.ngStrap.tab', 'mgcrea.ngStrap.collapse' ]);
 })(window, document);
