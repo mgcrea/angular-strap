@@ -45,14 +45,18 @@ angular.module('mgcrea.ngStrap.datepicker',
 		this.$get = function ($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
 			var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
 			var isTouch = ('createTouch' in $window.document) && isNative;
-			if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
+			if (!defaults.lang) {
+				defaults.lang = $dateFormatter.getDefaultLocale();
+			}
 
 			function DatepickerFactory(element, controller, config) {
 				var $datepicker = $tooltip(element, angular.extend({}, defaults, config));
 				var parentScope = config.scope;
 				var options = $datepicker.$options;
 				var scope = $datepicker.$scope;
-				if (options.startView) options.startView -= options.minView;
+				if (options.startView) {
+					options.startView -= options.minView;
+				}
 
 				// View vars
 
@@ -269,7 +273,6 @@ angular.module('mgcrea.ngStrap.datepicker',
 				};
 
 				return $datepicker;
-
 			}
 
 			DatepickerFactory.defaults = defaults;
@@ -346,7 +349,9 @@ angular.module('mgcrea.ngStrap.datepicker',
 					'onBeforeShow',
 					'onShow',
 					'onBeforeHide',
-					'onHide'
+					'onHide',
+					'onInvalid',
+					'onValid'
 				], function (key) {
 					var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
 					if (angular.isDefined(attr[bsKey])) {
@@ -454,8 +459,11 @@ angular.module('mgcrea.ngStrap.datepicker',
 					controller.$setValidity('date', isValid);
 					controller.$setValidity('min', isMinValid);
 					controller.$setValidity('max', isMaxValid);
+
 					// Only update the model when we have a valid date
 					if (isValid) controller.$dateValue = parsedDate;
+
+					return isValid && isMaxValid && isMinValid;
 				}
 
 				function tryFallbackFormats(viewValue) {
@@ -472,16 +480,29 @@ angular.module('mgcrea.ngStrap.datepicker',
 					return;
 				}
 
+				function triggerValid() {
+					if (options.onValid) {
+						options.onValid();
+					}
+				}
+
+				function triggerInvalid() {
+					if (options.onInvalid) {
+						options.onInvalid();
+					}
+				}
+
 				// viewValue -> $parsers -> modelValue
 				controller.$parsers.unshift(function (viewValue) {
-					// console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
 					var date;
 					// Null values should correctly reset the model value & validity
 					if (!viewValue) {
 						controller.$setValidity('date', true);
+
 						// BREAKING CHANGE:
 						// return null (not undefined) when input value is empty, so angularjs 1.3
 						// ngModelController can go ahead and run validators, like ngRequired
+						triggerValid();
 						return null;
 					}
 					var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
@@ -492,11 +513,17 @@ angular.module('mgcrea.ngStrap.datepicker',
 
 					if (!parsedDate || isNaN(parsedDate.getTime())) {
 						controller.$setValidity('date', false);
+
 						// return undefined, causes ngModelController to
 						// invalidate model value
+						triggerInvalid();
 						return;
 					}
-					validateAgainstMinMaxDate(parsedDate);
+					if (!validateAgainstMinMaxDate(parsedDate)) {
+						triggerInvalid();
+					}
+
+					triggerValid();
 
 					if (options.dateType === 'string') {
 						date = dateParser.timezoneOffsetAdjust(parsedDate, options.timezone, true);
@@ -510,12 +537,12 @@ angular.module('mgcrea.ngStrap.datepicker',
 					} else if (options.dateType === 'iso') {
 						return date.toISOString();
 					}
+
 					return new Date(date);
 				});
 
 				// modelValue -> $formatters -> viewValue
 				controller.$formatters.push(function (modelValue) {
-					// console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
 					var date;
 					if (angular.isUndefined(modelValue) || modelValue === null) {
 						date = NaN;
@@ -528,11 +555,7 @@ angular.module('mgcrea.ngStrap.datepicker',
 					} else {
 						date = new Date(modelValue);
 					}
-					// Setup default value?
-					// if (isNaN(date.getTime())) {
-					//   var today = new Date();
-					//   date = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
-					// }
+
 					controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
 					return getDateFormattedString();
 				});

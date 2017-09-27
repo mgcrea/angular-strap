@@ -105,13 +105,9 @@ describe('datepicker', function () {
 			scope: { selectedDate: new Date(1986, 1, 22) },
 			element: '<input type="text" ng-model="selectedDate" data-date-format="EEEE MMMM d, yyyy" bs-datepicker>'
 		},
-
-
 		'options-dateFormat-fallback': {
 			element: '<input type="text" ng-model="selectedDate" data-date-format="M/d/yy" data-fallback-formats="[\'M.d.yyyy\']" bs-datepicker>'
 		},
-
-
 		'options-timezone-utc': {
 			element: '<input type="text" ng-model="selectedDate" data-date-format="yyyy-MM-dd" data-timezone="UTC" bs-datepicker>'
 		},
@@ -230,6 +226,17 @@ describe('datepicker', function () {
 		'options-hasClear': {
 			scope: { selectedDate: new Date() },
 			element: '<input type="text" ng-model="selectedDate" data-has-clear="true" data-min-date="{{minDate}}" data-date-format="yyyy-MM-dd" bs-datepicker>'
+		},
+
+		'options-onInvalid': {
+			scope: { selectedDate: new Date() },
+			element: '<input bs-on-invalid="onInvalid" ng-model="selectedDate" bs-datepicker></input>'
+		},
+		'options-onValid': {
+			element: '<input bs-on-valid="onValid" ng-model="selectedDate" data-date-format="MM/dd/yyyy" bs-datepicker></input>'
+		},
+		'options-onValid-onInvalid': {
+			element: '<input bs-on-valid="onValid" bs-on-invalid="onInvalid" ng-model="selectedDate" data-date-format="MM/dd/yyyy" bs-datepicker></input>'
 		}
 	};
 
@@ -693,38 +700,6 @@ describe('datepicker', function () {
 		});
 	});
 
-	// describe('using service', function() {
-
-	//   it('should correctly open on next digest', function() {
-	//     var myModal = $modal(templates['default'].scope.modal);
-	//     scope.$digest();
-	//     expect(bodyEl.children('.modal').length).toBe(1);
-	//     myModal.hide();
-	//     expect(bodyEl.children('.modal').length).toBe(0);
-	//   });
-
-	//   it('should correctly be destroyed', function() {
-	//     var myModal = $modal(angular.extend(templates['default'].scope.modal));
-	//     scope.$digest();
-	//     expect(bodyEl.children('.modal').length).toBe(1);
-	//     myModal.destroy();
-	//     expect(bodyEl.children('.modal').length).toBe(0);
-	//     expect(bodyEl.children().length).toBe(1);
-	//   });
-
-	//   it('should correctly work with ngClick', function() {
-	//     var elm = compileDirective('markup-ngClick-service');
-	//     var myModal = $modal(angular.extend({show: false}, templates['default'].scope.modal));
-	//     scope.showModal = function() {
-	//       myModal.$promise.then(myModal.show);
-	//     };
-	//     expect(bodyEl.children('.modal').length).toBe(0);
-	//     angular.element(elm[0]).triggerHandler('click');
-	//     expect(bodyEl.children('.modal').length).toBe(1);
-	//   });
-
-	// });
-
 	describe('show / hide events', function () {
 
 		it('should dispatch show and show.before events', function () {
@@ -968,7 +943,6 @@ describe('datepicker', function () {
 		});
 
 		describe('dateFormat', function () {
-
 			it('should support a custom dateFormat', function () {
 				var elm = compileDirective('options-dateFormat');
 				expect(elm.val()).toBe('1986-02-22');
@@ -1675,7 +1649,6 @@ describe('datepicker', function () {
 	});
 
 	describe('onHide', function () {
-
 		it('should invoke show event callback', function () {
 			var hide = false;
 
@@ -1690,6 +1663,107 @@ describe('datepicker', function () {
 			$animate.flush();
 
 			expect(hide).toBe(true);
+		});
+	});
+
+	describe("onValid and onInvalid:", function () {
+		it("should trigger isInvalid on invalid inputs", function () {
+			var hit = false;
+			function onInvalid() {
+				hit = true;
+			}
+
+			var elm = compileDirective('options-onInvalid', {
+				onInvalid: onInvalid
+			});
+			scope.$digest();
+
+			expect(hit).toBe(false);
+
+			elm.val("Not even a date");
+			angular.element(elm[0]).triggerHandler('change');
+			scope.$digest();
+
+			expect(hit).toBe(true);
+		});
+
+		it("should trigger isValid on valid inputs", function () {
+			var hit = false;
+			function onValid() {
+				hit = true;
+			}
+
+			var elm = compileDirective('options-onValid', {
+				onValid: onValid,
+				selectedDate: new Date(2017, 0, 1)
+			});
+			scope.$digest();
+
+			expect(elm.val()).toBe("01/01/2017");
+
+			elm.val("03/03/2017");
+			angular.element(elm[0]).triggerHandler('change');
+			scope.$digest();
+
+			expect(hit).toBe(true);
+		});
+
+		it("should properly function with both onValid and onInvalid hooks", function () {
+			var invalid = false;
+			var hit = false;
+
+			function onInvalid() {
+				hit = true;
+				invalid = true;
+			}
+
+			function onValid() {
+				hit = true;
+				invalid = false;
+			}
+
+			var elm = compileDirective('options-onValid-onInvalid', {
+				onValid: onValid,
+				onInvalid: onInvalid,
+				selectedDate: new Date(2017, 0, 1)
+			});
+			scope.$digest();
+
+			expect(elm.val()).toBe("01/01/2017");
+
+			elm.val("03/03/2017");
+			angular.element(elm[0]).triggerHandler('change');
+			scope.$digest();
+			expect(hit).toBe(true);
+			expect(invalid).toBe(false);
+			hit = false;
+
+			elm.val("Invalid input");
+			angular.element(elm[0]).triggerHandler('change');
+			scope.$digest();
+			expect(hit).toBe(true);
+			expect(invalid).toBe(true);
+			hit = false;
+
+			elm.val("01/04/2018");
+			angular.element(elm[0]).triggerHandler('change');
+			scope.$digest();
+			expect(hit).toBe(true);
+			expect(invalid).toBe(false);
+			hit = false;
+
+			elm.val("1/4/18");
+			angular.element(elm[0]).triggerHandler('change');
+			scope.$digest();
+			expect(hit).toBe(true);
+			expect(invalid).toBe(true);
+			hit = false;
+
+			elm.val("");
+			angular.element(elm[0]).triggerHandler('change');
+			scope.$digest();
+			expect(hit).toBe(true);
+			expect(invalid).toBe(false);
 		});
 	});
 });
