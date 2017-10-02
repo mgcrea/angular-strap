@@ -6,6 +6,7 @@ var Server = require('karma').Server;
 var reporter = require('./helpers/reporter');
 
 module.exports = function (gulp, config) {
+
   var testTimezone = '';
   var hasWatchFlag = process.argv.indexOf('-w') !== -1;
   gulp.task('karma:unit', gulp.series('ng:test/templates', function (done) {
@@ -18,7 +19,10 @@ module.exports = function (gulp, config) {
     }
     new Server({
       configFile: path.join(config.dirname, 'test/karma.conf.js'),
-      browsers: ['PhantomJS']
+      browsers: ['PhantomJS'],
+      reporters: [hasWatchFlag ? 'progress' : 'dots'],
+      autoWatch: hasWatchFlag ? true : false,
+      singleRun: hasWatchFlag ? false : true
     }, function (code) {
       gutil.log('Karma has exited with ' + code);
       done();

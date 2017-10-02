@@ -45,17 +45,13 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
   this.$get = [ '$window', '$document', '$rootScope', '$sce', '$dateFormatter', 'datepickerViews', '$tooltip', '$timeout', function($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
     var isNative = /(ip[ao]d|iphone|android)/gi.test($window.navigator.userAgent);
     var isTouch = 'createTouch' in $window.document && isNative;
-    if (!defaults.lang) {
-      defaults.lang = $dateFormatter.getDefaultLocale();
-    }
+    if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
     function DatepickerFactory(element, controller, config) {
       var $datepicker = $tooltip(element, angular.extend({}, defaults, config));
       var parentScope = config.scope;
       var options = $datepicker.$options;
       var scope = $datepicker.$scope;
-      if (options.startView) {
-        options.startView -= options.minView;
-      }
+      if (options.startView) options.startView -= options.minView;
       var pickerViews = datepickerViews($datepicker);
       $datepicker.$views = pickerViews.views;
       var viewDate = pickerViews.viewDate;
@@ -251,9 +247,7 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         scope: scope
       };
       angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent', 'hasToday', 'hasClear', 'fallbackFormats' ], function(key) {
-        if (angular.isDefined(attr[key])) {
-          options[key] = attr[key];
-        }
+        if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'html', 'container', 'autoclose', 'useNative', 'hasToday', 'hasClear' ], function(key) {
@@ -263,9 +257,7 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
       });
       angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onInvalid', 'onValid' ], function(key) {
         var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
-        if (angular.isDefined(attr[bsKey])) {
-          options[key] = scope.$eval(attr[bsKey]);
-        }
+        if (angular.isDefined(attr[bsKey])) options[key] = scope.$eval(attr[bsKey]);
       });
       if (angular.isDefined(attr.fallbackFormats)) {
         options.fallbackFormats = scope.$eval(attr.fallbackFormats);
@@ -355,14 +347,10 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         return output;
       }
       function triggerValid() {
-        if (options.onValid) {
-          options.onValid();
-        }
+        if (options.onValid) options.onValid();
       }
       function triggerInvalid() {
-        if (options.onInvalid) {
-          options.onInvalid();
-        }
+        if (options.onInvalid) options.onInvalid();
       }
       controller.$parsers.unshift(function(viewValue) {
         var date;
@@ -372,9 +360,7 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
           return null;
         }
         var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
-        if (!parsedDate || isNaN(parsedDate.getTime())) {
-          parsedDate = tryFallbackFormats(viewValue);
-        }
+        if (!parsedDate || isNaN(parsedDate.getTime())) parsedDate = tryFallbackFormats(viewValue);
         if (!parsedDate || isNaN(parsedDate.getTime())) {
           controller.$setValidity('date', false);
           triggerInvalid();
@@ -382,8 +368,9 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         }
         if (!validateAgainstMinMaxDate(parsedDate)) {
           triggerInvalid();
+        } else {
+          triggerValid();
         }
-        triggerValid();
         if (options.dateType === 'string') {
           date = dateParser.timezoneOffsetAdjust(parsedDate, options.timezone, true);
           return formatDate(date, options.modelDateFormat || options.dateFormat);

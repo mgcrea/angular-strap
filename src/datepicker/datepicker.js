@@ -1,11 +1,10 @@
 'use strict';
 
-angular.module('mgcrea.ngStrap.datepicker',
-  [
-    'mgcrea.ngStrap.helpers.dateParser',
-    'mgcrea.ngStrap.helpers.dateFormatter',
-    'mgcrea.ngStrap.tooltip'
-  ])
+angular.module('mgcrea.ngStrap.datepicker', [
+  'mgcrea.ngStrap.helpers.dateParser',
+  'mgcrea.ngStrap.helpers.dateFormatter',
+  'mgcrea.ngStrap.tooltip'
+])
   .provider('$datepicker', function () {
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -288,9 +287,7 @@ angular.module('mgcrea.ngStrap.datepicker',
         // Directive options
         var options = { scope: scope };
         angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent', 'hasToday', 'hasClear', 'fallbackFormats'], function (key) {
-          if (angular.isDefined(attr[key])) {
-            options[key] = attr[key];
-          }
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // use string regex match boolean attr falsy values, leave truthy values be
@@ -304,9 +301,7 @@ angular.module('mgcrea.ngStrap.datepicker',
         // bind functions from the attrs to the show and hide events
         angular.forEach(['onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onInvalid', 'onValid'], function (key) {
           var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
-          if (angular.isDefined(attr[bsKey])) {
-            options[key] = scope.$eval(attr[bsKey]);
-          }
+          if (angular.isDefined(attr[bsKey])) options[key] = scope.$eval(attr[bsKey]);
         });
 
         //bind fallback array if defined
@@ -438,6 +433,7 @@ angular.module('mgcrea.ngStrap.datepicker',
 
         // viewValue -> $parsers -> modelValue
         controller.$parsers.unshift(function (viewValue) {
+          // console.warn('$parser("%s"): viewValue=%o', element.attr('ng-model'), viewValue);
           var date;
           // Null values should correctly reset the model value & validity
           if (!viewValue) {
@@ -462,9 +458,11 @@ angular.module('mgcrea.ngStrap.datepicker',
             return;
           }
 
-          if (!validateAgainstMinMaxDate(parsedDate)) triggerInvalid();
-
-          triggerValid();
+          if (!validateAgainstMinMaxDate(parsedDate)) {
+            triggerInvalid();
+          } else {
+            triggerValid();
+          }
 
           if (options.dateType === 'string') {
             date = dateParser.timezoneOffsetAdjust(parsedDate, options.timezone, true);
