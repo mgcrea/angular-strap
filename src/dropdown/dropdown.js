@@ -20,13 +20,10 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
     this.$get = function ($window, $rootScope, $tooltip, $timeout) {
 
       var bodyEl = angular.element($window.document.body);
-      var matchesSelector = Element.prototype.matchesSelector
-        || Element.prototype.webkitMatchesSelector
-        || Element.prototype.mozMatchesSelector
-        || Element.prototype.msMatchesSelector
-        || Element.prototype.oMatchesSelector;
+      var matchesSelector = Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector;
 
       function DropdownFactory(element, config) {
+
         var $dropdown = {};
 
         // Common vars
@@ -44,32 +41,24 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
             $dropdown.hide();
             return;
           }
+          if (!/(38|40)/.test(evt.keyCode)) return;
           evt.preventDefault();
           evt.stopPropagation();
 
           // Retrieve focused index
           var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
-          if (!items.length) {
-            return;
-          }
+          if (!items.length) return;
           var index;
           angular.forEach(items, function (el, i) {
-            if (matchesSelector && matchesSelector.call(el, ':focus')) {
-              index = i;
-            }
+            if (matchesSelector && matchesSelector.call(el, ':focus')) index = i;
           });
 
           // Navigate with keyboard
-          if (evt.keyCode === 38 && index > 0) {
-            index--;
-          }
-          else if (evt.keyCode === 40 && index < items.length - 1) {
-            index++;
-          }
-          else if (angular.isUndefined(index)) {
-            index = 0;
-          }
+          if (evt.keyCode === 38 && index > 0) index--;
+          else if (evt.keyCode === 40 && index < items.length - 1) index++;
+          else if (angular.isUndefined(index)) index = 0;
           items.eq(index)[0].focus();
+
         };
 
         // Overrides
@@ -80,28 +69,18 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
           $timeout(function () {
-            if (options.keyboard && $dropdown.$element) {
-              $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
-            }
+            if (options.keyboard && $dropdown.$element) $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
             bodyEl.on('click', onBodyClick);
           }, 0, false);
-          if (parentEl.hasClass('dropdown')) {
-            parentEl.addClass('open');
-          }
+          if (parentEl.hasClass('dropdown')) parentEl.addClass('open');
         };
 
         var hide = $dropdown.hide;
         $dropdown.hide = function () {
-          if (!$dropdown.$isShown) {
-            return;
-          }
-          if (options.keyboard && $dropdown.$element) {
-            $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
-          }
+          if (!$dropdown.$isShown) return;
+          if (options.keyboard && $dropdown.$element) $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
           bodyEl.off('click', onBodyClick);
-          if (parentEl.hasClass('dropdown')) {
-            parentEl.removeClass('open');
-          }
+          if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
           hide();
         };
 
@@ -114,17 +93,18 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         // Private functions
 
         function onBodyClick(evt) {
-          if (evt.target === element[0]) {
-            return;
-          }
+          if (evt.target === element[0]) return;
           return evt.target !== element[0] && $dropdown.hide();
         }
 
         return $dropdown;
+
       }
 
       return DropdownFactory;
+
     };
+
   })
 
   .directive('bsDropdown', function ($window, $sce, $dropdown) {
@@ -149,8 +129,9 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         }
 
         return function postLink(scope, element, attr) {
+
           // Directive options
-          var options = { scope: scope };
+          var options = {
             scope: scope
           };
           angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id', 'autoClose'], function (key) {

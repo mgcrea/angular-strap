@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2017-10-02
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -45,13 +45,17 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
   this.$get = [ '$window', '$document', '$rootScope', '$sce', '$dateFormatter', 'datepickerViews', '$tooltip', '$timeout', function($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
     var isNative = /(ip[ao]d|iphone|android)/gi.test($window.navigator.userAgent);
     var isTouch = 'createTouch' in $window.document && isNative;
-    if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
+    if (!defaults.lang) {
+      defaults.lang = $dateFormatter.getDefaultLocale();
+    }
     function DatepickerFactory(element, controller, config) {
       var $datepicker = $tooltip(element, angular.extend({}, defaults, config));
       var parentScope = config.scope;
       var options = $datepicker.$options;
       var scope = $datepicker.$scope;
-      if (options.startView) options.startView -= options.minView;
+      if (options.startView) {
+        options.startView -= options.minView;
+      }
       var pickerViews = datepickerViews($datepicker);
       $datepicker.$views = pickerViews.views;
       var viewDate = pickerViews.viewDate;
@@ -247,7 +251,9 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         scope: scope
       };
       angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent', 'hasToday', 'hasClear', 'fallbackFormats' ], function(key) {
-        if (angular.isDefined(attr[key])) options[key] = attr[key];
+        if (angular.isDefined(attr[key])) {
+          options[key] = attr[key];
+        }
       });
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'html', 'container', 'autoclose', 'useNative', 'hasToday', 'hasClear' ], function(key) {
@@ -255,12 +261,17 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
           options[key] = false;
         }
       });
-      angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+      angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onInvalid', 'onValid' ], function(key) {
         var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
         if (angular.isDefined(attr[bsKey])) {
           options[key] = scope.$eval(attr[bsKey]);
         }
       });
+      if (angular.isDefined(attr.fallbackFormats)) {
+        options.fallbackFormats = scope.$eval(attr.fallbackFormats);
+      } else {
+        options.fallbackFormats = [];
+      }
       var datepicker = $datepicker(element, controller, options);
       options = datepicker.$options;
       if (isNative && options.useNative) options.dateFormat = 'yyyy-MM-dd';
@@ -332,6 +343,7 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         controller.$setValidity('min', isMinValid);
         controller.$setValidity('max', isMaxValid);
         if (isValid) controller.$dateValue = parsedDate;
+        return isValid && isMaxValid && isMinValid;
       }
       function tryFallbackFormats(viewValue) {
         var result;
@@ -344,10 +356,21 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         }
         return;
       }
+      function triggerValid() {
+        if (options.onValid) {
+          options.onValid();
+        }
+      }
+      function triggerInvalid() {
+        if (options.onInvalid) {
+          options.onInvalid();
+        }
+      }
       controller.$parsers.unshift(function(viewValue) {
         var date;
         if (!viewValue) {
           controller.$setValidity('date', true);
+          triggerValid();
           return null;
         }
         var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
@@ -356,9 +379,13 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         }
         if (!parsedDate || isNaN(parsedDate.getTime())) {
           controller.$setValidity('date', false);
+          triggerInvalid();
           return;
         }
-        validateAgainstMinMaxDate(parsedDate);
+        if (!validateAgainstMinMaxDate(parsedDate)) {
+          triggerInvalid();
+        }
+        triggerValid();
         if (options.dateType === 'string') {
           date = dateParser.timezoneOffsetAdjust(parsedDate, options.timezone, true);
           return formatDate(date, options.modelDateFormat || options.dateFormat);
@@ -386,7 +413,11 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         } else {
           date = new Date(modelValue);
         }
-        controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+        if (options.timezone === 'UTC') {
+          controller.$dateValue = date;
+        } else {
+          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+        }
         return getDateFormattedString();
       });
       controller.$render = function() {

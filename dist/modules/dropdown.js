@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2017-10-02
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -30,55 +30,37 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       $dropdown = $tooltip(element, options);
       var parentEl = element.parent();
       $dropdown.$onKeyDown = function(evt) {
-        if (!/(38|40)/.test(evt.keyCode)) {
+        if (/(9)/.test(evt.keyCode)) {
+          $dropdown.hide();
           return;
         }
+        if (!/(38|40)/.test(evt.keyCode)) return;
         evt.preventDefault();
         evt.stopPropagation();
         var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
-        if (!items.length) {
-          return;
-        }
+        if (!items.length) return;
         var index;
         angular.forEach(items, function(el, i) {
-          if (matchesSelector && matchesSelector.call(el, ':focus')) {
-            index = i;
-          }
+          if (matchesSelector && matchesSelector.call(el, ':focus')) index = i;
         });
-        if (evt.keyCode === 38 && index > 0) {
-          index--;
-        } else if (evt.keyCode === 40 && index < items.length - 1) {
-          index++;
-        } else if (angular.isUndefined(index)) {
-          index = 0;
-        }
+        if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (angular.isUndefined(index)) index = 0;
         items.eq(index)[0].focus();
       };
       var show = $dropdown.show;
       $dropdown.show = function() {
         show();
         $timeout(function() {
-          if (options.keyboard && $dropdown.$element) {
-            $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
-          }
+          if (options.keyboard && $dropdown.$element) $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
           bodyEl.on('click', onBodyClick);
         }, 0, false);
-        if (parentEl.hasClass('dropdown')) {
-          parentEl.addClass('open');
-        }
+        if (parentEl.hasClass('dropdown')) parentEl.addClass('open');
       };
       var hide = $dropdown.hide;
       $dropdown.hide = function() {
-        if (!$dropdown.$isShown) {
-          return;
-        }
-        if (options.keyboard && $dropdown.$element) {
-          $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
-        }
+        if (!$dropdown.$isShown) return;
+        if (options.keyboard && $dropdown.$element) $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
         bodyEl.off('click', onBodyClick);
-        if (parentEl.hasClass('dropdown')) {
-          parentEl.removeClass('open');
-        }
+        if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
         hide();
       };
       var destroy = $dropdown.destroy;
@@ -87,9 +69,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         destroy();
       };
       function onBodyClick(evt) {
-        if (evt.target === element[0]) {
-          return;
-        }
+        if (evt.target === element[0]) return;
         return evt.target !== element[0] && $dropdown.hide();
       }
       return $dropdown;
