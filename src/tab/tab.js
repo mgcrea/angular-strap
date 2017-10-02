@@ -10,6 +10,11 @@ angular.module('mgcrea.ngStrap.tab', [])
       navClass: 'nav-tabs',
       activeClass: 'active'
     };
+    var _tabsHash = {};
+
+    var _addTabControl = function (key, control) {
+      if (!_tabsHash[key]) _tabsHash[key] = control;
+    };
 
     var controller = this.controller = function ($scope, $element, $attrs) {
       var self = this;
@@ -80,12 +85,19 @@ angular.module('mgcrea.ngStrap.tab', [])
         return self.$panes.$active === $pane.name || self.$panes.$active === $index;
       };
 
+      self.$onKeyPress = $scope.$onKeyPress = function (e, index) {
+        if (e.keyCode === 32 || e.charCode === 32 || e.keyCode === 13 || e.charCode === 13) {
+          self.$setActive(index);
+        }
+      };
     };
 
     this.$get = function () {
       var $tab = {};
       $tab.defaults = defaults;
       $tab.controller = controller;
+      $tab.addTabControl = _addTabControl;
+      $tab.tabsHash = _tabsHash;
       return $tab;
     };
 
@@ -107,6 +119,12 @@ angular.module('mgcrea.ngStrap.tab', [])
 
         var ngModelCtrl = controllers[0];
         var bsTabsCtrl = controllers[1];
+
+        // Add a way for developers to access tab scope if needed.  This allows for more fine grained control over what
+        // tabs are available in the tab component
+        if (attrs.tabKey !== '' && attrs.tabKey !== undefined) {
+          $tab.addTabControl(attrs.tabKey, bsTabsCtrl);
+        }
 
         // 'ngModel' does interfere with form validation
         // and status, use `bsActivePane` instead to avoid it

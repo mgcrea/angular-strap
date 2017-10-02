@@ -305,7 +305,9 @@ describe('datepicker', function() {
       // select the first day of the month
       angular.element(sandboxEl.find('.dropdown-menu tbody .btn:contains(01)')[0]).triggerHandler('click');
       expect(sandboxEl.find('.dropdown-menu tbody td .btn-primary').text().trim() * 1).toBe(1);
-      expect(elm.val()).toBe((today.getMonth() + 1 + 1) + '/1/' + (today.getFullYear() + '').substr(2));
+
+      var nextMonthAndYear = new Date(today.getFullYear(), today.getMonth() +1 , 1);
+      expect(elm.val()).toBe(nextMonthAndYear.getMonth() + 1 + '/1/' + (nextMonthAndYear.getFullYear() + '').substr(2));
     });
 
     it('should correctly set the model with manually typed value', function() {

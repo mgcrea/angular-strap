@@ -55,6 +55,8 @@ module.exports = function (gulp, config) {
   gulp.task('karma:travis~1.2.0', gulp.series('ng:test/templates', testAngularVersion('~1.2.0')));
   gulp.task('karma:travis~1.3.0', gulp.series('ng:test/templates', testAngularVersion('~1.3.0')));
   gulp.task('karma:travis~1.4.0', gulp.series('ng:test/templates', testAngularVersion('~1.4.0')));
+  gulp.task('karma:travis~1.5.0', gulp.series('ng:test/templates', testAngularVersion('~1.5.0')));
+  gulp.task('karma:travis~1.6.0', gulp.series('ng:test/templates', testAngularVersion('~1.6.0')));
 
   gulp.task('test', gulp.series('ng:test/templates', gulp.parallel('karma:unit')));
   gulp.task('test:timezone', function () {

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.10 - 2016-10-17
+ * @version v2.3.12 - 2017-01-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -91,6 +91,20 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         evt.preventDefault();
         evt.stopPropagation();
       };
+      $typeahead.$$updateScrollTop = function(container, index) {
+        if (index > -1 && index < container.children.length) {
+          var active = container.children[index];
+          var clientTop = active.offsetTop;
+          var clientBottom = active.offsetTop + active.clientHeight;
+          var highWatermark = container.scrollTop;
+          var lowWatermark = container.scrollTop + container.clientHeight;
+          if (clientBottom >= highWatermark && clientTop < highWatermark) {
+            container.scrollTop = Math.max(0, container.scrollTop - container.clientHeight);
+          } else if (clientBottom > lowWatermark) {
+            container.scrollTop = clientTop;
+          }
+        }
+      };
       $typeahead.$onKeyDown = function(evt) {
         if (!/(38|40|13)/.test(evt.keyCode)) return;
         if ($typeahead.$isVisible() && !(evt.keyCode === 13 && scope.$activeIndex === -1)) {
@@ -106,6 +120,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         } else if (angular.isUndefined(scope.$activeIndex)) {
           scope.$activeIndex = 0;
         }
+        $typeahead.$$updateScrollTop($typeahead.$element[0], scope.$activeIndex);
         scope.$digest();
       };
       var show = $typeahead.show;
