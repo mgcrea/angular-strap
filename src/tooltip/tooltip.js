@@ -295,12 +295,14 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           // in leaveAnimateCallback
           _tipToHide = tipElement;
 
-          // Support v1.2+ $animate
-          // https://github.com/angular/angular.js/issues/11713
-          if (angular.version.minor <= 2) {
-            $animate.leave(tipElement, leaveAnimateCallback);
-          } else {
-            $animate.leave(tipElement).then(leaveAnimateCallback);
+          if (tipElement !== null) {
+            // Support v1.2+ $animate
+            // https://github.com/angular/angular.js/issues/11713
+            if (angular.version.minor <= 2) {
+              $animate.leave(tipElement, leaveAnimateCallback);
+            } else {
+              $animate.leave(tipElement).then(leaveAnimateCallback);
+            }
           }
 
           $tooltip.$isShown = scope.$isShown = false;

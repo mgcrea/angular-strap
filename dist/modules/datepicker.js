@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.10 - 2017-09-25
+ * @version v2.3.12 - 2017-01-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -61,7 +61,8 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
       scope.$hasToday = options.hasToday;
       scope.$hasClear = options.hasClear;
       var $picker = $datepicker.$views[scope.$mode];
-      scope.$select = function(date) {
+      scope.$select = function(date, disabled) {
+        if (disabled) return;
         $datepicker.select(date);
       };
       scope.$selectPane = function(value) {
