@@ -45,18 +45,14 @@ angular.module('mgcrea.ngStrap.datepicker',
     this.$get = function ($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
       var isNative = /(ip[ao]d|iphone|android)/ig.test($window.navigator.userAgent);
       var isTouch = ('createTouch' in $window.document) && isNative;
-      if (!defaults.lang) {
-        defaults.lang = $dateFormatter.getDefaultLocale();
-      }
+      if (!defaults.lang) defaults.lang = $dateFormatter.getDefaultLocale();
 
       function DatepickerFactory(element, controller, config) {
         var $datepicker = $tooltip(element, angular.extend({}, defaults, config));
         var parentScope = config.scope;
         var options = $datepicker.$options;
         var scope = $datepicker.$scope;
-        if (options.startView) {
-          options.startView -= options.minView;
-        }
+        if (options.startView) options.startView -= options.minView;
 
         // View vars
 
@@ -291,40 +287,7 @@ angular.module('mgcrea.ngStrap.datepicker',
       link: function postLink(scope, element, attr, controller) {
         // Directive options
         var options = { scope: scope };
-        angular.forEach([
-          'template',
-          'templateUrl',
-          'controller',
-          'controllerAs',
-          'placement',
-          'container',
-          'delay',
-          'trigger',
-          'html',
-          'animation',
-          'autoclose',
-          'dateType',
-          'dateFormat',
-          'timezone',
-          'modelDateFormat',
-          'dayFormat',
-          'strictFormat',
-          'startWeek',
-          'startDate',
-          'useNative',
-          'lang',
-          'startView',
-          'minView',
-          'iconLeft',
-          'iconRight',
-          'daysOfWeekDisabled',
-          'id',
-          'prefixClass',
-          'prefixEvent',
-          'hasToday',
-          'hasClear',
-          'fallbackFormats'
-        ], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent', 'hasToday', 'hasClear', 'fallbackFormats'], function (key) {
           if (angular.isDefined(attr[key])) {
             options[key] = attr[key];
           }
@@ -332,28 +295,14 @@ angular.module('mgcrea.ngStrap.datepicker',
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([
-          'html',
-          'container',
-          'autoclose',
-          'useNative',
-          'hasToday',
-          'hasClear'
-        ], function (key) {
+        angular.forEach(['html', 'container', 'autoclose', 'useNative', 'hasToday', 'hasClear'], function (key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
           }
         });
 
         // bind functions from the attrs to the show and hide events
-        angular.forEach([
-          'onBeforeShow',
-          'onShow',
-          'onBeforeHide',
-          'onHide',
-          'onInvalid',
-          'onValid'
-        ], function (key) {
+        angular.forEach(['onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onInvalid', 'onValid'], function (key) {
           var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
           if (angular.isDefined(attr[bsKey])) {
             options[key] = scope.$eval(attr[bsKey]);
@@ -480,15 +429,11 @@ angular.module('mgcrea.ngStrap.datepicker',
         }
 
         function triggerValid() {
-          if (options.onValid) {
-            options.onValid();
-          }
+          if (options.onValid) options.onValid();
         }
 
         function triggerInvalid() {
-          if (options.onInvalid) {
-            options.onInvalid();
-          }
+          if (options.onInvalid) options.onInvalid();
         }
 
         // viewValue -> $parsers -> modelValue
@@ -497,30 +442,27 @@ angular.module('mgcrea.ngStrap.datepicker',
           // Null values should correctly reset the model value & validity
           if (!viewValue) {
             controller.$setValidity('date', true);
+            triggerValid();
 
             // BREAKING CHANGE:
             // return null (not undefined) when input value is empty, so angularjs 1.3
             // ngModelController can go ahead and run validators, like ngRequired
-            triggerValid();
             return null;
           }
           var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
 
-          if (!parsedDate || isNaN(parsedDate.getTime())) {
-            parsedDate = tryFallbackFormats(viewValue);
-          }
+          if (!parsedDate || isNaN(parsedDate.getTime())) parsedDate = tryFallbackFormats(viewValue);
 
           if (!parsedDate || isNaN(parsedDate.getTime())) {
             controller.$setValidity('date', false);
+            triggerInvalid();
 
             // return undefined, causes ngModelController to
             // invalidate model value
-            triggerInvalid();
             return;
           }
-          if (!validateAgainstMinMaxDate(parsedDate)) {
-            triggerInvalid();
-          }
+
+          if (!validateAgainstMinMaxDate(parsedDate)) triggerInvalid();
 
           triggerValid();
 
