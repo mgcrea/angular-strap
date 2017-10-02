@@ -285,14 +285,13 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         strict: options.strictFormat
       });
       var fallbackParsers = [];
-      for (var i = 0; i < options.fallbackFormats.length; i++) {
-        var format = options.fallbackFormats[i];
+      angular.forEach(options.fallbackFormats, function(format) {
         fallbackParsers.push($dateParser({
           format: format,
           lang: lang,
           strict: options.strictFormat
         }));
-      }
+      });
       if (attr.bsShow) {
         scope.$watch(attr.bsShow, function(newValue, oldValue) {
           if (!datepicker || !angular.isDefined(newValue)) return;
@@ -346,15 +345,14 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         return isValid && isMaxValid && isMinValid;
       }
       function tryFallbackFormats(viewValue) {
-        var result;
-        for (var i = 0; i < fallbackParsers.length; i++) {
-          var parser = fallbackParsers[i];
+        var output;
+        angular.forEach(fallbackParsers, function(parser) {
           var result = parser.parse(viewValue, controller.$dateValue);
           if (result) {
-            return result;
+            output = result;
           }
-        }
-        return;
+        });
+        return output;
       }
       function triggerValid() {
         if (options.onValid) {
