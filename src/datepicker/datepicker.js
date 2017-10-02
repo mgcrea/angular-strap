@@ -72,7 +72,8 @@ angular.module('mgcrea.ngStrap.datepicker',
 
 				// Scope methods
 
-				scope.$select = function (date) {
+        scope.$select = function (date, disabled) {
+          if (disabled) return;
 					$datepicker.select(date);
 				};
 				scope.$selectPane = function (value) {
@@ -556,7 +557,12 @@ angular.module('mgcrea.ngStrap.datepicker',
 						date = new Date(modelValue);
 					}
 
-					controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+          // do not adjust date if timezone is UTC
+          if (options.timezone === 'UTC') {
+            controller.$dateValue = date;
+          } else {
+            controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+          }
 					return getDateFormattedString();
 				});
 
