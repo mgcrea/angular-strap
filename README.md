@@ -13,6 +13,15 @@ AngularStrap is a set of native directives that enables seamless integration of 
 - If you don't want to use `ngAnimate`, you will have to include a tiny [ngAnimate mock](https://github.com/mgcrea/angular-strap/wiki/ngAnimate-mock).
 
 
+## Looking for maintainers!
+
+We're currently looking for aspiring maintainers to tackle issues and pull requests!
+
+I (mgcrea) have not worked on any Angular.js v1 codebase for more than a year now. For me it's time to move on!
+
+If you have an ongoing project depending on AngularStrap, and would like to become a contributor, please chime in on [issue #2256](https://github.com/mgcrea/angular-strap/issues/2256)
+
+
 ## Documentation and examples
 
 + Check the [documentation](http://mgcrea.github.io/angular-strap) and [changelog](https://github.com/mgcrea/angular-strap/releases).
