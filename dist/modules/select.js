@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2017-10-02
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -200,6 +200,18 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
         if (!options.multiple) {
           if (evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--; else if (evt.keyCode === 38 && scope.$activeIndex < 0) scope.$activeIndex = scope.$matches.length - 1; else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++; else if (angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
           scope.$digest();
+          $timeout(function() {
+            var ddlMenuContainer = angular.element('ul.select.dropdown-menu:last-of-type').get(0);
+            var activeListItem = angular.element(ddlMenuContainer).find('li.active:first');
+            var listItemHeight = activeListItem.height();
+            var itemPosition = ddlMenuContainer.scrollTop + activeListItem.position().top;
+            var menuHeight = angular.element(ddlMenuContainer).height();
+            if (itemPosition < ddlMenuContainer.scrollTop) {
+              ddlMenuContainer.scrollTop = itemPosition;
+            } else if (itemPosition + listItemHeight > ddlMenuContainer.scrollTop + menuHeight) {
+              ddlMenuContainer.scrollTop += itemPosition + listItemHeight - (ddlMenuContainer.scrollTop + menuHeight);
+            }
+          });
         }
       };
       $select.$isIE = function() {
@@ -278,7 +290,7 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
       if (element[0].nodeName.toLowerCase() === 'select') {
         var inputEl = element;
         inputEl.css('display', 'none');
-        element = angular.element('<button type="button" class="btn btn-default"></button>');
+        element = angular.element('<button type="button" class="btn btn-default" aria-haspopup="true"></button>');
         inputEl.after(element);
       }
       var parsedOptions = $parseOptions(attr.bsOptions);

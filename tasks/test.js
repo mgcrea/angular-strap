@@ -29,7 +29,7 @@ module.exports = function (gulp, config) {
     }).start();
   }));
   // codeclimate-test-reporter
-  gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis (done) {
+  gulp.task('karma:travis', gulp.series('ng:test/templates', function karmaTravis(done) {
     new Server({
       configFile: path.join(config.dirname, 'test/karma.conf.js'),
       browsers: ['PhantomJS'],
@@ -46,8 +46,8 @@ module.exports = function (gulp, config) {
         done();
         return;
       }
-      gulp.src('test/coverage/**/lcov.info', {read: false})
-        .pipe(reporter({token: token}))
+      gulp.src('test/coverage/**/lcov.info', { read: false })
+        .pipe(reporter({ token: token }))
         .on('end', done);
     }).start();
   }));
@@ -68,7 +68,7 @@ module.exports = function (gulp, config) {
     return gulp.series('ng:test/templates', gulp.parallel('karma:unit'));
   });
 
-  function testAngularVersion (version) {
+  function testAngularVersion(version) {
     return function (done) {
       new Server({
         configFile: path.join(config.dirname, 'test/' + version + '/karma.conf.js'),

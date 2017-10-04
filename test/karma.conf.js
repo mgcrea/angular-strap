@@ -3,7 +3,7 @@
 
 'use strict';
 
-module.exports = function(config) {
+module.exports = function (config) {
 
   config.set({
 
@@ -117,9 +117,9 @@ module.exports = function(config) {
 
     // Coverage reporter generates the coverage
     coverageReporter: {
-      reporters:[
-        {type: 'lcov', dir:'test/coverage/'},
-        {type: 'text-summary', dir:'test/coverage/'}
+      reporters: [
+        { type: 'lcov', dir: 'test/coverage/' },
+        { type: 'text-summary', dir: 'test/coverage/' }
       ]
     }
 
