@@ -161,7 +161,11 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', [])
           var today = new Date();
           date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), 0, 0, 0, (key === 'minDate' ? 0 : -1));
         } else if(angular.isString(value) && value.match(/^".+"$/)) { // Support {{ dateObj }}
-          date = new Date(value.substr(1, value.length - 2));
+          if (value.match(/Z/)) {
+            date = new Date(value.substr(1, value.length - 3));
+          } else {
+            date = new Date(value.substr(1, value.length - 2));
+          }
         } else if(isNumeric(value)) {
           date = new Date(parseInt(value, 10));
         } else if (angular.isString(value) && 0 === value.length) { // Reset date
