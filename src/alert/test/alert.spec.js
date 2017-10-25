@@ -3,18 +3,26 @@
 describe('alert', function() {
 
   var bodyEl = $('body'), sandboxEl;
-  var $compile, $templateCache, $alert, scope;
+  var $compile, $templateCache, $animate, $timeout, $alert, scope;
 
   beforeEach(module('ngSanitize'));
+  beforeEach(module('ngAnimate'));
+  beforeEach(module('ngAnimateMock'));
   beforeEach(module('mgcrea.ngStrap.modal', 'mgcrea.ngStrap.alert'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$alert_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_, _$alert_, _$animate_, _$timeout_) {
     scope = _$rootScope_.$new();
     bodyEl.html('');
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo($('body'));
     $compile = _$compile_;
     $templateCache = _$templateCache_;
     $alert = _$alert_;
+    $animate = _$animate_;
+    $timeout = _$timeout_;
+    var flush = $animate.flush || $animate.triggerCallbacks;
+    $animate.flush = function() {
+      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+    };
   }));
 
   afterEach(function() {
@@ -62,6 +70,9 @@ describe('alert', function() {
     'options-template': {
       scope: {alert: {title: 'Title', content: 'Hello alert!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a data-template-url="custom" bs-alert="alert">click me</a>'
+    },
+    'options-events': {
+      element: '<a bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" bs-alert="alert">click me</a>'
     }
   };
 
@@ -96,29 +107,29 @@ describe('alert', function() {
     it('should correctly compile inner content', function() {
       var elm = compileDirective('default');
       angular.element(elm[0]).triggerHandler('click');
-      expect(sandboxEl.find('.alert > strong').html()).toBe(scope.alert.title);
-      expect(sandboxEl.find('.alert > span').html()).toBe(scope.alert.content);
+      expect(sandboxEl.find('.alert strong').html()).toBe(scope.alert.title);
+      expect(sandboxEl.find('.alert').html()).toContain(scope.alert.content);
     });
 
     it('should support scope as object', function() {
       var elm = compileDirective('markup-scope');
       angular.element(elm[0]).triggerHandler('click');
-      expect(sandboxEl.find('.alert > strong').html()).toBe(scope.alert.title);
-      expect(sandboxEl.find('.alert > span').html()).toBe(scope.alert.content);
+      expect(sandboxEl.find('.alert strong').html()).toBe(scope.alert.title);
+      expect(sandboxEl.find('.alert').html()).toContain(scope.alert.content);
     });
 
     it('should support ngRepeat markup inside', function() {
       var elm = compileDirective('markup-ngRepeat');
       angular.element(elm.find('[bs-alert]')).triggerHandler('click');
-      expect(sandboxEl.find('.alert > strong').html()).toBe(scope.items[0].alert.title);
-      expect(sandboxEl.find('.alert > span').html()).toBe(scope.items[0].alert.content);
+      expect(sandboxEl.find('.alert strong').html()).toBe(scope.items[0].alert.title);
+      expect(sandboxEl.find('.alert').html()).toContain(scope.items[0].alert.content);
     });
 
     it('should overwrite inherited title when no value specified', function() {
       var elm = compileDirective('default-no-title');
       angular.element(elm[0]).triggerHandler('click');
-      expect(sandboxEl.find('.alert > strong').html()).toBe('');
-      expect(sandboxEl.find('.alert > span').html()).toBe(scope.alert.content);
+      expect(sandboxEl.find('.alert strong').html()).toBeUndefined();
+      expect(sandboxEl.find('.alert').html()).toContain(scope.alert.content);
     });
 
   });
@@ -326,6 +337,78 @@ describe('alert', function() {
       })
 
     })
+
+    describe('onBeforeShow', function() {
+
+      it('should invoke beforeShow event callback', function() {
+        var beforeShow = false;
+
+        function onBeforeShow(select) {
+          beforeShow = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeShow: onBeforeShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeShow).toBe(true);
+      });
+    });
+
+    describe('onShow', function() {
+
+      it('should invoke show event callback', function() {
+        var show = false;
+
+        function onShow(select) {
+          show = true;
+        }
+
+        var elm = compileDirective('options-events', {onShow: onShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(show).toBe(true);
+      });
+    });
+
+    describe('onBeforeHide', function() {
+
+      it('should invoke beforeHide event callback', function() {
+        var beforeHide = false;
+
+        function onBeforeHide(select) {
+          beforeHide = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeHide: onBeforeHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeHide).toBe(true);
+      });
+    });
+
+    describe('onHide', function() {
+
+      it('should invoke show event callback', function() {
+        var hide = false;
+
+        function onHide(select) {
+          hide = true;
+        }
+
+        var elm = compileDirective('options-events', {onHide: onHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(hide).toBe(true);
+      });
+    });
 
   });
 

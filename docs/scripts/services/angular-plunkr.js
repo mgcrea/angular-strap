@@ -4,7 +4,7 @@ angular.module('mgcrea.ngPlunkr', ['mgcrea.ngStrap.helpers.debounce'])
 
 .run(function($templateCache, version) {
 
-  var ngVersion = '1.4.5';
+  var ngVersion = '1.5.5';
 
   var templateHtml = '' +
     '<!DOCTYPE html>\n' +
@@ -16,8 +16,8 @@ angular.module('mgcrea.ngPlunkr', ['mgcrea.ngStrap.helpers.debounce'])
     '    <script>document.write(\'<base href="\' + document.location + \'" />\');</script>\n' +
 
     // styles
-    '    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.3.0/css/font-awesome.css">\n' +
-    '    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.4/css/bootstrap.min.css">\n' +
+    '    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.5.0/css/font-awesome.css">\n' +
+    '    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css">\n' +
     '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libs.min.css">\n' +
     '    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/docs.min.css">\n' +
     '    <link rel="stylesheet" href="style.css" />\n' +

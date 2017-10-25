@@ -1,5 +1,4 @@
 'use strict';
-/* eslint node:true */
 
 var gulp = require('gulp');
 var path = require('path');
@@ -30,7 +29,10 @@ gulp.task('build', gulp.series('ng:build', 'compat', function afterBuild() {
 
 gulp.task('pages', gulp.series('ng:pages', function afterPages(done) {
   var paths = config.docs;
-  return gulp.src(['bower_components/highlightjs/styles/github.css'],
+  return gulp.src([
+    'bower_components/highlightjs/styles/github.css',
+    '1.0/**/*'
+  ],
     {cwd: paths.cwd, base: paths.cwd})
     .pipe(gulp.dest(paths.dest));
 }));

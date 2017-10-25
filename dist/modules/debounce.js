@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.12 - 2017-01-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -11,7 +11,9 @@ angular.module('mgcrea.ngStrap.helpers.debounce', []).factory('debounce', [ '$ti
   return function(func, wait, immediate) {
     var timeout = null;
     return function() {
-      var context = this, args = arguments, callNow = immediate && !timeout;
+      var context = this;
+      var args = arguments;
+      var callNow = immediate && !timeout;
       if (timeout) {
         $timeout.cancel(timeout);
       }
@@ -30,9 +32,10 @@ angular.module('mgcrea.ngStrap.helpers.debounce', []).factory('debounce', [ '$ti
 } ]).factory('throttle', [ '$timeout', function($timeout) {
   return function(func, wait, options) {
     var timeout = null;
-    options || (options = {});
+    if (!options) options = {};
     return function() {
-      var context = this, args = arguments;
+      var context = this;
+      var args = arguments;
       if (!timeout) {
         if (options.leading !== false) {
           func.apply(context, args);

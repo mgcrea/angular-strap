@@ -157,7 +157,14 @@ describe('timepicker', function() {
     'options-container': {
       scope: {selectedTime: new Date()},
       element: '<input type="text" data-container="{{container}}" ng-model="selectedTime" bs-timepicker>'
-    }
+    },
+    'options-events': {
+      element: '<input type="text" bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" ng-model="selectedTime" bs-timepicker>'
+    },
+    'options-defaultDate-today': {
+      scope: {selectedTime: null, defaultDate: 'today'},
+      element: '<input type="text" ng-model="selectedTime" default-date="today" bs-timepicker>'
+    },
   };
 
   function compileDirective(template, locals) {
@@ -206,7 +213,7 @@ describe('timepicker', function() {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(6) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
     });
 
     it('should correctly update the model when the view is updated', function() {
@@ -262,7 +269,7 @@ describe('timepicker', function() {
       var elm = compileDirective('default', {selectedTime: undefined});
       expect(elm.val()).toBe('');
       angular.element(elm[0]).triggerHandler('focus');
-      var amButton = angular.element(sandboxEl.find('.dropdown-menu tbody td:eq(6) button:eq(0)')[0]);
+      var amButton = angular.element(sandboxEl.find('.dropdown-menu tbody td:eq(4) button:eq(0)')[0]);
       spyOn(scope.$$childHead, '$switchMeridian');
       amButton.triggerHandler('click');
       // expect not to throw exception
@@ -311,7 +318,7 @@ describe('timepicker', function() {
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(0) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'h'));
       expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(2) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'mm'));
-      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(6) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
+      expect(sandboxEl.find('.dropdown-menu tbody tr:eq(2) td:eq(4) .btn-primary').text()).toBe(dateFilter(scope.selectedTime, 'a'));
 
     });
 
@@ -647,6 +654,78 @@ describe('timepicker', function() {
 
     });
 
+    describe('onBeforeShow', function() {
+
+      it('should invoke beforeShow event callback', function() {
+        var beforeShow = false;
+
+        function onBeforeShow(select) {
+          beforeShow = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeShow: onBeforeShow});
+
+        angular.element(elm[0]).triggerHandler('focus');
+
+        expect(beforeShow).toBe(true);
+      });
+    });
+
+    describe('onShow', function() {
+
+      it('should invoke show event callback', function() {
+        var show = false;
+
+        function onShow(select) {
+          show = true;
+        }
+
+        var elm = compileDirective('options-events', {onShow: onShow});
+
+        angular.element(elm[0]).triggerHandler('focus');
+        $animate.flush();
+
+        expect(show).toBe(true);
+      });
+    });
+
+    describe('onBeforeHide', function() {
+
+      it('should invoke beforeHide event callback', function() {
+        var beforeHide = false;
+
+        function onBeforeHide(select) {
+          beforeHide = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeHide: onBeforeHide});
+
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(elm[0]).triggerHandler('blur');
+
+        expect(beforeHide).toBe(true);
+      });
+    });
+
+    describe('onHide', function() {
+
+      it('should invoke show event callback', function() {
+        var hide = false;
+
+        function onHide(select) {
+          hide = true;
+        }
+
+        var elm = compileDirective('options-events', {onHide: onHide});
+
+        angular.element(elm[0]).triggerHandler('focus');
+        angular.element(elm[0]).triggerHandler('blur');
+        $animate.flush();
+
+        expect(hide).toBe(true);
+      });
+    });
+
     describe('seconds display', function() {
 
       it('should hide seconds', function() {
@@ -654,7 +733,7 @@ describe('timepicker', function() {
         angular.element(elm[0]).triggerHandler('focus');
         expect(sandboxEl.find('.dropdown-menu thead .btn').length).toBe(2);
         expect(sandboxEl.find('.dropdown-menu tbody .btn').length).toBe($timepicker.defaults.length * 2);
-        expect(sandboxEl.find('.dropdown-menu tfoot .btn').length).toBe(2);
+        expect(sandboxEl.find('.dropdown-menu tbody tr:first td').length).toBe(3);
       });
 
       it('should show seconds', function() {
@@ -1276,6 +1355,49 @@ describe('timepicker', function() {
         expect(hide).toBe(true);
       });
 
+    });
+
+    describe('defaultDate', function () {
+      it('should support a automatically filled date with current year, month and day', function() {
+        var localScope = templates['default'].scope
+
+        for (var key in scope) {
+          localScope[key] = scope[key]
+        }
+
+        var element = templates['default'].element
+
+        var elem = $(element).appendTo(sandboxEl);
+
+        var myTimepicker = $timepicker(elem, {
+          $dateValue: null,
+          $setViewValue: function() {},
+          $render: function() {}
+        }, {
+          scope: localScope
+        });
+
+        localScope.$digest();
+        myTimepicker.show();
+
+        var currentDate = new Date();
+
+        myTimepicker.select(currentDate, 0)
+        myTimepicker.select(currentDate, 1)
+        myTimepicker.select(currentDate, 2)
+
+        var year = localScope.selectedTime.getYear();
+        var month = localScope.selectedTime.getMonth();
+        var day = localScope.selectedTime.getDate();
+
+        var currentYear = currentDate.getYear();
+        var currentMonth = currentDate.getMonth();
+        var currentDay = currentDate.getDate();
+
+        expect(year).toBe(currentYear);
+        expect(month).toBe(currentMonth);
+        expect(day).toBe(currentDay);
+      });
     });
 
   });

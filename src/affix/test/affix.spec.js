@@ -3,7 +3,7 @@
 
 describe('affix', function () {
 
-  var $compile, scope, sandboxEl;
+  var $compile, scope, sandboxEl, $timeout;
   // var mouse = effroi.mouse;
 
 
@@ -41,11 +41,13 @@ describe('affix', function () {
     var element = $(template.element).appendTo(sandboxEl);
     element = $compile(element)(scope);
     scope.$digest();
+    $timeout.flush();
     return jQuery(element[0]);
   }
-  function sandboxSetup(_$rootScope_, _$compile_) {
+  function sandboxSetup(_$rootScope_, _$compile_, _$timeout_) {
     scope = _$rootScope_;
     $compile = _$compile_;
+    $timeout = _$timeout_;
     sandboxEl = $('<div>').attr('id', 'sandbox').appendTo('body');
   }
   // Tests

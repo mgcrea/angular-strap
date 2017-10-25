@@ -23,7 +23,7 @@ $scope.icons = {{icons}};
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
 
     <label>Single select:&nbsp;</label>
-    <button type="button" class="btn btn-default" ng-model="selectedIcon" data-html="1" bs-options="icon.value as icon.label for icon in icons" bs-select>
+    <button type="button" class="btn btn-default" ng-model="selectedIcon" data-html="1" data-toggle="true" bs-options="icon.value as icon.label for icon in icons" bs-select>
       Action <span class="caret"></span>
     </button>
     <hr>
@@ -125,6 +125,54 @@ $scope.icons = {{icons}};
           <td>'$select'</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>toggle</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>When true, an item can be deselected.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onShow</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked after the select is shown.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onBeforeShow</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked before the select is shown.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onHide</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked after the select is hidden.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onBeforeHide</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked before the select is hidden.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onSelect</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked when an item is selected.</p>
           </td>
         </tr>
         <tr>

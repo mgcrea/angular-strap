@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.12 - 2017-01-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -28,11 +28,11 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
     noneText: 'None',
     maxLength: 3,
     maxLengthHtml: 'selected',
-    iconCheckmark: 'glyphicon glyphicon-ok'
+    iconCheckmark: 'glyphicon glyphicon-ok',
+    toggle: false
   };
   this.$get = [ '$window', '$document', '$rootScope', '$tooltip', '$timeout', function($window, $document, $rootScope, $tooltip, $timeout) {
-    var bodyEl = angular.element($window.document.body);
-    var isNative = /(ip(a|o)d|iphone|android)/gi.test($window.navigator.userAgent);
+    var isNative = /(ip[ao]d|iphone|android)/gi.test($window.navigator.userAgent);
     var isTouch = 'createTouch' in $window.document && isNative;
     function SelectFactory(element, controller, config) {
       var $select = {};
@@ -86,7 +86,11 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
       };
       $select.activate = function(index) {
         if (options.multiple) {
-          $select.$isActive(index) ? scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1) : scope.$activeIndex.push(index);
+          if ($select.$isActive(index)) {
+            scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1);
+          } else {
+            scope.$activeIndex.push(index);
+          }
           if (options.sort) scope.$activeIndex.sort(function(a, b) {
             return a - b;
           });
@@ -96,6 +100,9 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
         return scope.$activeIndex;
       };
       $select.select = function(index) {
+        if (angular.isUndefined(index) || index < 0 || index >= scope.$matches.length) {
+          return;
+        }
         var value = scope.$matches[index].value;
         scope.$apply(function() {
           $select.activate(index);
@@ -107,11 +114,18 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
               return scope.$matches[index].value;
             }));
           } else {
-            controller.$setViewValue(value);
+            if (options.toggle) {
+              controller.$setViewValue(value === controller.$modelValue ? undefined : value);
+            } else {
+              controller.$setViewValue(value);
+            }
             $select.hide();
           }
         });
         scope.$emit(options.prefixEvent + '.select', value, index, $select);
+        if (angular.isDefined(options.onSelect) && angular.isFunction(options.onSelect)) {
+          options.onSelect(value, index, $select);
+        }
       };
       $select.$updateActiveIndex = function() {
         if (options.multiple) {
@@ -139,25 +153,36 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
       $select.$isActive = function(index) {
         if (options.multiple) {
           return scope.$activeIndex.indexOf(index) !== -1;
-        } else {
-          return scope.$activeIndex === index;
         }
+        return scope.$activeIndex === index;
       };
       $select.$getIndex = function(value) {
-        var l = scope.$matches.length, i = l;
-        if (!l) return;
-        for (i = l; i--; ) {
-          if (scope.$matches[i].value === value) break;
+        var index;
+        for (index = scope.$matches.length; index--; ) {
+          if (angular.equals(scope.$matches[index].value, value)) break;
         }
-        if (i < 0) return;
-        return i;
+        return index;
       };
       $select.$onMouseDown = function(evt) {
         evt.preventDefault();
         evt.stopPropagation();
         if (isTouch) {
           var targetEl = angular.element(evt.target);
-          targetEl.triggerHandler('click');
+          var anchor;
+          if (evt.target.nodeName !== 'A') {
+            var anchorCandidate = targetEl.parent();
+            while (!anchor && anchorCandidate.length > 0) {
+              if (anchorCandidate[0].nodeName === 'A') {
+                anchor = anchorCandidate;
+              }
+              anchorCandidate = anchorCandidate.parent();
+            }
+          }
+          if (anchor) {
+            angular.element(anchor).triggerHandler('click');
+          } else {
+            targetEl.triggerHandler('click');
+          }
         }
       };
       $select.$onKeyDown = function(evt) {
@@ -227,16 +252,28 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
         scope: scope,
         placeholder: defaults.placeholder
       };
-      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent', 'toggle' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;
       angular.forEach([ 'html', 'container', 'allNoneButtons', 'sort' ], function(key) {
-        if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
+          options[key] = false;
+        }
+      });
+      angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onSelect' ], function(key) {
+        var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+        if (angular.isDefined(attr[bsKey])) {
+          options[key] = scope.$eval(attr[bsKey]);
+        }
       });
       var dataMultiple = element.attr('data-multiple');
       if (angular.isDefined(dataMultiple)) {
-        if (falseValueRegExp.test(dataMultiple)) options.multiple = false; else options.multiple = dataMultiple;
+        if (falseValueRegExp.test(dataMultiple)) {
+          options.multiple = false;
+        } else {
+          options.multiple = dataMultiple;
+        }
       }
       if (element[0].nodeName.toLowerCase() === 'select') {
         var inputEl = element;
@@ -261,11 +298,12 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
         controller.$render();
       }, true);
       controller.$render = function() {
-        var selected, index;
+        var selected;
+        var index;
         if (options.multiple && angular.isArray(controller.$modelValue)) {
           selected = controller.$modelValue.map(function(value) {
             index = select.$getIndex(value);
-            return angular.isDefined(index) ? select.$scope.$matches[index].label : false;
+            return index !== -1 ? select.$scope.$matches[index].label : false;
           }).filter(angular.isDefined);
           if (selected.length > (options.maxLength || defaults.maxLength)) {
             selected = selected.length + ' ' + (options.maxLengthHtml || defaults.maxLengthHtml);
@@ -274,9 +312,9 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
           }
         } else {
           index = select.$getIndex(controller.$modelValue);
-          selected = angular.isDefined(index) ? select.$scope.$matches[index].label : false;
+          selected = index !== -1 ? select.$scope.$matches[index].label : false;
         }
-        element.html((selected ? selected : options.placeholder) + (options.caretHtml ? options.caretHtml : defaults.caretHtml));
+        element.html((selected || options.placeholder) + (options.caretHtml || defaults.caretHtml));
       };
       if (options.multiple) {
         controller.$isEmpty = function(value) {

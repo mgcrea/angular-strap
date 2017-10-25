@@ -23,7 +23,7 @@ describe('popover', function () {
     $timeout = $injector.get('$timeout');
     var flush = $animate.flush || $animate.triggerCallbacks;
     $animate.flush = function() {
-      flush.call($animate); if(!$animate.triggerCallbacks) $timeout.flush();
+      flush.call($animate, true); if(!$animate.triggerCallbacks) $timeout.flush();
     };
   }));
 
@@ -93,6 +93,21 @@ describe('popover', function () {
     'bsShow-binding': {
       scope: {isVisible: false, popover: {title: 'Title', content: 'Hello Popover!'}},
       element: '<a class="btn" title="{{popover.title}}" data-content="{{popover.content}}" bs-popover bs-show="isVisible"></a>'
+    },
+    'bsEnabled-attr': {
+      scope: {popover: {title: 'Hello Popover!'}},
+      element: '<a title="{{popover.title}}" data-trigger="hover" bs-popover bs-enabled="false">click me</a>'
+    },
+    'bsEnabled-attr-binding': {
+      scope: {popover: {title: 'Hello Popover!'}, isEnabled: true},
+      element: '<a title="{{popover.title}}" data-trigger="hover" bs-popover bs-enabled="isEnabled">click me</a>'
+    },
+    'options-contentTemplate': {
+      scope: {foo: 'bar'},
+      element: '<a class="btn" title="foo-title" data-content-template="custom" bs-popover bs-show="isVisible"></a>'
+    },
+    'options-events': {
+      element: '<a bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" bs-popover="popover">click me</a>'
     }
   };
 
@@ -195,6 +210,86 @@ describe('popover', function () {
       scope.$digest();
       expect(sandboxEl.children().length).toBe(2);
     });
+  });
+
+  describe('bsEnabled attribute', function() {
+    it('should support setting to a boolean value', function() {
+      compileDirective('bsEnabled-attr');
+      expect(sandboxEl.children('.popover').length).toBe(0);
+    });
+
+    it('should open on mouseenter when enabled', function() {
+      var elm = compileDirective('bsEnabled-attr-binding');
+      expect(sandboxEl.children('.popover').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.flush();
+      expect(sandboxEl.children('.popover').length).toBe(1);
+    });
+    //
+    it('should close on mouseleave when enabled', function() {
+      var elm = compileDirective('bsEnabled-attr-binding');
+      expect(sandboxEl.children('.popover').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.flush();
+      expect(sandboxEl.children('.popover').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      expect(sandboxEl.children('.popover').length).toBe(0);
+    });
+    //
+    it('should not open on mouseenter when disabled', function() {
+      var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: false });
+      expect(sandboxEl.children('.popover').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.flush(true);
+      expect(sandboxEl.children('.popover').length).toBe(0);
+    });
+
+    it('should close on mouseleave when disabled', function() {
+      var elm = compileDirective('bsEnabled-attr-binding');
+      expect(sandboxEl.children('.popover').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.flush();
+      expect(sandboxEl.children('.popover').length).toBe(1);
+      scope.isEnabled = false;
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      expect(sandboxEl.children('.popover').length).toBe(0);
+    });
+
+    it('should support undefined value', function() {
+      var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: undefined });
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.flush();
+      expect(sandboxEl.children('.popover').length).toBe(1);
+    });
+
+    it('should support string values', function() {
+      var elm = compileDirective('bsEnabled-attr-binding', { isEnabled: 'true' });
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      $animate.flush();
+      expect(sandboxEl.children('.popover').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      scope.isEnabled = 'false';
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      expect(sandboxEl.children('.popover').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      scope.isEnabled = '1';
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      expect(sandboxEl.children('.popover').length).toBe(1);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      scope.isEnabled = '0';
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      expect(sandboxEl.children('.popover').length).toBe(0);
+      angular.element(elm[0]).triggerHandler('mouseleave');
+      scope.isEnabled = 'popover';
+      scope.$digest();
+      angular.element(elm[0]).triggerHandler('mouseenter');
+      expect(sandboxEl.children('.popover').length).toBe(1);
+    });
+
   });
 
   describe('show / hide events', function() {
@@ -317,7 +412,7 @@ describe('popover', function () {
         expect(sandboxEl.find('.popover-content').html()).toBe(scope.popover.content);
       });
 
-      it('should NOT correctly compile inner content when truthy', function() {
+      it('should NOT correctly compile inner content when falsy', function() {
         var elm = compileDirective('options-html', {html: 'false'});
         angular.element(elm[0]).triggerHandler('click');
         expect(sandboxEl.find('.popover-title').html()).not.toBe(scope.popover.title);
@@ -389,6 +484,19 @@ describe('popover', function () {
         angular.element(elm[0]).triggerHandler('click');
         expect(angular.element(sandboxEl.find('.popover-content > .btn')[0]).triggerHandler('click'));
         expect(scope.popover.counter).toBe(2);
+      });
+
+    });
+
+
+    describe('contentTemplate', function () {
+
+      it('should support custom content templates', function() {
+        $templateCache.put('custom', '{{foo}}: some content inside the template');
+        var elm = compileDirective('options-contentTemplate');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.popover-title').text()).toBe('foo-title');
+        expect(sandboxEl.find('.popover-content').text()).toBe('bar: some content inside the template');
       });
 
     });
@@ -468,6 +576,78 @@ describe('popover', function () {
       });
 
 
+    });
+
+    describe('onBeforeShow', function() {
+
+      it('should invoke beforeShow event callback', function() {
+        var beforeShow = false;
+
+        function onBeforeShow(select) {
+          beforeShow = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeShow: onBeforeShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeShow).toBe(true);
+      });
+    });
+
+    describe('onShow', function() {
+
+      it('should invoke show event callback', function() {
+        var show = false;
+
+        function onShow(select) {
+          show = true;
+        }
+
+        var elm = compileDirective('options-events', {onShow: onShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(show).toBe(true);
+      });
+    });
+
+    describe('onBeforeHide', function() {
+
+      it('should invoke beforeHide event callback', function() {
+        var beforeHide = false;
+
+        function onBeforeHide(select) {
+          beforeHide = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeHide: onBeforeHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeHide).toBe(true);
+      });
+    });
+
+    describe('onHide', function() {
+
+      it('should invoke show event callback', function() {
+        var hide = false;
+
+        function onHide(select) {
+          hide = true;
+        }
+
+        var elm = compileDirective('options-events', {onHide: onHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(hide).toBe(true);
+      });
     });
 
     describe('prefix', function () {

@@ -32,8 +32,8 @@
       <small>(using inlined sibling template)</small>
     </button>
     <ul class="dropdown-menu" role="menu">
-      <li><a href="#anotherAction"><i class="fa fa-download"></i>&nbsp;Some action</a></li>
-      <li><a ng-click="$alert('Holy guacamole')"><i class="fa fa-globe"></i>&nbsp;Display an alert</a></li>
+      <li><a href="#anotherAction" tabindex="0"><i class="fa fa-download"></i>&nbsp;Some action</a></li>
+      <li><a ng-click="$alert('Holy guacamole')" tabindex="0"><i class="fa fa-globe"></i>&nbsp;Display an alert</a></li>
       <li ng-repeat="i in ['Foo', 'Bar', 'Baz']"><a ng-href="#action{{i}}"><i class="fa fa-chevron-right"></i>&nbsp;{{i}}</a></li>
     </ul>
 
@@ -91,7 +91,7 @@
           <td>trigger</td>
           <td>string</td>
           <td>'click'</td>
-          <td>how dropdown is triggered - click | hover | focus | manual</td>
+          <td>how dropdown is triggered - click | hover | focus | contextmenu | manual</td>
         </tr>
         <tr>
           <td>html</td>
@@ -135,6 +135,38 @@
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
             <p>It should be a <code>div.dropdown-menu</code> element following Bootstrap styles conventions (<a href="//github.com/mgcrea/angular-strap/blob/master/src/dropdown/dropdown.tpl.html" target="_blank">like this</a>).</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onShow</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked after the dropdown is shown.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onBeforeShow</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked before the dropdown is shown.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onHide</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked after the dropdown is hidden.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onBeforeHide</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked before the dropdown is hidden.</p>
           </td>
         </tr>
       </tbody>

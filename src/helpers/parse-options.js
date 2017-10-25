@@ -2,15 +2,15 @@
 
 angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
 
-  .provider('$parseOptions', function() {
+  .provider('$parseOptions', function () {
 
     var defaults = this.defaults = {
       regexp: /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/
     };
 
-    this.$get = function($parse, $q) {
+    this.$get = function ($parse, $q) {
 
-      function ParseOptionsFactory(attr, config) {
+      function ParseOptionsFactory (attr, config) {
 
         var $parseOptions = {};
 
@@ -19,22 +19,30 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
         $parseOptions.$values = [];
 
         // Private vars
-        var match, displayFn, valueName, keyName, groupByFn, valueFn, valuesFn;
+        var match;
+        var displayFn;
+        var valueName;
+        /* eslint-disable no-unused-vars */
+        var keyName;
+        var groupByFn;
+        /* eslint-enable no-unused-vars */
+        var valueFn;
+        var valuesFn;
 
-        $parseOptions.init = function() {
+        $parseOptions.init = function () {
           $parseOptions.$match = match = attr.match(options.regexp);
-          displayFn = $parse(match[2] || match[1]),
-          valueName = match[4] || match[6],
-          keyName = match[5],
-          groupByFn = $parse(match[3] || ''),
-          valueFn = $parse(match[2] ? match[1] : valueName),
+          displayFn = $parse(match[2] || match[1]);
+          valueName = match[4] || match[6];
+          keyName = match[5];
+          groupByFn = $parse(match[3] || '');
+          valueFn = $parse(match[2] ? match[1] : valueName);
           valuesFn = $parse(match[7]);
         };
 
-        $parseOptions.valuesFn = function(scope, controller) {
+        $parseOptions.valuesFn = function (scope, controller) {
           return $q.when(valuesFn(scope, controller))
-          .then(function(values) {
-            if(!angular.isArray(values)) {
+          .then(function (values) {
+            if (!angular.isArray(values)) {
               values = [];
             }
             $parseOptions.$values = values.length ? parseValues(values, scope) : [];
@@ -42,7 +50,7 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
           });
         };
 
-        $parseOptions.displayValue = function(modelValue) {
+        $parseOptions.displayValue = function (modelValue) {
           var scope = {};
           scope[valueName] = modelValue;
           return displayFn(scope);
@@ -50,9 +58,11 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', [])
 
         // Private functions
 
-        function parseValues(values, scope) {
-          return values.map(function(match, index) {
-            var locals = {}, label, value;
+        function parseValues (values, scope) {
+          return values.map(function (match, index) {
+            var locals = {};
+            var label;
+            var value;
             locals[valueName] = match;
             label = displayFn(scope, locals);
             value = valueFn(scope, locals);

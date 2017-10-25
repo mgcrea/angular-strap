@@ -55,6 +55,9 @@
       min-height: 100px;
       text-align: left;
     }
+    .btn {
+      font-size: 8px;
+    }
     .container-viewport {
       position: absolute;
       top: 100px;
@@ -84,6 +87,12 @@
   <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="right" data-animation="am-flip-x">Shift Down w/ Animation</button>
   <button type="button" class="btn btn-default" bs-tooltip data-title="This should not be shifted down" data-placement="right" data-viewport="null">Don't Shift Down</button>
 
+  <button type="button" class="btn btn-default pull-right" bs-tooltip data-title="This should be shifted to the left" data-placement="auto">Shift Left (auto)</button>
+  <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted to the right" data-placement="auto">Shift Right (auto)</button>
+  <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="auto">Shift Down (auto)</button>
+  <button type="button" class="btn btn-default" bs-tooltip data-title="This should be shifted down" data-placement="auto" data-animation="am-flip-x">Shift Down w/ Animation (auto)</button>
+  <button type="button" class="btn btn-default" bs-tooltip data-title="This should not be shifted down" data-placement="auto" data-viewport="null">Don't Shift Down (auto)</button>
+
   <button type="button" class="btn btn-default tooltip-right btn-bottom-left" bs-tooltip data-title="This should be shifted up" data-placement="right">Shift Up</button>
   <button type="button" class="btn btn-default tooltip-right btn-bottom-right" bs-tooltip data-title="This should be shifted left" data-placement="top">Shift Left</button>
 
@@ -99,21 +108,68 @@
     <button type="button" class="btn btn-default tooltip-viewport-right btn-bottom-right" bs-tooltip data-title="This should be shifted left" data-placement="top" data-viewport="{selector: '.container-viewport', padding: 2}">Shift Left</button>
   </div>
 
-  <!-- bower:js -->
-  <!-- endinject -->
 
-  <!-- source:js -->
-  <!-- endinject -->
+    <!-- bower:js -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/fastclick/lib/fastclick.js"></script>
+    <script src="bower_components/highlightjs/highlight.pack.js"></script>
+    <!-- endinject -->
 
-  <!-- inject:js -->
-  <!-- endinject -->
+    <!-- source:js -->
+    <script src="src/module.js"></script>
+    <script src="src/affix/affix.js"></script>
+    <script src="src/aside/aside.js"></script>
+    <script src="src/button/button.js"></script>
+    <script src="src/alert/alert.js"></script>
+    <script src="src/collapse/collapse.js"></script>
+    <script src="src/datepicker/datepicker.js"></script>
+    <script src="src/dropdown/dropdown.js"></script>
+    <script src="src/helpers/compiler.js"></script>
+    <script src="src/helpers/date-formatter.js"></script>
+    <script src="src/helpers/date-parser.js"></script>
+    <script src="src/helpers/debounce.js"></script>
+    <script src="src/helpers/dimensions.js"></script>
+    <script src="src/helpers/parse-options.js"></script>
+    <script src="src/helpers/raf.js"></script>
+    <script src="src/modal/modal.js"></script>
+    <script src="src/navbar/navbar.js"></script>
+    <script src="src/scrollspy/scrollspy.js"></script>
+    <script src="src/popover/popover.js"></script>
+    <script src="src/select/select.js"></script>
+    <script src="src/tab/tab.js"></script>
+    <script src="src/timepicker/timepicker.js"></script>
+    <script src="src/typeahead/typeahead.js"></script>
+    <script src="src/tooltip/tooltip.js"></script>
+    <!-- endinject -->
 
-  <!-- source-docs:js -->
-  <!-- endinject -->
+    <!-- inject:js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/services/indent.js"></script>
+    <script src="scripts/services/angular-plunkr.js"></script>
+    <script src="scripts/directives/highlight-block.js"></script>
+    <script src="scripts/directives/code.js"></script>
+    <script src="scripts/directives/append-source.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <!-- endinject -->
 
-  <!-- views:js -->
-  <!-- endinject -->
+    <!-- source-docs:js -->
+    <script src="src/aside/docs/aside.demo.js"></script>
+    <script src="src/alert/docs/alert.demo.js"></script>
+    <script src="src/button/docs/button.demo.js"></script>
+    <script src="src/collapse/docs/collapse.demo.js"></script>
+    <script src="src/datepicker/docs/datepicker.demo.js"></script>
+    <script src="src/dropdown/docs/dropdown.demo.js"></script>
+    <script src="src/modal/docs/modal.demo.js"></script>
+    <script src="src/navbar/docs/navbar.demo.js"></script>
+    <script src="src/popover/docs/popover.demo.js"></script>
+    <script src="src/select/docs/select.demo.js"></script>
+    <script src="src/tab/docs/tab.demo.js"></script>
+    <script src="src/timepicker/docs/timepicker.demo.js"></script>
+    <script src="src/typeahead/docs/typeahead.demo.js"></script>
+    <script src="src/tooltip/docs/tooltip.demo.js"></script>
+    <!-- endinject -->
 
 </body>
 </html>
-

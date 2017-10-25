@@ -23,10 +23,10 @@ describe('tab', function () {
 
   var templates = {
     'default': {
-      element: '<div bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+      element: '<div bs-tabs><div data-title="title-1" bs-pane>content-1</div><div data-title="title-2" bs-pane>content-2</div></div>'
     },
     'defaultNested': {
-      element: '<div bs-tabs><div title="title-1" bs-pane><div bs-tabs><div title="title-nested-11" bs-pane>content-nested-11</div><div title="title-nested-12" bs-pane>content-nested-12</div></div></div><div title="title-2" bs-pane><div bs-tabs><div title="title-nested-21" bs-pane>content-nested-21</div><div title="title-nested-22" bs-pane>content-nested-22</div></div></div></div>'
+      element: '<div bs-tabs><div data-title="title-1" bs-pane><div bs-tabs><div data-title="title-nested-11" bs-pane>content-nested-11</div><div data-title="title-nested-12" bs-pane>content-nested-12</div></div></div><div data-title="title-2" bs-pane><div bs-tabs><div data-title="title-nested-21" bs-pane>content-nested-21</div><div data-title="title-nested-22" bs-pane>content-nested-22</div></div></div></div>'
     },
     'template-ngRepeat': {
       scope: {tabs: [
@@ -34,15 +34,15 @@ describe('tab', function () {
         {title:'Profile', content: 'Food truck fixie locavore...'},
         {title:'About', content: 'Etsy mixtape wayfarers...'}
       ]},
-      element: '<div bs-tabs><div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
+      element: '<div bs-tabs><div ng-repeat="tab in tabs" data-title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
     },
     'binding-ngModel': {
       scope: {tab: {active: 1}},
-      element: '<div ng-model="tab.active" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+      element: '<div ng-model="tab.active" bs-tabs><div data-title="title-1" bs-pane>content-1</div><div data-title="title-2" bs-pane>content-2</div></div>'
     },
     'binding-named-ngModel': {
       scope: {tab: {active: 'title-1'}},
-      element: '<div ng-model="tab.active" bs-tabs><div title="title-1" name="title-1" bs-pane>content-1</div><div title="title-2" name="title-2" bs-pane>content-2</div></div>'
+      element: '<div ng-model="tab.active" bs-tabs><div data-title="title-1" name="title-1" bs-pane>content-1</div><div data-title="title-2" name="title-2" bs-pane>content-2</div></div>'
     },
     'template-ngModel-ngRepeat': {
       scope: {
@@ -52,15 +52,15 @@ describe('tab', function () {
           {title:'Profile', content: 'Food truck fixie locavore...'},
           {title:'About', content: 'Etsy mixtape wayfarers...'}
       ]},
-      element: '<div ng-model="tab.active" bs-tabs><div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
+      element: '<div ng-model="tab.active" bs-tabs><div ng-repeat="tab in tabs" data-title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
     },
     'binding-named-bsActivePane': {
       scope: {tab: {active: 'title-1'}},
-      element: '<div bs-active-pane="tab.active" bs-tabs><div title="title-1" name="title-1" bs-pane>content-1</div><div title="title-2" name="title-2" bs-pane>content-2</div></div>'
+      element: '<div bs-active-pane="tab.active" bs-tabs><div data-title="title-1" name="title-1" bs-pane>content-1</div><div data-title="title-2" name="title-2" bs-pane>content-2</div></div>'
     },
     'binding-bsActivePane': {
       scope: {tab: {active: 1}},
-      element: '<div bs-active-pane="tab.active" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+      element: '<div bs-active-pane="tab.active" bs-tabs><div data-title="title-1" bs-pane>content-1</div><div data-title="title-2" bs-pane>content-2</div></div>'
     },
     'template-bsActivePane-ngRepeat': {
       scope: {
@@ -70,22 +70,22 @@ describe('tab', function () {
           {title:'Profile', content: 'Food truck fixie locavore...'},
           {title:'About', content: 'Etsy mixtape wayfarers...'}
       ]},
-      element: '<div bs-active-pane="tab.active" bs-tabs><div ng-repeat="tab in tabs" title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
+      element: '<div bs-active-pane="tab.active" bs-tabs><div ng-repeat="tab in tabs" data-title="{{ tab.title }}" ng-bind="tab.content" bs-pane></div>'
     },
     'options-animation': {
-      element: '<div data-animation="am-flip-x" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+      element: '<div data-animation="am-flip-x" bs-tabs><div data-title="title-1" bs-pane>content-1</div><div data-title="title-2" bs-pane>content-2</div></div>'
     },
     'options-template': {
-      element: '<div data-template="custom" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+      element: '<div data-template="custom" bs-tabs><div data-title="title-1" bs-pane>content-1</div><div data-title="title-2" bs-pane>content-2</div></div>'
     },
     'options-navClass': {
-      element: '<div data-nav-class="nav-pills nav-stacked" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+      element: '<div data-nav-class="nav-pills nav-stacked" bs-tabs><div data-title="title-1" bs-pane>content-1</div><div data-title="title-2" bs-pane>content-2</div></div>'
     },
     'options-activeClass': {
-      element: '<div data-active-class="in" bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane>content-2</div></div>'
+      element: '<div data-active-class="in" bs-tabs><div data-title="title-1" bs-pane>content-1</div><div data-title="title-2" bs-pane>content-2</div></div>'
     },
     'pane-options-disabled': {
-      element: '<div bs-tabs><div title="title-1" bs-pane>content-1</div><div title="title-2" bs-pane disabled="true">content-2</div></div>'
+      element: '<div bs-tabs><div data-title="title-1" bs-pane>content-1</div><div data-title="title-2" bs-pane disabled="true">content-2</div></div>'
     }
   };
 

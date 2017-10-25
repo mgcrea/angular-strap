@@ -147,7 +147,7 @@
           <td>string | DOMElement | false</td>
           <td>false</td>
           <td>
-            <p>Position the tooltip relative to a specific target element.</p>
+            <p>Position the popover relative to a specific target element.</p>
           </td>
         </tr>
         <tr>
@@ -179,7 +179,7 @@
           <td>autoClose</td>
           <td>boolean</td>
           <td>false</td>
-          <td>If provided, auto closes the tooltip when clicking outside of it.</td>
+          <td>If provided, auto closes the popover when clicking outside of it.</td>
         </tr>
         <tr>
           <td>id</td>
@@ -187,6 +187,38 @@
           <td>''</td>
           <td>
             The popover instance id for usage in event handlers.
+          </td>
+        </tr>
+        <tr>
+          <td>onShow</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked after the popover is shown.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onBeforeShow</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked before the popover is shown.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onHide</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked after the popover is hidden.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onBeforeHide</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked before the popover is hidden.</p>
           </td>
         </tr>
         <tr>
@@ -220,6 +252,41 @@
     </div>
   </div>
 
+  <h3>Helper attributes</h3>
+  <p>Helper attributes can be used together with the directive via data-attributes to support specific functionality. Helper attributes support data binding. To use helper attributes, append the helper attribute name to <code>data-</code>, as in <code>data-bs-show="true"</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th style="width: 100px;">Name</th>
+        <th style="width: 100px;">type</th>
+        <th style="width: 50px;">default</th>
+        <th>description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>bsShow</td>
+        <td>boolean | string</td>
+        <td>false</td>
+        <td>
+          <p>shows or hides the popover. Supports boolean values or "true"/"false" string values.</p>
+          <p>You can also specify "popover" to show just the popover when using several angular-strap directives on the same element.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>bsEnabled</td>
+        <td>boolean | string</td>
+        <td>true</td>
+        <td>
+          <p>enables or disables the popover trigger. When the popover is disabled, calling show() will have no effect.</p>
+          <p>Supports boolean values or "true" "false" "1" "0" string values.</p>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
   <h3>Scope methods</h3>
   <p>Methods available inside the directive scope to toggle visibility.</p>
 
@@ -231,5 +298,8 @@
 
   <h4>$toggle()</h4>
   <p>Toggles the popover.</p>
+
+  <h4>$setEnabled(isEnabled)</h4>
+  <p>Enables or disables the popover.</p>
 
 </div>

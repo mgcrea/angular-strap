@@ -1,11 +1,13 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.12 - 2017-01-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 'use strict';
+
+bsCompilerService.$inject = [ '$q', '$http', '$injector', '$compile', '$controller', '$templateCache' ];
 
 angular.module('mgcrea.ngStrap.core', []).service('$bsCompiler', bsCompilerService);
 
@@ -20,8 +22,8 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
     var template = options.template || '';
     var controller = options.controller;
     var controllerAs = options.controllerAs;
-    var resolve = angular.copy(options.resolve || {});
-    var locals = angular.copy(options.locals || {});
+    var resolve = options.resolve || {};
+    var locals = options.locals || {};
     var transformTemplate = options.transformTemplate || angular.identity;
     var bindToController = options.bindToController;
     angular.forEach(resolve, function(value, key) {
@@ -38,6 +40,13 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
       resolve.$template = fetchTemplate(templateUrl);
     } else {
       throw new Error('Missing `template` / `templateUrl` option.');
+    }
+    if (options.titleTemplate) {
+      resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.titleTemplate) ]).then(function(templates) {
+        var templateEl = angular.element(templates[0]);
+        findElement('[ng-bind="title"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+        return templateEl[0].outerHTML;
+      });
     }
     if (options.contentTemplate) {
       resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.contentTemplate) ]).then(function(templates) {
@@ -89,5 +98,3 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
     });
   }
 }
-
-bsCompilerService.$inject = [ '$q', '$http', '$injector', '$compile', '$controller', '$templateCache' ];
