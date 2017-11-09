@@ -218,7 +218,10 @@ angular.module('mgcrea.ngStrap.collapse', [])
   })
 
   .directive('bsCollapseToggle', function () {
-
+    var KEY_CODES = {
+      ENTER: 13,
+      SPACE: 32
+    };
     return {
       require: ['^?ngModel', '^bsCollapse'],
       link: function postLink (scope, element, attrs, controllers) {
@@ -247,10 +250,9 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
         element.on('click', actionEventHandler);
         element.bind('keydown keypress', function (e) {
-          if (e.which === 13 || e.which === 32) {
+          if (e.which === KEY_CODES.ENTER || e.which === KEY_CODES.SPACE) {
+            console.log('key handler handling');
             actionEventHandler();
-            e.preventDefault();
-          } else if (e.which !== 16 && e.which !== 9) {
             e.preventDefault();
           }
         });
