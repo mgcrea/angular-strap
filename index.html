@@ -700,6 +700,14 @@
             <p>If provided, this function will be invoked before the modal is hidden.</p>
           </td>
         </tr>
+        <tr>
+          <td>zIndex</td>
+          <td>number</td>
+          <td>1050</td>
+          <td>
+             CSS z-index value for the modal.
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -1682,7 +1690,7 @@ so remove the option then. Just looks bad to have an option that doesn't work
           <td>string | DOMElement | false</td>
           <td>false</td>
           <td>
-            <p>Position the tooltip relative to a specific target element.</p>
+            <p>Position the popover relative to a specific target element.</p>
           </td>
         </tr>
         <tr>
@@ -1714,7 +1722,7 @@ so remove the option then. Just looks bad to have an option that doesn't work
           <td>autoClose</td>
           <td>boolean</td>
           <td>false</td>
-          <td>If provided, auto closes the tooltip when clicking outside of it.</td>
+          <td>If provided, auto closes the popover when clicking outside of it.</td>
         </tr>
         <tr>
           <td>id</td>
@@ -1787,6 +1795,41 @@ so remove the option then. Just looks bad to have an option that doesn't work
     </div>
   </div>
 
+  <h3>Helper attributes</h3>
+  <p>Helper attributes can be used together with the directive via data-attributes to support specific functionality. Helper attributes support data binding. To use helper attributes, append the helper attribute name to <code>data-</code>, as in <code>data-bs-show="true"</code>.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th style="width: 100px;">Name</th>
+        <th style="width: 100px;">type</th>
+        <th style="width: 50px;">default</th>
+        <th>description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>bsShow</td>
+        <td>boolean | string</td>
+        <td>false</td>
+        <td>
+          <p>shows or hides the popover. Supports boolean values or "true"/"false" string values.</p>
+          <p>You can also specify "popover" to show just the popover when using several angular-strap directives on the same element.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>bsEnabled</td>
+        <td>boolean | string</td>
+        <td>true</td>
+        <td>
+          <p>enables or disables the popover trigger. When the popover is disabled, calling show() will have no effect.</p>
+          <p>Supports boolean values or "true" "false" "1" "0" string values.</p>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
   <h3>Scope methods</h3>
   <p>Methods available inside the directive scope to toggle visibility.</p>
 
@@ -1798,6 +1841,9 @@ so remove the option then. Just looks bad to have an option that doesn't work
 
   <h4>$toggle()</h4>
   <p>Toggles the popover.</p>
+
+  <h4>$setEnabled(isEnabled)</h4>
+  <p>Enables or disables the popover.</p>
 
 </div>
 <!--/ngInclude: 'popover/docs/popover.demo.html' -->
@@ -2112,10 +2158,10 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
       <div class="form-group">
         <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range <small>(dynamic)</small></label><br>
         <div class="form-group col-xs-6">
-          <input type="text" class="form-control" ng-model="fromDate" data-max-date="{{untilDate}}" placeholder="From" bs-datepicker="">
+          <input type="text" class="form-control" ng-model="fromDate" data-max-date="{{untilDate}}" placeholder="From" data-has-today="true" data-has-clear="true" bs-datepicker="">
         </div>
         <div class="form-group col-xs-6">
-          <input type="text" class="form-control" ng-model="untilDate" data-min-date="{{fromDate}}" placeholder="Until" bs-datepicker="">
+          <input type="text" class="form-control" ng-model="untilDate" data-min-date="{{fromDate}}" placeholder="Until" data-has-today="true" data-has-clear="false" bs-datepicker="">
         </div>
       </div>
     </form>
@@ -2375,6 +2421,22 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
             <p>Example date range: <code>{ start: new Date(2010, 11, 24), end: new Date(2010, 11, 25) }</code></p>
           </td>
         </tr>
+        <tr>
+          <td>hasToday</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether the picker has Today button.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>hasClear</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether the picker has Clear button.</p>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -2464,6 +2526,19 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           <input type="text" size="8" class="form-control" ng-model="sharedDate" data-time-format="h:mm:ss a" data-autoclose="1" placeholder="Time" bs-timepicker="">
         </div>
       </div>
+      <hr>
+
+      <!-- Default date with datetime example -->
+      <div class="form-group">
+        <label class="control-label"><i class="fa fa-calendar"></i> Datetime picker with 'today' as default date</label><br>
+        <div class="form-group">
+          <input type="text" size="10" class="form-control" ng-model="emptySharedDate" data-autoclose="1" placeholder="Date" bs-datepicker="">
+        </div>
+        <div class="form-group">
+          <input type="text" size="8" class="form-control" ng-model="emptySharedDate" default-date="today" data-time-format="h:mm:ss a" data-autoclose="1" placeholder="Time" bs-timepicker="">
+        </div>
+      </div>
+
 
     </form>
   </div>
@@ -2707,6 +2782,14 @@ $scope.sharedDate = {{sharedDate}}; // (formatted: {{sharedDate | date:'short'}}
           <td>'pager'</td>
           <td>
             <p>Sets the behavior of the arrow buttons in the picker. 'pager' to move the displayed hour/minute options, 'picker' to change the current time hours/minutes value.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>defaultDate</td>
+          <td>string</td>
+          <td>'auto'</td>
+          <td>
+            <p>Sets default date for timepicker + datepicker if date is not selected yet. You can use the string 'today' to set today, or 'auto' to set 01.01.1970.</p>
           </td>
         </tr>
       </tbody>
@@ -3502,8 +3585,8 @@ $scope.panels.activePanel = {{ panels.activePanel }};
       <small>(using inlined sibling template)</small>
     </button>
     <ul class="dropdown-menu" role="menu">
-      <li><a href="#anotherAction"><i class="fa fa-download"></i>&nbsp;Some action</a></li>
-      <li><a ng-click="$alert('Holy guacamole')"><i class="fa fa-globe"></i>&nbsp;Display an alert</a></li>
+      <li><a href="#anotherAction" tabindex="0"><i class="fa fa-download"></i>&nbsp;Some action</a></li>
+      <li><a ng-click="$alert('Holy guacamole')" tabindex="0"><i class="fa fa-globe"></i>&nbsp;Display an alert</a></li>
       <li ng-repeat="i in ['Foo', 'Bar', 'Baz']"><a ng-href="#action{{i}}"><i class="fa fa-chevron-right"></i>&nbsp;{{i}}</a></li>
     </ul>
 
@@ -3927,9 +4010,13 @@ $scope.panels.activePanel = {{ panels.activePanel }};
         </tr>
         <tr>
           <td>offsetParent</td>
-          <td>number</td>
-          <td>0</td>
-          <td>Pixels to offset from parent when calculating position of scroll.</td>
+          <td>number | HTML string | DOMElement</td>
+          <td></td>
+          <td>
+            If provided, the affix will be positioned relative to a parent element. 
+            If a numeric value is present, the affix will try to find a parent that is N parents "up" in the DOM tree.
+            If a non-numeric value is provided, the value is treated as an HTML string or DOMElement and constructed via angular.element(element).
+          </td>
         </tr>
         <tr>
           <td>offsetUnpin</td>
@@ -3976,7 +4063,7 @@ $scope.panels.activePanel = {{ panels.activePanel }};
       <a href="https://twitter.com/olouv" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @olouv</a>
     </p>
     <hr>
-    <p>Using <a href="http://twitter.github.com/bootstrap" target="_blank">Twitter Bootstrap</a> and the <a href="css/docs.css" target="_blank">Bootstrap's docs styles</a> designed and built by <a href="http://twitter.com/mdo" target="_blank">@mdo</a> and <a href="http://twitter.com/fat" target="_blank">@fat</a>.</p>
+    <p>Using <a href="http://getbootstrap.com" target="_blank">Bootstrap</a> and the <a href="css/docs.css" target="_blank">Bootstrap's docs styles</a> designed and built by <a href="http://twitter.com/mdo" target="_blank">@mdo</a> and <a href="http://twitter.com/fat" target="_blank">@fat</a>.</p>
     <p>Code licensed under <a href="//github.com/mgcrea/angular-strap/blob/master/LICENSE.md" target="_blank">The MIT License</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
     <ul class="footer-links">
       <li><a href="https://github.com/mgcrea/angular-strap/issues?state=open">Issues</a>
