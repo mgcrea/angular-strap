@@ -1,13 +1,13 @@
 /**
  * angular-strap
- * @version v2.3.8 - 2016-05-09
+ * @version v2.3.12 - 2017-11-20
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 /*!
- * Bootstrap v3.3.6 (http://getbootstrap.com)
- * Copyright 2011-2015 Twitter, Inc.
+ * Bootstrap v3.3.7 (http://getbootstrap.com)
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
@@ -1098,7 +1098,6 @@ a:focus {
   text-decoration: underline;
 }
 a:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2523,7 +2522,6 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -3005,7 +3003,6 @@ select[multiple].input-lg {
 .btn.focus,
 .btn:active.focus,
 .btn.active.focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -5056,14 +5053,6 @@ a.thumbnail.active {
 .alert-danger .alert-link {
   color: #843534;
 }
-@-webkit-keyframes progress-bar-stripes {
-  from {
-    background-position: 40px 0;
-  }
-  to {
-    background-position: 0 0;
-  }
-}
 @keyframes progress-bar-stripes {
   from {
     background-position: 40px 0;
@@ -5099,7 +5088,6 @@ a.thumbnail.active {
 }
 .progress.active .progress-bar,
 .progress-bar.active {
-  -webkit-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 .progress-bar-success {
@@ -5810,14 +5798,10 @@ button.close {
   outline: 0;
 }
 .modal.fade .modal-dialog {
-  -webkit-transform: translate(0, -25%);
   transform: translate(0, -25%);
-  transition: -webkit-transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
-  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
 }
 .modal.in .modal-dialog {
-  -webkit-transform: translate(0, 0);
   transform: translate(0, 0);
 }
 .modal-open .modal {
@@ -6173,30 +6157,24 @@ button.close {
 }
 @media all and (transform-3d), (-webkit-transform-3d) {
   .carousel-inner > .item {
-    transition: -webkit-transform 0.6s ease-in-out;
     transition: transform 0.6s ease-in-out;
-    transition: transform 0.6s ease-in-out, -webkit-transform 0.6s ease-in-out;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    -webkit-perspective: 1000px;
     perspective: 1000px;
   }
   .carousel-inner > .item.next,
   .carousel-inner > .item.active.right {
-    -webkit-transform: translate3d(100%, 0, 0);
     transform: translate3d(100%, 0, 0);
     left: 0;
   }
   .carousel-inner > .item.prev,
   .carousel-inner > .item.active.left {
-    -webkit-transform: translate3d(-100%, 0, 0);
     transform: translate3d(-100%, 0, 0);
     left: 0;
   }
   .carousel-inner > .item.next.left,
   .carousel-inner > .item.prev.right,
   .carousel-inner > .item.active {
-    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
     left: 0;
   }
@@ -6666,62 +6644,41 @@ button.close {
   }
 }
 .modal.disabled {
-  -webkit-animation: noop !important;
-          animation: noop !important;
+  animation: noop !important;
 }
 .modal.disabled.am-fade-and-slide-top .modal-dialog {
-  -webkit-animation-duration: 0.3s;
-          animation-duration: 0.3s;
-  -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
-  -webkit-animation-fill-mode: backwards;
-          animation-fill-mode: backwards;
-  -webkit-animation-name: fadeAndSlideFromTop;
-          animation-name: fadeAndSlideFromTop;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: backwards;
+  animation-name: fadeAndSlideFromTop;
 }
 .modal.disabled.am-fade-and-slide-top.ng-enter .modal-dialog {
   visibility: hidden;
-  -webkit-animation-name: fadeAndSlideFromTop;
-          animation-name: fadeAndSlideFromTop;
+  animation-name: fadeAndSlideFromTop;
 }
 .modal.disabled.am-fade-and-slide-top.ng-enter-active .modal-dialog,
 .modal.disabled.am-fade-and-slide-top.ng-leave-active .modal-dialog {
   visibility: visible;
 }
 .modal.disabled.am-fade-and-slide-top.ng-leave .modal-dialog {
-  -webkit-animation-name: fadeAndSlideToTop;
-          animation-name: fadeAndSlideToTop;
+  animation-name: fadeAndSlideToTop;
 }
 .modal.disabled.am-fade-and-scale .modal-dialog {
-  -webkit-animation-duration: 0.3s;
-          animation-duration: 0.3s;
-  -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
-  -webkit-animation-fill-mode: backwards;
-          animation-fill-mode: backwards;
-  -webkit-animation-name: fadeAndScaleIn;
-          animation-name: fadeAndScaleIn;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: backwards;
+  animation-name: fadeAndScaleIn;
 }
 .modal.disabled.am-fade-and-scale.ng-enter .modal-dialog {
   visibility: hidden;
-  -webkit-animation-name: fadeAndScaleIn;
-          animation-name: fadeAndScaleIn;
+  animation-name: fadeAndScaleIn;
 }
 .modal.disabled.am-fade-and-scale.ng-enter-active .modal-dialog,
 .modal.disabled.am-fade-and-scale.ng-leave-active .modal-dialog {
   visibility: visible;
 }
 .modal.disabled.am-fade-and-scale.ng-leave .modal-dialog {
-  -webkit-animation-name: fadeAndScaleOut;
-          animation-name: fadeAndScaleOut;
-}
-@-webkit-keyframes noop {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 1;
-  }
+  animation-name: fadeAndScaleOut;
 }
 @keyframes noop {
   from {
@@ -7200,7 +7157,7 @@ body.modal-open {
 }
 .datepicker.dropdown-menu {
   width: 250px;
-  height: 270px;
+  height: 290px;
 }
 .datepicker.dropdown-menu button {
   outline: none;
@@ -7324,38 +7281,29 @@ input[type="checkbox"] {
   margin-left: 10px;
 }
 .tab-pane.am-fade {
-  -webkit-animation-duration: .3s;
-          animation-duration: .3s;
-  -webkit-animation-timing-function: ease;
-          animation-timing-function: ease;
-  -webkit-animation-fill-mode: backwards;
-          animation-fill-mode: backwards;
+  animation-duration: .3s;
+  animation-timing-function: ease;
+  animation-fill-mode: backwards;
   opacity: 1;
 }
 .tab-pane.am-fade.active-remove {
   display: none !important;
 }
 .tab-pane.am-fade.active-add {
-  -webkit-animation-name: fadeIn;
-          animation-name: fadeIn;
+  animation-name: fadeIn;
 }
 .panel-collapse.am-collapse {
-  -webkit-animation-duration: .3s;
-          animation-duration: .3s;
-  -webkit-animation-timing-function: ease;
-          animation-timing-function: ease;
-  -webkit-animation-fill-mode: backwards;
-          animation-fill-mode: backwards;
+  animation-duration: .3s;
+  animation-timing-function: ease;
+  animation-fill-mode: backwards;
   overflow: hidden;
 }
 .panel-collapse.am-collapse.in-remove {
-  -webkit-animation-name: collapse;
-          animation-name: collapse;
+  animation-name: collapse;
   display: block;
 }
 .panel-collapse.am-collapse.in-add {
-  -webkit-animation-name: expand;
-          animation-name: expand;
+  animation-name: expand;
 }
 .panel-collapse.am-collapse2 {
   transition: 0.3s ease max-height;
@@ -7369,28 +7317,12 @@ input[type="checkbox"] {
 .panel-collapse.am-collapse2.in-add {
   max-height: 0px;
 }
-@-webkit-keyframes expand {
-  from {
-    max-height: 0px;
-  }
-  to {
-    max-height: 100px;
-  }
-}
 @keyframes expand {
   from {
     max-height: 0px;
   }
   to {
     max-height: 100px;
-  }
-}
-@-webkit-keyframes collapse {
-  from {
-    max-height: 100px;
-  }
-  to {
-    max-height: 0px;
   }
 }
 @keyframes collapse {
@@ -7400,4 +7332,8 @@ input[type="checkbox"] {
   to {
     max-height: 0px;
   }
+}
+.typeahead.dropdown-menu {
+  max-height: 112px;
+  overflow-y: auto;
 }

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.8 - 2016-05-09
+ * @version v2.3.12 - 2017-11-20
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -52,6 +52,7 @@
     $scope.selectedTimeAsNumber = 10 * 36e5 + 30 * 6e4 + 40 * 1e3;
     $scope.selectedTimeAsString = '10:00';
     $scope.sharedDate = new Date(new Date().setMinutes(0, 0));
+    $scope.emptySharedDate = null;
   } ]);
   angular.module('mgcrea.ngStrapDocs').controller('TabDemoCtrl', [ '$scope', '$templateCache', function($scope, $templateCache) {
     $scope.tabs = [ {
@@ -212,17 +213,6 @@
       });
     };
   } ]);
-  angular.module('mgcrea.ngStrapDocs').config([ '$asideProvider', function($asideProvider) {
-    angular.extend($asideProvider.defaults, {
-      container: 'body',
-      html: true
-    });
-  } ]).controller('AsideDemoCtrl', [ '$scope', function($scope) {
-    $scope.aside = {
-      title: 'Title',
-      content: 'Hello Aside<br />This is a multiline message!'
-    };
-  } ]);
   angular.module('mgcrea.ngStrapDocs').controller('ButtonDemoCtrl', [ '$scope', function($scope) {
     $scope.button = {
       toggle: false,
@@ -232,6 +222,17 @@
         right: false
       },
       radio: 'left'
+    };
+  } ]);
+  angular.module('mgcrea.ngStrapDocs').config([ '$asideProvider', function($asideProvider) {
+    angular.extend($asideProvider.defaults, {
+      container: 'body',
+      html: true
+    });
+  } ]).controller('AsideDemoCtrl', [ '$scope', function($scope) {
+    $scope.aside = {
+      title: 'Title',
+      content: 'Hello Aside<br />This is a multiline message!'
     };
   } ]);
   angular.module('mgcrea.ngStrapDocs').controller('AlertDemoCtrl', [ '$scope', '$templateCache', '$timeout', '$alert', function($scope, $templateCache, $timeout, $alert) {

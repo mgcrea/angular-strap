@@ -1,13 +1,13 @@
 /**
  * angular-strap
- * @version v2.3.8 - 2016-05-09
+ * @version v2.3.12 - 2017-11-20
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 (function(window, document, undefined) {
   'use strict';
-  angular.module('mgcrea.ngStrapDocs', [ 'mgcrea.ngStrap', 'mgcrea.ngPlunkr', 'ngRoute', 'ngAnimate' ]).constant('version', 'v2.3.8').constant('ngVersion', angular.version.full).config([ '$plunkrProvider', 'version', function($plunkrProvider, version) {
+  angular.module('mgcrea.ngStrapDocs', [ 'mgcrea.ngStrap', 'mgcrea.ngPlunkr', 'ngRoute', 'ngAnimate' ]).constant('version', 'v2.3.12').constant('ngVersion', angular.version.full).config([ '$plunkrProvider', 'version', function($plunkrProvider, version) {
     angular.extend($plunkrProvider.defaults, {
       plunkrTitle: 'AngularStrap Example Plunkr',
       plunkrTags: [ 'angular', 'angular-strap' ],
