@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-11-10
+ * @version v2.3.12 - 2017-11-30
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -38,6 +38,6 @@
     $templateCache.put('tooltip/tooltip.tpl.html', '<div class="tooltip in" ng-show="title"><div class="tooltip-arrow"></div><div class="tooltip-inner" ng-bind="title"></div></div>');
   } ]);
   angular.module('mgcrea.ngStrap.typeahead').run([ '$templateCache', function($templateCache) {
-    $templateCache.put('typeahead/typeahead.tpl.html', '<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="select" aria-hidden="true"><li role="presentation" ng-repeat="match in $matches" ng-class="{active: $index == $activeIndex}"><a role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind="match.label"></a></li></ul>');
+    $templateCache.put('typeahead/typeahead.tpl.html', '<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="listbox" ng-attr-aria-hidden="{{!$isVisible()}}"><li role="option" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}" ng-attr-aria-selected="{{$isActive($index)}}" ng-attr-id="{{::$generateResultId($index)}}"><a role="presentation" ng-click="$select($index, $event)" ng-bind="match.label"></a></li></ul>');
   } ]);
 })(window, document);
