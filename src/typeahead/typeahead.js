@@ -23,9 +23,16 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       trimValue: true
     };
 
+    var KEY_CODES = {
+      downArrow: 40,
+      enter: 13,
+      escape: 27,
+      upArrow: 38
+    };
+
     this.$get = function ($window, $rootScope, $tooltip, $$rAF, $timeout) {
 
-      function TypeaheadFactory (element, controller, config) {
+      function TypeaheadFactory(element, controller, config) {
 
         var $typeahead = {};
 
@@ -33,8 +40,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var options = angular.extend({}, defaults, config);
 
         $typeahead = $tooltip(element, options);
+
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
+        scope.id = options.id;
 
         scope.$resetMatches = function () {
           scope.$matches = [];
@@ -56,6 +65,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         scope.$isVisible = function () {
           return $typeahead.$isVisible();
+        };
+
+        scope.$isActive = function isActive (index) {
+          return scope.$activeIndex === index ? true : undefined;
         };
 
         // Public methods
@@ -101,6 +114,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           return scope.$matches.length && angular.isString(controller.$viewValue) && controller.$viewValue.length >= options.minLength;
         };
 
+        scope.$generateResultId = function (index) {
+          return scope.id ? scope.id + '_typeahead_result_' + index : undefined;
+        };
+
         $typeahead.$getIndex = function (value) {
           var index;
           for (index = scope.$matches.length; index--;) {
@@ -134,24 +151,30 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         };
 
         $typeahead.$onKeyDown = function (evt) {
+          // If the key code isn't up arrow, down arrow, or enter return.
           if (!/(38|40|13)/.test(evt.keyCode)) return;
 
           // Let ngSubmit pass if the typeahead tip is hidden or no option is selected
-          if ($typeahead.$isVisible() && !(evt.keyCode === 13 && scope.$activeIndex === -1)) {
+          if ($typeahead.$isVisible() && !(evt.keyCode === KEY_CODES.enter && scope.$activeIndex === -1)) {
             evt.preventDefault();
             evt.stopPropagation();
           }
 
           // Select with enter
-          if (evt.keyCode === 13 && scope.$matches.length) {
+          if (evt.keyCode === KEY_CODES.enter && scope.$matches.length) {
             $typeahead.select(scope.$activeIndex);
-          // Navigate with keyboard
-          } else if (evt.keyCode === 38 && scope.$activeIndex > 0) {
+            // Navigate with keyboard
+          } else if (evt.keyCode === KEY_CODES.upArrow && scope.$activeIndex > 0) {
             scope.$activeIndex--;
-          } else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) {
+            setAriaActiveDescendant(scope.$activeIndex);
+            angular.element(document.getElementById(options.id + '_sr_text')).html(scope.$matches[scope.$activeIndex].label);
+          } else if (evt.keyCode === KEY_CODES.downArrow && scope.$activeIndex < scope.$matches.length - 1) {
             scope.$activeIndex++;
+            setAriaActiveDescendant(scope.$activeIndex);
+            angular.element(document.getElementById(options.id + '_sr_text')).html(scope.$matches[scope.$activeIndex].label);
           } else if (angular.isUndefined(scope.$activeIndex)) {
             scope.$activeIndex = 0;
+            setAriaActiveDescendant();
           }
 
           // update scrollTop property on $typeahead when scope.$activeIndex is not in visible area
@@ -168,6 +191,20 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           // event bubbling from being processed immediately.
           $timeout(function () {
             if ($typeahead.$element) {
+              if (options.id) {
+                // Set the id on the "dropdown" component of the typeahead. The input should "control" this element.
+                $typeahead.$element.attr('id', options.id + '_listbox');
+                element.attr('aria-controls', options.id + '_listbox');
+
+                var assertDiv = document.getElementById(options.id + '_sr_text');
+                if (!assertDiv) {
+                  $typeahead.$element.parent().append('<div id="' + options.id + '_sr_text" aria-live="assertive" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;"></div>');
+                }
+              }
+
+              // If the input was given an aria-labelledby attribute apply it to the "dropdown" component.
+              $typeahead.$element.attr('aria-labelledby', options.ariaLabelledby);
+
               $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
               if (options.keyboard) {
                 if (element) element.on('keydown', $typeahead.$onKeyDown);
@@ -185,8 +222,45 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           if (!options.autoSelect) {
             $typeahead.activate(-1);
           }
+
+          var assertDiv = document.getElementById(options.id + '_sr_text');
+          angular.element(assertDiv).remove();
+
+          setAriaActiveDescendant();
+
           hide();
         };
+
+        var onKeyUp = $typeahead.$onKeyUp; // eslint-disable-line no-unused-vars
+        $typeahead.$onKeyUp = function (evt) {
+          if (evt.which === KEY_CODES.escape && $typeahead.$isShown) {
+            $typeahead.hide();
+            evt.stopPropagation();
+          }
+        };
+
+        var onFocusKeyUp = $typeahead.$onFocusKeyUp; // eslint-disable-line no-unused-vars
+        $typeahead.$onFocusKeyUp = function (evt) {
+          if (evt.which === KEY_CODES.escape) {
+            $typeahead.hide();
+            evt.stopPropagation();
+          }
+        };
+
+        // Helper functions within this closure
+
+        function setAriaActiveDescendant(index) {
+          if (index === undefined || !scope.id) {
+            element.removeAttr('aria-activedescendant');
+          } else {
+            var resultId = scope.$generateResultId(index);
+            if (resultId) {
+              element.attr('aria-activedescendant', resultId);
+            } else {
+              element.removeAttr('aria-activedescendant');
+            }
+          }
+        }
 
         return $typeahead;
 
@@ -194,7 +268,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
       // Helper functions
 
-      function safeDigest (scope) {
+      function safeDigest(scope) {
         /* eslint-disable no-unused-expressions */
         scope.$$phase || (scope.$root && scope.$root.$$phase) || scope.$digest();
         /* eslint-enable no-unused-expressions */
@@ -225,7 +299,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
     return {
       restrict: 'EAC',
       require: 'ngModel',
-      link: function postLink (scope, element, attr, controller) {
+      link: function postLink(scope, element, attr, controller) {
 
         // Fixes firefox bug when using objects in model with typeahead
         // Yes this breaks any other directive using a 'change' event on this input,
@@ -236,7 +310,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var options = {
           scope: scope
         };
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass'], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass', 'ariaLabelledby'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -272,6 +346,11 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Initialize typeahead
         var typeahead = $typeahead(element, controller, options);
+
+        if (!element.attr('aria-autocomplete') && !bsOptions.templateUrl) {
+          // Per draft spec for a combobox element the aria-auto complete should be set to a list.
+          element.attr('aria-autocomplete', 'list');
+        }
 
         // Watch options on demand
         if (options.watchOptions) {
@@ -341,6 +420,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
         // Garbage collection
         scope.$on('$destroy', function () {
+          element.off('keydown');
           if (typeahead) typeahead.destroy();
           options = null;
           typeahead = null;

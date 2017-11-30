@@ -1,7 +1,8 @@
 <div class="bs-docs-section" ng-controller="TypeaheadDemoCtrl">
 
   <div class="page-header">
-    <h1 id="typeaheads">Typeaheads <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/typeahead/typeahead.js" target="_blank">typeahead.js</a>
+    <h1 id="typeaheads">Typeaheads
+      <a class="small" href="//github.com/mgcrea/angular-strap/blob/master/src/typeahead/typeahead.js" target="_blank">typeahead.js</a>
     </h1>
     <code>mgcrea.ngStrap.typeahead</code>
   </div>
@@ -12,10 +13,16 @@
 
   <div class="callout callout-danger">
     <h4>Plugin dependency</h4>
-    <p>Selects require the <a href="#tooltips">tooltip module</a> and <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/parse-options.js" target="_blank">parseOptions helper</a> module to be loaded.</p>
+    <p>Selects require the
+      <a href="#tooltips">tooltip module</a> and
+      <a href="//github.com/mgcrea/angular-strap/blob/master/src/helpers/parse-options.js" target="_blank">parseOptions helper</a> module to be loaded.</p>
   </div>
 
-  <h3>Live demo <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="typeahead/docs/typeahead.demo.html" data-content-js-url="typeahead/docs/typeahead.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right" bs-tooltip></a></h3>
+  <h3>Live demo
+    <a class="small edit-plunkr" data-module-name="mgcrea.ngStrapDocs" data-content-html-url="typeahead/docs/typeahead.demo.html"
+      data-content-js-url="typeahead/docs/typeahead.demo.js" ng-plunkr data-title="edit in plunker" data-placement="right"
+      bs-tooltip></a>
+  </h3>
   <pre class="bs-example-scope">$scope.selectedState = "{{selectedState}}";
 $scope.states = {{states}};
 
@@ -27,32 +34,49 @@ $scope.selectedAddress = "{{selectedAddress}}";
   <div class="bs-example" style="padding-bottom: 24px;" append-source>
     <form class="form-inline" role="form">
       <div class="form-group">
-        <label><i class="fa fa-globe"></i> State</label>
-        <input type="text" class="form-control" ng-model="selectedState" bs-options="state for state in states" placeholder="Enter state" bs-typeahead>
+        <label id="example_1_label">
+          <i aria-hidden="true" class="fa fa-globe"></i> State</label>
+
+        <div role="combobox" id="example_1_combobox" aria-haspopup="true" style="display: inline-block">
+          <input bs-typeahead id="example_1" aria-labelledby="example_1_label" type="text" class="form-control" ng-model="selectedState"
+            bs-options="state for state in states" placeholder="Enter state">
+        </div>
+
       </div>
       <div class="form-group">
         <label>Icon</label>
-        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-auto-select="true" data-animation="am-flip-x" bs-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
+        <input type="text" class="form-control" ng-model="selectedIcon" data-min-length="0" data-html="1" data-auto-select="true"
+          data-animation="am-flip-x" bs-options="icon as icon.label for icon in icons" placeholder="Enter icon" bs-typeahead>
       </div>
       <hr>
       <!-- Using an async data provider -->
       <div class="form-group">
-        <label><i class="fa fa-home"></i> Address <small>(async via maps.googleapis.com)</small></label>
-        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" bs-options="address.formatted_address as address.formatted_address for address in getAddress($viewValue)" placeholder="Enter address" bs-typeahead>
+        <label>
+          <i class="fa fa-home"></i> Address
+          <small>(async via maps.googleapis.com)</small>
+        </label>
+        <input type="text" class="form-control" ng-model="selectedAddress" data-animation="am-flip-x" bs-options="address.formatted_address as address.formatted_address for address in getAddress($viewValue)"
+          placeholder="Enter address" bs-typeahead>
       </div>
     </form>
   </div>
 
 
   <h2 id="typeaheads-usage">Usage</h2>
-  <p>Append a <code>bs-typeahead</code>attribute to any element to enable the directive.</p>
-  <p>Available items are specified using the <code>bs-options</code> attribute. This attribute uses AngularJS <a href="https://docs.angularjs.org/api/ng/directive/ngOptions" target="_blank">ngOptions</a> array data source syntax.</p>
+  <p>Append a
+    <code>bs-typeahead</code>attribute to any element to enable the directive.</p>
+  <p>Available items are specified using the
+    <code>bs-options</code> attribute. This attribute uses AngularJS
+    <a href="https://docs.angularjs.org/api/ng/directive/ngOptions" target="_blank">ngOptions</a> array data source syntax.</p>
   <div class="callout callout-danger">
     <h4>Breaking Change</h4>
-    <p>If you are using AngularStrap prior to version 2.2.0, please use <code>ng-options</code> instead of <code>bs-options</code>.</p>
+    <p>If you are using AngularStrap prior to version 2.2.0, please use
+      <code>ng-options</code> instead of
+      <code>bs-options</code>.</p>
   </div>
   <div class="callout callout-info">
-    <h4>The module exposes a <code>$typeahead</code>service</h4>
+    <h4>The module exposes a
+      <code>$typeahead</code>service</h4>
     <p>Available for programmatic use (mainly in directives as it requires a DOM element).</p>
     <div class="highlight">
       <pre>
@@ -64,11 +88,18 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
 
   <h3>Options</h3>
-  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes, append the option name to <code>data-</code>, as in <code>data-animation=""</code>.</p>
+  <p>Options can be passed via data-attributes on the directive or as an object hash to configure the service. For data attributes,
+    append the option name to
+    <code>data-</code>, as in
+    <code>data-animation=""</code>.</p>
   <div class="callout callout-info">
     <h4>This module supports exotic placement options!</h4>
-    <p>You can position your typeahead in corners (such as <code>bottom-left</code>) or any other combination two.</p>
-    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use <code>bootstrap-additions.css</code> from the <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
+    <p>You can position your typeahead in corners (such as
+      <code>bottom-left</code>) or any other combination two.</p>
+    <p>Exotic placement options are not part of the Bootstrap's core, to use them you must use
+      <code>bootstrap-additions.css</code> from the
+      <a href="//github.com/mgcrea/bootstrap-additions" target="_blank">BootstrapAdditions</a> project. This project being not yet fully released, meanwhile, you can use the
+      <a href="//mgcrea.github.io/angular-strap/static/styles/bootstrap-additions.min.css" target="_blank">development snapshot</a> compiled for theses docs.</p>
   </div>
   <div class="table-responsive">
     <table class="table table-bordered table-striped">
@@ -85,15 +116,18 @@ $scope.selectedAddress = "{{selectedAddress}}";
           <td>animation</td>
           <td>string</td>
           <td>am-fade</td>
-          <td>apply a CSS animation powered by <code>ngAnimate</code></td>
+          <td>apply a CSS animation powered by
+            <code>ngAnimate</code>
+          </td>
         </tr>
         <tr>
           <td>placement</td>
           <td>string</td>
           <td>'bottom-left'</td>
           <td>
-            how to position the typeahead - top | bottom | left | right | auto, or any combination like bottom-left or auto bottom-left.<br>
-            When "auto" is specified, it will dynamically reorient the typeahead. For example, if placement is "auto left", the typeahead will display to the left when possible, otherwise it will display right.
+            how to position the typeahead - top | bottom | left | right | auto, or any combination like bottom-left or auto bottom-left.
+            <br> When "auto" is specified, it will dynamically reorient the typeahead. For example, if placement is "auto left",
+            the typeahead will display to the left when possible, otherwise it will display right.
           </td>
         </tr>
         <tr>
@@ -106,7 +140,10 @@ $scope.selectedAddress = "{{selectedAddress}}";
           <td>html</td>
           <td>boolean</td>
           <td>false</td>
-          <td>replace <code>ng-bind</code> with <code>ng-bind-html</code>, requires <code>ngSanitize</code> to be loaded</td>
+          <td>replace
+            <code>ng-bind</code> with
+            <code>ng-bind-html</code>, requires
+            <code>ngSanitize</code> to be loaded</td>
         </tr>
         <tr>
           <td>delay</td>
@@ -126,7 +163,9 @@ $scope.selectedAddress = "{{selectedAddress}}";
           <td>false</td>
           <td>
             <p>Appends the typeahead to a specific element. Example:
-              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the typeahead in the flow of the document near the triggering element -&nbsp;which will prevent the typeahead from floating away from the triggering element during a window resize.</p>
+              <code>container: 'body'</code>. This option is particularly useful in that it allows you to position the typeahead
+              in the flow of the document near the triggering element -&nbsp;which will prevent the typeahead from floating
+              away from the triggering element during a window resize.</p>
           </td>
         </tr>
         <tr>
@@ -238,7 +277,9 @@ $scope.selectedAddress = "{{selectedAddress}}";
   </div>
   <div class="callout callout-info">
     <h4>Default options</h4>
-    <p>You can override global defaults for the plugin with <code>$typeaheadProvider.defaults</code></p>
+    <p>You can override global defaults for the plugin with
+      <code>$typeaheadProvider.defaults</code>
+    </p>
     <div class="highlight">
       <pre class="bs-exemple-code">
         <code class="javascript" highlight-block>

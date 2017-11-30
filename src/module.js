@@ -1,3 +1,4 @@
+'use strict';
 
 angular.module('mgcrea.ngStrap', [
   'mgcrea.ngStrap.modal',

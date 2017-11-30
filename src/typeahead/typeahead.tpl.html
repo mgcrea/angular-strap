@@ -1,5 +1,6 @@
-<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="select" aria-hidden="true">
-  <li role="presentation" ng-repeat="match in $matches" ng-class="{active: $index == $activeIndex}">
-    <a role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind="match.label"></a>
+<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="listbox" ng-attr-aria-hidden="{{!$isVisible()}}">
+  <li role="option" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}" ng-attr-aria-selected="{{$isActive($index)}}"
+    ng-attr-id="{{::$generateResultId($index)}}">
+    <a role="presentation" ng-click="$select($index, $event)" ng-bind="match.label"></a>
   </li>
 </ul>
