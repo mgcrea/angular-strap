@@ -8,9 +8,18 @@ AngularStrap is a set of native directives that enables seamless integration of 
 
 - With no external dependency except the [Bootstrap CSS Styles](https://github.com/twbs/bootstrap/blob/master/dist/css/bootstrap.css), AngularStrap is lighter and faster than ever as it does leverage the power of ngAnimate from AngularJS 1.2+!
 
-- AngularStrap is [tested](https://travis-ci.org/mgcrea/angular-strap) against the latest patch release of the 1.2, 1.3 and 1.4 branches.
+- AngularStrap is [tested](https://travis-ci.org/mgcrea/angular-strap) against the latest patch release of the 1.2, 1.3, 1.4 and 1.5 branches.
 
 - If you don't want to use `ngAnimate`, you will have to include a tiny [ngAnimate mock](https://github.com/mgcrea/angular-strap/wiki/ngAnimate-mock).
+
+
+## Looking for maintainers!
+
+We're currently looking for aspiring maintainers to tackle issues and pull requests!
+
+I (mgcrea) have not worked on any Angular.js v1 codebase for more than a year now. For me it's time to move on!
+
+If you have an ongoing project depending on AngularStrap, and would like to become a contributor, please chime in on [issue #2256](https://github.com/mgcrea/angular-strap/issues/2256)
 
 
 ## Documentation and examples
@@ -76,7 +85,9 @@ $ bower install
 $ cd docs
 $ bower install
 $ cd ..
-$ $(npm bin)/gulp test
+$ npm test
+# or
+$ npm run test:watch
 ```
 
 You can build the latest version using `gulp`.

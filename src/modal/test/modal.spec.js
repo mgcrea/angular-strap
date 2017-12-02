@@ -94,7 +94,22 @@ describe('modal', function() {
     'options-contentTemplate': {
       scope: {modal: {title: 'Title', content: 'Hello Modal!', counter: 0}, items: ['foo', 'bar', 'baz']},
       element: '<a title="{{modal.title}}" data-content="{{modal.content}}" data-content-template="custom" bs-modal>click me</a>'
-    }
+    },
+    'options-modalClass': {
+      element: '<a bs-modal="modal" data-modal-class="my-custom-class">click me</a>'
+    },
+    'options-size-lg': {
+      element: '<a bs-modal="modal" data-size="lg">click me</a>'
+    },
+    'options-size-invalid': {
+      element: '<a bs-modal="modal" data-size="md">click me</a>'
+    },
+    'options-events': {
+      element: '<a bs-on-before-hide="onBeforeHide" bs-on-hide="onHide" bs-on-before-show="onBeforeShow" bs-on-show="onShow" bs-modal="modal">click me</a>'
+    },
+    'options-z-index': {
+      element: '<a bs-modal="modal" data-z-index="{{zIndex}}">click me</a>'
+    },
   };
 
   function compileDirective(template, locals) {
@@ -684,7 +699,7 @@ describe('modal', function() {
 
         angular.element(elm2[0]).triggerHandler('click');
         expect(bodyEl.find('.modal-backdrop').length).toBe(2);
-        var backdrop2 = bodyEl.find('.modal-backdrop')[0];
+        var backdrop2 = bodyEl.find('.modal-backdrop')[angular.version.minor <= 2 ? 1 : 0];
         var modal2 = bodyEl.find('.modal')[1];
 
         expect(angular.element(backdrop1).css('z-index')).toBe('1040');
@@ -695,6 +710,156 @@ describe('modal', function() {
 
     });
 
+    describe('modalClass', function() {
+      it('should add class to the modal element', function() {
+        var elm = compileDirective('options-modalClass');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.children('.modal')).toHaveClass('my-custom-class');
+      });
+
+      it('should not add class to the modal element when modalClass is not present', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.children('.modal')).not.toHaveClass('my-custom-class');
+      });
+    });
+
+    describe('size', function() {
+      it('sets size class when specified', function() {
+        var elm = compileDirective('options-size-lg');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-dialog')).toHaveClass('modal-lg');
+      });
+
+      it('does not set size class when not specified', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-dialog')).not.toHaveClass('modal-lg');
+      });
+
+      it('does not set size class when invalid size is specified', function() {
+        var elm = compileDirective('options-size-invalid');
+        angular.element(elm[0]).triggerHandler('click');
+        expect(sandboxEl.find('.modal-dialog')).not.toHaveClass('modal-lg');
+      });
+
+    });
+
+    describe('zIndex', function() {
+
+      it('does not interfere with the default values', function() {
+        var elm = compileDirective('default');
+        angular.element(elm[0]).triggerHandler('click');
+        var modal = bodyEl.find('.modal')[0];
+        var backdrop = bodyEl.find('.modal-backdrop')[0];
+        expect(angular.element(modal).css('z-index')).toBe('1050');
+        expect(angular.element(backdrop).css('z-index')).toBe('1040');
+      });
+
+      it('sets a custom z-index on a modal and decrements the backdrop z-index by 10', function() {
+        var elm = compileDirective('options-z-index', {zIndex: 2000});
+        angular.element(elm[0]).triggerHandler('click');
+        var modal = bodyEl.find('.modal')[0];
+        var backdrop = bodyEl.find('.modal-backdrop')[0];
+        expect(angular.element(modal).css('z-index')).toBe('2000');
+        expect(angular.element(backdrop).css('z-index')).toBe('1990');
+      });
+
+    });
+
+    describe('stackableModals', function() {
+
+      it('remove class modal-open from body only when the last modal is closed', function() {
+        var elm1 = compileDirective('default');
+        var elm2 = compileDirective('default');
+        // open modal 1
+        angular.element(elm1[0]).triggerHandler('click');
+        expect(sandboxEl.children('.modal').length).toBe(1);
+        // open modal 2
+        angular.element(elm2[0]).triggerHandler('click');
+        expect(sandboxEl.children('.modal').length).toBe(2);
+        // close modal 2
+        angular.element(elm2[0]).triggerHandler('click');
+        $animate.flush(); // hide only fires AFTER the animation is complete
+        expect(bodyEl.hasClass('modal-open')).toBeTruthy();
+        // close modal 1
+        angular.element(elm1[0]).triggerHandler('click');
+        $animate.flush(); // hide only fires AFTER the animation is complete
+        expect(bodyEl.hasClass('modal-open')).toBeFalsy();
+      });
+    });
+
+    describe('onBeforeShow', function() {
+
+      it('should invoke beforeShow event callback', function() {
+        var beforeShow = false;
+
+        function onBeforeShow(select) {
+          beforeShow = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeShow: onBeforeShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeShow).toBe(true);
+      });
+    });
+
+    describe('onShow', function() {
+
+      it('should invoke show event callback', function() {
+        var show = false;
+
+        function onShow(select) {
+          show = true;
+        }
+
+        var elm = compileDirective('options-events', {onShow: onShow});
+
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(show).toBe(true);
+      });
+    });
+
+    describe('onBeforeHide', function() {
+
+      it('should invoke beforeHide event callback', function() {
+        var beforeHide = false;
+
+        function onBeforeHide(select) {
+          beforeHide = true;
+        }
+
+        var elm = compileDirective('options-events', {onBeforeHide: onBeforeHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+
+        expect(beforeHide).toBe(true);
+      });
+    });
+
+    describe('onHide', function() {
+
+      it('should invoke show event callback', function() {
+        var hide = false;
+
+        function onHide(select) {
+          hide = true;
+        }
+
+        var elm = compileDirective('options-events', {onHide: onHide});
+
+        angular.element(elm[0]).triggerHandler('click');
+        angular.element(elm[0]).triggerHandler('click');
+        $animate.flush();
+
+        expect(hide).toBe(true);
+      });
+    });
 
   });
 

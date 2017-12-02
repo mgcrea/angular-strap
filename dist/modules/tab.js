@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.12 - 2017-01-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -107,7 +107,6 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
     require: [ '^?ngModel', '^bsTabs' ],
     scope: true,
     link: function postLink(scope, element, attrs, controllers) {
-      var ngModelCtrl = controllers[0];
       var bsTabsCtrl = controllers[1];
       element.addClass('tab-pane');
       attrs.$observe('title', function(newValue, oldValue) {

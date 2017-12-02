@@ -2,7 +2,7 @@
 
 angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
-  .provider('$dropdown', function() {
+  .provider('$dropdown', function () {
 
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -17,25 +17,30 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
       delay: 0
     };
 
-    this.$get = function($window, $rootScope, $tooltip, $timeout) {
+    this.$get = function ($window, $rootScope, $tooltip, $timeout) {
 
       var bodyEl = angular.element($window.document.body);
       var matchesSelector = Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector;
 
-      function DropdownFactory(element, config) {
+      function DropdownFactory (element, config) {
 
         var $dropdown = {};
 
         // Common vars
         var options = angular.extend({}, defaults, config);
-        var scope = $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+        /* var scope = */
+        $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
 
         $dropdown = $tooltip(element, options);
         var parentEl = element.parent();
 
         // Protected methods
 
-        $dropdown.$onKeyDown = function(evt) {
+        $dropdown.$onKeyDown = function (evt) {
+          if (/(9)/.test(evt.keyCode)) {
+            $dropdown.hide();
+            return;
+          }
           if (!/(38|40)/.test(evt.keyCode)) return;
           evt.preventDefault();
           evt.stopPropagation();
@@ -44,7 +49,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
           if (!items.length) return;
           var index;
-          angular.forEach(items, function(el, i) {
+          angular.forEach(items, function (el, i) {
             if (matchesSelector && matchesSelector.call(el, ':focus')) index = i;
           });
 
@@ -59,35 +64,35 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         // Overrides
 
         var show = $dropdown.show;
-        $dropdown.show = function() {
+        $dropdown.show = function () {
           show();
           // use timeout to hookup the events to prevent
           // event bubbling from being processed imediately.
-          $timeout(function() {
-            options.keyboard && $dropdown.$element && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+          $timeout(function () {
+            if (options.keyboard && $dropdown.$element) $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
             bodyEl.on('click', onBodyClick);
           }, 0, false);
-          parentEl.hasClass('dropdown') && parentEl.addClass('open');
+          if (parentEl.hasClass('dropdown')) parentEl.addClass('open');
         };
 
         var hide = $dropdown.hide;
-        $dropdown.hide = function() {
+        $dropdown.hide = function () {
           if (!$dropdown.$isShown) return;
-          options.keyboard && $dropdown.$element && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+          if (options.keyboard && $dropdown.$element) $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
           bodyEl.off('click', onBodyClick);
-          parentEl.hasClass('dropdown') && parentEl.removeClass('open');
+          if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
           hide();
         };
 
         var destroy = $dropdown.destroy;
-        $dropdown.destroy = function() {
+        $dropdown.destroy = function () {
           bodyEl.off('click', onBodyClick);
           destroy();
         };
 
         // Private functions
 
-        function onBodyClick(evt) {
+        function onBodyClick (evt) {
           if (evt.target === element[0]) return;
           return evt.target !== element[0] && $dropdown.hide();
         }
@@ -102,12 +107,12 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
   })
 
-  .directive('bsDropdown', function($window, $sce, $dropdown) {
+  .directive('bsDropdown', function ($window, $sce, $dropdown) {
 
     return {
       restrict: 'EAC',
       scope: true,
-      compile: function(tElement, tAttrs) {
+      compile: function (tElement, tAttrs) {
 
         // Support for inlined template (next sibling)
         // It must be fetched before compilation
@@ -116,45 +121,62 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           while (nextSibling && nextSibling.nodeType !== 1) {
             nextSibling = nextSibling.nextSibling;
           }
-          if (nextSibling.classList.contains('dropdown-menu')) {
+          if (nextSibling && nextSibling.className.split(' ').indexOf('dropdown-menu') >= 0) {
             tAttrs.template = nextSibling.outerHTML;
             tAttrs.templateUrl = undefined;
             nextSibling.parentNode.removeChild(nextSibling);
           }
         }
 
-        return function postLink(scope, element, attr) {
+        return function postLink (scope, element, attr) {
 
           // Directive options
-          var options = {scope: scope};
-          angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id', 'autoClose'], function(key) {
+          var options = {
+            scope: scope
+          };
+          angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id', 'autoClose'], function (key) {
             if (angular.isDefined(tAttrs[key])) options[key] = tAttrs[key];
           });
 
           // use string regex match boolean attr falsy values, leave truthy values be
           var falseValueRegExp = /^(false|0|)$/i;
-          angular.forEach(['html', 'container'], function(key) {
-            if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key]))
-              options[key] = false;
+          angular.forEach(['html', 'container'], function (key) {
+            if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+          });
+
+          // bind functions from the attrs to the show and hide events
+          angular.forEach(['onBeforeShow', 'onShow', 'onBeforeHide', 'onHide'], function (key) {
+            var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+            if (angular.isDefined(attr[bsKey])) {
+              options[key] = scope.$eval(attr[bsKey]);
+            }
           });
 
           // Support scope as an object
-          attr.bsDropdown && scope.$watch(attr.bsDropdown, function(newValue, oldValue) {
-            scope.content = newValue;
-          }, true);
-
-          // Visibility binding support
-          attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
-            if (!dropdown || !angular.isDefined(newValue)) return;
-            if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
-            newValue === true ? dropdown.show() : dropdown.hide();
-          });
+          if (attr.bsDropdown) {
+            scope.$watch(attr.bsDropdown, function (newValue, oldValue) {
+              scope.content = newValue;
+            }, true);
+          }
 
           // Initialize dropdown
           var dropdown = $dropdown(element, options);
 
+          // Visibility binding support
+          if (attr.bsShow) {
+            scope.$watch(attr.bsShow, function (newValue, oldValue) {
+              if (!dropdown || !angular.isDefined(newValue)) return;
+              if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
+              if (newValue === true) {
+                dropdown.show();
+              } else {
+                dropdown.hide();
+              }
+            });
+          }
+
           // Garbage collection
-          scope.$on('$destroy', function() {
+          scope.$on('$destroy', function () {
             if (dropdown) dropdown.destroy();
             options = null;
             dropdown = null;

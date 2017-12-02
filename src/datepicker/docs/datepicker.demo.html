@@ -44,10 +44,10 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
       <div class="form-group">
         <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range <small>(dynamic)</small></label><br>
         <div class="form-group col-xs-6">
-          <input type="text" class="form-control" ng-model="fromDate"  data-max-date="{{untilDate}}" placeholder="From" bs-datepicker>
+          <input type="text" class="form-control" ng-model="fromDate"  data-max-date="{{untilDate}}" placeholder="From" data-has-today="true" data-has-clear="true" bs-datepicker>
         </div>
         <div class="form-group col-xs-6">
-          <input type="text" class="form-control" ng-model="untilDate"  data-min-date="{{fromDate}}" placeholder="Until" bs-datepicker>
+          <input type="text" class="form-control" ng-model="untilDate"  data-min-date="{{fromDate}}" placeholder="Until" data-has-today="true" data-has-clear="false" bs-datepicker>
         </div>
       </div>
     </form>
@@ -140,6 +140,38 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>'$datepicker'</td>
           <td>
             <p>If provided, overrides the default template, can be either a remote URL or a cached template id.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onShow</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked after the datepicker is shown.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onBeforeShow</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked before the datepicker is shown.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onHide</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked after the datepicker is hidden.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>onBeforeHide</td>
+          <td>function</td>
+          <td></td>
+          <td>
+            <p>If provided, this function will be invoked before the datepicker is hidden.</p>
           </td>
         </tr>
         <tr>
@@ -273,6 +305,22 @@ $scope.untilDate = {{untilDate}}; // &lt;- {{ getType('untilDate') }}
           <td>
             <p>Array of date ranges to disable.</p>
             <p>Example date range: <code>{ start: new Date(2010, 11, 24), end: new Date(2010, 11, 25) }</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>hasToday</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether the picker has Today button.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>hasClear</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>
+            <p>Whether the picker has Clear button.</p>
           </td>
         </tr>
       </tbody>

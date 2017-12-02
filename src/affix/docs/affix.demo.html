@@ -65,9 +65,13 @@
         </tr>
         <tr>
           <td>offsetParent</td>
-          <td>number</td>
-          <td>0</td>
-          <td>Pixels to offset from parent when calculating position of scroll.</td>
+          <td>number | HTML string | DOMElement</td>
+          <td></td>
+          <td>
+            If provided, the affix will be positioned relative to a parent element. 
+            If a numeric value is present, the affix will try to find a parent that is N parents "up" in the DOM tree.
+            If a non-numeric value is provided, the value is treated as an HTML string or DOMElement and constructed via angular.element(element).
+          </td>
         </tr>
         <tr>
           <td>offsetUnpin</td>

@@ -28,6 +28,9 @@ describe('collapse', function () {
     'default': {
       element: '<div class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
     },
+    'default-disabled-attr': {
+      element: '<div class="panel-group" bs-collapse><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle>title-1</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle disabled="disabled">title-2</a></h4></div><div class="panel-collapse" bs-collapse-target><div class="panel-body">content-2</div></div></div></div>'
+    },
     'jade-attributes': {
       element: '<div class="panel-group" bs-collapse="bs-collapse"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle="bs-collapse-toggle">title-1</a></h4></div><div class="panel-collapse" bs-collapse-target="bs-collapse-target"><div class="panel-body">content-1</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a bs-collapse-toggle="bs-collapse-toggle">title-2</a></h4></div><div class="panel-collapse" bs-collapse-target="bs-collapse-target"><div class="panel-body">content-2</div></div></div></div>'
     },
@@ -107,6 +110,17 @@ describe('collapse', function () {
       expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeTruthy();
       sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
       expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
+    });
+
+    it ('should not open or close panels that are disabled', function () {
+      var elm = compileDirective('default-disabled-attr');
+      expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+      //the second toggle link is disabled 
+      sandboxEl.find('[bs-collapse-toggle]:eq(1)').triggerHandler('click');
+      expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeTruthy();
+      expect(sandboxEl.find('[bs-collapse-target]:eq(1)').hasClass('in')).toBeFalsy();
+      sandboxEl.find('[bs-collapse-toggle]:eq(0)').triggerHandler('click');
+      expect(sandboxEl.find('[bs-collapse-target]:eq(0)').hasClass('in')).toBeFalsy();
     });
 
   });

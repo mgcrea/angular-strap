@@ -6,8 +6,7 @@
 angular.module('mgcrea.ngStrap.core', [])
   .service('$bsCompiler', bsCompilerService);
 
-function bsCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
-  /* jshint validthis: true */
+function bsCompilerService ($q, $http, $injector, $compile, $controller, $templateCache) {
 
   /*
    * @ngdoc service
@@ -68,9 +67,9 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
     *     called. If `bindToController` is true, they will be coppied to the ctrl instead
     *   - `bindToController` - `bool`: bind the locals to the controller, instead of passing them in.
     */
-  this.compile = function(options) {
+  this.compile = function (options) {
 
-    if(options.template && /\.html$/.test(options.template)) {
+    if (options.template && /\.html$/.test(options.template)) {
       console.warn('Deprecated use of `template` option to pass a file. Please use the `templateUrl` option instead.');
       options.templateUrl = options.template;
       options.template = '';
@@ -80,15 +79,15 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
     var template = options.template || '';
     var controller = options.controller;
     var controllerAs = options.controllerAs;
-    var resolve = angular.copy(options.resolve || {});
-    var locals = angular.copy(options.locals || {});
+    var resolve = options.resolve || {};
+    var locals = options.locals || {};
     var transformTemplate = options.transformTemplate || angular.identity;
     var bindToController = options.bindToController;
 
     // Take resolve values and invoke them.
     // Resolves can either be a string (value: 'MyRegisteredAngularConst'),
     // or an invokable 'factory' of sorts: (value: function ValueGetter($dependency) {})
-    angular.forEach(resolve, function(value, key) {
+    angular.forEach(resolve, function (value, key) {
       if (angular.isString(value)) {
         resolve[key] = $injector.get(value);
       } else {
@@ -107,20 +106,33 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
       throw new Error('Missing `template` / `templateUrl` option.');
     }
 
+    if (options.titleTemplate) {
+      resolve.$template = $q.all([resolve.$template, fetchTemplate(options.titleTemplate)])
+        .then(function (templates) {
+          var templateEl = angular.element(templates[0]);
+          findElement('[ng-bind="title"]', templateEl[0])
+            .removeAttr('ng-bind')
+            .html(templates[1]);
+          return templateEl[0].outerHTML;
+        });
+    }
+
     if (options.contentTemplate) {
       // TODO(mgcrea): deprecate?
       resolve.$template = $q.all([resolve.$template, fetchTemplate(options.contentTemplate)])
-        .then(function(templates) {
+        .then(function (templates) {
           var templateEl = angular.element(templates[0]);
-          var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+          var contentEl = findElement('[ng-bind="content"]', templateEl[0])
+            .removeAttr('ng-bind')
+            .html(templates[1]);
           // Drop the default footer as you probably don't want it if you use a custom contentTemplate
-          if(!options.templateUrl) contentEl.next().remove();
+          if (!options.templateUrl) contentEl.next().remove();
           return templateEl[0].outerHTML;
         });
     }
 
     // Wait for all the resolves to finish if they are promises
-    return $q.all(resolve).then(function(locals) {
+    return $q.all(resolve).then(function (locals) {
 
       var template = transformTemplate(locals.$template);
       if (options.html) {
@@ -134,7 +146,7 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
       return {
         locals: locals,
         element: element,
-        link: function link(scope) {
+        link: function link (scope) {
           locals.$scope = scope;
 
           // Instantiate controller if it exists, because we have scope
@@ -161,15 +173,15 @@ function bsCompilerService($q, $http, $injector, $compile, $controller, $templat
 
   };
 
-  function findElement(query, element) {
+  function findElement (query, element) {
     return angular.element((element || document).querySelectorAll(query));
   }
 
   var fetchPromises = {};
-  function fetchTemplate(template) {
-    if(fetchPromises[template]) return fetchPromises[template];
+  function fetchTemplate (template) {
+    if (fetchPromises[template]) return fetchPromises[template];
     return (fetchPromises[template] = $http.get(template, {cache: $templateCache})
-      .then(function(res) {
+      .then(function (res) {
         return res.data;
       }));
   }

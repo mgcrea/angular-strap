@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.6 - 2015-11-14
+ * @version v2.3.12 - 2017-01-26
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -58,12 +58,9 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
         controller.$formatters.push(function(modelValue) {
           return angular.equals(modelValue, trueValue);
         });
-        scope.$watch(attr.ngModel, function(newValue, oldValue) {
-          controller.$render();
-        });
       }
       controller.$render = function() {
-        var isActive = angular.equals(controller.$modelValue, trueValue);
+        var isActive = !!controller.$viewValue;
         $$rAF(function() {
           if (isInput) element[0].checked = isActive;
           activeElement.toggleClass(options.activeClass, isActive);
@@ -74,9 +71,7 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
           if (!isInput) {
             controller.$setViewValue(!activeElement.hasClass('active'));
           }
-          if (!hasExoticValues) {
-            controller.$render();
-          }
+          controller.$render();
         });
       });
     }
@@ -107,11 +102,15 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
       var activeElement = isInput ? element.parent() : element;
       var value;
       attr.$observe('value', function(v) {
-        value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
+        if (typeof v !== 'boolean' && constantValueRegExp.test(v)) {
+          value = scope.$eval(v);
+        } else {
+          value = v;
+        }
         controller.$render();
       });
       controller.$render = function() {
-        var isActive = angular.equals(controller.$modelValue, value);
+        var isActive = angular.equals(controller.$viewValue, value);
         $$rAF(function() {
           if (isInput) element[0].checked = isActive;
           activeElement.toggleClass(options.activeClass, isActive);

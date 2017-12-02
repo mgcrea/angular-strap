@@ -1,4 +1,4 @@
-<div class="dropdown-menu timepicker" style="min-width: 0px;width: auto;">
+<div class="dropdown-menu timepicker" style="min-width: 0px;width: auto;" aria-hidden="true">
 <table height="100%">
   <thead>
     <tr class="text-center">
@@ -15,11 +15,11 @@
           <i class="{{ $iconUp }}"></i>
         </button>
       </th>
-      <th>
+      <th ng-if="showSeconds" >
         &nbsp;
       </th>
-      <th>
-        <button ng-if="showSeconds" tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 2)">
+      <th ng-if="showSeconds">
+        <button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 2)">
           <i class="{{ $iconUp }}"></i>
         </button>
       </th>
@@ -40,11 +40,11 @@
           <span ng-class="{'text-muted': row[1].muted}" ng-bind="row[1].label"></span>
         </button>
       </td>
-      <td>
+      <td ng-if="showSeconds">
         <span ng-bind="i == midIndex ? timeSeparator : ' '"></span>
       </td>
-      <td class="text-center">
-        <button tabindex="-1" ng-if="showSeconds && row[2].date" style="width: 100%" type="button" class="btn btn-default" ng-class="{'btn-primary': row[2].selected}" ng-click="$select(row[2].date, 2)" ng-disabled="row[2].disabled">
+      <td ng-if="showSeconds" class="text-center">
+        <button tabindex="-1" ng-if="row[2].date" style="width: 100%" type="button" class="btn btn-default" ng-class="{'btn-primary': row[2].selected}" ng-click="$select(row[2].date, 2)" ng-disabled="row[2].disabled">
           <span ng-class="{'text-muted': row[2].muted}" ng-bind="row[2].label"></span>
         </button>
       </td>
@@ -72,10 +72,10 @@
           <i class="{{ $iconDown }}"></i>
         </button>
       </th>
-      <th>
+      <th ng-if="showSeconds">
         &nbsp;
       </th>
-      <th>
+      <th ng-if="showSeconds">
         <button ng-if="showSeconds" tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(1, 2)">
           <i class="{{ $iconDown }}"></i>
         </button>

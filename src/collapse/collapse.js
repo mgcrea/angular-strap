@@ -2,7 +2,7 @@
 
 angular.module('mgcrea.ngStrap.collapse', [])
 
-  .provider('$collapse', function() {
+  .provider('$collapse', function () {
 
     var defaults = this.defaults = {
       animation: 'am-collapse',
@@ -12,19 +12,19 @@ angular.module('mgcrea.ngStrap.collapse', [])
       allowMultiple: false
     };
 
-    var controller = this.controller = function($scope, $element, $attrs) {
+    var controller = this.controller = function ($scope, $element, $attrs) {
       var self = this;
 
       // Attributes options
       self.$options = angular.copy(defaults);
       angular.forEach(['animation', 'disallowToggle', 'activeClass', 'startCollapsed', 'allowMultiple'], function (key) {
-        if(angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
+        if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
 
       // use string regex match boolean attr falsy values, leave truthy values be
       var falseValueRegExp = /^(false|0|)$/i;
-      angular.forEach(['disallowToggle', 'startCollapsed', 'allowMultiple'], function(key) {
-        if(angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key])) {
+      angular.forEach(['disallowToggle', 'startCollapsed', 'allowMultiple'], function (key) {
+        if (angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key])) {
           self.$options[key] = false;
         }
       });
@@ -34,19 +34,19 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
       self.$viewChangeListeners = [];
 
-      self.$registerToggle = function(element) {
+      self.$registerToggle = function (element) {
         self.$toggles.push(element);
       };
-      self.$registerTarget = function(element) {
+      self.$registerTarget = function (element) {
         self.$targets.push(element);
       };
 
-      self.$unregisterToggle = function(element) {
+      self.$unregisterToggle = function (element) {
         var index = self.$toggles.indexOf(element);
         // remove toggle from $toggles array
         self.$toggles.splice(index, 1);
       };
-      self.$unregisterTarget = function(element) {
+      self.$unregisterTarget = function (element) {
         var index = self.$targets.indexOf(element);
 
         // remove element from $targets array
@@ -60,39 +60,39 @@ angular.module('mgcrea.ngStrap.collapse', [])
         // fix active item indexes
         fixActiveItemIndexes(index);
 
-        self.$viewChangeListeners.forEach(function(fn) {
+        self.$viewChangeListeners.forEach(function (fn) {
           fn();
         });
       };
 
       // use array to store all the currently open panels
       self.$targets.$active = !self.$options.startCollapsed ? [0] : [];
-      self.$setActive = $scope.$setActive = function(value) {
-        if(angular.isArray(value)) {
+      self.$setActive = $scope.$setActive = function (value) {
+        if (angular.isArray(value)) {
           self.$targets.$active = value;
-        }
-        else if(!self.$options.disallowToggle) {
-          // toogle element active status
-          isActive(value) ? deactivateItem(value) : activateItem(value);
+        } else if (!self.$options.disallowToggle && isActive(value)) {
+          deactivateItem(value);
         } else {
           activateItem(value);
         }
 
-        self.$viewChangeListeners.forEach(function(fn) {
+        self.$viewChangeListeners.forEach(function (fn) {
           fn();
         });
       };
 
-      self.$activeIndexes = function() {
-        return self.$options.allowMultiple ? self.$targets.$active :
-          self.$targets.$active.length === 1 ? self.$targets.$active[0] : -1;
+      self.$activeIndexes = function () {
+        if (self.$options.allowMultiple) {
+          return self.$targets.$active;
+        }
+        return self.$targets.$active.length === 1 ? self.$targets.$active[0] : -1;
       };
 
-      function fixActiveItemIndexes(index) {
+      function fixActiveItemIndexes (index) {
         // item with index was removed, so we
         // need to adjust other items index values
         var activeIndexes = self.$targets.$active;
-        for(var i = 0; i < activeIndexes.length; i++) {
+        for (var i = 0; i < activeIndexes.length; i++) {
           if (index < activeIndexes[i]) {
             activeIndexes[i] = activeIndexes[i] - 1;
           }
@@ -105,19 +105,19 @@ angular.module('mgcrea.ngStrap.collapse', [])
         }
       }
 
-      function isActive(value) {
+      function isActive (value) {
         var activeItems = self.$targets.$active;
-        return activeItems.indexOf(value) === -1 ? false : true;
+        return activeItems.indexOf(value) !== -1;
       }
 
-      function deactivateItem(value) {
+      function deactivateItem (value) {
         var index = self.$targets.$active.indexOf(value);
         if (index !== -1) {
           self.$targets.$active.splice(index, 1);
         }
       }
 
-      function activateItem(value) {
+      function activateItem (value) {
         if (!self.$options.allowMultiple) {
           // remove current selected item
           self.$targets.$active.splice(0, 1);
@@ -130,7 +130,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
     };
 
-    this.$get = function() {
+    this.$get = function () {
       var $collapse = {};
       $collapse.defaults = defaults;
       $collapse.controller = controller;
@@ -139,34 +139,31 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
   })
 
-  .directive('bsCollapse', function($window, $animate, $collapse) {
-
-    var defaults = $collapse.defaults;
+  .directive('bsCollapse', function ($window, $animate, $collapse) {
 
     return {
       require: ['?ngModel', 'bsCollapse'],
       controller: ['$scope', '$element', '$attrs', $collapse.controller],
-      link: function postLink(scope, element, attrs, controllers) {
+      link: function postLink (scope, element, attrs, controllers) {
 
         var ngModelCtrl = controllers[0];
         var bsCollapseCtrl = controllers[1];
 
-        if(ngModelCtrl) {
+        if (ngModelCtrl) {
 
           // Update the modelValue following
-          bsCollapseCtrl.$viewChangeListeners.push(function() {
+          bsCollapseCtrl.$viewChangeListeners.push(function () {
             ngModelCtrl.$setViewValue(bsCollapseCtrl.$activeIndexes());
           });
 
           // modelValue -> $formatters -> viewValue
-          ngModelCtrl.$formatters.push(function(modelValue) {
+          ngModelCtrl.$formatters.push(function (modelValue) {
             // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
             if (angular.isArray(modelValue)) {
               // model value is an array, so just replace
               // the active items directly
               bsCollapseCtrl.$setActive(modelValue);
-            }
-            else {
+            } else {
               var activeIndexes = bsCollapseCtrl.$activeIndexes();
 
               if (angular.isArray(activeIndexes)) {
@@ -175,8 +172,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
                   // item with modelValue index is not active
                   bsCollapseCtrl.$setActive(modelValue * 1);
                 }
-              }
-              else if (activeIndexes !== modelValue * 1) {
+              } else if (activeIndexes !== modelValue * 1) {
                 bsCollapseCtrl.$setActive(modelValue * 1);
               }
             }
@@ -190,13 +186,13 @@ angular.module('mgcrea.ngStrap.collapse', [])
 
   })
 
-  .directive('bsCollapseToggle', function() {
+  .directive('bsCollapseToggle', function () {
 
     return {
       require: ['^?ngModel', '^bsCollapse'],
-      link: function postLink(scope, element, attrs, controllers) {
+      link: function postLink (scope, element, attrs, controllers) {
 
-        var ngModelCtrl = controllers[0];
+        // var ngModelCtrl = controllers[0];
         var bsCollapseCtrl = controllers[1];
 
         // Add base attr
@@ -206,36 +202,47 @@ angular.module('mgcrea.ngStrap.collapse', [])
         bsCollapseCtrl.$registerToggle(element);
 
         // remove toggle from collapse controller when toggle is destroyed
-        scope.$on('$destroy', function() {
+        scope.$on('$destroy', function () {
           bsCollapseCtrl.$unregisterToggle(element);
         });
 
-        element.on('click', function() {
-          var index = attrs.bsCollapseToggle && attrs.bsCollapseToggle !== 'bs-collapse-toggle' ? attrs.bsCollapseToggle : bsCollapseCtrl.$toggles.indexOf(element);
-          bsCollapseCtrl.$setActive(index * 1);
-          scope.$apply();
-        });
+        var actionEventHandler = function () {
+          if (!attrs.disabled) {
+            var index = attrs.bsCollapseToggle && attrs.bsCollapseToggle !== 'bs-collapse-toggle' ? attrs.bsCollapseToggle : bsCollapseCtrl.$toggles.indexOf(element);
+            bsCollapseCtrl.$setActive(index * 1);
+            scope.$apply();
+          }
+        };
 
+        element.on('click', actionEventHandler);
+        element.bind('keydown keypress', function (e) {
+          if (e.which === 13) {
+            actionEventHandler();
+            e.preventDefault();
+          } else if (e.which !== 16 && e.which !== 9) {
+            e.preventDefault();
+          }
+        });
       }
     };
 
   })
 
-  .directive('bsCollapseTarget', function($animate) {
+  .directive('bsCollapseTarget', function ($animate) {
 
     return {
       require: ['^?ngModel', '^bsCollapse'],
       // scope: true,
-      link: function postLink(scope, element, attrs, controllers) {
+      link: function postLink (scope, element, attrs, controllers) {
 
-        var ngModelCtrl = controllers[0];
+        // var ngModelCtrl = controllers[0];
         var bsCollapseCtrl = controllers[1];
 
         // Add base class
         element.addClass('collapse');
 
         // Add animation class
-        if(bsCollapseCtrl.$options.animation) {
+        if (bsCollapseCtrl.$options.animation) {
           element.addClass(bsCollapseCtrl.$options.animation);
         }
 
@@ -243,11 +250,11 @@ angular.module('mgcrea.ngStrap.collapse', [])
         bsCollapseCtrl.$registerTarget(element);
 
         // remove pane target from collapse controller when target is destroyed
-        scope.$on('$destroy', function() {
+        scope.$on('$destroy', function () {
           bsCollapseCtrl.$unregisterTarget(element);
         });
 
-        function render() {
+        function render () {
           var index = bsCollapseCtrl.$targets.indexOf(element);
           var active = bsCollapseCtrl.$activeIndexes();
           var action = 'removeClass';
@@ -255,15 +262,14 @@ angular.module('mgcrea.ngStrap.collapse', [])
             if (active.indexOf(index) !== -1) {
               action = 'addClass';
             }
-          }
-          else if (index === active) {
+          } else if (index === active) {
             action = 'addClass';
           }
 
           $animate[action](element, bsCollapseCtrl.$options.activeClass);
         }
 
-        bsCollapseCtrl.$viewChangeListeners.push(function() {
+        bsCollapseCtrl.$viewChangeListeners.push(function () {
           render();
         });
         render();
