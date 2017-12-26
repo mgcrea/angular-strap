@@ -8,7 +8,8 @@ angular.module('mgcrea.ngStrap.tab', [])
       animation: 'am-fade',
       template: 'tab/tab.tpl.html',
       navClass: 'nav-tabs',
-      activeClass: 'active'
+      activeClass: 'active',
+	  isVertical: false
     };
     var _tabsHash = {};
 
@@ -21,9 +22,15 @@ angular.module('mgcrea.ngStrap.tab', [])
 
       // Attributes options
       self.$options = angular.copy(defaults);
-      angular.forEach(['animation', 'navClass', 'activeClass', 'id'], function (key) {
+      angular.forEach(['animation', 'navClass', 'activeClass', 'id', 'isVertical'], function (key) {
         if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
       });
+	  
+	  // use string regex match boolean attr falsy values, leave truthy values be
+      var falseValueRegExp = /^(false|0|)$/i;
+      angular.forEach(['isVertical'], function (key) {
+           if (angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key])) self.$options[key] = false;
+      });	  
 
       // Publish options on scope
       $scope.$navClass = self.$options.navClass;
@@ -139,9 +146,12 @@ angular.module('mgcrea.ngStrap.tab', [])
           e.preventDefault();
           e.stopPropagation();
 
-        } else if (e.keyCode === 37 || e.charCode === 37 || e.keyCode === 39 || e.charCode === 39) {
+        } else if (!self.$options.isVertical &&  (e.keyCode === 37 || e.charCode === 37 || e.keyCode === 39 || e.charCode === 39)) {
           // If the left of right arrow key was pressed.
           navigatePane(index, (e.keyCode === 37 || e.charCode === 37));
+        } else if (self.$options.isVertical && (e.keyCode === 38 || e.charCode === 38 || e.keyCode === 40 || e.charCode === 40)) {
+          // If the left of right arrow key was pressed.
+          navigatePane(index, (e.keyCode === 38 || e.charCode === 38));
         }
       };
     };
@@ -166,7 +176,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       transclude: true,
       scope: true,
       controller: ['$scope', '$element', '$attrs', '$timeout', $tab.controller],
-      templateUrl: function (element, attr) {
+      templateUrl: function (element, attr) {		  
         return attr.template || defaults.template;
       },
       link: function postLink (scope, element, attrs, controllers) {
