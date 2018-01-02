@@ -37,7 +37,7 @@
     "eslint": "^2.12.0",
     "eslint-config-mgcrea": "^8.0.0",
     "eslint-plugin-import": "^1.8.1",
-    "factory-angular-channels": "github:sumtotalsystems/factory-angular-channels#fix-npm-dependencies",
+    "factory-angular-channels": "github:sumtotalsystems/factory-angular-channels",
     "gulp-ng-annotate": "^2.0.0",
     "gulp-pre": "^4.0.0-alpha.4",
     "gulp-rename": "^1.2.2",
