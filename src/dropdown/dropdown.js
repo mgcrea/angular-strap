@@ -63,7 +63,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           // Navigate with keyboard
           if (evt.keyCode === 38 && index > 0) index--;
           else if (evt.keyCode === 40 && index < items.length - 1) index++;
-		  else if (evt.keyCode === 40 && index === items.length - 1) index = 0;
+          else if (evt.keyCode === 40 && index === items.length - 1) index = 0;
           else if (angular.isUndefined(index)) index = 0;
           items.eq(index)[0].focus();
 
