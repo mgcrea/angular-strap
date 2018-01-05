@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-11-30
+ * @version v2.3.12 - 2018-01-05
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -32,8 +32,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
     var forEach = angular.forEach;
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
     var bodyElement = angular.element($window.document.body);
-    var defaultContainerElement = '#layoutContainer';
-    var layoutHideElement = angular.element(defaultContainerElement);
+    var layoutHideElement = angular.element($window.document.getElementById('#layoutContainer'));
     var backdropCount = 0;
     var dialogBaseZindex = 1050;
     var backdropBaseZindex = 1040;

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-11-30
+ * @version v2.3.12 - 2018-01-05
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -12,7 +12,8 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
     animation: 'am-fade',
     template: 'tab/tab.tpl.html',
     navClass: 'nav-tabs',
-    activeClass: 'active'
+    activeClass: 'active',
+    isVertical: false
   };
   var _tabsHash = {};
   var _addTabControl = function(key, control) {
@@ -21,8 +22,12 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
   var controller = this.controller = function($scope, $element, $attrs, $timeout) {
     var self = this;
     self.$options = angular.copy(defaults);
-    angular.forEach([ 'animation', 'navClass', 'activeClass', 'id' ], function(key) {
+    angular.forEach([ 'animation', 'navClass', 'activeClass', 'id', 'isVertical' ], function(key) {
       if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
+    });
+    var falseValueRegExp = /^(false|0|)$/i;
+    angular.forEach([ 'isVertical' ], function(key) {
+      if (angular.isDefined($attrs[key]) && falseValueRegExp.test($attrs[key])) self.$options[key] = false;
     });
     $scope.$navClass = self.$options.navClass;
     $scope.$activeClass = self.$options.activeClass;
@@ -105,8 +110,10 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
         self.$setActive(name);
         e.preventDefault();
         e.stopPropagation();
-      } else if (e.keyCode === 37 || e.charCode === 37 || e.keyCode === 39 || e.charCode === 39) {
+      } else if (!self.$options.isVertical && (e.keyCode === 37 || e.charCode === 37 || e.keyCode === 39 || e.charCode === 39)) {
         navigatePane(index, e.keyCode === 37 || e.charCode === 37);
+      } else if (self.$options.isVertical && (e.keyCode === 38 || e.charCode === 38 || e.keyCode === 40 || e.charCode === 40)) {
+        navigatePane(index, e.keyCode === 38 || e.charCode === 38);
       }
     };
   };

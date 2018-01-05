@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-11-30
+ * @version v2.3.12 - 2018-01-05
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -49,7 +49,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         angular.forEach(items, function(el, i) {
           if (matchesSelector && matchesSelector.call(el, ':focus')) index = i;
         });
-        if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (angular.isUndefined(index)) index = 0;
+        if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (evt.keyCode === 40 && index === items.length - 1) index = 0; else if (angular.isUndefined(index)) index = 0;
         items.eq(index)[0].focus();
       };
       $dropdown.$onFocusOut = function(evt) {
@@ -127,7 +127,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         destroy();
       };
       function onBodyClick(evt) {
-        if (evt.target === element[0]) return;
+        if (evt.target === element[0]) return undefined;
         return evt.target !== element[0] && $dropdown.hide();
       }
       return $dropdown;
