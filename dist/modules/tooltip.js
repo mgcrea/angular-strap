@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2018-01-05
+ * @version v2.3.12 - 2018-01-16
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -44,7 +44,6 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
       var options = $tooltip.$options = angular.extend({}, defaults, config);
       var promise = $tooltip.$promise = $bsCompiler.compile(options);
       var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
-      var nodeName = element[0].nodeName.toLowerCase();
       if (options.delay && angular.isString(options.delay)) {
         var split = options.delay.split(',').map(parseFloat);
         options.delay = split.length > 1 ? {
@@ -328,10 +327,9 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
           if (trigger === 'click' || trigger === 'contextmenu') {
             element.on(trigger, $tooltip.toggle);
           } else if (trigger !== 'manual') {
-            element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-            element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-            if (nodeName === 'button' && trigger !== 'hover') {
-              element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            if (!isTouch) {
+              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
             }
           }
         });
@@ -343,10 +341,9 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
           if (trigger === 'click' || trigger === 'contextmenu') {
             element.off(trigger, $tooltip.toggle);
           } else if (trigger !== 'manual') {
-            element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-            element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-            if (nodeName === 'button' && trigger !== 'hover') {
-              element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+            if (!isTouch) {
+              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
+              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
             }
           }
         }
