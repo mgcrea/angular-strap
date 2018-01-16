@@ -47,7 +47,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
         var promise = $tooltip.$promise = $bsCompiler.compile(options);
         var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
 
-        var nodeName = element[0].nodeName.toLowerCase();
+        // var nodeName = element[0].nodeName.toLowerCase();
         if (options.delay && angular.isString(options.delay)) {
           var split = options.delay.split(',').map(parseFloat);
           options.delay = split.length > 1 ? {show: split[0], hide: split[1]} : split[0];
