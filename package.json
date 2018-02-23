@@ -58,6 +58,7 @@
   "scripts": {
     "start": "gulp serve",
     "compile": "gulp build",
+    "pages": "gulp pages",
     "test": "gulp karma:unit",
     "test:watch": "npm run test -- -w",
     "lint": "eslint src/*/*.js"
