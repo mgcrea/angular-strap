@@ -216,6 +216,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           // Bind events
           bindBackdropEvents();
           bindKeyboardEvents();
+          $modal.focus();
         };
 
         function enterAnimateCallback () {
