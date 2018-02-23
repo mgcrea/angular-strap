@@ -489,7 +489,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
           // event bubbling from being processed imediately.
           $timeout(function () {
             // Stop propagation when clicking inside tooltip
-            tipElement.on('click', stopEventPropagation);
+            if (tipElement !== null) {
+              tipElement.on('click', stopEventPropagation);
+            }
 
             // Hide when clicking outside tooltip
             $body.on('click', $tooltip.hide);
