@@ -41,7 +41,8 @@ angular.module('mgcrea.ngStrap.datepicker', [
       hasToday: false,
       hasClear: false,
       iconLeft: 'glyphicon glyphicon-chevron-left',
-      iconRight: 'glyphicon glyphicon-chevron-right'
+      iconRight: 'glyphicon glyphicon-chevron-right',
+      touchClickEmulationDisabled: false
     };
 
     this.$get = function ($window, $document, $rootScope, $sce, $dateFormatter, datepickerViews, $tooltip, $timeout) {
@@ -185,7 +186,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
           evt.preventDefault();
           evt.stopPropagation();
           // Emulate click for mobile devices
-          if (isTouch) {
+          if (isTouch && !options.touchClickEmulationDisabled) {
             var targetEl = angular.element(evt.target);
             if (targetEl[0].nodeName.toLowerCase() !== 'button') {
               targetEl = targetEl.parent();
@@ -296,13 +297,13 @@ angular.module('mgcrea.ngStrap.datepicker', [
 
         // Directive options
         var options = {scope: scope};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent', 'hasToday', 'hasClear'], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent', 'hasToday', 'hasClear', 'touchClickEmulationDisabled'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach(['html', 'container', 'autoclose', 'useNative', 'hasToday', 'hasClear'], function (key) {
+        angular.forEach(['html', 'container', 'autoclose', 'useNative', 'hasToday', 'hasClear', 'touchClickEmulationDisabled'], function (key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
           }
