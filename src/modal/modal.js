@@ -31,7 +31,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
       var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
       var bodyElement = angular.element($window.document.body);
 
-      var layoutHideElement = angular.element($window.document.getElementById('#layoutContainer'));
+      var layoutHideElement = angular.element('#layoutContainer');
 
       var backdropCount = 0;
       var dialogBaseZindex = 1050;
