@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2018-04-15
+ * @version v2.3.12 - 2018-05-08
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -330,6 +330,9 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
             if (!isTouch) {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
+            } else if (trigger === 'focus') {
+              element.on('focus', $tooltip.enter);
+              element.on('blur', $tooltip.leave);
             }
           }
         });
@@ -344,6 +347,9 @@ angular.module('mgcrea.ngStrap.tooltip', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStra
             if (!isTouch) {
               element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
+            } else if (trigger === 'focus') {
+              element.off('focus', $tooltip.enter);
+              element.off('blur', $tooltip.leave);
             }
           }
         }
