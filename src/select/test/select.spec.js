@@ -34,7 +34,7 @@ describe('select', function () {
   var templates = {
     'default': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
-      element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" bs-select></button>'
+      element: '<button type="button" class="btn" ng-model="selectedIcon" bs-options="icon.value as icon.label for icon in icons" placeholder="Placeholder text" bs-select></button>'
     },
     'default-with-namespace': {
       scope: {selectedIcon: '', icons: [{value: 'Gear', label: '> Gear'}, {value: 'Globe', label: '> Globe'}, {value: 'Heart', label: '> Heart'}, {value: 'Camera', label: '> Camera'}]},
@@ -168,7 +168,7 @@ describe('select', function () {
     it('should close on select', function() {
       var elm = compileDirective('default');
       expect(sandboxEl.children('.dropdown-menu.select').length).toBe(0);
-      expect(elm.text().trim()).toBe('Choose among the following...');
+      expect(elm.text().trim()).toBe('Placeholder text');
       angular.element(elm[0]).triggerHandler('focus');
       angular.element(sandboxEl.find('.dropdown-menu li:eq(1) a')[0]).triggerHandler('click');
       expect(scope.selectedIcon).toBe(scope.icons[1].value);
@@ -303,6 +303,7 @@ describe('select', function () {
 
       scope.selectedIcon = null;
       scope.$digest();
+      expect(elm.text().trim()).toBe("Placeholder text");
       angular.element(elm[0]).triggerHandler('focus');
       expect(sandboxEl.find('.dropdown-menu li.active').length).toBe(0);
       expect(sandboxEl.find('.dropdown-menu li.active').index()).toBe(-1);
