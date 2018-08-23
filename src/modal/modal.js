@@ -365,6 +365,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         $modal.$onKeyDown = function (evt) {
           if (options.keyboard) {
+            if (evt.keyCode === 8) {
+                evt.preventDefault();
+            }				
+			  
             if (evt.keyCode === 9) {
 
               var nextFocusable = findNextFocusableElement(evt.shiftKey);
