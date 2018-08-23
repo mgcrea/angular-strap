@@ -354,9 +354,11 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         $modal.$onKeyUp = function (evt) {
 
-          // Escape was pressed on an open modal. Hide it.
-          if (evt.which === 27 && $modal.$isShown) {
-            $modal.hide();
+          // Escape was pressed on an open modal. Hide it.  Backspace key, nothing happen.
+          if ((evt.which === 8||evt.which === 27) && $modal.$isShown) {
+            if (evt.which === 27) {
+               $modal.hide();
+            }
             evt.stopPropagation();
           }
         };
