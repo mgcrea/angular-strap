@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2018-05-08
+ * @version v2.3.12 - 2018-08-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -259,13 +259,18 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         modalElement[0].focus();
       };
       $modal.$onKeyUp = function(evt) {
-        if (evt.which === 27 && $modal.$isShown) {
-          $modal.hide();
+        if ((evt.which === 8 || evt.which === 27) && $modal.$isShown) {
+          if (evt.which === 27) {
+            $modal.hide();
+          }
           evt.stopPropagation();
         }
       };
       $modal.$onKeyDown = function(evt) {
         if (options.keyboard) {
+          if (evt.keyCode === 8) {
+            evt.preventDefault();
+          }
           if (evt.keyCode === 9) {
             var nextFocusable = findNextFocusableElement(evt.shiftKey);
             if (nextFocusable === undefined) {
