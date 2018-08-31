@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2018-08-28
+ * @version v2.3.12 - 2018-08-31
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -268,7 +268,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
       };
       $modal.$onKeyDown = function(evt) {
         if (options.keyboard) {
-          if (evt.keyCode === 8) {
+          if (evt.keyCode === 8 && evt.target.tagName !== 'TEXTAREA' && evt.target.tagName !== 'INPUT') {
             evt.preventDefault();
           }
           if (evt.keyCode === 9) {
