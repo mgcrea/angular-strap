@@ -365,7 +365,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         $modal.$onKeyDown = function (evt) {
           if (options.keyboard) {
-            if (evt.keyCode === 8) {
+            if (evt.keyCode === 8 && e.target.tagName!=='TEXTAREA' && e.target.tagName!=='INPUT') {
                 evt.preventDefault();
             }				
 			  
