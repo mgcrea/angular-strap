@@ -259,7 +259,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
             setTimeout(function () {
               focusableElement.focus();
             }, 500);
-          }
+          } else{		  
+			  layoutHideElement.attr('aria-hidden', 'false');
+			  unbindKeyboardEvents();
+		  }
         }
 
         $modal.hide = function () {
