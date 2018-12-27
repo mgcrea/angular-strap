@@ -30,7 +30,10 @@
     "url": "https://github.com/mgcrea/angular-strap.git"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "gulp": "^4.0.0",
+    "gulp-cli": "^2.0.1"
+  },
   "devDependencies": {
     "codeclimate-test-reporter": "^0.3.2",
     "del": "^2.2.0",

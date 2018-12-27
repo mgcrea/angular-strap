@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.9 - 2016-08-05
+ * @version v2.3.9 - 2018-12-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -96,7 +96,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
         MMM: $locale.DATETIME_FORMATS.SHORTMONTH.join('|'),
         MM: '0[1-9]|1[012]',
         M: options.strict ? '[1-9]|1[012]' : '0?[1-9]|1[012]',
-        yyyy: '[1]{1}[0-9]{3}|[2]{1}[0-9]{3}',
+        yyyy: '[1]{1}[0-9]{3}|[1-9]{1}[0-9]{3}',
         yy: '[0-9]{2}',
         y: options.strict ? '-?(0|[1-9][0-9]{0,3})' : '-?0*[0-9]{1,4}'
       };
