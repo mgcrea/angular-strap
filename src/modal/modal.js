@@ -251,17 +251,13 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
 
           modalElement.attr('aria-hidden', 'false');
+		  modalElement.attr('tabindex', '0');
+		  modalElement.focus();
 
-          var focusableElement = angular.element(findElement('.modal'));
-
-          if (focusableElement.length > 0) {
-            focusableElement.attr('tabindex', '0');
-            setTimeout(function () {
-              focusableElement.focus();
-            }, 500);
-          } else{		  
-			  layoutHideElement.attr('aria-hidden', 'false');
-			  unbindKeyboardEvents();
+		  if(!modalElement.length || !angular.element(modalElement[0]).hasClass("modal"))
+		  {
+			layoutHideElement.attr('aria-hidden', 'false');
+			unbindKeyboardEvents();
 		  }
         }
 
