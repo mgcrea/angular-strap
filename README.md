@@ -1,6 +1,6 @@
 # [AngularStrap](http://mgcrea.github.io/angular-strap)
 
-[![Bower Version](http://img.shields.io/bower/v/angular-strap.svg?style=flat)](https://github.com/mgcrea/angular-strap/releases) ![status](https://img.shields.io/badge/status-deprecated-red.svg) [![Build Status](http://img.shields.io/travis/mgcrea/angular-strap/master.svg?style=flat)](http://travis-ci.org/mgcrea/angular-strap)
+[![Bower Version](http://img.shields.io/bower/v/angular-strap.svg?style=flat)](https://github.com/mgcrea/angular-strap/releases) [![status](https://img.shields.io/badge/status-deprecated-red.svg)](https://github.com/mgcrea/angular-strap/issues/2256) [![Build Status](http://img.shields.io/travis/mgcrea/angular-strap/master.svg?style=flat)](http://travis-ci.org/mgcrea/angular-strap)
 
 [![Banner](http://mgcrea.github.io/angular-strap/images/snippet.png)](http://mgcrea.github.io/angular-strap)
 
