@@ -133,7 +133,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         $dropdown.hide = function (returnFocus) {
           if (!$dropdown.$isShown) return;
 
-          element.attr('aria-expanded', 'true');
+          element.attr('aria-expanded', 'false');
           $dropdown.$element.attr('aria-hidden', 'true');
 
           if (options.keyboard && $dropdown.$element) {
