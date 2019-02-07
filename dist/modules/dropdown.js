@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2019-02-04
+ * @version v2.3.12 - 2019-02-07
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -102,7 +102,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       var hide = $dropdown.hide;
       $dropdown.hide = function(returnFocus) {
         if (!$dropdown.$isShown) return;
-        element.attr('aria-expanded', 'true');
+        element.attr('aria-expanded', 'false');
         $dropdown.$element.attr('aria-hidden', 'true');
         if (options.keyboard && $dropdown.$element) {
           $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
