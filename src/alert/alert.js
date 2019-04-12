@@ -20,7 +20,8 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
       // Specific options
       duration: false,
       type: false,
-      dismissable: true
+      dismissable: true,
+	  focusMeDisabled: false
     };
 
     this.$get = function ($modal, $timeout) {
@@ -59,6 +60,9 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
         $alert.$scope.dismissable = !!options.dismissable;
         if (options.type) {
           $alert.$scope.type = options.type;
+        }
+		if (options.focusMeDisabled) {
+          $alert.$scope.focusMeDisabled = options.focusMeDisabled;
         }
 
         // Support auto-close duration
