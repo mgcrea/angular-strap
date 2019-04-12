@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2019-02-11
+ * @version v2.3.12 - 2019-04-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -21,7 +21,8 @@ angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$al
     show: true,
     duration: false,
     type: false,
-    dismissable: true
+    dismissable: true,
+    focusMeDisabled: false
   };
   this.$get = [ '$modal', '$timeout', function($modal, $timeout) {
     function AlertFactory(config) {
@@ -31,7 +32,7 @@ angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$al
       $alert.returnFocus = function() {
         function findFocusableElements() {
           var containerEl = angular.element($alert.$element).closest('[ng-controller]');
-          return containerEl.find('a:not([disabled]),button:not([disabled]),input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])').filter(function(i, el) {
+          return containerEl.find('a:not([disabled]),button:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([disabled]):not([tabindex="-1"])').filter(function(i, el) {
             return !angular.element(el).parentsUntil(containerEl, '[tabindex="-1"]').length;
           });
         }
@@ -48,6 +49,9 @@ angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$al
       $alert.$scope.dismissable = !!options.dismissable;
       if (options.type) {
         $alert.$scope.type = options.type;
+      }
+      if (options.focusMeDisabled) {
+        $alert.$scope.focusMeDisabled = options.focusMeDisabled;
       }
       var show = $alert.show;
       if (options.duration) {
