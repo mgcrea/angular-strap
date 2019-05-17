@@ -39,7 +39,6 @@ angular.module('mgcrea.ngStrap.tab', [])
       $scope.$onClick = function $onClick (evt, pane, index) {
         if (!pane.disabled) {
           self.$setActive(pane.name || index);
-          focusCurrentTab();
         }
 
         evt.preventDefault();
@@ -61,18 +60,7 @@ angular.module('mgcrea.ngStrap.tab', [])
           navigatePane(newIndex, toLeft);
         } else {
           self.$setActive(self.$panes[newIndex].name || newIndex);
-          focusCurrentTab();
         }
-      }
-
-      function focusCurrentTab () {
-        $timeout(function () {
-          var activeAs = angular.element($element[0].querySelectorAll('li.' + self.$options.activeClass));
-
-          if (activeAs.length > 0 && activeAs[0]) {
-            activeAs[0].focus();
-          }
-        }, 100);
       }
 
       self.$panes = $scope.$panes = [];
@@ -307,4 +295,16 @@ angular.module('mgcrea.ngStrap.tab', [])
       }
     };
 
-  });
+  }
+  
+  .directive('focusOn', function() {
+		return {
+			restrict: 'A',
+			link: function(scope, elem, attr) {
+				scope.$watch(attr.focusOn, function(newValue, oldValue) {
+					newValue !== oldValue && newValue && elem[0].focus();
+				});
+			}
+		}
+	}
+);
