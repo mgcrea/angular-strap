@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2019-04-12
+ * @version v2.3.12 - 2019-05-17
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -34,7 +34,6 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
     $scope.$onClick = function $onClick(evt, pane, index) {
       if (!pane.disabled) {
         self.$setActive(pane.name || index);
-        focusCurrentTab();
       }
       evt.preventDefault();
       evt.stopPropagation();
@@ -50,16 +49,7 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
         navigatePane(newIndex, toLeft);
       } else {
         self.$setActive(self.$panes[newIndex].name || newIndex);
-        focusCurrentTab();
       }
-    }
-    function focusCurrentTab() {
-      $timeout(function() {
-        var activeAs = angular.element($element[0].querySelectorAll('li.' + self.$options.activeClass));
-        if (activeAs.length > 0 && activeAs[0]) {
-          activeAs[0].focus();
-        }
-      }, 100);
     }
     self.$panes = $scope.$panes = [];
     self.$activePaneChangeListeners = self.$viewChangeListeners = [];
@@ -209,4 +199,13 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
       render();
     }
   };
-} ]);
+} ]).directive('focusOn', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, elem, attr) {
+      scope.$watch(attr.focusOn, function(newValue, oldValue) {
+        newValue !== oldValue && newValue && elem[0].focus();
+      });
+    }
+  };
+});

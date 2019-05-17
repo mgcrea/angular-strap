@@ -295,7 +295,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       }
     };
 
-  }
+  })
   
   .directive('focusOn', function() {
 		return {
@@ -306,5 +306,4 @@ angular.module('mgcrea.ngStrap.tab', [])
 				});
 			}
 		}
-	}
-);
+	})
