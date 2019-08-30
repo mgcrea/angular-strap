@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2019-08-20
+ * @version v2.3.12 - 2019-08-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -184,7 +184,7 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
       });
       bsTabsCtrl.$push(scope);
       if (scope.$describedBy !== undefined) {
-        element.attr('aria-describedby', scope.$describedBy);
+        element.attr('aria-labelledby', scope.$describedBy);
       }
       scope.$on('$destroy', function() {
         bsTabsCtrl.$remove(scope);

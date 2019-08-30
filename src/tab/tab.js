@@ -271,9 +271,10 @@ angular.module('mgcrea.ngStrap.tab', [])
         bsTabsCtrl.$push(scope);
 
         // Once the push has occured when can then update the element with some properties.
-        // Update the aria-describedby attribute
+        // Update the aria-labelledby attribute
+		// SS-11127 - removed aria-describedby from tab and tab-panel and utilized aria-labeledby on the tab-panel using the ID of the tab and not the ID of the tab link
         if (scope.$describedBy !== undefined) {
-          element.attr('aria-describedby', scope.$describedBy);
+          element.attr('aria-labelledby', scope.$describedBy);
         }
 
         // remove pane from tab controller when pane is destroyed
