@@ -1126,6 +1126,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               month = new Date(viewDate.year, i, 1);
 
               var monthItem = {
+                id: options.id !== null && options.id !== undefined ? (options.id + '_cell_' + i) : undefined,
                 date: month,
                 label: formatDate(month, this.format),
                 selected: picker.$isSelected(month),
@@ -1231,6 +1232,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               year = new Date(firstYear + i, 0, 1);
 
               var yearItem = {
+                id: options.id !== null && options.id !== undefined ? (options.id + '_cell_' + i) : undefined,
                 date: year,
                 label: formatDate(year, this.format),
                 selected: picker.$isSelected(year),
@@ -1263,6 +1265,8 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             }
 
             scope.title = years[0].label + '-' + years[years.length - 1].label;
+            scope.startYear = years[0].label;
+            scope.endYear = years[years.length - 1].label;
             scope.showLabels = false;
             scope.rows = split(years, this.split);
             if (defaultFirstDayTabIndex) {

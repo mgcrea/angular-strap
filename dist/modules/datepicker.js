@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2019-08-20
+ * @version v2.3.12 - 2019-09-03
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -776,6 +776,7 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
           for (var i = 0; i < 12; i++) {
             month = new Date(viewDate.year, i, 1);
             var monthItem = {
+              id: options.id !== null && options.id !== undefined ? options.id + '_cell_' + i : undefined,
               date: month,
               label: formatDate(month, this.format),
               selected: picker.$isSelected(month),
@@ -861,6 +862,7 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
           for (var i = 0; i < 12; i++) {
             year = new Date(firstYear + i, 0, 1);
             var yearItem = {
+              id: options.id !== null && options.id !== undefined ? options.id + '_cell_' + i : undefined,
               date: year,
               label: formatDate(year, this.format),
               selected: picker.$isSelected(year),
@@ -886,6 +888,8 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
             }
           }
           scope.title = years[0].label + '-' + years[years.length - 1].label;
+          scope.startYear = years[0].label;
+          scope.endYear = years[years.length - 1].label;
           scope.showLabels = false;
           scope.rows = split(years, this.split);
           if (defaultFirstDayTabIndex) {
