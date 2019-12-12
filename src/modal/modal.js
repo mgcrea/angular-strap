@@ -251,14 +251,12 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
           }
 
           modalElement.attr('aria-hidden', 'false');
-		  modalElement.attr('tabindex', '0');
-		  modalElement.focus();
-
-		  if(!modalElement.length || !angular.element(modalElement[0]).hasClass("modal"))
-		  {
-			layoutHideElement.attr('aria-hidden', 'false');
-			unbindKeyboardEvents();
-		  }
+          modalElement.attr('tabindex', '0');
+          modalElement.focus();
+          if (!modalElement.length || !angular.element(modalElement[0]).hasClass('modal')) {
+            layoutHideElement.attr('aria-hidden', 'false');
+            unbindKeyboardEvents();
+          }
         }
 
         $modal.hide = function () {
@@ -354,9 +352,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
         $modal.$onKeyUp = function (evt) {
 
           // Escape was pressed on an open modal. Hide it.  Backspace key, nothing happen.
-          if ((evt.which === 8||evt.which === 27) && $modal.$isShown) {
+          if ((evt.which === 8 || evt.which === 27) && $modal.$isShown) {
             if (evt.which === 27) {
-               $modal.hide();
+              $modal.hide();
             }
             evt.stopPropagation();
           }
@@ -364,10 +362,10 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
         $modal.$onKeyDown = function (evt) {
           if (options.keyboard) {
-            if (evt.keyCode === 8 && evt.target.tagName!=='TEXTAREA' && evt.target.tagName!=='INPUT') {
-                evt.preventDefault();
-            }				
-			  
+            if (evt.keyCode === 8 && evt.target.tagName !== 'TEXTAREA' && evt.target.tagName !== 'INPUT') {
+              evt.preventDefault();
+            }
+
             if (evt.keyCode === 9) {
 
               var nextFocusable = findNextFocusableElement(evt.shiftKey);

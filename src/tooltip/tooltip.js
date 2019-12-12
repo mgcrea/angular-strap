@@ -448,13 +448,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
               if (!isTouch) {
                 element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
                 element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              }
-			  //but do bind focus events for touch
-              else if (trigger === 'focus') {
+              } else if (trigger === 'focus') { // but do bind focus events for touch
                 element.on('focus', $tooltip.enter);
                 element.on('blur', $tooltip.leave);
-			  }
-		  
+              }
+
               // if (nodeName === 'button' && trigger !== 'hover') {
               //   element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
               // }
@@ -473,13 +471,11 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap
               if (!isTouch) {
                 element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
                 element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              }
-			  // Remove previously defined focus events
-              else if (trigger === 'focus') {
+              } else if (trigger === 'focus') { // Remove previously defined focus events
                 element.off('focus', $tooltip.enter);
                 element.off('blur', $tooltip.leave);
-			  }
-			  
+              }
+
               // if (nodeName === 'button' && trigger !== 'hover') {
               //   element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
               // }

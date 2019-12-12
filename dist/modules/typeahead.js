@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2019-12-11
+ * @version v2.3.12 - 2019-12-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -134,7 +134,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
           scope.$activeIndex++;
           setAriaActiveDescendant(scope.$activeIndex);
           angular.element(document.getElementById(options.id + '_sr_text')).html(scope.$matches[scope.$activeIndex].label);
-        } else if (evt.keyCode === KEY_CODES.upArrow && scope.$activeIndex == 0 || evt.keyCode === KEY_CODES.downArrow && scope.$activeIndex == scope.$matches.length - 1) {
+        } else if (evt.keyCode === KEY_CODES.upArrow && scope.$activeIndex === 0 || evt.keyCode === KEY_CODES.downArrow && scope.$activeIndex === scope.$matches.length - 1) {
           scope.$activeIndex = -1;
           var ele = '#' + evt.currentTarget.id;
           angular.element(ele).val('').val(controller.$viewValue);

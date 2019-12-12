@@ -172,15 +172,13 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
             scope.$activeIndex++;
             setAriaActiveDescendant(scope.$activeIndex);
             angular.element(document.getElementById(options.id + '_sr_text')).html(scope.$matches[scope.$activeIndex].label);
-          } 
-          else if ((evt.keyCode === KEY_CODES.upArrow && scope.$activeIndex == 0) || (evt.keyCode === KEY_CODES.downArrow && scope.$activeIndex == scope.$matches.length - 1)) {
+          } else if ((evt.keyCode === KEY_CODES.upArrow && scope.$activeIndex === 0) || (evt.keyCode === KEY_CODES.downArrow && scope.$activeIndex === scope.$matches.length - 1)) {
             scope.$activeIndex = -1;
             var ele = '#' + evt.currentTarget.id;
-            //position the cursor after the last letter of the selected item inside the control to allow the user to easily delete the selection if desired
+            // position the cursor after the last letter of the selected item inside the control to allow the user to easily delete the selection if desired
             angular.element(ele).val('').val(controller.$viewValue);
             angular.element(ele).focus();
-          }
-          else if (angular.isUndefined(scope.$activeIndex)) {
+          } else if (angular.isUndefined(scope.$activeIndex)) {
             scope.$activeIndex = 0;
             setAriaActiveDescendant();
           }
@@ -215,10 +213,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
 
               $typeahead.$element.on('mousedown', $typeahead.$onMouseDown);
               if (options.keyboard) {
-                //event for the element that we attach is added to event queue
-                //before pushing the same event more that once for the same element, event need to detach
-                //list item jumps happening in search list for this setted keydown off
-                if (element) element.off('keydown', $typeahead.$onKeyDown); 
+                // event for the element that we attach is added to event queue
+                // before pushing the same event more that once for the same element, event need to detach
+                // list item jumps happening in search list for this setted keydown off
+                if (element) element.off('keydown', $typeahead.$onKeyDown);
                 if (element) element.on('keydown', $typeahead.$onKeyDown);
               }
             }

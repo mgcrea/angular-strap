@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2019-12-11
+ * @version v2.3.12 - 2019-12-12
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -204,7 +204,9 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
     restrict: 'A',
     link: function(scope, elem, attr) {
       scope.$watch(attr.focusOn, function(newValue, oldValue) {
-        newValue !== oldValue && newValue && elem[0].focus();
+        if (newValue !== oldValue && newValue) {
+          elem[0].focus();
+        }
       });
     }
   };
