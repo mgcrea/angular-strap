@@ -44,7 +44,7 @@
             ng-focus="$focused(el)"
             ng-click="$select(el.date, el.disabled)"
             ng-keydown="$onKeyDown($event, el)">
-          <span class="btn btn-default" ng-class="{'btn-primary btn-selected': el.selected, 'btn-info btn-today': el.isToday && !el.selected}">
+          <span class="btn btn-default btn-datepicker" ng-class="{'btn-primary btn-datepicker-selected': el.selected, 'btn-today': el.isToday && !el.selected}">
             <span ng-class="{'text-muted': el.muted || el.disabled}" ng-bind="el.label"></span>
           </span>
           <!--focus-element="keyboard && ((hasSelectedDate && el.selected) || (!hasSelectedDate && el.isToday))"-->
