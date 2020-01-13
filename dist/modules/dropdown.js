@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2019-12-16
+ * @version v2.3.12 - 2020-01-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -33,7 +33,6 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         element.attr('aria-haspopup', 'true');
         element.attr('data-toggle', 'dropdown');
         element.attr('aria-expanded', 'false');
-        element.attr('role', 'button');
       }
       $dropdown.$onKeyDown = function(evt) {
         if (/(9)/.test(evt.keyCode) && !options.keyboard || /27/.test(evt.keyCode)) {
@@ -79,7 +78,6 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
           if ($dropdown.$element) {
             $dropdown.$element.attr('aria-hidden', 'false');
             $dropdown.$element.attr('role', 'menu');
-            $dropdown.$element.attr('tabindex', '-1');
           }
           if (options.keyboard && $dropdown.$element) {
             $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
@@ -88,12 +86,16 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
           bodyEl.on('click', onBodyClick);
           if ($dropdown.$element) {
             var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider)'));
-            items.attr('role', 'presentation');
+            items.attr('role', 'none');
             angular.element($dropdown.$element[0].querySelectorAll('li.divider')).attr('role', 'seperator');
             items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
             items.attr('role', 'menuitem');
             if (items.length && options.keyboard) {
-              items[0].focus();
+              angular.forEach(items, function(value, key) {
+                if (key > 0) {
+                  angular.element(value).attr('tabindex', '-1');
+                }
+              });
             }
           }
         }, 0, false);
