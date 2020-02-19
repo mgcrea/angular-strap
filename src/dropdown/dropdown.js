@@ -43,14 +43,14 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         // Dropdown menu items that are natively focusable need a tabindex of -1, but the user still needs to tab into the drodpwn menu
         // This event serves to enable the user to tab into the drodpown menu
-        element.keydown(function(evt){
-          if(/(9)/.test(evt.keyCode)){
+        element.keydown(function (evt) {
+          if (/(9)/.test(evt.keyCode)) {
             evt.preventDefault();
             evt.stopPropagation();
             var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
             items.eq(0)[0].focus();
           }
-        })
+        });
 
         // Protected methods
 
@@ -136,7 +136,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
               if (items.length && options.keyboard) {
                 // items[0].focus(); Removing initial focus as user must tab into the menu per SS-9603
 
-                //Dropdown menu items that are natively focusable need to have a tabindex of -1 per SS-9603
+                // Dropdown menu items that are natively focusable need to have a tabindex of -1 per SS-9603
                 angular.forEach(items, function (value, key) {
                   angular.element(value).attr('tabindex', '-1');
                 });
