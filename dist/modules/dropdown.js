@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2020-02-21
+ * @version v2.3.12 - 2020-03-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -35,7 +35,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         element.attr('aria-expanded', 'false');
       }
       element.keydown(function(evt) {
-        if (/(9)/.test(evt.keyCode)) {
+        if (/(9)/.test(evt.keyCode) && $dropdown.$element) {
           evt.preventDefault();
           evt.stopPropagation();
           var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));

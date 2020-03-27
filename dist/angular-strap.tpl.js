@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2020-02-21
+ * @version v2.3.12 - 2020-03-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -22,9 +22,6 @@
   angular.module('mgcrea.ngStrap.modal').run([ '$templateCache', function($templateCache) {
     $templateCache.put('modal/modal.tpl.html', '<div class="modal" tabindex="0" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header" ng-show="title"><button type="button" role="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button><h1 class="modal-title" ng-bind="title"></h1></div><div class="modal-body" ng-bind="content"></div><div class="modal-footer"><button type="button" class="btn btn-default" ng-click="$hide()" aria-label="Close">Close</button></div></div></div></div>');
   } ]);
-  angular.module('mgcrea.ngStrap.popover').run([ '$templateCache', function($templateCache) {
-    $templateCache.put('popover/popover.tpl.html', '<div class="popover" tabindex="-1"><div class="arrow"></div><h3 class="popover-title" ng-bind="title" ng-show="title"></h3><div class="popover-content" ng-bind="content"></div></div>');
-  } ]);
   angular.module('mgcrea.ngStrap.select').run([ '$templateCache', function($templateCache) {
     $templateCache.put('select/select.tpl.html', '<ul tabindex="-1" class="select dropdown-menu" ng-show="$isVisible()" role="menu"><li ng-if="$showAllNoneButtons"><div class="btn-group" style="margin-bottom: 5px; margin-left: 5px"><button type="button" class="btn btn-default btn-xs" ng-click="$selectAll()">{{$allText}}</button> <button type="button" class="btn btn-default btn-xs" ng-click="$selectNone()">{{$noneText}}</button></div></li><li role="presentation" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}"><a style="cursor: default" role="menuitem" tabindex="-1" ng-click="$select($index, $event)"><i class="{{$iconCheckmark}} pull-right" ng-if="$isMultiple && $isActive($index)"></i> <span ng-bind="match.label" role="menuitem"></span></a></li></ul>');
   } ]);
@@ -39,5 +36,8 @@
   } ]);
   angular.module('mgcrea.ngStrap.typeahead').run([ '$templateCache', function($templateCache) {
     $templateCache.put('typeahead/typeahead.tpl.html', '<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="listbox" ng-attr-aria-hidden="{{!$isVisible()}}"><li role="option" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}" ng-attr-aria-selected="{{$isActive($index)}}" ng-attr-id="{{::$generateResultId($index)}}"><a role="presentation" ng-click="$select($index, $event)" ng-bind="match.label"></a></li></ul>');
+  } ]);
+  angular.module('mgcrea.ngStrap.popover').run([ '$templateCache', function($templateCache) {
+    $templateCache.put('popover/popover.tpl.html', '<div class="popover" tabindex="-1"><div class="arrow"></div><h3 class="popover-title" ng-bind="title" ng-show="title"></h3><div class="popover-content" ng-bind="content"></div></div>');
   } ]);
 })(window, document);
