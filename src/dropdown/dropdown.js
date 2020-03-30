@@ -44,7 +44,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
         // Dropdown menu items that are natively focusable need a tabindex of -1, but the user still needs to tab into the drodpwn menu
         // This event serves to enable the user to tab into the drodpown menu
         element.keydown(function (evt) {
-          if (/(9)/.test(evt.keyCode)) {
+          if (/(9)/.test(evt.keyCode) && $dropdown.$element) {
             evt.preventDefault();
             evt.stopPropagation();
             var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
