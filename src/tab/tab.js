@@ -199,7 +199,7 @@ angular.module('mgcrea.ngStrap.tab', [])
           $timeout(function () {
             // get li elements
             var liElements = element.find('li');
-            for (var i = 0; i < liElements.length; i++) {              
+            for (var i = 0; i < liElements.length; i++) {
               var iElement = angular.element(liElements[i]);
               iElement.removeAttr('tabindex');
               if (iElement.hasClass(bsTabsCtrl.$options.activeClass)) {
