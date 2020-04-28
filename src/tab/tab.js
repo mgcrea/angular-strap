@@ -201,6 +201,7 @@ angular.module('mgcrea.ngStrap.tab', [])
             var liElements = element.find('li');
             for (var i = 0; i < liElements.length; i++) {
               var iElement = angular.element(liElements[i]);
+              iElement.removeAttr('tabindex');
               if (iElement.hasClass(bsTabsCtrl.$options.activeClass)) {
                 // if li is active, set focus to it.
                 iElement.find('a')[0].focus();
