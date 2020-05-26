@@ -20,14 +20,18 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
       limit: 6,
       autoSelect: false,
       comparator: '',
-      trimValue: true
+      trimValue: true,
+      translations: null,
+      feedbackId: '',
+      selectedProperty: ''
     };
 
     var KEY_CODES = {
       downArrow: 40,
       enter: 13,
       escape: 27,
-      upArrow: 38
+      upArrow: 38,
+      tab: 9
     };
 
     this.$get = function ($window, $rootScope, $tooltip, $$rAF, $timeout) {
@@ -92,8 +96,13 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         $typeahead.select = function (index) {
           if (index === -1) return;
           var value = scope.$matches[index].value;
-          // console.log('$setViewValue', value);
-          controller.$setViewValue(value);
+          if(typeof value == 'object' && options.selectedProperty != void 0 && options.selectedProperty.length > 0){
+            controller.$setViewValue(value[options.selectedProperty]);
+          }
+          else {
+            controller.$setViewValue(value);
+          }
+          // console.log('$setViewValue', value);          
           controller.$render();
           scope.$resetMatches();
           if (parentScope) parentScope.$digest();
@@ -252,8 +261,15 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var onFocusKeyUp = $typeahead.$onFocusKeyUp; // eslint-disable-line no-unused-vars
         $typeahead.$onFocusKeyUp = function (evt) {
           if (evt.which === KEY_CODES.escape) {
-            $typeahead.hide();
-            evt.stopPropagation();
+            // Feedback message handling as per SS-25684 and SS-11481
+            if (options.feedbackId != void 0 && options.translations != void 0) {
+              var translations = angular.fromJson(options.translations);
+              if ($typeahead.$scope.$matches != void 0 && $typeahead.$scope.$matches.length > 0) {
+                $('#' + options.feedbackId).text(translations.selectResultText)
+              }
+              // $typeahead.hide();
+              // evt.stopPropagation();
+            }            
           }
         };
 
@@ -320,7 +336,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         var options = {
           scope: scope
         };
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass', 'ariaLabelledby'], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'filter', 'limit', 'minLength', 'watchOptions', 'selectMode', 'autoSelect', 'comparator', 'id', 'prefixEvent', 'prefixClass', 'ariaLabelledby', 'translations', 'feedbackId', 'selectedProperty'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -416,6 +432,10 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
         controller.$render = function () {
           // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
           if (controller.$isEmpty(controller.$viewValue)) {
+            // Feedback message handling as per SS-25684 and SS-11481
+            if (options.feedbackId != void 0) {
+              $('#' + options.feedbackId).text('');
+            }
             return element.val('');
           }
           var index = typeahead.$getIndex(controller.$modelValue);
@@ -426,7 +446,36 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           var sd = element[0].selectionEnd;
           element.val(options.trimValue === false ? value : value.trim());
           element[0].setSelectionRange(ss, sd);
-        };
+
+          // Feedback message handling as per SS-25684 and SS-11481
+          if (options.feedbackId != void 0 && options.translations != void 0) {
+            // Clear feedback element contents
+            $('#' + options.feedbackId).text();
+
+            if (typeahead.$scope.$matches != void 0) {
+              var translations = angular.fromJson(options.translations);
+              if (typeahead.$scope.$matches.length > 0) {
+                $('#' + options.feedbackId).text(typeahead.$scope.$matches.length + ' ' + translations.resultsText);
+              }
+              else {
+                $('#' + options.feedbackId).text(translations.noResultsText);
+              }
+            }
+          }
+        }; 
+        
+        // Feedback message handling as per SS-25684 and SS-11481
+        element.on('keydown', function (evt) {
+          if (evt.which === 9) {
+            evt.preventDefault();
+            if (options.feedbackId != void 0 && options.translations != void 0) { 
+              var translations = angular.fromJson(options.translations);
+              if (typeahead.$scope.$matches.length > 0) {
+                $('#' + options.feedbackId).text(translations.selectResultText);
+              } 
+            }
+          }
+        });
 
         // Garbage collection
         scope.$on('$destroy', function () {
