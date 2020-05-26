@@ -79,7 +79,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       $typeahead.select = function(index) {
         if (index === -1) return;
         var value = scope.$matches[index].value;
-        if (typeof value == 'object' && options.selectedProperty != void 0 && options.selectedProperty.length > 0) {
+        if (typeof value === 'object' && options.selectedProperty !== void 0 && options.selectedProperty.length > 0) {
           controller.$setViewValue(value[options.selectedProperty]);
         } else {
           controller.$setViewValue(value);
@@ -200,10 +200,11 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       var onFocusKeyUp = $typeahead.$onFocusKeyUp;
       $typeahead.$onFocusKeyUp = function(evt) {
         if (evt.which === KEY_CODES.escape) {
-          if (options.feedbackId != void 0 && options.translations != void 0) {
+          if (options.feedbackId !== void 0 && options.translations !== void 0) {
             var translations = angular.fromJson(options.translations);
-            if ($typeahead.$scope.$matches != void 0 && $typeahead.$scope.$matches.length > 0) {
-              $('#' + options.feedbackId).text(translations.selectResultText);
+            var element = document.getElementById(options.feedbackId);
+            if ($typeahead.$scope.$matches !== void 0 && $typeahead.$scope.$matches.length > 0) {
+              angular.element(element).text(translations.selectResultText);
             }
           }
         }
@@ -308,9 +309,7 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       });
       controller.$render = function() {
         if (controller.$isEmpty(controller.$viewValue)) {
-          if (options.feedbackId != void 0) {
-            $('#' + options.feedbackId).text('');
-          }
+          setFeedbackMessage('');
           return element.val('');
         }
         var index = typeahead.$getIndex(controller.$modelValue);
@@ -321,14 +320,15 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         var sd = element[0].selectionEnd;
         element.val(options.trimValue === false ? value : value.trim());
         element[0].setSelectionRange(ss, sd);
-        if (options.feedbackId != void 0 && options.translations != void 0) {
-          $('#' + options.feedbackId).text();
+        if (options.translations != void 0) {
+          setFeedbackMessage('');
           if (typeahead.$scope.$matches != void 0) {
             var translations = angular.fromJson(options.translations);
             if (typeahead.$scope.$matches.length > 0) {
-              $('#' + options.feedbackId).text(typeahead.$scope.$matches.length + ' ' + translations.resultsText);
+              setFeedbackMessage(typeahead.$scope.$matches.length + ' ' + translations.resultsText);
             } else {
               $('#' + options.feedbackId).text(translations.noResultsText);
+              setFeedbackMessage(translations.noResultsText);
             }
           }
         }
@@ -336,10 +336,10 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
       element.on('keydown', function(evt) {
         if (evt.which === 9) {
           evt.preventDefault();
-          if (options.feedbackId != void 0 && options.translations != void 0) {
+          if (options.translations !== void 0) {
             var translations = angular.fromJson(options.translations);
             if (typeahead.$scope.$matches.length > 0) {
-              $('#' + options.feedbackId).text(translations.selectResultText);
+              setFeedbackMessage(translations.selectResultText);
             }
           }
         }
@@ -350,6 +350,12 @@ angular.module('mgcrea.ngStrap.typeahead', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.n
         options = null;
         typeahead = null;
       });
+      function setFeedbackMessage(message) {
+        if (options.feedbackId !== void 0) {
+          var element = document.getElementById(options.feedbackId);
+          angular.element(element).text(message);
+        }
+      }
     }
   };
 } ]);
