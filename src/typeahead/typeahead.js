@@ -446,23 +446,21 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           element[0].setSelectionRange(ss, sd);
 
           // Feedback message handling as per SS-25684 and SS-11481
-          if (options.translations != void 0) {
+          if (options.translations !== void 0) {
             // Clear feedback element contents
             setFeedbackMessage('');
 
-            if (typeahead.$scope.$matches != void 0) {
+            if (typeahead.$scope.$matches !== void 0) {
               var translations = angular.fromJson(options.translations);
               if (typeahead.$scope.$matches.length > 0) {
                 setFeedbackMessage(typeahead.$scope.$matches.length + ' ' + translations.resultsText);
-              }
-              else {
-                $('#' + options.feedbackId).text(translations.noResultsText);
+              } else {
                 setFeedbackMessage(translations.noResultsText);
               }
             }
           }
-        }; 
-        
+        };
+
         // Feedback message handling as per SS-25684 and SS-11481
         element.on('keydown', function (evt) {
           if (evt.which === 9) {
@@ -471,7 +469,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
               var translations = angular.fromJson(options.translations);
               if (typeahead.$scope.$matches.length > 0) {
                 setFeedbackMessage(translations.selectResultText);
-              } 
+              }
             }
           }
         });
@@ -484,7 +482,7 @@ angular.module('mgcrea.ngStrap.typeahead', ['mgcrea.ngStrap.tooltip', 'mgcrea.ng
           typeahead = null;
         });
 
-        function setFeedbackMessage(message) {
+        function setFeedbackMessage (message) {
           if (options.feedbackId !== void 0) {
             var element = document.getElementById(options.feedbackId);
             angular.element(element).text(message);

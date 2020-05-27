@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2020-05-26
+ * @version v2.3.12 - 2020-05-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -321,14 +321,13 @@
           var sd = element[0].selectionEnd;
           element.val(options.trimValue === false ? value : value.trim());
           element[0].setSelectionRange(ss, sd);
-          if (options.translations != void 0) {
+          if (options.translations !== void 0) {
             setFeedbackMessage('');
-            if (typeahead.$scope.$matches != void 0) {
+            if (typeahead.$scope.$matches !== void 0) {
               var translations = angular.fromJson(options.translations);
               if (typeahead.$scope.$matches.length > 0) {
                 setFeedbackMessage(typeahead.$scope.$matches.length + ' ' + translations.resultsText);
               } else {
-                $('#' + options.feedbackId).text(translations.noResultsText);
                 setFeedbackMessage(translations.noResultsText);
               }
             }
