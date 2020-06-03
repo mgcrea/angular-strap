@@ -60,7 +60,7 @@ angular.module('mgcrea.ngStrap.tab', [])
           navigatePane(newIndex, toLeft);
         } else {
           // As per SS-44480
-          $('[id="' + self.$panes[newIndex].$labeledBy + '"]').focus();
+          angular.element('[id="' + self.$panes[newIndex].$labeledBy + '"]').focus();
           self.$setActive(self.$panes[newIndex].name || newIndex);
         }
       }

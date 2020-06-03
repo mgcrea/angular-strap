@@ -48,7 +48,7 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
       if (self.$panes[newIndex].disabled) {
         navigatePane(newIndex, toLeft);
       } else {
-        $('[id="' + self.$panes[newIndex].$labeledBy + '"]').focus();
+        angular.element('[id="' + self.$panes[newIndex].$labeledBy + '"]').focus();
         self.$setActive(self.$panes[newIndex].name || newIndex);
       }
     }
