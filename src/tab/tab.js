@@ -59,6 +59,8 @@ angular.module('mgcrea.ngStrap.tab', [])
         if (self.$panes[newIndex].disabled) {
           navigatePane(newIndex, toLeft);
         } else {
+          // As per SS-44480
+          $('[id="' + self.$panes[newIndex].$labeledBy + '"]').focus();
           self.$setActive(self.$panes[newIndex].name || newIndex);
         }
       }
@@ -202,10 +204,12 @@ angular.module('mgcrea.ngStrap.tab', [])
             for (var i = 0; i < liElements.length; i++) {
               var iElement = angular.element(liElements[i]);
               iElement.removeAttr('tabindex');
-              if (iElement.hasClass(bsTabsCtrl.$options.activeClass)) {
+
+              // As per SS-44480
+              // if (iElement.hasClass(bsTabsCtrl.$options.activeClass)) {
                 // if li is active, set focus to it.
-                iElement.find('a')[0].focus();
-              }
+                // iElement.find('a')[0].focus();
+              // }
             }
             // delay, for the class (.active) change to reflect in DOM.
           }, 100);
