@@ -307,7 +307,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       link: function (scope, elem, attr) {
         scope.$watch(attr.focusOn, function (newValue, oldValue) {
           if (newValue !== oldValue && newValue) {
-            elem[0].children[0].focus()
+            elem[0].children[0].focus();
           }
         });
       }
