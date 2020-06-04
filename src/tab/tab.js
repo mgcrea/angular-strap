@@ -202,10 +202,12 @@ angular.module('mgcrea.ngStrap.tab', [])
             for (var i = 0; i < liElements.length; i++) {
               var iElement = angular.element(liElements[i]);
               iElement.removeAttr('tabindex');
-              if (iElement.hasClass(bsTabsCtrl.$options.activeClass)) {
+
+              // As per SS-44480
+              // if (iElement.hasClass(bsTabsCtrl.$options.activeClass)) {
                 // if li is active, set focus to it.
-                iElement.find('a')[0].focus();
-              }
+                // iElement.find('a')[0].focus();
+              // }
             }
             // delay, for the class (.active) change to reflect in DOM.
           }, 100);
@@ -305,7 +307,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       link: function (scope, elem, attr) {
         scope.$watch(attr.focusOn, function (newValue, oldValue) {
           if (newValue !== oldValue && newValue) {
-            elem[0].focus();
+            elem[0].children[0].focus();
           }
         });
       }
