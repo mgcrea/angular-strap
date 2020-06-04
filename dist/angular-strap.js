@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2020-06-03
+ * @version v2.3.12 - 2020-06-04
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -1546,7 +1546,6 @@
         if (self.$panes[newIndex].disabled) {
           navigatePane(newIndex, toLeft);
         } else {
-          angular.element('[id="' + self.$panes[newIndex].$labeledBy + '"]').focus();
           self.$setActive(self.$panes[newIndex].name || newIndex);
         }
       }
@@ -1702,7 +1701,7 @@
       link: function(scope, elem, attr) {
         scope.$watch(attr.focusOn, function(newValue, oldValue) {
           if (newValue !== oldValue && newValue) {
-            elem[0].focus();
+            elem[0].children[0].focus();
           }
         });
       }

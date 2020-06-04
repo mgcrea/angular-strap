@@ -59,8 +59,6 @@ angular.module('mgcrea.ngStrap.tab', [])
         if (self.$panes[newIndex].disabled) {
           navigatePane(newIndex, toLeft);
         } else {
-          // As per SS-44480
-          angular.element('[id="' + self.$panes[newIndex].$labeledBy + '"]').focus();
           self.$setActive(self.$panes[newIndex].name || newIndex);
         }
       }
@@ -309,7 +307,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       link: function (scope, elem, attr) {
         scope.$watch(attr.focusOn, function (newValue, oldValue) {
           if (newValue !== oldValue && newValue) {
-            elem[0].focus();
+            elem[0].children[0].focus()
           }
         });
       }
