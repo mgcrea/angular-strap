@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2020-06-04
+ * @version v2.3.12 - 2020-09-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -3475,33 +3475,31 @@
         var parentEl = element.parent();
         if (element && element[0] && element[0].tagName.toUpperCase() === 'BUTTON') {
           element.attr('aria-haspopup', 'true');
-          element.attr('data-toggle', 'dropdown');
           element.attr('aria-expanded', 'false');
         }
-        element.keydown(function(evt) {
-          if (/(9)/.test(evt.keyCode) && $dropdown.$element) {
+        $dropdown.$onKeyDown = function(evt) {
+          if (evt.keyCode === 9 || evt.keyCode === 27) {
+            $dropdown.hide(/27/.test(evt.keyCode));
+            return;
+          } else if ($dropdown.$element && (evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 32 || evt.keyCode === 13)) {
+            $dropdown.$element.focus();
             evt.preventDefault();
             evt.stopPropagation();
             var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
-            items.eq(0)[0].focus();
+            if (!items.length) return;
+            var index;
+            angular.forEach(items, function(el, i) {
+              if (matchesSelector && matchesSelector.call(el, '.active')) {
+                index = i;
+                $(el).removeClass('active');
+              }
+            });
+            if (evt.keyCode === 32 || evt.keyCode === 13) {
+              items.eq(index).click();
+            } else if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 38 && (angular.isUndefined(index) || index == 0)) index = items.length - 1; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (evt.keyCode === 40 && index === items.length - 1) index = 0; else if (angular.isUndefined(index)) index = 0;
+            items.eq(index).addClass('active');
+            $dropdown.$element.attr('aria-activedescendant', items.eq(index).attr('id'));
           }
-        });
-        $dropdown.$onKeyDown = function(evt) {
-          if (/(9)/.test(evt.keyCode) && !options.keyboard || /27/.test(evt.keyCode)) {
-            $dropdown.hide(/27/.test(evt.keyCode));
-            return;
-          }
-          if (!/(38|40)/.test(evt.keyCode)) return;
-          evt.preventDefault();
-          evt.stopPropagation();
-          var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
-          if (!items.length) return;
-          var index;
-          angular.forEach(items, function(el, i) {
-            if (matchesSelector && matchesSelector.call(el, ':focus')) index = i;
-          });
-          if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (evt.keyCode === 40 && index === items.length - 1) index = 0; else if (angular.isUndefined(index)) index = 0;
-          items.eq(index)[0].focus();
         };
         $dropdown.$onFocusOut = function(evt) {
           var inMenu = false;
@@ -3528,8 +3526,9 @@
           $timeout(function() {
             element.attr('aria-expanded', 'true');
             if ($dropdown.$element) {
-              $dropdown.$element.attr('aria-hidden', 'false');
+              $dropdown.$element.attr('aria-activedescendant', '');
               $dropdown.$element.attr('role', 'menu');
+              $dropdown.$element.attr('tabindex', '-1');
             }
             if (options.keyboard && $dropdown.$element) {
               $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
@@ -3544,6 +3543,7 @@
               items.attr('role', 'menuitem');
               if (items.length && options.keyboard) {
                 angular.forEach(items, function(value, key) {
+                  angular.element(value).attr('id', $dropdown.$scope.$id + '_menuitem_' + key);
                   angular.element(value).attr('tabindex', '-1');
                 });
               }
@@ -3555,7 +3555,6 @@
         $dropdown.hide = function(returnFocus) {
           if (!$dropdown.$isShown) return;
           element.attr('aria-expanded', 'false');
-          $dropdown.$element.attr('aria-hidden', 'true');
           if (options.keyboard && $dropdown.$element) {
             $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
             $dropdown.$element.off('focusout', $dropdown.$onFocusOut);
@@ -3625,6 +3624,11 @@
             }, true);
           }
           var dropdown = $dropdown(element, options);
+          element.keydown(function(evt) {
+            if (evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 27 || evt.keyCode === 9) {
+              dropdown.$onKeyDown(evt);
+            }
+          });
           if (attr.bsShow) {
             scope.$watch(attr.bsShow, function(newValue, oldValue) {
               if (!dropdown || !angular.isDefined(newValue)) return;
@@ -4975,6 +4979,117 @@
       }
     };
   } ]);
+  angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$bsAlert', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      prefixClass: 'alert',
+      prefixEvent: 'alert',
+      placement: null,
+      templateUrl: 'alert/alert.tpl.html',
+      container: false,
+      element: null,
+      backdrop: false,
+      keyboard: true,
+      show: true,
+      duration: false,
+      type: false,
+      dismissable: true,
+      focusMeDisabled: false
+    };
+    this.$get = ["$bsModal", "$timeout", function($modal, $timeout) {
+      function AlertFactory(config) {
+        var $alert = {};
+        var options = angular.extend({}, defaults, config);
+        $alert = $modal(options);
+        $alert.returnFocus = function() {
+          function findFocusableElements() {
+            var containerEl = angular.element($alert.$element).closest('[ng-controller]');
+            return containerEl.find('a:not([disabled]),button:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([disabled]):not([tabindex="-1"])').filter(function(i, el) {
+              return !angular.element(el).parentsUntil(containerEl, '[tabindex="-1"]').length;
+            });
+          }
+          function findNextFocusableElement() {
+            if (document.activeElement) {
+              var focusable = findFocusableElements().toArray();
+              if (focusable === undefined) return;
+              var index = focusable.indexOf(document.activeElement);
+              return focusable[index + 1];
+            }
+          }
+          angular.element(findNextFocusableElement()).focus();
+        };
+        $alert.$scope.dismissable = !!options.dismissable;
+        if (options.type) {
+          $alert.$scope.type = options.type;
+        }
+        if (options.focusMeDisabled) {
+          $alert.$scope.focusMeDisabled = options.focusMeDisabled;
+        }
+        var show = $alert.show;
+        if (options.duration) {
+          $alert.show = function() {
+            show();
+            $timeout(function() {
+              $alert.hide();
+            }, options.duration * 1e3);
+          };
+        }
+        return $alert;
+      }
+      return AlertFactory;
+    } ];
+  }).directive('bsAlert', ["$window", "$sce", "$bsAlert", function($window, $sce, $alert) {
+    return {
+      restrict: 'EAC',
+      scope: true,
+      link: function postLink(scope, element, attr, transclusion) {
+        var options = {
+          scope: scope,
+          element: element,
+          show: false
+        };
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable' ], function(key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach([ 'keyboard', 'html', 'container', 'dismissable' ], function(key) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
+        });
+        if (!scope.hasOwnProperty('title')) {
+          scope.title = '';
+        }
+        angular.forEach([ 'title', 'content', 'type' ], function(key) {
+          if (attr[key]) {
+            attr.$observe(key, function(newValue, oldValue) {
+              scope[key] = $sce.trustAsHtml(newValue);
+            });
+          }
+        });
+        if (attr.bsAlert) {
+          scope.$watch(attr.bsAlert, function(newValue, oldValue) {
+            if (angular.isObject(newValue)) {
+              angular.extend(scope, newValue);
+            } else {
+              scope.content = newValue;
+            }
+          }, true);
+        }
+        var alert = $alert(options);
+        element.on(attr.trigger || 'click', alert.toggle);
+        scope.$on('$destroy', function() {
+          if (alert) alert.destroy();
+          options = null;
+          alert = null;
+        });
+      }
+    };
+  } ]);
   angular.module('mgcrea.ngStrap.affix', [ 'mgcrea.ngStrap.helpers.dimensions', 'mgcrea.ngStrap.helpers.debounce' ]).provider('$bsAffix', function() {
     var defaults = this.defaults = {
       offsetTop: 'auto',
@@ -5162,116 +5277,5 @@
       } ]
     };
   });
-  angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$bsAlert', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      prefixClass: 'alert',
-      prefixEvent: 'alert',
-      placement: null,
-      templateUrl: 'alert/alert.tpl.html',
-      container: false,
-      element: null,
-      backdrop: false,
-      keyboard: true,
-      show: true,
-      duration: false,
-      type: false,
-      dismissable: true,
-      focusMeDisabled: false
-    };
-    this.$get = ["$bsModal", "$timeout", function($modal, $timeout) {
-      function AlertFactory(config) {
-        var $alert = {};
-        var options = angular.extend({}, defaults, config);
-        $alert = $modal(options);
-        $alert.returnFocus = function() {
-          function findFocusableElements() {
-            var containerEl = angular.element($alert.$element).closest('[ng-controller]');
-            return containerEl.find('a:not([disabled]),button:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([disabled]):not([tabindex="-1"])').filter(function(i, el) {
-              return !angular.element(el).parentsUntil(containerEl, '[tabindex="-1"]').length;
-            });
-          }
-          function findNextFocusableElement() {
-            if (document.activeElement) {
-              var focusable = findFocusableElements().toArray();
-              if (focusable === undefined) return;
-              var index = focusable.indexOf(document.activeElement);
-              return focusable[index + 1];
-            }
-          }
-          angular.element(findNextFocusableElement()).focus();
-        };
-        $alert.$scope.dismissable = !!options.dismissable;
-        if (options.type) {
-          $alert.$scope.type = options.type;
-        }
-        if (options.focusMeDisabled) {
-          $alert.$scope.focusMeDisabled = options.focusMeDisabled;
-        }
-        var show = $alert.show;
-        if (options.duration) {
-          $alert.show = function() {
-            show();
-            $timeout(function() {
-              $alert.hide();
-            }, options.duration * 1e3);
-          };
-        }
-        return $alert;
-      }
-      return AlertFactory;
-    } ];
-  }).directive('bsAlert', ["$window", "$sce", "$bsAlert", function($window, $sce, $alert) {
-    return {
-      restrict: 'EAC',
-      scope: true,
-      link: function postLink(scope, element, attr, transclusion) {
-        var options = {
-          scope: scope,
-          element: element,
-          show: false
-        };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'keyboard', 'html', 'container', 'animation', 'duration', 'dismissable' ], function(key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
-        });
-        var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'keyboard', 'html', 'container', 'dismissable' ], function(key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
-        });
-        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
-          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
-          if (angular.isDefined(attr[bsKey])) {
-            options[key] = scope.$eval(attr[bsKey]);
-          }
-        });
-        if (!scope.hasOwnProperty('title')) {
-          scope.title = '';
-        }
-        angular.forEach([ 'title', 'content', 'type' ], function(key) {
-          if (attr[key]) {
-            attr.$observe(key, function(newValue, oldValue) {
-              scope[key] = $sce.trustAsHtml(newValue);
-            });
-          }
-        });
-        if (attr.bsAlert) {
-          scope.$watch(attr.bsAlert, function(newValue, oldValue) {
-            if (angular.isObject(newValue)) {
-              angular.extend(scope, newValue);
-            } else {
-              scope.content = newValue;
-            }
-          }, true);
-        }
-        var alert = $alert(options);
-        element.on(attr.trigger || 'click', alert.toggle);
-        scope.$on('$destroy', function() {
-          if (alert) alert.destroy();
-          options = null;
-          alert = null;
-        });
-      }
-    };
-  } ]);
   angular.module('mgcrea.ngStrap', [ 'mgcrea.ngStrap.modal', 'mgcrea.ngStrap.aside', 'mgcrea.ngStrap.alert', 'mgcrea.ngStrap.button', 'mgcrea.ngStrap.select', 'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.timepicker', 'mgcrea.ngStrap.navbar', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.popover', 'mgcrea.ngStrap.dropdown', 'mgcrea.ngStrap.typeahead', 'mgcrea.ngStrap.scrollspy', 'mgcrea.ngStrap.affix', 'mgcrea.ngStrap.tab', 'mgcrea.ngStrap.collapse' ]);
 })(window, document);

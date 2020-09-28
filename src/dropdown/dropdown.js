@@ -36,48 +36,45 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         if (element && element[0] && element[0].tagName.toUpperCase() === 'BUTTON') {
           element.attr('aria-haspopup', 'true');
-          element.attr('data-toggle', 'dropdown');
           element.attr('aria-expanded', 'false');
-          // element.attr('role', 'button'); As the element is a <button> there is no need for this attribute
         }
-
-        // Dropdown menu items that are natively focusable need a tabindex of -1, but the user still needs to tab into the drodpwn menu
-        // This event serves to enable the user to tab into the drodpown menu
-        element.keydown(function (evt) {
-          if (/(9)/.test(evt.keyCode) && $dropdown.$element) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
-            items.eq(0)[0].focus();
-          }
-        });
 
         // Protected methods
 
-        $dropdown.$onKeyDown = function (evt) {
-          if ((/(9)/.test(evt.keyCode) && !options.keyboard) || /27/.test(evt.keyCode)) {
+        $dropdown.$onKeyDown = function (evt) {          
+          if (evt.keyCode === 9 || evt.keyCode === 27) {            
             $dropdown.hide(/27/.test(evt.keyCode));
             return;
           }
-          if (!/(38|40)/.test(evt.keyCode)) return;
-          evt.preventDefault();
-          evt.stopPropagation();
+          else if ($dropdown.$element && (evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 32 || evt.keyCode === 13)) {
+            $dropdown.$element.focus();
 
-          // Retrieve focused index
-          var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
-          if (!items.length) return;
-          var index;
-          angular.forEach(items, function (el, i) {
-            if (matchesSelector && matchesSelector.call(el, ':focus')) index = i;
-          });
+            evt.preventDefault();
+            evt.stopPropagation();
+  
+            // Retrieve active index
+            var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
+            if (!items.length) return;
+            var index;
+            angular.forEach(items, function (el, i) {            
+              if (matchesSelector && matchesSelector.call(el, '.active')) {
+                index = i;              
+                $(el).removeClass('active');
+              }
+            });
 
-          // Navigate with keyboard
-          if (evt.keyCode === 38 && index > 0) index--;
-          else if (evt.keyCode === 40 && index < items.length - 1) index++;
-          else if (evt.keyCode === 40 && index === items.length - 1) index = 0;
-          else if (angular.isUndefined(index)) index = 0;
-          items.eq(index)[0].focus();
-
+            // Navigate with keyboard
+            if (evt.keyCode === 32 || evt.keyCode === 13) {
+              items.eq(index).click();
+            } 
+            else if (evt.keyCode === 38 && index > 0) index--;
+            else if (evt.keyCode === 38 && (angular.isUndefined(index) || index == 0)) index = items.length - 1;
+            else if (evt.keyCode === 40 && index < items.length - 1) index++;
+            else if (evt.keyCode === 40 && index === items.length - 1) index = 0;
+            else if (angular.isUndefined(index)) index = 0;
+            items.eq(index).addClass('active');
+            $dropdown.$element.attr('aria-activedescendant', items.eq(index).attr('id'));
+          }         
         };
 
         $dropdown.$onFocusOut = function (evt) {
@@ -113,9 +110,9 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
             // Set assistive technology properties
             element.attr('aria-expanded', 'true');
             if ($dropdown.$element) {
-              $dropdown.$element.attr('aria-hidden', 'false');
+              $dropdown.$element.attr('aria-activedescendant', '');
               $dropdown.$element.attr('role', 'menu');
-              // $dropdown.$element.attr('tabindex', '-1'); <ul> element should have no tabindex per SS-9603
+              $dropdown.$element.attr('tabindex', '-1');                            
             }
             if (options.keyboard && $dropdown.$element) {
               $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
@@ -132,12 +129,12 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
               angular.element($dropdown.$element[0].querySelectorAll('li.divider')).attr('role', 'seperator');
 
               items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
-              items.attr('role', 'menuitem');
+              items.attr('role', 'menuitem');              
               if (items.length && options.keyboard) {
-                // items[0].focus(); Removing initial focus as user must tab into the menu per SS-9603
-
                 // Dropdown menu items that are natively focusable need to have a tabindex of -1 per SS-9603
+                // Menu item ID's should be unique for aria-activedescendant
                 angular.forEach(items, function (value, key) {
+                  angular.element(value).attr('id', $dropdown.$scope.$id + '_menuitem_' + key);
                   angular.element(value).attr('tabindex', '-1');
                 });
               }
@@ -151,7 +148,6 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           if (!$dropdown.$isShown) return;
 
           element.attr('aria-expanded', 'false');
-          $dropdown.$element.attr('aria-hidden', 'true');
 
           if (options.keyboard && $dropdown.$element) {
             $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
@@ -249,6 +245,13 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
           // Initialize dropdown
           var dropdown = $dropdown(element, options);
+
+          // Pickup key press on the dropdown button
+          element.keydown(function(evt) {
+            if(evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 27 || evt.keyCode === 9) {
+              dropdown.$onKeyDown(evt);
+            }
+          })
 
           // Visibility binding support
           if (attr.bsShow) {
