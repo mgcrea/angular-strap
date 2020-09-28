@@ -41,40 +41,38 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
 
         // Protected methods
 
-        $dropdown.$onKeyDown = function (evt) {          
-          if (evt.keyCode === 9 || evt.keyCode === 27) {            
+        $dropdown.$onKeyDown = function (evt) {
+          if (evt.keyCode === 9 || evt.keyCode === 27) {
             $dropdown.hide(/27/.test(evt.keyCode));
             return;
-          }
-          else if ($dropdown.$element && (evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 32 || evt.keyCode === 13)) {
+          } else if ($dropdown.$element && (evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 32 || evt.keyCode === 13)) {
             $dropdown.$element.focus();
 
             evt.preventDefault();
             evt.stopPropagation();
-  
+
             // Retrieve active index
             var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
             if (!items.length) return;
             var index;
-            angular.forEach(items, function (el, i) {            
+            angular.forEach(items, function (el, i) {
               if (matchesSelector && matchesSelector.call(el, '.active')) {
-                index = i;              
-                $(el).removeClass('active');
+                index = i;
+                angular.element(el).removeClass('active');
               }
             });
 
             // Navigate with keyboard
             if (evt.keyCode === 32 || evt.keyCode === 13) {
               items.eq(index).click();
-            } 
-            else if (evt.keyCode === 38 && index > 0) index--;
-            else if (evt.keyCode === 38 && (angular.isUndefined(index) || index == 0)) index = items.length - 1;
+            } else if (evt.keyCode === 38 && index > 0) index--;
+            else if (evt.keyCode === 38 && (angular.isUndefined(index) || index === 0)) index = items.length - 1;
             else if (evt.keyCode === 40 && index < items.length - 1) index++;
             else if (evt.keyCode === 40 && index === items.length - 1) index = 0;
             else if (angular.isUndefined(index)) index = 0;
             items.eq(index).addClass('active');
             $dropdown.$element.attr('aria-activedescendant', items.eq(index).attr('id'));
-          }         
+          }
         };
 
         $dropdown.$onFocusOut = function (evt) {
@@ -112,7 +110,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
             if ($dropdown.$element) {
               $dropdown.$element.attr('aria-activedescendant', '');
               $dropdown.$element.attr('role', 'menu');
-              $dropdown.$element.attr('tabindex', '-1');                            
+              $dropdown.$element.attr('tabindex', '-1');
             }
             if (options.keyboard && $dropdown.$element) {
               $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
@@ -129,7 +127,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
               angular.element($dropdown.$element[0].querySelectorAll('li.divider')).attr('role', 'seperator');
 
               items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
-              items.attr('role', 'menuitem');              
+              items.attr('role', 'menuitem');
               if (items.length && options.keyboard) {
                 // Dropdown menu items that are natively focusable need to have a tabindex of -1 per SS-9603
                 // Menu item ID's should be unique for aria-activedescendant
@@ -247,11 +245,11 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           var dropdown = $dropdown(element, options);
 
           // Pickup key press on the dropdown button
-          element.keydown(function(evt) {
-            if(evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 27 || evt.keyCode === 9) {
+          element.keydown(function (evt) {
+            if (evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 27 || evt.keyCode === 9) {
               dropdown.$onKeyDown(evt);
             }
-          })
+          });
 
           // Visibility binding support
           if (attr.bsShow) {
