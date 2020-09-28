@@ -3491,12 +3491,12 @@
             angular.forEach(items, function(el, i) {
               if (matchesSelector && matchesSelector.call(el, '.active')) {
                 index = i;
-                $(el).removeClass('active');
+                angular.element(el).removeClass('active');
               }
             });
             if (evt.keyCode === 32 || evt.keyCode === 13) {
               items.eq(index).click();
-            } else if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 38 && (angular.isUndefined(index) || index == 0)) index = items.length - 1; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (evt.keyCode === 40 && index === items.length - 1) index = 0; else if (angular.isUndefined(index)) index = 0;
+            } else if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 38 && (angular.isUndefined(index) || index === 0)) index = items.length - 1; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (evt.keyCode === 40 && index === items.length - 1) index = 0; else if (angular.isUndefined(index)) index = 0;
             items.eq(index).addClass('active');
             $dropdown.$element.attr('aria-activedescendant', items.eq(index).attr('id'));
           }
