@@ -6,8 +6,14 @@ angular.module('mgcrea.ngStrap.helpers.focusElement', [])
       link: function (scope, element, attrs) {
         scope.$watch(attrs.focusElement, function (value) {
           if (value === true) {
-            $timeout(function () {
-              element[0].focus();
+            $timeout(function(){
+              $(element[0]).animate(
+                {left:0}, 
+                100, 
+                function(){
+                  element[0].focus();
+                }
+              );
             });
           }
         });
