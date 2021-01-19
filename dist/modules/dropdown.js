@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2021-01-06
+ * @version v2.3.12 - 2021-01-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -38,7 +38,6 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
           $dropdown.hide(/27/.test(evt.keyCode));
           return;
         } else if ($dropdown.$element && (evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 32 || evt.keyCode === 13)) {
-          $dropdown.$element.focus();
           evt.preventDefault();
           evt.stopPropagation();
           var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
@@ -55,6 +54,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
           } else if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 38 && (angular.isUndefined(index) || index === 0)) index = items.length - 1; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (evt.keyCode === 40 && index === items.length - 1) index = 0; else if (angular.isUndefined(index)) index = 0;
           items.eq(index).addClass('active');
           $dropdown.$element.attr('aria-activedescendant', items.eq(index).attr('id'));
+          items.eq(index)[0].focus();
         }
       };
       $dropdown.$onFocusOut = function(evt) {
