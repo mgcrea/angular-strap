@@ -257,6 +257,9 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
             layoutHideElement.attr('aria-hidden', 'false');
             unbindKeyboardEvents();
           }
+		  if(angular.element(modalElement[0]).hasClass('alert')) {
+			  modalElement.removeAttr('tabindex');
+		  }
         }
 
         $modal.hide = function () {
