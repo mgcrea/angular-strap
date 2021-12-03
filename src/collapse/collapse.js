@@ -249,7 +249,7 @@ angular.module('mgcrea.ngStrap.collapse', [])
         };
 
         element.on('click', actionEventHandler);
-        element.bind('keydown keypress', function (e) {
+        element.on('keydown keypress', function (e) {
           if (e.which === KEY_CODES.ENTER || e.which === KEY_CODES.SPACE) {
             console.log('key handler handling');
             actionEventHandler();

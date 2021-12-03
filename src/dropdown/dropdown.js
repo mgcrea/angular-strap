@@ -246,7 +246,7 @@ angular.module('mgcrea.ngStrap.dropdown', ['mgcrea.ngStrap.tooltip'])
           var dropdown = $dropdown(element, options);
 
           // Pickup key press on the dropdown button
-          element.keydown(function (evt) {
+          element.on('keydown',function (evt) {
             if (evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 27 || evt.keyCode === 9) {
               dropdown.$onKeyDown(evt);
             }

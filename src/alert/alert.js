@@ -50,7 +50,7 @@ angular.module('mgcrea.ngStrap.alert', ['mgcrea.ngStrap.modal'])
               return focusable[index + 1];
             }
           }
-          angular.element(findNextFocusableElement()).focus();
+          angular.element(findNextFocusableElement()).trigger('focus');
         };
 
         // Support scope as string options [/*title, content, */ type, dismissable]

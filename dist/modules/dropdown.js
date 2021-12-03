@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2021-06-04
+ * @version v2.3.12 - 2021-12-03
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -180,7 +180,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
           }, true);
         }
         var dropdown = $dropdown(element, options);
-        element.keydown(function(evt) {
+        element.on('keydown', function(evt) {
           if (evt.keyCode === 38 || evt.keyCode === 40 || evt.keyCode === 27 || evt.keyCode === 9) {
             dropdown.$onKeyDown(evt);
           }

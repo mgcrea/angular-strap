@@ -252,7 +252,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.core', 'mgcrea.ngStrap.h
 
           modalElement.attr('aria-hidden', 'false');
           modalElement.attr('tabindex', '0');
-          modalElement.focus();
+          modalElement.trigger('focus');
           if (!modalElement.length || !angular.element(modalElement[0]).hasClass('modal')) {
             layoutHideElement.attr('aria-hidden', 'false');
             unbindKeyboardEvents();

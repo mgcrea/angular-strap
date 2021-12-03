@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2021-06-04
+ * @version v2.3.12 - 2021-12-03
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -184,7 +184,7 @@ angular.module('mgcrea.ngStrap.modal', [ 'mgcrea.ngStrap.core', 'mgcrea.ngStrap.
         }
         modalElement.attr('aria-hidden', 'false');
         modalElement.attr('tabindex', '0');
-        modalElement.focus();
+        modalElement.trigger('focus');
         if (!modalElement.length || !angular.element(modalElement[0]).hasClass('modal')) {
           layoutHideElement.attr('aria-hidden', 'false');
           unbindKeyboardEvents();

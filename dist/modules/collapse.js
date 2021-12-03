@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2021-06-04
+ * @version v2.3.12 - 2021-12-03
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -186,7 +186,7 @@ angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
         }
       };
       element.on('click', actionEventHandler);
-      element.bind('keydown keypress', function(e) {
+      element.on('keydown keypress', function(e) {
         if (e.which === KEY_CODES.ENTER || e.which === KEY_CODES.SPACE) {
           console.log('key handler handling');
           actionEventHandler();

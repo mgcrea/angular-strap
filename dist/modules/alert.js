@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2021-06-04
+ * @version v2.3.12 - 2021-12-03
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -44,7 +44,7 @@ angular.module('mgcrea.ngStrap.alert', [ 'mgcrea.ngStrap.modal' ]).provider('$al
             return focusable[index + 1];
           }
         }
-        angular.element(findNextFocusableElement()).focus();
+        angular.element(findNextFocusableElement()).trigger('focus');
       };
       $alert.$scope.dismissable = !!options.dismissable;
       if (options.type) {
