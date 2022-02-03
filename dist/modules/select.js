@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.13 - 2022-02-08
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -278,7 +278,7 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
       if (element[0].nodeName.toLowerCase() === 'select') {
         var inputEl = element;
         inputEl.css('display', 'none');
-        element = angular.element('<button type="button" class="btn btn-default"></button>');
+        element = angular.element('<button type="button" class="btn btn-default" aria-haspopup="true"></button>');
         inputEl.after(element);
       }
       var parsedOptions = $parseOptions(attr.bsOptions);
@@ -293,13 +293,13 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
           controller.$render();
         });
       }, true);
-      scope.$watch(attr.ngModel, function(newValue, oldValue) {
-        select.$updateActiveIndex();
+      controller.$viewChangeListeners.push(function() {
         controller.$render();
-      }, true);
+      });
       controller.$render = function() {
         var selected;
         var index;
+        select.$updateActiveIndex();
         if (options.multiple && angular.isArray(controller.$modelValue)) {
           selected = controller.$modelValue.map(function(value) {
             index = select.$getIndex(value);

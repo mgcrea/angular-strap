@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.13 - 2022-02-08
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -362,7 +362,11 @@ angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser
         } else {
           date = new Date(modelValue);
         }
-        controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+        if (options.timezone === 'UTC') {
+          controller.$dateValue = date;
+        } else {
+          controller.$dateValue = dateParser.timezoneOffsetAdjust(date, options.timezone);
+        }
         return getDateFormattedString();
       });
       controller.$render = function() {

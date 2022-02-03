@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.13 - 2022-02-08
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -14,7 +14,7 @@ angular.module('mgcrea.ngStrap.affix', [ 'mgcrea.ngStrap.helpers.dimensions', 'm
     setWidth: true
   };
   this.$get = [ '$window', 'debounce', 'dimensions', function($window, debounce, dimensions) {
-    var bodyEl = angular.element($window.document.body);
+    var documentEl = angular.element($window.document);
     var windowEl = angular.element($window);
     function AffixFactory(element, config) {
       var $affix = {};
@@ -83,7 +83,7 @@ angular.module('mgcrea.ngStrap.affix', [ 'mgcrea.ngStrap.helpers.dimensions', 'm
           }
           if (options.inlineStyles) {
             element.css('position', options.offsetParent ? '' : 'relative');
-            element.css('top', options.offsetParent ? '' : bodyEl[0].offsetHeight - offsetBottom - elementHeight - initialOffsetTop + 'px');
+            element.css('top', options.offsetParent ? '' : documentEl.height() - offsetBottom - elementHeight - initialOffsetTop + 'px');
           }
         } else {
           unpin = null;

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.13 - 2022-02-08
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -172,7 +172,11 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
           var today = new Date();
           date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), 0, 0, 0, key === 'minDate' ? 0 : -1);
         } else if (angular.isString(value) && value.match(/^".+"$/)) {
-          date = new Date(value.substr(1, value.length - 2));
+          if (value.match(/Z/)) {
+            date = new Date(value.substr(1, value.length - 3));
+          } else {
+            date = new Date(value.substr(1, value.length - 2));
+          }
         } else if (isNumeric(value)) {
           date = new Date(parseInt(value, 10));
         } else if (angular.isString(value) && value.length === 0) {

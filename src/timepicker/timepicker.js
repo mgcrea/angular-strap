@@ -222,7 +222,11 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           } else if (index === 2) {
             selectedTime = date.getTime() + viewDate.hour * 36e5 + viewDate.minute * 6e4;
           }
-          return selectedTime < options.minTime * 1 || selectedTime > options.maxTime * 1;
+          if (options.minTime <= options.maxTime) {
+            return selectedTime < options.minTime * 1 || selectedTime > options.maxTime * 1;
+          } else {
+            return selectedTime < options.minTime * 1 && selectedTime > options.maxTime * 1;
+          }
         };
 
         scope.$arrowAction = function (value, index) {
@@ -508,8 +512,13 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         function validateAgainstMinMaxTime (parsedTime) {
           if (!angular.isDate(parsedTime)) return;
-          var isMinValid = isNaN(options.minTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) >= options.minTime;
-          var isMaxValid = isNaN(options.maxTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) <= options.maxTime;
+          if (options.minTime <= options.maxTime) {
+            var isMinValid = isNaN(options.minTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) >= options.minTime;
+            var isMaxValid = isNaN(options.maxTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) <= options.maxTime;
+          } else {
+            var isMinValid = isNaN(options.minTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) <= options.minTime;
+            var isMaxValid = isNaN(options.maxTime) || new Date(parsedTime.getTime()).setFullYear(1970, 0, 1) >= options.maxTime;
+          }
           var isValid = isMinValid && isMaxValid;
           controller.$setValidity('date', isValid);
           controller.$setValidity('min', isMinValid);

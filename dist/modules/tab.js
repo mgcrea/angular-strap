@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.13 - 2022-02-08
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -13,6 +13,10 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
     template: 'tab/tab.tpl.html',
     navClass: 'nav-tabs',
     activeClass: 'active'
+  };
+  var _tabsHash = {};
+  var _addTabControl = function(key, control) {
+    if (!_tabsHash[key]) _tabsHash[key] = control;
   };
   var controller = this.controller = function($scope, $element, $attrs) {
     var self = this;
@@ -62,11 +66,18 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
     self.$isActive = $scope.$isActive = function($pane, $index) {
       return self.$panes.$active === $pane.name || self.$panes.$active === $index;
     };
+    self.$onKeyPress = $scope.$onKeyPress = function(e, index) {
+      if (e.keyCode === 32 || e.charCode === 32 || e.keyCode === 13 || e.charCode === 13) {
+        self.$setActive(index);
+      }
+    };
   };
   this.$get = function() {
     var $tab = {};
     $tab.defaults = defaults;
     $tab.controller = controller;
+    $tab.addTabControl = _addTabControl;
+    $tab.tabsHash = _tabsHash;
     return $tab;
   };
 }).directive('bsTabs', [ '$window', '$animate', '$tab', '$parse', function($window, $animate, $tab, $parse) {
@@ -82,6 +93,9 @@ angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
     link: function postLink(scope, element, attrs, controllers) {
       var ngModelCtrl = controllers[0];
       var bsTabsCtrl = controllers[1];
+      if (attrs.tabKey !== '' && attrs.tabKey !== undefined) {
+        $tab.addTabControl(attrs.tabKey, bsTabsCtrl);
+      }
       if (ngModelCtrl) {
         bsTabsCtrl.$activePaneChangeListeners.push(function() {
           ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
